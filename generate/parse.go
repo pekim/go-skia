@@ -23,7 +23,7 @@ func (g *generator) parse() {
 	}
 
 	index := clang.NewIndex(0, 1)
-	errCode := index.ParseTranslationUnit2("./generate/skia.h", parseArgs, nil,
+	errCode := index.ParseTranslationUnit2("./skia.h", parseArgs, nil,
 		clang.TranslationUnit_SkipFunctionBodies, &g.transUnit)
 	if errCode != clang.Error_Success {
 		panic(errCode)

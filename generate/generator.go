@@ -18,7 +18,10 @@ func Generate() {
 	fmt.Println("")
 
 	g := generator{}
+	fmt.Println("parse")
 	g.parse()
+	fmt.Println("visit")
 	g.visit()
+	fmt.Println("generate")
 	g.generate()
 }
