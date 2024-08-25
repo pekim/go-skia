@@ -21,7 +21,7 @@ func (g *generator) visit() {
 
 func (g *generator) visitClass(cursor clang.Cursor) {
 	fmt.Println("class", cursor.Spelling())
-	cursor.Visit(func(cursor, parent clang.Cursor) (status clang.ChildVisitResult) {
+	cursor.Visit(func(cursor, _parent clang.Cursor) (status clang.ChildVisitResult) {
 		fmt.Println("  ", cursor.Spelling(), cursor.Kind())
 		switch cursor.Kind() {
 		case clang.Cursor_EnumDecl:
