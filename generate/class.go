@@ -8,6 +8,7 @@ type class struct {
 
 func (c class) generate(fileGo *genFile) {
 	fileGo.writelnf("type %s struct {", c.goName)
+	fileGo.writeln("  skia unsafe.Pointer")
 	fileGo.writeln("}")
 	fileGo.writeln("")
 

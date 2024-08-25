@@ -2,7 +2,12 @@
 
 package skia
 
+import (
+	"unsafe"
+)
+
 type Matrix struct {
+	skia unsafe.Pointer
 }
 
 type MatrixScaleToFit int64
@@ -25,18 +30,23 @@ const (
 )
 
 type RefCntBase struct {
+	skia unsafe.Pointer
 }
 
 type ColorInfo struct {
+	skia unsafe.Pointer
 }
 
 type Pixmap struct {
+	skia unsafe.Pointer
 }
 
 type Data struct {
+	skia unsafe.Pointer
 }
 
 type YUVAInfo struct {
+	skia unsafe.Pointer
 }
 
 type YUVAInfoYUVAChannels int64
@@ -88,6 +98,7 @@ const (
 )
 
 type YUVAPixmapInfo struct {
+	skia unsafe.Pointer
 }
 
 type YUVAPixmapInfoDataType int64
@@ -101,9 +112,11 @@ const (
 )
 
 type YUVAPixmaps struct {
+	skia unsafe.Pointer
 }
 
 type Once struct {
+	skia unsafe.Pointer
 }
 
 type OnceState int64
@@ -115,12 +128,15 @@ const (
 )
 
 type ColorSpace struct {
+	skia unsafe.Pointer
 }
 
 type Noncopyable struct {
+	skia unsafe.Pointer
 }
 
 type Codec struct {
+	skia unsafe.Pointer
 }
 
 type CodecResult int64
@@ -168,6 +184,7 @@ const (
 )
 
 type Flattenable struct {
+	skia unsafe.Pointer
 }
 
 type FlattenableType int64
@@ -184,6 +201,7 @@ const (
 )
 
 type ImageFilter struct {
+	skia unsafe.Pointer
 }
 
 type ImageFilterMapDirection int64
@@ -194,6 +212,7 @@ const (
 )
 
 type M44 struct {
+	skia unsafe.Pointer
 }
 
 type M44Uninitialized_Constructor int64
@@ -209,6 +228,7 @@ const (
 )
 
 type Paint struct {
+	skia unsafe.Pointer
 }
 
 type PaintStyle int64
@@ -240,12 +260,15 @@ const (
 )
 
 type RasterHandleAllocator struct {
+	skia unsafe.Pointer
 }
 
 type String struct {
+	skia unsafe.Pointer
 }
 
 type SurfaceProps struct {
+	skia unsafe.Pointer
 }
 
 type SurfacePropsFlags int64
@@ -258,12 +281,15 @@ const (
 )
 
 type Deque struct {
+	skia unsafe.Pointer
 }
 
 type ContainerAllocator struct {
+	skia unsafe.Pointer
 }
 
 type Canvas struct {
+	skia unsafe.Pointer
 }
 
 type CanvasSaveLayerFlagsSet int64
@@ -332,9 +358,11 @@ const (
 )
 
 type AutoCanvasRestore struct {
+	skia unsafe.Pointer
 }
 
 type Document struct {
+	skia unsafe.Pointer
 }
 
 type DocumentState int64
@@ -346,48 +374,63 @@ const (
 )
 
 type FontStyleSet struct {
+	skia unsafe.Pointer
 }
 
 type FontMgr struct {
+	skia unsafe.Pointer
 }
 
 type MaskFilter struct {
+	skia unsafe.Pointer
 }
 
 type Stream struct {
+	skia unsafe.Pointer
 }
 
 type StreamRewindable struct {
+	skia unsafe.Pointer
 }
 
 type StreamSeekable struct {
+	skia unsafe.Pointer
 }
 
 type StreamAsset struct {
+	skia unsafe.Pointer
 }
 
 type StreamMemory struct {
+	skia unsafe.Pointer
 }
 
 type WStream struct {
+	skia unsafe.Pointer
 }
 
 type NullWStream struct {
+	skia unsafe.Pointer
 }
 
 type FILEStream struct {
+	skia unsafe.Pointer
 }
 
 type MemoryStream struct {
+	skia unsafe.Pointer
 }
 
 type FILEWStream struct {
+	skia unsafe.Pointer
 }
 
 type DynamicMemoryWStream struct {
+	skia unsafe.Pointer
 }
 
 type Image struct {
+	skia unsafe.Pointer
 }
 
 type ImageCachingHint int64
@@ -420,6 +463,7 @@ const (
 )
 
 type Surface struct {
+	skia unsafe.Pointer
 }
 
 type SurfaceContentChangeMode int64
@@ -438,6 +482,7 @@ const (
 )
 
 type FontStyle struct {
+	skia unsafe.Pointer
 }
 
 type FontStyleWeight int64
@@ -479,9 +524,11 @@ const (
 )
 
 type WeakRefCnt struct {
+	skia unsafe.Pointer
 }
 
 type Typeface struct {
+	skia unsafe.Pointer
 }
 
 type TypefaceSerializeBehavior int64
@@ -493,6 +540,7 @@ const (
 )
 
 type Font struct {
+	skia unsafe.Pointer
 }
 
 type FontEdging int64
@@ -515,12 +563,15 @@ const (
 )
 
 type TextBlob struct {
+	skia unsafe.Pointer
 }
 
 type TextBlobBuilder struct {
+	skia unsafe.Pointer
 }
 
 type Path1DPathEffect struct {
+	skia unsafe.Pointer
 }
 
 type Path1DPathEffectStyle int64
@@ -533,27 +584,35 @@ const (
 )
 
 type Line2DPathEffect struct {
+	skia unsafe.Pointer
 }
 
 type Path2DPathEffect struct {
+	skia unsafe.Pointer
 }
 
 type ColorFilter struct {
+	skia unsafe.Pointer
 }
 
 type ColorFilters struct {
+	skia unsafe.Pointer
 }
 
 type ColorMatrixFilter struct {
+	skia unsafe.Pointer
 }
 
 type CornerPathEffect struct {
+	skia unsafe.Pointer
 }
 
 type DashPathEffect struct {
+	skia unsafe.Pointer
 }
 
 type Path struct {
+	skia unsafe.Pointer
 }
 
 type PathArcSize int64
@@ -592,6 +651,7 @@ const (
 )
 
 type PathEffect struct {
+	skia unsafe.Pointer
 }
 
 type PathEffectDashType int64
@@ -602,12 +662,15 @@ const (
 )
 
 type DiscretePathEffect struct {
+	skia unsafe.Pointer
 }
 
 type Shader struct {
+	skia unsafe.Pointer
 }
 
 type GradientShader struct {
+	skia unsafe.Pointer
 }
 
 type GradientShaderFlags int64
@@ -617,9 +680,11 @@ const (
 )
 
 type Picture struct {
+	skia unsafe.Pointer
 }
 
 type ImageFilters struct {
+	skia unsafe.Pointer
 }
 
 type ImageFiltersDither int64
@@ -630,12 +695,15 @@ const (
 )
 
 type ShaderMaskFilter struct {
+	skia unsafe.Pointer
 }
 
 type TableMaskFilter struct {
+	skia unsafe.Pointer
 }
 
 type TrimPathEffect struct {
+	skia unsafe.Pointer
 }
 
 type TrimPathEffectMode int64
@@ -646,57 +714,75 @@ const (
 )
 
 type DataTable struct {
+	skia unsafe.Pointer
 }
 
 type Encoder struct {
+	skia unsafe.Pointer
 }
 
 type GrGLExtensions struct {
+	skia unsafe.Pointer
 }
 
 type GrColorFormatDesc struct {
+	skia unsafe.Pointer
 }
 
 type GrBackendFormat struct {
+	skia unsafe.Pointer
 }
 
 type GrBackendTexture struct {
+	skia unsafe.Pointer
 }
 
 type GrBackendRenderTarget struct {
+	skia unsafe.Pointer
 }
 
 type GrDriverBugWorkarounds struct {
+	skia unsafe.Pointer
 }
 
 type GrContext_Base struct {
+	skia unsafe.Pointer
 }
 
 type Semaphore struct {
+	skia unsafe.Pointer
 }
 
 type Mutex struct {
+	skia unsafe.Pointer
 }
 
 type AutoMutexExclusive struct {
+	skia unsafe.Pointer
 }
 
 type GrImageContext struct {
+	skia unsafe.Pointer
 }
 
 type GrRecordingContext struct {
+	skia unsafe.Pointer
 }
 
 type GrDirectContext struct {
+	skia unsafe.Pointer
 }
 
 type TDStorage struct {
+	skia unsafe.Pointer
 }
 
 type OpBuilder struct {
+	skia unsafe.Pointer
 }
 
 type ParsePath struct {
+	skia unsafe.Pointer
 }
 
 type ParsePathPathEncoding int64
@@ -707,9 +793,11 @@ const (
 )
 
 type PDFBitmap struct {
+	skia unsafe.Pointer
 }
 
 type PDFUnion struct {
+	skia unsafe.Pointer
 }
 
 type PDFUnionType int64
@@ -732,39 +820,51 @@ const (
 )
 
 type PDFObject struct {
+	skia unsafe.Pointer
 }
 
 type PDFArray struct {
+	skia unsafe.Pointer
 }
 
 type PDFDict struct {
+	skia unsafe.Pointer
 }
 
 type ArenaAlloc struct {
+	skia unsafe.Pointer
 }
 
 type ArenaAllocWithReset struct {
+	skia unsafe.Pointer
 }
 
 type PDFTagTree struct {
+	skia unsafe.Pointer
 }
 
 type PDFOffsetMap struct {
+	skia unsafe.Pointer
 }
 
 type PDFDocument struct {
+	skia unsafe.Pointer
 }
 
 type Shaper struct {
+	skia unsafe.Pointer
 }
 
 type TextBlobBuilderRunHandler struct {
+	skia unsafe.Pointer
 }
 
 type SVGDOM struct {
+	skia unsafe.Pointer
 }
 
 type SVGLength struct {
+	skia unsafe.Pointer
 }
 
 type SVGLengthUnit int64
@@ -784,6 +884,7 @@ const (
 )
 
 type SVGIRI struct {
+	skia unsafe.Pointer
 }
 
 type SVGIRIType int64
@@ -795,6 +896,7 @@ const (
 )
 
 type SVGColor struct {
+	skia unsafe.Pointer
 }
 
 type SVGColorType int64
@@ -806,6 +908,7 @@ const (
 )
 
 type SVGPaint struct {
+	skia unsafe.Pointer
 }
 
 type SVGPaintType int64
@@ -817,6 +920,7 @@ const (
 )
 
 type SVGFuncIRI struct {
+	skia unsafe.Pointer
 }
 
 type SVGFuncIRIType int64
@@ -827,6 +931,7 @@ const (
 )
 
 type SVGLineJoin struct {
+	skia unsafe.Pointer
 }
 
 type SVGLineJoinType int64
@@ -839,6 +944,7 @@ const (
 )
 
 type SVGSpreadMethod struct {
+	skia unsafe.Pointer
 }
 
 type SVGSpreadMethodType int64
@@ -850,6 +956,7 @@ const (
 )
 
 type SVGFillRule struct {
+	skia unsafe.Pointer
 }
 
 type SVGFillRuleType int64
@@ -861,6 +968,7 @@ const (
 )
 
 type SVGVisibility struct {
+	skia unsafe.Pointer
 }
 
 type SVGVisibilityType int64
@@ -873,6 +981,7 @@ const (
 )
 
 type SVGDashArray struct {
+	skia unsafe.Pointer
 }
 
 type SVGDashArrayType int64
@@ -884,6 +993,7 @@ const (
 )
 
 type SVGStopColor struct {
+	skia unsafe.Pointer
 }
 
 type SVGStopColorType int64
@@ -896,6 +1006,7 @@ const (
 )
 
 type SVGObjectBoundingBoxUnits struct {
+	skia unsafe.Pointer
 }
 
 type SVGObjectBoundingBoxUnitsType int64
@@ -906,6 +1017,7 @@ const (
 )
 
 type SVGFontFamily struct {
+	skia unsafe.Pointer
 }
 
 type SVGFontFamilyType int64
@@ -916,6 +1028,7 @@ const (
 )
 
 type SVGFontStyle struct {
+	skia unsafe.Pointer
 }
 
 type SVGFontStyleType int64
@@ -928,6 +1041,7 @@ const (
 )
 
 type SVGFontSize struct {
+	skia unsafe.Pointer
 }
 
 type SVGFontSizeType int64
@@ -938,6 +1052,7 @@ const (
 )
 
 type SVGFontWeight struct {
+	skia unsafe.Pointer
 }
 
 type SVGFontWeightType int64
@@ -960,6 +1075,7 @@ const (
 )
 
 type SVGTextAnchor struct {
+	skia unsafe.Pointer
 }
 
 type SVGTextAnchorType int64
@@ -972,6 +1088,7 @@ const (
 )
 
 type SVGFeInputType struct {
+	skia unsafe.Pointer
 }
 
 type SVGFeInputTypeType int64
@@ -988,21 +1105,27 @@ const (
 )
 
 type SVGFeTurbulenceBaseFrequency struct {
+	skia unsafe.Pointer
 }
 
 type SVGAttributeParser struct {
+	skia unsafe.Pointer
 }
 
 type SVGNode struct {
+	skia unsafe.Pointer
 }
 
 type SVGTransformableNode struct {
+	skia unsafe.Pointer
 }
 
 type SVGContainer struct {
+	skia unsafe.Pointer
 }
 
 type SVGSVG struct {
+	skia unsafe.Pointer
 }
 
 type SVGSVGType int64
@@ -1013,6 +1136,7 @@ const (
 )
 
 type SVGLengthContext struct {
+	skia unsafe.Pointer
 }
 
 type SVGLengthContextLengthType int64
@@ -1024,6 +1148,7 @@ const (
 )
 
 type SVGRenderContext struct {
+	skia unsafe.Pointer
 }
 
 type SVGRenderContextApplyFlags int64

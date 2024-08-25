@@ -13,6 +13,10 @@ func (g *generator) generate() {
 
 	g.goFile.writeln("package skia")
 	g.goFile.writeln("")
+	g.goFile.writeln("import (")
+	g.goFile.writeln(`  "unsafe"`)
+	g.goFile.writeln(")")
+	g.goFile.writeln("")
 
 	for _, class := range g.classes {
 		class.generate(g.goFile)
