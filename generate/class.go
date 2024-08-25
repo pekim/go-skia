@@ -6,7 +6,7 @@ type class struct {
 	enums  []enum
 }
 
-func (c class) generate(fileGo genFile) {
+func (c class) generate(fileGo *genFile) {
 	for _, enum := range c.enums {
 		enum.generate(fileGo)
 	}

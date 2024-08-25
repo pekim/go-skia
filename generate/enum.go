@@ -16,7 +16,7 @@ type enumConstant struct {
 	value int64
 }
 
-func (e enum) generate(fileGo genFile) {
+func (e enum) generate(fileGo *genFile) {
 	goName := e.class.goName + e.name
 	fileGo.writelnf("type %s int64", goName)
 	fileGo.writeln("")

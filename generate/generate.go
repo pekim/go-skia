@@ -2,7 +2,9 @@ package generate
 
 import (
 	"fmt"
+	"go/format"
 	"os"
+	"strings"
 )
 
 func (g *generator) generate() {
@@ -19,44 +21,40 @@ func (g *generator) generate() {
 
 type genFile struct {
 	filename string
-	file     *os.File
+	content  strings.Builder
 }
 
-func newGenFile(filename string) genFile {
-	file, err := os.OpenFile(filename, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0644)
-	if err != nil {
-		panic(err)
-	}
-	return genFile{
+func newGenFile(filename string) *genFile {
+	return &genFile{
 		filename: filename,
-		file:     file,
 	}
 }
 
-func (f genFile) close() {
-	err := f.file.Close()
+func (f *genFile) close() {
+	formatted, err := format.Source([]byte(f.content.String()))
+	if err != nil {
+		panic(err)
+	}
+	err = os.WriteFile(f.filename, formatted, 0644)
 	if err != nil {
 		panic(err)
 	}
 }
 
-func (f genFile) write(text string) {
-	_, err := f.file.WriteString(text)
-	if err != nil {
-		panic(err)
-	}
+func (f *genFile) write(content string) {
+	f.content.WriteString(content)
 }
 
-func (f genFile) writeln(line string) {
+func (f *genFile) writeln(line string) {
 	f.write(line)
 	f.write("\n")
 }
 
-func (f genFile) writef(format string, args ...any) {
+func (f *genFile) writef(format string, args ...any) {
 	f.write(fmt.Sprintf(format, args...))
 }
 
-func (f genFile) writelnf(format string, args ...any) {
+func (f *genFile) writelnf(format string, args ...any) {
 	f.writef(format, args...)
 	f.write("\n")
 }

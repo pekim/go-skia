@@ -9,7 +9,7 @@ import (
 type generator struct {
 	transUnit clang.TranslationUnit
 	classes   []class
-	goFile    genFile
+	goFile    *genFile
 }
 
 func Generate() {
