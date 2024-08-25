@@ -29,8 +29,7 @@ func (g *generator) visitClass(cursor clang.Cursor) {
 
 		switch cursor.Kind() {
 		case clang.Cursor_EnumDecl:
-			enum := g.visitClassEnum(&class, cursor)
-			class.enums = append(class.enums, enum)
+			g.visitClassEnum(&class, cursor)
 		}
 
 		return clang.ChildVisit_Continue
@@ -38,7 +37,7 @@ func (g *generator) visitClass(cursor clang.Cursor) {
 	g.classes = append(g.classes, class)
 }
 
-func (g *generator) visitClassEnum(class *class, cursor clang.Cursor) enum {
+func (g *generator) visitClassEnum(class *class, cursor clang.Cursor) {
 	enum := enum{
 		class: class,
 		name:  cursor.Spelling(),
@@ -53,11 +52,26 @@ func (g *generator) visitClassEnum(class *class, cursor clang.Cursor) enum {
 		return clang.ChildVisit_Continue
 	})
 
-	return enum
+	class.enums = append(class.enums, enum)
 }
 
 func (g *generator) visitEnum(cursor clang.Cursor) {
+	if cursor.IsAnonymous() {
+		return
+	}
+
+	enum := enum{
+		name: cursor.Spelling(),
+	}
 	cursor.Visit(func(cursor, parent clang.Cursor) (status clang.ChildVisitResult) {
+		if cursor.Kind() == clang.Cursor_EnumConstantDecl {
+			enum.constants = append(enum.constants, enumConstant{
+				name:  cursor.Spelling(),
+				value: cursor.EnumConstantDeclValue(),
+			})
+		}
 		return clang.ChildVisit_Continue
 	})
+
+	g.enums = append(g.enums, enum)
 }

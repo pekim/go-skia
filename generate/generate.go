@@ -17,6 +17,10 @@ func (g *generator) generate() {
 	for _, class := range g.classes {
 		class.generate(g.goFile)
 	}
+
+	for _, enum := range g.enums {
+		enum.generate(g.goFile)
+	}
 }
 
 type genFile struct {
@@ -35,9 +39,11 @@ func newGenFile(filename string) *genFile {
 }
 
 func (f *genFile) close() {
-	formatted, err := format.Source([]byte(f.content.String()))
+	unformatted := []byte(f.content.String())
+	formatted, err := format.Source(unformatted)
 	if err != nil {
-		panic(err)
+		fmt.Printf("failed to format %s: %s\n", f.filename, err.Error())
+		formatted = unformatted
 	}
 	err = os.WriteFile(f.filename, formatted, 0644)
 	if err != nil {

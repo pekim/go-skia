@@ -17,13 +17,22 @@ type enumConstant struct {
 }
 
 func (e enum) generate(fileGo *genFile) {
-	goName := e.class.goName + e.name
+	if len(e.constants) == 0 {
+		return
+	}
+
+	// generate the enum type
+	goName := e.name
+	if e.class != nil {
+		goName = e.class.goName + e.name
+	}
 	fileGo.writelnf("type %s int64", goName)
 	fileGo.writeln("")
-	fileGo.writeln("const (")
 
+	// generate the enum's constants
+	fileGo.writeln("const (")
 	for _, constant := range e.constants {
-		// special case - skip legacy names that would generate duplicate names
+		// skip legacy names that would generate duplicate names
 		if strings.HasSuffix(constant.name, "BackendHandleAccess") {
 			continue
 		}
@@ -37,9 +46,10 @@ func (e enum) generate(fileGo *genFile) {
 			name = strings.TrimSuffix(name, "_")
 		}
 		name = fmt.Sprintf("%s_%s", goName, name)
+
 		fileGo.writelnf("  %s %s = %d", name, goName, constant.value)
 	}
-
 	fileGo.writeln(")")
+
 	fileGo.writeln("")
 }

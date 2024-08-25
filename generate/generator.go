@@ -9,6 +9,7 @@ import (
 type generator struct {
 	transUnit clang.TranslationUnit
 	classes   []class
+	enums     []enum
 	goFile    *genFile
 }
 
