@@ -1,7 +1,7 @@
 package generate
 
 import (
-	"fmt"
+	"strings"
 
 	"github.com/go-clang/clang-v15/clang"
 )
@@ -20,30 +20,44 @@ func (g *generator) visit() {
 }
 
 func (g *generator) visitClass(cursor clang.Cursor) {
-	fmt.Println("class", cursor.Spelling())
+	name := cursor.Spelling()
+	class := class{
+		cName:  name,
+		goName: strings.TrimPrefix(name, "Sk"),
+	}
 	cursor.Visit(func(cursor, _parent clang.Cursor) (status clang.ChildVisitResult) {
-		fmt.Println("  ", cursor.Spelling(), cursor.Kind())
+
 		switch cursor.Kind() {
 		case clang.Cursor_EnumDecl:
-			g.visitClassEnum(cursor)
+			enum := g.visitClassEnum(&class, cursor)
+			class.enums = append(class.enums, enum)
 		}
 
 		return clang.ChildVisit_Continue
 	})
+	g.classes = append(g.classes, class)
 }
 
-func (g *generator) visitClassEnum(cursor clang.Cursor) {
-	fmt.Println("  enum", cursor.Spelling())
+func (g *generator) visitClassEnum(class *class, cursor clang.Cursor) enum {
+	enum := enum{
+		class: class,
+		name:  cursor.Spelling(),
+	}
 	cursor.Visit(func(cursor, parent clang.Cursor) (status clang.ChildVisitResult) {
-		fmt.Println("    ", cursor.Spelling(), cursor.Kind(), cursor.EnumConstantDeclValue())
+		if cursor.Kind() == clang.Cursor_EnumConstantDecl {
+			enum.constants = append(enum.constants, enumConstant{
+				name:  cursor.Spelling(),
+				value: cursor.EnumConstantDeclValue(),
+			})
+		}
 		return clang.ChildVisit_Continue
 	})
+
+	return enum
 }
 
 func (g *generator) visitEnum(cursor clang.Cursor) {
-	fmt.Println("enum", cursor.Spelling())
 	cursor.Visit(func(cursor, parent clang.Cursor) (status clang.ChildVisitResult) {
-		fmt.Println("  ", cursor.Spelling(), cursor.Kind(), cursor.EnumConstantDeclValue())
 		return clang.ChildVisit_Continue
 	})
 }

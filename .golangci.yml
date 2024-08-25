@@ -144,14 +144,11 @@ linters-settings:
     # Correct spellings using locale preferences for US or UK.
     # Setting locale to US will correct the British spelling of 'colour' to 'color'.
     # Default ("") is to use a neutral variety of English.
-    locale: UK
+    # locale: US
 
     # List of words to ignore
     # among the one defined in https://github.com/golangci/misspell/blob/master/words.go
     ignore-words:
-      - colors
-      - Color
-      - MITER
 
     # Extra word corrections.
     extra-words:
