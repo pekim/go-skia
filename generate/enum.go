@@ -2,6 +2,7 @@ package generate
 
 import (
 	"fmt"
+	"slices"
 	"strings"
 )
 
@@ -21,8 +22,13 @@ func (e enum) generate(fileGo *genFile) {
 		return
 	}
 
+	// Skip global enums that would result in a name conflict with a class enum.
+	if slices.Contains([]string{"SkPathSegmentMask", "SkPathVerb"}, e.name) {
+		return
+	}
+
 	// generate the enum type
-	goName := e.name
+	goName := strings.TrimPrefix(e.name, "Sk")
 	if e.class != nil {
 		goName = e.class.goName + e.name
 	}

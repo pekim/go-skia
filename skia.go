@@ -669,290 +669,270 @@ const (
 	SVGRenderContextApplyFlags_Leaf SVGRenderContextApplyFlags = 1
 )
 
-type SkApplyPerspectiveClip int64
+type ApplyPerspectiveClip int64
 
 const (
-	SkApplyPerspectiveClip_No  SkApplyPerspectiveClip = 0
-	SkApplyPerspectiveClip_Yes SkApplyPerspectiveClip = 1
+	ApplyPerspectiveClip_No  ApplyPerspectiveClip = 0
+	ApplyPerspectiveClip_Yes ApplyPerspectiveClip = 1
 )
 
-type SkEncodedOrigin int64
+type EncodedOrigin int64
 
 const (
-	SkEncodedOrigin_TopLeft     SkEncodedOrigin = 1
-	SkEncodedOrigin_TopRight    SkEncodedOrigin = 2
-	SkEncodedOrigin_BottomRight SkEncodedOrigin = 3
-	SkEncodedOrigin_BottomLeft  SkEncodedOrigin = 4
-	SkEncodedOrigin_LeftTop     SkEncodedOrigin = 5
-	SkEncodedOrigin_RightTop    SkEncodedOrigin = 6
-	SkEncodedOrigin_RightBottom SkEncodedOrigin = 7
-	SkEncodedOrigin_LeftBottom  SkEncodedOrigin = 8
-	SkEncodedOrigin_Default     SkEncodedOrigin = 1
-	SkEncodedOrigin_Last        SkEncodedOrigin = 8
+	EncodedOrigin_TopLeft     EncodedOrigin = 1
+	EncodedOrigin_TopRight    EncodedOrigin = 2
+	EncodedOrigin_BottomRight EncodedOrigin = 3
+	EncodedOrigin_BottomLeft  EncodedOrigin = 4
+	EncodedOrigin_LeftTop     EncodedOrigin = 5
+	EncodedOrigin_RightTop    EncodedOrigin = 6
+	EncodedOrigin_RightBottom EncodedOrigin = 7
+	EncodedOrigin_LeftBottom  EncodedOrigin = 8
+	EncodedOrigin_Default     EncodedOrigin = 1
+	EncodedOrigin_Last        EncodedOrigin = 8
 )
 
-type SkAlphaType int64
+type AlphaType int64
 
 const (
-	SkAlphaType_Unknown  SkAlphaType = 0
-	SkAlphaType_Opaque   SkAlphaType = 1
-	SkAlphaType_Premul   SkAlphaType = 2
-	SkAlphaType_Unpremul SkAlphaType = 3
-	SkAlphaType_LastEnum SkAlphaType = 3
+	AlphaType_Unknown  AlphaType = 0
+	AlphaType_Opaque   AlphaType = 1
+	AlphaType_Premul   AlphaType = 2
+	AlphaType_Unpremul AlphaType = 3
+	AlphaType_LastEnum AlphaType = 3
 )
 
-type SkColorType int64
+type ColorType int64
 
 const (
-	SkColorType_Unknown            SkColorType = 0
-	SkColorType_Alpha_8            SkColorType = 1
-	SkColorType_RGB_565            SkColorType = 2
-	SkColorType_ARGB_4444          SkColorType = 3
-	SkColorType_RGBA_8888          SkColorType = 4
-	SkColorType_RGB_888x           SkColorType = 5
-	SkColorType_BGRA_8888          SkColorType = 6
-	SkColorType_RGBA_1010102       SkColorType = 7
-	SkColorType_BGRA_1010102       SkColorType = 8
-	SkColorType_RGB_101010x        SkColorType = 9
-	SkColorType_BGR_101010x        SkColorType = 10
-	SkColorType_BGR_101010x_XR     SkColorType = 11
-	SkColorType_BGRA_10101010_XR   SkColorType = 12
-	SkColorType_RGBA_10x6          SkColorType = 13
-	SkColorType_Gray_8             SkColorType = 14
-	SkColorType_RGBA_F16Norm       SkColorType = 15
-	SkColorType_RGBA_F16           SkColorType = 16
-	SkColorType_RGBA_F32           SkColorType = 17
-	SkColorType_R8G8_unorm         SkColorType = 18
-	SkColorType_A16_float          SkColorType = 19
-	SkColorType_R16G16_float       SkColorType = 20
-	SkColorType_A16_unorm          SkColorType = 21
-	SkColorType_R16G16_unorm       SkColorType = 22
-	SkColorType_R16G16B16A16_unorm SkColorType = 23
-	SkColorType_SRGBA_8888         SkColorType = 24
-	SkColorType_R8_unorm           SkColorType = 25
-	SkColorType_LastEnum           SkColorType = 25
-	SkColorType_N32                SkColorType = 4
+	ColorType_Unknown            ColorType = 0
+	ColorType_Alpha_8            ColorType = 1
+	ColorType_RGB_565            ColorType = 2
+	ColorType_ARGB_4444          ColorType = 3
+	ColorType_RGBA_8888          ColorType = 4
+	ColorType_RGB_888x           ColorType = 5
+	ColorType_BGRA_8888          ColorType = 6
+	ColorType_RGBA_1010102       ColorType = 7
+	ColorType_BGRA_1010102       ColorType = 8
+	ColorType_RGB_101010x        ColorType = 9
+	ColorType_BGR_101010x        ColorType = 10
+	ColorType_BGR_101010x_XR     ColorType = 11
+	ColorType_BGRA_10101010_XR   ColorType = 12
+	ColorType_RGBA_10x6          ColorType = 13
+	ColorType_Gray_8             ColorType = 14
+	ColorType_RGBA_F16Norm       ColorType = 15
+	ColorType_RGBA_F16           ColorType = 16
+	ColorType_RGBA_F32           ColorType = 17
+	ColorType_R8G8_unorm         ColorType = 18
+	ColorType_A16_float          ColorType = 19
+	ColorType_R16G16_float       ColorType = 20
+	ColorType_A16_unorm          ColorType = 21
+	ColorType_R16G16_unorm       ColorType = 22
+	ColorType_R16G16B16A16_unorm ColorType = 23
+	ColorType_SRGBA_8888         ColorType = 24
+	ColorType_R8_unorm           ColorType = 25
+	ColorType_LastEnum           ColorType = 25
+	ColorType_N32                ColorType = 4
 )
 
-type SkYUVColorSpace int64
+type YUVColorSpace int64
 
 const (
-	SkYUVColorSpace_JPEG_Full            SkYUVColorSpace = 0
-	SkYUVColorSpace_Rec601_Limited       SkYUVColorSpace = 1
-	SkYUVColorSpace_Rec709_Full          SkYUVColorSpace = 2
-	SkYUVColorSpace_Rec709_Limited       SkYUVColorSpace = 3
-	SkYUVColorSpace_BT2020_8bit_Full     SkYUVColorSpace = 4
-	SkYUVColorSpace_BT2020_8bit_Limited  SkYUVColorSpace = 5
-	SkYUVColorSpace_BT2020_10bit_Full    SkYUVColorSpace = 6
-	SkYUVColorSpace_BT2020_10bit_Limited SkYUVColorSpace = 7
-	SkYUVColorSpace_BT2020_12bit_Full    SkYUVColorSpace = 8
-	SkYUVColorSpace_BT2020_12bit_Limited SkYUVColorSpace = 9
-	SkYUVColorSpace_FCC_Full             SkYUVColorSpace = 10
-	SkYUVColorSpace_FCC_Limited          SkYUVColorSpace = 11
-	SkYUVColorSpace_SMPTE240_Full        SkYUVColorSpace = 12
-	SkYUVColorSpace_SMPTE240_Limited     SkYUVColorSpace = 13
-	SkYUVColorSpace_YDZDX_Full           SkYUVColorSpace = 14
-	SkYUVColorSpace_YDZDX_Limited        SkYUVColorSpace = 15
-	SkYUVColorSpace_GBR_Full             SkYUVColorSpace = 16
-	SkYUVColorSpace_GBR_Limited          SkYUVColorSpace = 17
-	SkYUVColorSpace_YCgCo_8bit_Full      SkYUVColorSpace = 18
-	SkYUVColorSpace_YCgCo_8bit_Limited   SkYUVColorSpace = 19
-	SkYUVColorSpace_YCgCo_10bit_Full     SkYUVColorSpace = 20
-	SkYUVColorSpace_YCgCo_10bit_Limited  SkYUVColorSpace = 21
-	SkYUVColorSpace_YCgCo_12bit_Full     SkYUVColorSpace = 22
-	SkYUVColorSpace_YCgCo_12bit_Limited  SkYUVColorSpace = 23
-	SkYUVColorSpace_Identity             SkYUVColorSpace = 24
-	SkYUVColorSpace_LastEnum             SkYUVColorSpace = 24
-	SkYUVColorSpace_JPEG                 SkYUVColorSpace = 0
-	SkYUVColorSpace_Rec601               SkYUVColorSpace = 1
-	SkYUVColorSpace_Rec709               SkYUVColorSpace = 3
-	SkYUVColorSpace_BT2020               SkYUVColorSpace = 5
+	YUVColorSpace_JPEG_Full            YUVColorSpace = 0
+	YUVColorSpace_Rec601_Limited       YUVColorSpace = 1
+	YUVColorSpace_Rec709_Full          YUVColorSpace = 2
+	YUVColorSpace_Rec709_Limited       YUVColorSpace = 3
+	YUVColorSpace_BT2020_8bit_Full     YUVColorSpace = 4
+	YUVColorSpace_BT2020_8bit_Limited  YUVColorSpace = 5
+	YUVColorSpace_BT2020_10bit_Full    YUVColorSpace = 6
+	YUVColorSpace_BT2020_10bit_Limited YUVColorSpace = 7
+	YUVColorSpace_BT2020_12bit_Full    YUVColorSpace = 8
+	YUVColorSpace_BT2020_12bit_Limited YUVColorSpace = 9
+	YUVColorSpace_FCC_Full             YUVColorSpace = 10
+	YUVColorSpace_FCC_Limited          YUVColorSpace = 11
+	YUVColorSpace_SMPTE240_Full        YUVColorSpace = 12
+	YUVColorSpace_SMPTE240_Limited     YUVColorSpace = 13
+	YUVColorSpace_YDZDX_Full           YUVColorSpace = 14
+	YUVColorSpace_YDZDX_Limited        YUVColorSpace = 15
+	YUVColorSpace_GBR_Full             YUVColorSpace = 16
+	YUVColorSpace_GBR_Limited          YUVColorSpace = 17
+	YUVColorSpace_YCgCo_8bit_Full      YUVColorSpace = 18
+	YUVColorSpace_YCgCo_8bit_Limited   YUVColorSpace = 19
+	YUVColorSpace_YCgCo_10bit_Full     YUVColorSpace = 20
+	YUVColorSpace_YCgCo_10bit_Limited  YUVColorSpace = 21
+	YUVColorSpace_YCgCo_12bit_Full     YUVColorSpace = 22
+	YUVColorSpace_YCgCo_12bit_Limited  YUVColorSpace = 23
+	YUVColorSpace_Identity             YUVColorSpace = 24
+	YUVColorSpace_LastEnum             YUVColorSpace = 24
+	YUVColorSpace_JPEG                 YUVColorSpace = 0
+	YUVColorSpace_Rec601               YUVColorSpace = 1
+	YUVColorSpace_Rec709               YUVColorSpace = 3
+	YUVColorSpace_BT2020               YUVColorSpace = 5
 )
 
-type SkColorChannel int64
+type ColorChannel int64
 
 const (
-	SkColorChannel_R        SkColorChannel = 0
-	SkColorChannel_G        SkColorChannel = 1
-	SkColorChannel_B        SkColorChannel = 2
-	SkColorChannel_A        SkColorChannel = 3
-	SkColorChannel_LastEnum SkColorChannel = 3
+	ColorChannel_R        ColorChannel = 0
+	ColorChannel_G        ColorChannel = 1
+	ColorChannel_B        ColorChannel = 2
+	ColorChannel_A        ColorChannel = 3
+	ColorChannel_LastEnum ColorChannel = 3
 )
 
-type SkColorChannelFlag int64
+type ColorChannelFlag int64
 
 const (
-	SkColorChannelFlag_Red                           SkColorChannelFlag = 1
-	SkColorChannelFlag_Green                         SkColorChannelFlag = 2
-	SkColorChannelFlag_Blue                          SkColorChannelFlag = 4
-	SkColorChannelFlag_Alpha                         SkColorChannelFlag = 8
-	SkColorChannelFlag_Gray                          SkColorChannelFlag = 16
-	SkColorChannelFlag_GrayAlpha_SkColorChannelFlags SkColorChannelFlag = 24
-	SkColorChannelFlag_RG_SkColorChannelFlags        SkColorChannelFlag = 3
-	SkColorChannelFlag_RGB_SkColorChannelFlags       SkColorChannelFlag = 7
-	SkColorChannelFlag_RGBA_SkColorChannelFlags      SkColorChannelFlag = 15
+	ColorChannelFlag_Red                           ColorChannelFlag = 1
+	ColorChannelFlag_Green                         ColorChannelFlag = 2
+	ColorChannelFlag_Blue                          ColorChannelFlag = 4
+	ColorChannelFlag_Alpha                         ColorChannelFlag = 8
+	ColorChannelFlag_Gray                          ColorChannelFlag = 16
+	ColorChannelFlag_GrayAlpha_SkColorChannelFlags ColorChannelFlag = 24
+	ColorChannelFlag_RG_SkColorChannelFlags        ColorChannelFlag = 3
+	ColorChannelFlag_RGB_SkColorChannelFlags       ColorChannelFlag = 7
+	ColorChannelFlag_RGBA_SkColorChannelFlags      ColorChannelFlag = 15
 )
 
-type SkFilterMode int64
+type FilterMode int64
 
 const (
-	SkFilterMode_Nearest SkFilterMode = 0
-	SkFilterMode_Linear  SkFilterMode = 1
-	SkFilterMode_Last    SkFilterMode = 1
+	FilterMode_Nearest FilterMode = 0
+	FilterMode_Linear  FilterMode = 1
+	FilterMode_Last    FilterMode = 1
 )
 
-type SkMipmapMode int64
+type MipmapMode int64
 
 const (
-	SkMipmapMode_None    SkMipmapMode = 0
-	SkMipmapMode_Nearest SkMipmapMode = 1
-	SkMipmapMode_Linear  SkMipmapMode = 2
-	SkMipmapMode_Last    SkMipmapMode = 2
+	MipmapMode_None    MipmapMode = 0
+	MipmapMode_Nearest MipmapMode = 1
+	MipmapMode_Linear  MipmapMode = 2
+	MipmapMode_Last    MipmapMode = 2
 )
 
-type SkBlurStyle int64
+type BlurStyle int64
 
 const (
-	SkBlurStyle_Normal   SkBlurStyle = 0
-	SkBlurStyle_Solid    SkBlurStyle = 1
-	SkBlurStyle_Outer    SkBlurStyle = 2
-	SkBlurStyle_Inner    SkBlurStyle = 3
-	SkBlurStyle_LastEnum SkBlurStyle = 3
+	BlurStyle_Normal   BlurStyle = 0
+	BlurStyle_Solid    BlurStyle = 1
+	BlurStyle_Outer    BlurStyle = 2
+	BlurStyle_Inner    BlurStyle = 3
+	BlurStyle_LastEnum BlurStyle = 3
 )
 
-type SkBlendMode int64
+type BlendMode int64
 
 const (
-	SkBlendMode_Clear             SkBlendMode = 0
-	SkBlendMode_Src               SkBlendMode = 1
-	SkBlendMode_Dst               SkBlendMode = 2
-	SkBlendMode_SrcOver           SkBlendMode = 3
-	SkBlendMode_DstOver           SkBlendMode = 4
-	SkBlendMode_SrcIn             SkBlendMode = 5
-	SkBlendMode_DstIn             SkBlendMode = 6
-	SkBlendMode_SrcOut            SkBlendMode = 7
-	SkBlendMode_DstOut            SkBlendMode = 8
-	SkBlendMode_SrcATop           SkBlendMode = 9
-	SkBlendMode_DstATop           SkBlendMode = 10
-	SkBlendMode_Xor               SkBlendMode = 11
-	SkBlendMode_Plus              SkBlendMode = 12
-	SkBlendMode_Modulate          SkBlendMode = 13
-	SkBlendMode_Screen            SkBlendMode = 14
-	SkBlendMode_Overlay           SkBlendMode = 15
-	SkBlendMode_Darken            SkBlendMode = 16
-	SkBlendMode_Lighten           SkBlendMode = 17
-	SkBlendMode_ColorDodge        SkBlendMode = 18
-	SkBlendMode_ColorBurn         SkBlendMode = 19
-	SkBlendMode_HardLight         SkBlendMode = 20
-	SkBlendMode_SoftLight         SkBlendMode = 21
-	SkBlendMode_Difference        SkBlendMode = 22
-	SkBlendMode_Exclusion         SkBlendMode = 23
-	SkBlendMode_Multiply          SkBlendMode = 24
-	SkBlendMode_Hue               SkBlendMode = 25
-	SkBlendMode_Saturation        SkBlendMode = 26
-	SkBlendMode_Color             SkBlendMode = 27
-	SkBlendMode_Luminosity        SkBlendMode = 28
-	SkBlendMode_LastCoeffMode     SkBlendMode = 14
-	SkBlendMode_LastSeparableMode SkBlendMode = 24
-	SkBlendMode_LastMode          SkBlendMode = 28
+	BlendMode_Clear             BlendMode = 0
+	BlendMode_Src               BlendMode = 1
+	BlendMode_Dst               BlendMode = 2
+	BlendMode_SrcOver           BlendMode = 3
+	BlendMode_DstOver           BlendMode = 4
+	BlendMode_SrcIn             BlendMode = 5
+	BlendMode_DstIn             BlendMode = 6
+	BlendMode_SrcOut            BlendMode = 7
+	BlendMode_DstOut            BlendMode = 8
+	BlendMode_SrcATop           BlendMode = 9
+	BlendMode_DstATop           BlendMode = 10
+	BlendMode_Xor               BlendMode = 11
+	BlendMode_Plus              BlendMode = 12
+	BlendMode_Modulate          BlendMode = 13
+	BlendMode_Screen            BlendMode = 14
+	BlendMode_Overlay           BlendMode = 15
+	BlendMode_Darken            BlendMode = 16
+	BlendMode_Lighten           BlendMode = 17
+	BlendMode_ColorDodge        BlendMode = 18
+	BlendMode_ColorBurn         BlendMode = 19
+	BlendMode_HardLight         BlendMode = 20
+	BlendMode_SoftLight         BlendMode = 21
+	BlendMode_Difference        BlendMode = 22
+	BlendMode_Exclusion         BlendMode = 23
+	BlendMode_Multiply          BlendMode = 24
+	BlendMode_Hue               BlendMode = 25
+	BlendMode_Saturation        BlendMode = 26
+	BlendMode_Color             BlendMode = 27
+	BlendMode_Luminosity        BlendMode = 28
+	BlendMode_LastCoeffMode     BlendMode = 14
+	BlendMode_LastSeparableMode BlendMode = 24
+	BlendMode_LastMode          BlendMode = 28
 )
 
-type SkBlendModeCoeff int64
+type BlendModeCoeff int64
 
 const (
-	SkBlendModeCoeff_Zero       SkBlendModeCoeff = 0
-	SkBlendModeCoeff_One        SkBlendModeCoeff = 1
-	SkBlendModeCoeff_SC         SkBlendModeCoeff = 2
-	SkBlendModeCoeff_ISC        SkBlendModeCoeff = 3
-	SkBlendModeCoeff_DC         SkBlendModeCoeff = 4
-	SkBlendModeCoeff_IDC        SkBlendModeCoeff = 5
-	SkBlendModeCoeff_SA         SkBlendModeCoeff = 6
-	SkBlendModeCoeff_ISA        SkBlendModeCoeff = 7
-	SkBlendModeCoeff_DA         SkBlendModeCoeff = 8
-	SkBlendModeCoeff_IDA        SkBlendModeCoeff = 9
-	SkBlendModeCoeff_CoeffCount SkBlendModeCoeff = 10
+	BlendModeCoeff_Zero       BlendModeCoeff = 0
+	BlendModeCoeff_One        BlendModeCoeff = 1
+	BlendModeCoeff_SC         BlendModeCoeff = 2
+	BlendModeCoeff_ISC        BlendModeCoeff = 3
+	BlendModeCoeff_DC         BlendModeCoeff = 4
+	BlendModeCoeff_IDC        BlendModeCoeff = 5
+	BlendModeCoeff_SA         BlendModeCoeff = 6
+	BlendModeCoeff_ISA        BlendModeCoeff = 7
+	BlendModeCoeff_DA         BlendModeCoeff = 8
+	BlendModeCoeff_IDA        BlendModeCoeff = 9
+	BlendModeCoeff_CoeffCount BlendModeCoeff = 10
 )
 
-type SkClipOp int64
+type ClipOp int64
 
 const (
-	SkClipOp_Difference    SkClipOp = 0
-	SkClipOp_Intersect     SkClipOp = 1
-	SkClipOp_Max_EnumValue SkClipOp = 1
+	ClipOp_Difference    ClipOp = 0
+	ClipOp_Intersect     ClipOp = 1
+	ClipOp_Max_EnumValue ClipOp = 1
 )
 
-type SkTextEncoding int64
+type TextEncoding int64
 
 const (
-	SkTextEncoding_UTF8    SkTextEncoding = 0
-	SkTextEncoding_UTF16   SkTextEncoding = 1
-	SkTextEncoding_UTF32   SkTextEncoding = 2
-	SkTextEncoding_GlyphID SkTextEncoding = 3
+	TextEncoding_UTF8    TextEncoding = 0
+	TextEncoding_UTF16   TextEncoding = 1
+	TextEncoding_UTF32   TextEncoding = 2
+	TextEncoding_GlyphID TextEncoding = 3
 )
 
-type SkFontHinting int64
+type FontHinting int64
 
 const (
-	SkFontHinting_None   SkFontHinting = 0
-	SkFontHinting_Slight SkFontHinting = 1
-	SkFontHinting_Normal SkFontHinting = 2
-	SkFontHinting_Full   SkFontHinting = 3
+	FontHinting_None   FontHinting = 0
+	FontHinting_Slight FontHinting = 1
+	FontHinting_Normal FontHinting = 2
+	FontHinting_Full   FontHinting = 3
 )
 
-type SkPixelGeometry int64
+type PixelGeometry int64
 
 const (
-	SkPixelGeometry_Unknown SkPixelGeometry = 0
-	SkPixelGeometry_RGB_H   SkPixelGeometry = 1
-	SkPixelGeometry_BGR_H   SkPixelGeometry = 2
-	SkPixelGeometry_RGB_V   SkPixelGeometry = 3
-	SkPixelGeometry_BGR_V   SkPixelGeometry = 4
+	PixelGeometry_Unknown PixelGeometry = 0
+	PixelGeometry_RGB_H   PixelGeometry = 1
+	PixelGeometry_BGR_H   PixelGeometry = 2
+	PixelGeometry_RGB_V   PixelGeometry = 3
+	PixelGeometry_BGR_V   PixelGeometry = 4
 )
 
-type SkPathFillType int64
+type PathFillType int64
 
 const (
-	SkPathFillType_Winding        SkPathFillType = 0
-	SkPathFillType_EvenOdd        SkPathFillType = 1
-	SkPathFillType_InverseWinding SkPathFillType = 2
-	SkPathFillType_InverseEvenOdd SkPathFillType = 3
+	PathFillType_Winding        PathFillType = 0
+	PathFillType_EvenOdd        PathFillType = 1
+	PathFillType_InverseWinding PathFillType = 2
+	PathFillType_InverseEvenOdd PathFillType = 3
 )
 
-type SkPathDirection int64
+type PathDirection int64
 
 const (
-	SkPathDirection_CW  SkPathDirection = 0
-	SkPathDirection_CCW SkPathDirection = 1
+	PathDirection_CW  PathDirection = 0
+	PathDirection_CCW PathDirection = 1
 )
 
-type SkPathSegmentMask int64
+type TileMode int64
 
 const (
-	SkPathSegmentMask_Line  SkPathSegmentMask = 1
-	SkPathSegmentMask_Quad  SkPathSegmentMask = 2
-	SkPathSegmentMask_Conic SkPathSegmentMask = 4
-	SkPathSegmentMask_Cubic SkPathSegmentMask = 8
-)
-
-type SkPathVerb int64
-
-const (
-	SkPathVerb_Move  SkPathVerb = 0
-	SkPathVerb_Line  SkPathVerb = 1
-	SkPathVerb_Quad  SkPathVerb = 2
-	SkPathVerb_Conic SkPathVerb = 3
-	SkPathVerb_Cubic SkPathVerb = 4
-	SkPathVerb_Close SkPathVerb = 5
-)
-
-type SkTileMode int64
-
-const (
-	SkTileMode_Clamp        SkTileMode = 0
-	SkTileMode_Repeat       SkTileMode = 1
-	SkTileMode_Mirror       SkTileMode = 2
-	SkTileMode_Decal        SkTileMode = 3
-	SkTileMode_LastTileMode SkTileMode = 3
+	TileMode_Clamp        TileMode = 0
+	TileMode_Repeat       TileMode = 1
+	TileMode_Mirror       TileMode = 2
+	TileMode_Decal        TileMode = 3
+	TileMode_LastTileMode TileMode = 3
 )
 
 type GrBackendApi int64
@@ -1056,15 +1036,15 @@ const (
 	GrGLFormat_Last                 GrGLFormat = 27
 )
 
-type SkTextureCompressionType int64
+type TextureCompressionType int64
 
 const (
-	SkTextureCompressionType_None            SkTextureCompressionType = 0
-	SkTextureCompressionType_ETC2_RGB8_UNORM SkTextureCompressionType = 1
-	SkTextureCompressionType_BC1_RGB8_UNORM  SkTextureCompressionType = 2
-	SkTextureCompressionType_BC1_RGBA8_UNORM SkTextureCompressionType = 3
-	SkTextureCompressionType_Last            SkTextureCompressionType = 3
-	SkTextureCompressionType_ETC1_RGB8       SkTextureCompressionType = 1
+	TextureCompressionType_None            TextureCompressionType = 0
+	TextureCompressionType_ETC2_RGB8_UNORM TextureCompressionType = 1
+	TextureCompressionType_BC1_RGB8_UNORM  TextureCompressionType = 2
+	TextureCompressionType_BC1_RGBA8_UNORM TextureCompressionType = 3
+	TextureCompressionType_Last            TextureCompressionType = 3
+	TextureCompressionType_ETC1_RGB8       TextureCompressionType = 1
 )
 
 type GrPrimitiveType int64
@@ -1414,192 +1394,192 @@ const (
 	GrDriverBugWorkaroundType_NUMBER_OF_GPU_DRIVER_BUG_WORKAROUND_TYPES     GrDriverBugWorkaroundType = 17
 )
 
-type SkPathOp int64
+type PathOp int64
 
 const (
-	SkPathOp_Difference        SkPathOp = 0
-	SkPathOp_Intersect         SkPathOp = 1
-	SkPathOp_Union             SkPathOp = 2
-	SkPathOp_XOR               SkPathOp = 3
-	SkPathOp_ReverseDifference SkPathOp = 4
+	PathOp_Difference        PathOp = 0
+	PathOp_Intersect         PathOp = 1
+	PathOp_Union             PathOp = 2
+	PathOp_XOR               PathOp = 3
+	PathOp_ReverseDifference PathOp = 4
 )
 
-type SkPDFSteamCompressionEnabled int64
+type PDFSteamCompressionEnabled int64
 
 const (
-	SkPDFSteamCompressionEnabled_No      SkPDFSteamCompressionEnabled = 0
-	SkPDFSteamCompressionEnabled_Yes     SkPDFSteamCompressionEnabled = -1
-	SkPDFSteamCompressionEnabled_Default SkPDFSteamCompressionEnabled = -1
+	PDFSteamCompressionEnabled_No      PDFSteamCompressionEnabled = 0
+	PDFSteamCompressionEnabled_Yes     PDFSteamCompressionEnabled = -1
+	PDFSteamCompressionEnabled_Default PDFSteamCompressionEnabled = -1
 )
 
-type SkSVGPropertyState int64
+type SVGPropertyState int64
 
 const (
-	SkSVGPropertyState_Unspecified SkSVGPropertyState = 0
-	SkSVGPropertyState_Inherit     SkSVGPropertyState = 1
-	SkSVGPropertyState_Value       SkSVGPropertyState = 2
+	SVGPropertyState_Unspecified SVGPropertyState = 0
+	SVGPropertyState_Inherit     SVGPropertyState = 1
+	SVGPropertyState_Value       SVGPropertyState = 2
 )
 
-type SkSVGLineCap int64
+type SVGLineCap int64
 
 const (
-	SkSVGLineCap_Butt   SkSVGLineCap = 0
-	SkSVGLineCap_Round  SkSVGLineCap = 1
-	SkSVGLineCap_Square SkSVGLineCap = 2
+	SVGLineCap_Butt   SVGLineCap = 0
+	SVGLineCap_Round  SVGLineCap = 1
+	SVGLineCap_Square SVGLineCap = 2
 )
 
-type SkSVGFeColorMatrixType int64
+type SVGFeColorMatrixType int64
 
 const (
-	SkSVGFeColorMatrixType_Matrix           SkSVGFeColorMatrixType = 0
-	SkSVGFeColorMatrixType_Saturate         SkSVGFeColorMatrixType = 1
-	SkSVGFeColorMatrixType_HueRotate        SkSVGFeColorMatrixType = 2
-	SkSVGFeColorMatrixType_LuminanceToAlpha SkSVGFeColorMatrixType = 3
+	SVGFeColorMatrixType_Matrix           SVGFeColorMatrixType = 0
+	SVGFeColorMatrixType_Saturate         SVGFeColorMatrixType = 1
+	SVGFeColorMatrixType_HueRotate        SVGFeColorMatrixType = 2
+	SVGFeColorMatrixType_LuminanceToAlpha SVGFeColorMatrixType = 3
 )
 
-type SkSVGFeCompositeOperator int64
+type SVGFeCompositeOperator int64
 
 const (
-	SkSVGFeCompositeOperator_Over       SkSVGFeCompositeOperator = 0
-	SkSVGFeCompositeOperator_In         SkSVGFeCompositeOperator = 1
-	SkSVGFeCompositeOperator_Out        SkSVGFeCompositeOperator = 2
-	SkSVGFeCompositeOperator_Atop       SkSVGFeCompositeOperator = 3
-	SkSVGFeCompositeOperator_Xor        SkSVGFeCompositeOperator = 4
-	SkSVGFeCompositeOperator_Arithmetic SkSVGFeCompositeOperator = 5
+	SVGFeCompositeOperator_Over       SVGFeCompositeOperator = 0
+	SVGFeCompositeOperator_In         SVGFeCompositeOperator = 1
+	SVGFeCompositeOperator_Out        SVGFeCompositeOperator = 2
+	SVGFeCompositeOperator_Atop       SVGFeCompositeOperator = 3
+	SVGFeCompositeOperator_Xor        SVGFeCompositeOperator = 4
+	SVGFeCompositeOperator_Arithmetic SVGFeCompositeOperator = 5
 )
 
-type SkSVGXmlSpace int64
+type SVGXmlSpace int64
 
 const (
-	SkSVGXmlSpace_Default  SkSVGXmlSpace = 0
-	SkSVGXmlSpace_Preserve SkSVGXmlSpace = 1
+	SVGXmlSpace_Default  SVGXmlSpace = 0
+	SVGXmlSpace_Preserve SVGXmlSpace = 1
 )
 
-type SkSVGColorspace int64
+type SVGColorspace int64
 
 const (
-	SkSVGColorspace_Auto      SkSVGColorspace = 0
-	SkSVGColorspace_SRGB      SkSVGColorspace = 1
-	SkSVGColorspace_LinearRGB SkSVGColorspace = 2
+	SVGColorspace_Auto      SVGColorspace = 0
+	SVGColorspace_SRGB      SVGColorspace = 1
+	SVGColorspace_LinearRGB SVGColorspace = 2
 )
 
-type SkSVGDisplay int64
+type SVGDisplay int64
 
 const (
-	SkSVGDisplay_Inline SkSVGDisplay = 0
-	SkSVGDisplay_None   SkSVGDisplay = 1
+	SVGDisplay_Inline SVGDisplay = 0
+	SVGDisplay_None   SVGDisplay = 1
 )
 
-type SkSVGFeFuncType int64
+type SVGFeFuncType int64
 
 const (
-	SkSVGFeFuncType_Identity SkSVGFeFuncType = 0
-	SkSVGFeFuncType_Table    SkSVGFeFuncType = 1
-	SkSVGFeFuncType_Discrete SkSVGFeFuncType = 2
-	SkSVGFeFuncType_Linear   SkSVGFeFuncType = 3
-	SkSVGFeFuncType_Gamma    SkSVGFeFuncType = 4
+	SVGFeFuncType_Identity SVGFeFuncType = 0
+	SVGFeFuncType_Table    SVGFeFuncType = 1
+	SVGFeFuncType_Discrete SVGFeFuncType = 2
+	SVGFeFuncType_Linear   SVGFeFuncType = 3
+	SVGFeFuncType_Gamma    SVGFeFuncType = 4
 )
 
-type SkSVGAttribute int64
+type SVGAttribute int64
 
 const (
-	SkSVGAttribute_ClipRule                  SkSVGAttribute = 0
-	SkSVGAttribute_Color                     SkSVGAttribute = 1
-	SkSVGAttribute_ColorInterpolation        SkSVGAttribute = 2
-	SkSVGAttribute_ColorInterpolationFilters SkSVGAttribute = 3
-	SkSVGAttribute_Cx                        SkSVGAttribute = 4
-	SkSVGAttribute_Cy                        SkSVGAttribute = 5
-	SkSVGAttribute_Fill                      SkSVGAttribute = 6
-	SkSVGAttribute_FillOpacity               SkSVGAttribute = 7
-	SkSVGAttribute_FillRule                  SkSVGAttribute = 8
-	SkSVGAttribute_Filter                    SkSVGAttribute = 9
-	SkSVGAttribute_FilterUnits               SkSVGAttribute = 10
-	SkSVGAttribute_FontFamily                SkSVGAttribute = 11
-	SkSVGAttribute_FontSize                  SkSVGAttribute = 12
-	SkSVGAttribute_FontStyle                 SkSVGAttribute = 13
-	SkSVGAttribute_FontWeight                SkSVGAttribute = 14
-	SkSVGAttribute_Fx                        SkSVGAttribute = 15
-	SkSVGAttribute_Fy                        SkSVGAttribute = 16
-	SkSVGAttribute_GradientUnits             SkSVGAttribute = 17
-	SkSVGAttribute_GradientTransform         SkSVGAttribute = 18
-	SkSVGAttribute_Height                    SkSVGAttribute = 19
-	SkSVGAttribute_Href                      SkSVGAttribute = 20
-	SkSVGAttribute_Opacity                   SkSVGAttribute = 21
-	SkSVGAttribute_Points                    SkSVGAttribute = 22
-	SkSVGAttribute_PreserveAspectRatio       SkSVGAttribute = 23
-	SkSVGAttribute_R                         SkSVGAttribute = 24
-	SkSVGAttribute_Rx                        SkSVGAttribute = 25
-	SkSVGAttribute_Ry                        SkSVGAttribute = 26
-	SkSVGAttribute_SpreadMethod              SkSVGAttribute = 27
-	SkSVGAttribute_Stroke                    SkSVGAttribute = 28
-	SkSVGAttribute_StrokeDashArray           SkSVGAttribute = 29
-	SkSVGAttribute_StrokeDashOffset          SkSVGAttribute = 30
-	SkSVGAttribute_StrokeOpacity             SkSVGAttribute = 31
-	SkSVGAttribute_StrokeLineCap             SkSVGAttribute = 32
-	SkSVGAttribute_StrokeLineJoin            SkSVGAttribute = 33
-	SkSVGAttribute_StrokeMiterLimit          SkSVGAttribute = 34
-	SkSVGAttribute_StrokeWidth               SkSVGAttribute = 35
-	SkSVGAttribute_Transform                 SkSVGAttribute = 36
-	SkSVGAttribute_Text                      SkSVGAttribute = 37
-	SkSVGAttribute_TextAnchor                SkSVGAttribute = 38
-	SkSVGAttribute_ViewBox                   SkSVGAttribute = 39
-	SkSVGAttribute_Visibility                SkSVGAttribute = 40
-	SkSVGAttribute_Width                     SkSVGAttribute = 41
-	SkSVGAttribute_X                         SkSVGAttribute = 42
-	SkSVGAttribute_X1                        SkSVGAttribute = 43
-	SkSVGAttribute_X2                        SkSVGAttribute = 44
-	SkSVGAttribute_Y                         SkSVGAttribute = 45
-	SkSVGAttribute_Y1                        SkSVGAttribute = 46
-	SkSVGAttribute_Y2                        SkSVGAttribute = 47
-	SkSVGAttribute_Unknown                   SkSVGAttribute = 48
+	SVGAttribute_ClipRule                  SVGAttribute = 0
+	SVGAttribute_Color                     SVGAttribute = 1
+	SVGAttribute_ColorInterpolation        SVGAttribute = 2
+	SVGAttribute_ColorInterpolationFilters SVGAttribute = 3
+	SVGAttribute_Cx                        SVGAttribute = 4
+	SVGAttribute_Cy                        SVGAttribute = 5
+	SVGAttribute_Fill                      SVGAttribute = 6
+	SVGAttribute_FillOpacity               SVGAttribute = 7
+	SVGAttribute_FillRule                  SVGAttribute = 8
+	SVGAttribute_Filter                    SVGAttribute = 9
+	SVGAttribute_FilterUnits               SVGAttribute = 10
+	SVGAttribute_FontFamily                SVGAttribute = 11
+	SVGAttribute_FontSize                  SVGAttribute = 12
+	SVGAttribute_FontStyle                 SVGAttribute = 13
+	SVGAttribute_FontWeight                SVGAttribute = 14
+	SVGAttribute_Fx                        SVGAttribute = 15
+	SVGAttribute_Fy                        SVGAttribute = 16
+	SVGAttribute_GradientUnits             SVGAttribute = 17
+	SVGAttribute_GradientTransform         SVGAttribute = 18
+	SVGAttribute_Height                    SVGAttribute = 19
+	SVGAttribute_Href                      SVGAttribute = 20
+	SVGAttribute_Opacity                   SVGAttribute = 21
+	SVGAttribute_Points                    SVGAttribute = 22
+	SVGAttribute_PreserveAspectRatio       SVGAttribute = 23
+	SVGAttribute_R                         SVGAttribute = 24
+	SVGAttribute_Rx                        SVGAttribute = 25
+	SVGAttribute_Ry                        SVGAttribute = 26
+	SVGAttribute_SpreadMethod              SVGAttribute = 27
+	SVGAttribute_Stroke                    SVGAttribute = 28
+	SVGAttribute_StrokeDashArray           SVGAttribute = 29
+	SVGAttribute_StrokeDashOffset          SVGAttribute = 30
+	SVGAttribute_StrokeOpacity             SVGAttribute = 31
+	SVGAttribute_StrokeLineCap             SVGAttribute = 32
+	SVGAttribute_StrokeLineJoin            SVGAttribute = 33
+	SVGAttribute_StrokeMiterLimit          SVGAttribute = 34
+	SVGAttribute_StrokeWidth               SVGAttribute = 35
+	SVGAttribute_Transform                 SVGAttribute = 36
+	SVGAttribute_Text                      SVGAttribute = 37
+	SVGAttribute_TextAnchor                SVGAttribute = 38
+	SVGAttribute_ViewBox                   SVGAttribute = 39
+	SVGAttribute_Visibility                SVGAttribute = 40
+	SVGAttribute_Width                     SVGAttribute = 41
+	SVGAttribute_X                         SVGAttribute = 42
+	SVGAttribute_X1                        SVGAttribute = 43
+	SVGAttribute_X2                        SVGAttribute = 44
+	SVGAttribute_Y                         SVGAttribute = 45
+	SVGAttribute_Y1                        SVGAttribute = 46
+	SVGAttribute_Y2                        SVGAttribute = 47
+	SVGAttribute_Unknown                   SVGAttribute = 48
 )
 
-type SkSVGTag int64
+type SVGTag int64
 
 const (
-	SkSVGTag_Circle              SkSVGTag = 0
-	SkSVGTag_ClipPath            SkSVGTag = 1
-	SkSVGTag_Defs                SkSVGTag = 2
-	SkSVGTag_Ellipse             SkSVGTag = 3
-	SkSVGTag_FeBlend             SkSVGTag = 4
-	SkSVGTag_FeColorMatrix       SkSVGTag = 5
-	SkSVGTag_FeComponentTransfer SkSVGTag = 6
-	SkSVGTag_FeComposite         SkSVGTag = 7
-	SkSVGTag_FeDiffuseLighting   SkSVGTag = 8
-	SkSVGTag_FeDisplacementMap   SkSVGTag = 9
-	SkSVGTag_FeDistantLight      SkSVGTag = 10
-	SkSVGTag_FeFlood             SkSVGTag = 11
-	SkSVGTag_FeFuncA             SkSVGTag = 12
-	SkSVGTag_FeFuncR             SkSVGTag = 13
-	SkSVGTag_FeFuncG             SkSVGTag = 14
-	SkSVGTag_FeFuncB             SkSVGTag = 15
-	SkSVGTag_FeGaussianBlur      SkSVGTag = 16
-	SkSVGTag_FeImage             SkSVGTag = 17
-	SkSVGTag_FeMerge             SkSVGTag = 18
-	SkSVGTag_FeMergeNode         SkSVGTag = 19
-	SkSVGTag_FeMorphology        SkSVGTag = 20
-	SkSVGTag_FeOffset            SkSVGTag = 21
-	SkSVGTag_FePointLight        SkSVGTag = 22
-	SkSVGTag_FeSpecularLighting  SkSVGTag = 23
-	SkSVGTag_FeSpotLight         SkSVGTag = 24
-	SkSVGTag_FeTurbulence        SkSVGTag = 25
-	SkSVGTag_Filter              SkSVGTag = 26
-	SkSVGTag_G                   SkSVGTag = 27
-	SkSVGTag_Image               SkSVGTag = 28
-	SkSVGTag_Line                SkSVGTag = 29
-	SkSVGTag_LinearGradient      SkSVGTag = 30
-	SkSVGTag_Mask                SkSVGTag = 31
-	SkSVGTag_Path                SkSVGTag = 32
-	SkSVGTag_Pattern             SkSVGTag = 33
-	SkSVGTag_Polygon             SkSVGTag = 34
-	SkSVGTag_Polyline            SkSVGTag = 35
-	SkSVGTag_RadialGradient      SkSVGTag = 36
-	SkSVGTag_Rect                SkSVGTag = 37
-	SkSVGTag_Stop                SkSVGTag = 38
-	SkSVGTag_Svg                 SkSVGTag = 39
-	SkSVGTag_Text                SkSVGTag = 40
-	SkSVGTag_TextLiteral         SkSVGTag = 41
-	SkSVGTag_TextPath            SkSVGTag = 42
-	SkSVGTag_TSpan               SkSVGTag = 43
-	SkSVGTag_Use                 SkSVGTag = 44
+	SVGTag_Circle              SVGTag = 0
+	SVGTag_ClipPath            SVGTag = 1
+	SVGTag_Defs                SVGTag = 2
+	SVGTag_Ellipse             SVGTag = 3
+	SVGTag_FeBlend             SVGTag = 4
+	SVGTag_FeColorMatrix       SVGTag = 5
+	SVGTag_FeComponentTransfer SVGTag = 6
+	SVGTag_FeComposite         SVGTag = 7
+	SVGTag_FeDiffuseLighting   SVGTag = 8
+	SVGTag_FeDisplacementMap   SVGTag = 9
+	SVGTag_FeDistantLight      SVGTag = 10
+	SVGTag_FeFlood             SVGTag = 11
+	SVGTag_FeFuncA             SVGTag = 12
+	SVGTag_FeFuncR             SVGTag = 13
+	SVGTag_FeFuncG             SVGTag = 14
+	SVGTag_FeFuncB             SVGTag = 15
+	SVGTag_FeGaussianBlur      SVGTag = 16
+	SVGTag_FeImage             SVGTag = 17
+	SVGTag_FeMerge             SVGTag = 18
+	SVGTag_FeMergeNode         SVGTag = 19
+	SVGTag_FeMorphology        SVGTag = 20
+	SVGTag_FeOffset            SVGTag = 21
+	SVGTag_FePointLight        SVGTag = 22
+	SVGTag_FeSpecularLighting  SVGTag = 23
+	SVGTag_FeSpotLight         SVGTag = 24
+	SVGTag_FeTurbulence        SVGTag = 25
+	SVGTag_Filter              SVGTag = 26
+	SVGTag_G                   SVGTag = 27
+	SVGTag_Image               SVGTag = 28
+	SVGTag_Line                SVGTag = 29
+	SVGTag_LinearGradient      SVGTag = 30
+	SVGTag_Mask                SVGTag = 31
+	SVGTag_Path                SVGTag = 32
+	SVGTag_Pattern             SVGTag = 33
+	SVGTag_Polygon             SVGTag = 34
+	SVGTag_Polyline            SVGTag = 35
+	SVGTag_RadialGradient      SVGTag = 36
+	SVGTag_Rect                SVGTag = 37
+	SVGTag_Stop                SVGTag = 38
+	SVGTag_Svg                 SVGTag = 39
+	SVGTag_Text                SVGTag = 40
+	SVGTag_TextLiteral         SVGTag = 41
+	SVGTag_TextPath            SVGTag = 42
+	SVGTag_TSpan               SVGTag = 43
+	SVGTag_Use                 SVGTag = 44
 )
