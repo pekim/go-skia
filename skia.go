@@ -2,12 +2,23 @@
 
 package skia
 
+// #cgo CXXFLAGS: -I ${SRCDIR}/skia/skia
+// #include "api.h"
+import "C"
+
 import (
 	"unsafe"
 )
 
 type Matrix struct {
 	skia unsafe.Pointer
+}
+
+func NewMatrix() Matrix {
+	c := C.skia_new_SkMatrix()
+	return Matrix{
+		skia: c,
+	}
 }
 
 type MatrixScaleToFit int64
@@ -33,12 +44,33 @@ type RefCntBase struct {
 	skia unsafe.Pointer
 }
 
+func NewRefCntBase() RefCntBase {
+	c := C.skia_new_SkRefCntBase()
+	return RefCntBase{
+		skia: c,
+	}
+}
+
 type ColorInfo struct {
 	skia unsafe.Pointer
 }
 
+func NewColorInfo() ColorInfo {
+	c := C.skia_new_SkColorInfo()
+	return ColorInfo{
+		skia: c,
+	}
+}
+
 type Pixmap struct {
 	skia unsafe.Pointer
+}
+
+func NewPixmap() Pixmap {
+	c := C.skia_new_SkPixmap()
+	return Pixmap{
+		skia: c,
+	}
 }
 
 type Data struct {
@@ -47,6 +79,13 @@ type Data struct {
 
 type YUVAInfo struct {
 	skia unsafe.Pointer
+}
+
+func NewYUVAInfo() YUVAInfo {
+	c := C.skia_new_SkYUVAInfo()
+	return YUVAInfo{
+		skia: c,
+	}
 }
 
 type YUVAInfoYUVAChannels int64
@@ -101,6 +140,13 @@ type YUVAPixmapInfo struct {
 	skia unsafe.Pointer
 }
 
+func NewYUVAPixmapInfo() YUVAPixmapInfo {
+	c := C.skia_new_SkYUVAPixmapInfo()
+	return YUVAPixmapInfo{
+		skia: c,
+	}
+}
+
 type YUVAPixmapInfoDataType int64
 
 const (
@@ -115,8 +161,22 @@ type YUVAPixmaps struct {
 	skia unsafe.Pointer
 }
 
+func NewYUVAPixmaps() YUVAPixmaps {
+	c := C.skia_new_SkYUVAPixmaps()
+	return YUVAPixmaps{
+		skia: c,
+	}
+}
+
 type Once struct {
 	skia unsafe.Pointer
+}
+
+func NewOnce() Once {
+	c := C.skia_new_SkOnce()
+	return Once{
+		skia: c,
+	}
 }
 
 type OnceState int64
@@ -133,6 +193,13 @@ type ColorSpace struct {
 
 type Noncopyable struct {
 	skia unsafe.Pointer
+}
+
+func NewNoncopyable() Noncopyable {
+	c := C.skia_new_SkNoncopyable()
+	return Noncopyable{
+		skia: c,
+	}
 }
 
 type Codec struct {
@@ -187,6 +254,13 @@ type Flattenable struct {
 	skia unsafe.Pointer
 }
 
+func NewFlattenable() Flattenable {
+	c := C.skia_new_SkFlattenable()
+	return Flattenable{
+		skia: c,
+	}
+}
+
 type FlattenableType int64
 
 const (
@@ -215,6 +289,13 @@ type M44 struct {
 	skia unsafe.Pointer
 }
 
+func NewM44() M44 {
+	c := C.skia_new_SkM44()
+	return M44{
+		skia: c,
+	}
+}
+
 type M44Uninitialized_Constructor int64
 
 const (
@@ -229,6 +310,13 @@ const (
 
 type Paint struct {
 	skia unsafe.Pointer
+}
+
+func NewPaint() Paint {
+	c := C.skia_new_SkPaint()
+	return Paint{
+		skia: c,
+	}
 }
 
 type PaintStyle int64
@@ -263,12 +351,33 @@ type RasterHandleAllocator struct {
 	skia unsafe.Pointer
 }
 
+func NewRasterHandleAllocator() RasterHandleAllocator {
+	c := C.skia_new_SkRasterHandleAllocator()
+	return RasterHandleAllocator{
+		skia: c,
+	}
+}
+
 type String struct {
 	skia unsafe.Pointer
 }
 
+func NewString() String {
+	c := C.skia_new_SkString()
+	return String{
+		skia: c,
+	}
+}
+
 type SurfaceProps struct {
 	skia unsafe.Pointer
+}
+
+func NewSurfaceProps() SurfaceProps {
+	c := C.skia_new_SkSurfaceProps()
+	return SurfaceProps{
+		skia: c,
+	}
 }
 
 type SurfacePropsFlags int64
@@ -290,6 +399,13 @@ type ContainerAllocator struct {
 
 type Canvas struct {
 	skia unsafe.Pointer
+}
+
+func NewCanvas() Canvas {
+	c := C.skia_new_SkCanvas()
+	return Canvas{
+		skia: c,
+	}
 }
 
 type CanvasSaveLayerFlagsSet int64
@@ -389,6 +505,13 @@ type Stream struct {
 	skia unsafe.Pointer
 }
 
+func NewStream() Stream {
+	c := C.skia_new_SkStream()
+	return Stream{
+		skia: c,
+	}
+}
+
 type StreamRewindable struct {
 	skia unsafe.Pointer
 }
@@ -409,8 +532,22 @@ type WStream struct {
 	skia unsafe.Pointer
 }
 
+func NewWStream() WStream {
+	c := C.skia_new_SkWStream()
+	return WStream{
+		skia: c,
+	}
+}
+
 type NullWStream struct {
 	skia unsafe.Pointer
+}
+
+func NewNullWStream() NullWStream {
+	c := C.skia_new_SkNullWStream()
+	return NullWStream{
+		skia: c,
+	}
 }
 
 type FILEStream struct {
@@ -421,12 +558,26 @@ type MemoryStream struct {
 	skia unsafe.Pointer
 }
 
+func NewMemoryStream() MemoryStream {
+	c := C.skia_new_SkMemoryStream()
+	return MemoryStream{
+		skia: c,
+	}
+}
+
 type FILEWStream struct {
 	skia unsafe.Pointer
 }
 
 type DynamicMemoryWStream struct {
 	skia unsafe.Pointer
+}
+
+func NewDynamicMemoryWStream() DynamicMemoryWStream {
+	c := C.skia_new_SkDynamicMemoryWStream()
+	return DynamicMemoryWStream{
+		skia: c,
+	}
 }
 
 type Image struct {
@@ -485,6 +636,13 @@ type FontStyle struct {
 	skia unsafe.Pointer
 }
 
+func NewFontStyle() FontStyle {
+	c := C.skia_new_SkFontStyle()
+	return FontStyle{
+		skia: c,
+	}
+}
+
 type FontStyleWeight int64
 
 const (
@@ -527,6 +685,13 @@ type WeakRefCnt struct {
 	skia unsafe.Pointer
 }
 
+func NewWeakRefCnt() WeakRefCnt {
+	c := C.skia_new_SkWeakRefCnt()
+	return WeakRefCnt{
+		skia: c,
+	}
+}
+
 type Typeface struct {
 	skia unsafe.Pointer
 }
@@ -541,6 +706,13 @@ const (
 
 type Font struct {
 	skia unsafe.Pointer
+}
+
+func NewFont() Font {
+	c := C.skia_new_SkFont()
+	return Font{
+		skia: c,
+	}
 }
 
 type FontEdging int64
@@ -570,6 +742,13 @@ type TextBlobBuilder struct {
 	skia unsafe.Pointer
 }
 
+func NewTextBlobBuilder() TextBlobBuilder {
+	c := C.skia_new_SkTextBlobBuilder()
+	return TextBlobBuilder{
+		skia: c,
+	}
+}
+
 type Path1DPathEffect struct {
 	skia unsafe.Pointer
 }
@@ -595,8 +774,22 @@ type ColorFilter struct {
 	skia unsafe.Pointer
 }
 
+func NewColorFilter() ColorFilter {
+	c := C.skia_new_SkColorFilter()
+	return ColorFilter{
+		skia: c,
+	}
+}
+
 type ColorFilters struct {
 	skia unsafe.Pointer
+}
+
+func NewColorFilters() ColorFilters {
+	c := C.skia_new_SkColorFilters()
+	return ColorFilters{
+		skia: c,
+	}
 }
 
 type ColorMatrixFilter struct {
@@ -613,6 +806,13 @@ type DashPathEffect struct {
 
 type Path struct {
 	skia unsafe.Pointer
+}
+
+func NewPath() Path {
+	c := C.skia_new_SkPath()
+	return Path{
+		skia: c,
+	}
 }
 
 type PathArcSize int64
@@ -654,6 +854,13 @@ type PathEffect struct {
 	skia unsafe.Pointer
 }
 
+func NewPathEffect() PathEffect {
+	c := C.skia_new_SkPathEffect()
+	return PathEffect{
+		skia: c,
+	}
+}
+
 type PathEffectDashType int64
 
 const (
@@ -667,6 +874,13 @@ type DiscretePathEffect struct {
 
 type Shader struct {
 	skia unsafe.Pointer
+}
+
+func NewShader() Shader {
+	c := C.skia_new_SkShader()
+	return Shader{
+		skia: c,
+	}
 }
 
 type GradientShader struct {
@@ -683,8 +897,22 @@ type Picture struct {
 	skia unsafe.Pointer
 }
 
+func NewPicture() Picture {
+	c := C.skia_new_SkPicture()
+	return Picture{
+		skia: c,
+	}
+}
+
 type ImageFilters struct {
 	skia unsafe.Pointer
+}
+
+func NewImageFilters() ImageFilters {
+	c := C.skia_new_SkImageFilters()
+	return ImageFilters{
+		skia: c,
+	}
 }
 
 type ImageFiltersDither int64
@@ -702,6 +930,13 @@ type TableMaskFilter struct {
 	skia unsafe.Pointer
 }
 
+func NewTableMaskFilter() TableMaskFilter {
+	c := C.skia_new_SkTableMaskFilter()
+	return TableMaskFilter{
+		skia: c,
+	}
+}
+
 type TrimPathEffect struct {
 	skia unsafe.Pointer
 }
@@ -717,6 +952,13 @@ type DataTable struct {
 	skia unsafe.Pointer
 }
 
+func NewDataTable() DataTable {
+	c := C.skia_new_SkDataTable()
+	return DataTable{
+		skia: c,
+	}
+}
+
 type Encoder struct {
 	skia unsafe.Pointer
 }
@@ -725,24 +967,66 @@ type GrGLExtensions struct {
 	skia unsafe.Pointer
 }
 
+func NewGrGLExtensions() GrGLExtensions {
+	c := C.skia_new_GrGLExtensions()
+	return GrGLExtensions{
+		skia: c,
+	}
+}
+
 type GrColorFormatDesc struct {
 	skia unsafe.Pointer
+}
+
+func NewGrColorFormatDesc() GrColorFormatDesc {
+	c := C.skia_new_GrColorFormatDesc()
+	return GrColorFormatDesc{
+		skia: c,
+	}
 }
 
 type GrBackendFormat struct {
 	skia unsafe.Pointer
 }
 
+func NewGrBackendFormat() GrBackendFormat {
+	c := C.skia_new_GrBackendFormat()
+	return GrBackendFormat{
+		skia: c,
+	}
+}
+
 type GrBackendTexture struct {
 	skia unsafe.Pointer
+}
+
+func NewGrBackendTexture() GrBackendTexture {
+	c := C.skia_new_GrBackendTexture()
+	return GrBackendTexture{
+		skia: c,
+	}
 }
 
 type GrBackendRenderTarget struct {
 	skia unsafe.Pointer
 }
 
+func NewGrBackendRenderTarget() GrBackendRenderTarget {
+	c := C.skia_new_GrBackendRenderTarget()
+	return GrBackendRenderTarget{
+		skia: c,
+	}
+}
+
 type GrDriverBugWorkarounds struct {
 	skia unsafe.Pointer
+}
+
+func NewGrDriverBugWorkarounds() GrDriverBugWorkarounds {
+	c := C.skia_new_GrDriverBugWorkarounds()
+	return GrDriverBugWorkarounds{
+		skia: c,
+	}
 }
 
 type GrContext_Base struct {
@@ -755,6 +1039,13 @@ type Semaphore struct {
 
 type Mutex struct {
 	skia unsafe.Pointer
+}
+
+func NewMutex() Mutex {
+	c := C.skia_new_SkMutex()
+	return Mutex{
+		skia: c,
+	}
 }
 
 type AutoMutexExclusive struct {
@@ -823,8 +1114,22 @@ type PDFObject struct {
 	skia unsafe.Pointer
 }
 
+func NewPDFObject() PDFObject {
+	c := C.skia_new_SkPDFObject()
+	return PDFObject{
+		skia: c,
+	}
+}
+
 type PDFArray struct {
 	skia unsafe.Pointer
+}
+
+func NewPDFArray() PDFArray {
+	c := C.skia_new_SkPDFArray()
+	return PDFArray{
+		skia: c,
+	}
 }
 
 type PDFDict struct {
@@ -843,6 +1148,13 @@ type PDFTagTree struct {
 	skia unsafe.Pointer
 }
 
+func NewPDFTagTree() PDFTagTree {
+	c := C.skia_new_SkPDFTagTree()
+	return PDFTagTree{
+		skia: c,
+	}
+}
+
 type PDFOffsetMap struct {
 	skia unsafe.Pointer
 }
@@ -855,6 +1167,13 @@ type Shaper struct {
 	skia unsafe.Pointer
 }
 
+func NewShaper() Shaper {
+	c := C.skia_new_SkShaper()
+	return Shaper{
+		skia: c,
+	}
+}
+
 type TextBlobBuilderRunHandler struct {
 	skia unsafe.Pointer
 }
@@ -865,6 +1184,13 @@ type SVGDOM struct {
 
 type SVGLength struct {
 	skia unsafe.Pointer
+}
+
+func NewSVGLength() SVGLength {
+	c := C.skia_new_SkSVGLength()
+	return SVGLength{
+		skia: c,
+	}
 }
 
 type SVGLengthUnit int64
@@ -887,6 +1213,13 @@ type SVGIRI struct {
 	skia unsafe.Pointer
 }
 
+func NewSVGIRI() SVGIRI {
+	c := C.skia_new_SkSVGIRI()
+	return SVGIRI{
+		skia: c,
+	}
+}
+
 type SVGIRIType int64
 
 const (
@@ -897,6 +1230,13 @@ const (
 
 type SVGColor struct {
 	skia unsafe.Pointer
+}
+
+func NewSVGColor() SVGColor {
+	c := C.skia_new_SkSVGColor()
+	return SVGColor{
+		skia: c,
+	}
 }
 
 type SVGColorType int64
@@ -911,6 +1251,13 @@ type SVGPaint struct {
 	skia unsafe.Pointer
 }
 
+func NewSVGPaint() SVGPaint {
+	c := C.skia_new_SkSVGPaint()
+	return SVGPaint{
+		skia: c,
+	}
+}
+
 type SVGPaintType int64
 
 const (
@@ -923,6 +1270,13 @@ type SVGFuncIRI struct {
 	skia unsafe.Pointer
 }
 
+func NewSVGFuncIRI() SVGFuncIRI {
+	c := C.skia_new_SkSVGFuncIRI()
+	return SVGFuncIRI{
+		skia: c,
+	}
+}
+
 type SVGFuncIRIType int64
 
 const (
@@ -932,6 +1286,13 @@ const (
 
 type SVGLineJoin struct {
 	skia unsafe.Pointer
+}
+
+func NewSVGLineJoin() SVGLineJoin {
+	c := C.skia_new_SkSVGLineJoin()
+	return SVGLineJoin{
+		skia: c,
+	}
 }
 
 type SVGLineJoinType int64
@@ -947,6 +1308,13 @@ type SVGSpreadMethod struct {
 	skia unsafe.Pointer
 }
 
+func NewSVGSpreadMethod() SVGSpreadMethod {
+	c := C.skia_new_SkSVGSpreadMethod()
+	return SVGSpreadMethod{
+		skia: c,
+	}
+}
+
 type SVGSpreadMethodType int64
 
 const (
@@ -959,6 +1327,13 @@ type SVGFillRule struct {
 	skia unsafe.Pointer
 }
 
+func NewSVGFillRule() SVGFillRule {
+	c := C.skia_new_SkSVGFillRule()
+	return SVGFillRule{
+		skia: c,
+	}
+}
+
 type SVGFillRuleType int64
 
 const (
@@ -969,6 +1344,13 @@ const (
 
 type SVGVisibility struct {
 	skia unsafe.Pointer
+}
+
+func NewSVGVisibility() SVGVisibility {
+	c := C.skia_new_SkSVGVisibility()
+	return SVGVisibility{
+		skia: c,
+	}
 }
 
 type SVGVisibilityType int64
@@ -984,6 +1366,13 @@ type SVGDashArray struct {
 	skia unsafe.Pointer
 }
 
+func NewSVGDashArray() SVGDashArray {
+	c := C.skia_new_SkSVGDashArray()
+	return SVGDashArray{
+		skia: c,
+	}
+}
+
 type SVGDashArrayType int64
 
 const (
@@ -994,6 +1383,13 @@ const (
 
 type SVGStopColor struct {
 	skia unsafe.Pointer
+}
+
+func NewSVGStopColor() SVGStopColor {
+	c := C.skia_new_SkSVGStopColor()
+	return SVGStopColor{
+		skia: c,
+	}
 }
 
 type SVGStopColorType int64
@@ -1009,6 +1405,13 @@ type SVGObjectBoundingBoxUnits struct {
 	skia unsafe.Pointer
 }
 
+func NewSVGObjectBoundingBoxUnits() SVGObjectBoundingBoxUnits {
+	c := C.skia_new_SkSVGObjectBoundingBoxUnits()
+	return SVGObjectBoundingBoxUnits{
+		skia: c,
+	}
+}
+
 type SVGObjectBoundingBoxUnitsType int64
 
 const (
@@ -1020,6 +1423,13 @@ type SVGFontFamily struct {
 	skia unsafe.Pointer
 }
 
+func NewSVGFontFamily() SVGFontFamily {
+	c := C.skia_new_SkSVGFontFamily()
+	return SVGFontFamily{
+		skia: c,
+	}
+}
+
 type SVGFontFamilyType int64
 
 const (
@@ -1029,6 +1439,13 @@ const (
 
 type SVGFontStyle struct {
 	skia unsafe.Pointer
+}
+
+func NewSVGFontStyle() SVGFontStyle {
+	c := C.skia_new_SkSVGFontStyle()
+	return SVGFontStyle{
+		skia: c,
+	}
 }
 
 type SVGFontStyleType int64
@@ -1044,6 +1461,13 @@ type SVGFontSize struct {
 	skia unsafe.Pointer
 }
 
+func NewSVGFontSize() SVGFontSize {
+	c := C.skia_new_SkSVGFontSize()
+	return SVGFontSize{
+		skia: c,
+	}
+}
+
 type SVGFontSizeType int64
 
 const (
@@ -1053,6 +1477,13 @@ const (
 
 type SVGFontWeight struct {
 	skia unsafe.Pointer
+}
+
+func NewSVGFontWeight() SVGFontWeight {
+	c := C.skia_new_SkSVGFontWeight()
+	return SVGFontWeight{
+		skia: c,
+	}
 }
 
 type SVGFontWeightType int64
@@ -1078,6 +1509,13 @@ type SVGTextAnchor struct {
 	skia unsafe.Pointer
 }
 
+func NewSVGTextAnchor() SVGTextAnchor {
+	c := C.skia_new_SkSVGTextAnchor()
+	return SVGTextAnchor{
+		skia: c,
+	}
+}
+
 type SVGTextAnchorType int64
 
 const (
@@ -1089,6 +1527,13 @@ const (
 
 type SVGFeInputType struct {
 	skia unsafe.Pointer
+}
+
+func NewSVGFeInputType() SVGFeInputType {
+	c := C.skia_new_SkSVGFeInputType()
+	return SVGFeInputType{
+		skia: c,
+	}
 }
 
 type SVGFeInputTypeType int64
@@ -1106,6 +1551,13 @@ const (
 
 type SVGFeTurbulenceBaseFrequency struct {
 	skia unsafe.Pointer
+}
+
+func NewSVGFeTurbulenceBaseFrequency() SVGFeTurbulenceBaseFrequency {
+	c := C.skia_new_SkSVGFeTurbulenceBaseFrequency()
+	return SVGFeTurbulenceBaseFrequency{
+		skia: c,
+	}
 }
 
 type SVGAttributeParser struct {

@@ -199,3 +199,8 @@ sed -e 's@^class SkData;$@#include "include/core/SkData.h"@' src/pdf/SkPDFSubset
 # Perform the build
 bin/gn gen "${BUILD_DIR}" --args="${COMMON_ARGS} ${PLATFORM_ARGS}"
 ninja -C "${BUILD_DIR}"
+cd ../..
+
+# generate
+go run generate/cmd/main.go
+go run temp-test/test.go

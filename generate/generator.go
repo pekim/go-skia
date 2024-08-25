@@ -7,10 +7,12 @@ import (
 )
 
 type generator struct {
-	transUnit clang.TranslationUnit
-	classes   []class
-	enums     []enum
-	goFile    *genFile
+	transUnit  clang.TranslationUnit
+	classes    []class
+	enums      []enum
+	goFile     *fileGo
+	headerFile *fileHeader
+	cppFile    *fileCpp
 }
 
 func Generate() {

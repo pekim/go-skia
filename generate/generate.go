@@ -1,74 +1,20 @@
 package generate
 
-import (
-	"fmt"
-	"go/format"
-	"os"
-	"strings"
-)
-
 func (g *generator) generate() {
-	g.goFile = newGenFile("./skia.go")
-	defer g.goFile.close()
+	g.goFile = newFileGo()
+	defer g.goFile.finish()
 
-	g.goFile.writeln("package skia")
-	g.goFile.writeln("")
-	g.goFile.writeln("import (")
-	g.goFile.writeln(`  "unsafe"`)
-	g.goFile.writeln(")")
-	g.goFile.writeln("")
+	g.headerFile = newFileHeader()
+	defer g.headerFile.finish()
+
+	g.cppFile = newFileCpp()
+	defer g.cppFile.finish()
 
 	for _, class := range g.classes {
-		class.generate(g.goFile)
+		class.generate(g)
 	}
 
 	for _, enum := range g.enums {
-		enum.generate(g.goFile)
+		enum.generate(g)
 	}
-}
-
-type genFile struct {
-	filename string
-	content  strings.Builder
-}
-
-func newGenFile(filename string) *genFile {
-	f := &genFile{
-		filename: filename,
-	}
-	f.writeln("// This is a generated file. DO NOT EDIT.")
-	f.writeln("")
-
-	return f
-}
-
-func (f *genFile) close() {
-	unformatted := []byte(f.content.String())
-	formatted, err := format.Source(unformatted)
-	if err != nil {
-		fmt.Printf("failed to format %s: %s\n", f.filename, err.Error())
-		formatted = unformatted
-	}
-	err = os.WriteFile(f.filename, formatted, 0644)
-	if err != nil {
-		panic(err)
-	}
-}
-
-func (f *genFile) write(content string) {
-	f.content.WriteString(content)
-}
-
-func (f *genFile) writeln(line string) {
-	f.write(line)
-	f.write("\n")
-}
-
-func (f *genFile) writef(format string, args ...any) {
-	f.write(fmt.Sprintf(format, args...))
-}
-
-func (f *genFile) writelnf(format string, args ...any) {
-	f.writef(format, args...)
-	f.write("\n")
 }
