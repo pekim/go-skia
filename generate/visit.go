@@ -11,6 +11,7 @@ func (g *generator) visit() {
 		switch cursor.Kind() {
 		case clang.Cursor_ClassDecl:
 			g.visitClass(cursor)
+
 		case clang.Cursor_EnumDecl:
 			g.visitEnum(cursor)
 		}
@@ -25,16 +26,25 @@ func (g *generator) visitClass(cursor clang.Cursor) {
 		cName:  name,
 		goName: strings.TrimPrefix(name, "Sk"),
 	}
-	cursor.Visit(func(cursor, _parent clang.Cursor) (status clang.ChildVisitResult) {
 
+	isPublic := false
+	cursor.Visit(func(cursor, _parent clang.Cursor) (status clang.ChildVisitResult) {
 		switch cursor.Kind() {
+		case clang.Cursor_CXXAccessSpecifier:
+			if cursor.AccessSpecifier() == clang.AccessSpecifier_Public {
+				isPublic = true
+			}
+
 		case clang.Cursor_EnumDecl:
 			g.visitClassEnum(&class, cursor)
 		}
 
 		return clang.ChildVisit_Continue
 	})
-	g.classes = append(g.classes, class)
+
+	if isPublic {
+		g.classes = append(g.classes, class)
+	}
 }
 
 func (g *generator) visitClassEnum(class *class, cursor clang.Cursor) {

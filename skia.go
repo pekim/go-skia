@@ -2,6 +2,9 @@
 
 package skia
 
+type Matrix struct {
+}
+
 type MatrixScaleToFit int64
 
 const (
@@ -20,6 +23,21 @@ const (
 	MatrixTypeMask_Affine_Mask      MatrixTypeMask = 4
 	MatrixTypeMask_Perspective_Mask MatrixTypeMask = 8
 )
+
+type RefCntBase struct {
+}
+
+type ColorInfo struct {
+}
+
+type Pixmap struct {
+}
+
+type Data struct {
+}
+
+type YUVAInfo struct {
+}
 
 type YUVAInfoYUVAChannels int64
 
@@ -69,6 +87,9 @@ const (
 	YUVAInfoSiting_Centered YUVAInfoSiting = 0
 )
 
+type YUVAPixmapInfo struct {
+}
+
 type YUVAPixmapInfoDataType int64
 
 const (
@@ -79,6 +100,12 @@ const (
 	YUVAPixmapInfoDataType_Last           YUVAPixmapInfoDataType = 3
 )
 
+type YUVAPixmaps struct {
+}
+
+type Once struct {
+}
+
 type OnceState int64
 
 const (
@@ -86,6 +113,15 @@ const (
 	OnceState_Claimed    OnceState = 1
 	OnceState_Done       OnceState = 2
 )
+
+type ColorSpace struct {
+}
+
+type Noncopyable struct {
+}
+
+type Codec struct {
+}
 
 type CodecResult int64
 
@@ -131,6 +167,9 @@ const (
 	CodecXformTime_DecodeRow CodecXformTime = 2
 )
 
+type Flattenable struct {
+}
+
 type FlattenableType int64
 
 const (
@@ -144,12 +183,18 @@ const (
 	FlattenableType_SkShader      FlattenableType = 7
 )
 
+type ImageFilter struct {
+}
+
 type ImageFilterMapDirection int64
 
 const (
 	ImageFilterMapDirection_Forward ImageFilterMapDirection = 0
 	ImageFilterMapDirection_Reverse ImageFilterMapDirection = 1
 )
+
+type M44 struct {
+}
 
 type M44Uninitialized_Constructor int64
 
@@ -162,6 +207,9 @@ type M44NaN_Constructor int64
 const (
 	M44NaN_Constructor_ M44NaN_Constructor = 0
 )
+
+type Paint struct {
+}
 
 type PaintStyle int64
 
@@ -191,6 +239,15 @@ const (
 	PaintJoin_Default PaintJoin = 0
 )
 
+type RasterHandleAllocator struct {
+}
+
+type String struct {
+}
+
+type SurfaceProps struct {
+}
+
 type SurfacePropsFlags int64
 
 const (
@@ -199,6 +256,15 @@ const (
 	SurfacePropsFlags_DynamicMSAA               SurfacePropsFlags = 2
 	SurfacePropsFlags_AlwaysDither              SurfacePropsFlags = 4
 )
+
+type Deque struct {
+}
+
+type ContainerAllocator struct {
+}
+
+type Canvas struct {
+}
 
 type CanvasSaveLayerFlagsSet int64
 
@@ -265,6 +331,12 @@ const (
 	CanvasDeviceCompatibleWithFilter_Yes     CanvasDeviceCompatibleWithFilter = -1
 )
 
+type AutoCanvasRestore struct {
+}
+
+type Document struct {
+}
+
 type DocumentState int64
 
 const (
@@ -272,6 +344,51 @@ const (
 	DocumentState_InPage       DocumentState = 1
 	DocumentState_Closed       DocumentState = 2
 )
+
+type FontStyleSet struct {
+}
+
+type FontMgr struct {
+}
+
+type MaskFilter struct {
+}
+
+type Stream struct {
+}
+
+type StreamRewindable struct {
+}
+
+type StreamSeekable struct {
+}
+
+type StreamAsset struct {
+}
+
+type StreamMemory struct {
+}
+
+type WStream struct {
+}
+
+type NullWStream struct {
+}
+
+type FILEStream struct {
+}
+
+type MemoryStream struct {
+}
+
+type FILEWStream struct {
+}
+
+type DynamicMemoryWStream struct {
+}
+
+type Image struct {
+}
 
 type ImageCachingHint int64
 
@@ -302,6 +419,9 @@ const (
 	ImageLegacyBitmapMode_RO ImageLegacyBitmapMode = 0
 )
 
+type Surface struct {
+}
+
 type SurfaceContentChangeMode int64
 
 const (
@@ -316,6 +436,9 @@ const (
 	SurfaceBackendHandleAccess_FlushWrite   SurfaceBackendHandleAccess = 1
 	SurfaceBackendHandleAccess_DiscardWrite SurfaceBackendHandleAccess = 2
 )
+
+type FontStyle struct {
+}
 
 type FontStyleWeight int64
 
@@ -355,6 +478,12 @@ const (
 	FontStyleSlant_Oblique FontStyleSlant = 2
 )
 
+type WeakRefCnt struct {
+}
+
+type Typeface struct {
+}
+
 type TypefaceSerializeBehavior int64
 
 const (
@@ -362,6 +491,9 @@ const (
 	TypefaceSerializeBehavior_DontIncludeData    TypefaceSerializeBehavior = 1
 	TypefaceSerializeBehavior_IncludeDataIfLocal TypefaceSerializeBehavior = 2
 )
+
+type Font struct {
+}
 
 type FontEdging int64
 
@@ -382,6 +514,15 @@ const (
 	FontPrivFlags_BaselineSnap_Priv     FontPrivFlags = 32
 )
 
+type TextBlob struct {
+}
+
+type TextBlobBuilder struct {
+}
+
+type Path1DPathEffect struct {
+}
+
 type Path1DPathEffectStyle int64
 
 const (
@@ -390,6 +531,30 @@ const (
 	Path1DPathEffectStyle_Morph     Path1DPathEffectStyle = 2
 	Path1DPathEffectStyle_LastEnum  Path1DPathEffectStyle = 2
 )
+
+type Line2DPathEffect struct {
+}
+
+type Path2DPathEffect struct {
+}
+
+type ColorFilter struct {
+}
+
+type ColorFilters struct {
+}
+
+type ColorMatrixFilter struct {
+}
+
+type CornerPathEffect struct {
+}
+
+type DashPathEffect struct {
+}
+
+type Path struct {
+}
 
 type PathArcSize int64
 
@@ -426,6 +591,9 @@ const (
 	PathVerb_Done  PathVerb = 6
 )
 
+type PathEffect struct {
+}
+
 type PathEffectDashType int64
 
 const (
@@ -433,11 +601,26 @@ const (
 	PathEffectDashType_Dash PathEffectDashType = 1
 )
 
+type DiscretePathEffect struct {
+}
+
+type Shader struct {
+}
+
+type GradientShader struct {
+}
+
 type GradientShaderFlags int64
 
 const (
 	GradientShaderFlags_InterpolateColorsInPremul GradientShaderFlags = 1
 )
+
+type Picture struct {
+}
+
+type ImageFilters struct {
+}
 
 type ImageFiltersDither int64
 
@@ -446,6 +629,15 @@ const (
 	ImageFiltersDither_Yes ImageFiltersDither = -1
 )
 
+type ShaderMaskFilter struct {
+}
+
+type TableMaskFilter struct {
+}
+
+type TrimPathEffect struct {
+}
+
 type TrimPathEffectMode int64
 
 const (
@@ -453,12 +645,72 @@ const (
 	TrimPathEffectMode_Inverted TrimPathEffectMode = 1
 )
 
+type DataTable struct {
+}
+
+type Encoder struct {
+}
+
+type GrGLExtensions struct {
+}
+
+type GrColorFormatDesc struct {
+}
+
+type GrBackendFormat struct {
+}
+
+type GrBackendTexture struct {
+}
+
+type GrBackendRenderTarget struct {
+}
+
+type GrDriverBugWorkarounds struct {
+}
+
+type GrContext_Base struct {
+}
+
+type Semaphore struct {
+}
+
+type Mutex struct {
+}
+
+type AutoMutexExclusive struct {
+}
+
+type GrImageContext struct {
+}
+
+type GrRecordingContext struct {
+}
+
+type GrDirectContext struct {
+}
+
+type TDStorage struct {
+}
+
+type OpBuilder struct {
+}
+
+type ParsePath struct {
+}
+
 type ParsePathPathEncoding int64
 
 const (
 	ParsePathPathEncoding_Absolute ParsePathPathEncoding = 0
 	ParsePathPathEncoding_Relative ParsePathPathEncoding = 1
 )
+
+type PDFBitmap struct {
+}
+
+type PDFUnion struct {
+}
 
 type PDFUnionType int64
 
@@ -479,6 +731,42 @@ const (
 	PDFUnionType_Ref             PDFUnionType = 13
 )
 
+type PDFObject struct {
+}
+
+type PDFArray struct {
+}
+
+type PDFDict struct {
+}
+
+type ArenaAlloc struct {
+}
+
+type ArenaAllocWithReset struct {
+}
+
+type PDFTagTree struct {
+}
+
+type PDFOffsetMap struct {
+}
+
+type PDFDocument struct {
+}
+
+type Shaper struct {
+}
+
+type TextBlobBuilderRunHandler struct {
+}
+
+type SVGDOM struct {
+}
+
+type SVGLength struct {
+}
+
 type SVGLengthUnit int64
 
 const (
@@ -495,6 +783,9 @@ const (
 	SVGLengthUnit_PC         SVGLengthUnit = 10
 )
 
+type SVGIRI struct {
+}
+
 type SVGIRIType int64
 
 const (
@@ -502,6 +793,9 @@ const (
 	SVGIRIType_Nonlocal SVGIRIType = 1
 	SVGIRIType_DataURI  SVGIRIType = 2
 )
+
+type SVGColor struct {
+}
 
 type SVGColorType int64
 
@@ -511,6 +805,9 @@ const (
 	SVGColorType_ICCColor     SVGColorType = 2
 )
 
+type SVGPaint struct {
+}
+
 type SVGPaintType int64
 
 const (
@@ -519,12 +816,18 @@ const (
 	SVGPaintType_IRI   SVGPaintType = 2
 )
 
+type SVGFuncIRI struct {
+}
+
 type SVGFuncIRIType int64
 
 const (
 	SVGFuncIRIType_None SVGFuncIRIType = 0
 	SVGFuncIRIType_IRI  SVGFuncIRIType = 1
 )
+
+type SVGLineJoin struct {
+}
 
 type SVGLineJoinType int64
 
@@ -535,6 +838,9 @@ const (
 	SVGLineJoinType_Inherit SVGLineJoinType = 3
 )
 
+type SVGSpreadMethod struct {
+}
+
 type SVGSpreadMethodType int64
 
 const (
@@ -543,6 +849,9 @@ const (
 	SVGSpreadMethodType_Reflect SVGSpreadMethodType = 2
 )
 
+type SVGFillRule struct {
+}
+
 type SVGFillRuleType int64
 
 const (
@@ -550,6 +859,9 @@ const (
 	SVGFillRuleType_EvenOdd SVGFillRuleType = 1
 	SVGFillRuleType_Inherit SVGFillRuleType = 2
 )
+
+type SVGVisibility struct {
+}
 
 type SVGVisibilityType int64
 
@@ -560,6 +872,9 @@ const (
 	SVGVisibilityType_Inherit  SVGVisibilityType = 3
 )
 
+type SVGDashArray struct {
+}
+
 type SVGDashArrayType int64
 
 const (
@@ -567,6 +882,9 @@ const (
 	SVGDashArrayType_DashArray SVGDashArrayType = 1
 	SVGDashArrayType_Inherit   SVGDashArrayType = 2
 )
+
+type SVGStopColor struct {
+}
 
 type SVGStopColorType int64
 
@@ -577,6 +895,9 @@ const (
 	SVGStopColorType_Inherit      SVGStopColorType = 3
 )
 
+type SVGObjectBoundingBoxUnits struct {
+}
+
 type SVGObjectBoundingBoxUnitsType int64
 
 const (
@@ -584,12 +905,18 @@ const (
 	SVGObjectBoundingBoxUnitsType_ObjectBoundingBox SVGObjectBoundingBoxUnitsType = 1
 )
 
+type SVGFontFamily struct {
+}
+
 type SVGFontFamilyType int64
 
 const (
 	SVGFontFamilyType_Family  SVGFontFamilyType = 0
 	SVGFontFamilyType_Inherit SVGFontFamilyType = 1
 )
+
+type SVGFontStyle struct {
+}
 
 type SVGFontStyleType int64
 
@@ -600,12 +927,18 @@ const (
 	SVGFontStyleType_Inherit SVGFontStyleType = 3
 )
 
+type SVGFontSize struct {
+}
+
 type SVGFontSizeType int64
 
 const (
 	SVGFontSizeType_Length  SVGFontSizeType = 0
 	SVGFontSizeType_Inherit SVGFontSizeType = 1
 )
+
+type SVGFontWeight struct {
+}
 
 type SVGFontWeightType int64
 
@@ -626,6 +959,9 @@ const (
 	SVGFontWeightType_Inherit SVGFontWeightType = 13
 )
 
+type SVGTextAnchor struct {
+}
+
 type SVGTextAnchorType int64
 
 const (
@@ -634,6 +970,9 @@ const (
 	SVGTextAnchorType_End     SVGTextAnchorType = 2
 	SVGTextAnchorType_Inherit SVGTextAnchorType = 3
 )
+
+type SVGFeInputType struct {
+}
 
 type SVGFeInputTypeType int64
 
@@ -648,12 +987,33 @@ const (
 	SVGFeInputTypeType_Unspecified              SVGFeInputTypeType = 7
 )
 
+type SVGFeTurbulenceBaseFrequency struct {
+}
+
+type SVGAttributeParser struct {
+}
+
+type SVGNode struct {
+}
+
+type SVGTransformableNode struct {
+}
+
+type SVGContainer struct {
+}
+
+type SVGSVG struct {
+}
+
 type SVGSVGType int64
 
 const (
 	SVGSVGType_Root  SVGSVGType = 0
 	SVGSVGType_Inner SVGSVGType = 1
 )
+
+type SVGLengthContext struct {
+}
 
 type SVGLengthContextLengthType int64
 
@@ -662,6 +1022,9 @@ const (
 	SVGLengthContextLengthType_Vertical   SVGLengthContextLengthType = 1
 	SVGLengthContextLengthType_Other      SVGLengthContextLengthType = 2
 )
+
+type SVGRenderContext struct {
+}
 
 type SVGRenderContextApplyFlags int64
 

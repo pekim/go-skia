@@ -7,6 +7,10 @@ type class struct {
 }
 
 func (c class) generate(fileGo *genFile) {
+	fileGo.writelnf("type %s struct {", c.goName)
+	fileGo.writeln("}")
+	fileGo.writeln("")
+
 	for _, enum := range c.enums {
 		enum.generate(fileGo)
 	}
