@@ -1,3 +1,5 @@
+// This is a generated file. DO NOT EDIT.
+
 package skia
 
 type MatrixScaleToFit int64

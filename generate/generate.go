@@ -25,9 +25,13 @@ type genFile struct {
 }
 
 func newGenFile(filename string) *genFile {
-	return &genFile{
+	f := &genFile{
 		filename: filename,
 	}
+	f.writeln("// This is a generated file. DO NOT EDIT.")
+	f.writeln("")
+
+	return f
 }
 
 func (f *genFile) close() {
