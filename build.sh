@@ -202,7 +202,7 @@ bin/gn gen "${BUILD_DIR}" --args="${COMMON_ARGS} ${PLATFORM_ARGS}"
 ninja -C "${BUILD_DIR}"
 cd ../..
 
-# generate
+# Generate & verify
 PATH=$ORIGINAL_PATH
 go run generate/cmd/main.go
 echo verify
