@@ -16,8 +16,8 @@ for arg in "$@"; do
 	--help | -h)
 		echo "$0 [options]"
 		echo "  -a, --args  Display the available args list for the skia build (no build)"
-		echo "  -c, --clean Remove the dist and skia/build directories (no build)"
-		echo "  -C, --CLEAN Remove the dist and skia directories (no build)"
+		echo "  -c, --clean Remove the generated files and skia/build directories (no build)"
+		echo "  -C, --CLEAN Remove the generated files and skia directories (no build)"
 		echo "  -h, --help This help text"
 		exit 0
 		;;
@@ -29,12 +29,12 @@ for arg in "$@"; do
 done
 
 if [ "$CLEAN"x == "fullx" ]; then
-	/bin/rm -rf dist skia
+	/bin/rm -rf api.* skia
 	exit 0
 fi
 
 if [ "$CLEAN"x == "restorex" ]; then
-	/bin/rm -rf dist skia/build
+	/bin/rm -rf api.* skia/build
 	if [ -d skia/skia ]; then
 		cd skia/skia
 		git checkout -- .
@@ -50,7 +50,6 @@ if [ "$SHOW_ARGS"x == "1x" ]; then
 fi
 
 BUILD_DIR=${PWD}/skia/build
-DIST=${PWD}/dist
 
 # As changes to Skia are made, these args may need to be adjusted.
 # Use 'bin/gn args $BUILD_DIR --list' to see what args are available.
