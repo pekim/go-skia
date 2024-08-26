@@ -1,5 +1,7 @@
 package generate
 
+import "fmt"
+
 type class struct {
 	cName  string
 	goName string
@@ -32,26 +34,28 @@ func (c classCtor) generate(g *generator) {
 		return
 	}
 
+	cFuncName := fmt.Sprintf("skia_new_%s", c.class.cName)
+
 	g.goFile.writelnf("func New%s() %s {", c.class.goName, c.class.goName)
 	g.goFile.writelnfTrim(`
-		c := C.skia_new_%s()
+		c := C.%s()
 		return %s {
 		  skia: c,
 		}
 	`,
-		c.class.cName,
+		cFuncName,
 		c.class.goName,
 	)
 	g.goFile.writeln("}")
 
-	g.headerFile.writelnf("void *skia_new_%s();", c.class.cName)
+	g.headerFile.writelnf("void *%s();", cFuncName)
 
 	g.cppFile.writelnf(`
-		void *skia_new_%s()
+		void *%s()
 		{
 			return (void *)(42);
 		}
-	`, c.class.cName)
+	`, cFuncName)
 	/*
 		return reinterpret_cast<void*>(new SkPaint());
 	*/
