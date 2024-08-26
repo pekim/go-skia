@@ -372,6 +372,11 @@ func NewString() String {
 		skia: C.skia_new_SkString(),
 	}
 }
+func NewString2(len uint) String {
+	return String{
+		skia: C.skia_new_SkString2(C.size_t(len)),
+	}
+}
 func (o *String) Delete() {
 	C.skia_delete_SkString(o.skia)
 }
@@ -568,6 +573,11 @@ type MemoryStream struct {
 func NewMemoryStream() MemoryStream {
 	return MemoryStream{
 		skia: C.skia_new_SkMemoryStream(),
+	}
+}
+func NewMemoryStream2(length uint) MemoryStream {
+	return MemoryStream{
+		skia: C.skia_new_SkMemoryStream2(C.size_t(length)),
 	}
 }
 
@@ -1145,12 +1155,23 @@ type ArenaAlloc struct {
 	skia unsafe.Pointer
 }
 
+func NewArenaAlloc(firstHeapAllocation uint) ArenaAlloc {
+	return ArenaAlloc{
+		skia: C.skia_new_SkArenaAlloc(C.size_t(firstHeapAllocation)),
+	}
+}
 func (o *ArenaAlloc) Delete() {
 	C.skia_delete_SkArenaAlloc(o.skia)
 }
 
 type ArenaAllocWithReset struct {
 	skia unsafe.Pointer
+}
+
+func NewArenaAllocWithReset(firstHeapAllocation uint) ArenaAllocWithReset {
+	return ArenaAllocWithReset{
+		skia: C.skia_new_SkArenaAllocWithReset(C.size_t(firstHeapAllocation)),
+	}
 }
 
 type PDFTagTree struct {

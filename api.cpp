@@ -72,6 +72,10 @@ void skia_delete_SkRasterHandleAllocator(void *obj) {
 
 void *skia_new_SkString() { return reinterpret_cast<void *>(new SkString()); }
 
+void *skia_new_SkString2(size_t len) {
+  return reinterpret_cast<void *>(new SkString(len));
+}
+
 void skia_delete_SkString(void *obj) {
   delete reinterpret_cast<SkString *>(obj);
 }
@@ -106,6 +110,10 @@ void skia_delete_SkFILEStream(void *obj) {
 
 void *skia_new_SkMemoryStream() {
   return reinterpret_cast<void *>(new SkMemoryStream());
+}
+
+void *skia_new_SkMemoryStream2(size_t length) {
+  return reinterpret_cast<void *>(new SkMemoryStream(length));
 }
 
 void skia_delete_SkFILEWStream(void *obj) {
@@ -242,8 +250,17 @@ void skia_delete_SkPDFDict(void *obj) {
   delete reinterpret_cast<SkPDFDict *>(obj);
 }
 
+void *skia_new_SkArenaAlloc(size_t firstHeapAllocation) {
+  return reinterpret_cast<void *>(new SkArenaAlloc(firstHeapAllocation));
+}
+
 void skia_delete_SkArenaAlloc(void *obj) {
   delete reinterpret_cast<SkArenaAlloc *>(obj);
+}
+
+void *skia_new_SkArenaAllocWithReset(size_t firstHeapAllocation) {
+  return reinterpret_cast<void *>(
+      new SkArenaAllocWithReset(firstHeapAllocation));
 }
 
 void *skia_new_SkPDFTagTree() {
