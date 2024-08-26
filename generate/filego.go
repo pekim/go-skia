@@ -14,6 +14,11 @@ func newFileGo() *fileGo {
 	package skia
 
 	// #cgo CXXFLAGS: -I ${SRCDIR}/skia/skia
+	// #cgo LDFLAGS: -L ${SRCDIR}/skia/build
+	// #cgo LDFLAGS: -l skia
+	// #cgo LDFLAGS: -l skshaper
+	// #cgo LDFLAGS: -l svg
+	// #cgo pkg-config: freetype2
 	// #include "api.h"
 	import "C"
 

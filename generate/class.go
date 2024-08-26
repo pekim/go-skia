@@ -1,12 +1,16 @@
 package generate
 
-import "fmt"
+import (
+	"fmt"
+	"slices"
+)
 
 type class struct {
-	cName  string
-	goName string
-	ctors  []classCtor
-	enums  []enum
+	cName    string
+	goName   string
+	abstract bool
+	ctors    []classCtor
+	enums    []enum
 }
 
 func (c class) generate(g *generator) {
@@ -15,8 +19,17 @@ func (c class) generate(g *generator) {
 	g.goFile.writeln("}")
 	g.goFile.writeln("")
 
-	for _, ctor := range c.ctors {
-		ctor.generate(g)
+	skipCtorsClasses := []string{
+		// class has an implicitly deleted ctor
+		"SkTableMaskFilter",
+		// "undefined symbol: typeinfo for SkWStream"
+		"SkNullWStream",
+	}
+
+	if !c.abstract && !slices.Contains(skipCtorsClasses, c.cName) {
+		for _, ctor := range c.ctors {
+			ctor.generate(g)
+		}
 	}
 
 	for _, enum := range c.enums {
@@ -53,10 +66,7 @@ func (c classCtor) generate(g *generator) {
 	g.cppFile.writelnf(`
 		void *%s()
 		{
-			return (void *)(42);
+			return reinterpret_cast<void*>(new %s());
 		}
-	`, cFuncName)
-	/*
-		return reinterpret_cast<void*>(new SkPaint());
-	*/
+	`, cFuncName, c.class.cName)
 }

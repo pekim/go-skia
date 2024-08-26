@@ -23,11 +23,11 @@ func (g *generator) visit() {
 func (g *generator) visitClass(cursor clang.Cursor) {
 	name := cursor.Spelling()
 	class := class{
-		cName:  name,
-		goName: strings.TrimPrefix(name, "Sk"),
+		cName:    name,
+		goName:   strings.TrimPrefix(name, "Sk"),
+		abstract: cursor.CXXRecord_IsAbstract(),
 	}
 
-	// fmt.Println(class.cName)
 	isPublic := false
 	cursor.Visit(func(cursor, _parent clang.Cursor) (status clang.ChildVisitResult) {
 		switch cursor.Kind() {
@@ -53,18 +53,14 @@ func (g *generator) visitClass(cursor clang.Cursor) {
 
 func (g *generator) visitClassCtor(class *class, cursor clang.Cursor) {
 	paramCount := 0
-	// fmt.Println("  ctor ==>")
 
 	cursor.Visit(func(cursor, parent clang.Cursor) (status clang.ChildVisitResult) {
 		switch cursor.Kind() {
 		case clang.Cursor_ParmDecl:
 			paramCount++
-			// fmt.Println("  ", cursor.Spelling())
 			cursor.Visit(func(cursor, parent clang.Cursor) (status clang.ChildVisitResult) {
-				// fmt.Println("    ", cursor.Kind())
 				switch cursor.Kind() {
 				case clang.Cursor_TypeRef:
-					// fmt.Println("    ", cursor.Spelling())
 				}
 				return clang.ChildVisit_Continue
 			})
@@ -73,7 +69,9 @@ func (g *generator) visitClassCtor(class *class, cursor clang.Cursor) {
 		return clang.ChildVisit_Continue
 	})
 
-	class.ctors = append(class.ctors, classCtor{class: *class, paramCount: paramCount})
+	if cursor.AccessSpecifier() == clang.AccessSpecifier_Public {
+		class.ctors = append(class.ctors, classCtor{class: *class, paramCount: paramCount})
+	}
 }
 
 func (g *generator) visitClassEnum(class *class, cursor clang.Cursor) {

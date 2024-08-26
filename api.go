@@ -3,6 +3,11 @@
 package skia
 
 // #cgo CXXFLAGS: -I ${SRCDIR}/skia/skia
+// #cgo LDFLAGS: -L ${SRCDIR}/skia/build
+// #cgo LDFLAGS: -l skia
+// #cgo LDFLAGS: -l skshaper
+// #cgo LDFLAGS: -l svg
+// #cgo pkg-config: freetype2
 // #include "api.h"
 import "C"
 
@@ -254,13 +259,6 @@ type Flattenable struct {
 	skia unsafe.Pointer
 }
 
-func NewFlattenable() Flattenable {
-	c := C.skia_new_SkFlattenable()
-	return Flattenable{
-		skia: c,
-	}
-}
-
 type FlattenableType int64
 
 const (
@@ -349,13 +347,6 @@ const (
 
 type RasterHandleAllocator struct {
 	skia unsafe.Pointer
-}
-
-func NewRasterHandleAllocator() RasterHandleAllocator {
-	c := C.skia_new_SkRasterHandleAllocator()
-	return RasterHandleAllocator{
-		skia: c,
-	}
 }
 
 type String struct {
@@ -505,13 +496,6 @@ type Stream struct {
 	skia unsafe.Pointer
 }
 
-func NewStream() Stream {
-	c := C.skia_new_SkStream()
-	return Stream{
-		skia: c,
-	}
-}
-
 type StreamRewindable struct {
 	skia unsafe.Pointer
 }
@@ -532,22 +516,8 @@ type WStream struct {
 	skia unsafe.Pointer
 }
 
-func NewWStream() WStream {
-	c := C.skia_new_SkWStream()
-	return WStream{
-		skia: c,
-	}
-}
-
 type NullWStream struct {
 	skia unsafe.Pointer
-}
-
-func NewNullWStream() NullWStream {
-	c := C.skia_new_SkNullWStream()
-	return NullWStream{
-		skia: c,
-	}
 }
 
 type FILEStream struct {
@@ -774,22 +744,8 @@ type ColorFilter struct {
 	skia unsafe.Pointer
 }
 
-func NewColorFilter() ColorFilter {
-	c := C.skia_new_SkColorFilter()
-	return ColorFilter{
-		skia: c,
-	}
-}
-
 type ColorFilters struct {
 	skia unsafe.Pointer
-}
-
-func NewColorFilters() ColorFilters {
-	c := C.skia_new_SkColorFilters()
-	return ColorFilters{
-		skia: c,
-	}
 }
 
 type ColorMatrixFilter struct {
@@ -854,13 +810,6 @@ type PathEffect struct {
 	skia unsafe.Pointer
 }
 
-func NewPathEffect() PathEffect {
-	c := C.skia_new_SkPathEffect()
-	return PathEffect{
-		skia: c,
-	}
-}
-
 type PathEffectDashType int64
 
 const (
@@ -874,13 +823,6 @@ type DiscretePathEffect struct {
 
 type Shader struct {
 	skia unsafe.Pointer
-}
-
-func NewShader() Shader {
-	c := C.skia_new_SkShader()
-	return Shader{
-		skia: c,
-	}
 }
 
 type GradientShader struct {
@@ -897,22 +839,8 @@ type Picture struct {
 	skia unsafe.Pointer
 }
 
-func NewPicture() Picture {
-	c := C.skia_new_SkPicture()
-	return Picture{
-		skia: c,
-	}
-}
-
 type ImageFilters struct {
 	skia unsafe.Pointer
-}
-
-func NewImageFilters() ImageFilters {
-	c := C.skia_new_SkImageFilters()
-	return ImageFilters{
-		skia: c,
-	}
 }
 
 type ImageFiltersDither int64
@@ -930,13 +858,6 @@ type TableMaskFilter struct {
 	skia unsafe.Pointer
 }
 
-func NewTableMaskFilter() TableMaskFilter {
-	c := C.skia_new_SkTableMaskFilter()
-	return TableMaskFilter{
-		skia: c,
-	}
-}
-
 type TrimPathEffect struct {
 	skia unsafe.Pointer
 }
@@ -950,13 +871,6 @@ const (
 
 type DataTable struct {
 	skia unsafe.Pointer
-}
-
-func NewDataTable() DataTable {
-	c := C.skia_new_SkDataTable()
-	return DataTable{
-		skia: c,
-	}
 }
 
 type Encoder struct {
@@ -976,13 +890,6 @@ func NewGrGLExtensions() GrGLExtensions {
 
 type GrColorFormatDesc struct {
 	skia unsafe.Pointer
-}
-
-func NewGrColorFormatDesc() GrColorFormatDesc {
-	c := C.skia_new_GrColorFormatDesc()
-	return GrColorFormatDesc{
-		skia: c,
-	}
 }
 
 type GrBackendFormat struct {
@@ -1114,13 +1021,6 @@ type PDFObject struct {
 	skia unsafe.Pointer
 }
 
-func NewPDFObject() PDFObject {
-	c := C.skia_new_SkPDFObject()
-	return PDFObject{
-		skia: c,
-	}
-}
-
 type PDFArray struct {
 	skia unsafe.Pointer
 }
@@ -1165,13 +1065,6 @@ type PDFDocument struct {
 
 type Shaper struct {
 	skia unsafe.Pointer
-}
-
-func NewShaper() Shaper {
-	c := C.skia_new_SkShaper()
-	return Shaper{
-		skia: c,
-	}
 }
 
 type TextBlobBuilderRunHandler struct {

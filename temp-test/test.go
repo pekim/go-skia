@@ -1,7 +1,12 @@
 package main
 
-import "github.com/pekim/go-skia"
+import (
+	"fmt"
+
+	"github.com/pekim/go-skia"
+)
 
 func main() {
-	skia.NewPaint()
+	p := skia.NewPaint()
+	fmt.Println(p)
 }
