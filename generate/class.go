@@ -49,22 +49,23 @@ type classCtor struct {
 
 func (c classCtor) generate(g *generator) {
 	if c.paramCount > 0 {
+		// TODO ctor with parameters
 		return
 	}
 
 	cFuncName := fmt.Sprintf("skia_new_%s", c.class.cName)
 
-	g.goFile.writelnf("func New%s() %s {", c.class.goName, c.class.goName)
 	g.goFile.writelnfTrim(`
-		c := C.%s()
-		return %s {
-		  skia: c,
+		func New%s() %s {
+			return %s {
+		  	skia: C.%s(),
+			}
 		}
 	`,
-		cFuncName,
+		c.class.goName, c.class.goName,
 		c.class.goName,
+		cFuncName,
 	)
-	g.goFile.writeln("}")
 
 	g.headerFile.writelnf("void *%s();", cFuncName)
 
@@ -83,13 +84,14 @@ type classDtor struct {
 func (c classDtor) generate(g *generator) {
 	cFuncName := fmt.Sprintf("skia_delete_%s", c.class.cName)
 
-	g.goFile.writelnf("func (o *%s) Delete() {", c.class.goName)
 	g.goFile.writelnfTrim(`
-		C.%s(o.skia)
+		func (o *%s) Delete() {
+			C.%s(o.skia)
+		}
 	`,
+		c.class.goName,
 		cFuncName,
 	)
-	g.goFile.writeln("}")
 
 	g.headerFile.writelnf("void %s(void *obj);", cFuncName)
 
