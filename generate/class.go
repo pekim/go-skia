@@ -10,6 +10,7 @@ type class struct {
 	goName   string
 	abstract bool
 	ctors    []classCtor
+	dtors    []classDtor
 	enums    []enum
 }
 
@@ -30,6 +31,10 @@ func (c class) generate(g *generator) {
 		for _, ctor := range c.ctors {
 			ctor.generate(g)
 		}
+	}
+
+	for _, dtor := range c.dtors {
+		dtor.generate(g)
 	}
 
 	for _, enum := range c.enums {
@@ -67,6 +72,31 @@ func (c classCtor) generate(g *generator) {
 		void *%s()
 		{
 			return reinterpret_cast<void*>(new %s());
+		}
+	`, cFuncName, c.class.cName)
+}
+
+type classDtor struct {
+	class class
+}
+
+func (c classDtor) generate(g *generator) {
+	cFuncName := fmt.Sprintf("skia_delete_%s", c.class.cName)
+
+	g.goFile.writelnf("func (o *%s) Delete() {", c.class.goName)
+	g.goFile.writelnfTrim(`
+		C.%s(o.skia)
+	`,
+		cFuncName,
+	)
+	g.goFile.writeln("}")
+
+	g.headerFile.writelnf("void %s(void *obj);", cFuncName)
+
+	g.cppFile.writelnf(`
+		void %s(void *obj)
+		{
+			delete reinterpret_cast<%s*>(obj);
 		}
 	`, cFuncName, c.class.cName)
 }

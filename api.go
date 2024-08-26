@@ -55,6 +55,9 @@ func NewRefCntBase() RefCntBase {
 		skia: c,
 	}
 }
+func (o *RefCntBase) Delete() {
+	C.skia_delete_SkRefCntBase(o.skia)
+}
 
 type ColorInfo struct {
 	skia unsafe.Pointer
@@ -65,6 +68,9 @@ func NewColorInfo() ColorInfo {
 	return ColorInfo{
 		skia: c,
 	}
+}
+func (o *ColorInfo) Delete() {
+	C.skia_delete_SkColorInfo(o.skia)
 }
 
 type Pixmap struct {
@@ -172,6 +178,9 @@ func NewYUVAPixmaps() YUVAPixmaps {
 		skia: c,
 	}
 }
+func (o *YUVAPixmaps) Delete() {
+	C.skia_delete_SkYUVAPixmaps(o.skia)
+}
 
 type Once struct {
 	skia unsafe.Pointer
@@ -209,6 +218,10 @@ func NewNoncopyable() Noncopyable {
 
 type Codec struct {
 	skia unsafe.Pointer
+}
+
+func (o *Codec) Delete() {
+	C.skia_delete_SkCodec(o.skia)
 }
 
 type CodecResult int64
@@ -316,6 +329,9 @@ func NewPaint() Paint {
 		skia: c,
 	}
 }
+func (o *Paint) Delete() {
+	C.skia_delete_SkPaint(o.skia)
+}
 
 type PaintStyle int64
 
@@ -349,6 +365,10 @@ type RasterHandleAllocator struct {
 	skia unsafe.Pointer
 }
 
+func (o *RasterHandleAllocator) Delete() {
+	C.skia_delete_SkRasterHandleAllocator(o.skia)
+}
+
 type String struct {
 	skia unsafe.Pointer
 }
@@ -358,6 +378,9 @@ func NewString() String {
 	return String{
 		skia: c,
 	}
+}
+func (o *String) Delete() {
+	C.skia_delete_SkString(o.skia)
 }
 
 type SurfaceProps struct {
@@ -384,6 +407,10 @@ type Deque struct {
 	skia unsafe.Pointer
 }
 
+func (o *Deque) Delete() {
+	C.skia_delete_SkDeque(o.skia)
+}
+
 type ContainerAllocator struct {
 	skia unsafe.Pointer
 }
@@ -397,6 +424,9 @@ func NewCanvas() Canvas {
 	return Canvas{
 		skia: c,
 	}
+}
+func (o *Canvas) Delete() {
+	C.skia_delete_SkCanvas(o.skia)
 }
 
 type CanvasSaveLayerFlagsSet int64
@@ -468,6 +498,10 @@ type AutoCanvasRestore struct {
 	skia unsafe.Pointer
 }
 
+func (o *AutoCanvasRestore) Delete() {
+	C.skia_delete_SkAutoCanvasRestore(o.skia)
+}
+
 type Document struct {
 	skia unsafe.Pointer
 }
@@ -496,6 +530,10 @@ type Stream struct {
 	skia unsafe.Pointer
 }
 
+func (o *Stream) Delete() {
+	C.skia_delete_SkStream(o.skia)
+}
+
 type StreamRewindable struct {
 	skia unsafe.Pointer
 }
@@ -516,12 +554,20 @@ type WStream struct {
 	skia unsafe.Pointer
 }
 
+func (o *WStream) Delete() {
+	C.skia_delete_SkWStream(o.skia)
+}
+
 type NullWStream struct {
 	skia unsafe.Pointer
 }
 
 type FILEStream struct {
 	skia unsafe.Pointer
+}
+
+func (o *FILEStream) Delete() {
+	C.skia_delete_SkFILEStream(o.skia)
 }
 
 type MemoryStream struct {
@@ -539,6 +585,10 @@ type FILEWStream struct {
 	skia unsafe.Pointer
 }
 
+func (o *FILEWStream) Delete() {
+	C.skia_delete_SkFILEWStream(o.skia)
+}
+
 type DynamicMemoryWStream struct {
 	skia unsafe.Pointer
 }
@@ -548,6 +598,9 @@ func NewDynamicMemoryWStream() DynamicMemoryWStream {
 	return DynamicMemoryWStream{
 		skia: c,
 	}
+}
+func (o *DynamicMemoryWStream) Delete() {
+	C.skia_delete_SkDynamicMemoryWStream(o.skia)
 }
 
 type Image struct {
@@ -661,6 +714,9 @@ func NewWeakRefCnt() WeakRefCnt {
 		skia: c,
 	}
 }
+func (o *WeakRefCnt) Delete() {
+	C.skia_delete_SkWeakRefCnt(o.skia)
+}
 
 type Typeface struct {
 	skia unsafe.Pointer
@@ -718,6 +774,9 @@ func NewTextBlobBuilder() TextBlobBuilder {
 		skia: c,
 	}
 }
+func (o *TextBlobBuilder) Delete() {
+	C.skia_delete_SkTextBlobBuilder(o.skia)
+}
 
 type Path1DPathEffect struct {
 	skia unsafe.Pointer
@@ -769,6 +828,9 @@ func NewPath() Path {
 	return Path{
 		skia: c,
 	}
+}
+func (o *Path) Delete() {
+	C.skia_delete_SkPath(o.skia)
 }
 
 type PathArcSize int64
@@ -839,6 +901,10 @@ type Picture struct {
 	skia unsafe.Pointer
 }
 
+func (o *Picture) Delete() {
+	C.skia_delete_SkPicture(o.skia)
+}
+
 type ImageFilters struct {
 	skia unsafe.Pointer
 }
@@ -877,6 +943,10 @@ type Encoder struct {
 	skia unsafe.Pointer
 }
 
+func (o *Encoder) Delete() {
+	C.skia_delete_SkEncoder(o.skia)
+}
+
 type GrGLExtensions struct {
 	skia unsafe.Pointer
 }
@@ -902,6 +972,9 @@ func NewGrBackendFormat() GrBackendFormat {
 		skia: c,
 	}
 }
+func (o *GrBackendFormat) Delete() {
+	C.skia_delete_GrBackendFormat(o.skia)
+}
 
 type GrBackendTexture struct {
 	skia unsafe.Pointer
@@ -912,6 +985,9 @@ func NewGrBackendTexture() GrBackendTexture {
 	return GrBackendTexture{
 		skia: c,
 	}
+}
+func (o *GrBackendTexture) Delete() {
+	C.skia_delete_GrBackendTexture(o.skia)
 }
 
 type GrBackendRenderTarget struct {
@@ -924,6 +1000,9 @@ func NewGrBackendRenderTarget() GrBackendRenderTarget {
 		skia: c,
 	}
 }
+func (o *GrBackendRenderTarget) Delete() {
+	C.skia_delete_GrBackendRenderTarget(o.skia)
+}
 
 type GrDriverBugWorkarounds struct {
 	skia unsafe.Pointer
@@ -935,13 +1014,24 @@ func NewGrDriverBugWorkarounds() GrDriverBugWorkarounds {
 		skia: c,
 	}
 }
+func (o *GrDriverBugWorkarounds) Delete() {
+	C.skia_delete_GrDriverBugWorkarounds(o.skia)
+}
 
 type GrContext_Base struct {
 	skia unsafe.Pointer
 }
 
+func (o *GrContext_Base) Delete() {
+	C.skia_delete_GrContext_Base(o.skia)
+}
+
 type Semaphore struct {
 	skia unsafe.Pointer
+}
+
+func (o *Semaphore) Delete() {
+	C.skia_delete_SkSemaphore(o.skia)
 }
 
 type Mutex struct {
@@ -954,25 +1044,48 @@ func NewMutex() Mutex {
 		skia: c,
 	}
 }
+func (o *Mutex) Delete() {
+	C.skia_delete_SkMutex(o.skia)
+}
 
 type AutoMutexExclusive struct {
 	skia unsafe.Pointer
+}
+
+func (o *AutoMutexExclusive) Delete() {
+	C.skia_delete_SkAutoMutexExclusive(o.skia)
 }
 
 type GrImageContext struct {
 	skia unsafe.Pointer
 }
 
+func (o *GrImageContext) Delete() {
+	C.skia_delete_GrImageContext(o.skia)
+}
+
 type GrRecordingContext struct {
 	skia unsafe.Pointer
+}
+
+func (o *GrRecordingContext) Delete() {
+	C.skia_delete_GrRecordingContext(o.skia)
 }
 
 type GrDirectContext struct {
 	skia unsafe.Pointer
 }
 
+func (o *GrDirectContext) Delete() {
+	C.skia_delete_GrDirectContext(o.skia)
+}
+
 type TDStorage struct {
 	skia unsafe.Pointer
+}
+
+func (o *TDStorage) Delete() {
+	C.skia_delete_SkTDStorage(o.skia)
 }
 
 type OpBuilder struct {
@@ -998,6 +1111,10 @@ type PDFUnion struct {
 	skia unsafe.Pointer
 }
 
+func (o *PDFUnion) Delete() {
+	C.skia_delete_SkPDFUnion(o.skia)
+}
+
 type PDFUnionType int64
 
 const (
@@ -1021,6 +1138,10 @@ type PDFObject struct {
 	skia unsafe.Pointer
 }
 
+func (o *PDFObject) Delete() {
+	C.skia_delete_SkPDFObject(o.skia)
+}
+
 type PDFArray struct {
 	skia unsafe.Pointer
 }
@@ -1031,13 +1152,24 @@ func NewPDFArray() PDFArray {
 		skia: c,
 	}
 }
+func (o *PDFArray) Delete() {
+	C.skia_delete_SkPDFArray(o.skia)
+}
 
 type PDFDict struct {
 	skia unsafe.Pointer
 }
 
+func (o *PDFDict) Delete() {
+	C.skia_delete_SkPDFDict(o.skia)
+}
+
 type ArenaAlloc struct {
 	skia unsafe.Pointer
+}
+
+func (o *ArenaAlloc) Delete() {
+	C.skia_delete_SkArenaAlloc(o.skia)
 }
 
 type ArenaAllocWithReset struct {
@@ -1054,6 +1186,9 @@ func NewPDFTagTree() PDFTagTree {
 		skia: c,
 	}
 }
+func (o *PDFTagTree) Delete() {
+	C.skia_delete_SkPDFTagTree(o.skia)
+}
 
 type PDFOffsetMap struct {
 	skia unsafe.Pointer
@@ -1063,8 +1198,16 @@ type PDFDocument struct {
 	skia unsafe.Pointer
 }
 
+func (o *PDFDocument) Delete() {
+	C.skia_delete_SkPDFDocument(o.skia)
+}
+
 type Shaper struct {
 	skia unsafe.Pointer
+}
+
+func (o *Shaper) Delete() {
+	C.skia_delete_SkShaper(o.skia)
 }
 
 type TextBlobBuilderRunHandler struct {
@@ -1461,6 +1604,10 @@ type SVGNode struct {
 	skia unsafe.Pointer
 }
 
+func (o *SVGNode) Delete() {
+	C.skia_delete_SkSVGNode(o.skia)
+}
+
 type SVGTransformableNode struct {
 	skia unsafe.Pointer
 }
@@ -1494,6 +1641,10 @@ const (
 
 type SVGRenderContext struct {
 	skia unsafe.Pointer
+}
+
+func (o *SVGRenderContext) Delete() {
+	C.skia_delete_SkSVGRenderContext(o.skia)
 }
 
 type SVGRenderContextApplyFlags int64

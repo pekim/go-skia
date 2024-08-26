@@ -39,6 +39,9 @@ func (g *generator) visitClass(cursor clang.Cursor) {
 		case clang.Cursor_Constructor:
 			g.visitClassCtor(&class, cursor)
 
+		case clang.Cursor_Destructor:
+			g.visitClassDtor(&class, cursor)
+
 		case clang.Cursor_EnumDecl:
 			g.visitClassEnum(&class, cursor)
 		}
@@ -71,6 +74,12 @@ func (g *generator) visitClassCtor(class *class, cursor clang.Cursor) {
 
 	if cursor.AccessSpecifier() == clang.AccessSpecifier_Public {
 		class.ctors = append(class.ctors, classCtor{class: *class, paramCount: paramCount})
+	}
+}
+
+func (g *generator) visitClassDtor(class *class, cursor clang.Cursor) {
+	if cursor.AccessSpecifier() == clang.AccessSpecifier_Public {
+		class.dtors = append(class.dtors, classDtor{class: *class})
 	}
 }
 
