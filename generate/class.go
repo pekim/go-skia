@@ -48,6 +48,9 @@ func (c *class) generate(g *generator) {
 type classCtor struct {
 	class  *class
 	params []param
+
+	nameSuffix string
+	cFuncName  string
 }
 
 func (c *classCtor) generate(g *generator) {
@@ -58,57 +61,15 @@ func (c *classCtor) generate(g *generator) {
 		}
 	}
 
-	nameSuffix := ""
 	c.class.ctorN++
 	if c.class.ctorN > 1 {
-		nameSuffix = strconv.Itoa(c.class.ctorN)
+		c.nameSuffix = strconv.Itoa(c.class.ctorN)
 	}
-	cFuncName := fmt.Sprintf("skia_new_%s%s", c.class.cName, nameSuffix)
+	c.cFuncName = fmt.Sprintf("skia_new_%s%s", c.class.cName, c.nameSuffix)
 
-	var goParams = make([]string, len(c.params))
-	for p, param := range c.params {
-		goParams[p] = param.goDecl()
-	}
-	allGoParams := strings.Join(goParams, ", ")
-	var goCArgs = make([]string, len(c.params))
-	for p, param := range c.params {
-		goCArgs[p] = param.goCArg()
-	}
-	allGoCArgs := strings.Join(goCArgs, ", ")
-	g.goFile.writelnfTrim(`
-		func New%s%s(%s) %s {
-			return %s {
-		  	skia: C.%s(%s),
-			}
-		}
-	`,
-		c.class.goName, nameSuffix, allGoParams, c.class.goName,
-		c.class.goName,
-		cFuncName, allGoCArgs,
-	)
-
-	var cParams = make([]string, len(c.params))
-	for p, param := range c.params {
-		cParams[p] = param.cDecl()
-	}
-	allCParams := strings.Join(cParams, ", ")
-	var cArgs = make([]string, len(c.params))
-	for p, param := range c.params {
-		cArgs[p] = param.cArg()
-	}
-	allCArgs := strings.Join(cArgs, ", ")
-	g.headerFile.writelnf("void *%s(%s);", cFuncName, allCParams)
-
-	g.cppFile.writelnf(`
-		void *%s(%s)
-		{
-			return reinterpret_cast<void*>(new %s(%s));
-		}
-	`,
-		cFuncName,
-		allCParams,
-		c.class.cName, allCArgs,
-	)
+	c.generateGo(g)
+	c.generateHeader(g)
+	c.generateCpp(g)
 }
 
 type classDtor struct {
@@ -135,4 +96,65 @@ func (c classDtor) generate(g *generator) {
 			delete reinterpret_cast<%s*>(obj);
 		}
 	`, cFuncName, c.class.cName)
+}
+
+func (c *classCtor) generateGo(g *generator) {
+	var goParams = make([]string, len(c.params))
+	for p, param := range c.params {
+		goParams[p] = param.goDecl()
+	}
+	allGoParams := strings.Join(goParams, ", ")
+
+	var goCArgs = make([]string, len(c.params))
+	for p, param := range c.params {
+		goCArgs[p] = param.goCArg()
+	}
+	allGoCArgs := strings.Join(goCArgs, ", ")
+
+	g.goFile.writelnfTrim(`
+		func New%s%s(%s) %s {
+			return %s {
+		  	skia: C.%s(%s),
+			}
+		}
+	`,
+		c.class.goName, c.nameSuffix, allGoParams, c.class.goName,
+		c.class.goName,
+		c.cFuncName, allGoCArgs,
+	)
+}
+
+func (c *classCtor) generateHeader(g *generator) {
+	var cParams = make([]string, len(c.params))
+	for p, param := range c.params {
+		cParams[p] = param.cDecl()
+	}
+	allCParams := strings.Join(cParams, ", ")
+
+	g.headerFile.writelnf("void *%s(%s);", c.cFuncName, allCParams)
+}
+
+func (c *classCtor) generateCpp(g *generator) {
+	var cParams = make([]string, len(c.params))
+	for p, param := range c.params {
+		cParams[p] = param.cDecl()
+	}
+	allCParams := strings.Join(cParams, ", ")
+
+	var cArgs = make([]string, len(c.params))
+	for p, param := range c.params {
+		cArgs[p] = param.cArg()
+	}
+	allCArgs := strings.Join(cArgs, ", ")
+
+	g.cppFile.writelnf(`
+		void *%s(%s)
+		{
+			return reinterpret_cast<void*>(new %s(%s));
+		}
+	`,
+		c.cFuncName,
+		allCParams,
+		c.class.cName, allCArgs,
+	)
 }
