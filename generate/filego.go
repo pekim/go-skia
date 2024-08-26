@@ -6,7 +6,7 @@ type fileGo struct {
 
 func newFileGo() *fileGo {
 	f := &fileGo{
-		genFile: newGenFile("./skia.go"),
+		genFile: newGenFile("./api.go"),
 	}
 
 	f.genFile.goFmt = true

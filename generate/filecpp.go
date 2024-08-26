@@ -27,4 +27,5 @@ func (f fileCpp) finish() {
 	`)
 
 	f.close()
+	f.clangFormat()
 }

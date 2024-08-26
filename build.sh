@@ -1,6 +1,8 @@
 #! /usr/bin/env bash
 set -eo pipefail
 
+ORIGINAL_PATH=$PATH
+
 # These two variables should be set in tandem to keep a consistent set of sources.
 # Last set Sat Jun 15 11:00:00 PDT 2024
 DEPOT_TOOLS_COMMIT=1d1f17af898bc5158fb1128952894ac061b06f56
@@ -202,5 +204,6 @@ ninja -C "${BUILD_DIR}"
 cd ../..
 
 # generate
+PATH=$ORIGINAL_PATH
 go run generate/cmd/main.go
 go run temp-test/test.go

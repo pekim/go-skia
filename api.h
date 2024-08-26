@@ -1,9 +1,8 @@
 // This is a generated file. DO NOT EDIT.
 
-
-		#ifdef __cplusplus
-		extern "C" {
-		#endif // __cplusplus
+#ifdef __cplusplus
+extern "C" {
+#endif // __cplusplus
 
 void *skia_new_SkMatrix();
 void *skia_new_SkRefCntBase();
@@ -70,6 +69,6 @@ void *skia_new_SkSVGTextAnchor();
 void *skia_new_SkSVGFeInputType();
 void *skia_new_SkSVGFeTurbulenceBaseFrequency();
 
-		#ifdef __cplusplus
-		}
-		#endif // __cplusplus
+#ifdef __cplusplus
+}
+#endif // __cplusplus

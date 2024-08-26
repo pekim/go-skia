@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"go/format"
 	"os"
+	"os/exec"
 	"strings"
 )
 
@@ -43,6 +44,18 @@ func (f *genFile) close() {
 	}
 
 	err := os.WriteFile(f.filename, formatted, 0644)
+	if err != nil {
+		panic(err)
+	}
+}
+
+func (f *genFile) clangFormat() {
+	cmd := exec.Command("clang-format", "-style=llvm", "-i", f.filename)
+	output, err := cmd.CombinedOutput()
+	if len(output) > 0 {
+		fmt.Printf("Output of clang-format for %s\n", f.filename)
+		fmt.Println(string(output))
+	}
 	if err != nil {
 		panic(err)
 	}

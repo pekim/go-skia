@@ -26,4 +26,5 @@ func (f fileHeader) finish() {
 	`)
 
 	f.close()
+	f.clangFormat()
 }
