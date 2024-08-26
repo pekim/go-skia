@@ -10,4 +10,12 @@ import (
 func main() {
 	p := skia.NewPaint()
 	p.Delete()
+
+	// fmt.Println(skia.NewM44())
+	// fmt.Println(skia.NewM442(
+	// 	0, 1, 2, 3,
+	// 	0, 1, 2, 3,
+	// 	0, 1, 2, 3,
+	// 	0, 1, 2, 3,
+	// ))
 }

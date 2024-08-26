@@ -296,6 +296,11 @@ func NewM44() M44 {
 		skia: C.skia_new_SkM44(),
 	}
 }
+func NewM442(m0 float32, m4 float32, m8 float32, m12 float32, m1 float32, m5 float32, m9 float32, m13 float32, m2 float32, m6 float32, m10 float32, m14 float32, m3 float32, m7 float32, m11 float32, m15 float32) M44 {
+	return M44{
+		skia: C.skia_new_SkM442(C.float(m0), C.float(m4), C.float(m8), C.float(m12), C.float(m1), C.float(m5), C.float(m9), C.float(m13), C.float(m2), C.float(m6), C.float(m10), C.float(m14), C.float(m3), C.float(m7), C.float(m11), C.float(m15)),
+	}
+}
 
 type M44Uninitialized_Constructor int64
 

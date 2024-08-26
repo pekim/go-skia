@@ -3,6 +3,8 @@ package generate
 import (
 	"fmt"
 	"slices"
+	"strconv"
+	"strings"
 )
 
 type class struct {
@@ -10,11 +12,12 @@ type class struct {
 	goName   string
 	abstract bool
 	ctors    []classCtor
+	ctorN    int // for ctor name function uniqueness
 	dtors    []classDtor
 	enums    []enum
 }
 
-func (c class) generate(g *generator) {
+func (c *class) generate(g *generator) {
 	g.goFile.writelnf("type %s struct {", c.goName)
 	g.goFile.writeln("  skia unsafe.Pointer")
 	g.goFile.writeln("}")
@@ -43,38 +46,68 @@ func (c class) generate(g *generator) {
 }
 
 type classCtor struct {
-	class      class
-	paramCount int
+	class  *class
+	params []param
 }
 
-func (c classCtor) generate(g *generator) {
-	if c.paramCount > 0 {
-		// TODO ctor with parameters
-		return
+func (c *classCtor) generate(g *generator) {
+	for _, param := range c.params {
+		if !param.supported() {
+			return
+		}
 	}
 
-	cFuncName := fmt.Sprintf("skia_new_%s", c.class.cName)
+	nameSuffix := ""
+	c.class.ctorN++
+	if c.class.ctorN > 1 {
+		nameSuffix = strconv.Itoa(c.class.ctorN)
+	}
+	cFuncName := fmt.Sprintf("skia_new_%s%s", c.class.cName, nameSuffix)
 
+	var goParams = make([]string, len(c.params))
+	for p, param := range c.params {
+		goParams[p] = param.goDecl()
+	}
+	allGoParams := strings.Join(goParams, ", ")
+	var goCArgs = make([]string, len(c.params))
+	for p, param := range c.params {
+		goCArgs[p] = param.goCArg()
+	}
+	allGoCArgs := strings.Join(goCArgs, ", ")
 	g.goFile.writelnfTrim(`
-		func New%s() %s {
+		func New%s%s(%s) %s {
 			return %s {
-		  	skia: C.%s(),
+		  	skia: C.%s(%s),
 			}
 		}
 	`,
-		c.class.goName, c.class.goName,
+		c.class.goName, nameSuffix, allGoParams, c.class.goName,
 		c.class.goName,
-		cFuncName,
+		cFuncName, allGoCArgs,
 	)
 
-	g.headerFile.writelnf("void *%s();", cFuncName)
+	var cParams = make([]string, len(c.params))
+	for p, param := range c.params {
+		cParams[p] = param.cDecl()
+	}
+	allCParams := strings.Join(cParams, ", ")
+	var cArgs = make([]string, len(c.params))
+	for p, param := range c.params {
+		cArgs[p] = param.cArg()
+	}
+	allCArgs := strings.Join(cArgs, ", ")
+	g.headerFile.writelnf("void *%s(%s);", cFuncName, allCParams)
 
 	g.cppFile.writelnf(`
-		void *%s()
+		void *%s(%s)
 		{
-			return reinterpret_cast<void*>(new %s());
+			return reinterpret_cast<void*>(new %s(%s));
 		}
-	`, cFuncName, c.class.cName)
+	`,
+		cFuncName,
+		allCParams,
+		c.class.cName, allCArgs,
+	)
 }
 
 type classDtor struct {

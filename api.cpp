@@ -51,6 +51,17 @@ void skia_delete_SkCodec(void *obj) { delete reinterpret_cast<SkCodec *>(obj); }
 
 void *skia_new_SkM44() { return reinterpret_cast<void *>(new SkM44()); }
 
+void *skia_new_SkM442(float m0, float m4, float m8, float m12, float m1,
+                      float m5, float m9, float m13, float m2, float m6,
+                      float m10, float m14, float m3, float m7, float m11,
+                      float m15) {
+  return reinterpret_cast<void *>(
+      new SkM44((SkScalar)m0, (SkScalar)m4, (SkScalar)m8, (SkScalar)m12,
+                (SkScalar)m1, (SkScalar)m5, (SkScalar)m9, (SkScalar)m13,
+                (SkScalar)m2, (SkScalar)m6, (SkScalar)m10, (SkScalar)m14,
+                (SkScalar)m3, (SkScalar)m7, (SkScalar)m11, (SkScalar)m15));
+}
+
 void *skia_new_SkPaint() { return reinterpret_cast<void *>(new SkPaint()); }
 
 void skia_delete_SkPaint(void *obj) { delete reinterpret_cast<SkPaint *>(obj); }

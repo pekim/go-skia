@@ -27,6 +27,7 @@ func (g *generator) visitClass(cursor clang.Cursor) {
 		goName:   strings.TrimPrefix(name, "Sk"),
 		abstract: cursor.CXXRecord_IsAbstract(),
 	}
+	// fmt.Println(class.cName)
 
 	isPublic := false
 	cursor.Visit(func(cursor, _parent clang.Cursor) (status clang.ChildVisitResult) {
@@ -55,26 +56,49 @@ func (g *generator) visitClass(cursor clang.Cursor) {
 }
 
 func (g *generator) visitClassCtor(class *class, cursor clang.Cursor) {
-	paramCount := 0
+	ctor := classCtor{
+		class: class,
+	}
 
+	// fmt.Println("  ctor")
 	cursor.Visit(func(cursor, parent clang.Cursor) (status clang.ChildVisitResult) {
 		switch cursor.Kind() {
 		case clang.Cursor_ParmDecl:
-			paramCount++
-			cursor.Visit(func(cursor, parent clang.Cursor) (status clang.ChildVisitResult) {
-				switch cursor.Kind() {
-				case clang.Cursor_TypeRef:
-				}
-				return clang.ChildVisit_Continue
-			})
+			// fmt.Println("    param", cursor.Spelling())
+			ctor.params = append(ctor.params, g.visitParamDecl(cursor))
+			// cursor.Visit(func(cursor, parent clang.Cursor) (status clang.ChildVisitResult) {
+			// 	fmt.Println("      ", cursor.Kind(), cursor.Spelling())
+			// 	switch cursor.Kind() {
+			// 	case clang.Cursor_TypeRef:
+			// 	}
+			// 	return clang.ChildVisit_Continue
+			// })
 		}
 
 		return clang.ChildVisit_Continue
 	})
 
 	if cursor.AccessSpecifier() == clang.AccessSpecifier_Public {
-		class.ctors = append(class.ctors, classCtor{class: *class, paramCount: paramCount})
+		class.ctors = append(class.ctors, ctor)
 	}
+}
+
+func (g *generator) visitParamDecl(cursor clang.Cursor) param {
+	cName := cursor.Spelling()
+	var cDecl string
+
+	cursor.Visit(func(cursor, parent clang.Cursor) (status clang.ChildVisitResult) {
+		// fmt.Println("      ", cursor.Kind(), cursor.Spelling())
+		switch cursor.Kind() {
+		case clang.Cursor_TypeRef:
+			cDecl = cursor.Spelling()
+			// default:
+			// 	fmt.Println(cursor.Kind())
+		}
+		return clang.ChildVisit_Continue
+	})
+
+	return newParam(cName, cDecl)
 }
 
 func (g *generator) visitClassDtor(class *class, cursor clang.Cursor) {
