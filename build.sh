@@ -206,4 +206,5 @@ cd ../..
 # generate
 PATH=$ORIGINAL_PATH
 go run generate/cmd/main.go
-go run temp-test/test.go
+echo verify
+go run verify/verify.go
