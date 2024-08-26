@@ -1,6 +1,9 @@
 package generate
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 type param struct {
 	cName  string
@@ -84,4 +87,12 @@ func (p param) cArg() string {
 	default:
 		panic("unsupported param type")
 	}
+}
+
+func makeParamsString(params []param, makeParam func(p param) string) string {
+	var paramsStrings = make([]string, len(params))
+	for p, param := range params {
+		paramsStrings[p] = makeParam(param)
+	}
+	return strings.Join(paramsStrings, ", ")
 }

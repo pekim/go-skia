@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"slices"
 	"strconv"
-	"strings"
 )
 
 type class struct {
@@ -99,17 +98,8 @@ func (c classDtor) generate(g *generator) {
 }
 
 func (c *classCtor) generateGo(g *generator) {
-	var goParams = make([]string, len(c.params))
-	for p, param := range c.params {
-		goParams[p] = param.goDecl()
-	}
-	allGoParams := strings.Join(goParams, ", ")
-
-	var goCArgs = make([]string, len(c.params))
-	for p, param := range c.params {
-		goCArgs[p] = param.goCArg()
-	}
-	allGoCArgs := strings.Join(goCArgs, ", ")
+	goParams := makeParamsString(c.params, func(p param) string { return p.goDecl() })
+	goCArgs := makeParamsString(c.params, func(p param) string { return p.goCArg() })
 
 	g.goFile.writelnfTrim(`
 		func New%s%s(%s) %s {
@@ -118,34 +108,20 @@ func (c *classCtor) generateGo(g *generator) {
 			}
 		}
 	`,
-		c.class.goName, c.nameSuffix, allGoParams, c.class.goName,
+		c.class.goName, c.nameSuffix, goParams, c.class.goName,
 		c.class.goName,
-		c.cFuncName, allGoCArgs,
+		c.cFuncName, goCArgs,
 	)
 }
 
 func (c *classCtor) generateHeader(g *generator) {
-	var cParams = make([]string, len(c.params))
-	for p, param := range c.params {
-		cParams[p] = param.cDecl()
-	}
-	allCParams := strings.Join(cParams, ", ")
-
-	g.headerFile.writelnf("void *%s(%s);", c.cFuncName, allCParams)
+	params := makeParamsString(c.params, func(p param) string { return p.cDecl() })
+	g.headerFile.writelnf("void *%s(%s);", c.cFuncName, params)
 }
 
 func (c *classCtor) generateCpp(g *generator) {
-	var cParams = make([]string, len(c.params))
-	for p, param := range c.params {
-		cParams[p] = param.cDecl()
-	}
-	allCParams := strings.Join(cParams, ", ")
-
-	var cArgs = make([]string, len(c.params))
-	for p, param := range c.params {
-		cArgs[p] = param.cArg()
-	}
-	allCArgs := strings.Join(cArgs, ", ")
+	cParams := makeParamsString(c.params, func(p param) string { return p.cDecl() })
+	cArgs := makeParamsString(c.params, func(p param) string { return p.cArg() })
 
 	g.cppFile.writelnf(`
 		void *%s(%s)
@@ -154,7 +130,7 @@ func (c *classCtor) generateCpp(g *generator) {
 		}
 	`,
 		c.cFuncName,
-		allCParams,
-		c.class.cName, allCArgs,
+		cParams,
+		c.class.cName, cArgs,
 	)
 }
