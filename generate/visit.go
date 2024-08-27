@@ -27,7 +27,6 @@ func (g *generator) visitClass(cursor clang.Cursor) {
 		goName:   strings.TrimPrefix(name, "Sk"),
 		abstract: cursor.CXXRecord_IsAbstract(),
 	}
-	// fmt.Println(class.cName)
 
 	isPublic := false
 	cursor.Visit(func(cursor, _parent clang.Cursor) (status clang.ChildVisitResult) {
@@ -60,19 +59,10 @@ func (g *generator) visitClassCtor(class *class, cursor clang.Cursor) {
 		class: class,
 	}
 
-	// fmt.Println("  ctor")
 	cursor.Visit(func(cursor, parent clang.Cursor) (status clang.ChildVisitResult) {
 		switch cursor.Kind() {
 		case clang.Cursor_ParmDecl:
-			// fmt.Println("    param", cursor.Spelling())
 			ctor.params = append(ctor.params, g.visitParamDecl(cursor))
-			// cursor.Visit(func(cursor, parent clang.Cursor) (status clang.ChildVisitResult) {
-			// 	fmt.Println("      ", cursor.Kind(), cursor.Spelling())
-			// 	switch cursor.Kind() {
-			// 	case clang.Cursor_TypeRef:
-			// 	}
-			// 	return clang.ChildVisit_Continue
-			// })
 		}
 
 		return clang.ChildVisit_Continue
@@ -85,18 +75,8 @@ func (g *generator) visitClassCtor(class *class, cursor clang.Cursor) {
 
 func (g *generator) visitParamDecl(cursor clang.Cursor) param {
 	cName := cursor.Spelling()
-	var cDecl string
-
-	cursor.Visit(func(cursor, parent clang.Cursor) (status clang.ChildVisitResult) {
-		// fmt.Println("      ", cursor.Kind(), cursor.Spelling())
-		switch cursor.Kind() {
-		case clang.Cursor_TypeRef:
-			cDecl = cursor.Spelling()
-			// default:
-			// 	fmt.Println(cursor.Kind())
-		}
-		return clang.ChildVisit_Continue
-	})
+	typ := cursor.Type()
+	cDecl := typ.Spelling()
 
 	return newParam(cName, cDecl)
 }
