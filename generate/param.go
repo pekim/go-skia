@@ -2,6 +2,7 @@ package generate
 
 import (
 	"fmt"
+	"slices"
 	"strings"
 )
 
@@ -22,9 +23,7 @@ func newParam(cName string, cDecl string) param {
 }
 
 func (p param) supported() bool {
-	return p.cDecl_ == "SkScalar" ||
-		p.cDecl_ == "uint32_t" ||
-		p.cDecl_ == "size_t"
+	return slices.Contains([]string{"SkScalar", "uint32_t", "size_t"}, p.cDecl_)
 }
 
 func (p param) goDecl() string {
