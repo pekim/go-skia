@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"slices"
 	"strconv"
+	"strings"
 )
 
 type class struct {
@@ -53,10 +54,15 @@ type classCtor struct {
 }
 
 func (c *classCtor) generate(g *generator) {
-	for _, param := range c.params {
+	for i, param := range c.params {
 		if !param.supported() {
 			// fmt.Println(c.class.cName, param.cName, param.cDecl_)
 			return
+		}
+
+		if param.cName == "" {
+			param.cName = fmt.Sprintf("p%d", i)
+			param.goName = param.cName
 		}
 	}
 
@@ -99,18 +105,27 @@ func (c classDtor) generate(g *generator) {
 
 func (c *classCtor) generateGo(g *generator) {
 	goParams := makeParamsString(c.params, func(p param) string { return p.goDecl() })
-	goCArgs := makeParamsString(c.params, func(p param) string { return p.goCArg() })
+	cArgNames := makeParamsString(c.params, func(p param) string { return p.goCName })
+
+	cArgs := make([]string, len(c.params))
+	for p, param := range c.params {
+		cArgs[p] = param.goCArg()
+	}
+	allCArgs := strings.Join(cArgs, "\n")
+	allCArgs += "\n"
 
 	g.goFile.writelnfTrim(`
 		func New%s%s(%s) %s {
+			%s
 			return %s {
 		  	skia: C.%s(%s),
 			}
 		}
 	`,
 		c.class.goName, c.nameSuffix, goParams, c.class.goName,
+		allCArgs,
 		c.class.goName,
-		c.cFuncName, goCArgs,
+		c.cFuncName, cArgNames,
 	)
 }
 

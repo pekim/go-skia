@@ -20,6 +20,7 @@ type Matrix struct {
 }
 
 func NewMatrix() Matrix {
+
 	return Matrix{
 		skia: C.skia_new_SkMatrix(),
 	}
@@ -49,6 +50,7 @@ type RefCntBase struct {
 }
 
 func NewRefCntBase() RefCntBase {
+
 	return RefCntBase{
 		skia: C.skia_new_SkRefCntBase(),
 	}
@@ -62,6 +64,7 @@ type ColorInfo struct {
 }
 
 func NewColorInfo() ColorInfo {
+
 	return ColorInfo{
 		skia: C.skia_new_SkColorInfo(),
 	}
@@ -75,6 +78,7 @@ type Pixmap struct {
 }
 
 func NewPixmap() Pixmap {
+
 	return Pixmap{
 		skia: C.skia_new_SkPixmap(),
 	}
@@ -89,6 +93,7 @@ type YUVAInfo struct {
 }
 
 func NewYUVAInfo() YUVAInfo {
+
 	return YUVAInfo{
 		skia: C.skia_new_SkYUVAInfo(),
 	}
@@ -147,6 +152,7 @@ type YUVAPixmapInfo struct {
 }
 
 func NewYUVAPixmapInfo() YUVAPixmapInfo {
+
 	return YUVAPixmapInfo{
 		skia: C.skia_new_SkYUVAPixmapInfo(),
 	}
@@ -167,6 +173,7 @@ type YUVAPixmaps struct {
 }
 
 func NewYUVAPixmaps() YUVAPixmaps {
+
 	return YUVAPixmaps{
 		skia: C.skia_new_SkYUVAPixmaps(),
 	}
@@ -180,6 +187,7 @@ type Once struct {
 }
 
 func NewOnce() Once {
+
 	return Once{
 		skia: C.skia_new_SkOnce(),
 	}
@@ -202,6 +210,7 @@ type Noncopyable struct {
 }
 
 func NewNoncopyable() Noncopyable {
+
 	return Noncopyable{
 		skia: C.skia_new_SkNoncopyable(),
 	}
@@ -292,13 +301,31 @@ type M44 struct {
 }
 
 func NewM44() M44 {
+
 	return M44{
 		skia: C.skia_new_SkM44(),
 	}
 }
 func NewM442(m0 float32, m4 float32, m8 float32, m12 float32, m1 float32, m5 float32, m9 float32, m13 float32, m2 float32, m6 float32, m10 float32, m14 float32, m3 float32, m7 float32, m11 float32, m15 float32) M44 {
+	c_m0 := C.float(m0)
+	c_m4 := C.float(m4)
+	c_m8 := C.float(m8)
+	c_m12 := C.float(m12)
+	c_m1 := C.float(m1)
+	c_m5 := C.float(m5)
+	c_m9 := C.float(m9)
+	c_m13 := C.float(m13)
+	c_m2 := C.float(m2)
+	c_m6 := C.float(m6)
+	c_m10 := C.float(m10)
+	c_m14 := C.float(m14)
+	c_m3 := C.float(m3)
+	c_m7 := C.float(m7)
+	c_m11 := C.float(m11)
+	c_m15 := C.float(m15)
+
 	return M44{
-		skia: C.skia_new_SkM442(C.float(m0), C.float(m4), C.float(m8), C.float(m12), C.float(m1), C.float(m5), C.float(m9), C.float(m13), C.float(m2), C.float(m6), C.float(m10), C.float(m14), C.float(m3), C.float(m7), C.float(m11), C.float(m15)),
+		skia: C.skia_new_SkM442(c_m0, c_m4, c_m8, c_m12, c_m1, c_m5, c_m9, c_m13, c_m2, c_m6, c_m10, c_m14, c_m3, c_m7, c_m11, c_m15),
 	}
 }
 
@@ -319,6 +346,7 @@ type Paint struct {
 }
 
 func NewPaint() Paint {
+
 	return Paint{
 		skia: C.skia_new_SkPaint(),
 	}
@@ -368,13 +396,16 @@ type String struct {
 }
 
 func NewString() String {
+
 	return String{
 		skia: C.skia_new_SkString(),
 	}
 }
 func NewString2(len uint) String {
+	c_len := C.size_t(len)
+
 	return String{
-		skia: C.skia_new_SkString2(C.size_t(len)),
+		skia: C.skia_new_SkString2(c_len),
 	}
 }
 func (o *String) Delete() {
@@ -386,6 +417,7 @@ type SurfaceProps struct {
 }
 
 func NewSurfaceProps() SurfaceProps {
+
 	return SurfaceProps{
 		skia: C.skia_new_SkSurfaceProps(),
 	}
@@ -417,6 +449,7 @@ type Canvas struct {
 }
 
 func NewCanvas() Canvas {
+
 	return Canvas{
 		skia: C.skia_new_SkCanvas(),
 	}
@@ -571,13 +604,16 @@ type MemoryStream struct {
 }
 
 func NewMemoryStream() MemoryStream {
+
 	return MemoryStream{
 		skia: C.skia_new_SkMemoryStream(),
 	}
 }
 func NewMemoryStream2(length uint) MemoryStream {
+	c_length := C.size_t(length)
+
 	return MemoryStream{
-		skia: C.skia_new_SkMemoryStream2(C.size_t(length)),
+		skia: C.skia_new_SkMemoryStream2(c_length),
 	}
 }
 
@@ -594,6 +630,7 @@ type DynamicMemoryWStream struct {
 }
 
 func NewDynamicMemoryWStream() DynamicMemoryWStream {
+
 	return DynamicMemoryWStream{
 		skia: C.skia_new_SkDynamicMemoryWStream(),
 	}
@@ -659,6 +696,7 @@ type FontStyle struct {
 }
 
 func NewFontStyle() FontStyle {
+
 	return FontStyle{
 		skia: C.skia_new_SkFontStyle(),
 	}
@@ -707,6 +745,7 @@ type WeakRefCnt struct {
 }
 
 func NewWeakRefCnt() WeakRefCnt {
+
 	return WeakRefCnt{
 		skia: C.skia_new_SkWeakRefCnt(),
 	}
@@ -732,6 +771,7 @@ type Font struct {
 }
 
 func NewFont() Font {
+
 	return Font{
 		skia: C.skia_new_SkFont(),
 	}
@@ -765,6 +805,7 @@ type TextBlobBuilder struct {
 }
 
 func NewTextBlobBuilder() TextBlobBuilder {
+
 	return TextBlobBuilder{
 		skia: C.skia_new_SkTextBlobBuilder(),
 	}
@@ -819,6 +860,7 @@ type Path struct {
 }
 
 func NewPath() Path {
+
 	return Path{
 		skia: C.skia_new_SkPath(),
 	}
@@ -946,6 +988,7 @@ type GrGLExtensions struct {
 }
 
 func NewGrGLExtensions() GrGLExtensions {
+
 	return GrGLExtensions{
 		skia: C.skia_new_GrGLExtensions(),
 	}
@@ -960,6 +1003,7 @@ type GrBackendFormat struct {
 }
 
 func NewGrBackendFormat() GrBackendFormat {
+
 	return GrBackendFormat{
 		skia: C.skia_new_GrBackendFormat(),
 	}
@@ -973,6 +1017,7 @@ type GrBackendTexture struct {
 }
 
 func NewGrBackendTexture() GrBackendTexture {
+
 	return GrBackendTexture{
 		skia: C.skia_new_GrBackendTexture(),
 	}
@@ -986,6 +1031,7 @@ type GrBackendRenderTarget struct {
 }
 
 func NewGrBackendRenderTarget() GrBackendRenderTarget {
+
 	return GrBackendRenderTarget{
 		skia: C.skia_new_GrBackendRenderTarget(),
 	}
@@ -999,6 +1045,7 @@ type GrDriverBugWorkarounds struct {
 }
 
 func NewGrDriverBugWorkarounds() GrDriverBugWorkarounds {
+
 	return GrDriverBugWorkarounds{
 		skia: C.skia_new_GrDriverBugWorkarounds(),
 	}
@@ -1028,6 +1075,7 @@ type Mutex struct {
 }
 
 func NewMutex() Mutex {
+
 	return Mutex{
 		skia: C.skia_new_SkMutex(),
 	}
@@ -1135,6 +1183,7 @@ type PDFArray struct {
 }
 
 func NewPDFArray() PDFArray {
+
 	return PDFArray{
 		skia: C.skia_new_SkPDFArray(),
 	}
@@ -1156,8 +1205,10 @@ type ArenaAlloc struct {
 }
 
 func NewArenaAlloc(firstHeapAllocation uint) ArenaAlloc {
+	c_firstHeapAllocation := C.size_t(firstHeapAllocation)
+
 	return ArenaAlloc{
-		skia: C.skia_new_SkArenaAlloc(C.size_t(firstHeapAllocation)),
+		skia: C.skia_new_SkArenaAlloc(c_firstHeapAllocation),
 	}
 }
 func (o *ArenaAlloc) Delete() {
@@ -1169,8 +1220,10 @@ type ArenaAllocWithReset struct {
 }
 
 func NewArenaAllocWithReset(firstHeapAllocation uint) ArenaAllocWithReset {
+	c_firstHeapAllocation := C.size_t(firstHeapAllocation)
+
 	return ArenaAllocWithReset{
-		skia: C.skia_new_SkArenaAllocWithReset(C.size_t(firstHeapAllocation)),
+		skia: C.skia_new_SkArenaAllocWithReset(c_firstHeapAllocation),
 	}
 }
 
@@ -1179,6 +1232,7 @@ type PDFTagTree struct {
 }
 
 func NewPDFTagTree() PDFTagTree {
+
 	return PDFTagTree{
 		skia: C.skia_new_SkPDFTagTree(),
 	}
@@ -1220,6 +1274,7 @@ type SVGLength struct {
 }
 
 func NewSVGLength() SVGLength {
+
 	return SVGLength{
 		skia: C.skia_new_SkSVGLength(),
 	}
@@ -1246,6 +1301,7 @@ type SVGIRI struct {
 }
 
 func NewSVGIRI() SVGIRI {
+
 	return SVGIRI{
 		skia: C.skia_new_SkSVGIRI(),
 	}
@@ -1264,6 +1320,7 @@ type SVGColor struct {
 }
 
 func NewSVGColor() SVGColor {
+
 	return SVGColor{
 		skia: C.skia_new_SkSVGColor(),
 	}
@@ -1282,6 +1339,7 @@ type SVGPaint struct {
 }
 
 func NewSVGPaint() SVGPaint {
+
 	return SVGPaint{
 		skia: C.skia_new_SkSVGPaint(),
 	}
@@ -1300,6 +1358,7 @@ type SVGFuncIRI struct {
 }
 
 func NewSVGFuncIRI() SVGFuncIRI {
+
 	return SVGFuncIRI{
 		skia: C.skia_new_SkSVGFuncIRI(),
 	}
@@ -1317,6 +1376,7 @@ type SVGLineJoin struct {
 }
 
 func NewSVGLineJoin() SVGLineJoin {
+
 	return SVGLineJoin{
 		skia: C.skia_new_SkSVGLineJoin(),
 	}
@@ -1336,6 +1396,7 @@ type SVGSpreadMethod struct {
 }
 
 func NewSVGSpreadMethod() SVGSpreadMethod {
+
 	return SVGSpreadMethod{
 		skia: C.skia_new_SkSVGSpreadMethod(),
 	}
@@ -1354,6 +1415,7 @@ type SVGFillRule struct {
 }
 
 func NewSVGFillRule() SVGFillRule {
+
 	return SVGFillRule{
 		skia: C.skia_new_SkSVGFillRule(),
 	}
@@ -1372,6 +1434,7 @@ type SVGVisibility struct {
 }
 
 func NewSVGVisibility() SVGVisibility {
+
 	return SVGVisibility{
 		skia: C.skia_new_SkSVGVisibility(),
 	}
@@ -1391,6 +1454,7 @@ type SVGDashArray struct {
 }
 
 func NewSVGDashArray() SVGDashArray {
+
 	return SVGDashArray{
 		skia: C.skia_new_SkSVGDashArray(),
 	}
@@ -1409,6 +1473,7 @@ type SVGStopColor struct {
 }
 
 func NewSVGStopColor() SVGStopColor {
+
 	return SVGStopColor{
 		skia: C.skia_new_SkSVGStopColor(),
 	}
@@ -1428,6 +1493,7 @@ type SVGObjectBoundingBoxUnits struct {
 }
 
 func NewSVGObjectBoundingBoxUnits() SVGObjectBoundingBoxUnits {
+
 	return SVGObjectBoundingBoxUnits{
 		skia: C.skia_new_SkSVGObjectBoundingBoxUnits(),
 	}
@@ -1445,6 +1511,7 @@ type SVGFontFamily struct {
 }
 
 func NewSVGFontFamily() SVGFontFamily {
+
 	return SVGFontFamily{
 		skia: C.skia_new_SkSVGFontFamily(),
 	}
@@ -1462,6 +1529,7 @@ type SVGFontStyle struct {
 }
 
 func NewSVGFontStyle() SVGFontStyle {
+
 	return SVGFontStyle{
 		skia: C.skia_new_SkSVGFontStyle(),
 	}
@@ -1481,6 +1549,7 @@ type SVGFontSize struct {
 }
 
 func NewSVGFontSize() SVGFontSize {
+
 	return SVGFontSize{
 		skia: C.skia_new_SkSVGFontSize(),
 	}
@@ -1498,6 +1567,7 @@ type SVGFontWeight struct {
 }
 
 func NewSVGFontWeight() SVGFontWeight {
+
 	return SVGFontWeight{
 		skia: C.skia_new_SkSVGFontWeight(),
 	}
@@ -1527,6 +1597,7 @@ type SVGTextAnchor struct {
 }
 
 func NewSVGTextAnchor() SVGTextAnchor {
+
 	return SVGTextAnchor{
 		skia: C.skia_new_SkSVGTextAnchor(),
 	}
@@ -1546,6 +1617,7 @@ type SVGFeInputType struct {
 }
 
 func NewSVGFeInputType() SVGFeInputType {
+
 	return SVGFeInputType{
 		skia: C.skia_new_SkSVGFeInputType(),
 	}
@@ -1569,6 +1641,7 @@ type SVGFeTurbulenceBaseFrequency struct {
 }
 
 func NewSVGFeTurbulenceBaseFrequency() SVGFeTurbulenceBaseFrequency {
+
 	return SVGFeTurbulenceBaseFrequency{
 		skia: C.skia_new_SkSVGFeTurbulenceBaseFrequency(),
 	}

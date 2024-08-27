@@ -6,16 +6,18 @@ import (
 )
 
 type param struct {
-	cName  string
-	goName string
-	cDecl_ string
+	cName   string
+	goCName string
+	goName  string
+	cDecl_  string
 }
 
 func newParam(cName string, cDecl string) param {
 	return param{
-		cName:  cName,
-		cDecl_: cDecl,
-		goName: cName,
+		cName:   cName,
+		goCName: fmt.Sprintf("c_%s", cName),
+		cDecl_:  cDecl,
+		goName:  cName,
 	}
 }
 
@@ -44,13 +46,13 @@ func (p param) goDecl() string {
 func (p param) goCArg() string {
 	switch p.cDecl_ {
 	case "SkScalar":
-		return fmt.Sprintf("C.float(%s)", p.goName)
+		return fmt.Sprintf("%s := C.float(%s)", p.goCName, p.goName)
 
 	case "size_t":
-		return fmt.Sprintf("C.size_t(%s)", p.goName)
+		return fmt.Sprintf("%s := C.size_t(%s)", p.goCName, p.goName)
 
 	case "uint32_t":
-		return fmt.Sprintf("C.uint32_t(%s)", p.goName)
+		return fmt.Sprintf("%s := C.uint32_t(%s)", p.goCName, p.goName)
 
 	default:
 		panic("unsupported param type")
