@@ -77,8 +77,13 @@ func (g *generator) visitParamDecl(cursor clang.Cursor) param {
 	cName := cursor.Spelling()
 	typ := cursor.Type()
 	cDecl := typ.Spelling()
+	p := newParam(cName, cDecl)
 
-	return newParam(cName, cDecl)
+	p.kind = typ.Kind()
+	p.array = typ.ArrayElementType().Kind() != clang.Type_Invalid
+	p.arrayKind = typ.ArrayElementType().Kind()
+
+	return p
 }
 
 func (g *generator) visitClassDtor(class *class, cursor clang.Cursor) {

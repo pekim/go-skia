@@ -3,7 +3,9 @@ repos:
     rev: v4.5.0
     hooks:
       - id: trailing-whitespace
+        exclude: generate/ast.dump
       - id: end-of-file-fixer
+        exclude: generate/ast.dump
       - id: check-yaml
   - repo: https://github.com/dnephin/pre-commit-golang
     rev: v0.5.1

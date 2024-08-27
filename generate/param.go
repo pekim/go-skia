@@ -4,13 +4,18 @@ import (
 	"fmt"
 	"slices"
 	"strings"
+
+	"github.com/go-clang/clang-v15/clang"
 )
 
 type param struct {
-	cName   string
-	goCName string
-	goName  string
-	cDecl_  string
+	cName     string
+	goCName   string
+	goName    string
+	cDecl_    string
+	kind      clang.TypeKind
+	array     bool
+	arrayKind clang.TypeKind
 }
 
 func newParam(cName string, cDecl string) param {

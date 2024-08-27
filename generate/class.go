@@ -55,6 +55,11 @@ type classCtor struct {
 
 func (c *classCtor) generate(g *generator) {
 	for i, param := range c.params {
+		if param.array {
+			fmt.Println(c.class.cName, param.arrayKind)
+		}
+
+		fmt.Println(c.class.cName, "::", param.cDecl_, "::", param.kind, param.arrayKind)
 		if !param.supported() {
 			// fmt.Println(c.class.cName, param.cName, param.cDecl_)
 			return
