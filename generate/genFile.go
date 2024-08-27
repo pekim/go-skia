@@ -78,8 +78,3 @@ func (f *genFile) writelnf(format string, args ...any) {
 	f.writef(format, args...)
 	f.write("\n")
 }
-
-func (f *genFile) writelnfTrim(format string, args ...any) {
-	f.write(strings.TrimSpace(fmt.Sprintf(format, args...)))
-	f.write("\n")
-}

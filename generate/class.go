@@ -84,7 +84,7 @@ type classDtor struct {
 func (c classDtor) generate(g *generator) {
 	cFuncName := fmt.Sprintf("skia_delete_%s", c.class.cName)
 
-	g.goFile.writelnfTrim(`
+	g.goFile.writelnf(`
 		func (o *%s) Delete() {
 			C.%s(o.skia)
 		}
@@ -114,7 +114,7 @@ func (c *classCtor) generateGo(g *generator) {
 	allCArgs := strings.Join(cArgs, "\n")
 	allCArgs += "\n"
 
-	g.goFile.writelnfTrim(`
+	g.goFile.writelnf(`
 		func New%s%s(%s) %s {
 			%s
 			return %s {

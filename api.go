@@ -55,6 +55,7 @@ func NewRefCntBase() RefCntBase {
 		skia: C.skia_new_SkRefCntBase(),
 	}
 }
+
 func (o *RefCntBase) Delete() {
 	C.skia_delete_SkRefCntBase(o.skia)
 }
@@ -69,6 +70,7 @@ func NewColorInfo() ColorInfo {
 		skia: C.skia_new_SkColorInfo(),
 	}
 }
+
 func (o *ColorInfo) Delete() {
 	C.skia_delete_SkColorInfo(o.skia)
 }
@@ -178,6 +180,7 @@ func NewYUVAPixmaps() YUVAPixmaps {
 		skia: C.skia_new_SkYUVAPixmaps(),
 	}
 }
+
 func (o *YUVAPixmaps) Delete() {
 	C.skia_delete_SkYUVAPixmaps(o.skia)
 }
@@ -306,6 +309,7 @@ func NewM44() M44 {
 		skia: C.skia_new_SkM44(),
 	}
 }
+
 func NewM442(m0 float32, m4 float32, m8 float32, m12 float32, m1 float32, m5 float32, m9 float32, m13 float32, m2 float32, m6 float32, m10 float32, m14 float32, m3 float32, m7 float32, m11 float32, m15 float32) M44 {
 	c_m0 := C.float(m0)
 	c_m4 := C.float(m4)
@@ -351,6 +355,7 @@ func NewPaint() Paint {
 		skia: C.skia_new_SkPaint(),
 	}
 }
+
 func (o *Paint) Delete() {
 	C.skia_delete_SkPaint(o.skia)
 }
@@ -401,6 +406,7 @@ func NewString() String {
 		skia: C.skia_new_SkString(),
 	}
 }
+
 func NewString2(len uint) String {
 	c_len := C.size_t(len)
 
@@ -408,6 +414,7 @@ func NewString2(len uint) String {
 		skia: C.skia_new_SkString2(c_len),
 	}
 }
+
 func (o *String) Delete() {
 	C.skia_delete_SkString(o.skia)
 }
@@ -454,6 +461,7 @@ func NewCanvas() Canvas {
 		skia: C.skia_new_SkCanvas(),
 	}
 }
+
 func (o *Canvas) Delete() {
 	C.skia_delete_SkCanvas(o.skia)
 }
@@ -609,6 +617,7 @@ func NewMemoryStream() MemoryStream {
 		skia: C.skia_new_SkMemoryStream(),
 	}
 }
+
 func NewMemoryStream2(length uint) MemoryStream {
 	c_length := C.size_t(length)
 
@@ -635,6 +644,7 @@ func NewDynamicMemoryWStream() DynamicMemoryWStream {
 		skia: C.skia_new_SkDynamicMemoryWStream(),
 	}
 }
+
 func (o *DynamicMemoryWStream) Delete() {
 	C.skia_delete_SkDynamicMemoryWStream(o.skia)
 }
@@ -750,6 +760,7 @@ func NewWeakRefCnt() WeakRefCnt {
 		skia: C.skia_new_SkWeakRefCnt(),
 	}
 }
+
 func (o *WeakRefCnt) Delete() {
 	C.skia_delete_SkWeakRefCnt(o.skia)
 }
@@ -810,6 +821,7 @@ func NewTextBlobBuilder() TextBlobBuilder {
 		skia: C.skia_new_SkTextBlobBuilder(),
 	}
 }
+
 func (o *TextBlobBuilder) Delete() {
 	C.skia_delete_SkTextBlobBuilder(o.skia)
 }
@@ -865,6 +877,7 @@ func NewPath() Path {
 		skia: C.skia_new_SkPath(),
 	}
 }
+
 func (o *Path) Delete() {
 	C.skia_delete_SkPath(o.skia)
 }
@@ -1008,6 +1021,7 @@ func NewGrBackendFormat() GrBackendFormat {
 		skia: C.skia_new_GrBackendFormat(),
 	}
 }
+
 func (o *GrBackendFormat) Delete() {
 	C.skia_delete_GrBackendFormat(o.skia)
 }
@@ -1022,6 +1036,7 @@ func NewGrBackendTexture() GrBackendTexture {
 		skia: C.skia_new_GrBackendTexture(),
 	}
 }
+
 func (o *GrBackendTexture) Delete() {
 	C.skia_delete_GrBackendTexture(o.skia)
 }
@@ -1036,6 +1051,7 @@ func NewGrBackendRenderTarget() GrBackendRenderTarget {
 		skia: C.skia_new_GrBackendRenderTarget(),
 	}
 }
+
 func (o *GrBackendRenderTarget) Delete() {
 	C.skia_delete_GrBackendRenderTarget(o.skia)
 }
@@ -1050,6 +1066,7 @@ func NewGrDriverBugWorkarounds() GrDriverBugWorkarounds {
 		skia: C.skia_new_GrDriverBugWorkarounds(),
 	}
 }
+
 func (o *GrDriverBugWorkarounds) Delete() {
 	C.skia_delete_GrDriverBugWorkarounds(o.skia)
 }
@@ -1080,6 +1097,7 @@ func NewMutex() Mutex {
 		skia: C.skia_new_SkMutex(),
 	}
 }
+
 func (o *Mutex) Delete() {
 	C.skia_delete_SkMutex(o.skia)
 }
@@ -1188,6 +1206,7 @@ func NewPDFArray() PDFArray {
 		skia: C.skia_new_SkPDFArray(),
 	}
 }
+
 func (o *PDFArray) Delete() {
 	C.skia_delete_SkPDFArray(o.skia)
 }
@@ -1211,6 +1230,7 @@ func NewArenaAlloc(firstHeapAllocation uint) ArenaAlloc {
 		skia: C.skia_new_SkArenaAlloc(c_firstHeapAllocation),
 	}
 }
+
 func (o *ArenaAlloc) Delete() {
 	C.skia_delete_SkArenaAlloc(o.skia)
 }
@@ -1237,6 +1257,7 @@ func NewPDFTagTree() PDFTagTree {
 		skia: C.skia_new_SkPDFTagTree(),
 	}
 }
+
 func (o *PDFTagTree) Delete() {
 	C.skia_delete_SkPDFTagTree(o.skia)
 }
