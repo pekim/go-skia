@@ -141,7 +141,7 @@ func typeFromClangType(cType clang.Type) (typ, error) {
 			typ_.isPrimitive = true
 		}
 
-	case clang.Type_Pointer:
+	case clang.Type_Pointer, clang.Type_LValueReference, clang.Type_RValueReference:
 		typ_.pointerLevel++
 
 		subTyp, err := typeFromClangType(cType.PointeeType())
