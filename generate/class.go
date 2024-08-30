@@ -3,7 +3,6 @@ package generate
 import (
 	"fmt"
 	"slices"
-	"strconv"
 	"strings"
 )
 
@@ -45,43 +44,6 @@ func (c *class) generate(g *generator) {
 	}
 }
 
-type classCtor struct {
-	class  *class
-	params []param
-
-	nameSuffix string
-	cFuncName  string
-}
-
-func (c *classCtor) generate(g *generator) {
-	for i, param := range c.params {
-		if param.array {
-			fmt.Println(c.class.cName, param.arrayKind)
-		}
-
-		fmt.Println(c.class.cName, "::", param.cDecl_, "::", param.kind, param.arrayKind)
-		if !param.supported() {
-			// fmt.Println(c.class.cName, param.cName, param.cDecl_)
-			return
-		}
-
-		if param.cName == "" {
-			param.cName = fmt.Sprintf("p%d", i)
-			param.goName = param.cName
-		}
-	}
-
-	c.class.ctorN++
-	if c.class.ctorN > 1 {
-		c.nameSuffix = strconv.Itoa(c.class.ctorN)
-	}
-	c.cFuncName = fmt.Sprintf("skia_new_%s%s", c.class.cName, c.nameSuffix)
-
-	c.generateGo(g)
-	c.generateHeader(g)
-	c.generateCpp(g)
-}
-
 type classDtor struct {
 	class class
 }
@@ -110,7 +72,7 @@ func (c classDtor) generate(g *generator) {
 
 func (c *classCtor) generateGo(g *generator) {
 	goParams := makeParamsString(c.params, func(p param) string { return p.goDecl() })
-	cArgNames := makeParamsString(c.params, func(p param) string { return p.goCName })
+	cArgNames := makeParamsString(c.params, func(p param) string { return p.cgoName })
 
 	cArgs := make([]string, len(c.params))
 	for p, param := range c.params {
@@ -135,12 +97,12 @@ func (c *classCtor) generateGo(g *generator) {
 }
 
 func (c *classCtor) generateHeader(g *generator) {
-	params := makeParamsString(c.params, func(p param) string { return p.cDecl() })
+	params := makeParamsString(c.params, func(p param) string { return p.cParamDecl() })
 	g.headerFile.writelnf("void *%s(%s);", c.cFuncName, params)
 }
 
 func (c *classCtor) generateCpp(g *generator) {
-	cParams := makeParamsString(c.params, func(p param) string { return p.cDecl() })
+	cParams := makeParamsString(c.params, func(p param) string { return p.cParamDecl() })
 	cArgs := makeParamsString(c.params, func(p param) string { return p.cArg() })
 
 	g.cppFile.writelnf(`

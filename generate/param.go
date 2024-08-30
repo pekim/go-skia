@@ -2,97 +2,73 @@ package generate
 
 import (
 	"fmt"
-	"slices"
 	"strings"
 
 	"github.com/go-clang/clang-v15/clang"
 )
 
 type param struct {
-	cName     string
-	goCName   string
-	goName    string
-	cDecl_    string
-	kind      clang.TypeKind
-	array     bool
-	arrayKind clang.TypeKind
+	cName   string
+	cgoName string
+	goName  string
+	typ     typ
 }
 
-func newParam(cName string, cDecl string) param {
-	return param{
-		cName:   cName,
-		goCName: fmt.Sprintf("c_%s", cName),
-		cDecl_:  cDecl,
-		goName:  cName,
+func newParam(cursor clang.Cursor, n int) param {
+	p := param{
+		cName: cursor.DisplayName(),
 	}
+	if p.cName == "" {
+		p.cName = fmt.Sprintf("p%d", n)
+	}
+
+	p.cgoName = fmt.Sprintf("c_%s", p.cName)
+	p.goName = validGoName(p.cName)
+
+	typ, err := typeFromClangType(cursor.Type())
+	if err != nil {
+		panic(err)
+	}
+	p.typ = typ
+
+	return p
 }
 
 func (p param) supported() bool {
-	return slices.Contains([]string{"SkScalar", "uint32_t", "size_t"}, p.cDecl_)
+	if p.typ.isArray {
+		// TODO support array params
+		return false
+	}
+	if p.typ.pointerLevel > 0 {
+		// TODO support pointer params
+		return false
+	}
+	if p.typ.isEnumLiteral {
+		// TODO support enum params
+		return false
+	}
+
+	if p.typ.isPrimitive {
+		return true
+	}
+
+	return false
 }
 
 func (p param) goDecl() string {
-	switch p.cDecl_ {
-	case "SkScalar":
-		return fmt.Sprintf("%s float32", p.goName)
-
-	case "size_t":
-		return fmt.Sprintf("%s uint", p.goName)
-
-	case "uint32_t":
-		return fmt.Sprintf("%s uint32", p.goName)
-
-	default:
-		panic("unsupported param type")
-	}
+	return fmt.Sprintf("%s %s", p.goName, p.typ.goName)
 }
 
 func (p param) goCArg() string {
-	switch p.cDecl_ {
-	case "SkScalar":
-		return fmt.Sprintf("%s := C.float(%s)", p.goCName, p.goName)
-
-	case "size_t":
-		return fmt.Sprintf("%s := C.size_t(%s)", p.goCName, p.goName)
-
-	case "uint32_t":
-		return fmt.Sprintf("%s := C.uint32_t(%s)", p.goCName, p.goName)
-
-	default:
-		panic("unsupported param type")
-	}
+	return fmt.Sprintf("%s := C.%s(%s)", p.cgoName, p.typ.cgoName, p.goName)
 }
 
-func (p param) cDecl() string {
-	switch p.cDecl_ {
-	case "SkScalar":
-		return fmt.Sprintf("float %s", p.cName)
-
-	case "size_t":
-		return fmt.Sprintf("size_t %s", p.cName)
-
-	case "uint32_t":
-		return fmt.Sprintf("uint32_t %s", p.cName)
-
-	default:
-		panic("unsupported param type")
-	}
+func (p param) cParamDecl() string {
+	return fmt.Sprintf("%s %s", p.typ.cgoName, p.cgoName)
 }
 
 func (p param) cArg() string {
-	switch p.cDecl_ {
-	case "SkScalar":
-		return fmt.Sprintf("(SkScalar)%s", p.cName)
-
-	case "size_t":
-		return p.cName
-
-	case "uint32_t":
-		return p.cName
-
-	default:
-		panic("unsupported param type")
-	}
+	return p.cgoName
 }
 
 func makeParamsString(params []param, makeParam func(p param) string) string {
@@ -101,4 +77,11 @@ func makeParamsString(params []param, makeParam func(p param) string) string {
 		paramsStrings[p] = makeParam(param)
 	}
 	return strings.Join(paramsStrings, ", ")
+}
+
+func validGoName(name string) string {
+	if name == "type" {
+		return "typ"
+	}
+	return name
 }

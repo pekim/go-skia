@@ -51,15 +51,13 @@ void skia_delete_SkCodec(void *obj) { delete reinterpret_cast<SkCodec *>(obj); }
 
 void *skia_new_SkM44() { return reinterpret_cast<void *>(new SkM44()); }
 
-void *skia_new_SkM442(float m0, float m4, float m8, float m12, float m1,
-                      float m5, float m9, float m13, float m2, float m6,
-                      float m10, float m14, float m3, float m7, float m11,
-                      float m15) {
-  return reinterpret_cast<void *>(
-      new SkM44((SkScalar)m0, (SkScalar)m4, (SkScalar)m8, (SkScalar)m12,
-                (SkScalar)m1, (SkScalar)m5, (SkScalar)m9, (SkScalar)m13,
-                (SkScalar)m2, (SkScalar)m6, (SkScalar)m10, (SkScalar)m14,
-                (SkScalar)m3, (SkScalar)m7, (SkScalar)m11, (SkScalar)m15));
+void *skia_new_SkM442(float c_m0, float c_m4, float c_m8, float c_m12,
+                      float c_m1, float c_m5, float c_m9, float c_m13,
+                      float c_m2, float c_m6, float c_m10, float c_m14,
+                      float c_m3, float c_m7, float c_m11, float c_m15) {
+  return reinterpret_cast<void *>(new SkM44(c_m0, c_m4, c_m8, c_m12, c_m1, c_m5,
+                                            c_m9, c_m13, c_m2, c_m6, c_m10,
+                                            c_m14, c_m3, c_m7, c_m11, c_m15));
 }
 
 void *skia_new_SkPaint() { return reinterpret_cast<void *>(new SkPaint()); }
@@ -72,8 +70,8 @@ void skia_delete_SkRasterHandleAllocator(void *obj) {
 
 void *skia_new_SkString() { return reinterpret_cast<void *>(new SkString()); }
 
-void *skia_new_SkString2(size_t len) {
-  return reinterpret_cast<void *>(new SkString(len));
+void *skia_new_SkString2(ulong c_len) {
+  return reinterpret_cast<void *>(new SkString(c_len));
 }
 
 void skia_delete_SkString(void *obj) {
@@ -84,7 +82,16 @@ void *skia_new_SkSurfaceProps() {
   return reinterpret_cast<void *>(new SkSurfaceProps());
 }
 
+void *skia_new_SkDeque(ulong c_elemSize, int c_allocCount) {
+  return reinterpret_cast<void *>(new SkDeque(c_elemSize, c_allocCount));
+}
+
 void skia_delete_SkDeque(void *obj) { delete reinterpret_cast<SkDeque *>(obj); }
+
+void *skia_new_SkContainerAllocator(ulong c_sizeOfT, int c_maxCapacity) {
+  return reinterpret_cast<void *>(
+      new SkContainerAllocator(c_sizeOfT, c_maxCapacity));
+}
 
 void *skia_new_SkCanvas() { return reinterpret_cast<void *>(new SkCanvas()); }
 
@@ -112,8 +119,8 @@ void *skia_new_SkMemoryStream() {
   return reinterpret_cast<void *>(new SkMemoryStream());
 }
 
-void *skia_new_SkMemoryStream2(size_t length) {
-  return reinterpret_cast<void *>(new SkMemoryStream(length));
+void *skia_new_SkMemoryStream2(ulong c_length) {
+  return reinterpret_cast<void *>(new SkMemoryStream(c_length));
 }
 
 void skia_delete_SkFILEWStream(void *obj) {
@@ -202,6 +209,10 @@ void skia_delete_GrContext_Base(void *obj) {
   delete reinterpret_cast<GrContext_Base *>(obj);
 }
 
+void *skia_new_SkSemaphore(int c_count) {
+  return reinterpret_cast<void *>(new SkSemaphore(c_count));
+}
+
 void skia_delete_SkSemaphore(void *obj) {
   delete reinterpret_cast<SkSemaphore *>(obj);
 }
@@ -224,6 +235,10 @@ void skia_delete_GrRecordingContext(void *obj) {
 
 void skia_delete_GrDirectContext(void *obj) {
   delete reinterpret_cast<GrDirectContext *>(obj);
+}
+
+void *skia_new_SkTDStorage(int c_sizeOfT) {
+  return reinterpret_cast<void *>(new SkTDStorage(c_sizeOfT));
 }
 
 void skia_delete_SkTDStorage(void *obj) {
@@ -250,17 +265,17 @@ void skia_delete_SkPDFDict(void *obj) {
   delete reinterpret_cast<SkPDFDict *>(obj);
 }
 
-void *skia_new_SkArenaAlloc(size_t firstHeapAllocation) {
-  return reinterpret_cast<void *>(new SkArenaAlloc(firstHeapAllocation));
+void *skia_new_SkArenaAlloc(ulong c_firstHeapAllocation) {
+  return reinterpret_cast<void *>(new SkArenaAlloc(c_firstHeapAllocation));
 }
 
 void skia_delete_SkArenaAlloc(void *obj) {
   delete reinterpret_cast<SkArenaAlloc *>(obj);
 }
 
-void *skia_new_SkArenaAllocWithReset(size_t firstHeapAllocation) {
+void *skia_new_SkArenaAllocWithReset(ulong c_firstHeapAllocation) {
   return reinterpret_cast<void *>(
-      new SkArenaAllocWithReset(firstHeapAllocation));
+      new SkArenaAllocWithReset(c_firstHeapAllocation));
 }
 
 void *skia_new_SkPDFTagTree() {
@@ -351,6 +366,11 @@ void *skia_new_SkSVGFeInputType() {
 
 void *skia_new_SkSVGFeTurbulenceBaseFrequency() {
   return reinterpret_cast<void *>(new SkSVGFeTurbulenceBaseFrequency());
+}
+
+void *skia_new_SkSVGFeTurbulenceBaseFrequency2(float c_freqX, float c_freqY) {
+  return reinterpret_cast<void *>(
+      new SkSVGFeTurbulenceBaseFrequency(c_freqX, c_freqY));
 }
 
 void skia_delete_SkSVGNode(void *obj) {

@@ -1,5 +1,9 @@
 // This is a generated file. DO NOT EDIT.
 
+#include <sys/types.h>
+typedef signed char schar;
+typedef unsigned char uchar;
+
 #ifdef __cplusplus
 extern "C" {
 #endif // __cplusplus
@@ -18,18 +22,20 @@ void *skia_new_SkOnce();
 void *skia_new_SkNoncopyable();
 void skia_delete_SkCodec(void *obj);
 void *skia_new_SkM44();
-void *skia_new_SkM442(float m0, float m4, float m8, float m12, float m1,
-                      float m5, float m9, float m13, float m2, float m6,
-                      float m10, float m14, float m3, float m7, float m11,
-                      float m15);
+void *skia_new_SkM442(float c_m0, float c_m4, float c_m8, float c_m12,
+                      float c_m1, float c_m5, float c_m9, float c_m13,
+                      float c_m2, float c_m6, float c_m10, float c_m14,
+                      float c_m3, float c_m7, float c_m11, float c_m15);
 void *skia_new_SkPaint();
 void skia_delete_SkPaint(void *obj);
 void skia_delete_SkRasterHandleAllocator(void *obj);
 void *skia_new_SkString();
-void *skia_new_SkString2(size_t len);
+void *skia_new_SkString2(ulong c_len);
 void skia_delete_SkString(void *obj);
 void *skia_new_SkSurfaceProps();
+void *skia_new_SkDeque(ulong c_elemSize, int c_allocCount);
 void skia_delete_SkDeque(void *obj);
+void *skia_new_SkContainerAllocator(ulong c_sizeOfT, int c_maxCapacity);
 void *skia_new_SkCanvas();
 void skia_delete_SkCanvas(void *obj);
 void skia_delete_SkAutoCanvasRestore(void *obj);
@@ -37,7 +43,7 @@ void skia_delete_SkStream(void *obj);
 void skia_delete_SkWStream(void *obj);
 void skia_delete_SkFILEStream(void *obj);
 void *skia_new_SkMemoryStream();
-void *skia_new_SkMemoryStream2(size_t length);
+void *skia_new_SkMemoryStream2(ulong c_length);
 void skia_delete_SkFILEWStream(void *obj);
 void *skia_new_SkDynamicMemoryWStream();
 void skia_delete_SkDynamicMemoryWStream(void *obj);
@@ -61,6 +67,7 @@ void skia_delete_GrBackendRenderTarget(void *obj);
 void *skia_new_GrDriverBugWorkarounds();
 void skia_delete_GrDriverBugWorkarounds(void *obj);
 void skia_delete_GrContext_Base(void *obj);
+void *skia_new_SkSemaphore(int c_count);
 void skia_delete_SkSemaphore(void *obj);
 void *skia_new_SkMutex();
 void skia_delete_SkMutex(void *obj);
@@ -68,15 +75,16 @@ void skia_delete_SkAutoMutexExclusive(void *obj);
 void skia_delete_GrImageContext(void *obj);
 void skia_delete_GrRecordingContext(void *obj);
 void skia_delete_GrDirectContext(void *obj);
+void *skia_new_SkTDStorage(int c_sizeOfT);
 void skia_delete_SkTDStorage(void *obj);
 void skia_delete_SkPDFUnion(void *obj);
 void skia_delete_SkPDFObject(void *obj);
 void *skia_new_SkPDFArray();
 void skia_delete_SkPDFArray(void *obj);
 void skia_delete_SkPDFDict(void *obj);
-void *skia_new_SkArenaAlloc(size_t firstHeapAllocation);
+void *skia_new_SkArenaAlloc(ulong c_firstHeapAllocation);
 void skia_delete_SkArenaAlloc(void *obj);
-void *skia_new_SkArenaAllocWithReset(size_t firstHeapAllocation);
+void *skia_new_SkArenaAllocWithReset(ulong c_firstHeapAllocation);
 void *skia_new_SkPDFTagTree();
 void skia_delete_SkPDFTagTree(void *obj);
 void skia_delete_SkPDFDocument(void *obj);
@@ -100,6 +108,7 @@ void *skia_new_SkSVGFontWeight();
 void *skia_new_SkSVGTextAnchor();
 void *skia_new_SkSVGFeInputType();
 void *skia_new_SkSVGFeTurbulenceBaseFrequency();
+void *skia_new_SkSVGFeTurbulenceBaseFrequency2(float c_freqX, float c_freqY);
 void skia_delete_SkSVGNode(void *obj);
 void skia_delete_SkSVGRenderContext(void *obj);
 

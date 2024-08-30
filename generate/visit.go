@@ -1,8 +1,6 @@
 package generate
 
 import (
-	"strings"
-
 	"github.com/go-clang/clang-v15/clang"
 )
 
@@ -24,7 +22,7 @@ func (g *generator) visitClass(cursor clang.Cursor) {
 	name := cursor.Spelling()
 	class := class{
 		cName:    name,
-		goName:   strings.TrimPrefix(name, "Sk"),
+		goName:   trimSkiaPrefix(name),
 		abstract: cursor.CXXRecord_IsAbstract(),
 	}
 
@@ -37,7 +35,9 @@ func (g *generator) visitClass(cursor clang.Cursor) {
 			}
 
 		case clang.Cursor_Constructor:
-			g.visitClassCtor(&class, cursor)
+			if cursor.AccessSpecifier() == clang.AccessSpecifier_Public {
+				class.ctors = append(class.ctors, newClassCtor(&class, cursor))
+			}
 
 		case clang.Cursor_Destructor:
 			g.visitClassDtor(&class, cursor)
@@ -52,38 +52,6 @@ func (g *generator) visitClass(cursor clang.Cursor) {
 	if isPublic {
 		g.classes = append(g.classes, class)
 	}
-}
-
-func (g *generator) visitClassCtor(class *class, cursor clang.Cursor) {
-	ctor := classCtor{
-		class: class,
-	}
-
-	cursor.Visit(func(cursor, parent clang.Cursor) (status clang.ChildVisitResult) {
-		switch cursor.Kind() {
-		case clang.Cursor_ParmDecl:
-			ctor.params = append(ctor.params, g.visitParamDecl(cursor))
-		}
-
-		return clang.ChildVisit_Continue
-	})
-
-	if cursor.AccessSpecifier() == clang.AccessSpecifier_Public {
-		class.ctors = append(class.ctors, ctor)
-	}
-}
-
-func (g *generator) visitParamDecl(cursor clang.Cursor) param {
-	cName := cursor.Spelling()
-	typ := cursor.Type()
-	cDecl := typ.Spelling()
-	p := newParam(cName, cDecl)
-
-	p.kind = typ.Kind()
-	p.array = typ.ArrayElementType().Kind() != clang.Type_Invalid
-	p.arrayKind = typ.ArrayElementType().Kind()
-
-	return p
 }
 
 func (g *generator) visitClassDtor(class *class, cursor clang.Cursor) {

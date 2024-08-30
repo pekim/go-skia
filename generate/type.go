@@ -119,7 +119,7 @@ func typeFromClangType(cType clang.Type) (typ, error) {
 		typ_.cgoName = "void"
 		typ_.goName = "void" // There isn't really any such Go type.
 
-	case clang.Type_ConstantArray:
+	case clang.Type_ConstantArray, clang.Type_IncompleteArray:
 		subTyp, err := typeFromClangType(cType.ArrayElementType())
 		if err != nil {
 			return typ{}, err
@@ -129,7 +129,11 @@ func typeFromClangType(cType clang.Type) (typ, error) {
 		typ_.goName = subTyp.goName
 		typ_.pointerLevel += subTyp.pointerLevel
 		typ_.isArray = true
-		typ_.arraySize = cType.ArraySize()
+		if cType.Kind() == clang.Type_IncompleteArray {
+			typ_.arraySize = 0
+		} else {
+			typ_.arraySize = cType.ArraySize()
+		}
 
 	case clang.Type_Typedef:
 		typ_.isPrimitive = false

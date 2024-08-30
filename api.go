@@ -407,8 +407,8 @@ func NewString() String {
 	}
 }
 
-func NewString2(len uint) String {
-	c_len := C.size_t(len)
+func NewString2(len uint64) String {
+	c_len := C.ulong(len)
 
 	return String{
 		skia: C.skia_new_SkString2(c_len),
@@ -443,12 +443,30 @@ type Deque struct {
 	skia unsafe.Pointer
 }
 
+func NewDeque(elemSize uint64, allocCount int32) Deque {
+	c_elemSize := C.ulong(elemSize)
+	c_allocCount := C.int(allocCount)
+
+	return Deque{
+		skia: C.skia_new_SkDeque(c_elemSize, c_allocCount),
+	}
+}
+
 func (o *Deque) Delete() {
 	C.skia_delete_SkDeque(o.skia)
 }
 
 type ContainerAllocator struct {
 	skia unsafe.Pointer
+}
+
+func NewContainerAllocator(sizeOfT uint64, maxCapacity int32) ContainerAllocator {
+	c_sizeOfT := C.ulong(sizeOfT)
+	c_maxCapacity := C.int(maxCapacity)
+
+	return ContainerAllocator{
+		skia: C.skia_new_SkContainerAllocator(c_sizeOfT, c_maxCapacity),
+	}
 }
 
 type Canvas struct {
@@ -618,8 +636,8 @@ func NewMemoryStream() MemoryStream {
 	}
 }
 
-func NewMemoryStream2(length uint) MemoryStream {
-	c_length := C.size_t(length)
+func NewMemoryStream2(length uint64) MemoryStream {
+	c_length := C.ulong(length)
 
 	return MemoryStream{
 		skia: C.skia_new_SkMemoryStream2(c_length),
@@ -1083,6 +1101,14 @@ type Semaphore struct {
 	skia unsafe.Pointer
 }
 
+func NewSemaphore(count int32) Semaphore {
+	c_count := C.int(count)
+
+	return Semaphore{
+		skia: C.skia_new_SkSemaphore(c_count),
+	}
+}
+
 func (o *Semaphore) Delete() {
 	C.skia_delete_SkSemaphore(o.skia)
 }
@@ -1136,6 +1162,14 @@ func (o *GrDirectContext) Delete() {
 
 type TDStorage struct {
 	skia unsafe.Pointer
+}
+
+func NewTDStorage(sizeOfT int32) TDStorage {
+	c_sizeOfT := C.int(sizeOfT)
+
+	return TDStorage{
+		skia: C.skia_new_SkTDStorage(c_sizeOfT),
+	}
 }
 
 func (o *TDStorage) Delete() {
@@ -1223,8 +1257,8 @@ type ArenaAlloc struct {
 	skia unsafe.Pointer
 }
 
-func NewArenaAlloc(firstHeapAllocation uint) ArenaAlloc {
-	c_firstHeapAllocation := C.size_t(firstHeapAllocation)
+func NewArenaAlloc(firstHeapAllocation uint64) ArenaAlloc {
+	c_firstHeapAllocation := C.ulong(firstHeapAllocation)
 
 	return ArenaAlloc{
 		skia: C.skia_new_SkArenaAlloc(c_firstHeapAllocation),
@@ -1239,8 +1273,8 @@ type ArenaAllocWithReset struct {
 	skia unsafe.Pointer
 }
 
-func NewArenaAllocWithReset(firstHeapAllocation uint) ArenaAllocWithReset {
-	c_firstHeapAllocation := C.size_t(firstHeapAllocation)
+func NewArenaAllocWithReset(firstHeapAllocation uint64) ArenaAllocWithReset {
+	c_firstHeapAllocation := C.ulong(firstHeapAllocation)
 
 	return ArenaAllocWithReset{
 		skia: C.skia_new_SkArenaAllocWithReset(c_firstHeapAllocation),
@@ -1665,6 +1699,15 @@ func NewSVGFeTurbulenceBaseFrequency() SVGFeTurbulenceBaseFrequency {
 
 	return SVGFeTurbulenceBaseFrequency{
 		skia: C.skia_new_SkSVGFeTurbulenceBaseFrequency(),
+	}
+}
+
+func NewSVGFeTurbulenceBaseFrequency2(freqX float32, freqY float32) SVGFeTurbulenceBaseFrequency {
+	c_freqX := C.float(freqX)
+	c_freqY := C.float(freqY)
+
+	return SVGFeTurbulenceBaseFrequency{
+		skia: C.skia_new_SkSVGFeTurbulenceBaseFrequency2(c_freqX, c_freqY),
 	}
 }
 
