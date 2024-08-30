@@ -1,2 +1,2 @@
-github.com/go-clang/clang-v15 v0.0.0-20230222085438-ee3102fa0c71 h1:gXlg4/q29AOo0gVARaK3LxsjP0md+Ugovk02J8yI8D4=
-github.com/go-clang/clang-v15 v0.0.0-20230222085438-ee3102fa0c71/go.mod h1:mVo0vKBuX8TWkoMpROywGoG9IpIXCCoHp2VQ7IRsVT8=
+github.com/pekim/clang-v15 v0.0.0-20240830114552-c0d27ccce9ec h1:AffNc+B5pN6crx+Lli5aH7KnjCngoFzJ1NHdkcx+OD0=
+github.com/pekim/clang-v15 v0.0.0-20240830114552-c0d27ccce9ec/go.mod h1:Y8J5Du0xnYY8HlSyjQWaNmkg1CqCbgheEhRhQvbb224=

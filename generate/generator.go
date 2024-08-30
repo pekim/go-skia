@@ -16,8 +16,7 @@ type generator struct {
 }
 
 func Generate() {
-	// Put some space after C deprecation warning from clang package.
-	fmt.Println("")
+	// Put some space after ninja output (from build.sh).
 	fmt.Println("")
 
 	g := generator{}
