@@ -15,6 +15,20 @@ import (
 	"unsafe"
 )
 
+/*
+SkMatrix holds a 3x3 matrix for transforming coordinates. This allows mapping
+SkPoint and vectors with translation, scaling, skewing, rotation, and
+perspective.
+
+SkMatrix elements are in row major order.
+SkMatrix constexpr default constructs to identity.
+
+SkMatrix includes a hidden variable that classifies the type of matrix to
+improve performance. SkMatrix is not thread safe unless getType() is called first.
+
+example: https://fiddle.skia.org/c/
+_063
+*/
 type Matrix struct {
 	skia unsafe.Pointer
 }
@@ -73,6 +87,15 @@ const (
 	MatrixTypeMask_Perspective_Mask MatrixTypeMask = 8
 )
 
+/*
+SkRefCntBase is the base class for objects that may be shared by multiple
+objects. When an existing owner wants to share a reference, it calls ref().
+When an owner wants to release its reference, it calls unref(). When the
+shared object's reference count goes to zero as the result of an unref()
+call, its (virtual) destructor is called. It is an error for the
+destructor to be called explicitly (or via the object going out of scope on
+the stack or calling delete) if getRefCnt() > 1.
+*/
 type RefCntBase struct {
 	skia unsafe.Pointer
 }
@@ -88,6 +111,13 @@ func (o *RefCntBase) Delete() {
 	C.skia_delete_SkRefCntBase(o.skia)
 }
 
+/*
+Describes pixel and encoding. SkImageInfo can be created from SkColorInfo by
+providing dimensions.
+
+It encodes how pixel bits describe alpha, transparency; color components red, blue,
+and green; and SkColorSpace, the range and linearity of colors.
+*/
 type ColorInfo struct {
 	skia unsafe.Pointer
 }
@@ -103,6 +133,18 @@ func (o *ColorInfo) Delete() {
 	C.skia_delete_SkColorInfo(o.skia)
 }
 
+/*
+SkPixmap provides a utility to pair SkImageInfo with pixels and row bytes.
+SkPixmap is a low level class which provides convenience functions to access
+raster destinations. SkCanvas can not draw SkPixmap, nor does SkPixmap provide
+a direct drawing destination.
+
+Use SkBitmap to draw pixels referenced by SkPixmap; use SkSurface to draw into
+pixels referenced by SkPixmap.
+
+SkPixmap does not try to manage the lifetime of the pixel memory. Use SkPixelRef
+to manage pixel memory; SkPixelRef is safe across threads.
+*/
 type Pixmap struct {
 	skia unsafe.Pointer
 }
@@ -114,10 +156,19 @@ func NewPixmap() Pixmap {
 	}
 }
 
+/*
+SkData holds an immutable data buffer. Not only is the data immutable,
+but the actual ptr that is returned (by data() or bytes()) is guaranteed
+to always be the same for the life of this instance.
+*/
 type Data struct {
 	skia unsafe.Pointer
 }
 
+/*
+Specifies the structure of planes for a YUV image with optional alpha. The actual planar data
+is not part of this structure and depending on usage is in external textures or pixmaps.
+*/
 type YUVAInfo struct {
 	skia unsafe.Pointer
 }
@@ -239,6 +290,10 @@ const (
 	YUVAInfoSiting_Centered YUVAInfoSiting = 0
 )
 
+/*
+SkYUVAInfo combined with per-plane SkColorTypes and row bytes. Fully specifies the SkPixmaps
+for a YUVA image without the actual pixel memory and data.
+*/
 type YUVAPixmapInfo struct {
 	skia unsafe.Pointer
 }
@@ -272,6 +327,10 @@ const (
 	YUVAPixmapInfoDataType_Last           YUVAPixmapInfoDataType = 3
 )
 
+/*
+Helper to store SkPixmap planes as described by a SkYUVAPixmapInfo. Can be responsible for
+allocating/freeing memory for pixmaps or use external memory.
+*/
 type YUVAPixmaps struct {
 	skia unsafe.Pointer
 }
@@ -306,10 +365,17 @@ const (
 	OnceState_Done       OnceState = 2
 )
 
+/*
+////////////////////////////////////////////////////////////////////////////
+*/
 type ColorSpace struct {
 	skia unsafe.Pointer
 }
 
+/*
+SkNoncopyable is the base class for objects that do not want to
+be copied. It hides its copy-constructor and its assignment-operator.
+*/
 type Noncopyable struct {
 	skia unsafe.Pointer
 }
@@ -321,6 +387,9 @@ func NewNoncopyable() Noncopyable {
 	}
 }
 
+/*
+Abstraction layer directly on top of an image codec.
+*/
 type Codec struct {
 	skia unsafe.Pointer
 }
@@ -432,6 +501,11 @@ const (
 	CodecXformTime_DecodeRow CodecXformTime = 2
 )
 
+/*
+SkFlattenable is the base class for objects that need to be flattened
+into a data stream for either transport or as part of the key to the
+font cache.
+*/
 type Flattenable struct {
 	skia unsafe.Pointer
 }
@@ -449,6 +523,19 @@ const (
 	FlattenableType_SkShader      FlattenableType = 7
 )
 
+/*
+Base class for image filters. If one is installed in the paint, then all drawing occurs as
+usual, but it is as if the drawing happened into an offscreen (before the xfermode is applied).
+This offscreen bitmap will then be handed to the imagefilter, who in turn creates a new bitmap
+which is what will finally be drawn to the device (using the original xfermode).
+
+The local space of image filters matches the local space of the drawn geometry. For instance if
+there is rotation on the canvas, the blur will be computed along those rotated axes and not in
+the device space. In order to achieve this result, the actual drawing of the geometry may happen
+in an unrotated coordinate system so that the filtered image can be computed more easily, and
+then it will be post transformed to match what would have been produced if the geometry were
+drawn with the total canvas matrix to begin with.
+*/
 type ImageFilter struct {
 	skia unsafe.Pointer
 }
@@ -460,6 +547,14 @@ const (
 	ImageFilterMapDirection_Reverse ImageFilterMapDirection = 1
 )
 
+/*
+4x4 matrix used by SkCanvas and other parts of Skia.
+
+Skia assumes a right-handed coordinate system:
++X goes to the right
++Y goes down
++Z goes into the screen (away from the viewer)
+*/
 type M44 struct {
 	skia unsafe.Pointer
 }
@@ -522,6 +617,16 @@ const (
 	M44NaN_Constructor_ M44NaN_Constructor = 0
 )
 
+/*
+SkPaint controls options applied when drawing. SkPaint collects all
+options outside of the SkCanvas clip and SkCanvas matrix.
+
+Various options apply to strokes and fills, and images.
+
+SkPaint collects effects and filters that describe single-pass and multiple-pass
+algorithms that alter the drawing geometry, color, and transparency. For instance,
+SkPaint does not directly implement dashing or blur, but contains the objects that do so.
+*/
 type Paint struct {
 	skia unsafe.Pointer
 }
@@ -615,6 +720,29 @@ const (
 	PaintJoin_Default PaintJoin = 0
 )
 
+/*
+If a client wants to control the allocation of raster layers in a canvas, it should subclass
+SkRasterHandleAllocator. This allocator performs two tasks:
+1. controls how the memory for the pixels is allocated
+2. associates a "handle" to a private object that can track the matrix/clip of the SkCanvas
+
+This example allocates a canvas, and defers to the allocator to create the base layer.
+
+std::unique_ptr
+<SkCanvas
+> canvas = SkRasterHandleAllocator::MakeCanvas(
+SkImageInfo::Make(...),
+std::make_unique
+<MySubclassRasterHandleAllocator
+>(...),
+nullptr);
+
+If you have already allocated the base layer (and its handle, release-proc etc.) then you
+can pass those in using the last parameter to MakeCanvas().
+
+Regardless of how the base layer is allocated, each time canvas->saveLayer() is called,
+your allocator's allocHandle() will be called.
+*/
 type RasterHandleAllocator struct {
 	skia unsafe.Pointer
 }
@@ -623,6 +751,11 @@ func (o *RasterHandleAllocator) Delete() {
 	C.skia_delete_SkRasterHandleAllocator(o.skia)
 }
 
+/*
+Light weight class for managing strings. Uses reference
+counting to make string assignments and copies very fast
+with no extra RAM cost. Assumes UTF8 encoding.
+*/
 type String struct {
 	skia unsafe.Pointer
 }
@@ -646,6 +779,11 @@ func (o *String) Delete() {
 	C.skia_delete_SkString(o.skia)
 }
 
+/*
+Describes properties and constraints of a given SkSurface. The rendering engine can parse these
+during drawing, and can sometimes optimize its performance (e.g. disabling an expensive
+feature).
+*/
 type SurfaceProps struct {
 	skia unsafe.Pointer
 }
@@ -716,6 +854,28 @@ func NewContainerAllocator(sizeOfT uint64, maxCapacity int32) ContainerAllocator
 	}
 }
 
+/*
+SkCanvas provides an interface for drawing, and how the drawing is clipped and transformed.
+SkCanvas contains a stack of SkMatrix and clip values.
+
+SkCanvas and SkPaint together provide the state to draw into SkSurface or SkDevice.
+Each SkCanvas draw call transforms the geometry of the object by the concatenation of all
+SkMatrix values in the stack. The transformed geometry is clipped by the intersection
+of all of clip values in the stack. The SkCanvas draw calls use SkPaint to supply drawing
+state such as color, SkTypeface, text size, stroke width, SkShader and so on.
+
+To draw to a pixel-based destination, create raster surface or GPU surface.
+Request SkCanvas from SkSurface to obtain the interface to draw.
+SkCanvas generated by raster surface draws to memory visible to the CPU.
+SkCanvas generated by GPU surface uses Vulkan or OpenGL to draw to the GPU.
+
+To draw to a document, obtain SkCanvas from SVG canvas, document PDF, or SkPictureRecorder.
+SkDocument based SkCanvas and other SkCanvas subclasses reference SkDevice describing the
+destination.
+
+SkCanvas can be constructed to draw to SkBitmap without first creating raster surface.
+This approach may be deprecated in the future.
+*/
 type Canvas struct {
 	skia unsafe.Pointer
 }
@@ -826,6 +986,11 @@ const (
 	CanvasDeviceCompatibleWithFilter_Yes     CanvasDeviceCompatibleWithFilter = -1
 )
 
+/*
+Stack helper class calls SkCanvas::restoreToCount when SkAutoCanvasRestore
+goes out of scope. Use this to guarantee that the canvas is restored to a known
+state.
+*/
 type AutoCanvasRestore struct {
 	skia unsafe.Pointer
 }
@@ -834,6 +999,16 @@ func (o *AutoCanvasRestore) Delete() {
 	C.skia_delete_SkAutoCanvasRestore(o.skia)
 }
 
+/*
+High-level API for creating a document-based canvas. To use..
+
+1. Create a document, specifying a stream to store the output.
+2. For each "page" of content:
+a. canvas = doc->beginPage(...)
+b. draw_my_content(canvas);
+c. doc->endPage();
+3. Close the document with doc->close().
+*/
 type Document struct {
 	skia unsafe.Pointer
 }
@@ -846,18 +1021,44 @@ const (
 	DocumentState_Closed       DocumentState = 2
 )
 
+/*
+SkRefCntBase is the base class for objects that may be shared by multiple
+objects. When an existing owner wants to share a reference, it calls ref().
+When an owner wants to release its reference, it calls unref(). When the
+shared object's reference count goes to zero as the result of an unref()
+call, its (virtual) destructor is called. It is an error for the
+destructor to be called explicitly (or via the object going out of scope on
+the stack or calling delete) if getRefCnt() > 1.
+*/
 type FontStyleSet struct {
 	skia unsafe.Pointer
 }
 
+/*
+SkRefCntBase is the base class for objects that may be shared by multiple
+objects. When an existing owner wants to share a reference, it calls ref().
+When an owner wants to release its reference, it calls unref(). When the
+shared object's reference count goes to zero as the result of an unref()
+call, its (virtual) destructor is called. It is an error for the
+destructor to be called explicitly (or via the object going out of scope on
+the stack or calling delete) if getRefCnt() > 1.
+*/
 type FontMgr struct {
 	skia unsafe.Pointer
 }
 
+/*
+SkMaskFilter is the base class for object that perform transformations on
+the mask before drawing it. An example subclass is Blur.
+*/
 type MaskFilter struct {
 	skia unsafe.Pointer
 }
 
+/*
+SkStream -- abstraction for a source of bytes. Subclasses can be backed by
+memory, or a file, or something else.
+*/
 type Stream struct {
 	skia unsafe.Pointer
 }
@@ -866,18 +1067,30 @@ func (o *Stream) Delete() {
 	C.skia_delete_SkStream(o.skia)
 }
 
+/*
+SkStreamRewindable is a SkStream for which rewind and duplicate are required.
+*/
 type StreamRewindable struct {
 	skia unsafe.Pointer
 }
 
+/*
+SkStreamSeekable is a SkStreamRewindable for which position, seek, move, and fork are required.
+*/
 type StreamSeekable struct {
 	skia unsafe.Pointer
 }
 
+/*
+SkStreamAsset is a SkStreamSeekable for which getLength is required.
+*/
 type StreamAsset struct {
 	skia unsafe.Pointer
 }
 
+/*
+SkStreamMemory is a SkStreamAsset for which getMemoryBase is required.
+*/
 type StreamMemory struct {
 	skia unsafe.Pointer
 }
@@ -894,6 +1107,9 @@ type NullWStream struct {
 	skia unsafe.Pointer
 }
 
+/*
+A stream that wraps a C FILE* file stream.
+*/
 type FILEStream struct {
 	skia unsafe.Pointer
 }
@@ -902,6 +1118,9 @@ func (o *FILEStream) Delete() {
 	C.skia_delete_SkFILEStream(o.skia)
 }
 
+/*
+SkStreamMemory is a SkStreamAsset for which getMemoryBase is required.
+*/
 type MemoryStream struct {
 	skia unsafe.Pointer
 }
@@ -921,6 +1140,9 @@ func NewMemoryStream2(length uint64) MemoryStream {
 	}
 }
 
+/*
+//////////////////////////////////////////////////////////////////////////////////////////
+*/
 type FILEWStream struct {
 	skia unsafe.Pointer
 }
@@ -944,6 +1166,27 @@ func (o *DynamicMemoryWStream) Delete() {
 	C.skia_delete_SkDynamicMemoryWStream(o.skia)
 }
 
+/*
+SkImage describes a two dimensional array of pixels to draw. The pixels may be
+decoded in a raster bitmap, encoded in a SkPicture or compressed data stream,
+or located in GPU memory as a GPU texture.
+
+SkImage cannot be modified after it is created. SkImage may allocate additional
+storage as needed; for instance, an encoded SkImage may decode when drawn.
+
+SkImage width and height are greater than zero. Creating an SkImage with zero width
+or height returns SkImage equal to nullptr.
+
+SkImage may be created from SkBitmap, SkPixmap, SkSurface, SkPicture, encoded streams,
+GPU texture, YUV_ColorSpace data, or hardware buffer. Encoded streams supported
+include BMP, GIF, HEIF, ICO, JPEG, PNG, WBMP, WebP. Supported encoding details
+vary with platform.
+
+See SkImages namespace for the static factory methods to make SkImages.
+
+Clients should *not* subclass SkImage as there is a lot of internal machinery that is
+not publicly accessible.
+*/
 type Image struct {
 	skia unsafe.Pointer
 }
@@ -998,6 +1241,17 @@ const (
 	ImageLegacyBitmapMode_RO ImageLegacyBitmapMode = 0
 )
 
+/*
+SkSurface is responsible for managing the pixels that a canvas draws into. The pixels can be
+allocated either in CPU memory (a raster surface) or on the GPU (a GrRenderTarget surface).
+SkSurface takes care of allocating a SkCanvas that will draw into the surface. Call
+surface->getCanvas() to use that canvas (but don't delete it, it is owned by the surface).
+SkSurface always has non-zero dimensions. If there is a request for a new surface, and either
+of the requested dimensions are zero, then nullptr will be returned.
+
+Clients should *not* subclass SkSurface as there is a lot of internal machinery that is
+not publicly accessible.
+*/
 type Surface struct {
 	skia unsafe.Pointer
 }
@@ -1089,6 +1343,43 @@ const (
 	FontStyleSlant_Oblique FontStyleSlant = 2
 )
 
+/*
+SkWeakRefCnt is the base class for objects that may be shared by multiple
+objects. When an existing strong owner wants to share a reference, it calls
+ref(). When a strong owner wants to release its reference, it calls
+unref(). When the shared object's strong reference count goes to zero as
+the result of an unref() call, its (virtual) weak_dispose method is called.
+It is an error for the destructor to be called explicitly (or via the
+object going out of scope on the stack or calling delete) if
+getRefCnt() > 1.
+
+In addition to strong ownership, an owner may instead obtain a weak
+reference by calling weak_ref(). A call to weak_ref() must be balanced by a
+call to weak_unref(). To obtain a strong reference from a weak reference,
+call try_ref(). If try_ref() returns true, the owner's pointer is now also
+a strong reference on which unref() must be called. Note that this does not
+affect the original weak reference, weak_unref() must still be called. When
+the weak reference count goes to zero, the object is deleted. While the
+weak reference count is positive and the strong reference count is zero the
+object still exists, but will be in the disposed state. It is up to the
+object to define what this means.
+
+Note that a strong reference implicitly implies a weak reference. As a
+result, it is allowable for the owner of a strong ref to call try_ref().
+This will have the same effect as calling ref(), but may be more expensive.
+
+Example:
+
+SkWeakRefCnt myRef = strongRef.weak_ref();
+... // strongRef.unref() may or may not be called
+if (myRef.try_ref()) {
+... // use myRef
+myRef.unref();
+} else {
+// myRef is in the disposed state
+}
+myRef.weak_unref();
+*/
 type WeakRefCnt struct {
 	skia unsafe.Pointer
 }
@@ -1104,6 +1395,14 @@ func (o *WeakRefCnt) Delete() {
 	C.skia_delete_SkWeakRefCnt(o.skia)
 }
 
+/*
+The SkTypeface class specifies the typeface and intrinsic style of a font.
+This is used in the paint, along with optionally algorithmic settings like
+textSize, textSkewX, textScaleX, kFakeBoldText_Mask, to specify
+how text appears when drawn (and measured).
+
+Typeface objects are immutable, and so they can be shared between threads.
+*/
 type Typeface struct {
 	skia unsafe.Pointer
 }
@@ -1121,6 +1420,9 @@ const (
 	TypefaceSerializeBehavior_IncludeDataIfLocal TypefaceSerializeBehavior = 2
 )
 
+/*
+SkFont controls options applied when drawing and measuring text.
+*/
 type Font struct {
 	skia unsafe.Pointer
 }
@@ -1160,10 +1462,18 @@ const (
 	FontPrivFlags_BaselineSnap_Priv     FontPrivFlags = 32
 )
 
+/*
+SkTextBlob combines multiple text runs into an immutable container. Each text
+run consists of glyphs, SkPaint, and position. Only parts of SkPaint related to
+fonts and text rendering are used by run.
+*/
 type TextBlob struct {
 	skia unsafe.Pointer
 }
 
+/*
+Helper class for constructing SkTextBlob.
+*/
 type TextBlobBuilder struct {
 	skia unsafe.Pointer
 }
@@ -1200,6 +1510,14 @@ type Path2DPathEffect struct {
 	skia unsafe.Pointer
 }
 
+/*
+ColorFilters are optional objects in the drawing pipeline. When present in
+a paint, they are called with the "src" colors, and return new colors, which
+are then passed onto the next stage (either ImageFilter or Xfermode).
+
+All subclasses are required to be reentrant-safe : it must be legal to share
+the same instance between several threads.
+*/
 type ColorFilter struct {
 	skia unsafe.Pointer
 }
@@ -1208,10 +1526,22 @@ type ColorFilters struct {
 	skia unsafe.Pointer
 }
 
+/*
+ColorFilters are optional objects in the drawing pipeline. When present in
+a paint, they are called with the "src" colors, and return new colors, which
+are then passed onto the next stage (either ImageFilter or Xfermode).
+
+All subclasses are required to be reentrant-safe : it must be legal to share
+the same instance between several threads.
+*/
 type ColorMatrixFilter struct {
 	skia unsafe.Pointer
 }
 
+/*
+SkCornerPathEffect is a subclass of SkPathEffect that can turn sharp corners
+into various treatments (e.g. rounded corners)
+*/
 type CornerPathEffect struct {
 	skia unsafe.Pointer
 }
@@ -1220,6 +1550,24 @@ type DashPathEffect struct {
 	skia unsafe.Pointer
 }
 
+/*
+SkPath contain geometry. SkPath may be empty, or contain one or more verbs that
+outline a figure. SkPath always starts with a move verb to a Cartesian coordinate,
+and may be followed by additional verbs that add lines or curves.
+Adding a close verb makes the geometry into a continuous loop, a closed contour.
+SkPath may contain any number of contours, each beginning with a move verb.
+
+SkPath contours may contain only a move verb, or may also contain lines,
+quadratic beziers, conics, and cubic beziers. SkPath contours may be open or
+closed.
+
+When used to draw a filled area, SkPath describes whether the fill is inside or
+outside the geometry. SkPath also describes the winding rule used to fill
+overlapping contours.
+
+Internally, SkPath lazily computes metrics likes bounds and convexity. Call
+SkPath::updateBoundsCache to make SkPath thread safe.
+*/
 type Path struct {
 	skia unsafe.Pointer
 }
@@ -1298,6 +1646,13 @@ const (
 	PathVerb_Done  PathVerb = 6
 )
 
+/*
+SkPathEffect is the base class for objects in the SkPaint that affect
+the geometry of a drawing primitive before it is transformed by the
+canvas' matrix and drawn.
+
+Dashing is implemented as a subclass of SkPathEffect.
+*/
 type PathEffect struct {
 	skia unsafe.Pointer
 }
@@ -1313,14 +1668,59 @@ const (
 	PathEffectDashType_Dash PathEffectDashType = 1
 )
 
+/*
+This path effect chops a path into discrete segments, and randomly displaces them.
+*/
 type DiscretePathEffect struct {
 	skia unsafe.Pointer
 }
 
+/*
+Shaders specify the source color(s) for what is being drawn. If a paint
+has no shader, then the paint's color is used. If the paint has a
+shader, then the shader's color(s) are use instead, but they are
+modulated by the paint's alpha. This makes it easy to create a shader
+once (e.g. bitmap tiling or gradient) and then change its transparency
+w/o having to modify the original shader... only the paint's alpha needs
+to be modified.
+*/
 type Shader struct {
 	skia unsafe.Pointer
 }
 
+/*
+SkGradientShader hosts factories for creating subclasses of SkShader that
+render linear and radial gradients. In general, degenerate cases should not
+produce surprising results, but there are several types of degeneracies:
+
+A linear gradient made from the same two points.
+A radial gradient with a radius of zero.
+A sweep gradient where the start and end angle are the same.
+A two point conical gradient where the two centers and the two radii are
+the same.
+
+For any degenerate gradient with a decal tile mode, it will draw empty since the interpolating
+region is zero area and the outer region is discarded by the decal mode.
+
+For any degenerate gradient with a repeat or mirror tile mode, it will draw a solid color that
+is the average gradient color, since infinitely many repetitions of the gradients will fill the
+shape.
+
+For a clamped gradient, every type is well-defined at the limit except for linear gradients. The
+radial gradient with zero radius becomes the last color. The sweep gradient draws the sector
+from 0 to the provided angle with the first color, with a hardstop switching to the last color.
+When the provided angle is 0, this is just the solid last color again. Similarly, the two point
+conical gradient becomes a circle filled with the first color, sized to the provided radius,
+with a hardstop switching to the last color. When the two radii are both zero, this is just the
+solid last color.
+
+As a linear gradient approaches the degenerate case, its shader will approach the appearance of
+two half planes, each filled by the first and last colors of the gradient. The planes will be
+oriented perpendicular to the vector between the two defining points of the gradient. However,
+once they become the same point, Skia cannot reconstruct what that expected orientation is. To
+provide a stable and predictable color in this case, Skia just uses the last color as a solid
+fill to be similar to many of the other degenerate gradients' behaviors in clamp mode.
+*/
 type GradientShader struct {
 	skia unsafe.Pointer
 }
@@ -1338,6 +1738,18 @@ const (
 	GradientShaderFlags_InterpolateColorsInPremul GradientShaderFlags = 1
 )
 
+/*
+SkPicture records drawing commands made to SkCanvas. The command stream may be
+played in whole or in part at a later time.
+
+SkPicture is an abstract class. SkPicture may be generated by SkPictureRecorder
+or SkDrawable, or from SkPicture previously saved to SkData or SkStream.
+
+SkPicture may contain any SkCanvas drawing command, as well as one or more
+SkCanvas matrix or SkCanvas clip. SkPicture has a cull SkRect, which is used as
+a bounding box hint. To limit SkPicture bounds, use SkCanvas clip when
+recording or drawing SkPicture.
+*/
 type Picture struct {
 	skia unsafe.Pointer
 }
@@ -1361,6 +1773,10 @@ type ShaderMaskFilter struct {
 	skia unsafe.Pointer
 }
 
+/*
+Applies a table lookup on each of the alpha values in the mask.
+Helper methods create some common tables (e.g. gamma, clipping)
+*/
 type TableMaskFilter struct {
 	skia unsafe.Pointer
 }
@@ -1376,6 +1792,11 @@ const (
 	TrimPathEffectMode_Inverted TrimPathEffectMode = 1
 )
 
+/*
+Like SkData, SkDataTable holds an immutable data buffer. The data buffer is
+organized into a table of entries, each with a length, so the entries are
+not required to all be the same size.
+*/
 type DataTable struct {
 	skia unsafe.Pointer
 }
@@ -1388,6 +1809,12 @@ func (o *Encoder) Delete() {
 	C.skia_delete_SkEncoder(o.skia)
 }
 
+/*
+This helper queries the current GL context for its extensions, remembers them, and can be
+queried. It supports both glGetString- and glGetStringi-style extension string APIs and will
+use the latter if it is available. It also will query for EGL extensions if a eglQueryString
+implementation is provided.
+*/
 type GrGLExtensions struct {
 	skia unsafe.Pointer
 }
@@ -1399,6 +1826,11 @@ func NewGrGLExtensions() GrGLExtensions {
 	}
 }
 
+/*
+Describes a GrColorType by how many bits are used for each color component and how they are
+encoded. Currently all the non-zero channels share a single GrColorTypeEncoding. This could be
+expanded to store separate encodings and to indicate which bits belong to which components.
+*/
 type GrColorFormatDesc struct {
 	skia unsafe.Pointer
 }
@@ -1463,6 +1895,15 @@ func (o *GrDriverBugWorkarounds) Delete() {
 	C.skia_delete_GrDriverBugWorkarounds(o.skia)
 }
 
+/*
+SkRefCntBase is the base class for objects that may be shared by multiple
+objects. When an existing owner wants to share a reference, it calls ref().
+When an owner wants to release its reference, it calls unref(). When the
+shared object's reference count goes to zero as the result of an unref()
+call, its (virtual) destructor is called. It is an error for the
+destructor to be called explicitly (or via the object going out of scope on
+the stack or calling delete) if getRefCnt() > 1.
+*/
 type GrContext_Base struct {
 	skia unsafe.Pointer
 }
@@ -1510,6 +1951,15 @@ func (o *AutoMutexExclusive) Delete() {
 	C.skia_delete_SkAutoMutexExclusive(o.skia)
 }
 
+/*
+SkRefCntBase is the base class for objects that may be shared by multiple
+objects. When an existing owner wants to share a reference, it calls ref().
+When an owner wants to release its reference, it calls unref(). When the
+shared object's reference count goes to zero as the result of an unref()
+call, its (virtual) destructor is called. It is an error for the
+destructor to be called explicitly (or via the object going out of scope on
+the stack or calling delete) if getRefCnt() > 1.
+*/
 type GrImageContext struct {
 	skia unsafe.Pointer
 }
@@ -1518,6 +1968,15 @@ func (o *GrImageContext) Delete() {
 	C.skia_delete_GrImageContext(o.skia)
 }
 
+/*
+SkRefCntBase is the base class for objects that may be shared by multiple
+objects. When an existing owner wants to share a reference, it calls ref().
+When an owner wants to release its reference, it calls unref(). When the
+shared object's reference count goes to zero as the result of an unref()
+call, its (virtual) destructor is called. It is an error for the
+destructor to be called explicitly (or via the object going out of scope on
+the stack or calling delete) if getRefCnt() > 1.
+*/
 type GrRecordingContext struct {
 	skia unsafe.Pointer
 }
@@ -1526,6 +1985,15 @@ func (o *GrRecordingContext) Delete() {
 	C.skia_delete_GrRecordingContext(o.skia)
 }
 
+/*
+SkRefCntBase is the base class for objects that may be shared by multiple
+objects. When an existing owner wants to share a reference, it calls ref().
+When an owner wants to release its reference, it calls unref(). When the
+shared object's reference count goes to zero as the result of an unref()
+call, its (virtual) destructor is called. It is an error for the
+destructor to be called explicitly (or via the object going out of scope on
+the stack or calling delete) if getRefCnt() > 1.
+*/
 type GrDirectContext struct {
 	skia unsafe.Pointer
 }
@@ -1550,6 +2018,9 @@ func (o *TDStorage) Delete() {
 	C.skia_delete_SkTDStorage(o.skia)
 }
 
+/*
+Perform a series of path operations, optimized for unioning many paths together.
+*/
 type OpBuilder struct {
 	skia unsafe.Pointer
 }
@@ -1569,6 +2040,11 @@ type PDFBitmap struct {
 	skia unsafe.Pointer
 }
 
+/*
+A SkPDFUnion is a non-virtualized implementation of the
+non-compound, non-specialized PDF Object types: Name, String,
+Number, Boolean.
+*/
 type PDFUnion struct {
 	skia unsafe.Pointer
 }
@@ -1624,6 +2100,11 @@ const (
 	PDFUnionType_Ref PDFUnionType = 13
 )
 
+/*
+A PDF Object is the base class for primitive elements in a PDF file.  A
+common subtype is used to ease the use of indirect object references,
+which are common in the PDF format.
+*/
 type PDFObject struct {
 	skia unsafe.Pointer
 }
@@ -1632,6 +2113,9 @@ func (o *PDFObject) Delete() {
 	C.skia_delete_SkPDFObject(o.skia)
 }
 
+/*
+An array object in a PDF.
+*/
 type PDFArray struct {
 	skia unsafe.Pointer
 }
@@ -1647,6 +2131,9 @@ func (o *PDFArray) Delete() {
 	C.skia_delete_SkPDFArray(o.skia)
 }
 
+/*
+A dictionary object in a PDF.
+*/
 type PDFDict struct {
 	skia unsafe.Pointer
 }
@@ -1702,6 +2189,11 @@ type PDFOffsetMap struct {
 	skia unsafe.Pointer
 }
 
+/*
+Concrete implementation of SkDocument that creates PDF files. This
+class does not produced linearized or optimized PDFs; instead it
+it attempts to use a minimum amount of RAM.
+*/
 type PDFDocument struct {
 	skia unsafe.Pointer
 }
@@ -1718,10 +2210,22 @@ func (o *Shaper) Delete() {
 	C.skia_delete_SkShaper(o.skia)
 }
 
+/*
+Helper for shaping text directly into a SkTextBlob.
+*/
 type TextBlobBuilderRunHandler struct {
 	skia unsafe.Pointer
 }
 
+/*
+SkRefCntBase is the base class for objects that may be shared by multiple
+objects. When an existing owner wants to share a reference, it calls ref().
+When an owner wants to release its reference, it calls unref(). When the
+shared object's reference count goes to zero as the result of an unref()
+call, its (virtual) destructor is called. It is an error for the
+destructor to be called explicitly (or via the object going out of scope on
+the stack or calling delete) if getRefCnt() > 1.
+*/
 type SVGDOM struct {
 	skia unsafe.Pointer
 }
@@ -2226,10 +2730,23 @@ func NewSVGFeTurbulenceBaseFrequency2(freqX float32, freqY float32) SVGFeTurbule
 	}
 }
 
+/*
+SkNoncopyable is the base class for objects that do not want to
+be copied. It hides its copy-constructor and its assignment-operator.
+*/
 type SVGAttributeParser struct {
 	skia unsafe.Pointer
 }
 
+/*
+SkRefCntBase is the base class for objects that may be shared by multiple
+objects. When an existing owner wants to share a reference, it calls ref().
+When an owner wants to release its reference, it calls unref(). When the
+shared object's reference count goes to zero as the result of an unref()
+call, its (virtual) destructor is called. It is an error for the
+destructor to be called explicitly (or via the object going out of scope on
+the stack or calling delete) if getRefCnt() > 1.
+*/
 type SVGNode struct {
 	skia unsafe.Pointer
 }
@@ -2238,14 +2755,41 @@ func (o *SVGNode) Delete() {
 	C.skia_delete_SkSVGNode(o.skia)
 }
 
+/*
+SkRefCntBase is the base class for objects that may be shared by multiple
+objects. When an existing owner wants to share a reference, it calls ref().
+When an owner wants to release its reference, it calls unref(). When the
+shared object's reference count goes to zero as the result of an unref()
+call, its (virtual) destructor is called. It is an error for the
+destructor to be called explicitly (or via the object going out of scope on
+the stack or calling delete) if getRefCnt() > 1.
+*/
 type SVGTransformableNode struct {
 	skia unsafe.Pointer
 }
 
+/*
+SkRefCntBase is the base class for objects that may be shared by multiple
+objects. When an existing owner wants to share a reference, it calls ref().
+When an owner wants to release its reference, it calls unref(). When the
+shared object's reference count goes to zero as the result of an unref()
+call, its (virtual) destructor is called. It is an error for the
+destructor to be called explicitly (or via the object going out of scope on
+the stack or calling delete) if getRefCnt() > 1.
+*/
 type SVGContainer struct {
 	skia unsafe.Pointer
 }
 
+/*
+SkRefCntBase is the base class for objects that may be shared by multiple
+objects. When an existing owner wants to share a reference, it calls ref().
+When an owner wants to release its reference, it calls unref(). When the
+shared object's reference count goes to zero as the result of an unref()
+call, its (virtual) destructor is called. It is an error for the
+destructor to be called explicitly (or via the object going out of scope on
+the stack or calling delete) if getRefCnt() > 1.
+*/
 type SVGSVG struct {
 	skia unsafe.Pointer
 }

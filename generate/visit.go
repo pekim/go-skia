@@ -24,6 +24,7 @@ func (g *generator) visitClass(cursor clang.Cursor) {
 		cName:    name,
 		goName:   trimSkiaPrefix(name),
 		abstract: cursor.CXXRecord_IsAbstract(),
+		comment:  parsedCommentToGoComment(cursor.ParsedComment()),
 	}
 
 	isPublic := false

@@ -9,6 +9,7 @@ import (
 type class struct {
 	cName    string
 	goName   string
+	comment  string
 	abstract bool
 	ctors    []classCtor
 	ctorN    int // for ctor name function uniqueness
@@ -17,6 +18,9 @@ type class struct {
 }
 
 func (c *class) generate(g *generator) {
+	if c.comment != "" {
+		g.goFile.writeln(c.comment)
+	}
 	g.goFile.writelnf("type %s struct {", c.goName)
 	g.goFile.writeln("  skia unsafe.Pointer")
 	g.goFile.writeln("}")

@@ -27,9 +27,7 @@ func parsedCommentToGoComment(comment clang.Comment) string {
 					b.WriteString("\n")
 
 				case clang.Comment_InlineCommand:
-					if child.InlineCommandComment_getCommandName() != "GradientShader" {
-						fmt.Printf("unhandled inline command, %s\n", child.InlineCommandComment_getCommandName())
-					}
+					// ignore commands
 
 				default:
 					fmt.Printf("unhandled comment kind, %s\n", child.Kind().Spelling())
