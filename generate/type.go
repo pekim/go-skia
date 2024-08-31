@@ -54,7 +54,7 @@ type typ struct {
 	isEnumLiteral bool
 }
 
-// yypeFromClangType returns the typ from a Clang type.
+// typeFromClangType returns the typ from a Clang type.
 func typeFromClangType(cType clang.Type) (typ, error) {
 	typ_ := typ{
 		cName:        cType.Spelling(),
@@ -164,7 +164,8 @@ func typeFromClangType(cType clang.Type) (typ, error) {
 		typ_.isPrimitive = false
 
 	case clang.Type_Enum:
-		typ_.goName = trimSkiaPrefix(cType.Declaration().DisplayName())
+		typ_.cgoName = "int"
+		typ_.goName = strings.Replace(trimSkiaPrefix(typ_.cName), "::", "", 1)
 		typ_.isEnumLiteral = true
 		typ_.isPrimitive = true
 

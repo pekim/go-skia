@@ -28,7 +28,7 @@ func (e enum) generate(g *generator) {
 	}
 
 	// generate the enum type
-	goName := strings.TrimPrefix(e.name, "Sk")
+	goName := trimSkiaPrefix(e.name)
 	if e.class != nil {
 		goName = e.class.goName + e.name
 	}

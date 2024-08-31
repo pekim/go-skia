@@ -43,10 +43,6 @@ func (p param) supported() bool {
 		// TODO support pointer params
 		return false
 	}
-	if p.typ.isEnumLiteral {
-		// TODO support enum params
-		return false
-	}
 
 	if p.typ.isPrimitive {
 		return true
@@ -68,6 +64,9 @@ func (p param) cParamDecl() string {
 }
 
 func (p param) cArg() string {
+	if p.typ.isEnumLiteral {
+		return fmt.Sprintf("(%s)%s", p.typ.cName, p.cgoName)
+	}
 	return p.cgoName
 }
 

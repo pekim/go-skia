@@ -51,7 +51,16 @@ void skia_delete_SkCodec(void *obj) { delete reinterpret_cast<SkCodec *>(obj); }
 
 void *skia_new_SkM44() { return reinterpret_cast<void *>(new SkM44()); }
 
-void *skia_new_SkM442(float c_m0, float c_m4, float c_m8, float c_m12,
+void *skia_new_SkM442(int c_p0) {
+  return reinterpret_cast<void *>(
+      new SkM44((SkM44::Uninitialized_Constructor)c_p0));
+}
+
+void *skia_new_SkM443(int c_p0) {
+  return reinterpret_cast<void *>(new SkM44((SkM44::NaN_Constructor)c_p0));
+}
+
+void *skia_new_SkM444(float c_m0, float c_m4, float c_m8, float c_m12,
                       float c_m1, float c_m5, float c_m9, float c_m13,
                       float c_m2, float c_m6, float c_m10, float c_m14,
                       float c_m3, float c_m7, float c_m11, float c_m15) {
@@ -80,6 +89,17 @@ void skia_delete_SkString(void *obj) {
 
 void *skia_new_SkSurfaceProps() {
   return reinterpret_cast<void *>(new SkSurfaceProps());
+}
+
+void *skia_new_SkSurfaceProps2(uint c_flags, int c_p1) {
+  return reinterpret_cast<void *>(
+      new SkSurfaceProps(c_flags, (SkPixelGeometry)c_p1));
+}
+
+void *skia_new_SkSurfaceProps3(uint c_flags, int c_p1, float c_textContrast,
+                               float c_textGamma) {
+  return reinterpret_cast<void *>(new SkSurfaceProps(
+      c_flags, (SkPixelGeometry)c_p1, c_textContrast, c_textGamma));
 }
 
 void *skia_new_SkDeque(ulong c_elemSize, int c_allocCount) {
@@ -135,7 +155,12 @@ void skia_delete_SkDynamicMemoryWStream(void *obj) {
   delete reinterpret_cast<SkDynamicMemoryWStream *>(obj);
 }
 
-void *skia_new_SkFontStyle() {
+void *skia_new_SkFontStyle(int c_weight, int c_width, int c_slant) {
+  return reinterpret_cast<void *>(
+      new SkFontStyle(c_weight, c_width, (SkFontStyle::Slant)c_slant));
+}
+
+void *skia_new_SkFontStyle2() {
   return reinterpret_cast<void *>(new SkFontStyle());
 }
 
@@ -298,6 +323,10 @@ void *skia_new_SkSVGLength() {
   return reinterpret_cast<void *>(new SkSVGLength());
 }
 
+void *skia_new_SkSVGLength2(float c_v, int c_u) {
+  return reinterpret_cast<void *>(new SkSVGLength(c_v, (SkSVGLength::Unit)c_u));
+}
+
 void *skia_new_SkSVGIRI() { return reinterpret_cast<void *>(new SkSVGIRI()); }
 
 void *skia_new_SkSVGColor() {
@@ -308,36 +337,77 @@ void *skia_new_SkSVGPaint() {
   return reinterpret_cast<void *>(new SkSVGPaint());
 }
 
+void *skia_new_SkSVGPaint2(int c_t) {
+  return reinterpret_cast<void *>(new SkSVGPaint((SkSVGPaint::Type)c_t));
+}
+
 void *skia_new_SkSVGFuncIRI() {
   return reinterpret_cast<void *>(new SkSVGFuncIRI());
+}
+
+void *skia_new_SkSVGFuncIRI2(int c_t) {
+  return reinterpret_cast<void *>(new SkSVGFuncIRI((SkSVGFuncIRI::Type)c_t));
 }
 
 void *skia_new_SkSVGLineJoin() {
   return reinterpret_cast<void *>(new SkSVGLineJoin());
 }
 
+void *skia_new_SkSVGLineJoin2(int c_t) {
+  return reinterpret_cast<void *>(new SkSVGLineJoin((SkSVGLineJoin::Type)c_t));
+}
+
 void *skia_new_SkSVGSpreadMethod() {
   return reinterpret_cast<void *>(new SkSVGSpreadMethod());
+}
+
+void *skia_new_SkSVGSpreadMethod2(int c_t) {
+  return reinterpret_cast<void *>(
+      new SkSVGSpreadMethod((SkSVGSpreadMethod::Type)c_t));
 }
 
 void *skia_new_SkSVGFillRule() {
   return reinterpret_cast<void *>(new SkSVGFillRule());
 }
 
+void *skia_new_SkSVGFillRule2(int c_t) {
+  return reinterpret_cast<void *>(new SkSVGFillRule((SkSVGFillRule::Type)c_t));
+}
+
 void *skia_new_SkSVGVisibility() {
   return reinterpret_cast<void *>(new SkSVGVisibility());
+}
+
+void *skia_new_SkSVGVisibility2(int c_t) {
+  return reinterpret_cast<void *>(
+      new SkSVGVisibility((SkSVGVisibility::Type)c_t));
 }
 
 void *skia_new_SkSVGDashArray() {
   return reinterpret_cast<void *>(new SkSVGDashArray());
 }
 
+void *skia_new_SkSVGDashArray2(int c_t) {
+  return reinterpret_cast<void *>(
+      new SkSVGDashArray((SkSVGDashArray::Type)c_t));
+}
+
 void *skia_new_SkSVGStopColor() {
   return reinterpret_cast<void *>(new SkSVGStopColor());
 }
 
+void *skia_new_SkSVGStopColor2(int c_t) {
+  return reinterpret_cast<void *>(
+      new SkSVGStopColor((SkSVGStopColor::Type)c_t));
+}
+
 void *skia_new_SkSVGObjectBoundingBoxUnits() {
   return reinterpret_cast<void *>(new SkSVGObjectBoundingBoxUnits());
+}
+
+void *skia_new_SkSVGObjectBoundingBoxUnits2(int c_t) {
+  return reinterpret_cast<void *>(
+      new SkSVGObjectBoundingBoxUnits((SkSVGObjectBoundingBoxUnits::Type)c_t));
 }
 
 void *skia_new_SkSVGFontFamily() {
@@ -348,6 +418,11 @@ void *skia_new_SkSVGFontStyle() {
   return reinterpret_cast<void *>(new SkSVGFontStyle());
 }
 
+void *skia_new_SkSVGFontStyle2(int c_t) {
+  return reinterpret_cast<void *>(
+      new SkSVGFontStyle((SkSVGFontStyle::Type)c_t));
+}
+
 void *skia_new_SkSVGFontSize() {
   return reinterpret_cast<void *>(new SkSVGFontSize());
 }
@@ -356,12 +431,27 @@ void *skia_new_SkSVGFontWeight() {
   return reinterpret_cast<void *>(new SkSVGFontWeight());
 }
 
+void *skia_new_SkSVGFontWeight2(int c_t) {
+  return reinterpret_cast<void *>(
+      new SkSVGFontWeight((SkSVGFontWeight::Type)c_t));
+}
+
 void *skia_new_SkSVGTextAnchor() {
   return reinterpret_cast<void *>(new SkSVGTextAnchor());
 }
 
+void *skia_new_SkSVGTextAnchor2(int c_t) {
+  return reinterpret_cast<void *>(
+      new SkSVGTextAnchor((SkSVGTextAnchor::Type)c_t));
+}
+
 void *skia_new_SkSVGFeInputType() {
   return reinterpret_cast<void *>(new SkSVGFeInputType());
+}
+
+void *skia_new_SkSVGFeInputType2(int c_t) {
+  return reinterpret_cast<void *>(
+      new SkSVGFeInputType((SkSVGFeInputType::Type)c_t));
 }
 
 void *skia_new_SkSVGFeTurbulenceBaseFrequency() {

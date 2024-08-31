@@ -310,7 +310,23 @@ func NewM44() M44 {
 	}
 }
 
-func NewM442(m0 float32, m4 float32, m8 float32, m12 float32, m1 float32, m5 float32, m9 float32, m13 float32, m2 float32, m6 float32, m10 float32, m14 float32, m3 float32, m7 float32, m11 float32, m15 float32) M44 {
+func NewM442(p0 M44Uninitialized_Constructor) M44 {
+	c_p0 := C.int(p0)
+
+	return M44{
+		skia: C.skia_new_SkM442(c_p0),
+	}
+}
+
+func NewM443(p0 M44NaN_Constructor) M44 {
+	c_p0 := C.int(p0)
+
+	return M44{
+		skia: C.skia_new_SkM443(c_p0),
+	}
+}
+
+func NewM444(m0 float32, m4 float32, m8 float32, m12 float32, m1 float32, m5 float32, m9 float32, m13 float32, m2 float32, m6 float32, m10 float32, m14 float32, m3 float32, m7 float32, m11 float32, m15 float32) M44 {
 	c_m0 := C.float(m0)
 	c_m4 := C.float(m4)
 	c_m8 := C.float(m8)
@@ -329,7 +345,7 @@ func NewM442(m0 float32, m4 float32, m8 float32, m12 float32, m1 float32, m5 flo
 	c_m15 := C.float(m15)
 
 	return M44{
-		skia: C.skia_new_SkM442(c_m0, c_m4, c_m8, c_m12, c_m1, c_m5, c_m9, c_m13, c_m2, c_m6, c_m10, c_m14, c_m3, c_m7, c_m11, c_m15),
+		skia: C.skia_new_SkM444(c_m0, c_m4, c_m8, c_m12, c_m1, c_m5, c_m9, c_m13, c_m2, c_m6, c_m10, c_m14, c_m3, c_m7, c_m11, c_m15),
 	}
 }
 
@@ -427,6 +443,26 @@ func NewSurfaceProps() SurfaceProps {
 
 	return SurfaceProps{
 		skia: C.skia_new_SkSurfaceProps(),
+	}
+}
+
+func NewSurfaceProps2(flags uint32, p1 PixelGeometry) SurfaceProps {
+	c_flags := C.uint(flags)
+	c_p1 := C.int(p1)
+
+	return SurfaceProps{
+		skia: C.skia_new_SkSurfaceProps2(c_flags, c_p1),
+	}
+}
+
+func NewSurfaceProps3(flags uint32, p1 PixelGeometry, textContrast float32, textGamma float32) SurfaceProps {
+	c_flags := C.uint(flags)
+	c_p1 := C.int(p1)
+	c_textContrast := C.float(textContrast)
+	c_textGamma := C.float(textGamma)
+
+	return SurfaceProps{
+		skia: C.skia_new_SkSurfaceProps3(c_flags, c_p1, c_textContrast, c_textGamma),
 	}
 }
 
@@ -723,10 +759,20 @@ type FontStyle struct {
 	skia unsafe.Pointer
 }
 
-func NewFontStyle() FontStyle {
+func NewFontStyle(weight int32, width int32, slant FontStyleSlant) FontStyle {
+	c_weight := C.int(weight)
+	c_width := C.int(width)
+	c_slant := C.int(slant)
 
 	return FontStyle{
-		skia: C.skia_new_SkFontStyle(),
+		skia: C.skia_new_SkFontStyle(c_weight, c_width, c_slant),
+	}
+}
+
+func NewFontStyle2() FontStyle {
+
+	return FontStyle{
+		skia: C.skia_new_SkFontStyle2(),
 	}
 }
 
@@ -1335,6 +1381,15 @@ func NewSVGLength() SVGLength {
 	}
 }
 
+func NewSVGLength2(v float32, u SVGLengthUnit) SVGLength {
+	c_v := C.float(v)
+	c_u := C.int(u)
+
+	return SVGLength{
+		skia: C.skia_new_SkSVGLength2(c_v, c_u),
+	}
+}
+
 type SVGLengthUnit int64
 
 const (
@@ -1400,6 +1455,14 @@ func NewSVGPaint() SVGPaint {
 	}
 }
 
+func NewSVGPaint2(t SVGPaintType) SVGPaint {
+	c_t := C.int(t)
+
+	return SVGPaint{
+		skia: C.skia_new_SkSVGPaint2(c_t),
+	}
+}
+
 type SVGPaintType int64
 
 const (
@@ -1419,6 +1482,14 @@ func NewSVGFuncIRI() SVGFuncIRI {
 	}
 }
 
+func NewSVGFuncIRI2(t SVGFuncIRIType) SVGFuncIRI {
+	c_t := C.int(t)
+
+	return SVGFuncIRI{
+		skia: C.skia_new_SkSVGFuncIRI2(c_t),
+	}
+}
+
 type SVGFuncIRIType int64
 
 const (
@@ -1434,6 +1505,14 @@ func NewSVGLineJoin() SVGLineJoin {
 
 	return SVGLineJoin{
 		skia: C.skia_new_SkSVGLineJoin(),
+	}
+}
+
+func NewSVGLineJoin2(t SVGLineJoinType) SVGLineJoin {
+	c_t := C.int(t)
+
+	return SVGLineJoin{
+		skia: C.skia_new_SkSVGLineJoin2(c_t),
 	}
 }
 
@@ -1457,6 +1536,14 @@ func NewSVGSpreadMethod() SVGSpreadMethod {
 	}
 }
 
+func NewSVGSpreadMethod2(t SVGSpreadMethodType) SVGSpreadMethod {
+	c_t := C.int(t)
+
+	return SVGSpreadMethod{
+		skia: C.skia_new_SkSVGSpreadMethod2(c_t),
+	}
+}
+
 type SVGSpreadMethodType int64
 
 const (
@@ -1476,6 +1563,14 @@ func NewSVGFillRule() SVGFillRule {
 	}
 }
 
+func NewSVGFillRule2(t SVGFillRuleType) SVGFillRule {
+	c_t := C.int(t)
+
+	return SVGFillRule{
+		skia: C.skia_new_SkSVGFillRule2(c_t),
+	}
+}
+
 type SVGFillRuleType int64
 
 const (
@@ -1492,6 +1587,14 @@ func NewSVGVisibility() SVGVisibility {
 
 	return SVGVisibility{
 		skia: C.skia_new_SkSVGVisibility(),
+	}
+}
+
+func NewSVGVisibility2(t SVGVisibilityType) SVGVisibility {
+	c_t := C.int(t)
+
+	return SVGVisibility{
+		skia: C.skia_new_SkSVGVisibility2(c_t),
 	}
 }
 
@@ -1515,6 +1618,14 @@ func NewSVGDashArray() SVGDashArray {
 	}
 }
 
+func NewSVGDashArray2(t SVGDashArrayType) SVGDashArray {
+	c_t := C.int(t)
+
+	return SVGDashArray{
+		skia: C.skia_new_SkSVGDashArray2(c_t),
+	}
+}
+
 type SVGDashArrayType int64
 
 const (
@@ -1531,6 +1642,14 @@ func NewSVGStopColor() SVGStopColor {
 
 	return SVGStopColor{
 		skia: C.skia_new_SkSVGStopColor(),
+	}
+}
+
+func NewSVGStopColor2(t SVGStopColorType) SVGStopColor {
+	c_t := C.int(t)
+
+	return SVGStopColor{
+		skia: C.skia_new_SkSVGStopColor2(c_t),
 	}
 }
 
@@ -1551,6 +1670,14 @@ func NewSVGObjectBoundingBoxUnits() SVGObjectBoundingBoxUnits {
 
 	return SVGObjectBoundingBoxUnits{
 		skia: C.skia_new_SkSVGObjectBoundingBoxUnits(),
+	}
+}
+
+func NewSVGObjectBoundingBoxUnits2(t SVGObjectBoundingBoxUnitsType) SVGObjectBoundingBoxUnits {
+	c_t := C.int(t)
+
+	return SVGObjectBoundingBoxUnits{
+		skia: C.skia_new_SkSVGObjectBoundingBoxUnits2(c_t),
 	}
 }
 
@@ -1587,6 +1714,14 @@ func NewSVGFontStyle() SVGFontStyle {
 
 	return SVGFontStyle{
 		skia: C.skia_new_SkSVGFontStyle(),
+	}
+}
+
+func NewSVGFontStyle2(t SVGFontStyleType) SVGFontStyle {
+	c_t := C.int(t)
+
+	return SVGFontStyle{
+		skia: C.skia_new_SkSVGFontStyle2(c_t),
 	}
 }
 
@@ -1628,6 +1763,14 @@ func NewSVGFontWeight() SVGFontWeight {
 	}
 }
 
+func NewSVGFontWeight2(t SVGFontWeightType) SVGFontWeight {
+	c_t := C.int(t)
+
+	return SVGFontWeight{
+		skia: C.skia_new_SkSVGFontWeight2(c_t),
+	}
+}
+
 type SVGFontWeightType int64
 
 const (
@@ -1658,6 +1801,14 @@ func NewSVGTextAnchor() SVGTextAnchor {
 	}
 }
 
+func NewSVGTextAnchor2(t SVGTextAnchorType) SVGTextAnchor {
+	c_t := C.int(t)
+
+	return SVGTextAnchor{
+		skia: C.skia_new_SkSVGTextAnchor2(c_t),
+	}
+}
+
 type SVGTextAnchorType int64
 
 const (
@@ -1675,6 +1826,14 @@ func NewSVGFeInputType() SVGFeInputType {
 
 	return SVGFeInputType{
 		skia: C.skia_new_SkSVGFeInputType(),
+	}
+}
+
+func NewSVGFeInputType2(t SVGFeInputTypeType) SVGFeInputType {
+	c_t := C.int(t)
+
+	return SVGFeInputType{
+		skia: C.skia_new_SkSVGFeInputType2(c_t),
 	}
 }
 
