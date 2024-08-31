@@ -58,8 +58,8 @@ func (e enum) generate(g *generator) {
 		}
 		name = fmt.Sprintf("%s_%s", goName, name)
 
-		if e.comment != "" {
-			g.goFile.writeln(e.comment)
+		if constant.comment != "" {
+			g.goFile.writeln(constant.comment)
 		}
 		g.goFile.writelnf("  %s %s = %d", name, goName, constant.value)
 	}

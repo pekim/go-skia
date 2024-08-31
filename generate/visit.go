@@ -64,14 +64,14 @@ func (g *generator) visitClassEnum(class *class, cursor clang.Cursor) {
 	enum := enum{
 		class:   class,
 		name:    cursor.Spelling(),
-		comment: cursor.RawCommentText(),
+		comment: parsedCommentToGoComment(cursor.ParsedComment()),
 	}
 	cursor.Visit(func(cursor, parent clang.Cursor) (status clang.ChildVisitResult) {
 		if cursor.Kind() == clang.Cursor_EnumConstantDecl {
 			enum.constants = append(enum.constants, enumConstant{
 				name:    cursor.Spelling(),
 				value:   cursor.EnumConstantDeclValue(),
-				comment: cursor.RawCommentText(),
+				comment: parsedCommentToGoComment(cursor.ParsedComment()),
 			})
 		}
 		return clang.ChildVisit_Continue
