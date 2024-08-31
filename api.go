@@ -26,22 +26,78 @@ func NewMatrix() Matrix {
 	}
 }
 
+/*
+  - \enum SkMatrix::ScaleToFit
+    ScaleToFit describes how SkMatrix is constructed to map one SkRect to another.
+    ScaleToFit may allow SkMatrix to have unequal horizontal and vertical scaling,
+    or may restrict SkMatrix to square scaling. If restricted, ScaleToFit specifies
+    how SkMatrix maps to the side or center of the destination SkRect.
+*/
 type MatrixScaleToFit int64
 
 const (
-	MatrixScaleToFit_Fill   MatrixScaleToFit = 0
-	MatrixScaleToFit_Start  MatrixScaleToFit = 1
+	/** \enum SkMatrix::ScaleToFit
+	  ScaleToFit describes how SkMatrix is constructed to map one SkRect to another.
+	  ScaleToFit may allow SkMatrix to have unequal horizontal and vertical scaling,
+	  or may restrict SkMatrix to square scaling. If restricted, ScaleToFit specifies
+	  how SkMatrix maps to the side or center of the destination SkRect.
+	*/
+	MatrixScaleToFit_Fill MatrixScaleToFit = 0
+	/** \enum SkMatrix::ScaleToFit
+	  ScaleToFit describes how SkMatrix is constructed to map one SkRect to another.
+	  ScaleToFit may allow SkMatrix to have unequal horizontal and vertical scaling,
+	  or may restrict SkMatrix to square scaling. If restricted, ScaleToFit specifies
+	  how SkMatrix maps to the side or center of the destination SkRect.
+	*/
+	MatrixScaleToFit_Start MatrixScaleToFit = 1
+	/** \enum SkMatrix::ScaleToFit
+	  ScaleToFit describes how SkMatrix is constructed to map one SkRect to another.
+	  ScaleToFit may allow SkMatrix to have unequal horizontal and vertical scaling,
+	  or may restrict SkMatrix to square scaling. If restricted, ScaleToFit specifies
+	  how SkMatrix maps to the side or center of the destination SkRect.
+	*/
 	MatrixScaleToFit_Center MatrixScaleToFit = 2
-	MatrixScaleToFit_End    MatrixScaleToFit = 3
+	/** \enum SkMatrix::ScaleToFit
+	  ScaleToFit describes how SkMatrix is constructed to map one SkRect to another.
+	  ScaleToFit may allow SkMatrix to have unequal horizontal and vertical scaling,
+	  or may restrict SkMatrix to square scaling. If restricted, ScaleToFit specifies
+	  how SkMatrix maps to the side or center of the destination SkRect.
+	*/
+	MatrixScaleToFit_End MatrixScaleToFit = 3
 )
 
+/*
+  - \enum SkMatrix::TypeMask
+    Enum of bit fields for mask returned by getType().
+    Used to identify the complexity of SkMatrix, to optimize performance.
+*/
 type MatrixTypeMask int64
 
 const (
-	MatrixTypeMask_Identity_Mask    MatrixTypeMask = 0
-	MatrixTypeMask_Translate_Mask   MatrixTypeMask = 1
-	MatrixTypeMask_Scale_Mask       MatrixTypeMask = 2
-	MatrixTypeMask_Affine_Mask      MatrixTypeMask = 4
+	/** \enum SkMatrix::TypeMask
+	  Enum of bit fields for mask returned by getType().
+	  Used to identify the complexity of SkMatrix, to optimize performance.
+	*/
+	MatrixTypeMask_Identity_Mask MatrixTypeMask = 0
+	/** \enum SkMatrix::TypeMask
+	  Enum of bit fields for mask returned by getType().
+	  Used to identify the complexity of SkMatrix, to optimize performance.
+	*/
+	MatrixTypeMask_Translate_Mask MatrixTypeMask = 1
+	/** \enum SkMatrix::TypeMask
+	  Enum of bit fields for mask returned by getType().
+	  Used to identify the complexity of SkMatrix, to optimize performance.
+	*/
+	MatrixTypeMask_Scale_Mask MatrixTypeMask = 2
+	/** \enum SkMatrix::TypeMask
+	  Enum of bit fields for mask returned by getType().
+	  Used to identify the complexity of SkMatrix, to optimize performance.
+	*/
+	MatrixTypeMask_Affine_Mask MatrixTypeMask = 4
+	/** \enum SkMatrix::TypeMask
+	  Enum of bit fields for mask returned by getType().
+	  Used to identify the complexity of SkMatrix, to optimize performance.
+	*/
 	MatrixTypeMask_Perspective_Mask MatrixTypeMask = 8
 )
 
@@ -111,41 +167,300 @@ const (
 	YUVAInfoYUVAChannels_Last YUVAInfoYUVAChannels = 3
 )
 
+/**
+ * Specifies how YUV (and optionally A) are divided among planes. Planes are separated by
+ * underscores in the enum value names. Within each plane the pixmap/texture channels are
+ * mapped to the YUVA channels in the order specified, e.g. for kY_UV Y is in channel 0 of plane
+ * 0, U is in channel 0 of plane 1, and V is in channel 1 of plane 1. Channel ordering
+ * within a pixmap/texture given the channels it contains:
+ * A:                       0:A
+ * Luminance/Gray:          0:Gray
+ * Luminance/Gray + Alpha:  0:Gray, 1:A
+ * RG                       0:R,    1:G
+ * RGB                      0:R,    1:G, 2:B
+ * RGBA                     0:R,    1:G, 2:B, 3:A
+ */
 type YUVAInfoPlaneConfig int64
 
 const (
+	/**
+	 * Specifies how YUV (and optionally A) are divided among planes. Planes are separated by
+	 * underscores in the enum value names. Within each plane the pixmap/texture channels are
+	 * mapped to the YUVA channels in the order specified, e.g. for kY_UV Y is in channel 0 of plane
+	 * 0, U is in channel 0 of plane 1, and V is in channel 1 of plane 1. Channel ordering
+	 * within a pixmap/texture given the channels it contains:
+	 * A:                       0:A
+	 * Luminance/Gray:          0:Gray
+	 * Luminance/Gray + Alpha:  0:Gray, 1:A
+	 * RG                       0:R,    1:G
+	 * RGB                      0:R,    1:G, 2:B
+	 * RGBA                     0:R,    1:G, 2:B, 3:A
+	 */
 	YUVAInfoPlaneConfig_Unknown YUVAInfoPlaneConfig = 0
-	YUVAInfoPlaneConfig_Y_U_V   YUVAInfoPlaneConfig = 1
-	YUVAInfoPlaneConfig_Y_V_U   YUVAInfoPlaneConfig = 2
-	YUVAInfoPlaneConfig_Y_UV    YUVAInfoPlaneConfig = 3
-	YUVAInfoPlaneConfig_Y_VU    YUVAInfoPlaneConfig = 4
-	YUVAInfoPlaneConfig_YUV     YUVAInfoPlaneConfig = 5
-	YUVAInfoPlaneConfig_UYV     YUVAInfoPlaneConfig = 6
+	/**
+	 * Specifies how YUV (and optionally A) are divided among planes. Planes are separated by
+	 * underscores in the enum value names. Within each plane the pixmap/texture channels are
+	 * mapped to the YUVA channels in the order specified, e.g. for kY_UV Y is in channel 0 of plane
+	 * 0, U is in channel 0 of plane 1, and V is in channel 1 of plane 1. Channel ordering
+	 * within a pixmap/texture given the channels it contains:
+	 * A:                       0:A
+	 * Luminance/Gray:          0:Gray
+	 * Luminance/Gray + Alpha:  0:Gray, 1:A
+	 * RG                       0:R,    1:G
+	 * RGB                      0:R,    1:G, 2:B
+	 * RGBA                     0:R,    1:G, 2:B, 3:A
+	 */
+	YUVAInfoPlaneConfig_Y_U_V YUVAInfoPlaneConfig = 1
+	/**
+	 * Specifies how YUV (and optionally A) are divided among planes. Planes are separated by
+	 * underscores in the enum value names. Within each plane the pixmap/texture channels are
+	 * mapped to the YUVA channels in the order specified, e.g. for kY_UV Y is in channel 0 of plane
+	 * 0, U is in channel 0 of plane 1, and V is in channel 1 of plane 1. Channel ordering
+	 * within a pixmap/texture given the channels it contains:
+	 * A:                       0:A
+	 * Luminance/Gray:          0:Gray
+	 * Luminance/Gray + Alpha:  0:Gray, 1:A
+	 * RG                       0:R,    1:G
+	 * RGB                      0:R,    1:G, 2:B
+	 * RGBA                     0:R,    1:G, 2:B, 3:A
+	 */
+	YUVAInfoPlaneConfig_Y_V_U YUVAInfoPlaneConfig = 2
+	/**
+	 * Specifies how YUV (and optionally A) are divided among planes. Planes are separated by
+	 * underscores in the enum value names. Within each plane the pixmap/texture channels are
+	 * mapped to the YUVA channels in the order specified, e.g. for kY_UV Y is in channel 0 of plane
+	 * 0, U is in channel 0 of plane 1, and V is in channel 1 of plane 1. Channel ordering
+	 * within a pixmap/texture given the channels it contains:
+	 * A:                       0:A
+	 * Luminance/Gray:          0:Gray
+	 * Luminance/Gray + Alpha:  0:Gray, 1:A
+	 * RG                       0:R,    1:G
+	 * RGB                      0:R,    1:G, 2:B
+	 * RGBA                     0:R,    1:G, 2:B, 3:A
+	 */
+	YUVAInfoPlaneConfig_Y_UV YUVAInfoPlaneConfig = 3
+	/**
+	 * Specifies how YUV (and optionally A) are divided among planes. Planes are separated by
+	 * underscores in the enum value names. Within each plane the pixmap/texture channels are
+	 * mapped to the YUVA channels in the order specified, e.g. for kY_UV Y is in channel 0 of plane
+	 * 0, U is in channel 0 of plane 1, and V is in channel 1 of plane 1. Channel ordering
+	 * within a pixmap/texture given the channels it contains:
+	 * A:                       0:A
+	 * Luminance/Gray:          0:Gray
+	 * Luminance/Gray + Alpha:  0:Gray, 1:A
+	 * RG                       0:R,    1:G
+	 * RGB                      0:R,    1:G, 2:B
+	 * RGBA                     0:R,    1:G, 2:B, 3:A
+	 */
+	YUVAInfoPlaneConfig_Y_VU YUVAInfoPlaneConfig = 4
+	/**
+	 * Specifies how YUV (and optionally A) are divided among planes. Planes are separated by
+	 * underscores in the enum value names. Within each plane the pixmap/texture channels are
+	 * mapped to the YUVA channels in the order specified, e.g. for kY_UV Y is in channel 0 of plane
+	 * 0, U is in channel 0 of plane 1, and V is in channel 1 of plane 1. Channel ordering
+	 * within a pixmap/texture given the channels it contains:
+	 * A:                       0:A
+	 * Luminance/Gray:          0:Gray
+	 * Luminance/Gray + Alpha:  0:Gray, 1:A
+	 * RG                       0:R,    1:G
+	 * RGB                      0:R,    1:G, 2:B
+	 * RGBA                     0:R,    1:G, 2:B, 3:A
+	 */
+	YUVAInfoPlaneConfig_YUV YUVAInfoPlaneConfig = 5
+	/**
+	 * Specifies how YUV (and optionally A) are divided among planes. Planes are separated by
+	 * underscores in the enum value names. Within each plane the pixmap/texture channels are
+	 * mapped to the YUVA channels in the order specified, e.g. for kY_UV Y is in channel 0 of plane
+	 * 0, U is in channel 0 of plane 1, and V is in channel 1 of plane 1. Channel ordering
+	 * within a pixmap/texture given the channels it contains:
+	 * A:                       0:A
+	 * Luminance/Gray:          0:Gray
+	 * Luminance/Gray + Alpha:  0:Gray, 1:A
+	 * RG                       0:R,    1:G
+	 * RGB                      0:R,    1:G, 2:B
+	 * RGBA                     0:R,    1:G, 2:B, 3:A
+	 */
+	YUVAInfoPlaneConfig_UYV YUVAInfoPlaneConfig = 6
+	/**
+	 * Specifies how YUV (and optionally A) are divided among planes. Planes are separated by
+	 * underscores in the enum value names. Within each plane the pixmap/texture channels are
+	 * mapped to the YUVA channels in the order specified, e.g. for kY_UV Y is in channel 0 of plane
+	 * 0, U is in channel 0 of plane 1, and V is in channel 1 of plane 1. Channel ordering
+	 * within a pixmap/texture given the channels it contains:
+	 * A:                       0:A
+	 * Luminance/Gray:          0:Gray
+	 * Luminance/Gray + Alpha:  0:Gray, 1:A
+	 * RG                       0:R,    1:G
+	 * RGB                      0:R,    1:G, 2:B
+	 * RGBA                     0:R,    1:G, 2:B, 3:A
+	 */
 	YUVAInfoPlaneConfig_Y_U_V_A YUVAInfoPlaneConfig = 7
+	/**
+	 * Specifies how YUV (and optionally A) are divided among planes. Planes are separated by
+	 * underscores in the enum value names. Within each plane the pixmap/texture channels are
+	 * mapped to the YUVA channels in the order specified, e.g. for kY_UV Y is in channel 0 of plane
+	 * 0, U is in channel 0 of plane 1, and V is in channel 1 of plane 1. Channel ordering
+	 * within a pixmap/texture given the channels it contains:
+	 * A:                       0:A
+	 * Luminance/Gray:          0:Gray
+	 * Luminance/Gray + Alpha:  0:Gray, 1:A
+	 * RG                       0:R,    1:G
+	 * RGB                      0:R,    1:G, 2:B
+	 * RGBA                     0:R,    1:G, 2:B, 3:A
+	 */
 	YUVAInfoPlaneConfig_Y_V_U_A YUVAInfoPlaneConfig = 8
-	YUVAInfoPlaneConfig_Y_UV_A  YUVAInfoPlaneConfig = 9
-	YUVAInfoPlaneConfig_Y_VU_A  YUVAInfoPlaneConfig = 10
-	YUVAInfoPlaneConfig_YUVA    YUVAInfoPlaneConfig = 11
-	YUVAInfoPlaneConfig_UYVA    YUVAInfoPlaneConfig = 12
-	YUVAInfoPlaneConfig_Last    YUVAInfoPlaneConfig = 12
+	/**
+	 * Specifies how YUV (and optionally A) are divided among planes. Planes are separated by
+	 * underscores in the enum value names. Within each plane the pixmap/texture channels are
+	 * mapped to the YUVA channels in the order specified, e.g. for kY_UV Y is in channel 0 of plane
+	 * 0, U is in channel 0 of plane 1, and V is in channel 1 of plane 1. Channel ordering
+	 * within a pixmap/texture given the channels it contains:
+	 * A:                       0:A
+	 * Luminance/Gray:          0:Gray
+	 * Luminance/Gray + Alpha:  0:Gray, 1:A
+	 * RG                       0:R,    1:G
+	 * RGB                      0:R,    1:G, 2:B
+	 * RGBA                     0:R,    1:G, 2:B, 3:A
+	 */
+	YUVAInfoPlaneConfig_Y_UV_A YUVAInfoPlaneConfig = 9
+	/**
+	 * Specifies how YUV (and optionally A) are divided among planes. Planes are separated by
+	 * underscores in the enum value names. Within each plane the pixmap/texture channels are
+	 * mapped to the YUVA channels in the order specified, e.g. for kY_UV Y is in channel 0 of plane
+	 * 0, U is in channel 0 of plane 1, and V is in channel 1 of plane 1. Channel ordering
+	 * within a pixmap/texture given the channels it contains:
+	 * A:                       0:A
+	 * Luminance/Gray:          0:Gray
+	 * Luminance/Gray + Alpha:  0:Gray, 1:A
+	 * RG                       0:R,    1:G
+	 * RGB                      0:R,    1:G, 2:B
+	 * RGBA                     0:R,    1:G, 2:B, 3:A
+	 */
+	YUVAInfoPlaneConfig_Y_VU_A YUVAInfoPlaneConfig = 10
+	/**
+	 * Specifies how YUV (and optionally A) are divided among planes. Planes are separated by
+	 * underscores in the enum value names. Within each plane the pixmap/texture channels are
+	 * mapped to the YUVA channels in the order specified, e.g. for kY_UV Y is in channel 0 of plane
+	 * 0, U is in channel 0 of plane 1, and V is in channel 1 of plane 1. Channel ordering
+	 * within a pixmap/texture given the channels it contains:
+	 * A:                       0:A
+	 * Luminance/Gray:          0:Gray
+	 * Luminance/Gray + Alpha:  0:Gray, 1:A
+	 * RG                       0:R,    1:G
+	 * RGB                      0:R,    1:G, 2:B
+	 * RGBA                     0:R,    1:G, 2:B, 3:A
+	 */
+	YUVAInfoPlaneConfig_YUVA YUVAInfoPlaneConfig = 11
+	/**
+	 * Specifies how YUV (and optionally A) are divided among planes. Planes are separated by
+	 * underscores in the enum value names. Within each plane the pixmap/texture channels are
+	 * mapped to the YUVA channels in the order specified, e.g. for kY_UV Y is in channel 0 of plane
+	 * 0, U is in channel 0 of plane 1, and V is in channel 1 of plane 1. Channel ordering
+	 * within a pixmap/texture given the channels it contains:
+	 * A:                       0:A
+	 * Luminance/Gray:          0:Gray
+	 * Luminance/Gray + Alpha:  0:Gray, 1:A
+	 * RG                       0:R,    1:G
+	 * RGB                      0:R,    1:G, 2:B
+	 * RGBA                     0:R,    1:G, 2:B, 3:A
+	 */
+	YUVAInfoPlaneConfig_UYVA YUVAInfoPlaneConfig = 12
+	/**
+	 * Specifies how YUV (and optionally A) are divided among planes. Planes are separated by
+	 * underscores in the enum value names. Within each plane the pixmap/texture channels are
+	 * mapped to the YUVA channels in the order specified, e.g. for kY_UV Y is in channel 0 of plane
+	 * 0, U is in channel 0 of plane 1, and V is in channel 1 of plane 1. Channel ordering
+	 * within a pixmap/texture given the channels it contains:
+	 * A:                       0:A
+	 * Luminance/Gray:          0:Gray
+	 * Luminance/Gray + Alpha:  0:Gray, 1:A
+	 * RG                       0:R,    1:G
+	 * RGB                      0:R,    1:G, 2:B
+	 * RGBA                     0:R,    1:G, 2:B, 3:A
+	 */
+	YUVAInfoPlaneConfig_Last YUVAInfoPlaneConfig = 12
 )
 
+/**
+ * UV subsampling is also specified in the enum value names using J:a:b notation (e.g. 4:2:0 is
+ * 1/2 horizontal and 1/2 vertical resolution for U and V). If alpha is present it is not sub-
+ * sampled. Note that Subsampling values other than k444 are only valid with PlaneConfig values
+ * that have U and V in different planes than Y (and A, if present).
+ */
 type YUVAInfoSubsampling int64
 
 const (
+	/**
+	 * UV subsampling is also specified in the enum value names using J:a:b notation (e.g. 4:2:0 is
+	 * 1/2 horizontal and 1/2 vertical resolution for U and V). If alpha is present it is not sub-
+	 * sampled. Note that Subsampling values other than k444 are only valid with PlaneConfig values
+	 * that have U and V in different planes than Y (and A, if present).
+	 */
 	YUVAInfoSubsampling_Unknown YUVAInfoSubsampling = 0
-	YUVAInfoSubsampling_444     YUVAInfoSubsampling = 1
-	YUVAInfoSubsampling_422     YUVAInfoSubsampling = 2
-	YUVAInfoSubsampling_420     YUVAInfoSubsampling = 3
-	YUVAInfoSubsampling_440     YUVAInfoSubsampling = 4
-	YUVAInfoSubsampling_411     YUVAInfoSubsampling = 5
-	YUVAInfoSubsampling_410     YUVAInfoSubsampling = 6
-	YUVAInfoSubsampling_Last    YUVAInfoSubsampling = 6
+	/**
+	 * UV subsampling is also specified in the enum value names using J:a:b notation (e.g. 4:2:0 is
+	 * 1/2 horizontal and 1/2 vertical resolution for U and V). If alpha is present it is not sub-
+	 * sampled. Note that Subsampling values other than k444 are only valid with PlaneConfig values
+	 * that have U and V in different planes than Y (and A, if present).
+	 */
+	YUVAInfoSubsampling_444 YUVAInfoSubsampling = 1
+	/**
+	 * UV subsampling is also specified in the enum value names using J:a:b notation (e.g. 4:2:0 is
+	 * 1/2 horizontal and 1/2 vertical resolution for U and V). If alpha is present it is not sub-
+	 * sampled. Note that Subsampling values other than k444 are only valid with PlaneConfig values
+	 * that have U and V in different planes than Y (and A, if present).
+	 */
+	YUVAInfoSubsampling_422 YUVAInfoSubsampling = 2
+	/**
+	 * UV subsampling is also specified in the enum value names using J:a:b notation (e.g. 4:2:0 is
+	 * 1/2 horizontal and 1/2 vertical resolution for U and V). If alpha is present it is not sub-
+	 * sampled. Note that Subsampling values other than k444 are only valid with PlaneConfig values
+	 * that have U and V in different planes than Y (and A, if present).
+	 */
+	YUVAInfoSubsampling_420 YUVAInfoSubsampling = 3
+	/**
+	 * UV subsampling is also specified in the enum value names using J:a:b notation (e.g. 4:2:0 is
+	 * 1/2 horizontal and 1/2 vertical resolution for U and V). If alpha is present it is not sub-
+	 * sampled. Note that Subsampling values other than k444 are only valid with PlaneConfig values
+	 * that have U and V in different planes than Y (and A, if present).
+	 */
+	YUVAInfoSubsampling_440 YUVAInfoSubsampling = 4
+	/**
+	 * UV subsampling is also specified in the enum value names using J:a:b notation (e.g. 4:2:0 is
+	 * 1/2 horizontal and 1/2 vertical resolution for U and V). If alpha is present it is not sub-
+	 * sampled. Note that Subsampling values other than k444 are only valid with PlaneConfig values
+	 * that have U and V in different planes than Y (and A, if present).
+	 */
+	YUVAInfoSubsampling_411 YUVAInfoSubsampling = 5
+	/**
+	 * UV subsampling is also specified in the enum value names using J:a:b notation (e.g. 4:2:0 is
+	 * 1/2 horizontal and 1/2 vertical resolution for U and V). If alpha is present it is not sub-
+	 * sampled. Note that Subsampling values other than k444 are only valid with PlaneConfig values
+	 * that have U and V in different planes than Y (and A, if present).
+	 */
+	YUVAInfoSubsampling_410 YUVAInfoSubsampling = 6
+	/**
+	 * UV subsampling is also specified in the enum value names using J:a:b notation (e.g. 4:2:0 is
+	 * 1/2 horizontal and 1/2 vertical resolution for U and V). If alpha is present it is not sub-
+	 * sampled. Note that Subsampling values other than k444 are only valid with PlaneConfig values
+	 * that have U and V in different planes than Y (and A, if present).
+	 */
+	YUVAInfoSubsampling_Last YUVAInfoSubsampling = 6
 )
 
+/**
+ * Describes how subsampled chroma values are sited relative to luma values.
+ *
+ * Currently only centered siting is supported but will expand to support additional sitings.
+ */
 type YUVAInfoSiting int64
 
 const (
+	/**
+	 * Describes how subsampled chroma values are sited relative to luma values.
+	 *
+	 * Currently only centered siting is supported but will expand to support additional sitings.
+	 */
 	YUVAInfoSiting_Centered YUVAInfoSiting = 0
 )
 
@@ -160,14 +475,38 @@ func NewYUVAPixmapInfo() YUVAPixmapInfo {
 	}
 }
 
+/**
+ * Data type for Y, U, V, and possibly A channels independent of how values are packed into
+ * planes.
+ **/
 type YUVAPixmapInfoDataType int64
 
 const (
-	YUVAPixmapInfoDataType_Unorm8         YUVAPixmapInfoDataType = 0
-	YUVAPixmapInfoDataType_Unorm16        YUVAPixmapInfoDataType = 1
-	YUVAPixmapInfoDataType_Float16        YUVAPixmapInfoDataType = 2
+	/**
+	 * Data type for Y, U, V, and possibly A channels independent of how values are packed into
+	 * planes.
+	 **/
+	YUVAPixmapInfoDataType_Unorm8 YUVAPixmapInfoDataType = 0
+	/**
+	 * Data type for Y, U, V, and possibly A channels independent of how values are packed into
+	 * planes.
+	 **/
+	YUVAPixmapInfoDataType_Unorm16 YUVAPixmapInfoDataType = 1
+	/**
+	 * Data type for Y, U, V, and possibly A channels independent of how values are packed into
+	 * planes.
+	 **/
+	YUVAPixmapInfoDataType_Float16 YUVAPixmapInfoDataType = 2
+	/**
+	 * Data type for Y, U, V, and possibly A channels independent of how values are packed into
+	 * planes.
+	 **/
 	YUVAPixmapInfoDataType_Unorm10_Unorm2 YUVAPixmapInfoDataType = 3
-	YUVAPixmapInfoDataType_Last           YUVAPixmapInfoDataType = 3
+	/**
+	 * Data type for Y, U, V, and possibly A channels independent of how values are packed into
+	 * planes.
+	 **/
+	YUVAPixmapInfoDataType_Last YUVAPixmapInfoDataType = 3
 )
 
 type YUVAPixmaps struct {
@@ -227,39 +566,111 @@ func (o *Codec) Delete() {
 	C.skia_delete_SkCodec(o.skia)
 }
 
+/**
+ *  Error codes for various SkCodec methods.
+ */
 type CodecResult int64
 
 const (
-	CodecResult_Success           CodecResult = 0
-	CodecResult_IncompleteInput   CodecResult = 1
-	CodecResult_ErrorInInput      CodecResult = 2
+	/**
+	 *  Error codes for various SkCodec methods.
+	 */
+	CodecResult_Success CodecResult = 0
+	/**
+	 *  Error codes for various SkCodec methods.
+	 */
+	CodecResult_IncompleteInput CodecResult = 1
+	/**
+	 *  Error codes for various SkCodec methods.
+	 */
+	CodecResult_ErrorInInput CodecResult = 2
+	/**
+	 *  Error codes for various SkCodec methods.
+	 */
 	CodecResult_InvalidConversion CodecResult = 3
-	CodecResult_InvalidScale      CodecResult = 4
+	/**
+	 *  Error codes for various SkCodec methods.
+	 */
+	CodecResult_InvalidScale CodecResult = 4
+	/**
+	 *  Error codes for various SkCodec methods.
+	 */
 	CodecResult_InvalidParameters CodecResult = 5
-	CodecResult_InvalidInput      CodecResult = 6
-	CodecResult_CouldNotRewind    CodecResult = 7
-	CodecResult_InternalError     CodecResult = 8
-	CodecResult_Unimplemented     CodecResult = 9
+	/**
+	 *  Error codes for various SkCodec methods.
+	 */
+	CodecResult_InvalidInput CodecResult = 6
+	/**
+	 *  Error codes for various SkCodec methods.
+	 */
+	CodecResult_CouldNotRewind CodecResult = 7
+	/**
+	 *  Error codes for various SkCodec methods.
+	 */
+	CodecResult_InternalError CodecResult = 8
+	/**
+	 *  Error codes for various SkCodec methods.
+	 */
+	CodecResult_Unimplemented CodecResult = 9
 )
 
+/**
+ * For container formats that contain both still images and image sequences,
+ * instruct the decoder how the output should be selected. (Refer to comments
+ * for each value for more details.)
+ */
 type CodecSelectionPolicy int64
 
 const (
+	/**
+	 * For container formats that contain both still images and image sequences,
+	 * instruct the decoder how the output should be selected. (Refer to comments
+	 * for each value for more details.)
+	 */
 	CodecSelectionPolicy_PreferStillImage CodecSelectionPolicy = 0
-	CodecSelectionPolicy_PreferAnimation  CodecSelectionPolicy = 1
+	/**
+	 * For container formats that contain both still images and image sequences,
+	 * instruct the decoder how the output should be selected. (Refer to comments
+	 * for each value for more details.)
+	 */
+	CodecSelectionPolicy_PreferAnimation CodecSelectionPolicy = 1
 )
 
+/**
+ *  Whether or not the memory passed to getPixels is zero initialized.
+ */
 type CodecZeroInitialized int64
 
 const (
+	/**
+	 *  Whether or not the memory passed to getPixels is zero initialized.
+	 */
 	CodecZeroInitialized_Yes CodecZeroInitialized = 0
-	CodecZeroInitialized_No  CodecZeroInitialized = 1
+	/**
+	 *  Whether or not the memory passed to getPixels is zero initialized.
+	 */
+	CodecZeroInitialized_No CodecZeroInitialized = 1
 )
 
+/**
+ *  The order in which rows are output from the scanline decoder is not the
+ *  same for all variations of all image types.  This explains the possible
+ *  output row orderings.
+ */
 type CodecSkScanlineOrder int64
 
 const (
-	CodecSkScanlineOrder_TopDown  CodecSkScanlineOrder = 0
+	/**
+	 *  The order in which rows are output from the scanline decoder is not the
+	 *  same for all variations of all image types.  This explains the possible
+	 *  output row orderings.
+	 */
+	CodecSkScanlineOrder_TopDown CodecSkScanlineOrder = 0
+	/**
+	 *  The order in which rows are output from the scanline decoder is not the
+	 *  same for all variations of all image types.  This explains the possible
+	 *  output row orderings.
+	 */
 	CodecSkScanlineOrder_BottomUp CodecSkScanlineOrder = 1
 )
 
@@ -376,31 +787,162 @@ func (o *Paint) Delete() {
 	C.skia_delete_SkPaint(o.skia)
 }
 
+/*
+  - \enum SkPaint::Style
+    Set Style to fill, stroke, or both fill and stroke geometry.
+    The stroke and fill
+    share all paint attributes; for instance, they are drawn with the same color.
+
+    Use kStrokeAndFill_Style to avoid hitting the same pixels twice with a stroke draw and
+    a fill draw.
+*/
 type PaintStyle int64
 
 const (
-	PaintStyle_Fill          PaintStyle = 0
-	PaintStyle_Stroke        PaintStyle = 1
+	/** \enum SkPaint::Style
+	  Set Style to fill, stroke, or both fill and stroke geometry.
+	  The stroke and fill
+	  share all paint attributes; for instance, they are drawn with the same color.
+
+	  Use kStrokeAndFill_Style to avoid hitting the same pixels twice with a stroke draw and
+	  a fill draw.
+	*/
+	PaintStyle_Fill PaintStyle = 0
+	/** \enum SkPaint::Style
+	  Set Style to fill, stroke, or both fill and stroke geometry.
+	  The stroke and fill
+	  share all paint attributes; for instance, they are drawn with the same color.
+
+	  Use kStrokeAndFill_Style to avoid hitting the same pixels twice with a stroke draw and
+	  a fill draw.
+	*/
+	PaintStyle_Stroke PaintStyle = 1
+	/** \enum SkPaint::Style
+	  Set Style to fill, stroke, or both fill and stroke geometry.
+	  The stroke and fill
+	  share all paint attributes; for instance, they are drawn with the same color.
+
+	  Use kStrokeAndFill_Style to avoid hitting the same pixels twice with a stroke draw and
+	  a fill draw.
+	*/
 	PaintStyle_StrokeAndFill PaintStyle = 2
 )
 
+/*
+  - \enum SkPaint::Cap
+    Cap draws at the beginning and end of an open path contour.
+*/
 type PaintCap int64
 
 const (
-	PaintCap_Butt    PaintCap = 0
-	PaintCap_Round   PaintCap = 1
-	PaintCap_Square  PaintCap = 2
-	PaintCap_Last    PaintCap = 2
+	/** \enum SkPaint::Cap
+	  Cap draws at the beginning and end of an open path contour.
+	*/
+	PaintCap_Butt PaintCap = 0
+	/** \enum SkPaint::Cap
+	  Cap draws at the beginning and end of an open path contour.
+	*/
+	PaintCap_Round PaintCap = 1
+	/** \enum SkPaint::Cap
+	  Cap draws at the beginning and end of an open path contour.
+	*/
+	PaintCap_Square PaintCap = 2
+	/** \enum SkPaint::Cap
+	  Cap draws at the beginning and end of an open path contour.
+	*/
+	PaintCap_Last PaintCap = 2
+	/** \enum SkPaint::Cap
+	  Cap draws at the beginning and end of an open path contour.
+	*/
 	PaintCap_Default PaintCap = 0
 )
 
+/*
+  - \enum SkPaint::Join
+    Join specifies how corners are drawn when a shape is stroked. Join
+    affects the four corners of a stroked rectangle, and the connected segments in a
+    stroked path.
+
+    Choose miter join to draw sharp corners. Choose round join to draw a circle with a
+    radius equal to the stroke width on top of the corner. Choose bevel join to minimally
+    connect the thick strokes.
+
+    The fill path constructed to describe the stroked path respects the join setting but may
+    not contain the actual join. For instance, a fill path constructed with round joins does
+    not necessarily include circles at each connected segment.
+*/
 type PaintJoin int64
 
 const (
-	PaintJoin_Miter   PaintJoin = 0
-	PaintJoin_Round   PaintJoin = 1
-	PaintJoin_Bevel   PaintJoin = 2
-	PaintJoin_Last    PaintJoin = 2
+	/** \enum SkPaint::Join
+	  Join specifies how corners are drawn when a shape is stroked. Join
+	  affects the four corners of a stroked rectangle, and the connected segments in a
+	  stroked path.
+
+	  Choose miter join to draw sharp corners. Choose round join to draw a circle with a
+	  radius equal to the stroke width on top of the corner. Choose bevel join to minimally
+	  connect the thick strokes.
+
+	  The fill path constructed to describe the stroked path respects the join setting but may
+	  not contain the actual join. For instance, a fill path constructed with round joins does
+	  not necessarily include circles at each connected segment.
+	*/
+	PaintJoin_Miter PaintJoin = 0
+	/** \enum SkPaint::Join
+	  Join specifies how corners are drawn when a shape is stroked. Join
+	  affects the four corners of a stroked rectangle, and the connected segments in a
+	  stroked path.
+
+	  Choose miter join to draw sharp corners. Choose round join to draw a circle with a
+	  radius equal to the stroke width on top of the corner. Choose bevel join to minimally
+	  connect the thick strokes.
+
+	  The fill path constructed to describe the stroked path respects the join setting but may
+	  not contain the actual join. For instance, a fill path constructed with round joins does
+	  not necessarily include circles at each connected segment.
+	*/
+	PaintJoin_Round PaintJoin = 1
+	/** \enum SkPaint::Join
+	  Join specifies how corners are drawn when a shape is stroked. Join
+	  affects the four corners of a stroked rectangle, and the connected segments in a
+	  stroked path.
+
+	  Choose miter join to draw sharp corners. Choose round join to draw a circle with a
+	  radius equal to the stroke width on top of the corner. Choose bevel join to minimally
+	  connect the thick strokes.
+
+	  The fill path constructed to describe the stroked path respects the join setting but may
+	  not contain the actual join. For instance, a fill path constructed with round joins does
+	  not necessarily include circles at each connected segment.
+	*/
+	PaintJoin_Bevel PaintJoin = 2
+	/** \enum SkPaint::Join
+	  Join specifies how corners are drawn when a shape is stroked. Join
+	  affects the four corners of a stroked rectangle, and the connected segments in a
+	  stroked path.
+
+	  Choose miter join to draw sharp corners. Choose round join to draw a circle with a
+	  radius equal to the stroke width on top of the corner. Choose bevel join to minimally
+	  connect the thick strokes.
+
+	  The fill path constructed to describe the stroked path respects the join setting but may
+	  not contain the actual join. For instance, a fill path constructed with round joins does
+	  not necessarily include circles at each connected segment.
+	*/
+	PaintJoin_Last PaintJoin = 2
+	/** \enum SkPaint::Join
+	  Join specifies how corners are drawn when a shape is stroked. Join
+	  affects the four corners of a stroked rectangle, and the connected segments in a
+	  stroked path.
+
+	  Choose miter join to draw sharp corners. Choose round join to draw a circle with a
+	  radius equal to the stroke width on top of the corner. Choose bevel join to minimally
+	  connect the thick strokes.
+
+	  The fill path constructed to describe the stroked path respects the join setting but may
+	  not contain the actual join. For instance, a fill path constructed with round joins does
+	  not necessarily include circles at each connected segment.
+	*/
 	PaintJoin_Default PaintJoin = 0
 )
 
@@ -520,38 +1062,116 @@ func (o *Canvas) Delete() {
 	C.skia_delete_SkCanvas(o.skia)
 }
 
+/*
+  - \enum SkCanvas::SaveLayerFlagsSet
+    SaveLayerFlags provides options that may be used in any combination in SaveLayerRec,
+    defining how layer allocated by saveLayer() operates. It may be set to zero,
+    kPreserveLCDText_SaveLayerFlag, kInitWithPrevious_SaveLayerFlag, or both flags.
+*/
 type CanvasSaveLayerFlagsSet int64
 
 const (
-	CanvasSaveLayerFlagsSet_PreserveLCDText_SaveLayer  CanvasSaveLayerFlagsSet = 2
+	/** \enum SkCanvas::SaveLayerFlagsSet
+	  SaveLayerFlags provides options that may be used in any combination in SaveLayerRec,
+	  defining how layer allocated by saveLayer() operates. It may be set to zero,
+	  kPreserveLCDText_SaveLayerFlag, kInitWithPrevious_SaveLayerFlag, or both flags.
+	*/
+	CanvasSaveLayerFlagsSet_PreserveLCDText_SaveLayer CanvasSaveLayerFlagsSet = 2
+	/** \enum SkCanvas::SaveLayerFlagsSet
+	  SaveLayerFlags provides options that may be used in any combination in SaveLayerRec,
+	  defining how layer allocated by saveLayer() operates. It may be set to zero,
+	  kPreserveLCDText_SaveLayerFlag, kInitWithPrevious_SaveLayerFlag, or both flags.
+	*/
 	CanvasSaveLayerFlagsSet_InitWithPrevious_SaveLayer CanvasSaveLayerFlagsSet = 4
-	CanvasSaveLayerFlagsSet_F16ColorType               CanvasSaveLayerFlagsSet = 16
+	/** \enum SkCanvas::SaveLayerFlagsSet
+	  SaveLayerFlags provides options that may be used in any combination in SaveLayerRec,
+	  defining how layer allocated by saveLayer() operates. It may be set to zero,
+	  kPreserveLCDText_SaveLayerFlag, kInitWithPrevious_SaveLayerFlag, or both flags.
+	*/
+	CanvasSaveLayerFlagsSet_F16ColorType CanvasSaveLayerFlagsSet = 16
 )
 
+/*
+  - \enum SkCanvas::PointMode
+    Selects if an array of points are drawn as discrete points, as lines, or as
+    an open polygon.
+*/
 type CanvasPointMode int64
 
 const (
-	CanvasPointMode_Points  CanvasPointMode = 0
-	CanvasPointMode_Lines   CanvasPointMode = 1
+	/** \enum SkCanvas::PointMode
+	  Selects if an array of points are drawn as discrete points, as lines, or as
+	  an open polygon.
+	*/
+	CanvasPointMode_Points CanvasPointMode = 0
+	/** \enum SkCanvas::PointMode
+	  Selects if an array of points are drawn as discrete points, as lines, or as
+	  an open polygon.
+	*/
+	CanvasPointMode_Lines CanvasPointMode = 1
+	/** \enum SkCanvas::PointMode
+	  Selects if an array of points are drawn as discrete points, as lines, or as
+	  an open polygon.
+	*/
 	CanvasPointMode_Polygon CanvasPointMode = 2
 )
 
+/*
+  - \enum SkCanvas::SrcRectConstraint
+    SrcRectConstraint controls the behavior at the edge of source SkRect,
+    provided to drawImageRect() when there is any filtering. If kStrict is set,
+    then extra code is used to ensure it never samples outside of the src-rect.
+    kStrict_SrcRectConstraint disables the use of mipmaps and anisotropic filtering.
+*/
 type CanvasSrcRectConstraint int64
 
 const (
+	/** \enum SkCanvas::SrcRectConstraint
+	  SrcRectConstraint controls the behavior at the edge of source SkRect,
+	  provided to drawImageRect() when there is any filtering. If kStrict is set,
+	  then extra code is used to ensure it never samples outside of the src-rect.
+	  kStrict_SrcRectConstraint disables the use of mipmaps and anisotropic filtering.
+	*/
 	CanvasSrcRectConstraint_Strict CanvasSrcRectConstraint = 0
-	CanvasSrcRectConstraint_Fast   CanvasSrcRectConstraint = 1
+	/** \enum SkCanvas::SrcRectConstraint
+	  SrcRectConstraint controls the behavior at the edge of source SkRect,
+	  provided to drawImageRect() when there is any filtering. If kStrict is set,
+	  then extra code is used to ensure it never samples outside of the src-rect.
+	  kStrict_SrcRectConstraint disables the use of mipmaps and anisotropic filtering.
+	*/
+	CanvasSrcRectConstraint_Fast CanvasSrcRectConstraint = 1
 )
 
+/**
+ * Experimental. Controls anti-aliasing of each edge of images in an image-set.
+ */
 type CanvasQuadAAFlags int64
 
 const (
-	CanvasQuadAAFlags_Left_QuadAA   CanvasQuadAAFlags = 1
-	CanvasQuadAAFlags_Top_QuadAA    CanvasQuadAAFlags = 2
-	CanvasQuadAAFlags_Right_QuadAA  CanvasQuadAAFlags = 4
+	/**
+	 * Experimental. Controls anti-aliasing of each edge of images in an image-set.
+	 */
+	CanvasQuadAAFlags_Left_QuadAA CanvasQuadAAFlags = 1
+	/**
+	 * Experimental. Controls anti-aliasing of each edge of images in an image-set.
+	 */
+	CanvasQuadAAFlags_Top_QuadAA CanvasQuadAAFlags = 2
+	/**
+	 * Experimental. Controls anti-aliasing of each edge of images in an image-set.
+	 */
+	CanvasQuadAAFlags_Right_QuadAA CanvasQuadAAFlags = 4
+	/**
+	 * Experimental. Controls anti-aliasing of each edge of images in an image-set.
+	 */
 	CanvasQuadAAFlags_Bottom_QuadAA CanvasQuadAAFlags = 8
-	CanvasQuadAAFlags_None          CanvasQuadAAFlags = 0
-	CanvasQuadAAFlags_All           CanvasQuadAAFlags = 15
+	/**
+	 * Experimental. Controls anti-aliasing of each edge of images in an image-set.
+	 */
+	CanvasQuadAAFlags_None CanvasQuadAAFlags = 0
+	/**
+	 * Experimental. Controls anti-aliasing of each edge of images in an image-set.
+	 */
+	CanvasQuadAAFlags_All CanvasQuadAAFlags = 15
 )
 
 type CanvasSaveLayerStrategy int64
@@ -707,10 +1327,47 @@ type Image struct {
 	skia unsafe.Pointer
 }
 
+/*
+  - \enum SkImage::CachingHint
+    CachingHint selects whether Skia may internally cache SkBitmap generated by
+    decoding SkImage, or by copying SkImage from GPU to CPU. The default behavior
+    allows caching SkBitmap.
+
+    Choose kDisallow_CachingHint if SkImage pixels are to be used only once, or
+    if SkImage pixels reside in a cache outside of Skia, or to reduce memory pressure.
+
+    Choosing kAllow_CachingHint does not ensure that pixels will be cached.
+    SkImage pixels may not be cached if memory requirements are too large or
+    pixels are not accessible.
+*/
 type ImageCachingHint int64
 
 const (
-	ImageCachingHint_Allow    ImageCachingHint = 0
+	/** \enum SkImage::CachingHint
+	  CachingHint selects whether Skia may internally cache SkBitmap generated by
+	  decoding SkImage, or by copying SkImage from GPU to CPU. The default behavior
+	  allows caching SkBitmap.
+
+	  Choose kDisallow_CachingHint if SkImage pixels are to be used only once, or
+	  if SkImage pixels reside in a cache outside of Skia, or to reduce memory pressure.
+
+	  Choosing kAllow_CachingHint does not ensure that pixels will be cached.
+	  SkImage pixels may not be cached if memory requirements are too large or
+	  pixels are not accessible.
+	*/
+	ImageCachingHint_Allow ImageCachingHint = 0
+	/** \enum SkImage::CachingHint
+	  CachingHint selects whether Skia may internally cache SkBitmap generated by
+	  decoding SkImage, or by copying SkImage from GPU to CPU. The default behavior
+	  allows caching SkBitmap.
+
+	  Choose kDisallow_CachingHint if SkImage pixels are to be used only once, or
+	  if SkImage pixels reside in a cache outside of Skia, or to reduce memory pressure.
+
+	  Choosing kAllow_CachingHint does not ensure that pixels will be cached.
+	  SkImage pixels may not be cached if memory requirements are too large or
+	  pixels are not accessible.
+	*/
 	ImageCachingHint_Disallow ImageCachingHint = 1
 )
 
@@ -730,9 +1387,13 @@ const (
 	ImageRescaleMode_RepeatedCubic  ImageRescaleMode = 3
 )
 
+/** Deprecated.
+ */
 type ImageLegacyBitmapMode int64
 
 const (
+	/** Deprecated.
+	 */
 	ImageLegacyBitmapMode_RO ImageLegacyBitmapMode = 0
 )
 
@@ -740,11 +1401,21 @@ type Surface struct {
 	skia unsafe.Pointer
 }
 
+/*
+  - \enum SkSurface::ContentChangeMode
+    ContentChangeMode members are parameters to notifyContentWillChange().
+*/
 type SurfaceContentChangeMode int64
 
 const (
+	/** \enum SkSurface::ContentChangeMode
+	  ContentChangeMode members are parameters to notifyContentWillChange().
+	*/
 	SurfaceContentChangeMode_Discard SurfaceContentChangeMode = 0
-	SurfaceContentChangeMode_Retain  SurfaceContentChangeMode = 1
+	/** \enum SkSurface::ContentChangeMode
+	  ContentChangeMode members are parameters to notifyContentWillChange().
+	*/
+	SurfaceContentChangeMode_Retain SurfaceContentChangeMode = 1
 )
 
 type SurfaceBackendHandleAccess int64
@@ -833,11 +1504,31 @@ type Typeface struct {
 	skia unsafe.Pointer
 }
 
+/**
+ *  A typeface can serialize just a descriptor (names, etc.), or it can also include the
+ *  actual font data (which can be large). This enum controls how serialize() decides what
+ *  to serialize.
+ */
 type TypefaceSerializeBehavior int64
 
 const (
-	TypefaceSerializeBehavior_DoIncludeData      TypefaceSerializeBehavior = 0
-	TypefaceSerializeBehavior_DontIncludeData    TypefaceSerializeBehavior = 1
+	/**
+	 *  A typeface can serialize just a descriptor (names, etc.), or it can also include the
+	 *  actual font data (which can be large). This enum controls how serialize() decides what
+	 *  to serialize.
+	 */
+	TypefaceSerializeBehavior_DoIncludeData TypefaceSerializeBehavior = 0
+	/**
+	 *  A typeface can serialize just a descriptor (names, etc.), or it can also include the
+	 *  actual font data (which can be large). This enum controls how serialize() decides what
+	 *  to serialize.
+	 */
+	TypefaceSerializeBehavior_DontIncludeData TypefaceSerializeBehavior = 1
+	/**
+	 *  A typeface can serialize just a descriptor (names, etc.), or it can also include the
+	 *  actual font data (which can be large). This enum controls how serialize() decides what
+	 *  to serialize.
+	 */
 	TypefaceSerializeBehavior_IncludeDataIfLocal TypefaceSerializeBehavior = 2
 )
 
@@ -852,11 +1543,19 @@ func NewFont() Font {
 	}
 }
 
+/** Whether edge pixels draw opaque or with partial transparency.
+ */
 type FontEdging int64
 
 const (
-	FontEdging_Alias             FontEdging = 0
-	FontEdging_AntiAlias         FontEdging = 1
+	/** Whether edge pixels draw opaque or with partial transparency.
+	 */
+	FontEdging_Alias FontEdging = 0
+	/** Whether edge pixels draw opaque or with partial transparency.
+	 */
+	FontEdging_AntiAlias FontEdging = 1
+	/** Whether edge pixels draw opaque or with partial transparency.
+	 */
 	FontEdging_SubpixelAntiAlias FontEdging = 2
 )
 
@@ -946,39 +1645,119 @@ func (o *Path) Delete() {
 	C.skia_delete_SkPath(o.skia)
 }
 
+/*
+  - \enum SkPath::ArcSize
+    Four oval parts with radii (rx, ry) start at last SkPath SkPoint and ends at (x, y).
+    ArcSize and Direction select one of the four oval parts.
+*/
 type PathArcSize int64
 
 const (
+	/** \enum SkPath::ArcSize
+	  Four oval parts with radii (rx, ry) start at last SkPath SkPoint and ends at (x, y).
+	  ArcSize and Direction select one of the four oval parts.
+	*/
 	PathArcSize_Small PathArcSize = 0
+	/** \enum SkPath::ArcSize
+	  Four oval parts with radii (rx, ry) start at last SkPath SkPoint and ends at (x, y).
+	  ArcSize and Direction select one of the four oval parts.
+	*/
 	PathArcSize_Large PathArcSize = 1
 )
 
+/*
+  - \enum SkPath::AddPathMode
+    AddPathMode chooses how addPath() appends. Adding one SkPath to another can extend
+    the last contour or start a new contour.
+*/
 type PathAddPathMode int64
 
 const (
+	/** \enum SkPath::AddPathMode
+	  AddPathMode chooses how addPath() appends. Adding one SkPath to another can extend
+	  the last contour or start a new contour.
+	*/
 	PathAddPathMode_Append PathAddPathMode = 0
+	/** \enum SkPath::AddPathMode
+	  AddPathMode chooses how addPath() appends. Adding one SkPath to another can extend
+	  the last contour or start a new contour.
+	*/
 	PathAddPathMode_Extend PathAddPathMode = 1
 )
 
+/*
+  - \enum SkPath::SegmentMask
+    SegmentMask constants correspond to each drawing Verb type in SkPath; for
+    instance, if SkPath only contains lines, only the kLine_SegmentMask bit is set.
+*/
 type PathSegmentMask int64
 
 const (
-	PathSegmentMask_Line  PathSegmentMask = 1
-	PathSegmentMask_Quad  PathSegmentMask = 2
+	/** \enum SkPath::SegmentMask
+	  SegmentMask constants correspond to each drawing Verb type in SkPath; for
+	  instance, if SkPath only contains lines, only the kLine_SegmentMask bit is set.
+	*/
+	PathSegmentMask_Line PathSegmentMask = 1
+	/** \enum SkPath::SegmentMask
+	  SegmentMask constants correspond to each drawing Verb type in SkPath; for
+	  instance, if SkPath only contains lines, only the kLine_SegmentMask bit is set.
+	*/
+	PathSegmentMask_Quad PathSegmentMask = 2
+	/** \enum SkPath::SegmentMask
+	  SegmentMask constants correspond to each drawing Verb type in SkPath; for
+	  instance, if SkPath only contains lines, only the kLine_SegmentMask bit is set.
+	*/
 	PathSegmentMask_Conic PathSegmentMask = 4
+	/** \enum SkPath::SegmentMask
+	  SegmentMask constants correspond to each drawing Verb type in SkPath; for
+	  instance, if SkPath only contains lines, only the kLine_SegmentMask bit is set.
+	*/
 	PathSegmentMask_Cubic PathSegmentMask = 8
 )
 
+/*
+  - \enum SkPath::Verb
+    Verb instructs SkPath how to interpret one or more SkPoint and optional conic weight;
+    manage contour, and terminate SkPath.
+*/
 type PathVerb int64
 
 const (
-	PathVerb_Move  PathVerb = 0
-	PathVerb_Line  PathVerb = 1
-	PathVerb_Quad  PathVerb = 2
+	/** \enum SkPath::Verb
+	  Verb instructs SkPath how to interpret one or more SkPoint and optional conic weight;
+	  manage contour, and terminate SkPath.
+	*/
+	PathVerb_Move PathVerb = 0
+	/** \enum SkPath::Verb
+	  Verb instructs SkPath how to interpret one or more SkPoint and optional conic weight;
+	  manage contour, and terminate SkPath.
+	*/
+	PathVerb_Line PathVerb = 1
+	/** \enum SkPath::Verb
+	  Verb instructs SkPath how to interpret one or more SkPoint and optional conic weight;
+	  manage contour, and terminate SkPath.
+	*/
+	PathVerb_Quad PathVerb = 2
+	/** \enum SkPath::Verb
+	  Verb instructs SkPath how to interpret one or more SkPoint and optional conic weight;
+	  manage contour, and terminate SkPath.
+	*/
 	PathVerb_Conic PathVerb = 3
+	/** \enum SkPath::Verb
+	  Verb instructs SkPath how to interpret one or more SkPoint and optional conic weight;
+	  manage contour, and terminate SkPath.
+	*/
 	PathVerb_Cubic PathVerb = 4
+	/** \enum SkPath::Verb
+	  Verb instructs SkPath how to interpret one or more SkPoint and optional conic weight;
+	  manage contour, and terminate SkPath.
+	*/
 	PathVerb_Close PathVerb = 5
-	PathVerb_Done  PathVerb = 6
+	/** \enum SkPath::Verb
+	  Verb instructs SkPath how to interpret one or more SkPoint and optional conic weight;
+	  manage contour, and terminate SkPath.
+	*/
+	PathVerb_Done PathVerb = 6
 )
 
 type PathEffect struct {

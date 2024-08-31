@@ -62,14 +62,16 @@ func (g *generator) visitClassDtor(class *class, cursor clang.Cursor) {
 
 func (g *generator) visitClassEnum(class *class, cursor clang.Cursor) {
 	enum := enum{
-		class: class,
-		name:  cursor.Spelling(),
+		class:   class,
+		name:    cursor.Spelling(),
+		comment: cursor.RawCommentText(),
 	}
 	cursor.Visit(func(cursor, parent clang.Cursor) (status clang.ChildVisitResult) {
 		if cursor.Kind() == clang.Cursor_EnumConstantDecl {
 			enum.constants = append(enum.constants, enumConstant{
-				name:  cursor.Spelling(),
-				value: cursor.EnumConstantDeclValue(),
+				name:    cursor.Spelling(),
+				value:   cursor.EnumConstantDeclValue(),
+				comment: cursor.RawCommentText(),
 			})
 		}
 		return clang.ChildVisit_Continue

@@ -9,12 +9,14 @@ import (
 type enum struct {
 	class     *class
 	name      string
+	comment   string
 	constants []enumConstant
 }
 
 type enumConstant struct {
-	name  string
-	value int64
+	name    string
+	value   int64
+	comment string
 }
 
 func (e enum) generate(g *generator) {
@@ -28,6 +30,9 @@ func (e enum) generate(g *generator) {
 	}
 
 	// generate the enum type
+	if e.comment != "" {
+		g.goFile.writeln(e.comment)
+	}
 	goName := trimSkiaPrefix(e.name)
 	if e.class != nil {
 		goName = e.class.goName + e.name
@@ -53,6 +58,9 @@ func (e enum) generate(g *generator) {
 		}
 		name = fmt.Sprintf("%s_%s", goName, name)
 
+		if e.comment != "" {
+			g.goFile.writeln(e.comment)
+		}
 		g.goFile.writelnf("  %s %s = %d", name, goName, constant.value)
 	}
 	g.goFile.writeln(")")
