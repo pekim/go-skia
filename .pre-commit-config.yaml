@@ -11,6 +11,8 @@ repos:
     rev: v0.5.1
     hooks:
       - id: go-fmt
+        exclude: api.go
       - id: go-imports
+        exclude: api.go
       - id: golangci-lint
       - id: go-unit-tests

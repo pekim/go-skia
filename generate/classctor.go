@@ -3,21 +3,23 @@ package generate
 import (
 	"fmt"
 	"strconv"
+	"strings"
 
 	"github.com/go-clang/clang-v15/clang"
 )
 
 type classCtor struct {
-	class  *class
-	params []param
-
+	class      *class
 	nameSuffix string
 	cFuncName  string
+	comment    string
+	params     []param
 }
 
 func newClassCtor(class *class, cursor clang.Cursor) classCtor {
 	ctor := classCtor{
-		class: class,
+		class:   class,
+		comment: parsedCommentToGoComment(cursor.ParsedComment()),
 	}
 
 	numParam := int(cursor.NumArguments())
@@ -47,4 +49,54 @@ func (c *classCtor) generate(g *generator) {
 	c.generateGo(g)
 	c.generateHeader(g)
 	c.generateCpp(g)
+}
+
+func (c *classCtor) generateGo(g *generator) {
+	goParams := makeParamsString(c.params, func(p param) string { return p.goDecl() })
+	cArgNames := makeParamsString(c.params, func(p param) string { return p.cgoName })
+
+	cArgs := make([]string, len(c.params))
+	for p, param := range c.params {
+		cArgs[p] = param.goCArg()
+	}
+	allCArgs := strings.Join(cArgs, "\n")
+	allCArgs += "\n"
+
+	if c.comment != "" {
+		g.goFile.write(c.comment)
+	}
+	g.goFile.writelnf(`
+		func New%s%s(%s) %s {
+			%s
+			return %s {
+		  	skia: C.%s(%s),
+			}
+		}
+	`,
+		c.class.goName, c.nameSuffix, goParams, c.class.goName,
+		allCArgs,
+		c.class.goName,
+		c.cFuncName, cArgNames,
+	)
+}
+
+func (c *classCtor) generateHeader(g *generator) {
+	params := makeParamsString(c.params, func(p param) string { return p.cParamDecl() })
+	g.headerFile.writelnf("void *%s(%s);", c.cFuncName, params)
+}
+
+func (c *classCtor) generateCpp(g *generator) {
+	cParams := makeParamsString(c.params, func(p param) string { return p.cParamDecl() })
+	cArgs := makeParamsString(c.params, func(p param) string { return p.cArg() })
+
+	g.cppFile.writelnf(`
+		void *%s(%s)
+		{
+			return reinterpret_cast<void*>(new %s(%s));
+		}
+	`,
+		c.cFuncName,
+		cParams,
+		c.class.cName, cArgs,
+	)
 }

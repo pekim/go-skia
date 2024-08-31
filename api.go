@@ -33,6 +33,12 @@ type Matrix struct {
 	skia unsafe.Pointer
 }
 
+/*
+Creates an identity SkMatrix:
+
+| 1 0 0 |
+| 0 1 0 |
+| 0 0 1 |*/
 func NewMatrix() Matrix {
 
 	return Matrix{
@@ -100,6 +106,8 @@ type RefCntBase struct {
 	skia unsafe.Pointer
 }
 
+/*
+Default construct, initializing the reference count to 1.*/
 func NewRefCntBase() RefCntBase {
 
 	return RefCntBase{
@@ -122,6 +130,9 @@ type ColorInfo struct {
 	skia unsafe.Pointer
 }
 
+/*
+Creates an SkColorInfo with kUnknown_SkColorType, kUnknown_SkAlphaType,
+and no SkColorSpace.*/
 func NewColorInfo() ColorInfo {
 
 	return ColorInfo{
@@ -149,6 +160,11 @@ type Pixmap struct {
 	skia unsafe.Pointer
 }
 
+/*
+Creates an empty SkPixmap without pixels, with kUnknown_SkColorType, with
+kUnknown_SkAlphaType, and with a width and height of zero. Use
+reset() to associate pixels, SkColorType, SkAlphaType, width, and height
+after SkPixmap has been created.*/
 func NewPixmap() Pixmap {
 
 	return Pixmap{
@@ -298,6 +314,8 @@ type YUVAPixmapInfo struct {
 	skia unsafe.Pointer
 }
 
+/*
+Default SkYUVAPixmapInfo is invalid.*/
 func NewYUVAPixmapInfo() YUVAPixmapInfo {
 
 	return YUVAPixmapInfo{
@@ -335,6 +353,8 @@ type YUVAPixmaps struct {
 	skia unsafe.Pointer
 }
 
+/*
+Default SkYUVAPixmaps is invalid.*/
 func NewYUVAPixmaps() YUVAPixmaps {
 
 	return YUVAPixmaps{
@@ -582,6 +602,8 @@ func NewM443(p0 M44NaN_Constructor) M44 {
 	}
 }
 
+/*
+The constructor parameters are in row-major order.*/
 func NewM444(m0 float32, m4 float32, m8 float32, m12 float32, m1 float32, m5 float32, m9 float32, m13 float32, m2 float32, m6 float32, m10 float32, m14 float32, m3 float32, m7 float32, m11 float32, m15 float32) M44 {
 	c_m0 := C.float(m0)
 	c_m4 := C.float(m4)
@@ -631,6 +653,13 @@ type Paint struct {
 	skia unsafe.Pointer
 }
 
+/*
+Constructs SkPaint with default values.
+
+
+
+example: https://fiddle.skia.org/c/
+_empty_constructor*/
 func NewPaint() Paint {
 
 	return Paint{
@@ -788,6 +817,8 @@ type SurfaceProps struct {
 	skia unsafe.Pointer
 }
 
+/*
+No flags, unknown pixel geometry, platform-default contrast/gamma.*/
 func NewSurfaceProps() SurfaceProps {
 
 	return SurfaceProps{
@@ -795,6 +826,8 @@ func NewSurfaceProps() SurfaceProps {
 	}
 }
 
+/*
+TODO(kschmi): Remove this constructor and replace with the one below. **/
 func NewSurfaceProps2(flags uint32, p1 PixelGeometry) SurfaceProps {
 	c_flags := C.uint(flags)
 	c_p1 := C.int(p1)
@@ -804,6 +837,8 @@ func NewSurfaceProps2(flags uint32, p1 PixelGeometry) SurfaceProps {
 	}
 }
 
+/*
+Specified pixel geometry, text contrast, and gamma **/
 func NewSurfaceProps3(flags uint32, p1 PixelGeometry, textContrast float32, textGamma float32) SurfaceProps {
 	c_flags := C.uint(flags)
 	c_p1 := C.int(p1)
@@ -828,6 +863,9 @@ type Deque struct {
 	skia unsafe.Pointer
 }
 
+/*
+elemSize specifies the size of each individual element in the deque
+allocCount specifies how many elements are to be allocated as a block*/
 func NewDeque(elemSize uint64, allocCount int32) Deque {
 	c_elemSize := C.ulong(elemSize)
 	c_allocCount := C.int(allocCount)
@@ -880,6 +918,14 @@ type Canvas struct {
 	skia unsafe.Pointer
 }
 
+/*
+Creates an empty SkCanvas with no backing device or pixels, with
+a width and height of zero.
+
+
+
+example: https://fiddle.skia.org/c/
+_empty_constructor*/
 func NewCanvas() Canvas {
 
 	return Canvas{
@@ -1132,6 +1178,8 @@ func NewMemoryStream() MemoryStream {
 	}
 }
 
+/*
+We allocate (and free) the memory. Write to it via getMemoryBase()*/
 func NewMemoryStream2(length uint64) MemoryStream {
 	c_length := C.ulong(length)
 
@@ -1384,6 +1432,11 @@ type WeakRefCnt struct {
 	skia unsafe.Pointer
 }
 
+/*
+Default construct, initializing the reference counts to 1.
+The strong references collectively hold one weak reference. When the
+strong reference count goes to zero, the collectively held weak
+reference is released.*/
 func NewWeakRefCnt() WeakRefCnt {
 
 	return WeakRefCnt{
@@ -1427,6 +1480,8 @@ type Font struct {
 	skia unsafe.Pointer
 }
 
+/*
+Constructs SkFont with default values.*/
 func NewFont() Font {
 
 	return Font{
@@ -1478,6 +1533,13 @@ type TextBlobBuilder struct {
 	skia unsafe.Pointer
 }
 
+/*
+Constructs empty SkTextBlobBuilder. By default, SkTextBlobBuilder has no runs.
+
+
+
+example: https://fiddle.skia.org/c/
+_empty_constructor*/
 func NewTextBlobBuilder() TextBlobBuilder {
 
 	return TextBlobBuilder{
@@ -1572,6 +1634,14 @@ type Path struct {
 	skia unsafe.Pointer
 }
 
+/*
+Constructs an empty SkPath. By default, SkPath has no verbs, no SkPoint, and no weights.
+FillType is set to kWinding.
+
+
+
+example: https://fiddle.skia.org/c/
+_empty_constructor*/
 func NewPath() Path {
 
 	return Path{
@@ -2120,6 +2190,8 @@ type PDFArray struct {
 	skia unsafe.Pointer
 }
 
+/*
+Create a PDF array. Maximum length is 8191.*/
 func NewPDFArray() PDFArray {
 
 	return PDFArray{

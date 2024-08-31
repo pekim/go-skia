@@ -23,8 +23,7 @@ func parsedCommentToGoComment(comment clang.Comment) string {
 					b.WriteString("\n")
 
 				case clang.Comment_VerbatimLine:
-					b.WriteString(strings.TrimSpace(child.TextComment_getText()))
-					b.WriteString("\n")
+					b.WriteString(strings.TrimSpace(child.VerbatimBlockLineComment_getText()))
 
 				case clang.Comment_InlineCommand:
 					// ignore commands
@@ -33,6 +32,12 @@ func parsedCommentToGoComment(comment clang.Comment) string {
 					fmt.Printf("unhandled comment kind, %s\n", child.Kind().Spelling())
 				}
 			}
+
+		case clang.Comment_BlockCommand:
+			// TODO
+
+		case clang.Comment_ParamCommand:
+			// TODO
 
 		default:
 			fmt.Printf("unhandled comment kind, %s\n", child.Kind().Spelling())
