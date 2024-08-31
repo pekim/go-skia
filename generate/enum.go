@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"slices"
 	"strings"
+
+	"github.com/go-clang/clang-v15/clang"
 )
 
 type enum struct {
@@ -17,6 +19,26 @@ type enumConstant struct {
 	name    string
 	value   int64
 	comment string
+}
+
+func newEnum(cursor clang.Cursor, class *class) enum {
+	e := enum{
+		class:   class,
+		name:    cursor.Spelling(),
+		comment: parsedCommentToGoComment(cursor.ParsedComment()),
+	}
+	cursor.Visit(func(cursor, parent clang.Cursor) (status clang.ChildVisitResult) {
+		if cursor.Kind() == clang.Cursor_EnumConstantDecl {
+			e.constants = append(e.constants, enumConstant{
+				name:    cursor.Spelling(),
+				value:   cursor.EnumConstantDeclValue(),
+				comment: parsedCommentToGoComment(cursor.ParsedComment()),
+			})
+		}
+		return clang.ChildVisit_Continue
+	})
+
+	return e
 }
 
 func (e enum) generate(g *generator) {

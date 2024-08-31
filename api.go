@@ -2899,10 +2899,20 @@ const (
 	SVGRenderContextApplyFlags_Leaf SVGRenderContextApplyFlags = 1
 )
 
+/*
+When we transform points through a matrix containing perspective (the bottom row is something
+other than 0,0,1), the bruteforce math can produce confusing results (since we might divide
+by 0, or a negative w value). By default, methods that map rects and paths will apply
+perspective clipping, but this can be changed by specifying kYes to those methods.
+*/
 type ApplyPerspectiveClip int64
 
 const (
-	ApplyPerspectiveClip_No  ApplyPerspectiveClip = 0
+	/*
+	   Don't pre-clip the geometry before applying the (perspective) matrix*/
+	ApplyPerspectiveClip_No ApplyPerspectiveClip = 0
+	/*
+	   Do pre-clip the geometry before applying the (perspective) matrix*/
 	ApplyPerspectiveClip_Yes ApplyPerspectiveClip = 1
 )
 
@@ -2921,84 +2931,205 @@ const (
 	EncodedOrigin_Last        EncodedOrigin = 8
 )
 
+/*
+Describes how to interpret the alpha component of a pixel. A pixel may
+be opaque, or alpha, describing multiple levels of transparency.
+
+In simple blending, alpha weights the draw color and the destination
+color to create a new color. If alpha describes a weight from zero to one:
+
+new color = draw color * alpha + destination color * (1 - alpha)
+
+In practice alpha is encoded in two or more bits, where 1.0 equals all bits set.
+
+RGB may have alpha included in each component value; the stored
+value is the original RGB multiplied by alpha. Premultiplied color
+components improve performance.
+*/
 type AlphaType int64
 
 const (
-	AlphaType_Unknown  AlphaType = 0
-	AlphaType_Opaque   AlphaType = 1
-	AlphaType_Premul   AlphaType = 2
+	/*
+	   uninitialized*/
+	AlphaType_Unknown AlphaType = 0
+	/*
+	   pixel is opaque*/
+	AlphaType_Opaque AlphaType = 1
+	/*
+	   pixel components are premultiplied by alpha*/
+	AlphaType_Premul AlphaType = 2
+	/*
+	   pixel components are independent of alpha*/
 	AlphaType_Unpremul AlphaType = 3
+	/*
+	   last valid value*/
 	AlphaType_LastEnum AlphaType = 3
 )
 
+/*
+Describes how pixel bits encode color. A pixel may be an alpha mask, a grayscale, RGB, or ARGB.
+
+kN32_SkColorType selects the native 32-bit ARGB format for the current configuration. This can
+lead to inconsistent results across platforms, so use with caution.
+*/
 type ColorType int64
 
 const (
-	ColorType_Unknown            ColorType = 0
-	ColorType_Alpha_8            ColorType = 1
-	ColorType_RGB_565            ColorType = 2
-	ColorType_ARGB_4444          ColorType = 3
-	ColorType_RGBA_8888          ColorType = 4
-	ColorType_RGB_888x           ColorType = 5
-	ColorType_BGRA_8888          ColorType = 6
-	ColorType_RGBA_1010102       ColorType = 7
-	ColorType_BGRA_1010102       ColorType = 8
-	ColorType_RGB_101010x        ColorType = 9
-	ColorType_BGR_101010x        ColorType = 10
-	ColorType_BGR_101010x_XR     ColorType = 11
-	ColorType_BGRA_10101010_XR   ColorType = 12
-	ColorType_RGBA_10x6          ColorType = 13
-	ColorType_Gray_8             ColorType = 14
-	ColorType_RGBA_F16Norm       ColorType = 15
-	ColorType_RGBA_F16           ColorType = 16
-	ColorType_RGBA_F32           ColorType = 17
-	ColorType_R8G8_unorm         ColorType = 18
-	ColorType_A16_float          ColorType = 19
-	ColorType_R16G16_float       ColorType = 20
-	ColorType_A16_unorm          ColorType = 21
-	ColorType_R16G16_unorm       ColorType = 22
+	/*
+	   uninitialized*/
+	ColorType_Unknown ColorType = 0
+	/*
+	   pixel with alpha in 8-bit byte*/
+	ColorType_Alpha_8 ColorType = 1
+	/*
+	   pixel with 5 bits red, 6 bits green, 5 bits blue, in 16-bit word*/
+	ColorType_RGB_565 ColorType = 2
+	/*
+	   pixel with 4 bits for alpha, red, green, blue; in 16-bit word*/
+	ColorType_ARGB_4444 ColorType = 3
+	/*
+	   pixel with 8 bits for red, green, blue, alpha; in 32-bit word*/
+	ColorType_RGBA_8888 ColorType = 4
+	/*
+	   pixel with 8 bits each for red, green, blue; in 32-bit word*/
+	ColorType_RGB_888x ColorType = 5
+	/*
+	   pixel with 8 bits for blue, green, red, alpha; in 32-bit word*/
+	ColorType_BGRA_8888 ColorType = 6
+	/*
+	   10 bits for red, green, blue; 2 bits for alpha; in 32-bit word*/
+	ColorType_RGBA_1010102 ColorType = 7
+	/*
+	   10 bits for blue, green, red; 2 bits for alpha; in 32-bit word*/
+	ColorType_BGRA_1010102 ColorType = 8
+	/*
+	   pixel with 10 bits each for red, green, blue; in 32-bit word*/
+	ColorType_RGB_101010x ColorType = 9
+	/*
+	   pixel with 10 bits each for blue, green, red; in 32-bit word*/
+	ColorType_BGR_101010x ColorType = 10
+	/*
+	   pixel with 10 bits each for blue, green, red; in 32-bit word, extended range*/
+	ColorType_BGR_101010x_XR ColorType = 11
+	/*
+	   pixel with 10 bits each for blue, green, red, alpha; in 64-bit word, extended range*/
+	ColorType_BGRA_10101010_XR ColorType = 12
+	/*
+	   pixel with 10 used bits (most significant) followed by 6 unused*/
+	ColorType_RGBA_10x6 ColorType = 13
+	/*
+	   pixel with grayscale level in 8-bit byte*/
+	ColorType_Gray_8 ColorType = 14
+	/*
+	   pixel with half floats in [0,1] for red, green, blue, alpha;*/
+	ColorType_RGBA_F16Norm ColorType = 15
+	/*
+	   pixel with half floats for red, green, blue, alpha;*/
+	ColorType_RGBA_F16 ColorType = 16
+	/*
+	   pixel using C float for red, green, blue, alpha; in 128-bit word*/
+	ColorType_RGBA_F32 ColorType = 17
+	/*
+	   pixel with a uint8_t for red and green*/
+	ColorType_R8G8_unorm ColorType = 18
+	/*
+	   pixel with a half float for alpha*/
+	ColorType_A16_float ColorType = 19
+	/*
+	   pixel with a half float for red and green*/
+	ColorType_R16G16_float ColorType = 20
+	/*
+	   pixel with a little endian uint16_t for alpha*/
+	ColorType_A16_unorm ColorType = 21
+	/*
+	   pixel with a little endian uint16_t for red and green*/
+	ColorType_R16G16_unorm ColorType = 22
+	/*
+	   pixel with a little endian uint16_t for red, green, blue*/
 	ColorType_R16G16B16A16_unorm ColorType = 23
 	ColorType_SRGBA_8888         ColorType = 24
 	ColorType_R8_unorm           ColorType = 25
-	ColorType_LastEnum           ColorType = 25
-	ColorType_N32                ColorType = 4
+	/*
+	   last valid value*/
+	ColorType_LastEnum ColorType = 25
+	/*
+	   native 32-bit RGBA encoding*/
+	ColorType_N32 ColorType = 4
 )
 
+/*
+Describes color range of YUV pixels. The color mapping from YUV to RGB varies
+depending on the source. YUV pixels may be generated by JPEG images, standard
+video streams, or high definition video streams. Each has its own mapping from
+YUV to RGB.
+
+JPEG YUV values encode the full range of 0 to 255 for all three components.
+Video YUV values often range from 16 to 235 for Y and from 16 to 240 for U and V (limited).
+Details of encoding and conversion to RGB are described in YCbCr color space.
+
+The identity colorspace exists to provide a utility mapping from Y to R, U to G and V to B.
+It can be used to visualize the YUV planes or to explicitly post process the YUV channels.
+*/
 type YUVColorSpace int64
 
 const (
-	YUVColorSpace_JPEG_Full            YUVColorSpace = 0
-	YUVColorSpace_Rec601_Limited       YUVColorSpace = 1
-	YUVColorSpace_Rec709_Full          YUVColorSpace = 2
-	YUVColorSpace_Rec709_Limited       YUVColorSpace = 3
+	/*
+	   describes full range*/
+	YUVColorSpace_JPEG_Full YUVColorSpace = 0
+	/*
+	   describes SDTV range*/
+	YUVColorSpace_Rec601_Limited YUVColorSpace = 1
+	/*
+	   describes HDTV range*/
+	YUVColorSpace_Rec709_Full    YUVColorSpace = 2
+	YUVColorSpace_Rec709_Limited YUVColorSpace = 3
+	/*
+	   describes UHDTV range, non-constant-luminance*/
 	YUVColorSpace_BT2020_8bit_Full     YUVColorSpace = 4
 	YUVColorSpace_BT2020_8bit_Limited  YUVColorSpace = 5
 	YUVColorSpace_BT2020_10bit_Full    YUVColorSpace = 6
 	YUVColorSpace_BT2020_10bit_Limited YUVColorSpace = 7
 	YUVColorSpace_BT2020_12bit_Full    YUVColorSpace = 8
 	YUVColorSpace_BT2020_12bit_Limited YUVColorSpace = 9
-	YUVColorSpace_FCC_Full             YUVColorSpace = 10
-	YUVColorSpace_FCC_Limited          YUVColorSpace = 11
-	YUVColorSpace_SMPTE240_Full        YUVColorSpace = 12
-	YUVColorSpace_SMPTE240_Limited     YUVColorSpace = 13
-	YUVColorSpace_YDZDX_Full           YUVColorSpace = 14
-	YUVColorSpace_YDZDX_Limited        YUVColorSpace = 15
-	YUVColorSpace_GBR_Full             YUVColorSpace = 16
-	YUVColorSpace_GBR_Limited          YUVColorSpace = 17
-	YUVColorSpace_YCgCo_8bit_Full      YUVColorSpace = 18
-	YUVColorSpace_YCgCo_8bit_Limited   YUVColorSpace = 19
-	YUVColorSpace_YCgCo_10bit_Full     YUVColorSpace = 20
-	YUVColorSpace_YCgCo_10bit_Limited  YUVColorSpace = 21
-	YUVColorSpace_YCgCo_12bit_Full     YUVColorSpace = 22
-	YUVColorSpace_YCgCo_12bit_Limited  YUVColorSpace = 23
-	YUVColorSpace_Identity             YUVColorSpace = 24
-	YUVColorSpace_LastEnum             YUVColorSpace = 24
-	YUVColorSpace_JPEG                 YUVColorSpace = 0
-	YUVColorSpace_Rec601               YUVColorSpace = 1
-	YUVColorSpace_Rec709               YUVColorSpace = 3
-	YUVColorSpace_BT2020               YUVColorSpace = 5
+	/*
+	   describes FCC range*/
+	YUVColorSpace_FCC_Full    YUVColorSpace = 10
+	YUVColorSpace_FCC_Limited YUVColorSpace = 11
+	/*
+	   describes SMPTE240M range*/
+	YUVColorSpace_SMPTE240_Full    YUVColorSpace = 12
+	YUVColorSpace_SMPTE240_Limited YUVColorSpace = 13
+	/*
+	   describes YDZDX range*/
+	YUVColorSpace_YDZDX_Full    YUVColorSpace = 14
+	YUVColorSpace_YDZDX_Limited YUVColorSpace = 15
+	/*
+	   describes GBR range*/
+	YUVColorSpace_GBR_Full    YUVColorSpace = 16
+	YUVColorSpace_GBR_Limited YUVColorSpace = 17
+	/*
+	   describes YCgCo matrix*/
+	YUVColorSpace_YCgCo_8bit_Full     YUVColorSpace = 18
+	YUVColorSpace_YCgCo_8bit_Limited  YUVColorSpace = 19
+	YUVColorSpace_YCgCo_10bit_Full    YUVColorSpace = 20
+	YUVColorSpace_YCgCo_10bit_Limited YUVColorSpace = 21
+	YUVColorSpace_YCgCo_12bit_Full    YUVColorSpace = 22
+	YUVColorSpace_YCgCo_12bit_Limited YUVColorSpace = 23
+	/*
+	   maps Y->R, U->G, V->B*/
+	YUVColorSpace_Identity YUVColorSpace = 24
+	/*
+	   last valid value*/
+	YUVColorSpace_LastEnum YUVColorSpace = 24
+	YUVColorSpace_JPEG     YUVColorSpace = 0
+	YUVColorSpace_Rec601   YUVColorSpace = 1
+	YUVColorSpace_Rec709   YUVColorSpace = 3
+	YUVColorSpace_BT2020   YUVColorSpace = 5
 )
 
+/*
+Describes different color channels one can manipulate
+*/
 type ColorChannel int64
 
 const (
@@ -3009,6 +3140,9 @@ const (
 	ColorChannel_LastEnum ColorChannel = 3
 )
 
+/*
+Used to represent the channels available in a color type or texture format as a mask.
+*/
 type ColorChannelFlag int64
 
 const (
@@ -3043,63 +3177,188 @@ const (
 type BlurStyle int64
 
 const (
-	BlurStyle_Normal   BlurStyle = 0
-	BlurStyle_Solid    BlurStyle = 1
-	BlurStyle_Outer    BlurStyle = 2
+	/*
+	   fuzzy inside and outside*/
+	BlurStyle_Normal BlurStyle = 0
+	/*
+	   solid inside, fuzzy outside*/
+	BlurStyle_Solid BlurStyle = 1
+	/*
+	   nothing inside, fuzzy outside*/
+	BlurStyle_Outer BlurStyle = 2
+	/*
+	   fuzzy inside, nothing outside*/
 	BlurStyle_Inner    BlurStyle = 3
 	BlurStyle_LastEnum BlurStyle = 3
 )
 
+/*
+Blends are operators that take in two colors (source, destination) and return a new color.
+Many of these operate the same on all 4 components: red, green, blue, alpha. For these,
+we just document what happens to one component, rather than naming each one separately.
+
+Different SkColorTypes have different representations for color components:
+8-bit: 0..255
+6-bit: 0..63
+5-bit: 0..31
+4-bit: 0..15
+floats: 0...1
+
+The documentation is expressed as if the component values are always 0..1 (floats).
+
+For brevity, the documentation uses the following abbreviations
+s  : source
+d  : destination
+sa : source alpha
+da : destination alpha
+
+Results are abbreviated
+r  : if all 4 components are computed in the same manner
+ra : result alpha component
+rc : result "color": red, green, blue components
+*/
 type BlendMode int64
 
 const (
-	BlendMode_Clear             BlendMode = 0
-	BlendMode_Src               BlendMode = 1
-	BlendMode_Dst               BlendMode = 2
-	BlendMode_SrcOver           BlendMode = 3
-	BlendMode_DstOver           BlendMode = 4
-	BlendMode_SrcIn             BlendMode = 5
-	BlendMode_DstIn             BlendMode = 6
-	BlendMode_SrcOut            BlendMode = 7
-	BlendMode_DstOut            BlendMode = 8
-	BlendMode_SrcATop           BlendMode = 9
-	BlendMode_DstATop           BlendMode = 10
-	BlendMode_Xor               BlendMode = 11
-	BlendMode_Plus              BlendMode = 12
-	BlendMode_Modulate          BlendMode = 13
-	BlendMode_Screen            BlendMode = 14
-	BlendMode_Overlay           BlendMode = 15
-	BlendMode_Darken            BlendMode = 16
-	BlendMode_Lighten           BlendMode = 17
-	BlendMode_ColorDodge        BlendMode = 18
-	BlendMode_ColorBurn         BlendMode = 19
-	BlendMode_HardLight         BlendMode = 20
-	BlendMode_SoftLight         BlendMode = 21
-	BlendMode_Difference        BlendMode = 22
-	BlendMode_Exclusion         BlendMode = 23
-	BlendMode_Multiply          BlendMode = 24
-	BlendMode_Hue               BlendMode = 25
-	BlendMode_Saturation        BlendMode = 26
-	BlendMode_Color             BlendMode = 27
-	BlendMode_Luminosity        BlendMode = 28
-	BlendMode_LastCoeffMode     BlendMode = 14
+	/*
+	   r = 0*/
+	BlendMode_Clear BlendMode = 0
+	/*
+	   r = s*/
+	BlendMode_Src BlendMode = 1
+	/*
+	   r = d*/
+	BlendMode_Dst BlendMode = 2
+	/*
+	   r = s + (1-sa)*d*/
+	BlendMode_SrcOver BlendMode = 3
+	/*
+	   r = d + (1-da)*s*/
+	BlendMode_DstOver BlendMode = 4
+	/*
+	   r = s * da*/
+	BlendMode_SrcIn BlendMode = 5
+	/*
+	   r = d * sa*/
+	BlendMode_DstIn BlendMode = 6
+	/*
+	   r = s * (1-da)*/
+	BlendMode_SrcOut BlendMode = 7
+	/*
+	   r = d * (1-sa)*/
+	BlendMode_DstOut BlendMode = 8
+	/*
+	   r = s*da + d*(1-sa)*/
+	BlendMode_SrcATop BlendMode = 9
+	/*
+	   r = d*sa + s*(1-da)*/
+	BlendMode_DstATop BlendMode = 10
+	/*
+	   r = s*(1-da) + d*(1-sa)*/
+	BlendMode_Xor BlendMode = 11
+	/*
+	   r = min(s + d, 1)*/
+	BlendMode_Plus BlendMode = 12
+	/*
+	   r = s*d*/
+	BlendMode_Modulate BlendMode = 13
+	/*
+	   r = s + d - s*d*/
+	BlendMode_Screen BlendMode = 14
+	/*
+	   multiply or screen, depending on destination*/
+	BlendMode_Overlay BlendMode = 15
+	/*
+	   rc = s + d - max(s*da, d*sa), ra = kSrcOver*/
+	BlendMode_Darken BlendMode = 16
+	/*
+	   rc = s + d - min(s*da, d*sa), ra = kSrcOver*/
+	BlendMode_Lighten BlendMode = 17
+	/*
+	   brighten destination to reflect source*/
+	BlendMode_ColorDodge BlendMode = 18
+	/*
+	   darken destination to reflect source*/
+	BlendMode_ColorBurn BlendMode = 19
+	/*
+	   multiply or screen, depending on source*/
+	BlendMode_HardLight BlendMode = 20
+	/*
+	   lighten or darken, depending on source*/
+	BlendMode_SoftLight BlendMode = 21
+	/*
+	   rc = s + d - 2*(min(s*da, d*sa)), ra = kSrcOver*/
+	BlendMode_Difference BlendMode = 22
+	/*
+	   rc = s + d - two(s*d), ra = kSrcOver*/
+	BlendMode_Exclusion BlendMode = 23
+	/*
+	   r = s*(1-da) + d*(1-sa) + s*d*/
+	BlendMode_Multiply BlendMode = 24
+	/*
+	   hue of source with saturation and luminosity of destination*/
+	BlendMode_Hue BlendMode = 25
+	/*
+	   saturation of source with hue and luminosity of destination*/
+	BlendMode_Saturation BlendMode = 26
+	/*
+	   hue and saturation of source with luminosity of destination*/
+	BlendMode_Color BlendMode = 27
+	/*
+	   luminosity of source with hue and saturation of destination*/
+	BlendMode_Luminosity BlendMode = 28
+	/*
+	   last porter duff blend mode*/
+	BlendMode_LastCoeffMode BlendMode = 14
+	/*
+	   last blend mode operating separately on components*/
 	BlendMode_LastSeparableMode BlendMode = 24
-	BlendMode_LastMode          BlendMode = 28
+	/*
+	   last valid value*/
+	BlendMode_LastMode BlendMode = 28
 )
 
+/*
+For Porter-Duff SkBlendModes (those
+<
+= kLastCoeffMode), these coefficients describe the blend
+equation used. Coefficient-based blend modes specify an equation:
+('dstCoeff' * dst + 'srcCoeff' * src), where the coefficient values are constants, functions of
+the src or dst alpha, or functions of the src or dst color.
+*/
 type BlendModeCoeff int64
 
 const (
-	BlendModeCoeff_Zero       BlendModeCoeff = 0
-	BlendModeCoeff_One        BlendModeCoeff = 1
-	BlendModeCoeff_SC         BlendModeCoeff = 2
-	BlendModeCoeff_ISC        BlendModeCoeff = 3
-	BlendModeCoeff_DC         BlendModeCoeff = 4
-	BlendModeCoeff_IDC        BlendModeCoeff = 5
-	BlendModeCoeff_SA         BlendModeCoeff = 6
-	BlendModeCoeff_ISA        BlendModeCoeff = 7
-	BlendModeCoeff_DA         BlendModeCoeff = 8
-	BlendModeCoeff_IDA        BlendModeCoeff = 9
+	BlendModeCoeff_Zero BlendModeCoeff = 0
+	/*
+	   0*/
+	BlendModeCoeff_One BlendModeCoeff = 1
+	/*
+	   1*/
+	BlendModeCoeff_SC BlendModeCoeff = 2
+	/*
+	   src color*/
+	BlendModeCoeff_ISC BlendModeCoeff = 3
+	/*
+	   inverse src color (i.e. 1 - sc)*/
+	BlendModeCoeff_DC BlendModeCoeff = 4
+	/*
+	   dst color*/
+	BlendModeCoeff_IDC BlendModeCoeff = 5
+	/*
+	   inverse dst color (i.e. 1 - dc)*/
+	BlendModeCoeff_SA BlendModeCoeff = 6
+	/*
+	   src alpha*/
+	BlendModeCoeff_ISA BlendModeCoeff = 7
+	/*
+	   inverse src alpha (i.e. 1 - sa)*/
+	BlendModeCoeff_DA BlendModeCoeff = 8
+	/*
+	   dst alpha*/
+	BlendModeCoeff_IDA BlendModeCoeff = 9
+	/*
+	   inverse dst alpha (i.e. 1 - da)*/
 	BlendModeCoeff_CoeffCount BlendModeCoeff = 10
 )
 
@@ -3114,21 +3373,42 @@ const (
 type TextEncoding int64
 
 const (
-	TextEncoding_UTF8    TextEncoding = 0
-	TextEncoding_UTF16   TextEncoding = 1
-	TextEncoding_UTF32   TextEncoding = 2
+	/*
+	   uses bytes to represent UTF-8 or ASCII*/
+	TextEncoding_UTF8 TextEncoding = 0
+	/*
+	   uses two byte words to represent most of Unicode*/
+	TextEncoding_UTF16 TextEncoding = 1
+	/*
+	   uses four byte words to represent all of Unicode*/
+	TextEncoding_UTF32 TextEncoding = 2
+	/*
+	   uses two byte words to represent glyph indices*/
 	TextEncoding_GlyphID TextEncoding = 3
 )
 
 type FontHinting int64
 
 const (
-	FontHinting_None   FontHinting = 0
+	/*
+	   glyph outlines unchanged*/
+	FontHinting_None FontHinting = 0
+	/*
+	   minimal modification to improve constrast*/
 	FontHinting_Slight FontHinting = 1
+	/*
+	   glyph outlines modified to improve constrast*/
 	FontHinting_Normal FontHinting = 2
-	FontHinting_Full   FontHinting = 3
+	/*
+	   modifies glyph outlines for maximum constrast*/
+	FontHinting_Full FontHinting = 3
 )
 
+/*
+Description of how the LCD strips are arranged for each pixel. If this is unknown, or the
+pixels are meant to be "portable" and/or transformed before showing (e.g. rotated, scaled)
+then use kUnknown_SkPixelGeometry.
+*/
 type PixelGeometry int64
 
 const (
@@ -3142,41 +3422,80 @@ const (
 type PathFillType int64
 
 const (
-	PathFillType_Winding        PathFillType = 0
-	PathFillType_EvenOdd        PathFillType = 1
+	/*
+	   Specifies that "inside" is computed by a non-zero sum of signed edge crossings*/
+	PathFillType_Winding PathFillType = 0
+	/*
+	   Specifies that "inside" is computed by an odd number of edge crossings*/
+	PathFillType_EvenOdd PathFillType = 1
+	/*
+	   Same as Winding, but draws outside of the path, rather than inside*/
 	PathFillType_InverseWinding PathFillType = 2
+	/*
+	   Same as EvenOdd, but draws outside of the path, rather than inside*/
 	PathFillType_InverseEvenOdd PathFillType = 3
 )
 
 type PathDirection int64
 
 const (
-	PathDirection_CW  PathDirection = 0
+	/*
+	   clockwise direction for adding closed contours*/
+	PathDirection_CW PathDirection = 0
+	/*
+	   counter-clockwise direction for adding closed contours*/
 	PathDirection_CCW PathDirection = 1
 )
 
 type TileMode int64
 
 const (
-	TileMode_Clamp        TileMode = 0
-	TileMode_Repeat       TileMode = 1
-	TileMode_Mirror       TileMode = 2
-	TileMode_Decal        TileMode = 3
+	/*
+	   Replicate the edge color if the shader draws outside of its
+	   original bounds.*/
+	TileMode_Clamp TileMode = 0
+	/*
+	   Repeat the shader's image horizontally and vertically.*/
+	TileMode_Repeat TileMode = 1
+	/*
+	   Repeat the shader's image horizontally and vertically, alternating
+	   mirror images so that adjacent images always seam.*/
+	TileMode_Mirror TileMode = 2
+	/*
+	   Only draw within the original domain, return transparent-black everywhere else.*/
+	TileMode_Decal TileMode = 3
+	/*
+	   Only draw within the original domain, return transparent-black everywhere else.*/
 	TileMode_LastTileMode TileMode = 3
 )
 
+/*
+Possible 3D APIs that may be used by Ganesh.
+*/
 type GrBackendApi int64
 
 const (
-	GrBackendApi_OpenGL           GrBackendApi = 0
-	GrBackendApi_Vulkan           GrBackendApi = 1
-	GrBackendApi_Metal            GrBackendApi = 2
-	GrBackendApi_Direct3D         GrBackendApi = 3
-	GrBackendApi_Mock             GrBackendApi = 4
-	GrBackendApi_Unsupported      GrBackendApi = 5
+	GrBackendApi_OpenGL   GrBackendApi = 0
+	GrBackendApi_Vulkan   GrBackendApi = 1
+	GrBackendApi_Metal    GrBackendApi = 2
+	GrBackendApi_Direct3D GrBackendApi = 3
+	/*
+	   Mock is a backend that does not draw anything. It is used for unit tests
+	   and to measure CPU overhead.*/
+	GrBackendApi_Mock GrBackendApi = 4
+	/*
+	   Ganesh doesn't support some context types (e.g. Dawn) and will return Unsupported.*/
+	GrBackendApi_Unsupported GrBackendApi = 5
+	/*
+	   Added here to support the legacy GrBackend enum value and clients who referenced it using
+	   GrBackend::kOpenGL_GrBackend.*/
 	GrBackendApi_OpenGL_GrBackend GrBackendApi = 0
 )
 
+/*
+GPU SkImage and SkSurfaces can be stored such that (0, 0) in texture space may correspond to
+either the top-left or bottom-left content pixel.
+*/
 type GrSurfaceOrigin int64
 
 const (
@@ -3184,6 +3503,10 @@ const (
 	GrSurfaceOrigin_BottomLeft GrSurfaceOrigin = 1
 )
 
+/*
+A GrContext's cache of backend context state can be partially invalidated.
+These enums are specific to the GL backend and we'd add a new set for an alternative backend.
+*/
 type GrGLBackendState int64
 
 const (
@@ -3201,6 +3524,10 @@ const (
 	GrGLBackendState_ALL            GrGLBackendState = 65535
 )
 
+/*
+Enum used as return value when flush with semaphores so the client knows whether the valid
+semaphores will be submitted on the next GrContext::submit call.
+*/
 type GrSemaphoresSubmitted int64
 
 const (
@@ -3222,6 +3549,9 @@ const (
 	GrSyncCpu_Yes GrSyncCpu = -1
 )
 
+/*
+Classifies GL contexts by which standard they implement (currently as OpenGL vs. OpenGL ES).
+*/
 type GrGLStandard int64
 
 const (
@@ -3231,6 +3561,10 @@ const (
 	GrGLStandard_WebGL GrGLStandard = 3
 )
 
+/*
+The supported GL formats represented as an enum. Actual support by GrContext depends on GL
+context version and extensions.
+*/
 type GrGLFormat int64
 
 const (
@@ -3277,6 +3611,9 @@ const (
 	TextureCompressionType_ETC1_RGB8       TextureCompressionType = 1
 )
 
+/*
+Geometric primitives used for drawing.
+*/
 type GrPrimitiveType int64
 
 const (
@@ -3294,6 +3631,9 @@ const (
 	GrPrimitiveRestart_Yes GrPrimitiveRestart = -1
 )
 
+/*
+Should a created surface be texturable?
+*/
 type GrTexturable int64
 
 const (
@@ -3308,26 +3648,49 @@ const (
 	GrDDLProvider_Yes GrDDLProvider = -1
 )
 
+/*
+Ownership rules for external GPU resources imported into Skia.
+*/
 type GrWrapOwnership int64
 
 const (
+	/*
+	   Skia will assume the client will keep the resource alive and Skia will not free it.*/
 	GrWrapOwnership_Borrow GrWrapOwnership = 0
-	GrWrapOwnership_Adopt  GrWrapOwnership = 1
+	/*
+	   Skia will assume ownership of the resource and free it.*/
+	GrWrapOwnership_Adopt GrWrapOwnership = 1
 )
 
 type GrWrapCacheable int64
 
 const (
-	GrWrapCacheable_No  GrWrapCacheable = 0
+	/*
+	   The wrapped resource will be removed from the cache as soon as it becomes purgeable. It may
+	   still be assigned and found by a unique key, but the presence of the key will not be used to
+	   keep the resource alive when it has no references.*/
+	GrWrapCacheable_No GrWrapCacheable = 0
+	/*
+	   The wrapped resource is allowed to remain in the GrResourceCache when it has no references
+	   but has a unique key. Such resources should only be given unique keys when it is known that
+	   the key will eventually be removed from the resource or invalidated via the message bus.*/
 	GrWrapCacheable_Yes GrWrapCacheable = -1
 )
 
 type GrBudgetedType int64
 
 const (
-	GrBudgetedType_Budgeted              GrBudgetedType = 0
+	/*
+	   The resource is budgeted and is subject to purging under budget pressure.*/
+	GrBudgetedType_Budgeted GrBudgetedType = 0
+	/*
+	   The resource is unbudgeted and is purged as soon as it has no refs regardless of whether
+	   it has a unique or scratch key.*/
 	GrBudgetedType_UnbudgetedUncacheable GrBudgetedType = 1
-	GrBudgetedType_UnbudgetedCacheable   GrBudgetedType = 2
+	/*
+	   The resource is unbudgeted and is allowed to remain in the cache with no refs if it
+	   has a unique key. Scratch keys are ignored.*/
+	GrBudgetedType_UnbudgetedCacheable GrBudgetedType = 2
 )
 
 type GrScissorTest int64
@@ -3340,7 +3703,11 @@ const (
 type GrMemoryless int64
 
 const (
-	GrMemoryless_No  GrMemoryless = 0
+	/*
+	   The texture will be allocated normally and will affect memory budgets.*/
+	GrMemoryless_No GrMemoryless = 0
+	/*
+	   The texture will be not use GPU memory and will not affect memory budgets.*/
 	GrMemoryless_Yes GrMemoryless = -1
 )
 
@@ -3351,6 +3718,10 @@ const (
 	GrSemaphoreWrapType_WillWait   GrSemaphoreWrapType = 1
 )
 
+/*
+This enum is used to specify the load operation to be used when an OpsTask/GrOpsRenderPass
+begins execution.
+*/
 type GrLoadOp int64
 
 const (
@@ -3359,6 +3730,10 @@ const (
 	GrLoadOp_Discard GrLoadOp = 2
 )
 
+/*
+This enum is used to specify the store operation to be used when an OpsTask/GrOpsRenderPass
+ends execution.
+*/
 type GrStoreOp int64
 
 const (
@@ -3366,6 +3741,9 @@ const (
 	GrStoreOp_Discard GrStoreOp = 1
 )
 
+/*
+Used to control antialiasing in draw calls.
+*/
 type GrAA int64
 
 const (
@@ -3380,15 +3758,30 @@ const (
 	GrFillRule_EvenOdd GrFillRule = -1
 )
 
+/*
+This enum indicates the type of antialiasing to be performed.
+*/
 type GrAAType int64
 
 const (
-	GrAAType_None     GrAAType = 0
+	/*
+	   No antialiasing*/
+	GrAAType_None GrAAType = 0
+	/*
+	   Use fragment shader code to blend with a fractional pixel coverage.*/
 	GrAAType_Coverage GrAAType = 1
-	GrAAType_MSAA     GrAAType = 2
-	GrAAType_Last     GrAAType = 2
+	/*
+	   Use normal MSAA.*/
+	GrAAType_MSAA GrAAType = 2
+	/*
+	   Use normal MSAA.*/
+	GrAAType_Last GrAAType = 2
 )
 
+/*
+Some pixel configs are inherently clamped to [0,1], some are allowed to go outside that range,
+and some are FP but manually clamped in the XP.
+*/
 type GrClampType int64
 
 const (
@@ -3397,6 +3790,19 @@ const (
 	GrClampType_None   GrClampType = 2
 )
 
+/*
+A number of rectangle/quadrilateral drawing APIs can control anti-aliasing on a per edge basis.
+These masks specify which edges are AA'ed. The intent for this is to support tiling with seamless
+boundaries, where the inner edges are non-AA and the outer edges are AA. Regular rectangle draws
+simply use kAll or kNone depending on if they want anti-aliasing or not.
+
+In APIs that support per-edge AA, GrQuadAAFlags is the only AA-control parameter that is
+provided (compared to the typical GrAA parameter). kNone is equivalent to GrAA::kNo, and any
+other set of edge flags would require GrAA::kYes (with rendering output dependent on how that
+maps to GrAAType for a given SurfaceDrawContext).
+
+These values are identical to SkCanvas::QuadAAFlags.
+*/
 type GrQuadAAFlags int64
 
 const (
@@ -3408,6 +3814,11 @@ const (
 	GrQuadAAFlags_All    GrQuadAAFlags = 15
 )
 
+/*
+The type of texture. Backends other than GL currently only use the 2D value but the type must
+still be known at the API-neutral layer as it used to determine whether MIP maps, renderability,
+and sampling parameters are legal for proxies that will be instantiated with wrapped textures.
+*/
 type GrTextureType int64
 
 const (
@@ -3433,6 +3844,9 @@ const (
 	GrShaderFlags_Fragment_GrShader GrShaderFlags = 2
 )
 
+/*
+Types used to describe format of vertices in arrays.
+*/
 type GrVertexAttribType int64
 
 const (
@@ -3465,6 +3879,11 @@ const (
 	GrVertexAttribType_Last         GrVertexAttribType = 25
 )
 
+/*
+We have coverage effects that clip rendering to the edge of some geometric primitive.
+This enum specifies how that clipping is performed. Not all factories that take a
+GrClipEdgeType will succeed with all values and it is up to the caller to verify success.
+*/
 type GrClipEdgeType int64
 
 const (
@@ -3475,6 +3894,9 @@ const (
 	GrClipEdgeType_Last          GrClipEdgeType = 3
 )
 
+/*
+Indicates the type of pending IO operations that can be recorded for gpu resources.
+*/
 type GrIOType int64
 
 const (
@@ -3483,6 +3905,9 @@ const (
 	GrIOType_RW    GrIOType = 2
 )
 
+/*
+Indicates the type of data that a GPU buffer will be used for.
+*/
 type GrGpuBufferType int64
 
 const (
@@ -3494,13 +3919,24 @@ const (
 	GrGpuBufferType_Uniform      GrGpuBufferType = 5
 )
 
+/*
+Provides a performance hint regarding the frequency at which a data store will be accessed.
+*/
 type GrAccessPattern int64
 
 const (
+	/*
+	   Data store will be respecified repeatedly and used many times.*/
 	GrAccessPattern_Dynamic GrAccessPattern = 0
-	GrAccessPattern_Static  GrAccessPattern = 1
-	GrAccessPattern_Stream  GrAccessPattern = 2
-	GrAccessPattern_Last    GrAccessPattern = 2
+	/*
+	   Data store will be specified once and used many times. (Thus disqualified from caching.)*/
+	GrAccessPattern_Static GrAccessPattern = 1
+	/*
+	   Data store will be specified once and used at most a few times. (Also can't be cached.)*/
+	GrAccessPattern_Stream GrAccessPattern = 2
+	/*
+	   Data store will be specified once and used at most a few times. (Also can't be cached.)*/
+	GrAccessPattern_Last GrAccessPattern = 2
 )
 
 type GrInternalSurfaceFlags int64
@@ -3514,13 +3950,23 @@ const (
 	GrInternalSurfaceFlags_VkRTSupportsInputAttachment GrInternalSurfaceFlags = 16
 )
 
+/*
+Specifies if the holder owns the backend, OpenGL or Vulkan, object.
+*/
 type GrBackendObjectOwnership int64
 
 const (
+	/*
+	   Holder does not destroy the backend object.*/
 	GrBackendObjectOwnership_Borrowed GrBackendObjectOwnership = 0
-	GrBackendObjectOwnership_Owned    GrBackendObjectOwnership = -1
+	/*
+	   Holder destroys the backend object.*/
+	GrBackendObjectOwnership_Owned GrBackendObjectOwnership = -1
 )
 
+/*
+Used to include or exclude specific GPU path renderers for testing purposes.
+*/
 type GpuPathRenderers int64
 
 const (
@@ -3537,6 +3983,9 @@ const (
 	GpuPathRenderers_Default          GpuPathRenderers = 511
 )
 
+/*
+Used to describe the current state of Mips on a GrTexture
+*/
 type GrMipmapStatus int64
 
 const (
@@ -3545,6 +3994,15 @@ const (
 	GrMipmapStatus_Valid        GrMipmapStatus = 2
 )
 
+/*
+Like SkColorType this describes a layout of pixel data in CPU memory. It specifies the channels,
+their type, and width. This exists so that the GPU backend can have private types that have no
+analog in the public facing SkColorType enum and omit types not implemented in the GPU backend.
+It does not refer to a texture format and the mapping to texture formats may be many-to-many.
+It does not specify the sRGB encoding of the stored values. The components are listed in order of
+where they appear in memory. In other words the first component listed is in the low bits and
+the last component in the high bits.
+*/
 type GrColorType int64
 
 const (
@@ -3585,6 +4043,9 @@ const (
 	GrColorType_Last             GrColorType = 33
 )
 
+/*
+Describes the encoding of channel data in a GrColorType.
+*/
 type GrColorTypeEncoding int64
 
 const (
@@ -3624,13 +4085,26 @@ const (
 	GrDriverBugWorkaroundType_NUMBER_OF_GPU_DRIVER_BUG_WORKAROUND_TYPES     GrDriverBugWorkaroundType = 17
 )
 
+/*
+The logical operations that can be performed when combining two paths.
+*/
 type PathOp int64
 
 const (
-	PathOp_Difference        PathOp = 0
-	PathOp_Intersect         PathOp = 1
-	PathOp_Union             PathOp = 2
-	PathOp_XOR               PathOp = 3
+	/*
+	   subtract the op path from the first path*/
+	PathOp_Difference PathOp = 0
+	/*
+	   intersect the two paths*/
+	PathOp_Intersect PathOp = 1
+	/*
+	   union (inclusive-or) the two paths*/
+	PathOp_Union PathOp = 2
+	/*
+	   exclusive-or the two paths*/
+	PathOp_XOR PathOp = 3
+	/*
+	   subtract the first path from the op path*/
 	PathOp_ReverseDifference PathOp = 4
 )
 
