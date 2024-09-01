@@ -44,20 +44,22 @@ const (
 
 // typ represents a generation type.
 type typ struct {
-	cName         string
-	cgoName       string
-	goName        string
-	pointerLevel  int
-	isPrimitive   bool
-	isArray       bool
-	arraySize     int64
-	isEnumLiteral bool
+	cName             string
+	cgoName           string
+	goName            string
+	pointerLevel      int
+	isPrimitive       bool
+	isArray           bool
+	isLValueReference bool
+	isRValueReference bool
+	arraySize         int64
+	isEnumLiteral     bool
 }
 
 // typeFromClangType returns the typ from a Clang type.
 func typeFromClangType(cType clang.Type) (typ, error) {
 	typ_ := typ{
-		cName:        cType.Spelling(),
+		cName:        strings.TrimPrefix(cType.Spelling(), "const "),
 		pointerLevel: 0,
 		isPrimitive:  true,
 		isArray:      false,
@@ -157,6 +159,13 @@ func typeFromClangType(cType clang.Type) (typ, error) {
 		typ_.goName = subTyp.goName
 		typ_.pointerLevel += subTyp.pointerLevel
 		typ_.isPrimitive = subTyp.isPrimitive
+
+		if cType.Kind() == clang.Type_LValueReference {
+			typ_.isLValueReference = true
+		}
+		if cType.Kind() == clang.Type_RValueReference {
+			typ_.isRValueReference = true
+		}
 
 	case clang.Type_Record:
 		typ_.cgoName = cType.Declaration().Type().Spelling()

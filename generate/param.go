@@ -34,21 +34,24 @@ func newParam(cursor clang.Cursor, n int) param {
 	return p
 }
 
-func (p param) supported() bool {
+func (p param) supported() (bool, string) {
+	if p.typ.isPrimitive {
+		return true, ""
+	}
+	if p.typ.isLValueReference {
+		return true, ""
+	}
+
 	if p.typ.isArray {
 		// TODO support array params
-		return false
+		return false, "array not supported"
 	}
 	if p.typ.pointerLevel > 0 {
 		// TODO support pointer params
-		return false
+		return false, "pointer not supported"
 	}
 
-	if p.typ.isPrimitive {
-		return true
-	}
-
-	return false
+	return false, "not supported"
 }
 
 func (p param) goDecl() string {
@@ -56,16 +59,25 @@ func (p param) goDecl() string {
 }
 
 func (p param) goCArg() string {
+	if p.typ.isLValueReference {
+		return fmt.Sprintf("%s := (*C.void)(%s.skia)", p.cgoName, p.goName)
+	}
 	return fmt.Sprintf("%s := C.%s(%s)", p.cgoName, p.typ.cgoName, p.goName)
 }
 
 func (p param) cParamDecl() string {
+	if p.typ.isLValueReference {
+		return fmt.Sprintf("void* %s", p.cgoName)
+	}
 	return fmt.Sprintf("%s %s", p.typ.cgoName, p.cgoName)
 }
 
 func (p param) cArg() string {
 	if p.typ.isEnumLiteral {
 		return fmt.Sprintf("(%s)%s", p.typ.cName, p.cgoName)
+	}
+	if p.typ.isLValueReference {
+		return fmt.Sprintf("reinterpret_cast<%s>(%s)", p.typ.cName, p.cgoName)
 	}
 	return p.cgoName
 }

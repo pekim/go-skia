@@ -34,17 +34,20 @@ func newClassCtor(class *class, cursor clang.Cursor) classCtor {
 }
 
 func (c *classCtor) generate(g *generator) {
-	for _, param := range c.params {
-		if !param.supported() {
-			return
-		}
-	}
-
 	c.class.ctorN++
 	if c.class.ctorN > 1 {
 		c.nameSuffix = strconv.Itoa(c.class.ctorN)
 	}
 	c.cFuncName = fmt.Sprintf("skia_new_%s%s", c.class.cName, c.nameSuffix)
+
+	for _, param := range c.params {
+		supported, reason := param.supported()
+		if !supported {
+			g.goFile.writelnf("// function %s not supported; param %s, %s", c.cFuncName, param.cName, reason)
+			g.goFile.writeln("")
+			return
+		}
+	}
 
 	c.generateGo(g)
 	c.generateHeader(g)
