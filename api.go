@@ -150,7 +150,13 @@ func NewColorInfo3(p0 ColorInfo) ColorInfo {
 	}
 }
 
-// function skia_new_SkColorInfo4 not supported; param p0, pointer not supported
+func NewColorInfo4(p0 ColorInfo) ColorInfo {
+	c_p0 := p0.skia
+
+	return ColorInfo{
+		skia: C.skia_new_SkColorInfo4(c_p0),
+	}
+}
 
 func (o *ColorInfo) Delete() {
 	C.skia_delete_SkColorInfo(o.skia)
@@ -398,7 +404,13 @@ func NewYUVAPixmaps() YUVAPixmaps {
 	}
 }
 
-// function skia_new_SkYUVAPixmaps2 not supported; param that, pointer not supported
+func NewYUVAPixmaps2(that YUVAPixmaps) YUVAPixmaps {
+	c_that := that.skia
+
+	return YUVAPixmaps{
+		skia: C.skia_new_SkYUVAPixmaps2(c_that),
+	}
+}
 
 func NewYUVAPixmaps3(p0 YUVAPixmaps) YUVAPixmaps {
 	c_p0 := p0.skia
@@ -453,7 +465,13 @@ func NewNoncopyable() Noncopyable {
 	}
 }
 
-// function skia_new_SkNoncopyable2 not supported; param p0, pointer not supported
+func NewNoncopyable2(p0 Noncopyable) Noncopyable {
+	c_p0 := p0.skia
+
+	return Noncopyable{
+		skia: C.skia_new_SkNoncopyable2(c_p0),
+	}
+}
 
 /*
 Abstraction layer directly on top of an image codec.
@@ -629,7 +647,21 @@ func NewBitmap2(src Bitmap) Bitmap {
 	}
 }
 
-// function skia_new_SkBitmap3 not supported; param src, pointer not supported
+/*
+Copies settings from src to returned SkBitmap. Moves ownership of src pixels to
+SkBitmap.
+
+
+
+example: https://fiddle.skia.org/c/
+_move_SkBitmap*/
+func NewBitmap3(src Bitmap) Bitmap {
+	c_src := src.skia
+
+	return Bitmap{
+		skia: C.skia_new_SkBitmap3(c_src),
+	}
+}
 
 func (o *Bitmap) Delete() {
 	C.skia_delete_SkBitmap(o.skia)
@@ -841,7 +873,23 @@ func NewPaint3(paint Paint) Paint {
 	}
 }
 
-// function skia_new_SkPaint4 not supported; param paint, pointer not supported
+/*
+Implements a move constructor to avoid increasing the reference counts
+of objects referenced by the paint.
+
+After the call, paint is undefined, and can be safely destructed.
+
+
+
+example: https://fiddle.skia.org/c/
+_move_SkPaint*/
+func NewPaint4(paint Paint) Paint {
+	c_paint := paint.skia
+
+	return Paint{
+		skia: C.skia_new_SkPaint4(c_paint),
+	}
+}
 
 func (o *Paint) Delete() {
 	C.skia_delete_SkPaint(o.skia)
@@ -992,7 +1040,13 @@ func NewString5(p0 String) String {
 	}
 }
 
-// function skia_new_SkString6 not supported; param p0, pointer not supported
+func NewString6(p0 String) String {
+	c_p0 := p0.skia
+
+	return String{
+		skia: C.skia_new_SkString6(c_p0),
+	}
+}
 
 // function skia_new_SkString7 not supported; param p0, const std::string &
 
@@ -1473,7 +1527,13 @@ func NewDynamicMemoryWStream() DynamicMemoryWStream {
 	}
 }
 
-// function skia_new_SkDynamicMemoryWStream2 not supported; param p0, pointer not supported
+func NewDynamicMemoryWStream2(p0 DynamicMemoryWStream) DynamicMemoryWStream {
+	c_p0 := p0.skia
+
+	return DynamicMemoryWStream{
+		skia: C.skia_new_SkDynamicMemoryWStream2(c_p0),
+	}
+}
 
 func (o *DynamicMemoryWStream) Delete() {
 	C.skia_delete_SkDynamicMemoryWStream(o.skia)
@@ -2425,7 +2485,13 @@ func NewTDStorage3(that TDStorage) TDStorage {
 	}
 }
 
-// function skia_new_SkTDStorage4 not supported; param that, pointer not supported
+func NewTDStorage4(that TDStorage) TDStorage {
+	c_that := that.skia
+
+	return TDStorage{
+		skia: C.skia_new_SkTDStorage4(c_that),
+	}
+}
 
 func (o *TDStorage) Delete() {
 	C.skia_delete_SkTDStorage(o.skia)
@@ -2462,7 +2528,13 @@ type PDFUnion struct {
 	skia unsafe.Pointer
 }
 
-// function skia_new_SkPDFUnion not supported; param p0, pointer not supported
+func NewPDFUnion(p0 PDFUnion) PDFUnion {
+	c_p0 := p0.skia
+
+	return PDFUnion{
+		skia: C.skia_new_SkPDFUnion(c_p0),
+	}
+}
 
 func (o *PDFUnion) Delete() {
 	C.skia_delete_SkPDFUnion(o.skia)
@@ -2730,9 +2802,9 @@ func NewSVGColor2(c uint32) SVGColor {
 	}
 }
 
-// function skia_new_SkSVGColor3 not supported; param vars, pointer not supported
+// function skia_new_SkSVGColor3 not supported; param vars, SkSVGColor::Vars
 
-// function skia_new_SkSVGColor4 not supported; param vars, pointer not supported
+// function skia_new_SkSVGColor4 not supported; param vars, SkSVGColor::Vars
 
 func NewSVGColor5(p0 SVGColor) SVGColor {
 	c_p0 := p0.skia
@@ -2742,7 +2814,13 @@ func NewSVGColor5(p0 SVGColor) SVGColor {
 	}
 }
 
-// function skia_new_SkSVGColor6 not supported; param p0, pointer not supported
+func NewSVGColor6(p0 SVGColor) SVGColor {
+	c_p0 := p0.skia
+
+	return SVGColor{
+		skia: C.skia_new_SkSVGColor6(c_p0),
+	}
+}
 
 type SVGColorType int64
 
@@ -2783,7 +2861,13 @@ func NewSVGPaint5(p0 SVGPaint) SVGPaint {
 	}
 }
 
-// function skia_new_SkSVGPaint6 not supported; param p0, pointer not supported
+func NewSVGPaint6(p0 SVGPaint) SVGPaint {
+	c_p0 := p0.skia
+
+	return SVGPaint{
+		skia: C.skia_new_SkSVGPaint6(c_p0),
+	}
+}
 
 type SVGPaintType int64
 
@@ -2812,7 +2896,13 @@ func NewSVGFuncIRI2(t SVGFuncIRIType) SVGFuncIRI {
 	}
 }
 
-// function skia_new_SkSVGFuncIRI3 not supported; param iri, pointer not supported
+func NewSVGFuncIRI3(iri SVGIRI) SVGFuncIRI {
+	c_iri := iri.skia
+
+	return SVGFuncIRI{
+		skia: C.skia_new_SkSVGFuncIRI3(c_iri),
+	}
+}
 
 type SVGFuncIRIType int64
 

@@ -8,12 +8,13 @@ import (
 )
 
 type param struct {
-	cName    string
-	cgoName  string
-	goName   string
-	typ      typ
-	isClass  bool
-	isStruct bool
+	cName       string
+	cgoName     string
+	goName      string
+	typ         typ
+	isClass     bool
+	isStruct    bool
+	unsupported string
 }
 
 func newParam(cursor clang.Cursor, n int) param {
@@ -35,6 +36,9 @@ func newParam(cursor clang.Cursor, n int) param {
 			if strings.Contains(cursor.Spelling(), "class ") {
 				p.isClass = true
 			}
+			if strings.Contains(cursor.Spelling(), "SkSVGColor::Vars") {
+				p.unsupported = "SkSVGColor::Vars"
+			}
 		}
 		return clang.ChildVisit_Continue
 	})
@@ -49,7 +53,11 @@ func newParam(cursor clang.Cursor, n int) param {
 }
 
 func (p param) supported() (bool, string) {
-	if p.typ.isLValueReference {
+	if p.unsupported != "" {
+		return false, p.unsupported
+	}
+
+	if p.typ.isLValueReference || p.typ.isRValueReference {
 		return true, ""
 	}
 
@@ -77,7 +85,7 @@ func (p param) goDecl() string {
 }
 
 func (p param) goCArg() string {
-	if p.typ.isLValueReference {
+	if p.typ.isLValueReference || p.typ.isRValueReference {
 		if p.typ.isPrimitive {
 			return fmt.Sprintf("%s := (*C.%s)(&%s)", p.cgoName, p.typ.cgoName, p.goName)
 		}
@@ -87,7 +95,7 @@ func (p param) goCArg() string {
 }
 
 func (p param) cParamDecl() string {
-	if p.typ.isLValueReference {
+	if p.typ.isLValueReference || p.typ.isRValueReference {
 		if p.typ.isPrimitive {
 			return fmt.Sprintf("%s* %s", p.typ.cName, p.cgoName)
 		}
@@ -105,6 +113,12 @@ func (p param) cArg() string {
 			return fmt.Sprintf("reinterpret_cast<%s &>(*%s)", p.typ.cName, p.cgoName)
 		}
 		return fmt.Sprintf("reinterpret_cast<%s &>(%s)", p.typ.cName, p.cgoName)
+	}
+	if p.typ.isRValueReference {
+		if p.typ.isPrimitive {
+			return fmt.Sprintf("reinterpret_cast<%s &&>(*%s)", p.typ.cName, p.cgoName)
+		}
+		return fmt.Sprintf("reinterpret_cast<%s &&>(%s)", p.typ.cName, p.cgoName)
 	}
 	return p.cgoName
 }

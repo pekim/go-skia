@@ -24,6 +24,11 @@ void *skia_new_SkColorInfo3(void *c_p0) {
       new SkColorInfo(reinterpret_cast<SkColorInfo &>(c_p0)));
 }
 
+void *skia_new_SkColorInfo4(void *c_p0) {
+  return reinterpret_cast<void *>(
+      new SkColorInfo(reinterpret_cast<SkColorInfo &&>(c_p0)));
+}
+
 void skia_delete_SkColorInfo(void *obj) {
   delete reinterpret_cast<SkColorInfo *>(obj);
 }
@@ -52,6 +57,11 @@ void *skia_new_SkYUVAPixmaps() {
   return reinterpret_cast<void *>(new SkYUVAPixmaps());
 }
 
+void *skia_new_SkYUVAPixmaps2(void *c_that) {
+  return reinterpret_cast<void *>(
+      new SkYUVAPixmaps(reinterpret_cast<SkYUVAPixmaps &&>(c_that)));
+}
+
 void *skia_new_SkYUVAPixmaps3(void *c_p0) {
   return reinterpret_cast<void *>(
       new SkYUVAPixmaps(reinterpret_cast<SkYUVAPixmaps &>(c_p0)));
@@ -67,6 +77,11 @@ void *skia_new_SkNoncopyable() {
   return reinterpret_cast<void *>(new SkNoncopyable());
 }
 
+void *skia_new_SkNoncopyable2(void *c_p0) {
+  return reinterpret_cast<void *>(
+      new SkNoncopyable(reinterpret_cast<SkNoncopyable &&>(c_p0)));
+}
+
 void skia_delete_SkCodec(void *obj) { delete reinterpret_cast<SkCodec *>(obj); }
 
 void *skia_new_SkBitmap() { return reinterpret_cast<void *>(new SkBitmap()); }
@@ -74,6 +89,11 @@ void *skia_new_SkBitmap() { return reinterpret_cast<void *>(new SkBitmap()); }
 void *skia_new_SkBitmap2(void *c_src) {
   return reinterpret_cast<void *>(
       new SkBitmap(reinterpret_cast<SkBitmap &>(c_src)));
+}
+
+void *skia_new_SkBitmap3(void *c_src) {
+  return reinterpret_cast<void *>(
+      new SkBitmap(reinterpret_cast<SkBitmap &&>(c_src)));
 }
 
 void skia_delete_SkBitmap(void *obj) {
@@ -121,6 +141,11 @@ void *skia_new_SkPaint3(void *c_paint) {
       new SkPaint(reinterpret_cast<SkPaint &>(c_paint)));
 }
 
+void *skia_new_SkPaint4(void *c_paint) {
+  return reinterpret_cast<void *>(
+      new SkPaint(reinterpret_cast<SkPaint &&>(c_paint)));
+}
+
 void skia_delete_SkPaint(void *obj) { delete reinterpret_cast<SkPaint *>(obj); }
 
 void skia_delete_SkRasterHandleAllocator(void *obj) {
@@ -136,6 +161,11 @@ void *skia_new_SkString2(ulong c_len) {
 void *skia_new_SkString5(void *c_p0) {
   return reinterpret_cast<void *>(
       new SkString(reinterpret_cast<SkString &>(c_p0)));
+}
+
+void *skia_new_SkString6(void *c_p0) {
+  return reinterpret_cast<void *>(
+      new SkString(reinterpret_cast<SkString &&>(c_p0)));
 }
 
 void skia_delete_SkString(void *obj) {
@@ -220,6 +250,11 @@ void skia_delete_SkFILEWStream(void *obj) {
 
 void *skia_new_SkDynamicMemoryWStream() {
   return reinterpret_cast<void *>(new SkDynamicMemoryWStream());
+}
+
+void *skia_new_SkDynamicMemoryWStream2(void *c_p0) {
+  return reinterpret_cast<void *>(new SkDynamicMemoryWStream(
+      reinterpret_cast<SkDynamicMemoryWStream &&>(c_p0)));
 }
 
 void skia_delete_SkDynamicMemoryWStream(void *obj) {
@@ -368,8 +403,18 @@ void *skia_new_SkTDStorage3(void *c_that) {
       new SkTDStorage(reinterpret_cast<SkTDStorage &>(c_that)));
 }
 
+void *skia_new_SkTDStorage4(void *c_that) {
+  return reinterpret_cast<void *>(
+      new SkTDStorage(reinterpret_cast<SkTDStorage &&>(c_that)));
+}
+
 void skia_delete_SkTDStorage(void *obj) {
   delete reinterpret_cast<SkTDStorage *>(obj);
+}
+
+void *skia_new_SkPDFUnion(void *c_p0) {
+  return reinterpret_cast<void *>(
+      new SkPDFUnion(reinterpret_cast<SkPDFUnion &&>(c_p0)));
 }
 
 void skia_delete_SkPDFUnion(void *obj) {
@@ -447,6 +492,11 @@ void *skia_new_SkSVGColor5(void *c_p0) {
       new SkSVGColor(reinterpret_cast<SkSVGColor &>(c_p0)));
 }
 
+void *skia_new_SkSVGColor6(void *c_p0) {
+  return reinterpret_cast<void *>(
+      new SkSVGColor(reinterpret_cast<SkSVGColor &&>(c_p0)));
+}
+
 void *skia_new_SkSVGPaint() {
   return reinterpret_cast<void *>(new SkSVGPaint());
 }
@@ -460,12 +510,22 @@ void *skia_new_SkSVGPaint5(void *c_p0) {
       new SkSVGPaint(reinterpret_cast<SkSVGPaint &>(c_p0)));
 }
 
+void *skia_new_SkSVGPaint6(void *c_p0) {
+  return reinterpret_cast<void *>(
+      new SkSVGPaint(reinterpret_cast<SkSVGPaint &&>(c_p0)));
+}
+
 void *skia_new_SkSVGFuncIRI() {
   return reinterpret_cast<void *>(new SkSVGFuncIRI());
 }
 
 void *skia_new_SkSVGFuncIRI2(int c_t) {
   return reinterpret_cast<void *>(new SkSVGFuncIRI((SkSVGFuncIRI::Type)c_t));
+}
+
+void *skia_new_SkSVGFuncIRI3(void *c_iri) {
+  return reinterpret_cast<void *>(
+      new SkSVGFuncIRI(reinterpret_cast<SkSVGIRI &&>(c_iri)));
 }
 
 void *skia_new_SkSVGLineJoin() {
