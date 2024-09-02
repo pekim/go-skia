@@ -1,8 +1,6 @@
 package generate
 
 import (
-	"fmt"
-
 	"github.com/go-clang/clang-v15/clang"
 )
 
@@ -27,40 +25,40 @@ func (g *generator) visit() {
 	})
 }
 
-type speller interface {
-	Spelling() string
-}
+// type speller interface {
+// 	Spelling() string
+// }
 
-const dumpIndent = "  "
+// const dumpIndent = "  "
 
-func dumpCursor(cursor clang.Cursor, prefix string) {
-	fmt.Printf("%s%s : %s : %s\n", prefix,
-		cursor.Kind().Spelling(),
-		cursor.Spelling(),
-		cursor.Type().Kind())
+// func dumpCursor(cursor clang.Cursor, prefix string) {
+// 	fmt.Printf("%s%s : %s : %s\n", prefix,
+// 		cursor.Kind().Spelling(),
+// 		cursor.Spelling(),
+// 		cursor.Type().Kind())
 
-	dumpSpelling(prefix, "Type", cursor.Type())
-	if cursor.AccessSpecifier() != clang.AccessSpecifier_Invalid {
-		dumpSpelling(prefix, "AccessSpecifier", cursor.AccessSpecifier())
-	}
-	dumpCursorValue(prefix, "DisplayName", cursor.DisplayName())
-	if cursor.CXXRecord_IsAbstract() {
-		fmt.Println(prefix, "Abstract")
-	}
+// 	dumpSpelling(prefix, "Type", cursor.Type())
+// 	if cursor.AccessSpecifier() != clang.AccessSpecifier_Invalid {
+// 		dumpSpelling(prefix, "AccessSpecifier", cursor.AccessSpecifier())
+// 	}
+// 	dumpCursorValue(prefix, "DisplayName", cursor.DisplayName())
+// 	if cursor.CXXRecord_IsAbstract() {
+// 		fmt.Println(prefix, "Abstract")
+// 	}
 
-	cursor.Visit(func(cursor, _ clang.Cursor) (status clang.ChildVisitResult) {
-		dumpCursor(cursor, prefix+dumpIndent)
-		return clang.ChildVisit_Continue
-	})
-}
+// 	cursor.Visit(func(cursor, _ clang.Cursor) (status clang.ChildVisitResult) {
+// 		dumpCursor(cursor, prefix+dumpIndent)
+// 		return clang.ChildVisit_Continue
+// 	})
+// }
 
-func dumpCursorValue(prefix string, name string, value string) {
-	if len(value) > 0 {
-		fmt.Printf("%s%s = %s\n", prefix+dumpIndent+dumpIndent, name, value)
-	}
-}
+// func dumpCursorValue(prefix string, name string, value string) {
+// 	if len(value) > 0 {
+// 		fmt.Printf("%s%s = %s\n", prefix+dumpIndent+dumpIndent, name, value)
+// 	}
+// }
 
-func dumpSpelling(prefix string, name string, speller speller) {
-	value := speller.Spelling()
-	dumpCursorValue(prefix, name, value)
-}
+// func dumpSpelling(prefix string, name string, speller speller) {
+// 	value := speller.Spelling()
+// 	dumpCursorValue(prefix, name, value)
+// }

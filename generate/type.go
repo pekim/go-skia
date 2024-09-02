@@ -40,6 +40,7 @@ const (
 	CULongLong = "ulonglong"
 	CFloat     = "float"
 	CDouble    = "double"
+	CBool      = "bool"
 )
 
 // typ represents a generation type.
@@ -120,6 +121,7 @@ func typeFromClangType(cType clang.Type) (typ, error) {
 		typ_.goName = GoFloat64
 
 	case clang.Type_Bool:
+		typ_.cgoName = CBool
 		typ_.goName = GoBool
 
 	case clang.Type_Void:

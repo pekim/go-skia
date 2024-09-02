@@ -35,13 +35,6 @@ func newParam(cursor clang.Cursor, n int) param {
 }
 
 func (p param) supported() (bool, string) {
-	if p.typ.isPrimitive {
-		return true, ""
-	}
-	if p.typ.isLValueReference {
-		return true, ""
-	}
-
 	if p.typ.unsupported != "" {
 		return false, p.typ.unsupported
 	}
@@ -52,6 +45,13 @@ func (p param) supported() (bool, string) {
 	if p.typ.pointerLevel > 0 {
 		// TODO support pointer params
 		return false, "pointer not supported"
+	}
+
+	if p.typ.isPrimitive {
+		return true, ""
+	}
+	if p.typ.isLValueReference {
+		return true, ""
 	}
 
 	return false, "not supported"

@@ -9,6 +9,7 @@ func newFileHeader() *fileHeader {
 		genFile: newGenFile("./api.h"),
 	}
 
+	f.writeln("#include <stdbool.h>")
 	f.writeln("#include <sys/types.h>")
 	f.writeln("typedef signed char schar;")
 	f.writeln("typedef unsigned char uchar;")
