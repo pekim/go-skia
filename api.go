@@ -11,6 +11,33 @@ package skia
 // #include "api.h"
 import "C"
 
-import (
-	"unsafe"
+// import (
+// 	"unsafe"
+// )
+
+type Paint struct {
+}
+
+type PaintCap int
+
+const (
+	PaintCapButt   PaintCap = 0
+	PaintCapRound  PaintCap = 1
+	PaintCapSquare PaintCap = 2
+)
+
+type PaintJoin int
+
+const (
+	PaintJoinMiter PaintJoin = 0
+	PaintJoinRound PaintJoin = 1
+	PaintJoinBevel PaintJoin = 2
+)
+
+type PaintStyle int
+
+const (
+	PaintStyleFill          PaintStyle = 0
+	PaintStyleStroke        PaintStyle = 1
+	PaintStyleStrokeAndFill PaintStyle = 2
 )
