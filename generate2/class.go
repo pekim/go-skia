@@ -51,6 +51,7 @@ func (cc classes) generateGo(g generator) {
 	for _, class := range cc {
 		g.goFile.docComment(class.Doc)
 		g.goFile.writelnf("type %s struct {", class.goName)
+		g.goFile.writeln("  skia unsafe.Pointer")
 		g.goFile.writeln("}")
 		g.goFile.writeln("")
 

@@ -22,9 +22,9 @@ func newFileGo() *fileGo {
 	// #include "api.h"
 	import "C"
 
-	// import (
-	// 	"unsafe"
-	// )
+	import (
+		"unsafe"
+	)
 	`)
 
 	return f
