@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/pekim/go-skia/generate"
+	generate "github.com/pekim/go-skia/generate2"
 )
 
 func main() {

@@ -1,0 +1,31 @@
+[
+  {
+    "name": "SkPaint",
+    "enums": [
+      {
+        "name": "Cap",
+        "constants": [
+          { "name": "Butt" },
+          { "name": "Round" },
+          { "name": "Square" }
+        ]
+      },
+      {
+        "name": "Join",
+        "constants": [
+          { "name": "Miter" },
+          { "name": "Round" },
+          { "name": "Bevel" }
+        ]
+      },
+      {
+        "name": "Style",
+        "constants": [
+          { "name": "Fill" },
+          { "name": "Stroke" },
+          { "name": "StrokeAndFill" }
+        ]
+      }
+    ]
+  }
+]
