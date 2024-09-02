@@ -19,11 +19,13 @@ type class struct {
 
 type enum struct {
 	Name      string         `json:"name"`
+	Doc       []string       `json:"doc"`
 	Constants []enumConstant `json:"constants"`
 }
 
 type enumConstant struct {
-	Name string `json:"name"`
+	Name string   `json:"name"`
+	Doc  []string `json:"doc"`
 }
 
 func loadClasses() classes {
@@ -58,10 +60,13 @@ func (cc classes) generateGo(g generator) {
 }
 
 func (c class) generateEnum(g generator, enum enum) {
+	g.goFile.docComment(enum.Doc)
 	enumName := fmt.Sprintf("%s%s", c.goName, enum.Name)
+
 	g.goFile.writelnf("type %s int", enumName)
 	g.goFile.writeln("const    (")
 	for i, constant := range enum.Constants {
+		g.goFile.docComment(constant.Doc)
 		g.goFile.writelnf("%s%s %s = %d", enumName, constant.Name, enumName, i)
 	}
 	g.goFile.writeln(")")

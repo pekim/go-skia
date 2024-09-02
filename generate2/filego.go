@@ -33,3 +33,27 @@ func newFileGo() *fileGo {
 func (f fileGo) finish() {
 	f.close()
 }
+
+func (f fileGo) docComment(doc []string) {
+	if len(doc) == 0 {
+		return
+	}
+
+	if len(doc) == 1 {
+		f.write("// ")
+		f.writeln(doc[0])
+		return
+	}
+
+	f.writeln("/*")
+	for i, para := range doc {
+		if len(doc) == 0 {
+			continue
+		}
+		f.writeln(para)
+		if i < len(doc)-1 {
+			f.writeln("")
+		}
+	}
+	f.writeln("*/")
+}
