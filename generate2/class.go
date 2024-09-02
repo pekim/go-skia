@@ -14,7 +14,8 @@ type classes []class
 type class struct {
 	Name   string `json:"name"`
 	goName string
-	Enums  []enum `json:"enums"`
+	Doc    []string `json:"doc"`
+	Enums  []enum   `json:"enums"`
 }
 
 type enum struct {
@@ -48,6 +49,7 @@ func (cc classes) generate(g generator) {
 
 func (cc classes) generateGo(g generator) {
 	for _, class := range cc {
+		g.goFile.docComment(class.Doc)
 		g.goFile.writelnf("type %s struct {", class.goName)
 		g.goFile.writeln("}")
 		g.goFile.writeln("")
