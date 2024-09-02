@@ -66,6 +66,11 @@ const (
 	PaintFlagsAutoHinting PaintFlags = 8
 )
 
+/*
+Join enum specifies the settings for the paint's strokejoin.
+
+This is the treatment that is applied to corners in paths and rectangles.
+*/
 type PaintJoin int
 
 const (
@@ -77,6 +82,13 @@ const (
 	PaintJoinBevel PaintJoin = 2
 )
 
+/*
+Styles apply to rect, oval, path, and text.
+
+Bitmaps are always drawn in "fill", and lines are always drawn in "stroke".
+
+Note: strokeandfill implicitly draws the result with SkPath::kWinding_FillType, so if the original path is even-odd, the results may not appear the same as if it was drawn twice, filled and then stroked.
+*/
 type PaintStyle int
 
 const (
@@ -86,4 +98,18 @@ const (
 	PaintStyleStroke PaintStyle = 1
 	// fill and stroke the geometry
 	PaintStyleStrokeAndFill PaintStyle = 2
+)
+
+// Describes how to interpret the text parameters that are passed to paint methods like measureText() and getTextWidths().
+type PaintTextEncoding int
+
+const (
+	// the text parameters are UTF8
+	PaintTextEncodingUTF8 PaintTextEncoding = 0
+	// the text parameters are UTF16
+	PaintTextEncodingUTF16 PaintTextEncoding = 1
+	// the text parameters are UTF32
+	PaintTextEncodingUTF32 PaintTextEncoding = 2
+	// the text parameters are glyph indices
+	PaintTextEncodingGlyphID PaintTextEncoding = 3
 )

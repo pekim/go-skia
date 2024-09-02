@@ -69,6 +69,10 @@
 
       {
         "name": "Join",
+        "doc": [
+          "Join enum specifies the settings for the paint's strokejoin.",
+          "This is the treatment that is applied to corners in paths and rectangles."
+        ],
         "constants": [
           {
             "name": "Miter",
@@ -87,10 +91,30 @@
 
       {
         "name": "Style",
+        "doc": [
+          "Styles apply to rect, oval, path, and text.",
+          "Bitmaps are always drawn in \"fill\", and lines are always drawn in \"stroke\".",
+          "Note: strokeandfill implicitly draws the result with SkPath::kWinding_FillType, so if the original path is even-odd, the results may not appear the same as if it was drawn twice, filled and then stroked."
+        ],
         "constants": [
           { "name": "Fill", "doc": ["fill the geometry"] },
           { "name": "Stroke", "doc": ["stroke the geometry"] },
           { "name": "StrokeAndFill", "doc": ["fill and stroke the geometry"] }
+        ]
+      },
+      {
+        "name": "TextEncoding",
+        "doc": [
+          "Describes how to interpret the text parameters that are passed to paint methods like measureText() and getTextWidths()."
+        ],
+        "constants": [
+          { "name": "UTF8", "doc": ["the text parameters are UTF8"] },
+          { "name": "UTF16", "doc": ["the text parameters are UTF16"] },
+          { "name": "UTF32", "doc": ["the text parameters are UTF32"] },
+          {
+            "name": "GlyphID",
+            "doc": ["the text parameters are glyph indices"]
+          }
         ]
       }
     ]
