@@ -42,6 +42,9 @@ func (p param) supported() (bool, string) {
 		return true, ""
 	}
 
+	if p.typ.unsupported != "" {
+		return false, p.typ.unsupported
+	}
 	if p.typ.isArray {
 		// TODO support array params
 		return false, "array not supported"

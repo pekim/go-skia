@@ -54,10 +54,15 @@ type typ struct {
 	isRValueReference bool
 	arraySize         int64
 	isEnumLiteral     bool
+	unsupported       string
 }
 
 // typeFromClangType returns the typ from a Clang type.
 func typeFromClangType(cType clang.Type) (typ, error) {
+	if strings.Contains(cType.Spelling(), "std::") {
+		return typ{unsupported: cType.Spelling()}, nil
+	}
+
 	typ_ := typ{
 		cName:        strings.TrimPrefix(cType.Spelling(), "const "),
 		pointerLevel: 0,

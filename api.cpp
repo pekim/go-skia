@@ -151,11 +151,6 @@ void *skia_new_SkString5(void *c_p0) {
       new SkString(reinterpret_cast<SkString &>(c_p0)));
 }
 
-void *skia_new_SkString7(void *c_p0) {
-  return reinterpret_cast<void *>(
-      new SkString(reinterpret_cast<std::string &>(c_p0)));
-}
-
 void skia_delete_SkString(void *obj) {
   delete reinterpret_cast<SkString *>(obj);
 }
@@ -370,11 +365,6 @@ void *skia_new_GrDriverBugWorkarounds() {
 void *skia_new_GrDriverBugWorkarounds2(void *c_p0) {
   return reinterpret_cast<void *>(new GrDriverBugWorkarounds(
       reinterpret_cast<GrDriverBugWorkarounds &>(c_p0)));
-}
-
-void *skia_new_GrDriverBugWorkarounds3(void *c_workarounds) {
-  return reinterpret_cast<void *>(new GrDriverBugWorkarounds(
-      reinterpret_cast<std::vector<int32_t> &>(c_workarounds)));
 }
 
 void skia_delete_GrDriverBugWorkarounds(void *obj) {
