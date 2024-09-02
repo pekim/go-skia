@@ -1,11 +1,9 @@
 [
   {
     "name": "SkPaint",
-    "constructors": [
-      {
-        "NameSuffix": "Qaz"
-      }
-    ],
+
+    "constructors": [{}],
+
     "enums": [
       {
         "name": "Cap",
@@ -29,6 +27,43 @@
           }
         ]
       },
+
+      {
+        "name": "Flags",
+        "doc": [
+          "Specifies the bit values that are stored in the paint's flags."
+        ],
+        "constants": [
+          { "name": "AntiAlias", "doc": ["mask to enable antialiasing"] },
+          {
+            "name": "Dither",
+            "doc": ["mask to enable dithering. see setDither()"]
+          },
+          { "name": "FakeBoldText", "doc": ["mask to enable fake-bold text"] },
+          { "name": "LinearText", "doc": ["mask to enable linear-text"] },
+          {
+            "name": "SubpixelText",
+            "doc": ["mask to enable subpixel text positioning"]
+          },
+          {
+            "name": "DevKernText",
+            "doc": ["mask to enable device kerning text"]
+          },
+          {
+            "name": "LCDRenderText",
+            "doc": ["mask to enable subpixel glyph renderering"]
+          },
+          {
+            "name": "EmbeddedBitmapText",
+            "doc": ["mask to enable embedded bitmap strikes"]
+          },
+          {
+            "name": "AutoHinting",
+            "doc": ["mask to force Freetype's autohinter"]
+          }
+        ]
+      },
+
       {
         "name": "Join",
         "constants": [
@@ -46,6 +81,7 @@
           }
         ]
       },
+
       {
         "name": "Style",
         "constants": [

@@ -40,6 +40,30 @@ const (
 	PaintCapSquare PaintCap = 2
 )
 
+// Specifies the bit values that are stored in the paint's flags.
+type PaintFlags int
+
+const (
+	// mask to enable antialiasing
+	PaintFlagsAntiAlias PaintFlags = 0
+	// mask to enable dithering. see setDither()
+	PaintFlagsDither PaintFlags = 1
+	// mask to enable fake-bold text
+	PaintFlagsFakeBoldText PaintFlags = 2
+	// mask to enable linear-text
+	PaintFlagsLinearText PaintFlags = 3
+	// mask to enable subpixel text positioning
+	PaintFlagsSubpixelText PaintFlags = 4
+	// mask to enable device kerning text
+	PaintFlagsDevKernText PaintFlags = 5
+	// mask to enable subpixel glyph renderering
+	PaintFlagsLCDRenderText PaintFlags = 6
+	// mask to enable embedded bitmap strikes
+	PaintFlagsEmbeddedBitmapText PaintFlags = 7
+	// mask to force Freetype's autohinter
+	PaintFlagsAutoHinting PaintFlags = 8
+)
+
 type PaintJoin int
 
 const (
