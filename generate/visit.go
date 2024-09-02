@@ -19,6 +19,9 @@ func (g *generator) visit() {
 			if !cursor.IsAnonymous() {
 				g.enums = append(g.enums, newEnum(cursor, nil))
 			}
+
+		case clang.Cursor_StructDecl:
+			// fmt.Println(cursor.DisplayName())
 		}
 
 		return clang.ChildVisit_Continue

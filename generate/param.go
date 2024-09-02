@@ -8,10 +8,12 @@ import (
 )
 
 type param struct {
-	cName   string
-	cgoName string
-	goName  string
-	typ     typ
+	cName    string
+	cgoName  string
+	goName   string
+	typ      typ
+	isClass  bool
+	isStruct bool
 }
 
 func newParam(cursor clang.Cursor, n int) param {
@@ -25,6 +27,18 @@ func newParam(cursor clang.Cursor, n int) param {
 	p.cgoName = fmt.Sprintf("c_%s", p.cName)
 	p.goName = validGoName(p.cName)
 
+	cursor.Visit(func(cursor, parent clang.Cursor) (status clang.ChildVisitResult) {
+		if cursor.Kind() == clang.Cursor_TypeRef {
+			if strings.Contains(cursor.Spelling(), "struct ") {
+				p.isStruct = true
+			}
+			if strings.Contains(cursor.Spelling(), "class ") {
+				p.isClass = true
+			}
+		}
+		return clang.ChildVisit_Continue
+	})
+
 	typ, err := typeFromClangType(cursor.Type())
 	if err != nil {
 		panic(err)
@@ -35,6 +49,10 @@ func newParam(cursor clang.Cursor, n int) param {
 }
 
 func (p param) supported() (bool, string) {
+	if p.typ.isLValueReference {
+		return true, ""
+	}
+
 	if p.typ.unsupported != "" {
 		return false, p.typ.unsupported
 	}
@@ -50,9 +68,6 @@ func (p param) supported() (bool, string) {
 	if p.typ.isPrimitive {
 		return true, ""
 	}
-	if p.typ.isLValueReference {
-		return true, ""
-	}
 
 	return false, "not supported"
 }
@@ -63,13 +78,19 @@ func (p param) goDecl() string {
 
 func (p param) goCArg() string {
 	if p.typ.isLValueReference {
-		return fmt.Sprintf("%s := (*C.void)(%s.skia)", p.cgoName, p.goName)
+		if p.typ.isPrimitive {
+			return fmt.Sprintf("%s := (*C.%s)(&%s)", p.cgoName, p.typ.cgoName, p.goName)
+		}
+		return fmt.Sprintf("%s := %s.skia", p.cgoName, p.goName)
 	}
 	return fmt.Sprintf("%s := C.%s(%s)", p.cgoName, p.typ.cgoName, p.goName)
 }
 
 func (p param) cParamDecl() string {
 	if p.typ.isLValueReference {
+		if p.typ.isPrimitive {
+			return fmt.Sprintf("%s* %s", p.typ.cName, p.cgoName)
+		}
 		return fmt.Sprintf("void* %s", p.cgoName)
 	}
 	return fmt.Sprintf("%s %s", p.typ.cgoName, p.cgoName)
@@ -80,7 +101,10 @@ func (p param) cArg() string {
 		return fmt.Sprintf("(%s)%s", p.typ.cName, p.cgoName)
 	}
 	if p.typ.isLValueReference {
-		return fmt.Sprintf("reinterpret_cast<%s>(%s)", p.typ.cName, p.cgoName)
+		if p.typ.isPrimitive {
+			return fmt.Sprintf("reinterpret_cast<%s &>(*%s)", p.typ.cName, p.cgoName)
+		}
+		return fmt.Sprintf("reinterpret_cast<%s &>(%s)", p.typ.cName, p.cgoName)
 	}
 	return p.cgoName
 }

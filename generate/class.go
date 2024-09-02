@@ -55,6 +55,15 @@ func newClass(cursor clang.Cursor) class {
 }
 
 func (c *class) generate(g *generator) {
+	skipClasses := []string{
+		"SkArenaAlloc",
+		"SkAutoMutexExclusive",
+		"SkSVGRenderContext",
+	}
+	if slices.Contains(skipClasses, c.cName) {
+		return
+	}
+
 	if c.comment != "" {
 		g.goFile.writeln(c.comment)
 	}
@@ -69,7 +78,6 @@ func (c *class) generate(g *generator) {
 		// "undefined symbol: typeinfo for SkWStream"
 		"SkNullWStream",
 	}
-
 	if !c.abstract && !slices.Contains(skipCtorsClasses, c.cName) {
 		for _, ctor := range c.ctors {
 			ctor.generate(g)

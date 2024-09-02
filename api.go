@@ -142,7 +142,13 @@ func NewColorInfo() ColorInfo {
 
 // function skia_new_SkColorInfo2 not supported; param cs, not supported
 
-// function skia_new_SkColorInfo3 not supported; param p0, pointer not supported
+func NewColorInfo3(p0 ColorInfo) ColorInfo {
+	c_p0 := p0.skia
+
+	return ColorInfo{
+		skia: C.skia_new_SkColorInfo3(c_p0),
+	}
+}
 
 // function skia_new_SkColorInfo4 not supported; param p0, pointer not supported
 
@@ -178,7 +184,7 @@ func NewPixmap() Pixmap {
 	}
 }
 
-// function skia_new_SkPixmap2 not supported; param info, pointer not supported
+// function skia_new_SkPixmap2 not supported; param info, is struct
 
 /*
 SkData holds an immutable data buffer. Not only is the data immutable,
@@ -204,9 +210,15 @@ func NewYUVAInfo() YUVAInfo {
 	}
 }
 
-// function skia_new_SkYUVAInfo2 not supported; param p0, pointer not supported
+func NewYUVAInfo2(p0 YUVAInfo) YUVAInfo {
+	c_p0 := p0.skia
 
-// function skia_new_SkYUVAInfo3 not supported; param dimensions, not supported
+	return YUVAInfo{
+		skia: C.skia_new_SkYUVAInfo2(c_p0),
+	}
+}
+
+// function skia_new_SkYUVAInfo3 not supported; param dimensions, is struct
 
 type YUVAInfoYUVAChannels int64
 
@@ -335,11 +347,17 @@ func NewYUVAPixmapInfo() YUVAPixmapInfo {
 	}
 }
 
-// function skia_new_SkYUVAPixmapInfo2 not supported; param p0, pointer not supported
+// function skia_new_SkYUVAPixmapInfo2 not supported; param p1, array not supported
 
-// function skia_new_SkYUVAPixmapInfo3 not supported; param p0, pointer not supported
+// function skia_new_SkYUVAPixmapInfo3 not supported; param rowBytes, array not supported
 
-// function skia_new_SkYUVAPixmapInfo4 not supported; param p0, pointer not supported
+func NewYUVAPixmapInfo4(p0 YUVAPixmapInfo) YUVAPixmapInfo {
+	c_p0 := p0.skia
+
+	return YUVAPixmapInfo{
+		skia: C.skia_new_SkYUVAPixmapInfo4(c_p0),
+	}
+}
 
 /*
 Data type for Y, U, V, and possibly A channels independent of how values are packed into
@@ -382,7 +400,13 @@ func NewYUVAPixmaps() YUVAPixmaps {
 
 // function skia_new_SkYUVAPixmaps2 not supported; param that, pointer not supported
 
-// function skia_new_SkYUVAPixmaps3 not supported; param p0, pointer not supported
+func NewYUVAPixmaps3(p0 YUVAPixmaps) YUVAPixmaps {
+	c_p0 := p0.skia
+
+	return YUVAPixmaps{
+		skia: C.skia_new_SkYUVAPixmaps3(c_p0),
+	}
+}
 
 func (o *YUVAPixmaps) Delete() {
 	C.skia_delete_SkYUVAPixmaps(o.skia)
@@ -546,6 +570,83 @@ const (
 )
 
 /*
+SkBitmap describes a two-dimensional raster pixel array. SkBitmap is built on
+SkImageInfo, containing integer width and height, SkColorType and SkAlphaType
+describing the pixel format, and SkColorSpace describing the range of colors.
+SkBitmap points to SkPixelRef, which describes the physical array of pixels.
+SkImageInfo bounds may be located anywhere fully inside SkPixelRef bounds.
+
+SkBitmap can be drawn using SkCanvas. SkBitmap can be a drawing destination for SkCanvas
+draw member functions. SkBitmap flexibility as a pixel container limits some
+optimizations available to the target platform.
+
+If pixel array is primarily read-only, use SkImage for better performance.
+If pixel array is primarily written to, use SkSurface for better performance.
+
+Declaring SkBitmap const prevents altering SkImageInfo: the SkBitmap height, width,
+and so on cannot change. It does not affect SkPixelRef: a caller may write its
+pixels. Declaring SkBitmap const affects SkBitmap configuration, not its contents.
+
+SkBitmap is not thread safe. Each thread must have its own copy of SkBitmap fields,
+although threads may share the underlying pixel array.
+*/
+type Bitmap struct {
+	skia unsafe.Pointer
+}
+
+/*
+Creates an empty SkBitmap without pixels, with kUnknown_SkColorType,
+kUnknown_SkAlphaType, and with a width and height of zero. SkPixelRef origin is
+set to (0, 0).
+
+Use setInfo() to associate SkColorType, SkAlphaType, width, and height
+after SkBitmap has been created.
+
+
+
+example: https://fiddle.skia.org/c/
+_empty_constructor*/
+func NewBitmap() Bitmap {
+
+	return Bitmap{
+		skia: C.skia_new_SkBitmap(),
+	}
+}
+
+/*
+Copies settings from src to returned SkBitmap. Shares pixels if src has pixels
+allocated, so both bitmaps reference the same pixels.
+
+
+
+example: https://fiddle.skia.org/c/
+_copy_const_SkBitmap*/
+func NewBitmap2(src Bitmap) Bitmap {
+	c_src := src.skia
+
+	return Bitmap{
+		skia: C.skia_new_SkBitmap2(c_src),
+	}
+}
+
+// function skia_new_SkBitmap3 not supported; param src, pointer not supported
+
+func (o *Bitmap) Delete() {
+	C.skia_delete_SkBitmap(o.skia)
+}
+
+/*
+AllocFlags is obsolete.  We always zero pixel memory when allocated.
+*/
+type BitmapAllocFlags int64
+
+const (
+	/*
+	   zero pixel memory.  No effect.  This is the default.*/
+	BitmapAllocFlags_ZeroPixels_Alloc BitmapAllocFlags = 1
+)
+
+/*
 SkFlattenable is the base class for objects that need to be flattened
 into a data stream for either transport or as part of the key to the
 font cache.
@@ -603,7 +704,13 @@ type M44 struct {
 	skia unsafe.Pointer
 }
 
-// function skia_new_SkM44 not supported; param src, pointer not supported
+func NewM44(src M44) M44 {
+	c_src := src.skia
+
+	return M44{
+		skia: C.skia_new_SkM44(c_src),
+	}
+}
 
 func NewM442() M44 {
 
@@ -612,7 +719,14 @@ func NewM442() M44 {
 	}
 }
 
-// function skia_new_SkM443 not supported; param a, pointer not supported
+func NewM443(a M44, b M44) M44 {
+	c_a := a.skia
+	c_b := b.skia
+
+	return M44{
+		skia: C.skia_new_SkM443(c_a, c_b),
+	}
+}
 
 func NewM444(p0 M44Uninitialized_Constructor) M44 {
 	c_p0 := C.int(p0)
@@ -655,7 +769,13 @@ func NewM446(m0 float32, m4 float32, m8 float32, m12 float32, m1 float32, m5 flo
 	}
 }
 
-// function skia_new_SkM447 not supported; param src, pointer not supported
+func NewM447(src Matrix) M44 {
+	c_src := src.skia
+
+	return M44{
+		skia: C.skia_new_SkM447(c_src),
+	}
+}
 
 type M44Uninitialized_Constructor int64
 
@@ -697,9 +817,29 @@ func NewPaint() Paint {
 	}
 }
 
-// function skia_new_SkPaint2 not supported; param color, pointer not supported
+// function skia_new_SkPaint2 not supported; param colorSpace, pointer not supported
 
-// function skia_new_SkPaint3 not supported; param paint, pointer not supported
+/*
+Makes a shallow copy of SkPaint. SkPathEffect, SkShader,
+SkMaskFilter, SkColorFilter, and SkImageFilter are shared
+between the original paint and the copy. Objects containing SkRefCnt increment
+their references by one.
+
+The referenced objects SkPathEffect, SkShader, SkMaskFilter, SkColorFilter,
+and SkImageFilter cannot be modified after they are created.
+This prevents objects with SkRefCnt from being modified once SkPaint refers to them.
+
+
+
+example: https://fiddle.skia.org/c/
+_copy_const_SkPaint*/
+func NewPaint3(paint Paint) Paint {
+	c_paint := paint.skia
+
+	return Paint{
+		skia: C.skia_new_SkPaint3(c_paint),
+	}
+}
 
 // function skia_new_SkPaint4 not supported; param paint, pointer not supported
 
@@ -844,7 +984,13 @@ func NewString2(len uint64) String {
 
 // function skia_new_SkString4 not supported; param text, array not supported
 
-// function skia_new_SkString5 not supported; param p0, pointer not supported
+func NewString5(p0 String) String {
+	c_p0 := p0.skia
+
+	return String{
+		skia: C.skia_new_SkString5(c_p0),
+	}
+}
 
 // function skia_new_SkString6 not supported; param p0, pointer not supported
 
@@ -898,7 +1044,13 @@ func NewSurfaceProps3(flags uint32, p1 PixelGeometry, textContrast float32, text
 	}
 }
 
-// function skia_new_SkSurfaceProps4 not supported; param p0, pointer not supported
+func NewSurfaceProps4(p0 SurfaceProps) SurfaceProps {
+	c_p0 := p0.skia
+
+	return SurfaceProps{
+		skia: C.skia_new_SkSurfaceProps4(c_p0),
+	}
+}
 
 type SurfacePropsFlags int64
 
@@ -989,9 +1141,46 @@ func NewCanvas() Canvas {
 
 // function skia_new_SkCanvas3 not supported; param device, not supported
 
-// function skia_new_SkCanvas4 not supported; param bitmap, pointer not supported
+/*
+Constructs a canvas that draws into bitmap.
+Sets kUnknown_SkPixelGeometry in constructed SkSurface.
 
-// function skia_new_SkCanvas5 not supported; param bitmap, pointer not supported
+SkBitmap is copied so that subsequently editing bitmap will not affect
+constructed SkCanvas.
+
+May be deprecated in the future.
+
+
+
+example: https://fiddle.skia.org/c/
+_copy_const_SkBitmap*/
+func NewCanvas4(bitmap Bitmap) Canvas {
+	c_bitmap := bitmap.skia
+
+	return Canvas{
+		skia: C.skia_new_SkCanvas4(c_bitmap),
+	}
+}
+
+/*
+Constructs a canvas that draws into bitmap.
+Use props to match the device characteristics, like LCD striping.
+
+bitmap is copied so that subsequently editing bitmap will not affect
+constructed SkCanvas.
+
+
+
+example: https://fiddle.skia.org/c/
+_const_SkBitmap_const_SkSurfaceProps*/
+func NewCanvas5(bitmap Bitmap, props SurfaceProps) Canvas {
+	c_bitmap := bitmap.skia
+	c_props := props.skia
+
+	return Canvas{
+		skia: C.skia_new_SkCanvas5(c_bitmap, c_props),
+	}
+}
 
 func (o *Canvas) Delete() {
 	C.skia_delete_SkCanvas(o.skia)
@@ -1731,7 +1920,27 @@ func NewPath() Path {
 	}
 }
 
-// function skia_new_SkPath2 not supported; param path, pointer not supported
+/*
+Constructs a copy of an existing path.
+Copy constructor makes two paths identical by value. Internally, path and
+the returned result share pointer values. The underlying verb array, SkPoint array
+and weights are copied when modified.
+
+Creating a SkPath copy is very efficient and never allocates memory.
+SkPath are always copied by value from the interface; the underlying shared
+pointers are not exposed.
+
+
+
+example: https://fiddle.skia.org/c/
+_copy_const_SkPath*/
+func NewPath2(path Path) Path {
+	c_path := path.skia
+
+	return Path{
+		skia: C.skia_new_SkPath2(c_path),
+	}
+}
 
 func (o *Path) Delete() {
 	C.skia_delete_SkPath(o.skia)
@@ -1980,7 +2189,13 @@ func NewGrGLExtensions() GrGLExtensions {
 	}
 }
 
-// function skia_new_GrGLExtensions2 not supported; param p0, pointer not supported
+func NewGrGLExtensions2(p0 GrGLExtensions) GrGLExtensions {
+	c_p0 := p0.skia
+
+	return GrGLExtensions{
+		skia: C.skia_new_GrGLExtensions2(c_p0),
+	}
+}
 
 /*
 Describes a GrColorType by how many bits are used for each color component and how they are
@@ -2002,7 +2217,13 @@ func NewGrBackendFormat() GrBackendFormat {
 	}
 }
 
-// function skia_new_GrBackendFormat2 not supported; param p0, pointer not supported
+func NewGrBackendFormat2(p0 GrBackendFormat) GrBackendFormat {
+	c_p0 := p0.skia
+
+	return GrBackendFormat{
+		skia: C.skia_new_GrBackendFormat2(c_p0),
+	}
+}
 
 func (o *GrBackendFormat) Delete() {
 	C.skia_delete_GrBackendFormat(o.skia)
@@ -2019,9 +2240,15 @@ func NewGrBackendTexture() GrBackendTexture {
 	}
 }
 
-// function skia_new_GrBackendTexture2 not supported; param mockInfo, pointer not supported
+// function skia_new_GrBackendTexture2 not supported; param mockInfo, is struct
 
-// function skia_new_GrBackendTexture3 not supported; param that, pointer not supported
+func NewGrBackendTexture3(that GrBackendTexture) GrBackendTexture {
+	c_that := that.skia
+
+	return GrBackendTexture{
+		skia: C.skia_new_GrBackendTexture3(c_that),
+	}
+}
 
 func (o *GrBackendTexture) Delete() {
 	C.skia_delete_GrBackendTexture(o.skia)
@@ -2038,9 +2265,15 @@ func NewGrBackendRenderTarget() GrBackendRenderTarget {
 	}
 }
 
-// function skia_new_GrBackendRenderTarget2 not supported; param mockInfo, pointer not supported
+// function skia_new_GrBackendRenderTarget2 not supported; param mockInfo, is struct
 
-// function skia_new_GrBackendRenderTarget3 not supported; param that, pointer not supported
+func NewGrBackendRenderTarget3(that GrBackendRenderTarget) GrBackendRenderTarget {
+	c_that := that.skia
+
+	return GrBackendRenderTarget{
+		skia: C.skia_new_GrBackendRenderTarget3(c_that),
+	}
+}
 
 func (o *GrBackendRenderTarget) Delete() {
 	C.skia_delete_GrBackendRenderTarget(o.skia)
@@ -2057,7 +2290,13 @@ func NewGrDriverBugWorkarounds() GrDriverBugWorkarounds {
 	}
 }
 
-// function skia_new_GrDriverBugWorkarounds2 not supported; param p0, pointer not supported
+func NewGrDriverBugWorkarounds2(p0 GrDriverBugWorkarounds) GrDriverBugWorkarounds {
+	c_p0 := p0.skia
+
+	return GrDriverBugWorkarounds{
+		skia: C.skia_new_GrDriverBugWorkarounds2(c_p0),
+	}
+}
 
 // function skia_new_GrDriverBugWorkarounds3 not supported; param workarounds, const std::vector<int32_t> &
 
@@ -2111,20 +2350,6 @@ func NewMutex() Mutex {
 
 func (o *Mutex) Delete() {
 	C.skia_delete_SkMutex(o.skia)
-}
-
-type AutoMutexExclusive struct {
-	skia unsafe.Pointer
-}
-
-// function skia_new_SkAutoMutexExclusive not supported; param mutex, pointer not supported
-
-// function skia_new_SkAutoMutexExclusive2 not supported; param p0, pointer not supported
-
-// function skia_new_SkAutoMutexExclusive3 not supported; param p0, pointer not supported
-
-func (o *AutoMutexExclusive) Delete() {
-	C.skia_delete_SkAutoMutexExclusive(o.skia)
 }
 
 /*
@@ -2192,7 +2417,13 @@ func NewTDStorage(sizeOfT int32) TDStorage {
 
 // function skia_new_SkTDStorage2 not supported; param src, pointer not supported
 
-// function skia_new_SkTDStorage3 not supported; param that, pointer not supported
+func NewTDStorage3(that TDStorage) TDStorage {
+	c_that := that.skia
+
+	return TDStorage{
+		skia: C.skia_new_SkTDStorage3(c_that),
+	}
+}
 
 // function skia_new_SkTDStorage4 not supported; param that, pointer not supported
 
@@ -2330,28 +2561,6 @@ func (o *PDFDict) Delete() {
 	C.skia_delete_SkPDFDict(o.skia)
 }
 
-type ArenaAlloc struct {
-	skia unsafe.Pointer
-}
-
-// function skia_new_SkArenaAlloc not supported; param block, pointer not supported
-
-func NewArenaAlloc2(firstHeapAllocation uint64) ArenaAlloc {
-	c_firstHeapAllocation := C.ulong(firstHeapAllocation)
-
-	return ArenaAlloc{
-		skia: C.skia_new_SkArenaAlloc2(c_firstHeapAllocation),
-	}
-}
-
-// function skia_new_SkArenaAlloc3 not supported; param p0, pointer not supported
-
-// function skia_new_SkArenaAlloc4 not supported; param p0, pointer not supported
-
-func (o *ArenaAlloc) Delete() {
-	C.skia_delete_SkArenaAlloc(o.skia)
-}
-
 type ArenaAllocWithReset struct {
 	skia unsafe.Pointer
 }
@@ -2450,7 +2659,13 @@ func NewSVGLength2(v float32, u SVGLengthUnit) SVGLength {
 	}
 }
 
-// function skia_new_SkSVGLength3 not supported; param p0, pointer not supported
+func NewSVGLength3(p0 SVGLength) SVGLength {
+	c_p0 := p0.skia
+
+	return SVGLength{
+		skia: C.skia_new_SkSVGLength3(c_p0),
+	}
+}
 
 type SVGLengthUnit int64
 
@@ -2479,7 +2694,14 @@ func NewSVGIRI() SVGIRI {
 	}
 }
 
-// function skia_new_SkSVGIRI2 not supported; param iri, pointer not supported
+func NewSVGIRI2(t SVGIRIType, iri String) SVGIRI {
+	c_t := C.int(t)
+	c_iri := iri.skia
+
+	return SVGIRI{
+		skia: C.skia_new_SkSVGIRI2(c_t, c_iri),
+	}
+}
 
 type SVGIRIType int64
 
@@ -2500,13 +2722,25 @@ func NewSVGColor() SVGColor {
 	}
 }
 
-// function skia_new_SkSVGColor2 not supported; param c, pointer not supported
+func NewSVGColor2(c uint32) SVGColor {
+	c_c := (*C.uint)(&c)
+
+	return SVGColor{
+		skia: C.skia_new_SkSVGColor2(c_c),
+	}
+}
 
 // function skia_new_SkSVGColor3 not supported; param vars, pointer not supported
 
-// function skia_new_SkSVGColor4 not supported; param c, pointer not supported
+// function skia_new_SkSVGColor4 not supported; param vars, pointer not supported
 
-// function skia_new_SkSVGColor5 not supported; param p0, pointer not supported
+func NewSVGColor5(p0 SVGColor) SVGColor {
+	c_p0 := p0.skia
+
+	return SVGColor{
+		skia: C.skia_new_SkSVGColor5(c_p0),
+	}
+}
 
 // function skia_new_SkSVGColor6 not supported; param p0, pointer not supported
 
@@ -2539,9 +2773,15 @@ func NewSVGPaint2(t SVGPaintType) SVGPaint {
 
 // function skia_new_SkSVGPaint3 not supported; param c, not supported
 
-// function skia_new_SkSVGPaint4 not supported; param iri, pointer not supported
+// function skia_new_SkSVGPaint4 not supported; param fallback_color, not supported
 
-// function skia_new_SkSVGPaint5 not supported; param p0, pointer not supported
+func NewSVGPaint5(p0 SVGPaint) SVGPaint {
+	c_p0 := p0.skia
+
+	return SVGPaint{
+		skia: C.skia_new_SkSVGPaint5(c_p0),
+	}
+}
 
 // function skia_new_SkSVGPaint6 not supported; param p0, pointer not supported
 
@@ -2600,7 +2840,13 @@ func NewSVGLineJoin2(t SVGLineJoinType) SVGLineJoin {
 	}
 }
 
-// function skia_new_SkSVGLineJoin3 not supported; param p0, pointer not supported
+func NewSVGLineJoin3(p0 SVGLineJoin) SVGLineJoin {
+	c_p0 := p0.skia
+
+	return SVGLineJoin{
+		skia: C.skia_new_SkSVGLineJoin3(c_p0),
+	}
+}
 
 type SVGLineJoinType int64
 
@@ -2630,7 +2876,13 @@ func NewSVGSpreadMethod2(t SVGSpreadMethodType) SVGSpreadMethod {
 	}
 }
 
-// function skia_new_SkSVGSpreadMethod3 not supported; param p0, pointer not supported
+func NewSVGSpreadMethod3(p0 SVGSpreadMethod) SVGSpreadMethod {
+	c_p0 := p0.skia
+
+	return SVGSpreadMethod{
+		skia: C.skia_new_SkSVGSpreadMethod3(c_p0),
+	}
+}
 
 type SVGSpreadMethodType int64
 
@@ -2659,7 +2911,13 @@ func NewSVGFillRule2(t SVGFillRuleType) SVGFillRule {
 	}
 }
 
-// function skia_new_SkSVGFillRule3 not supported; param p0, pointer not supported
+func NewSVGFillRule3(p0 SVGFillRule) SVGFillRule {
+	c_p0 := p0.skia
+
+	return SVGFillRule{
+		skia: C.skia_new_SkSVGFillRule3(c_p0),
+	}
+}
 
 type SVGFillRuleType int64
 
@@ -2688,7 +2946,13 @@ func NewSVGVisibility2(t SVGVisibilityType) SVGVisibility {
 	}
 }
 
-// function skia_new_SkSVGVisibility3 not supported; param p0, pointer not supported
+func NewSVGVisibility3(p0 SVGVisibility) SVGVisibility {
+	c_p0 := p0.skia
+
+	return SVGVisibility{
+		skia: C.skia_new_SkSVGVisibility3(c_p0),
+	}
+}
 
 type SVGVisibilityType int64
 
@@ -2720,7 +2984,13 @@ func NewSVGDashArray2(t SVGDashArrayType) SVGDashArray {
 
 // function skia_new_SkSVGDashArray3 not supported; param dashArray, std::vector<SkSVGLength> &&
 
-// function skia_new_SkSVGDashArray4 not supported; param p0, pointer not supported
+func NewSVGDashArray4(p0 SVGDashArray) SVGDashArray {
+	c_p0 := p0.skia
+
+	return SVGDashArray{
+		skia: C.skia_new_SkSVGDashArray4(c_p0),
+	}
+}
 
 type SVGDashArrayType int64
 
@@ -2749,9 +3019,21 @@ func NewSVGStopColor2(t SVGStopColorType) SVGStopColor {
 	}
 }
 
-// function skia_new_SkSVGStopColor3 not supported; param c, pointer not supported
+func NewSVGStopColor3(c uint32) SVGStopColor {
+	c_c := (*C.uint)(&c)
 
-// function skia_new_SkSVGStopColor4 not supported; param p0, pointer not supported
+	return SVGStopColor{
+		skia: C.skia_new_SkSVGStopColor3(c_c),
+	}
+}
+
+func NewSVGStopColor4(p0 SVGStopColor) SVGStopColor {
+	c_p0 := p0.skia
+
+	return SVGStopColor{
+		skia: C.skia_new_SkSVGStopColor4(c_p0),
+	}
+}
 
 type SVGStopColorType int64
 
@@ -2847,7 +3129,13 @@ func NewSVGFontSize() SVGFontSize {
 	}
 }
 
-// function skia_new_SkSVGFontSize2 not supported; param s, pointer not supported
+func NewSVGFontSize2(s SVGLength) SVGFontSize {
+	c_s := s.skia
+
+	return SVGFontSize{
+		skia: C.skia_new_SkSVGFontSize2(c_s),
+	}
+}
 
 type SVGFontSizeType int64
 
@@ -2941,7 +3229,13 @@ func NewSVGFeInputType2(t SVGFeInputTypeType) SVGFeInputType {
 	}
 }
 
-// function skia_new_SkSVGFeInputType3 not supported; param id, pointer not supported
+func NewSVGFeInputType3(id String) SVGFeInputType {
+	c_id := id.skia
+
+	return SVGFeInputType{
+		skia: C.skia_new_SkSVGFeInputType3(c_id),
+	}
+}
 
 type SVGFeInputTypeType int64
 
@@ -3053,7 +3347,7 @@ type SVGLengthContext struct {
 	skia unsafe.Pointer
 }
 
-// function skia_new_SkSVGLengthContext not supported; param viewport, pointer not supported
+// function skia_new_SkSVGLengthContext not supported; param viewport, is struct
 
 type SVGLengthContextLengthType int64
 
@@ -3061,28 +3355,6 @@ const (
 	SVGLengthContextLengthType_Horizontal SVGLengthContextLengthType = 0
 	SVGLengthContextLengthType_Vertical   SVGLengthContextLengthType = 1
 	SVGLengthContextLengthType_Other      SVGLengthContextLengthType = 2
-)
-
-type SVGRenderContext struct {
-	skia unsafe.Pointer
-}
-
-// function skia_new_SkSVGRenderContext not supported; param p0, pointer not supported
-
-// function skia_new_SkSVGRenderContext2 not supported; param p0, pointer not supported
-
-// function skia_new_SkSVGRenderContext3 not supported; param p0, pointer not supported
-
-// function skia_new_SkSVGRenderContext4 not supported; param p0, pointer not supported
-
-func (o *SVGRenderContext) Delete() {
-	C.skia_delete_SkSVGRenderContext(o.skia)
-}
-
-type SVGRenderContextApplyFlags int64
-
-const (
-	SVGRenderContextApplyFlags_Leaf SVGRenderContextApplyFlags = 1
 )
 
 /*

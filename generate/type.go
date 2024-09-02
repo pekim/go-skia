@@ -162,6 +162,7 @@ func typeFromClangType(cType clang.Type) (typ, error) {
 			return typ{}, err
 		}
 
+		typ_.cName = subTyp.cName
 		typ_.cgoName = subTyp.cgoName
 		typ_.goName = subTyp.goName
 		typ_.pointerLevel += subTyp.pointerLevel

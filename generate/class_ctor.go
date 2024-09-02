@@ -41,6 +41,12 @@ func (c *classCtor) generate(g *generator) {
 	c.cFuncName = fmt.Sprintf("skia_new_%s%s", c.class.cName, c.nameSuffix)
 
 	for _, param := range c.params {
+		if param.isStruct {
+			g.goFile.writelnf("// function %s not supported; param %s, is struct", c.cFuncName, param.cName)
+			g.goFile.writeln("")
+			return
+		}
+
 		supported, reason := param.supported()
 		if !supported {
 			g.goFile.writelnf("// function %s not supported; param %s, %s", c.cFuncName, param.cName, reason)

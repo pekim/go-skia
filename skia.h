@@ -5,6 +5,7 @@
 #include "include/codec/SkPngDecoder.h"
 #include "include/codec/SkWbmpDecoder.h"
 #include "include/codec/SkWebpDecoder.h"
+#include "include/core/SkBitmap.h"
 #include "include/core/SkBlurTypes.h"
 #include "include/core/SkCanvas.h"
 #include "include/core/SkColorSpace.h"
