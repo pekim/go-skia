@@ -56,7 +56,7 @@ func (e enum) generate(g generator) {
 
 	f.writeDocComment(e.doc)
 	f.writelnf("type %s int64", e.goName)
-	f.writeln("")
+	f.writeln()
 
 	f.writeln("const (")
 	for _, constant := range e.constants {
@@ -64,5 +64,5 @@ func (e enum) generate(g generator) {
 		f.writelnf("%s %s = %d", constant.goName, e.goName, constant.value)
 	}
 	f.writeln(")")
-	f.writeln("")
+	f.writeln()
 }

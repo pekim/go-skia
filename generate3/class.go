@@ -66,7 +66,7 @@ func (c class) generateGo(g generator) {
 
 	f.writeDocComment(c.doc)
 	f.writelnf("type %s class", c.goName)
-	f.writeln("")
+	f.writeln()
 
 	for _, ctor := range c.Ctors {
 		if ctor != nil {

@@ -25,7 +25,7 @@ func newFile(filename string) *file {
 
 func (f *file) generatedFileComment() {
 	f.writeln("// This is a generated file. DO NOT EDIT.")
-	f.writeln("")
+	f.writeln()
 }
 
 func (f *file) close() {
@@ -65,7 +65,8 @@ func (f *file) write(content string) {
 	f.content.WriteString(content)
 }
 
-func (f *file) writeln(line string) {
+func (f *file) writeln(args ...any) {
+	line := fmt.Sprint(args...)
 	f.write(line)
 	f.write("\n")
 }

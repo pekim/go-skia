@@ -43,7 +43,7 @@ func (c classCtor) generateGo(g generator) {
 	f.writelnf("func %s() %s {", c.goFuncName, c.class.goName)
 	f.writelnf("  return %s(C.%s())", c.class.goName, c.cFuncName)
 	f.writeln("}")
-	f.writeln("")
+	f.writeln()
 }
 
 func (c classCtor) generateHeader(g generator) {
@@ -58,5 +58,5 @@ func (c classCtor) generateCpp(g generator) {
 	f.writelnf("void * %s() {", c.cFuncName)
 	f.writelnf("  return reinterpret_cast<void*>(new %s());", c.class.Name)
 	f.writeln("}")
-	f.writeln("")
+	f.writeln()
 }

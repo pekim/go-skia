@@ -12,7 +12,7 @@ func newFileCpp() *fileCpp {
 	for _, headerFile := range headerFiles {
 		f.writelnf("#include <%s>", headerFile)
 	}
-	f.writeln("")
+	f.writeln()
 
 	f.writelnf(`
 		extern "C"
