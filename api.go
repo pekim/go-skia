@@ -154,12 +154,9 @@ const (
 type PathSegmentMask int64
 
 const (
-	PathSegmentMaskLine PathSegmentMask = 1
-
-	PathSegmentMaskQuad PathSegmentMask = 2
-
+	PathSegmentMaskLine  PathSegmentMask = 1
+	PathSegmentMaskQuad  PathSegmentMask = 2
 	PathSegmentMaskConic PathSegmentMask = 4
-
 	PathSegmentMaskCubic PathSegmentMask = 8
 )
 
@@ -170,17 +167,11 @@ const (
 type PathVerb int64
 
 const (
-	PathVerbMove PathVerb = 0
-
-	PathVerbLine PathVerb = 1
-
-	PathVerbQuad PathVerb = 2
-
+	PathVerbMove  PathVerb = 0
+	PathVerbLine  PathVerb = 1
+	PathVerbQuad  PathVerb = 2
 	PathVerbConic PathVerb = 3
-
 	PathVerbCubic PathVerb = 4
-
 	PathVerbClose PathVerb = 5
-
-	PathVerbDone PathVerb = 6
+	PathVerbDone  PathVerb = 6
 )

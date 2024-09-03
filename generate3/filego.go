@@ -35,3 +35,9 @@ func newFileGo() *fileGo {
 func (f fileGo) finish() {
 	f.close()
 }
+
+func (f fileGo) writeComment(comment string) {
+	if len(comment) > 0 {
+		f.writeln(comment)
+	}
+}

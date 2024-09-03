@@ -47,7 +47,7 @@ func (c class) generate(g generator) {
 func (c class) generateGo(g generator) {
 	f := g.goFile
 
-	f.writeln(c.doc)
+	f.writeComment(c.doc)
 	f.writelnf("type %s class", c.goName)
 	f.writeln("")
 
@@ -55,16 +55,3 @@ func (c class) generateGo(g generator) {
 		enum.generate(g)
 	}
 }
-
-// func (c class) generateEnum(g generator, enum enum) {
-// 	g.goFile.docComment(enum.Doc)
-// 	enumName := fmt.Sprintf("%s%s", c.goName, enum.Name)
-
-// 	g.goFile.writelnf("type %s int", enumName)
-// 	g.goFile.writeln("const    (")
-// 	for i, constant := range enum.Constants {
-// 		g.goFile.docComment(constant.Doc)
-// 		g.goFile.writelnf("%s%s %s = %d", enumName, constant.Name, enumName, i)
-// 	}
-// 	g.goFile.writeln(")")
-// }

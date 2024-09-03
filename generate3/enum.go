@@ -51,13 +51,13 @@ func (e *enum) enrich(class *class, cursor clang.Cursor) {
 func (e enum) generate(g generator) {
 	f := g.goFile
 
-	f.writeln(e.doc)
+	f.writeComment(e.doc)
 	f.writelnf("type %s int64", e.goName)
 	f.writeln("")
 
 	f.writeln("const (")
 	for _, constant := range e.constants {
-		f.writeln(constant.doc)
+		f.writeComment(constant.doc)
 		f.writelnf("%s %s = %d", constant.goName, e.goName, constant.value)
 	}
 	f.writeln(")")
