@@ -6,6 +6,7 @@ import (
 	"os/exec"
 	"path"
 	"strings"
+	"sync"
 
 	"github.com/go-clang/clang-v15/clang"
 )
@@ -14,12 +15,28 @@ type translationUnit struct {
 	clang.TranslationUnit
 }
 
-func newTranslationUnit(headerFile string) translationUnit {
-	resourcesDir, err := clangResourceDir()
+var clangResourceDir = sync.OnceValue[string](func() string {
+	out, err := exec.Command("clang", "-print-resource-dir").Output()
 	if err != nil {
 		panic(err)
 	}
 
+	resDir := strings.TrimSpace(string(out))
+	parts := strings.Split(resDir, "\n")
+	resDir = parts[0]
+
+	if resDir == "" {
+		panic(errors.New("no output when getting clang resource dir"))
+	}
+	if !strings.HasPrefix(resDir, "/") {
+		panic(fmt.Errorf("expected clang resource dir to start with '/', but it %s", resDir))
+	}
+
+	return resDir
+})
+
+func newTranslationUnit(headerFile string) translationUnit {
+	resourcesDir := clangResourceDir()
 	parseArgs := []string{
 		"-I", path.Join(resourcesDir, "include"),
 		"-I", "./skia/skia/",
@@ -34,24 +51,4 @@ func newTranslationUnit(headerFile string) translationUnit {
 		panic(errCode)
 	}
 	return transUnit
-}
-
-func clangResourceDir() (string, error) {
-	out, err := exec.Command("clang", "-print-resource-dir").Output()
-	if err != nil {
-		panic(err)
-	}
-
-	resDir := strings.TrimSpace(string(out))
-	parts := strings.Split(resDir, "\n")
-	resDir = parts[0]
-
-	if resDir == "" {
-		return "", errors.New("no output when getting clang resource dir")
-	}
-	if !strings.HasPrefix(resDir, "/") {
-		return "", fmt.Errorf("expected clang resource dir to start with '/', but it %s", resDir)
-	}
-
-	return resDir, nil
 }
