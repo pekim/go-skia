@@ -10,7 +10,9 @@ extern "C" {
 #endif // __cplusplus
 
 void *misk_new_Paint();
+void *misk_new_PaintCopy(void *c_paint);
 void *misk_new_Path();
+void *misk_new_PathCopy(void *c_path);
 
 #ifdef __cplusplus
 }

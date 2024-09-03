@@ -71,7 +71,7 @@ func (tu translationUnit) enrichApi(api *api) {
 				break
 			}
 			if class, ok := api.findClass(cursor.Spelling()); ok {
-				class.enrich(cursor)
+				class.enrich(cursor, *api)
 			}
 
 		case clang.Cursor_EnumDecl:

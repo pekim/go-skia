@@ -38,7 +38,28 @@ Constructs SkPaint with default values.
 example: https://fiddle.skia.org/c/@Paint_empty_constructor
 */
 func NewPaint() Paint {
+
 	return Paint(C.misk_new_Paint())
+}
+
+/*
+Makes a shallow copy of SkPaint. SkPathEffect, SkShader,
+SkMaskFilter, SkColorFilter, and SkImageFilter are shared
+between the original paint and the copy. Objects containing SkRefCnt increment
+their references by one.
+
+The referenced objects SkPathEffect, SkShader, SkMaskFilter, SkColorFilter,
+and SkImageFilter cannot be modified after they are created.
+This prevents objects with SkRefCnt from being modified once SkPaint refers to them.
+
+@param paint  original to copy
+@return       shallow copy of paint
+
+example: https://fiddle.skia.org/c/@Paint_copy_const_SkPaint
+*/
+func NewPaintCopy(paint Paint) Paint {
+	c_paint := (unsafe.Pointer)(paint)
+	return Paint(C.misk_new_PaintCopy(c_paint))
 }
 
 /*
@@ -135,7 +156,28 @@ FillType is set to kWinding.
 example: https://fiddle.skia.org/c/@Path_empty_constructor
 */
 func NewPath() Path {
+
 	return Path(C.misk_new_Path())
+}
+
+/*
+Constructs a copy of an existing path.
+Copy constructor makes two paths identical by value. Internally, path and
+the returned result share pointer values. The underlying verb array, SkPoint array
+and weights are copied when modified.
+
+Creating a SkPath copy is very efficient and never allocates memory.
+SkPath are always copied by value from the interface; the underlying shared
+pointers are not exposed.
+
+@param path  SkPath to copy by value
+@return      copy of SkPath
+
+example: https://fiddle.skia.org/c/@Path_copy_const_SkPath
+*/
+func NewPathCopy(path Path) Path {
+	c_path := (unsafe.Pointer)(path)
+	return Path(C.misk_new_PathCopy(c_path))
 }
 
 /*

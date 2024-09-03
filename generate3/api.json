@@ -2,14 +2,12 @@
   "classes": [
     {
       "name": "SkPaint",
-      "constructors": [{}, null, null, null],
-      "constructorsX": [{}, null, { "suffix": "Copy" }, null],
+      "constructors": [{}, null, { "suffix": "Copy" }, null],
       "enums": [{ "name": "Cap" }, { "name": "Join" }, { "name": "Style" }]
     },
     {
       "name": "SkPath",
-      "constructors": [{}, null],
-      "constructorsX": [{}, { "suffix": "Copy" }],
+      "constructors": [{}, { "suffix": "Copy" }],
       "enums": [
         { "name": "AddPathMode" },
         { "name": "ArcSize" },

@@ -15,7 +15,7 @@ type class struct {
 	doc    string
 }
 
-func (c *class) enrich(cursor clang.Cursor) {
+func (c *class) enrich(cursor clang.Cursor, api api) {
 	c.goName = stripSkPrefix(c.Name)
 	c.doc = cursor.RawCommentText()
 	c.doc = strings.Replace(c.doc, fmt.Sprintf("\\class %s", c.Name), "", 1)
@@ -43,7 +43,7 @@ func (c *class) enrich(cursor clang.Cursor) {
 	for i, cursor := range ctorCursors {
 		ctor := c.Ctors[i]
 		if ctor != nil {
-			ctor.enrich(c, cursor)
+			ctor.enrich(api, c, cursor)
 		}
 	}
 }
