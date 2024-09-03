@@ -31,18 +31,18 @@ SkPaint does not directly implement dashing or blur, but contains the objects th
 type Paint class
 
 /*
-* Constructs SkPaint with default values.
+Constructs SkPaint with default values.
 
-	@return  default initialized SkPaint
+@return  default initialized SkPaint
 
-	example: https://fiddle.skia.org/c/@Paint_empty_constructor
+example: https://fiddle.skia.org/c/@Paint_empty_constructor
 */
 func NewPaint() Paint {
 	return Paint(C.misk_new_Paint())
 }
 
 /*
-	Cap draws at the beginning and end of an open path contour.
+Cap draws at the beginning and end of an open path contour.
 */
 type PaintCap int64
 
@@ -60,17 +60,17 @@ const (
 )
 
 /*
-	Join specifies how corners are drawn when a shape is stroked. Join
-	affects the four corners of a stroked rectangle, and the connected segments in a
-	stroked path.
+Join specifies how corners are drawn when a shape is stroked. Join
+affects the four corners of a stroked rectangle, and the connected segments in a
+stroked path.
 
-	Choose miter join to draw sharp corners. Choose round join to draw a circle with a
-	radius equal to the stroke width on top of the corner. Choose bevel join to minimally
-	connect the thick strokes.
+Choose miter join to draw sharp corners. Choose round join to draw a circle with a
+radius equal to the stroke width on top of the corner. Choose bevel join to minimally
+connect the thick strokes.
 
-	The fill path constructed to describe the stroked path respects the join setting but may
-	not contain the actual join. For instance, a fill path constructed with round joins does
-	not necessarily include circles at each connected segment.
+The fill path constructed to describe the stroked path respects the join setting but may
+not contain the actual join. For instance, a fill path constructed with round joins does
+not necessarily include circles at each connected segment.
 */
 type PaintJoin int64
 
@@ -88,12 +88,12 @@ const (
 )
 
 /*
-	Set Style to fill, stroke, or both fill and stroke geometry.
-	The stroke and fill
-	share all paint attributes; for instance, they are drawn with the same color.
+Set Style to fill, stroke, or both fill and stroke geometry.
+The stroke and fill
+share all paint attributes; for instance, they are drawn with the same color.
 
-	Use kStrokeAndFill_Style to avoid hitting the same pixels twice with a stroke draw and
-	a fill draw.
+Use kStrokeAndFill_Style to avoid hitting the same pixels twice with a stroke draw and
+a fill draw.
 */
 type PaintStyle int64
 
@@ -127,40 +127,41 @@ SkPath::updateBoundsCache to make SkPath thread safe.
 type Path class
 
 /*
-  - Constructs an empty SkPath. By default, SkPath has no verbs, no SkPoint, and no weights.
-    FillType is set to kWinding.
+Constructs an empty SkPath. By default, SkPath has no verbs, no SkPoint, and no weights.
+FillType is set to kWinding.
 
-    @return  empty SkPath
+@return  empty SkPath
 
-    example: https://fiddle.skia.org/c/@Path_empty_constructor
+example: https://fiddle.skia.org/c/@Path_empty_constructor
 */
 func NewPath() Path {
 	return Path(C.misk_new_Path())
 }
 
 /*
-	AddPathMode chooses how addPath() appends. Adding one SkPath to another can extend
-	the last contour or start a new contour.
+AddPathMode chooses how addPath() appends. Adding one SkPath to another can extend
+the last contour or start a new contour.
 */
 type PathAddPathMode int64
 
 const (
-	/** Contours are appended to the destination path as new contours.
-	 */
+	/*
+	   Contours are appended to the destination path as new contours.
+	*/
 	PathAddPathModeAppend PathAddPathMode = 0
 	/*
-	   - Extends the last contour of the destination path with the first countour
-	     of the source path, connecting them with a line.  If the last contour is
-	     closed, a new empty contour starting at its start point is extended instead.
-	     If the destination path is empty, the result is the source path.
-	     The last path of the result is closed only if the last path of the source is.
+	   Extends the last contour of the destination path with the first countour
+	   of the source path, connecting them with a line.  If the last contour is
+	   closed, a new empty contour starting at its start point is extended instead.
+	   If the destination path is empty, the result is the source path.
+	   The last path of the result is closed only if the last path of the source is.
 	*/
 	PathAddPathModeExtend PathAddPathMode = 1
 )
 
 /*
-	Four oval parts with radii (rx, ry) start at last SkPath SkPoint and ends at (x, y).
-	ArcSize and Direction select one of the four oval parts.
+Four oval parts with radii (rx, ry) start at last SkPath SkPoint and ends at (x, y).
+ArcSize and Direction select one of the four oval parts.
 */
 type PathArcSize int64
 
@@ -172,8 +173,8 @@ const (
 )
 
 /*
-	SegmentMask constants correspond to each drawing Verb type in SkPath; for
-	instance, if SkPath only contains lines, only the kLine_SegmentMask bit is set.
+SegmentMask constants correspond to each drawing Verb type in SkPath; for
+instance, if SkPath only contains lines, only the kLine_SegmentMask bit is set.
 */
 type PathSegmentMask int64
 
@@ -185,8 +186,8 @@ const (
 )
 
 /*
-	Verb instructs SkPath how to interpret one or more SkPoint and optional conic weight;
-	manage contour, and terminate SkPath.
+Verb instructs SkPath how to interpret one or more SkPoint and optional conic weight;
+manage contour, and terminate SkPath.
 */
 type PathVerb int64
 

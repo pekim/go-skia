@@ -25,7 +25,7 @@ func (e *enum) enrich(class *class, cursor clang.Cursor) {
 	e.goName = class.goName + e.Name
 	e.class = class
 	e.doc = cursor.RawCommentText()
-	e.doc = strings.Replace(e.doc, fmt.Sprintf("* \\enum %s::%s", class.Name, e.Name), "", 1)
+	e.doc = strings.Replace(e.doc, fmt.Sprintf("\\enum %s::%s", class.Name, e.Name), "", 1)
 
 	cursor.Visit(func(cursor, parent clang.Cursor) (status clang.ChildVisitResult) {
 		switch cursor.Kind() {
@@ -54,13 +54,13 @@ func (e *enum) enrich(class *class, cursor clang.Cursor) {
 func (e enum) generate(g generator) {
 	f := g.goFile
 
-	f.writeComment(e.doc)
+	f.writeDocComment(e.doc)
 	f.writelnf("type %s int64", e.goName)
 	f.writeln("")
 
 	f.writeln("const (")
 	for _, constant := range e.constants {
-		f.writeComment(constant.doc)
+		f.writeDocComment(constant.doc)
 		f.writelnf("%s %s = %d", constant.goName, e.goName, constant.value)
 	}
 	f.writeln(")")

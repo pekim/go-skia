@@ -39,7 +39,7 @@ func (c *classCtor) generate(g generator) {
 func (c classCtor) generateGo(g generator) {
 	f := g.goFile
 
-	f.writeComment(c.doc)
+	f.writeDocComment(c.doc)
 	f.writelnf("func %s() %s {", c.goFuncName, c.class.goName)
 	f.writelnf("  return %s(C.%s())", c.class.goName, c.cFuncName)
 	f.writeln("}")

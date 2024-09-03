@@ -18,7 +18,7 @@ type class struct {
 func (c *class) enrich(cursor clang.Cursor) {
 	c.goName = stripSkPrefix(c.Name)
 	c.doc = cursor.RawCommentText()
-	c.doc = strings.Replace(c.doc, fmt.Sprintf("* \\class %s", c.Name), "", 1)
+	c.doc = strings.Replace(c.doc, fmt.Sprintf("\\class %s", c.Name), "", 1)
 
 	var ctorCursors []clang.Cursor
 	cursor.Visit(func(cursor, parent clang.Cursor) (status clang.ChildVisitResult) {
@@ -64,7 +64,7 @@ func (c class) generate(g generator) {
 func (c class) generateGo(g generator) {
 	f := g.goFile
 
-	f.writeComment(c.doc)
+	f.writeDocComment(c.doc)
 	f.writelnf("type %s class", c.goName)
 	f.writeln("")
 
