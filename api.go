@@ -34,6 +34,19 @@ type Paint class
 */
 type PaintCap int64
 
+const (
+	// no stroke extension
+	PaintCapButt PaintCap = 0
+	// adds circle
+	PaintCapRound PaintCap = 1
+	// adds square
+	PaintCapSquare PaintCap = 2
+	// largest Cap value
+	PaintCapLast PaintCap = 2
+	// equivalent to kButt_Cap
+	PaintCapDefault PaintCap = 0
+)
+
 /*
 	Join specifies how corners are drawn when a shape is stroked. Join
 	affects the four corners of a stroked rectangle, and the connected segments in a
@@ -49,6 +62,19 @@ type PaintCap int64
 */
 type PaintJoin int64
 
+const (
+	// extends to miter limit
+	PaintJoinMiter PaintJoin = 0
+	// adds circle
+	PaintJoinRound PaintJoin = 1
+	// connects outside edges
+	PaintJoinBevel PaintJoin = 2
+	// equivalent to the largest value for Join
+	PaintJoinLast PaintJoin = 2
+	// equivalent to kMiter_Join
+	PaintJoinDefault PaintJoin = 0
+)
+
 /*
 	Set Style to fill, stroke, or both fill and stroke geometry.
 	The stroke and fill
@@ -58,6 +84,15 @@ type PaintJoin int64
 	a fill draw.
 */
 type PaintStyle int64
+
+const (
+	// set to fill geometry
+	PaintStyleFill PaintStyle = 0
+	// set to stroke geometry
+	PaintStyleStroke PaintStyle = 1
+	// sets to stroke and fill geometry
+	PaintStyleStrokeAndFill PaintStyle = 2
+)
 
 /*
 SkPath contain geometry. SkPath may be empty, or contain one or more verbs that
@@ -85,11 +120,32 @@ type Path class
 */
 type PathAddPathMode int64
 
+const (
+	/** Contours are appended to the destination path as new contours.
+	 */
+	PathAddPathModeAppend PathAddPathMode = 0
+	/*
+	   - Extends the last contour of the destination path with the first countour
+	     of the source path, connecting them with a line.  If the last contour is
+	     closed, a new empty contour starting at its start point is extended instead.
+	     If the destination path is empty, the result is the source path.
+	     The last path of the result is closed only if the last path of the source is.
+	*/
+	PathAddPathModeExtend PathAddPathMode = 1
+)
+
 /*
 	Four oval parts with radii (rx, ry) start at last SkPath SkPoint and ends at (x, y).
 	ArcSize and Direction select one of the four oval parts.
 */
 type PathArcSize int64
+
+const (
+	// smaller of arc pair
+	PathArcSizeSmall PathArcSize = 0
+	// larger of arc pair
+	PathArcSizeLarge PathArcSize = 1
+)
 
 /*
 	SegmentMask constants correspond to each drawing Verb type in SkPath; for
@@ -97,8 +153,34 @@ type PathArcSize int64
 */
 type PathSegmentMask int64
 
+const (
+	PathSegmentMaskLine PathSegmentMask = 1
+
+	PathSegmentMaskQuad PathSegmentMask = 2
+
+	PathSegmentMaskConic PathSegmentMask = 4
+
+	PathSegmentMaskCubic PathSegmentMask = 8
+)
+
 /*
 	Verb instructs SkPath how to interpret one or more SkPoint and optional conic weight;
 	manage contour, and terminate SkPath.
 */
 type PathVerb int64
+
+const (
+	PathVerbMove PathVerb = 0
+
+	PathVerbLine PathVerb = 1
+
+	PathVerbQuad PathVerb = 2
+
+	PathVerbConic PathVerb = 3
+
+	PathVerbCubic PathVerb = 4
+
+	PathVerbClose PathVerb = 5
+
+	PathVerbDone PathVerb = 6
+)

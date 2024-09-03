@@ -33,11 +33,13 @@ func (e *enum) enrich(class *class, cursor clang.Cursor) {
 			name := cursor.Spelling()
 			name = stripKPrefix(name)
 			name = strings.TrimSuffix(name, "_"+e.Name)
+			doc := cursor.RawCommentText()
+			doc = strings.Replace(doc, "!<", "", 1)
 
 			constant := enumConstant{
 				goName: e.goName + name,
 				value:  cursor.EnumConstantDeclValue(),
-				doc:    cursor.RawCommentText(),
+				doc:    doc,
 			}
 			e.constants = append(e.constants, constant)
 		}
@@ -53,4 +55,11 @@ func (e enum) generate(g generator) {
 	f.writelnf("type %s int64", e.goName)
 	f.writeln("")
 
+	f.writeln("const (")
+	for _, constant := range e.constants {
+		f.writeln(constant.doc)
+		f.writelnf("%s %s = %d", constant.goName, e.goName, constant.value)
+	}
+	f.writeln(")")
+	f.writeln("")
 }
