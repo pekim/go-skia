@@ -1,0 +1,17 @@
+{
+  "classes": [
+    {
+      "name": "SkPaint",
+
+      "constructors": [],
+
+      "enums": [
+        { "name": "Cap" },
+        { "name": "Flags" },
+        { "name": "Join" },
+        { "name": "Style" },
+        { "name": "TextEncoding" }
+      ]
+    }
+  ]
+}
