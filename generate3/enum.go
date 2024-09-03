@@ -38,8 +38,11 @@ func (e *enum) enrich(class *class, cursor clang.Cursor) {
 
 			constant := enumConstant{
 				goName: e.goName + name,
-				value:  cursor.EnumConstantDeclValue(),
-				doc:    doc,
+				// Assume that the value is signed, and will fit in an int64.
+				// Could use cursor.EnumDeclIntegerType().Kind() to find the type, but it rapidly
+				// gets rather involved as the type could in theory be any integer type.
+				value: cursor.EnumConstantDeclValue(),
+				doc:   doc,
 			}
 			e.constants = append(e.constants, constant)
 		}
