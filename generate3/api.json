@@ -3,13 +3,7 @@
     {
       "name": "SkPaint",
       "constructors": [],
-      "enums": [
-        { "name": "Cap" },
-        { "name": "Flags" },
-        { "name": "Join" },
-        { "name": "Style" },
-        { "name": "TextEncoding" }
-      ]
+      "enums": [{ "name": "Cap" }, { "name": "Join" }, { "name": "Style" }]
     },
     {
       "name": "SkPath",

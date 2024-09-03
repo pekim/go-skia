@@ -1,6 +1,7 @@
 package generate
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/go-clang/clang-v15/clang"
@@ -24,6 +25,7 @@ func (e *enum) enrich(class *class, cursor clang.Cursor) {
 	e.goName = class.goName + e.Name
 	e.class = class
 	e.doc = cursor.RawCommentText()
+	e.doc = strings.Replace(e.doc, fmt.Sprintf("* \\enum %s::%s", class.Name, e.Name), "", 1)
 
 	cursor.Visit(func(cursor, parent clang.Cursor) (status clang.ChildVisitResult) {
 		switch cursor.Kind() {
@@ -42,4 +44,13 @@ func (e *enum) enrich(class *class, cursor clang.Cursor) {
 
 		return clang.ChildVisit_Continue
 	})
+}
+
+func (e enum) generate(g generator) {
+	f := g.goFile
+
+	f.writeln(e.doc)
+	f.writelnf("type %s int64", e.goName)
+	f.writeln("")
+
 }

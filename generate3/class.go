@@ -1,6 +1,9 @@
 package generate
 
 import (
+	"fmt"
+	"strings"
+
 	"github.com/go-clang/clang-v15/clang"
 )
 
@@ -14,6 +17,7 @@ type class struct {
 func (c *class) enrich(cursor clang.Cursor) {
 	c.goName = stripSkPrefix(c.Name)
 	c.doc = cursor.RawCommentText()
+	c.doc = strings.Replace(c.doc, fmt.Sprintf("* \\class %s", c.Name), "", 1)
 
 	cursor.Visit(func(cursor, parent clang.Cursor) (status clang.ChildVisitResult) {
 		switch cursor.Kind() {
@@ -36,24 +40,21 @@ func (c *class) findEnum(name string) (*enum, bool) {
 	return nil, false
 }
 
-// func (cc classes) generate(g generator) {
-// 	cc.generateGo(g)
-// }
+func (c class) generate(g generator) {
+	c.generateGo(g)
+}
 
-// func (cc classes) generateGo(g generator) {
-// 	for _, class := range cc {
-// 		g.goFile.docComment(class.Doc)
-// 		g.goFile.writelnf("type %s struct {", class.goName)
-// 		g.goFile.writeln("  skia unsafe.Pointer")
-// 		g.goFile.writeln("}")
-// 		g.goFile.writeln("")
+func (c class) generateGo(g generator) {
+	f := g.goFile
 
-// 		for _, enum := range class.Enums {
-// 			class.generateEnum(g, enum)
-// 			g.goFile.writeln("")
-// 		}
-// 	}
-// }
+	f.writeln(c.doc)
+	f.writelnf("type %s class", c.goName)
+	f.writeln("")
+
+	for _, enum := range c.Enums {
+		enum.generate(g)
+	}
+}
 
 // func (c class) generateEnum(g generator, enum enum) {
 // 	g.goFile.docComment(enum.Doc)

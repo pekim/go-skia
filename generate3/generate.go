@@ -1,11 +1,6 @@
 package generate
 
-import (
-	"fmt"
-)
-
 type generator struct {
-	api        api
 	goFile     *fileGo
 	headerFile *fileHeader
 	cppFile    *fileCpp
@@ -13,6 +8,7 @@ type generator struct {
 
 func Generate() {
 	g := generator{}
+
 	g.goFile = newFileGo()
 	defer g.goFile.finish()
 
@@ -22,7 +18,6 @@ func Generate() {
 	g.cppFile = newFileCpp()
 	defer g.cppFile.finish()
 
-	g.api = loadApi()
-	fmt.Println(len(g.api.Classes))
-	// api.generate(g)
+	api := loadApi()
+	api.generate(g)
 }

@@ -39,3 +39,9 @@ func (a api) findClass(name string) (*class, bool) {
 	}
 	return nil, false
 }
+
+func (a api) generate(g generator) {
+	for _, class := range a.Classes {
+		class.generate(g)
+	}
+}
