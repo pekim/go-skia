@@ -10,17 +10,20 @@ type enum struct {
 	Name      string `json:"name"`
 	goName    string
 	class     *class
+	doc       string
 	constants []enumConstant
 }
 
 type enumConstant struct {
 	goName string
 	value  int64
+	doc    string
 }
 
 func (e *enum) enrich(class *class, cursor clang.Cursor) {
 	e.goName = class.goName + e.Name
 	e.class = class
+	e.doc = cursor.RawCommentText()
 
 	cursor.Visit(func(cursor, parent clang.Cursor) (status clang.ChildVisitResult) {
 		switch cursor.Kind() {
@@ -32,6 +35,7 @@ func (e *enum) enrich(class *class, cursor clang.Cursor) {
 			constant := enumConstant{
 				goName: e.goName + name,
 				value:  cursor.EnumConstantDeclValue(),
+				doc:    cursor.RawCommentText(),
 			}
 			e.constants = append(e.constants, constant)
 		}
