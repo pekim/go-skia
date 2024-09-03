@@ -19,12 +19,8 @@ func loadApi() api {
 		panic(err)
 	}
 
-	headerFiles := []string{
-		"skia/skia/include/core/SkPaint.h",
-		"skia/skia/include/core/SkPath.h",
-	}
 	for _, headerFile := range headerFiles {
-		tu := newTranslationUnit(headerFile)
+		tu := newTranslationUnit("skia/skia/" + headerFile)
 		tu.enrichApi(&api)
 	}
 

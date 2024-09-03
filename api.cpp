@@ -1,6 +1,7 @@
 // This is a generated file. DO NOT EDIT.
 
-#include "skia.h"
+#include <include/core/SkPaint.h>
+#include <include/core/SkPath.h>
 
 extern "C" {
 #include "api.h"

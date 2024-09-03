@@ -1,5 +1,10 @@
 package generate
 
+var headerFiles = []string{
+	"include/core/SkPaint.h",
+	"include/core/SkPath.h",
+}
+
 type generator struct {
 	goFile     *fileGo
 	headerFile *fileHeader
