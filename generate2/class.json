@@ -5,7 +5,18 @@
       "The SkPaint class holds the style and color information about how to draw geometries, text and bitmaps."
     ],
 
-    "constructors": [{}],
+    "constructors": [
+      { "doc": ["Constructs SkPaint with default values."] },
+      {
+        "suffix": "Copy",
+        "doc": [
+          "Makes a shallow copy of SkPaint.",
+          "SkPathEffect, SkShader, SkMaskFilter, SkColorFilter, and SkImageFilter are shared between the original paint and the copy. Objects containing SkRefCnt increment their references by one.",
+          "The referenced objects SkPathEffect, SkShader, SkMaskFilter, SkColorFilter, and SkImageFilter cannot be modified after they are created. This prevents objects with SkRefCnt from being modified once SkPaint refers to them."
+        ],
+        "params": [{ "name": "paint", "class": "SkPaint", "lvalueRef": true }]
+      }
+    ],
 
     "enums": [
       {
