@@ -9,3 +9,10 @@ func stripSkPrefix(name string) string {
 func stripKPrefix(name string) string {
 	return strings.TrimPrefix(name, "k")
 }
+
+func validGoName(name string) string {
+	if name == "type" {
+		return "typ"
+	}
+	return name
+}

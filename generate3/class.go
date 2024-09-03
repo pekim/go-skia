@@ -8,10 +8,11 @@ import (
 )
 
 type class struct {
-	Name   string `json:"name"`
+	Name   string       `json:"name"`
+	Ctors  []*classCtor `json:"constructors"`
+	Enums  []enum       `json:"enums"`
 	goName string
 	doc    string
-	Enums  []enum `json:"enums"`
 }
 
 func (c *class) enrich(cursor clang.Cursor) {
@@ -19,8 +20,14 @@ func (c *class) enrich(cursor clang.Cursor) {
 	c.doc = cursor.RawCommentText()
 	c.doc = strings.Replace(c.doc, fmt.Sprintf("* \\class %s", c.Name), "", 1)
 
+	var ctorCursors []clang.Cursor
 	cursor.Visit(func(cursor, parent clang.Cursor) (status clang.ChildVisitResult) {
 		switch cursor.Kind() {
+		case clang.Cursor_Constructor:
+			if cursor.AccessSpecifier() == clang.AccessSpecifier_Public {
+				ctorCursors = append(ctorCursors, cursor)
+			}
+
 		case clang.Cursor_EnumDecl:
 			if enum, ok := c.findEnum(cursor.Spelling()); ok {
 				enum.enrich(c, cursor)
@@ -29,6 +36,16 @@ func (c *class) enrich(cursor clang.Cursor) {
 
 		return clang.ChildVisit_Continue
 	})
+
+	if len(c.Ctors) != len(ctorCursors) {
+		panic(fmt.Sprintf("class %s has %d ctors, but expected %d", c.Name, len(ctorCursors), len(c.Ctors)))
+	}
+	for i, cursor := range ctorCursors {
+		ctor := c.Ctors[i]
+		if ctor != nil {
+			ctor.enrich(c, cursor)
+		}
+	}
 }
 
 func (c *class) findEnum(name string) (*enum, bool) {
@@ -50,6 +67,12 @@ func (c class) generateGo(g generator) {
 	f.writeComment(c.doc)
 	f.writelnf("type %s class", c.goName)
 	f.writeln("")
+
+	for _, ctor := range c.Ctors {
+		if ctor != nil {
+			ctor.generate(g)
+		}
+	}
 
 	for _, enum := range c.Enums {
 		enum.generate(g)

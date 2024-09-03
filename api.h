@@ -9,6 +9,9 @@ typedef unsigned char uchar;
 extern "C" {
 #endif // __cplusplus
 
+void *misk_new_Paint();
+void *misk_new_Path();
+
 #ifdef __cplusplus
 }
 #endif // __cplusplus

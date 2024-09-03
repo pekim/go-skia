@@ -14,7 +14,10 @@ func main() {
 		panic(fmt.Sprintf("unexpected value for skia.PaintJoinBevel, %d", skia.PaintJoinBevel))
 	}
 
-	// p := skia.NewPaint()
+	paint := skia.NewPaint()
+	if paint == nil {
+		panic("Paint is nil")
+	}
 	// p.Delete()
 
 	// s := skia.NewString()

@@ -8,6 +8,7 @@ package skia
 // #cgo LDFLAGS: -l skshaper
 // #cgo LDFLAGS: -l svg
 // #cgo pkg-config: freetype2
+//
 // #include "api.h"
 import "C"
 
@@ -28,6 +29,17 @@ algorithms that alter the drawing geometry, color, and transparency. For instanc
 SkPaint does not directly implement dashing or blur, but contains the objects that do so.
 */
 type Paint class
+
+/*
+* Constructs SkPaint with default values.
+
+	@return  default initialized SkPaint
+
+	example: https://fiddle.skia.org/c/@Paint_empty_constructor
+*/
+func NewPaint() Paint {
+	return Paint(C.misk_new_Paint())
+}
 
 /*
 	Cap draws at the beginning and end of an open path contour.
@@ -113,6 +125,18 @@ Internally, SkPath lazily computes metrics likes bounds and convexity. Call
 SkPath::updateBoundsCache to make SkPath thread safe.
 */
 type Path class
+
+/*
+  - Constructs an empty SkPath. By default, SkPath has no verbs, no SkPoint, and no weights.
+    FillType is set to kWinding.
+
+    @return  empty SkPath
+
+    example: https://fiddle.skia.org/c/@Path_empty_constructor
+*/
+func NewPath() Path {
+	return Path(C.misk_new_Path())
+}
 
 /*
 	AddPathMode chooses how addPath() appends. Adding one SkPath to another can extend

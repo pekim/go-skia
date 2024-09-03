@@ -19,6 +19,7 @@ func newFileGo() *fileGo {
 	// #cgo LDFLAGS: -l skshaper
 	// #cgo LDFLAGS: -l svg
 	// #cgo pkg-config: freetype2
+	//
 	// #include "api.h"
 	import "C"
 
