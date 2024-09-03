@@ -3,6 +3,7 @@ package generate
 import (
 	_ "embed"
 	"encoding/json"
+	"fmt"
 )
 
 //go:embed api.json
@@ -33,6 +34,15 @@ func loadApi() api {
 	err := json.Unmarshal(apiJson, &api)
 	if err != nil {
 		panic(err)
+	}
+
+	headerFiles := []string{
+		"skia/skia/include/core/SkPaint.h",
+		"skia/skia/include/core/SkPath.h",
+	}
+	for _, headerFile := range headerFiles {
+		tu := newTranslationUnit(headerFile)
+		fmt.Println(tu)
 	}
 
 	return api
