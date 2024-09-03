@@ -11,6 +11,8 @@ package skia
 // #include "api.h"
 import "C"
 
-// import (
-// 	"unsafe"
-// )
+import (
+	"unsafe"
+)
+
+type class unsafe.Pointer

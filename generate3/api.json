@@ -10,6 +10,16 @@
         { "name": "Style" },
         { "name": "TextEncoding" }
       ]
+    },
+    {
+      "name": "SkPath",
+      "constructors": [],
+      "enums": [
+        { "name": "AddPathMode" },
+        { "name": "ArcSize" },
+        { "name": "SegmentMask" },
+        { "name": "Verb" }
+      ]
     }
   ]
 }

@@ -56,7 +56,7 @@ func newTranslationUnit(headerFile string) translationUnit {
 	return transUnit
 }
 
-func (tu translationUnit) populateApi(api *api) {
+func (tu translationUnit) enrichApi(api *api) {
 	tu.TranslationUnitCursor().Visit(func(cursor, parent clang.Cursor) (status clang.ChildVisitResult) {
 		file, _, _, _ := cursor.Location().FileLocation()
 		if file.Name() != tu.headerFile {
@@ -70,8 +70,9 @@ func (tu translationUnit) populateApi(api *api) {
 				// Skip forward declarations.
 				break
 			}
-			fmt.Println(cursor.Spelling())
-			// class:=api.findClass(cursor.Spelling())
+			if class, ok := api.findClass(cursor.Spelling()); ok {
+				class.enrich(cursor)
+			}
 
 		case clang.Cursor_EnumDecl:
 			// TODO

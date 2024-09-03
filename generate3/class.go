@@ -1,5 +1,41 @@
 package generate
 
+import (
+	"github.com/go-clang/clang-v15/clang"
+)
+
+type class struct {
+	Name   string `json:"name"`
+	goName string
+	doc    string
+	Enums  []enum `json:"enums"`
+}
+
+func (c *class) enrich(cursor clang.Cursor) {
+	c.goName = stripSkPrefix(c.Name)
+	c.doc = cursor.RawCommentText()
+
+	cursor.Visit(func(cursor, parent clang.Cursor) (status clang.ChildVisitResult) {
+		switch cursor.Kind() {
+		case clang.Cursor_EnumDecl:
+			if enum, ok := c.findEnum(cursor.Spelling()); ok {
+				enum.enrich(c, cursor)
+			}
+		}
+
+		return clang.ChildVisit_Continue
+	})
+}
+
+func (c *class) findEnum(name string) (*enum, bool) {
+	for i, enum := range c.Enums {
+		if enum.Name == name {
+			return &c.Enums[i], true
+		}
+	}
+	return nil, false
+}
+
 // func (cc classes) generate(g generator) {
 // 	cc.generateGo(g)
 // }

@@ -23,11 +23,6 @@ func Generate() {
 	defer g.cppFile.finish()
 
 	g.api = loadApi()
-	// fmt.Printf("%#v\n", g.api)
-	fmt.Println(g.api)
+	fmt.Println(len(g.api.Classes))
 	// api.generate(g)
 }
-
-// func stripSkPrefix(name string) string {
-// 	return strings.TrimPrefix(name, "Sk")
-// }

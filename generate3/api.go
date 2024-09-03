@@ -9,24 +9,8 @@ import (
 var apiJson []byte
 
 type api struct {
-	Classes classes `json:"classes"`
+	Classes []class `json:"classes"`
 }
-
-type classes []class
-
-type class struct {
-	Name  string `json:"name"`
-	Enums []enum `json:"enums"`
-}
-
-type enum struct {
-	Name string `json:"name"`
-	// constants []enumConstant
-}
-
-// type enumConstant struct {
-// 	name string
-// }
 
 func loadApi() api {
 	var api api
@@ -41,8 +25,17 @@ func loadApi() api {
 	}
 	for _, headerFile := range headerFiles {
 		tu := newTranslationUnit(headerFile)
-		tu.populateApi(&api)
+		tu.enrichApi(&api)
 	}
 
 	return api
+}
+
+func (a api) findClass(name string) (*class, bool) {
+	for i, class := range a.Classes {
+		if class.Name == name {
+			return &a.Classes[i], true
+		}
+	}
+	return nil, false
 }
