@@ -3,7 +3,6 @@ package generate
 import (
 	_ "embed"
 	"encoding/json"
-	"fmt"
 )
 
 //go:embed api.json
@@ -42,7 +41,7 @@ func loadApi() api {
 	}
 	for _, headerFile := range headerFiles {
 		tu := newTranslationUnit(headerFile)
-		fmt.Println(tu)
+		tu.populateApi(&api)
 	}
 
 	return api
