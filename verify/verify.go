@@ -1,9 +1,19 @@
 package main
 
+import (
+	"fmt"
+
+	"github.com/pekim/go-skia"
+)
+
 // A simple program for verifying that the skia package builds
 // and can be used.
 
 func main() {
+	if skia.PaintJoinBevel != 2 {
+		panic(fmt.Sprintf("unexpected value for skia.PaintJoinBevel, %d", skia.PaintJoinBevel))
+	}
+
 	// p := skia.NewPaint()
 	// p.Delete()
 
