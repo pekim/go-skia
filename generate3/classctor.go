@@ -79,7 +79,7 @@ func (c classCtor) generateCpp(g generator) {
 	}
 
 	f.writelnf("void * %s(%s) {", c.cFuncName, strings.Join(params, ", "))
-	f.writelnf("  return reinterpret_cast<void*>(new %s(%s));", c.class.Name, strings.Join(args, ", "))
+	f.writelnf("  return reinterpret_cast<void*>(new %s(%s));", c.class.CName, strings.Join(args, ", "))
 	f.writeln("}")
 	f.writeln()
 }

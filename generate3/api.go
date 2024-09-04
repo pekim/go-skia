@@ -33,7 +33,7 @@ func loadApi() api {
 
 func (a api) findClass(name string) (*class, bool) {
 	for i, class := range a.Classes {
-		if class.Name == name {
+		if class.CName == name {
 			return &a.Classes[i], true
 		}
 	}

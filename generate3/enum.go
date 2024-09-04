@@ -8,7 +8,7 @@ import (
 )
 
 type enum struct {
-	Name      string `json:"name"`
+	CName     string `json:"name"`
 	goName    string
 	class     *class
 	doc       string
@@ -22,17 +22,17 @@ type enumConstant struct {
 }
 
 func (e *enum) enrich(class *class, cursor clang.Cursor) {
-	e.goName = class.goName + e.Name
+	e.goName = class.goName + e.CName
 	e.class = class
 	e.doc = cursor.RawCommentText()
-	e.doc = strings.Replace(e.doc, fmt.Sprintf("\\enum %s::%s", class.Name, e.Name), "", 1)
+	e.doc = strings.Replace(e.doc, fmt.Sprintf("\\enum %s::%s", class.CName, e.CName), "", 1)
 
 	cursor.Visit(func(cursor, parent clang.Cursor) (status clang.ChildVisitResult) {
 		switch cursor.Kind() {
 		case clang.Cursor_EnumConstantDecl:
 			name := cursor.Spelling()
 			name = stripKPrefix(name)
-			name = strings.TrimSuffix(name, "_"+e.Name)
+			name = strings.TrimSuffix(name, "_"+e.CName)
 			doc := cursor.RawCommentText()
 			doc = strings.Replace(doc, "!<", "", 1)
 

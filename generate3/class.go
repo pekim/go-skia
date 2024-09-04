@@ -8,7 +8,7 @@ import (
 )
 
 type class struct {
-	Name   string       `json:"name"`
+	CName  string       `json:"name"`
 	Ctors  []*classCtor `json:"constructors"`
 	Enums  []enum       `json:"enums"`
 	dtor   classDtor
@@ -17,9 +17,9 @@ type class struct {
 }
 
 func (c *class) enrich(cursor clang.Cursor, api api) {
-	c.goName = stripSkPrefix(c.Name)
+	c.goName = stripSkPrefix(c.CName)
 	c.doc = cursor.RawCommentText()
-	c.doc = strings.Replace(c.doc, fmt.Sprintf("\\class %s", c.Name), "", 1)
+	c.doc = strings.Replace(c.doc, fmt.Sprintf("\\class %s", c.CName), "", 1)
 
 	var ctorCursors []clang.Cursor
 	cursor.Visit(func(cursor, parent clang.Cursor) (status clang.ChildVisitResult) {
@@ -42,7 +42,7 @@ func (c *class) enrich(cursor clang.Cursor, api api) {
 	})
 
 	if len(c.Ctors) != len(ctorCursors) {
-		panic(fmt.Sprintf("class %s has %d ctors, but expected %d", c.Name, len(ctorCursors), len(c.Ctors)))
+		panic(fmt.Sprintf("class %s has %d ctors, but expected %d", c.CName, len(ctorCursors), len(c.Ctors)))
 	}
 	for i, cursor := range ctorCursors {
 		ctor := c.Ctors[i]
@@ -54,7 +54,7 @@ func (c *class) enrich(cursor clang.Cursor, api api) {
 
 func (c *class) findEnum(name string) (*enum, bool) {
 	for i, enum := range c.Enums {
-		if enum.Name == name {
+		if enum.CName == name {
 			return &c.Enums[i], true
 		}
 	}

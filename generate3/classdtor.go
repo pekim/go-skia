@@ -26,7 +26,7 @@ func (d *classDtor) generate(g generator) {
 }
 
 func (d *classDtor) generateGo(g generator) {
-	d.cFuncName = fmt.Sprintf("misk_delete_%s", d.class.Name)
+	d.cFuncName = fmt.Sprintf("misk_delete_%s", d.class.CName)
 
 	f := g.goFile
 	f.writeDocComment(d.doc)
@@ -43,7 +43,7 @@ func (d *classDtor) generateHeader(g generator) {
 func (d *classDtor) generateCpp(g generator) {
 	f := g.cppFile
 	f.writelnf("void  %s(void *obj) {", d.cFuncName)
-	f.writelnf("  delete reinterpret_cast<%s*>(obj);", d.class.Name)
+	f.writelnf("  delete reinterpret_cast<%s*>(obj);", d.class.CName)
 	f.writeln("}")
 	f.writeln()
 }
