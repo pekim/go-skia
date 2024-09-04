@@ -10,9 +10,9 @@ func newFileHeader() *fileHeader {
 	}
 
 	f.writeln("#include <stdbool.h>")
-	f.writeln("#include <sys/types.h>")
-	f.writeln("typedef signed char schar;")
-	f.writeln("typedef unsigned char uchar;")
+	// f.writeln("#include <sys/types.h>")
+	// f.writeln("typedef signed char schar;")
+	// f.writeln("typedef unsigned char uchar;")
 
 	f.writelnf(`
 		#ifdef __cplusplus

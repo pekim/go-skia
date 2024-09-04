@@ -99,9 +99,10 @@ Returns false for kUnknown_SkColorType.
 @param bm  SkBitmap to check
 @return    true if all pixels have opaque values or SkColorType is opaque
 */
-func BitmapComputeIsOpaque(bm Bitmap) {
+func BitmapComputeIsOpaque(bm Bitmap) bool {
 	c_bm := bm.sk
-	C.misk_Bitmap_ComputeIsOpaque(c_bm)
+	retC := C.misk_Bitmap_ComputeIsOpaque(c_bm)
+	return bool(retC)
 }
 
 /*

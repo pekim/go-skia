@@ -19,6 +19,11 @@ func main() {
 	paint.Delete()
 	paint2.Delete()
 
+	bm := skia.NewBitmap()
+	if skia.BitmapComputeIsOpaque(bm) {
+		panic("expected false")
+	}
+
 	// path := skia.NewPath()
 	// path2 := skia.NewPathCopy(path)
 	// fmt.Println(path2)

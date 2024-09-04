@@ -29,10 +29,10 @@ extern "C"
     delete reinterpret_cast<SkBitmap *> (obj);
   }
 
-  void
+  bool
   misk_Bitmap_ComputeIsOpaque (void *c_bm)
   {
-    SkBitmap::ComputeIsOpaque (*reinterpret_cast<SkBitmap *> (c_bm));
+    return SkBitmap::ComputeIsOpaque (*reinterpret_cast<SkBitmap *> (c_bm));
   }
 
   void *

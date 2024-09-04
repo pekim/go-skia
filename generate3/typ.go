@@ -13,6 +13,7 @@ type typ struct {
 	isPrimitive       bool // a simple type, that can be converted from Go type to C type with a type conversion
 	isLValueReference bool
 	isPointer         bool
+	isVoid            bool
 	class             *class
 	enum              *enum
 	subTyp            *typ
@@ -35,6 +36,13 @@ func typFromClangType(cType clang.Type, api api) typ {
 
 	} else {
 		switch cType.Kind() {
+		case clang.Type_Void:
+			typ.isVoid = true
+
+		case clang.Type_Bool:
+			typ.cgoName = "bool"
+			typ.goName = "bool"
+
 		case clang.Type_UChar:
 			typ.cgoName = "uint"
 			typ.goName = "uint"

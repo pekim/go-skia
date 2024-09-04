@@ -15,7 +15,7 @@ type method struct {
 	doc        string
 	isStatic   bool
 	params     []param
-	// retrn      retrn
+	retrn      typ
 }
 
 func (m *method) enrich(api api, class *class, cursor clang.Cursor) {
@@ -36,6 +36,8 @@ func (m *method) enrich(api api, class *class, cursor clang.Cursor) {
 		param := newParam(i, arg, api)
 		m.params[i] = param
 	}
+
+	m.retrn = typFromClangType(cursor.ResultType(), api)
 }
 
 func (m method) generate(g generator) {
@@ -56,10 +58,26 @@ func (m method) generateGo(g generator) {
 		cArgs[i] = param.cgoName
 	}
 
+	var returnDecl string
+	if !m.retrn.isVoid {
+		returnDecl = m.retrn.goName
+	}
+
+	call := fmt.Sprintf("C.%s(%s)", m.cFuncName, strings.Join(cArgs, ", "))
+
 	f.writeDocComment(m.doc)
-	f.writelnf("func %s(%s)  {", m.goFuncName, strings.Join(params, ", "))
+	f.writelnf("func %s(%s) %s {", m.goFuncName, strings.Join(params, ", "), returnDecl)
 	f.writeln(strings.Join(cVars, "\n"))
-	f.writelnf("  C.%s(%s)", m.cFuncName, strings.Join(cArgs, ", "))
+	if m.retrn.isVoid {
+		f.writelnf("  %s", call)
+	} else {
+		f.writelnf("  retC := %s", call)
+		if m.retrn.goName == "bool" {
+			f.writelnf("  return %s(retC)", m.retrn.goName)
+		} else {
+			fatalf("return type '%s' not supported", m.retrn.goName)
+		}
+	}
 	f.writeln("}")
 	f.writeln()
 }
@@ -71,7 +89,8 @@ func (m method) generateHeader(g generator) {
 	for i, param := range m.params {
 		params[i] = param.cParam
 	}
-	f.writelnf("void %s(%s);", m.cFuncName, strings.Join(params, ", "))
+
+	f.writelnf("%s %s(%s);", m.retrn.cName, m.cFuncName, strings.Join(params, ", "))
 }
 
 func (m method) generateCpp(g generator) {
@@ -84,8 +103,8 @@ func (m method) generateCpp(g generator) {
 		args[i] = param.cArg
 	}
 
-	f.writelnf("void %s(%s) {", m.cFuncName, strings.Join(params, ", "))
-	f.writelnf("  %s::%s(%s);", m.class.CName, m.CName, strings.Join(args, ", "))
+	f.writelnf("%s %s(%s) {", m.retrn.cName, m.cFuncName, strings.Join(params, ", "))
+	f.writelnf("  return %s::%s(%s);", m.class.CName, m.CName, strings.Join(args, ", "))
 	f.writeln("}")
 	f.writeln()
 }
