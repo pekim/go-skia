@@ -2,7 +2,7 @@
   "classes": [
     {
       "name": "SkCanvas",
-      "constructors": [{}, null, null, null, null],
+      "constructors": [{}, { "suffix": "WithDimensions" }, null, null, null],
       "enums": [
         { "name": "ClipEdgeStyle" },
         { "name": "PointMode" },

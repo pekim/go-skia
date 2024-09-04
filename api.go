@@ -57,6 +57,32 @@ func NewCanvas() Canvas {
 }
 
 /*
+Creates SkCanvas of the specified dimensions without a SkSurface.
+Used by subclasses with custom implementations for draw member functions.
+
+If props equals nullptr, SkSurfaceProps are created with
+SkSurfaceProps::InitType settings, which choose the pixel striping
+direction and order. Since a platform may dynamically change its direction when
+the device is rotated, and since a platform may have multiple monitors with
+different characteristics, it is best not to rely on this legacy behavior.
+
+@param width   zero or greater
+@param height  zero or greater
+@param props   LCD striping orientation and setting for device independent fonts;
+may be nullptr
+@return        SkCanvas placeholder with dimensions
+
+example: https://fiddle.skia.org/c/@Canvas_int_int_const_SkSurfaceProps_star
+*/
+func NewCanvasWithDimensions(width int, height int, props SurfaceProps) Canvas {
+	c_width := C.int(width)
+	c_height := C.int(height)
+	c_props := props.sk
+	retC := C.misk_new_CanvasWithDimensions(c_width, c_height, c_props)
+	return Canvas{sk: unsafe.Pointer(retC)}
+}
+
+/*
 Draws saved layers, if any.
 Frees up resources used by SkCanvas.
 

@@ -9,7 +9,9 @@ import (
 type typ struct {
 	cName             string
 	goName            string
+	isPrimitive       bool // a simple type, that can be converted from Go type to C type with a type conversion
 	isLValueReference bool
+	isPointer         bool
 	class             *class
 	subTyp            *typ
 }
@@ -24,6 +26,16 @@ func typFromClangType(cType clang.Type, api api) typ {
 		typ.goName = typ.class.goName
 	} else {
 		switch cType.Kind() {
+		case clang.Type_Int:
+			typ.goName = "int"
+			typ.isPrimitive = true
+
+		case clang.Type_Pointer:
+			subTyp := typFromClangType(cType.PointeeType(), api)
+			typ.subTyp = &subTyp
+			typ.isPointer = true
+			typ.goName = typ.subTyp.goName
+
 		case clang.Type_LValueReference:
 			subTyp := typFromClangType(cType.PointeeType(), api)
 			typ.subTyp = &subTyp

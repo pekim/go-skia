@@ -15,6 +15,13 @@ extern "C"
     return reinterpret_cast<void *> (new SkCanvas ());
   }
 
+  void *
+  misk_new_CanvasWithDimensions (int c_width, int c_height, void *c_props)
+  {
+    return reinterpret_cast<void *> (new SkCanvas (
+        c_width, c_height, reinterpret_cast<SkSurfaceProps *> (c_props)));
+  }
+
   void
   misk_delete_SkCanvas (void *obj)
   {

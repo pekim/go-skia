@@ -31,10 +31,21 @@ func newParam(paramIndex int, cursor clang.Cursor, api api) param {
 		typ:     typ,
 	}
 
-	if typ.isLValueReference && typ.subTyp.class != nil {
-		p.cgoVar = fmt.Sprintf("%s := %s.sk", cgoName, p.goName)
+	if typ.isPrimitive {
+		p.cgoVar = fmt.Sprintf("%s := C.%s(%s)", p.cgoName, p.typ.cName, p.goName)
+		p.cParam = fmt.Sprintf("%s %s", p.typ.cName, p.cgoName)
+		p.cArg = p.cgoName
+
+	} else if typ.isLValueReference && typ.subTyp.class != nil {
+		p.cgoVar = fmt.Sprintf("%s := %s.sk", p.cgoName, p.goName)
 		p.cParam = fmt.Sprintf("void *%s", p.cgoName)
 		p.cArg = fmt.Sprintf("*reinterpret_cast<%s*>(%s)", p.typ.subTyp.cName, p.cgoName)
+
+	} else if typ.isPointer && typ.subTyp.class != nil {
+		p.cgoVar = fmt.Sprintf("%s := %s.sk", p.cgoName, p.goName)
+		p.cParam = fmt.Sprintf("void *%s", p.cgoName)
+		p.cArg = fmt.Sprintf("reinterpret_cast<%s*>(%s)", p.typ.subTyp.cName, p.cgoName)
+
 	} else {
 		fatalf("unhandled cgoVar for param with typ %#v", typ)
 	}

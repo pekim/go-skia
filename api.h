@@ -11,6 +11,8 @@ extern "C"
 #endif // __cplusplus
 
   void *misk_new_Canvas ();
+  void *misk_new_CanvasWithDimensions (int c_width, int c_height,
+                                       void *c_props);
   void misk_delete_SkCanvas (void *obj);
   void *misk_new_Paint ();
   void *misk_new_PaintCopy (void *c_paint);

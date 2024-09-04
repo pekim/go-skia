@@ -27,6 +27,11 @@ func loadApi() api {
 	}
 	fmt.Println()
 
+	for i := range api.Classes {
+		class := &api.Classes[i]
+		class.enrich2(api)
+	}
+
 	return api
 }
 
