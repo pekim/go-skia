@@ -30,8 +30,6 @@ func newFileGo() *fileGo {
 	import (
 		"unsafe"
 	)
-
-	type class unsafe.Pointer
 	`)
 
 	return f

@@ -12,8 +12,10 @@ extern "C"
 
   void *misk_new_Paint ();
   void *misk_new_PaintCopy (void *c_paint);
+  void misk_delete_SkPaint (void *obj);
   void *misk_new_Path ();
   void *misk_new_PathCopy (void *c_path);
+  void misk_delete_SkPath (void *obj);
 
 #ifdef __cplusplus
 }

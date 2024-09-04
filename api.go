@@ -16,8 +16,6 @@ import (
 	"unsafe"
 )
 
-type class unsafe.Pointer
-
 /*
 SkPaint controls options applied when drawing. SkPaint collects all
 options outside of the SkCanvas clip and SkCanvas matrix.
@@ -28,7 +26,9 @@ SkPaint collects effects and filters that describe single-pass and multiple-pass
 algorithms that alter the drawing geometry, color, and transparency. For instance,
 SkPaint does not directly implement dashing or blur, but contains the objects that do so.
 */
-type Paint class
+type Paint struct {
+	sk unsafe.Pointer
+}
 
 /*
 Constructs SkPaint with default values.
@@ -39,7 +39,8 @@ example: https://fiddle.skia.org/c/@Paint_empty_constructor
 */
 func NewPaint() Paint {
 
-	return Paint(C.misk_new_Paint())
+	retC := C.misk_new_Paint()
+	return Paint{sk: unsafe.Pointer(retC)}
 }
 
 /*
@@ -58,8 +59,18 @@ This prevents objects with SkRefCnt from being modified once SkPaint refers to t
 example: https://fiddle.skia.org/c/@Paint_copy_const_SkPaint
 */
 func NewPaintCopy(paint Paint) Paint {
-	c_paint := (unsafe.Pointer)(paint)
-	return Paint(C.misk_new_PaintCopy(c_paint))
+	c_paint := paint.sk
+	retC := C.misk_new_PaintCopy(c_paint)
+	return Paint{sk: unsafe.Pointer(retC)}
+}
+
+/*
+Decreases SkPaint SkRefCnt of owned objects: SkPathEffect, SkShader,
+SkMaskFilter, SkColorFilter, and SkImageFilter. If the
+objects containing SkRefCnt go to zero, they are deleted.
+*/
+func (o Paint) Delete() {
+	C.misk_delete_SkPaint(o.sk)
 }
 
 /*
@@ -145,7 +156,9 @@ overlapping contours.
 Internally, SkPath lazily computes metrics likes bounds and convexity. Call
 SkPath::updateBoundsCache to make SkPath thread safe.
 */
-type Path class
+type Path struct {
+	sk unsafe.Pointer
+}
 
 /*
 Constructs an empty SkPath. By default, SkPath has no verbs, no SkPoint, and no weights.
@@ -157,7 +170,8 @@ example: https://fiddle.skia.org/c/@Path_empty_constructor
 */
 func NewPath() Path {
 
-	return Path(C.misk_new_Path())
+	retC := C.misk_new_Path()
+	return Path{sk: unsafe.Pointer(retC)}
 }
 
 /*
@@ -176,8 +190,18 @@ pointers are not exposed.
 example: https://fiddle.skia.org/c/@Path_copy_const_SkPath
 */
 func NewPathCopy(path Path) Path {
-	c_path := (unsafe.Pointer)(path)
-	return Path(C.misk_new_PathCopy(c_path))
+	c_path := path.sk
+	retC := C.misk_new_PathCopy(c_path)
+	return Path{sk: unsafe.Pointer(retC)}
+}
+
+/*
+Releases ownership of any shared data and deletes data if SkPath is sole owner.
+
+example: https://fiddle.skia.org/c/@Path_destructor
+*/
+func (o Path) Delete() {
+	C.misk_delete_SkPath(o.sk)
 }
 
 /*

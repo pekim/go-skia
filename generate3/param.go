@@ -29,7 +29,7 @@ func newParam(cursor clang.Cursor, api api) param {
 	}
 
 	if typ.isLValueReference && typ.subTyp.class != nil {
-		p.cgoVar = fmt.Sprintf("%s := (unsafe.Pointer)(%s)", cgoName, p.goName)
+		p.cgoVar = fmt.Sprintf("%s := %s.sk", cgoName, p.goName)
 		p.cParam = fmt.Sprintf("void *%s", p.cgoName)
 		p.cArg = fmt.Sprintf("*reinterpret_cast<%s*>(%s)", p.typ.subTyp.cName, p.cgoName)
 	} else {

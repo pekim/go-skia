@@ -15,14 +15,9 @@ func main() {
 	}
 
 	paint := skia.NewPaint()
-	if paint == nil {
-		panic("Paint is nil")
-	}
 	paint2 := skia.NewPaintCopy(paint)
-	if paint2 == nil {
-		panic("Paint is nil")
-	}
-	// p.Delete()
+	paint.Delete()
+	paint2.Delete()
 
 	// path := skia.NewPath()
 	// path2 := skia.NewPathCopy(path)

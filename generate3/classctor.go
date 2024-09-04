@@ -31,7 +31,7 @@ func (c *classCtor) enrich(api api, class *class, cursor clang.Cursor) {
 	}
 }
 
-func (c *classCtor) generate(g generator) {
+func (c classCtor) generate(g generator) {
 	c.generateGo(g)
 	c.generateHeader(g)
 	c.generateCpp(g)
@@ -52,7 +52,8 @@ func (c classCtor) generateGo(g generator) {
 	f.writeDocComment(c.doc)
 	f.writelnf("func %s(%s) %s {", c.goFuncName, strings.Join(params, ", "), c.class.goName)
 	f.writeln(strings.Join(cVars, "\n"))
-	f.writelnf("  return %s(C.%s(%s))", c.class.goName, c.cFuncName, strings.Join(cArgs, ", "))
+	f.writelnf("  retC := C.%s(%s)", c.cFuncName, strings.Join(cArgs, ", "))
+	f.writelnf("  return %s{sk: unsafe.Pointer(retC)}", c.class.goName)
 	f.writeln("}")
 	f.writeln()
 }

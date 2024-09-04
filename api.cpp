@@ -20,6 +20,12 @@ extern "C"
         new SkPaint (*reinterpret_cast<SkPaint *> (c_paint)));
   }
 
+  void
+  misk_delete_SkPaint (void *obj)
+  {
+    delete reinterpret_cast<SkPaint *> (obj);
+  }
+
   void *
   misk_new_Path ()
   {
@@ -31,5 +37,11 @@ extern "C"
   {
     return reinterpret_cast<void *> (
         new SkPath (*reinterpret_cast<SkPath *> (c_path)));
+  }
+
+  void
+  misk_delete_SkPath (void *obj)
+  {
+    delete reinterpret_cast<SkPath *> (obj);
   }
 }

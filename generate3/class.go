@@ -11,6 +11,7 @@ type class struct {
 	Name   string       `json:"name"`
 	Ctors  []*classCtor `json:"constructors"`
 	Enums  []enum       `json:"enums"`
+	dtor   classDtor
 	goName string
 	doc    string
 }
@@ -27,6 +28,9 @@ func (c *class) enrich(cursor clang.Cursor, api api) {
 			if cursor.AccessSpecifier() == clang.AccessSpecifier_Public {
 				ctorCursors = append(ctorCursors, cursor)
 			}
+
+		case clang.Cursor_Destructor:
+			c.dtor = newClassDtor(c, cursor)
 
 		case clang.Cursor_EnumDecl:
 			if enum, ok := c.findEnum(cursor.Spelling()); ok {
@@ -65,7 +69,9 @@ func (c class) generateGo(g generator) {
 	f := g.goFile
 
 	f.writeDocComment(c.doc)
-	f.writelnf("type %s class", c.goName)
+	f.writelnf("type %s struct {", c.goName)
+	f.writeln("  sk unsafe.Pointer")
+	f.writeln("}")
 	f.writeln()
 
 	for _, ctor := range c.Ctors {
@@ -73,6 +79,7 @@ func (c class) generateGo(g generator) {
 			ctor.generate(g)
 		}
 	}
+	c.dtor.generate(g)
 
 	for _, enum := range c.Enums {
 		enum.generate(g)
