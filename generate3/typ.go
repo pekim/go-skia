@@ -1,7 +1,6 @@
 package generate
 
 import (
-	"fmt"
 	"strings"
 
 	"github.com/go-clang/clang-v15/clang"
@@ -32,7 +31,7 @@ func typFromClangType(cType clang.Type, api api) typ {
 			typ.goName = typ.subTyp.goName
 
 		default:
-			panic(fmt.Sprintf("unsupported type '%s'", cType.Spelling()))
+			fatalf("unsupported type '%s'", cType.Spelling())
 		}
 	}
 

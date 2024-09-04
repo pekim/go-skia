@@ -17,9 +17,7 @@ type api struct {
 func loadApi() api {
 	var api api
 	err := json.Unmarshal(apiJson, &api)
-	if err != nil {
-		panic(err)
-	}
+	fatalOnError(err)
 
 	fmt.Print("load api ")
 	for _, headerFile := range headerFiles {

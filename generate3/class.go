@@ -42,7 +42,7 @@ func (c *class) enrich(cursor clang.Cursor, api api) {
 	})
 
 	if len(c.Ctors) != len(ctorCursors) {
-		panic(fmt.Sprintf("class %s has %d ctors, but expected %d", c.CName, len(ctorCursors), len(c.Ctors)))
+		fatalf("class %s has %d ctors, but expected %d", c.CName, len(ctorCursors), len(c.Ctors))
 	}
 	for i, cursor := range ctorCursors {
 		ctor := c.Ctors[i]

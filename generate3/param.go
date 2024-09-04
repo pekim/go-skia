@@ -36,7 +36,7 @@ func newParam(paramIndex int, cursor clang.Cursor, api api) param {
 		p.cParam = fmt.Sprintf("void *%s", p.cgoName)
 		p.cArg = fmt.Sprintf("*reinterpret_cast<%s*>(%s)", p.typ.subTyp.cName, p.cgoName)
 	} else {
-		panic(fmt.Sprintf("unhandled cgoVar for param with typ %#v", typ))
+		fatalf("unhandled cgoVar for param with typ %#v", typ)
 	}
 
 	return p

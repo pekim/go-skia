@@ -59,7 +59,7 @@ func (e *enum) enrich(class *class, cursor clang.Cursor) {
 
 func (e enum) generate(g generator) {
 	if e.goName == "" {
-		panic(fmt.Sprintf("enum %s not initialised, perhaps misspelled in json", e.CName))
+		fatalf("enum %s not initialised, perhaps misspelled in json", e.CName)
 	}
 
 	f := g.goFile

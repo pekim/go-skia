@@ -44,9 +44,7 @@ func (f *file) close() {
 	}
 
 	err := os.WriteFile(f.filename, formatted, 0644)
-	if err != nil {
-		panic(err)
-	}
+	fatalOnError(err)
 }
 
 func (f *file) clangFormat() {
@@ -56,9 +54,7 @@ func (f *file) clangFormat() {
 		fmt.Printf("Output of clang-format for %s\n", f.filename)
 		fmt.Println(string(output))
 	}
-	if err != nil {
-		panic(err)
-	}
+	fatalOnError(err)
 }
 
 func (f *file) write(content string) {
