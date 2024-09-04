@@ -10,6 +10,8 @@ extern "C"
 {
 #endif // __cplusplus
 
+  void *misk_new_Canvas ();
+  void misk_delete_SkCanvas (void *obj);
   void *misk_new_Paint ();
   void *misk_new_PaintCopy (void *c_paint);
   void misk_delete_SkPaint (void *obj);

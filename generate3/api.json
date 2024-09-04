@@ -1,6 +1,18 @@
 {
   "classes": [
     {
+      "name": "SkCanvas",
+      "constructors": [{}, null, null, null, null],
+      "enums": [
+        { "name": "ClipEdgeStyle" },
+        { "name": "PointMode" },
+        { "name": "QuadAAFlags" },
+        { "name": "SaveLayerFlagsSet" },
+        { "name": "SaveLayerStrategy" },
+        { "name": "SrcRectConstraint" }
+      ]
+    },
+    {
       "name": "SkPaint",
       "constructors": [{}, null, { "suffix": "Copy" }, null],
       "enums": [{ "name": "Cap" }, { "name": "Join" }, { "name": "Style" }]

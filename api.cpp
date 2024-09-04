@@ -1,11 +1,24 @@
 // This is a generated file. DO NOT EDIT.
 
+#include <include/core/SkCanvas.h>
 #include <include/core/SkPaint.h>
 #include <include/core/SkPath.h>
 
 extern "C"
 {
 #include "api.h"
+
+  void *
+  misk_new_Canvas ()
+  {
+    return reinterpret_cast<void *> (new SkCanvas ());
+  }
+
+  void
+  misk_delete_SkCanvas (void *obj)
+  {
+    delete reinterpret_cast<SkCanvas *> (obj);
+  }
 
   void *
   misk_new_Paint ()
