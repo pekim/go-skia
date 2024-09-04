@@ -16,6 +16,7 @@ type method struct {
 	isStatic   bool
 	params     []param
 	retrn      typ
+	enriched   bool
 }
 
 func (m *method) enrich(api api, class *class, cursor clang.Cursor) {
@@ -38,6 +39,8 @@ func (m *method) enrich(api api, class *class, cursor clang.Cursor) {
 	}
 
 	m.retrn = typFromClangType(cursor.ResultType(), api)
+
+	m.enriched = true
 }
 
 func (m method) generate(g generator) {
@@ -47,6 +50,10 @@ func (m method) generate(g generator) {
 }
 
 func (m method) generateGo(g generator) {
+	if !m.enriched {
+		fatalf("method %s has not been enriched", m.CName)
+	}
+
 	f := g.goFile
 
 	params := make([]string, len(m.params))

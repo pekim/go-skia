@@ -14,6 +14,7 @@ type classCtor struct {
 	class      *class
 	doc        string
 	params     []param
+	enriched   bool
 }
 
 func (c *classCtor) enrich(api api, class *class, cursor clang.Cursor) {
@@ -29,9 +30,15 @@ func (c *classCtor) enrich(api api, class *class, cursor clang.Cursor) {
 		param := newParam(i, arg, api)
 		c.params[i] = param
 	}
+
+	c.enriched = true
 }
 
 func (c classCtor) generate(g generator) {
+	if !c.enriched {
+		fatalf("class %s ctor has not been enriched", c.class.CName)
+	}
+
 	c.generateGo(g)
 	c.generateHeader(g)
 	c.generateCpp(g)

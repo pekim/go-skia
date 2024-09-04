@@ -14,6 +14,7 @@ type enum struct {
 	class     *class
 	doc       string
 	constants []enumConstant
+	enriched  bool
 }
 
 type enumConstant struct {
@@ -57,11 +58,13 @@ func (e *enum) enrich(class *class, cursor clang.Cursor, api api) {
 
 		return clang.ChildVisit_Continue
 	})
+
+	e.enriched = true
 }
 
 func (e enum) generate(g generator) {
-	if e.goName == "" {
-		fatalf("enum %s not initialised, perhaps misspelled in json", e.CName)
+	if !e.enriched {
+		fatalf("enum %s has not been enriched", e.CName)
 	}
 
 	f := g.goFile

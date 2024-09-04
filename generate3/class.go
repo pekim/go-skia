@@ -8,14 +8,15 @@ import (
 )
 
 type class struct {
-	cursor  clang.Cursor
-	CName   string       `json:"name"`
-	Ctors   []*classCtor `json:"constructors"`
-	Enums   []enum       `json:"enums"`
-	Methods []method     `json:"methods"`
-	dtor    classDtor
-	goName  string
-	doc     string
+	cursor   clang.Cursor
+	CName    string       `json:"name"`
+	Ctors    []*classCtor `json:"constructors"`
+	Enums    []enum       `json:"enums"`
+	Methods  []method     `json:"methods"`
+	dtor     classDtor
+	goName   string
+	doc      string
+	enriched bool
 }
 
 func (c *class) enrich1(cursor clang.Cursor) {
@@ -23,6 +24,7 @@ func (c *class) enrich1(cursor clang.Cursor) {
 	c.goName = stripSkPrefix(c.CName)
 	c.doc = cursor.RawCommentText()
 	c.doc = strings.Replace(c.doc, fmt.Sprintf("\\class %s", c.CName), "", 1)
+	c.enriched = true
 }
 
 func (c *class) enrich2(api api) {
@@ -85,6 +87,10 @@ func (c *class) findMethod(name string) (*method, bool) {
 }
 
 func (c class) generate(g generator) {
+	if !c.enriched {
+		fatalf("class %s has not been enriched", c.CName)
+	}
+
 	f := g.goFile
 
 	f.writeDocComment(c.doc)
