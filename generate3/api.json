@@ -12,11 +12,13 @@
         { "name": "SrcRectConstraint" }
       ]
     },
+
     {
       "name": "SkPaint",
       "constructors": [{}, null, { "suffix": "Copy" }, null],
       "enums": [{ "name": "Cap" }, { "name": "Join" }, { "name": "Style" }]
     },
+
     {
       "name": "SkPath",
       "constructors": [{}, { "suffix": "Copy" }],
@@ -27,10 +29,13 @@
         { "name": "Verb" }
       ]
     },
+
     {
       "name": "SkSurfaceProps",
       "constructors": [{}, null, null, { "suffix": "Copy" }],
       "enums": [{ "name": "Flags" }]
     }
-  ]
+  ],
+
+  "enums": [{ "name": "SkPixelGeometry" }]
 }

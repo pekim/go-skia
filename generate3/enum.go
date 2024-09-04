@@ -22,10 +22,16 @@ type enumConstant struct {
 }
 
 func (e *enum) enrich(class *class, cursor clang.Cursor) {
-	e.goName = class.goName + e.CName
+	if class != nil {
+		e.goName = class.goName + e.CName
+	} else {
+		e.goName = stripSkPrefix(e.CName)
+	}
 	e.class = class
 	e.doc = cursor.RawCommentText()
-	e.doc = strings.Replace(e.doc, fmt.Sprintf("\\enum %s::%s", class.CName, e.CName), "", 1)
+	if class != nil {
+		e.doc = strings.Replace(e.doc, fmt.Sprintf("\\enum %s::%s", class.CName, e.CName), "", 1)
+	}
 
 	cursor.Visit(func(cursor, parent clang.Cursor) (status clang.ChildVisitResult) {
 		switch cursor.Kind() {

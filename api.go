@@ -421,3 +421,18 @@ const (
 	SurfacePropsFlagsDynamicMSAA_Flag               SurfacePropsFlags = 2
 	SurfacePropsFlagsAlwaysDither_Flag              SurfacePropsFlags = 4
 )
+
+/*
+*  Description of how the LCD strips are arranged for each pixel. If this is unknown, or the
+*  pixels are meant to be "portable" and/or transformed before showing (e.g. rotated, scaled)
+*  then use kUnknown_SkPixelGeometry.
+ */
+type PixelGeometry int64
+
+const (
+	PixelGeometryUnknown PixelGeometry = 0
+	PixelGeometryRGB_H   PixelGeometry = 1
+	PixelGeometryBGR_H   PixelGeometry = 2
+	PixelGeometryRGB_V   PixelGeometry = 3
+	PixelGeometryBGR_V   PixelGeometry = 4
+)
