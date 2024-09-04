@@ -21,6 +21,8 @@ extern "C"
   void *misk_new_PathCopy (void *c_path);
   void misk_delete_SkPath (void *obj);
   void *misk_new_SurfaceProps ();
+  void *misk_new_SurfacePropsPixelGeometry (unsigned int c_flags,
+                                            unsigned int c_p1);
   void *misk_new_SurfacePropsCopy (void *c_p0);
 
 #ifdef __cplusplus

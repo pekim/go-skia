@@ -73,6 +73,13 @@ extern "C"
   }
 
   void *
+  misk_new_SurfacePropsPixelGeometry (unsigned int c_flags, unsigned int c_p1)
+  {
+    return reinterpret_cast<void *> (
+        new SkSurfaceProps (c_flags, SkPixelGeometry (c_p1)));
+  }
+
+  void *
   misk_new_SurfacePropsCopy (void *c_p0)
   {
     return reinterpret_cast<void *> (

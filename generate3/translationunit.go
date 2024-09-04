@@ -73,7 +73,7 @@ func (tu translationUnit) enrichApi(api *api) {
 
 		case clang.Cursor_EnumDecl:
 			if enum, ok := api.findEnum(cursor.Spelling()); ok {
-				enum.enrich(nil, cursor)
+				enum.enrich(nil, cursor, *api)
 			}
 
 		case clang.Cursor_StructDecl:

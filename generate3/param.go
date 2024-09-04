@@ -32,9 +32,14 @@ func newParam(paramIndex int, cursor clang.Cursor, api api) param {
 	}
 
 	if typ.isPrimitive {
-		p.cgoVar = fmt.Sprintf("%s := C.%s(%s)", p.cgoName, p.typ.cName, p.goName)
+		p.cgoVar = fmt.Sprintf("%s := C.%s(%s)", p.cgoName, p.typ.cgoName, p.goName)
 		p.cParam = fmt.Sprintf("%s %s", p.typ.cName, p.cgoName)
 		p.cArg = p.cgoName
+
+	} else if typ.enum != nil {
+		p.cgoVar = fmt.Sprintf("%s := C.%s(%s)", p.cgoName, typ.enum.cType.cgoName, p.goName)
+		p.cParam = fmt.Sprintf("%s %s", typ.enum.cType.cName, p.cgoName)
+		p.cArg = fmt.Sprintf("%s(%s)", typ.cName, p.cgoName)
 
 	} else if typ.isLValueReference && typ.subTyp.class != nil {
 		p.cgoVar = fmt.Sprintf("%s := %s.sk", p.cgoName, p.goName)

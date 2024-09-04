@@ -433,6 +433,16 @@ func NewSurfaceProps() SurfaceProps {
 	return SurfaceProps{sk: unsafe.Pointer(retC)}
 }
 
+/*
+TODO(kschmi): Remove this constructor and replace with the one below. *
+*/
+func NewSurfacePropsPixelGeometry(flags uint, p1 PixelGeometry) SurfaceProps {
+	c_flags := C.uint(flags)
+	c_p1 := C.uint(p1)
+	retC := C.misk_new_SurfacePropsPixelGeometry(c_flags, c_p1)
+	return SurfaceProps{sk: unsafe.Pointer(retC)}
+}
+
 func NewSurfacePropsCopy(p0 SurfaceProps) SurfaceProps {
 	c_p0 := p0.sk
 	retC := C.misk_new_SurfacePropsCopy(c_p0)

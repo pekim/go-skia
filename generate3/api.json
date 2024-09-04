@@ -32,7 +32,12 @@
 
     {
       "name": "SkSurfaceProps",
-      "constructors": [{}, null, null, { "suffix": "Copy" }],
+      "constructors": [
+        {},
+        { "suffix": "PixelGeometry" },
+        null,
+        { "suffix": "Copy" }
+      ],
       "enums": [{ "name": "Flags" }]
     }
   ],

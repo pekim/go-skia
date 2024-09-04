@@ -9,6 +9,7 @@ import (
 
 type enum struct {
 	CName     string `json:"name"`
+	cType     typ
 	goName    string
 	class     *class
 	doc       string
@@ -21,7 +22,8 @@ type enumConstant struct {
 	doc    string
 }
 
-func (e *enum) enrich(class *class, cursor clang.Cursor) {
+func (e *enum) enrich(class *class, cursor clang.Cursor, api api) {
+	e.cType = typFromClangType(cursor.EnumDeclIntegerType(), api)
 	if class != nil {
 		e.goName = class.goName + e.CName
 	} else {

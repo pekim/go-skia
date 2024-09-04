@@ -38,7 +38,7 @@ func (c *class) enrich2(api api) {
 
 		case clang.Cursor_EnumDecl:
 			if enum, ok := c.findEnum(cursor.Spelling()); ok {
-				enum.enrich(c, cursor)
+				enum.enrich(c, cursor, api)
 			}
 		}
 
