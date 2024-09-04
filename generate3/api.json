@@ -2,7 +2,8 @@
   "classes": [
     {
       "name": "SkBitmap",
-      "constructors": [{}, { "suffix": "Copy" }, null]
+      "constructors": [{}, { "suffix": "Copy" }, null],
+      "methods": [{ "name": "ComputeIsOpaque" }]
     },
 
     {

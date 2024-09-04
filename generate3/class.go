@@ -8,13 +8,14 @@ import (
 )
 
 type class struct {
-	cursor clang.Cursor
-	CName  string       `json:"name"`
-	Ctors  []*classCtor `json:"constructors"`
-	Enums  []enum       `json:"enums"`
-	dtor   classDtor
-	goName string
-	doc    string
+	cursor  clang.Cursor
+	CName   string       `json:"name"`
+	Ctors   []*classCtor `json:"constructors"`
+	Enums   []enum       `json:"enums"`
+	Methods []method     `json:"methods"`
+	dtor    classDtor
+	goName  string
+	doc     string
 }
 
 func (c *class) enrich1(cursor clang.Cursor) {
@@ -34,12 +35,21 @@ func (c *class) enrich2(api api) {
 			}
 
 		case clang.Cursor_Destructor:
-			c.dtor = newClassDtor(c, cursor)
+			if cursor.AccessSpecifier() == clang.AccessSpecifier_Public {
+				c.dtor = newClassDtor(c, cursor)
+			}
 
 		case clang.Cursor_EnumDecl:
 			if enum, ok := c.findEnum(cursor.Spelling()); ok {
 				enum.enrich(c, cursor, api)
 			}
+
+		case clang.Cursor_CXXMethod:
+			if method, ok := c.findMethod(cursor.Spelling()); ok {
+				method.enrich(api, c, cursor)
+			}
+
+		default:
 		}
 
 		return clang.ChildVisit_Continue
@@ -65,11 +75,16 @@ func (c *class) findEnum(name string) (*enum, bool) {
 	return nil, false
 }
 
-func (c class) generate(g generator) {
-	c.generateGo(g)
+func (c *class) findMethod(name string) (*method, bool) {
+	for i, method := range c.Methods {
+		if method.CName == name {
+			return &c.Methods[i], true
+		}
+	}
+	return nil, false
 }
 
-func (c class) generateGo(g generator) {
+func (c class) generate(g generator) {
 	f := g.goFile
 
 	f.writeDocComment(c.doc)
@@ -84,6 +99,10 @@ func (c class) generateGo(g generator) {
 		}
 	}
 	c.dtor.generate(g)
+
+	for _, method := range c.Methods {
+		method.generate(g)
+	}
 
 	for _, enum := range c.Enums {
 		enum.generate(g)

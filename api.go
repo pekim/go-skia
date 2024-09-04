@@ -82,6 +82,29 @@ func (o Bitmap) Delete() {
 }
 
 /*
+Returns true if all pixels are opaque. SkColorType determines how pixels
+are encoded, and whether pixel describes alpha. Returns true for SkColorType
+without alpha in each pixel; for other SkColorType, returns true if all
+pixels have alpha values equivalent to 1.0 or greater.
+
+For SkColorType kRGB_565_SkColorType or kGray_8_SkColorType: always
+returns true. For SkColorType kAlpha_8_SkColorType, kBGRA_8888_SkColorType,
+kRGBA_8888_SkColorType: returns true if all pixel alpha values are 255.
+For SkColorType kARGB_4444_SkColorType: returns true if all pixel alpha values are 15.
+For kRGBA_F16_SkColorType: returns true if all pixel alpha values are 1.0 or
+greater.
+
+Returns false for kUnknown_SkColorType.
+
+@param bm  SkBitmap to check
+@return    true if all pixels have opaque values or SkColorType is opaque
+*/
+func BitmapComputeIsOpaque(bm Bitmap) {
+	c_bm := bm.sk
+	C.misk_Bitmap_ComputeIsOpaque(c_bm)
+}
+
+/*
 SkCanvas provides an interface for drawing, and how the drawing is clipped and transformed.
 SkCanvas contains a stack of SkMatrix and clip values.
 
