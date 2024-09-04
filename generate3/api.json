@@ -26,6 +26,11 @@
         { "name": "SegmentMask" },
         { "name": "Verb" }
       ]
+    },
+    {
+      "name": "SkSurfaceProps",
+      "constructors": [{}, null, null, null],
+      "enums": [{ "name": "Flags" }]
     }
   ]
 }

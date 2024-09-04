@@ -18,6 +18,7 @@ extern "C"
   void *misk_new_Path ();
   void *misk_new_PathCopy (void *c_path);
   void misk_delete_SkPath (void *obj);
+  void *misk_new_SurfaceProps ();
 
 #ifdef __cplusplus
 }

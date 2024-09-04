@@ -20,6 +20,11 @@ func newClassDtor(class *class, cursor clang.Cursor) classDtor {
 }
 
 func (d *classDtor) generate(g generator) {
+	if d.class == nil {
+		// There is no destructor for the class.
+		return
+	}
+
 	d.generateGo(g)
 	d.generateHeader(g)
 	d.generateCpp(g)

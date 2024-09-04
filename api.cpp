@@ -3,6 +3,7 @@
 #include <include/core/SkCanvas.h>
 #include <include/core/SkPaint.h>
 #include <include/core/SkPath.h>
+#include <include/core/SkSurfaceProps.h>
 
 extern "C"
 {
@@ -56,5 +57,11 @@ extern "C"
   misk_delete_SkPath (void *obj)
   {
     delete reinterpret_cast<SkPath *> (obj);
+  }
+
+  void *
+  misk_new_SurfaceProps ()
+  {
+    return reinterpret_cast<void *> (new SkSurfaceProps ());
   }
 }

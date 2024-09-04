@@ -388,3 +388,30 @@ const (
 	PathVerbClose PathVerb = 5
 	PathVerbDone  PathVerb = 6
 )
+
+/*
+*  Describes properties and constraints of a given SkSurface. The rendering engine can parse these
+*  during drawing, and can sometimes optimize its performance (e.g. disabling an expensive
+*  feature).
+ */
+type SurfaceProps struct {
+	sk unsafe.Pointer
+}
+
+/*
+No flags, unknown pixel geometry, platform-default contrast/gamma.
+*/
+func NewSurfaceProps() SurfaceProps {
+
+	retC := C.misk_new_SurfaceProps()
+	return SurfaceProps{sk: unsafe.Pointer(retC)}
+}
+
+type SurfacePropsFlags int64
+
+const (
+	SurfacePropsFlagsDefault_Flag                   SurfacePropsFlags = 0
+	SurfacePropsFlagsUseDeviceIndependentFonts_Flag SurfacePropsFlags = 1
+	SurfacePropsFlagsDynamicMSAA_Flag               SurfacePropsFlags = 2
+	SurfacePropsFlagsAlwaysDither_Flag              SurfacePropsFlags = 4
+)

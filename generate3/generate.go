@@ -4,6 +4,7 @@ var headerFiles = []string{
 	"include/core/SkCanvas.h",
 	"include/core/SkPaint.h",
 	"include/core/SkPath.h",
+	"include/core/SkSurfaceProps.h",
 }
 
 type generator struct {
