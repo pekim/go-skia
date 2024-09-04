@@ -148,6 +148,49 @@ func NewCanvasWithDimensions(width int, height int, props SurfaceProps) Canvas {
 }
 
 /*
+Constructs a canvas that draws into bitmap.
+Sets kUnknown_SkPixelGeometry in constructed SkSurface.
+
+SkBitmap is copied so that subsequently editing bitmap will not affect
+constructed SkCanvas.
+
+May be deprecated in the future.
+
+@param bitmap  width, height, SkColorType, SkAlphaType, and pixel
+storage of raster surface
+@return        SkCanvas that can be used to draw into bitmap
+
+example: https://fiddle.skia.org/c/@Canvas_copy_const_SkBitmap
+*/
+func NewCanvasFromBitmap(bitmap Bitmap) Canvas {
+	c_bitmap := bitmap.sk
+	retC := C.misk_new_CanvasFromBitmap(c_bitmap)
+	return Canvas{sk: unsafe.Pointer(retC)}
+}
+
+/*
+Constructs a canvas that draws into bitmap.
+Use props to match the device characteristics, like LCD striping.
+
+bitmap is copied so that subsequently editing bitmap will not affect
+constructed SkCanvas.
+
+@param bitmap  width, height, SkColorType, SkAlphaType,
+and pixel storage of raster surface
+@param props   order and orientation of RGB striping; and whether to use
+device independent fonts
+@return        SkCanvas that can be used to draw into bitmap
+
+example: https://fiddle.skia.org/c/@Canvas_const_SkBitmap_const_SkSurfaceProps
+*/
+func NewCanvasFromBitmapSurfaceProps(bitmap Bitmap, props SurfaceProps) Canvas {
+	c_bitmap := bitmap.sk
+	c_props := props.sk
+	retC := C.misk_new_CanvasFromBitmapSurfaceProps(c_bitmap, c_props)
+	return Canvas{sk: unsafe.Pointer(retC)}
+}
+
+/*
 Draws saved layers, if any.
 Frees up resources used by SkCanvas.
 

@@ -42,6 +42,21 @@ extern "C"
         c_width, c_height, reinterpret_cast<SkSurfaceProps *> (c_props)));
   }
 
+  void *
+  misk_new_CanvasFromBitmap (void *c_bitmap)
+  {
+    return reinterpret_cast<void *> (
+        new SkCanvas (*reinterpret_cast<SkBitmap *> (c_bitmap)));
+  }
+
+  void *
+  misk_new_CanvasFromBitmapSurfaceProps (void *c_bitmap, void *c_props)
+  {
+    return reinterpret_cast<void *> (
+        new SkCanvas (*reinterpret_cast<SkBitmap *> (c_bitmap),
+                      *reinterpret_cast<SkSurfaceProps *> (c_props)));
+  }
+
   void
   misk_delete_SkCanvas (void *obj)
   {

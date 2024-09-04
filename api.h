@@ -16,6 +16,8 @@ extern "C"
   void *misk_new_Canvas ();
   void *misk_new_CanvasWithDimensions (int c_width, int c_height,
                                        void *c_props);
+  void *misk_new_CanvasFromBitmap (void *c_bitmap);
+  void *misk_new_CanvasFromBitmapSurfaceProps (void *c_bitmap, void *c_props);
   void misk_delete_SkCanvas (void *obj);
   void *misk_new_Paint ();
   void *misk_new_PaintCopy (void *c_paint);

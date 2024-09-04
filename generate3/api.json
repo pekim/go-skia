@@ -7,7 +7,13 @@
 
     {
       "name": "SkCanvas",
-      "constructors": [{}, { "suffix": "WithDimensions" }, null, null, null],
+      "constructors": [
+        {},
+        { "suffix": "WithDimensions" },
+        null,
+        { "suffix": "FromBitmap" },
+        { "suffix": "FromBitmapSurfaceProps" }
+      ],
       "enums": [
         { "name": "ClipEdgeStyle" },
         { "name": "PointMode" },
