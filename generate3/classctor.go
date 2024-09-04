@@ -26,7 +26,7 @@ func (c *classCtor) enrich(api api, class *class, cursor clang.Cursor) {
 	c.params = make([]param, paramCount)
 	for i := 0; i < paramCount; i++ {
 		arg := cursor.Argument(uint32(i))
-		param := newParam(arg, api)
+		param := newParam(i, arg, api)
 		c.params[i] = param
 	}
 }

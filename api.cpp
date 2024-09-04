@@ -64,4 +64,11 @@ extern "C"
   {
     return reinterpret_cast<void *> (new SkSurfaceProps ());
   }
+
+  void *
+  misk_new_SurfacePropsCopy (void *c_p0)
+  {
+    return reinterpret_cast<void *> (
+        new SkSurfaceProps (*reinterpret_cast<SkSurfaceProps *> (c_p0)));
+  }
 }

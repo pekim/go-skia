@@ -29,7 +29,7 @@
     },
     {
       "name": "SkSurfaceProps",
-      "constructors": [{}, null, null, null],
+      "constructors": [{}, null, null, { "suffix": "Copy" }],
       "enums": [{ "name": "Flags" }]
     }
   ]

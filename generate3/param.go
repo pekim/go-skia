@@ -16,8 +16,11 @@ type param struct {
 	typ     typ
 }
 
-func newParam(cursor clang.Cursor, api api) param {
+func newParam(paramIndex int, cursor clang.Cursor, api api) param {
 	cName := cursor.DisplayName()
+	if cName == "" {
+		cName = fmt.Sprintf("p%d", paramIndex)
+	}
 	typ := typFromClangType(cursor.Type(), api)
 	cgoName := "c_" + cName
 

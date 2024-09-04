@@ -407,6 +407,12 @@ func NewSurfaceProps() SurfaceProps {
 	return SurfaceProps{sk: unsafe.Pointer(retC)}
 }
 
+func NewSurfacePropsCopy(p0 SurfaceProps) SurfaceProps {
+	c_p0 := p0.sk
+	retC := C.misk_new_SurfacePropsCopy(c_p0)
+	return SurfaceProps{sk: unsafe.Pointer(retC)}
+}
+
 type SurfacePropsFlags int64
 
 const (
