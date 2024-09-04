@@ -1,6 +1,11 @@
 {
   "classes": [
     {
+      "name": "SkBitmap",
+      "constructors": [{}, { "suffix": "Copy" }, null]
+    },
+
+    {
       "name": "SkCanvas",
       "constructors": [{}, { "suffix": "WithDimensions" }, null, null, null],
       "enums": [

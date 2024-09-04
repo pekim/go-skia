@@ -17,6 +17,71 @@ import (
 )
 
 /*
+SkBitmap describes a two-dimensional raster pixel array. SkBitmap is built on
+SkImageInfo, containing integer width and height, SkColorType and SkAlphaType
+describing the pixel format, and SkColorSpace describing the range of colors.
+SkBitmap points to SkPixelRef, which describes the physical array of pixels.
+SkImageInfo bounds may be located anywhere fully inside SkPixelRef bounds.
+
+SkBitmap can be drawn using SkCanvas. SkBitmap can be a drawing destination for SkCanvas
+draw member functions. SkBitmap flexibility as a pixel container limits some
+optimizations available to the target platform.
+
+If pixel array is primarily read-only, use SkImage for better performance.
+If pixel array is primarily written to, use SkSurface for better performance.
+
+Declaring SkBitmap const prevents altering SkImageInfo: the SkBitmap height, width,
+and so on cannot change. It does not affect SkPixelRef: a caller may write its
+pixels. Declaring SkBitmap const affects SkBitmap configuration, not its contents.
+
+SkBitmap is not thread safe. Each thread must have its own copy of SkBitmap fields,
+although threads may share the underlying pixel array.
+*/
+type Bitmap struct {
+	sk unsafe.Pointer
+}
+
+/*
+Creates an empty SkBitmap without pixels, with kUnknown_SkColorType,
+kUnknown_SkAlphaType, and with a width and height of zero. SkPixelRef origin is
+set to (0, 0).
+
+Use setInfo() to associate SkColorType, SkAlphaType, width, and height
+after SkBitmap has been created.
+
+@return  empty SkBitmap
+
+example: https://fiddle.skia.org/c/@Bitmap_empty_constructor
+*/
+func NewBitmap() Bitmap {
+
+	retC := C.misk_new_Bitmap()
+	return Bitmap{sk: unsafe.Pointer(retC)}
+}
+
+/*
+Copies settings from src to returned SkBitmap. Shares pixels if src has pixels
+allocated, so both bitmaps reference the same pixels.
+
+@param src  SkBitmap to copy SkImageInfo, and share SkPixelRef
+@return     copy of src
+
+example: https://fiddle.skia.org/c/@Bitmap_copy_const_SkBitmap
+*/
+func NewBitmapCopy(src Bitmap) Bitmap {
+	c_src := src.sk
+	retC := C.misk_new_BitmapCopy(c_src)
+	return Bitmap{sk: unsafe.Pointer(retC)}
+}
+
+/*
+Decrements SkPixelRef reference count, if SkPixelRef is not nullptr.
+*/
+func (o Bitmap) Delete() {
+	C.misk_delete_SkBitmap(o.sk)
+}
+
+/*
 SkCanvas provides an interface for drawing, and how the drawing is clipped and transformed.
 SkCanvas contains a stack of SkMatrix and clip values.
 

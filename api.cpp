@@ -1,5 +1,6 @@
 // This is a generated file. DO NOT EDIT.
 
+#include <include/core/SkBitmap.h>
 #include <include/core/SkCanvas.h>
 #include <include/core/SkPaint.h>
 #include <include/core/SkPath.h>
@@ -8,6 +9,25 @@
 extern "C"
 {
 #include "api.h"
+
+  void *
+  misk_new_Bitmap ()
+  {
+    return reinterpret_cast<void *> (new SkBitmap ());
+  }
+
+  void *
+  misk_new_BitmapCopy (void *c_src)
+  {
+    return reinterpret_cast<void *> (
+        new SkBitmap (*reinterpret_cast<SkBitmap *> (c_src)));
+  }
+
+  void
+  misk_delete_SkBitmap (void *obj)
+  {
+    delete reinterpret_cast<SkBitmap *> (obj);
+  }
 
   void *
   misk_new_Canvas ()
