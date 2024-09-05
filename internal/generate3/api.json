@@ -1,0 +1,67 @@
+{
+  "classes": [
+    {
+      "name": "SkBitmap",
+      "constructors": [{}, { "suffix": "Copy" }, null],
+      "methods": [{ "name": "ComputeIsOpaque" }]
+    },
+
+    {
+      "name": "SkCanvas",
+      "constructors": [
+        {},
+        { "suffix": "WithDimensions" },
+        null,
+        { "suffix": "FromBitmap" },
+        { "suffix": "FromBitmapSurfaceProps" }
+      ],
+      "enums": [
+        { "name": "ClipEdgeStyle" },
+        { "name": "PointMode" },
+        { "name": "QuadAAFlags" },
+        { "name": "SaveLayerFlagsSet" },
+        { "name": "SaveLayerStrategy" },
+        { "name": "SrcRectConstraint" }
+      ]
+    },
+
+    {
+      "name": "SkColorSpace",
+      "methods": [
+        { "name": "MakeSRGB" },
+        { "name": "MakeSRGBLinear" },
+        { "name": "Equals" }
+      ]
+    },
+
+    {
+      "name": "SkPaint",
+      "constructors": [{}, null, { "suffix": "Copy" }, null],
+      "enums": [{ "name": "Cap" }, { "name": "Join" }, { "name": "Style" }]
+    },
+
+    {
+      "name": "SkPath",
+      "constructors": [{}, { "suffix": "Copy" }],
+      "enums": [
+        { "name": "AddPathMode" },
+        { "name": "ArcSize" },
+        { "name": "SegmentMask" },
+        { "name": "Verb" }
+      ]
+    },
+
+    {
+      "name": "SkSurfaceProps",
+      "constructors": [
+        {},
+        { "suffix": "PixelGeometry" },
+        null,
+        { "suffix": "Copy" }
+      ],
+      "enums": [{ "name": "Flags" }]
+    }
+  ],
+
+  "enums": [{ "name": "SkPixelGeometry" }]
+}

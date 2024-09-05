@@ -204,6 +204,6 @@ cd ../..
 
 # Generate & verify
 PATH=$ORIGINAL_PATH
-go run generate/cmd/main.go
+go run internal/generate3/cmd/main.go
 echo verify
-go run verify/verify.go
+go run internal/verify/verify.go
