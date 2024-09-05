@@ -24,9 +24,10 @@ The build script
 ./build.sh
 ```
 
-A warning from `github.com/go-clang/clang-v15/clang` about use of the deprecated
-`clang_getDiagnosticCategoryName`
-function is annoying but harmless.
+### \_skia dir
+
+The leading underscore in the dir name is to prevent the directory appearing in godoc output
+in the "Subdirectories" section.
 
 ### pre-commit hook
 

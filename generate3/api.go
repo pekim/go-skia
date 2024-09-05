@@ -22,7 +22,7 @@ func loadApi() api {
 	fmt.Print("load api ")
 	for _, headerFile := range headerFiles {
 		fmt.Print(".")
-		tu := newTranslationUnit("skia/skia/" + headerFile)
+		tu := newTranslationUnit("_skia/skia/" + headerFile)
 		tu.enrichApi(&api)
 	}
 	fmt.Println()

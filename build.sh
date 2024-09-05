@@ -16,8 +16,8 @@ for arg in "$@"; do
 	--help | -h)
 		echo "$0 [options]"
 		echo "  -a, --args  Display the available args list for the skia build (no build)"
-		echo "  -c, --clean Remove the generated files and skia/build directories (no build)"
-		echo "  -C, --CLEAN Remove the generated files and skia directories (no build)"
+		echo "  -c, --clean Remove the generated files and _skia/build directories (no build)"
+		echo "  -C, --CLEAN Remove the generated files and _skia directories (no build)"
 		echo "  -h, --help This help text"
 		exit 0
 		;;
@@ -29,27 +29,27 @@ for arg in "$@"; do
 done
 
 if [ "$CLEAN"x == "fullx" ]; then
-	/bin/rm -rf api.* skia
+	/bin/rm -rf api.* _skia
 	exit 0
 fi
 
 if [ "$CLEAN"x == "restorex" ]; then
-	/bin/rm -rf api.* skia/build
+	/bin/rm -rf api.* _skia/build
 	if [ -d skia/skia ]; then
-		cd skia/skia
+		cd __skia/skia
 		git checkout -- .
 	fi
 	exit 0
 fi
 
 if [ "$SHOW_ARGS"x == "1x" ]; then
-	export PATH="${PWD}/skia/depot_tools:${PATH}"
-	cd skia/skia
+	export PATH="${PWD}/_skia/depot_tools:${PATH}"
+	cd _skia/skia
 	bin/gn args ../build --list --short
 	exit 0
 fi
 
-BUILD_DIR=${PWD}/skia/build
+BUILD_DIR=${PWD}/_skia/build
 
 # As changes to Skia are made, these args may need to be adjusted.
 # Use 'bin/gn args $BUILD_DIR --list' to see what args are available.
@@ -172,8 +172,8 @@ MINGW*)
 esac
 
 # Setup the Skia tree, pulling sources, if needed.
-mkdir -p skia
-cd skia
+mkdir -p _skia
+cd _skia
 
 if [ ! -e depot_tools ]; then
 	git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
