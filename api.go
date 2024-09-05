@@ -319,6 +319,17 @@ func ColorSpaceMakeSRGBLinear() ColorSpace {
 }
 
 /*
+*  If both are null, we return true. If one is null and the other is not, we return false.
+*  If both are non-null, we do a deeper compare.
+ */
+func ColorSpaceEquals(p0 ColorSpace, p1 ColorSpace) bool {
+	c_p0 := p0.sk
+	c_p1 := p1.sk
+	retC := C.misk_ColorSpace_Equals(c_p0, c_p1)
+	return bool(retC)
+}
+
+/*
 SkPaint controls options applied when drawing. SkPaint collects all
 options outside of the SkCanvas clip and SkCanvas matrix.
 

@@ -27,7 +27,11 @@
 
     {
       "name": "SkColorSpace",
-      "methods": [{ "name": "MakeSRGB" }, { "name": "MakeSRGBLinear" }]
+      "methods": [
+        { "name": "MakeSRGB" },
+        { "name": "MakeSRGBLinear" },
+        { "name": "Equals" }
+      ]
     },
 
     {

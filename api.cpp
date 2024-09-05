@@ -82,6 +82,13 @@ extern "C"
     return SkColorSpace::MakeSRGBLinear ().release ();
   }
 
+  bool
+  misk_ColorSpace_Equals (void *c_p0, void *c_p1)
+  {
+    return SkColorSpace::Equals (reinterpret_cast<SkColorSpace *> (c_p0),
+                                 reinterpret_cast<SkColorSpace *> (c_p1));
+  }
+
   void *
   misk_new_Paint ()
   {

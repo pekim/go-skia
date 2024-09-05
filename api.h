@@ -22,6 +22,7 @@ extern "C"
   void misk_delete_SkCanvas (void *obj);
   void *misk_ColorSpace_MakeSRGB ();
   void *misk_ColorSpace_MakeSRGBLinear ();
+  bool misk_ColorSpace_Equals (void *c_p0, void *c_p1);
   void *misk_new_Paint ();
   void *misk_new_PaintCopy (void *c_paint);
   void misk_delete_SkPaint (void *obj);
