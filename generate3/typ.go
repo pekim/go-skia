@@ -42,6 +42,7 @@ func typFromClangType(cType clang.Type, api api) typ {
 		case clang.Type_Bool:
 			typ.cgoName = "bool"
 			typ.goName = "bool"
+			typ.isPrimitive = true
 
 		case clang.Type_UChar:
 			typ.cgoName = "uint"

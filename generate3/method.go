@@ -79,7 +79,7 @@ func (m method) generateGo(g generator) {
 		f.writelnf("  %s", call)
 	} else {
 		f.writelnf("  retC := %s", call)
-		if m.retrn.goName == "bool" {
+		if m.retrn.isPrimitive {
 			f.writelnf("  return %s(retC)", m.retrn.goName)
 		} else {
 			fatalf("return type '%s' not supported", m.retrn.goName)
