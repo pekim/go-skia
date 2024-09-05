@@ -1,6 +1,7 @@
 package skia
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -20,4 +21,9 @@ func TestCtorDtor(t *testing.T) {
 func TestClassStaticMethod(t *testing.T) {
 	bm := NewBitmap()
 	assert.False(t, BitmapComputeIsOpaque(bm))
+}
+
+func TestFontMgr(t *testing.T) {
+	fm := FontMgrRefDefault()
+	fmt.Println(fm)
 }

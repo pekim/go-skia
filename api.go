@@ -637,3 +637,13 @@ const (
 	PixelGeometryRGB_V   PixelGeometry = 3
 	PixelGeometryBGR_V   PixelGeometry = 4
 )
+
+type FontMgr struct {
+	sk unsafe.Pointer
+}
+
+func FontMgrRefDefault() FontMgr {
+	return FontMgr{
+		sk: C.sk_fontmgr_ref_default(),
+	}
+}

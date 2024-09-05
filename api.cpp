@@ -3,9 +3,22 @@
 #include <include/core/SkBitmap.h>
 #include <include/core/SkCanvas.h>
 #include <include/core/SkColorSpace.h>
+#include <include/core/SkFontMgr.h>
 #include <include/core/SkPaint.h>
 #include <include/core/SkPath.h>
 #include <include/core/SkSurfaceProps.h>
+
+#if defined(SKIA_MAC)
+#include "include/ports/SkFontMgr_mac_ct.h"
+#endif
+
+#if defined(SKIA_UNIX)
+#include "include/ports/SkFontMgr_fontconfig.h"
+#endif
+
+#if defined(SKIA_WINDOWS)
+#include "include/ports/SkTypeface_win.h"
+#endif
 
 extern "C"
 {
@@ -145,5 +158,21 @@ extern "C"
   {
     return reinterpret_cast<void *> (
         new SkSurfaceProps (*reinterpret_cast<SkSurfaceProps *> (c_p0)));
+  }
+
+  void *
+  sk_fontmgr_ref_default (void)
+  {
+#if defined(SKIA_MAC)
+    return reinterpret_cast<void *> (
+        SkFontMgr_New_CoreText (nullptr).release ());
+#elif defined(SKIA_UNIX)
+    return reinterpret_cast<void *> (
+        SkFontMgr_New_FontConfig (nullptr).release ());
+#elif defined(SKIA_WINDOWS)
+    return reinterpret_cast<void *> (SkFontMgr_New_DirectWrite ().release ());
+#else
+#error "No font manager available for this platform"
+#endif
   }
 }

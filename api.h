@@ -10,6 +10,7 @@ extern "C"
 {
 #endif // __cplusplus
 
+  void *sk_fontmgr_ref_default (void);
   void *misk_new_Bitmap ();
   void *misk_new_BitmapCopy (void *c_src);
   void misk_delete_SkBitmap (void *obj);
