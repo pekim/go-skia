@@ -37,10 +37,6 @@ func newFileGo() *fileGo {
 
 func (f fileGo) finish() {
 	f.writeln(`
-		type FontMgr struct {
-			sk unsafe.Pointer
-		}
-
 		func FontMgrRefDefault() FontMgr {
 			return FontMgr {
 				sk: C.sk_fontmgr_ref_default(),

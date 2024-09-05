@@ -4,6 +4,7 @@
 #include <include/core/SkCanvas.h>
 #include <include/core/SkColorSpace.h>
 #include <include/core/SkFontMgr.h>
+#include <include/core/SkFontStyle.h>
 #include <include/core/SkPaint.h>
 #include <include/core/SkPath.h>
 #include <include/core/SkSurfaceProps.h>
@@ -86,13 +87,14 @@ extern "C"
   void *
   misk_ColorSpace_MakeSRGB ()
   {
-    return SkColorSpace::MakeSRGB ().release ();
+    return reinterpret_cast<void *> (SkColorSpace::MakeSRGB ().release ());
   }
 
   void *
   misk_ColorSpace_MakeSRGBLinear ()
   {
-    return SkColorSpace::MakeSRGBLinear ().release ();
+    return reinterpret_cast<void *> (
+        SkColorSpace::MakeSRGBLinear ().release ());
   }
 
   bool

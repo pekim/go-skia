@@ -329,6 +329,10 @@ func ColorSpaceEquals(p0 ColorSpace, p1 ColorSpace) bool {
 	return bool(retC)
 }
 
+type FontMgr struct {
+	sk unsafe.Pointer
+}
+
 /*
 SkPaint controls options applied when drawing. SkPaint collects all
 options outside of the SkCanvas clip and SkCanvas matrix.
@@ -637,10 +641,6 @@ const (
 	PixelGeometryRGB_V   PixelGeometry = 3
 	PixelGeometryBGR_V   PixelGeometry = 4
 )
-
-type FontMgr struct {
-	sk unsafe.Pointer
-}
 
 func FontMgrRefDefault() FontMgr {
 	return FontMgr{

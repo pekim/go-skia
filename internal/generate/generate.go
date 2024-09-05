@@ -5,6 +5,7 @@ var headerFiles = []string{
 	"include/core/SkCanvas.h",
 	"include/core/SkColorSpace.h",
 	"include/core/SkFontMgr.h",
+	"include/core/SkFontStyle.h",
 	"include/core/SkPaint.h",
 	"include/core/SkPath.h",
 	"include/core/SkSurfaceProps.h",

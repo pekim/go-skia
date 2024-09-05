@@ -25,6 +25,10 @@ func (c *class) enrich1(cursor clang.Cursor) {
 	c.doc = cursor.RawCommentText()
 	c.doc = strings.Replace(c.doc, fmt.Sprintf("\\class %s", c.CName), "", 1)
 	c.enriched = true
+
+	if c.CName == "SkFontStyle" {
+		dumpCursor(cursor, "")
+	}
 }
 
 func (c *class) enrich2(api api) {

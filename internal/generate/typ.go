@@ -30,6 +30,11 @@ func typFromClangType(cType clang.Type, api api) typ {
 	if class, ok := api.findClass(typ.cName); ok {
 		typ.class = class
 		typ.goName = typ.class.goName
+		// fmt.Println(typ.cName, cType.SizeOf(),
+		// 	clang.TypeLayoutError_Invalid,
+		// 	clang.TypeLayoutError_Incomplete,
+		// 	clang.TypeLayoutError_Dependent,
+		// )
 
 	} else if enum, ok := api.findEnum(typ.cName); ok {
 		typ.enum = enum
