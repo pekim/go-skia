@@ -20,6 +20,8 @@ extern "C"
   void *misk_new_CanvasFromBitmap (void *c_bitmap);
   void *misk_new_CanvasFromBitmapSurfaceProps (void *c_bitmap, void *c_props);
   void misk_delete_SkCanvas (void *obj);
+  void *misk_ColorSpace_MakeSRGB ();
+  void *misk_ColorSpace_MakeSRGBLinear ();
   void *misk_new_Paint ();
   void *misk_new_PaintCopy (void *c_paint);
   void misk_delete_SkPaint (void *obj);

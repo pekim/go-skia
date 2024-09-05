@@ -3,7 +3,7 @@ package generate
 var headerFiles = []string{
 	"include/core/SkBitmap.h",
 	"include/core/SkCanvas.h",
-	// "include/core/SkColorSpace.h",
+	"include/core/SkColorSpace.h",
 	"include/core/SkPaint.h",
 	"include/core/SkPath.h",
 	"include/core/SkSurfaceProps.h",

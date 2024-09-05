@@ -26,6 +26,11 @@
     },
 
     {
+      "name": "SkColorSpace",
+      "methods": [{ "name": "MakeSRGB" }, { "name": "MakeSRGBLinear" }]
+    },
+
+    {
       "name": "SkPaint",
       "constructors": [{}, null, { "suffix": "Copy" }, null],
       "enums": [{ "name": "Cap" }, { "name": "Join" }, { "name": "Style" }]

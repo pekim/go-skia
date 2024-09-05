@@ -60,7 +60,7 @@ func (c classCtor) generateGo(g generator) {
 	f.writelnf("func %s(%s) %s {", c.goFuncName, strings.Join(params, ", "), c.class.goName)
 	f.writeln(strings.Join(cVars, "\n"))
 	f.writelnf("  retC := C.%s(%s)", c.cFuncName, strings.Join(cArgs, ", "))
-	f.writelnf("  return %s{sk: unsafe.Pointer(retC)}", c.class.goName)
+	f.writelnf("  return %s{sk: retC}", c.class.goName)
 	f.writeln("}")
 	f.writeln()
 }

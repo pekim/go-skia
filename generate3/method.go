@@ -81,6 +81,8 @@ func (m method) generateGo(g generator) {
 		f.writelnf("  retC := %s", call)
 		if m.retrn.isPrimitive {
 			f.writelnf("  return %s(retC)", m.retrn.goName)
+		} else if m.retrn.isSmartPointer && m.retrn.class != nil {
+			f.writelnf("  return %s{sk: retC}", m.retrn.class.goName)
 		} else {
 			fatalf("return type '%s' not supported", m.retrn.goName)
 		}
@@ -110,8 +112,13 @@ func (m method) generateCpp(g generator) {
 		args[i] = param.cArg
 	}
 
+	skSpRelease := ""
+	if m.retrn.isSmartPointer {
+		skSpRelease = ".release()"
+	}
+
 	f.writelnf("%s %s(%s) {", m.retrn.cName, m.cFuncName, strings.Join(params, ", "))
-	f.writelnf("  return %s::%s(%s);", m.class.CName, m.CName, strings.Join(args, ", "))
+	f.writelnf("  return %s::%s(%s)%s;", m.class.CName, m.CName, strings.Join(args, ", "), skSpRelease)
 	f.writeln("}")
 	f.writeln()
 }

@@ -14,6 +14,7 @@ type typ struct {
 	isLValueReference bool
 	isPointer         bool
 	isVoid            bool
+	isSmartPointer    bool
 	class             *class
 	enum              *enum
 	subTyp            *typ
@@ -33,6 +34,15 @@ func typFromClangType(cType clang.Type, api api) typ {
 	} else if enum, ok := api.findEnum(typ.cName); ok {
 		typ.enum = enum
 		typ.goName = typ.enum.goName
+
+	} else if strings.HasPrefix(typ.cName, "sk_sp<") {
+		// A type like "sk_sp<SkSomeClass>" is of kind clang.Type_Elaborated.
+		// Its CanonicalType's kind is clang.Type_Record.
+		// The template argument 'SkSomeClass' can be got, but it is not clear how to get the 'sk_sp'
+		// So determine it's a smart pointer from the C name starting with "sk_sp<".
+		typ = typFromClangType(cType.TemplateArgumentAsType(0), api)
+		typ.isSmartPointer = true
+		typ.cName = "void *"
 
 	} else {
 		switch cType.Kind() {
@@ -74,7 +84,7 @@ func typFromClangType(cType clang.Type, api api) typ {
 			typ.goName = typ.subTyp.goName
 
 		default:
-			fatalf("unsupported type '%s'", cType.Spelling())
+			fatalf("unsupported type '%s', of kind %s", cType.Spelling(), cType.Kind())
 		}
 	}
 

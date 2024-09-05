@@ -2,6 +2,7 @@
 
 #include <include/core/SkBitmap.h>
 #include <include/core/SkCanvas.h>
+#include <include/core/SkColorSpace.h>
 #include <include/core/SkPaint.h>
 #include <include/core/SkPath.h>
 #include <include/core/SkSurfaceProps.h>
@@ -67,6 +68,18 @@ extern "C"
   misk_delete_SkCanvas (void *obj)
   {
     delete reinterpret_cast<SkCanvas *> (obj);
+  }
+
+  void *
+  misk_ColorSpace_MakeSRGB ()
+  {
+    return SkColorSpace::MakeSRGB ().release ();
+  }
+
+  void *
+  misk_ColorSpace_MakeSRGBLinear ()
+  {
+    return SkColorSpace::MakeSRGBLinear ().release ();
   }
 
   void *

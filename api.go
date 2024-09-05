@@ -56,7 +56,7 @@ example: https://fiddle.skia.org/c/@Bitmap_empty_constructor
 func NewBitmap() Bitmap {
 
 	retC := C.misk_new_Bitmap()
-	return Bitmap{sk: unsafe.Pointer(retC)}
+	return Bitmap{sk: retC}
 }
 
 /*
@@ -71,7 +71,7 @@ example: https://fiddle.skia.org/c/@Bitmap_copy_const_SkBitmap
 func NewBitmapCopy(src Bitmap) Bitmap {
 	c_src := src.sk
 	retC := C.misk_new_BitmapCopy(c_src)
-	return Bitmap{sk: unsafe.Pointer(retC)}
+	return Bitmap{sk: retC}
 }
 
 /*
@@ -142,7 +142,7 @@ example: https://fiddle.skia.org/c/@Canvas_empty_constructor
 func NewCanvas() Canvas {
 
 	retC := C.misk_new_Canvas()
-	return Canvas{sk: unsafe.Pointer(retC)}
+	return Canvas{sk: retC}
 }
 
 /*
@@ -168,7 +168,7 @@ func NewCanvasWithDimensions(width int, height int, props SurfaceProps) Canvas {
 	c_height := C.int(height)
 	c_props := props.sk
 	retC := C.misk_new_CanvasWithDimensions(c_width, c_height, c_props)
-	return Canvas{sk: unsafe.Pointer(retC)}
+	return Canvas{sk: retC}
 }
 
 /*
@@ -189,7 +189,7 @@ example: https://fiddle.skia.org/c/@Canvas_copy_const_SkBitmap
 func NewCanvasFromBitmap(bitmap Bitmap) Canvas {
 	c_bitmap := bitmap.sk
 	retC := C.misk_new_CanvasFromBitmap(c_bitmap)
-	return Canvas{sk: unsafe.Pointer(retC)}
+	return Canvas{sk: retC}
 }
 
 /*
@@ -211,7 +211,7 @@ func NewCanvasFromBitmapSurfaceProps(bitmap Bitmap, props SurfaceProps) Canvas {
 	c_bitmap := bitmap.sk
 	c_props := props.sk
 	retC := C.misk_new_CanvasFromBitmapSurfaceProps(c_bitmap, c_props)
-	return Canvas{sk: unsafe.Pointer(retC)}
+	return Canvas{sk: retC}
 }
 
 /*
@@ -296,6 +296,28 @@ const (
 	CanvasSrcRectConstraintFast CanvasSrcRectConstraint = 1
 )
 
+type ColorSpace struct {
+	sk unsafe.Pointer
+}
+
+/*
+*  Create the sRGB color space.
+ */
+func ColorSpaceMakeSRGB() ColorSpace {
+
+	retC := C.misk_ColorSpace_MakeSRGB()
+	return ColorSpace{sk: retC}
+}
+
+/*
+*  Colorspace with the sRGB primaries, but a linear (1.0) gamma.
+ */
+func ColorSpaceMakeSRGBLinear() ColorSpace {
+
+	retC := C.misk_ColorSpace_MakeSRGBLinear()
+	return ColorSpace{sk: retC}
+}
+
 /*
 SkPaint controls options applied when drawing. SkPaint collects all
 options outside of the SkCanvas clip and SkCanvas matrix.
@@ -320,7 +342,7 @@ example: https://fiddle.skia.org/c/@Paint_empty_constructor
 func NewPaint() Paint {
 
 	retC := C.misk_new_Paint()
-	return Paint{sk: unsafe.Pointer(retC)}
+	return Paint{sk: retC}
 }
 
 /*
@@ -341,7 +363,7 @@ example: https://fiddle.skia.org/c/@Paint_copy_const_SkPaint
 func NewPaintCopy(paint Paint) Paint {
 	c_paint := paint.sk
 	retC := C.misk_new_PaintCopy(c_paint)
-	return Paint{sk: unsafe.Pointer(retC)}
+	return Paint{sk: retC}
 }
 
 /*
@@ -451,7 +473,7 @@ example: https://fiddle.skia.org/c/@Path_empty_constructor
 func NewPath() Path {
 
 	retC := C.misk_new_Path()
-	return Path{sk: unsafe.Pointer(retC)}
+	return Path{sk: retC}
 }
 
 /*
@@ -472,7 +494,7 @@ example: https://fiddle.skia.org/c/@Path_copy_const_SkPath
 func NewPathCopy(path Path) Path {
 	c_path := path.sk
 	retC := C.misk_new_PathCopy(c_path)
-	return Path{sk: unsafe.Pointer(retC)}
+	return Path{sk: retC}
 }
 
 /*
@@ -562,7 +584,7 @@ No flags, unknown pixel geometry, platform-default contrast/gamma.
 func NewSurfaceProps() SurfaceProps {
 
 	retC := C.misk_new_SurfaceProps()
-	return SurfaceProps{sk: unsafe.Pointer(retC)}
+	return SurfaceProps{sk: retC}
 }
 
 /*
@@ -572,13 +594,13 @@ func NewSurfacePropsPixelGeometry(flags uint, p1 PixelGeometry) SurfaceProps {
 	c_flags := C.uint(flags)
 	c_p1 := C.uint(p1)
 	retC := C.misk_new_SurfacePropsPixelGeometry(c_flags, c_p1)
-	return SurfaceProps{sk: unsafe.Pointer(retC)}
+	return SurfaceProps{sk: retC}
 }
 
 func NewSurfacePropsCopy(p0 SurfaceProps) SurfaceProps {
 	c_p0 := p0.sk
 	retC := C.misk_new_SurfacePropsCopy(c_p0)
-	return SurfaceProps{sk: unsafe.Pointer(retC)}
+	return SurfaceProps{sk: retC}
 }
 
 type SurfacePropsFlags int64
