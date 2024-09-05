@@ -52,8 +52,9 @@ func (f fileGo) writeDocComment(comment string) {
 		comment = strings.TrimPrefix(comment, "/**")
 		comment = strings.TrimSuffix(comment, "*/")
 		lines := strings.Split(comment, "\n")
-		for i, line := range lines {
-			lines[i] = strings.TrimSpace(line)
+		for i := range lines {
+			lines[i] = strings.TrimSpace(lines[i])
+			lines[i] = strings.TrimPrefix(lines[i], "*")
 		}
 		comment = "/*\n" + strings.Join(lines, "\n") + "\n*/"
 	}

@@ -247,8 +247,8 @@ const (
 )
 
 /*
-* Experimental. Controls anti-aliasing of each edge of images in an image-set.
- */
+Experimental. Controls anti-aliasing of each edge of images in an image-set.
+*/
 type CanvasQuadAAFlags int64
 
 const (
@@ -301,8 +301,8 @@ type ColorSpace struct {
 }
 
 /*
-*  Create the sRGB color space.
- */
+Create the sRGB color space.
+*/
 func ColorSpaceMakeSRGB() ColorSpace {
 
 	retC := C.misk_ColorSpace_MakeSRGB()
@@ -310,8 +310,8 @@ func ColorSpaceMakeSRGB() ColorSpace {
 }
 
 /*
-*  Colorspace with the sRGB primaries, but a linear (1.0) gamma.
- */
+Colorspace with the sRGB primaries, but a linear (1.0) gamma.
+*/
 func ColorSpaceMakeSRGBLinear() ColorSpace {
 
 	retC := C.misk_ColorSpace_MakeSRGBLinear()
@@ -319,9 +319,9 @@ func ColorSpaceMakeSRGBLinear() ColorSpace {
 }
 
 /*
-*  If both are null, we return true. If one is null and the other is not, we return false.
-*  If both are non-null, we do a deeper compare.
- */
+If both are null, we return true. If one is null and the other is not, we return false.
+If both are non-null, we do a deeper compare.
+*/
 func ColorSpaceEquals(p0 ColorSpace, p1 ColorSpace) bool {
 	c_p0 := p0.sk
 	c_p1 := p1.sk
@@ -581,10 +581,10 @@ const (
 )
 
 /*
-*  Describes properties and constraints of a given SkSurface. The rendering engine can parse these
-*  during drawing, and can sometimes optimize its performance (e.g. disabling an expensive
-*  feature).
- */
+Describes properties and constraints of a given SkSurface. The rendering engine can parse these
+during drawing, and can sometimes optimize its performance (e.g. disabling an expensive
+feature).
+*/
 type SurfaceProps struct {
 	sk unsafe.Pointer
 }
@@ -624,10 +624,10 @@ const (
 )
 
 /*
-*  Description of how the LCD strips are arranged for each pixel. If this is unknown, or the
-*  pixels are meant to be "portable" and/or transformed before showing (e.g. rotated, scaled)
-*  then use kUnknown_SkPixelGeometry.
- */
+Description of how the LCD strips are arranged for each pixel. If this is unknown, or the
+pixels are meant to be "portable" and/or transformed before showing (e.g. rotated, scaled)
+then use kUnknown_SkPixelGeometry.
+*/
 type PixelGeometry int64
 
 const (
