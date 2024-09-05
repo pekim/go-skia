@@ -2,138 +2,58 @@ package generate
 
 import (
 	"fmt"
-	"strings"
 
 	"github.com/go-clang/clang-v15/clang"
 )
 
 type param struct {
-	cName       string
-	cgoName     string
-	goName      string
-	typ         typ
-	isClass     bool
-	isStruct    bool
-	unsupported string
+	cName   string
+	cgoName string
+	cgoVar  string
+	cParam  string
+	cArg    string
+	goName  string
+	typ     typ
 }
 
-func newParam(cursor clang.Cursor, n int) param {
+func newParam(paramIndex int, cursor clang.Cursor, api api) param {
+	cName := cursor.DisplayName()
+	if cName == "" {
+		cName = fmt.Sprintf("p%d", paramIndex)
+	}
+	typ := typFromClangType(cursor.Type(), api)
+	cgoName := "c_" + cName
+
 	p := param{
-		cName: cursor.DisplayName(),
-	}
-	if p.cName == "" {
-		p.cName = fmt.Sprintf("p%d", n)
+		cName:   cName,
+		cgoName: cgoName,
+		goName:  validGoName(cName),
+		typ:     typ,
 	}
 
-	p.cgoName = fmt.Sprintf("c_%s", p.cName)
-	p.goName = validGoName(p.cName)
+	if typ.isPrimitive {
+		p.cgoVar = fmt.Sprintf("%s := C.%s(%s)", p.cgoName, p.typ.cgoName, p.goName)
+		p.cParam = fmt.Sprintf("%s %s", p.typ.cName, p.cgoName)
+		p.cArg = p.cgoName
 
-	cursor.Visit(func(cursor, parent clang.Cursor) (status clang.ChildVisitResult) {
-		if cursor.Kind() == clang.Cursor_TypeRef {
-			if strings.Contains(cursor.Spelling(), "struct ") {
-				p.isStruct = true
-			}
-			if strings.Contains(cursor.Spelling(), "class ") {
-				p.isClass = true
-			}
-			if strings.Contains(cursor.Spelling(), "SkSVGColor::Vars") {
-				p.unsupported = "SkSVGColor::Vars"
-			}
-		}
-		return clang.ChildVisit_Continue
-	})
+	} else if typ.enum != nil {
+		p.cgoVar = fmt.Sprintf("%s := C.%s(%s)", p.cgoName, typ.enum.cType.cgoName, p.goName)
+		p.cParam = fmt.Sprintf("%s %s", typ.enum.cType.cName, p.cgoName)
+		p.cArg = fmt.Sprintf("%s(%s)", typ.cName, p.cgoName)
 
-	typ, err := typeFromClangType(cursor.Type())
-	if err != nil {
-		panic(err)
+	} else if typ.isLValueReference && typ.subTyp.class != nil {
+		p.cgoVar = fmt.Sprintf("%s := %s.sk", p.cgoName, p.goName)
+		p.cParam = fmt.Sprintf("void *%s", p.cgoName)
+		p.cArg = fmt.Sprintf("*reinterpret_cast<%s*>(%s)", p.typ.subTyp.cName, p.cgoName)
+
+	} else if typ.isPointer && typ.subTyp.class != nil {
+		p.cgoVar = fmt.Sprintf("%s := %s.sk", p.cgoName, p.goName)
+		p.cParam = fmt.Sprintf("void *%s", p.cgoName)
+		p.cArg = fmt.Sprintf("reinterpret_cast<%s*>(%s)", p.typ.subTyp.cName, p.cgoName)
+
+	} else {
+		fatalf("unhandled cgoVar for param with typ %#v", typ)
 	}
-	p.typ = typ
 
 	return p
-}
-
-func (p param) supported() (bool, string) {
-	if p.unsupported != "" {
-		return false, p.unsupported
-	}
-
-	if p.typ.isLValueReference || p.typ.isRValueReference {
-		return true, ""
-	}
-
-	if p.typ.unsupported != "" {
-		return false, p.typ.unsupported
-	}
-	if p.typ.isArray {
-		// TODO support array params
-		return false, "array not supported"
-	}
-	if p.typ.pointerLevel > 0 {
-		// TODO support pointer params
-		return false, "pointer not supported"
-	}
-
-	if p.typ.isPrimitive {
-		return true, ""
-	}
-
-	return false, "not supported"
-}
-
-func (p param) goDecl() string {
-	return fmt.Sprintf("%s %s", p.goName, p.typ.goName)
-}
-
-func (p param) goCArg() string {
-	if p.typ.isLValueReference || p.typ.isRValueReference {
-		if p.typ.isPrimitive {
-			return fmt.Sprintf("%s := (*C.%s)(&%s)", p.cgoName, p.typ.cgoName, p.goName)
-		}
-		return fmt.Sprintf("%s := %s.skia", p.cgoName, p.goName)
-	}
-	return fmt.Sprintf("%s := C.%s(%s)", p.cgoName, p.typ.cgoName, p.goName)
-}
-
-func (p param) cParamDecl() string {
-	if p.typ.isLValueReference || p.typ.isRValueReference {
-		if p.typ.isPrimitive {
-			return fmt.Sprintf("%s* %s", p.typ.cName, p.cgoName)
-		}
-		return fmt.Sprintf("void* %s", p.cgoName)
-	}
-	return fmt.Sprintf("%s %s", p.typ.cgoName, p.cgoName)
-}
-
-func (p param) cArg() string {
-	if p.typ.isEnumLiteral {
-		return fmt.Sprintf("(%s)%s", p.typ.cName, p.cgoName)
-	}
-	if p.typ.isLValueReference {
-		if p.typ.isPrimitive {
-			return fmt.Sprintf("reinterpret_cast<%s &>(*%s)", p.typ.cName, p.cgoName)
-		}
-		return fmt.Sprintf("reinterpret_cast<%s &>(%s)", p.typ.cName, p.cgoName)
-	}
-	if p.typ.isRValueReference {
-		if p.typ.isPrimitive {
-			return fmt.Sprintf("reinterpret_cast<%s &&>(*%s)", p.typ.cName, p.cgoName)
-		}
-		return fmt.Sprintf("reinterpret_cast<%s &&>(%s)", p.typ.cName, p.cgoName)
-	}
-	return p.cgoName
-}
-
-func makeParamsString(params []param, makeParam func(p param) string) string {
-	var paramsStrings = make([]string, len(params))
-	for p, param := range params {
-		paramsStrings[p] = makeParam(param)
-	}
-	return strings.Join(paramsStrings, ", ")
-}
-
-func validGoName(name string) string {
-	if name == "type" {
-		return "typ"
-	}
-	return name
 }

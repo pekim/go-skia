@@ -1,6 +1,24 @@
 package generate
 
-func (g *generator) generate() {
+var headerFiles = []string{
+	"include/core/SkBitmap.h",
+	"include/core/SkCanvas.h",
+	"include/core/SkColorSpace.h",
+	"include/core/SkPaint.h",
+	"include/core/SkPath.h",
+	"include/core/SkSurfaceProps.h",
+	// "include/core/SkTypeface.h",
+}
+
+type generator struct {
+	goFile     *fileGo
+	headerFile *fileHeader
+	cppFile    *fileCpp
+}
+
+func Generate() {
+	g := generator{}
+
 	g.goFile = newFileGo()
 	defer g.goFile.finish()
 
@@ -10,11 +28,6 @@ func (g *generator) generate() {
 	g.cppFile = newFileCpp()
 	defer g.cppFile.finish()
 
-	for _, class := range g.classes {
-		class.generate(g)
-	}
-
-	for _, enum := range g.enums {
-		enum.generate(g)
-	}
+	api := loadApi()
+	api.generate(g)
 }

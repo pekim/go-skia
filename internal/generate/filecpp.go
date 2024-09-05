@@ -1,17 +1,20 @@
 package generate
 
 type fileCpp struct {
-	*genFile
+	*file
 }
 
 func newFileCpp() *fileCpp {
 	f := &fileCpp{
-		genFile: newGenFile("./api.cpp"),
+		file: newFile("./api.cpp"),
 	}
 
-	f.writelnf(`
-		#include "skia.h"
+	for _, headerFile := range headerFiles {
+		f.writelnf("#include <%s>", headerFile)
+	}
+	f.writeln()
 
+	f.writelnf(`
 		extern "C"
   	{
 		#include "api.h"

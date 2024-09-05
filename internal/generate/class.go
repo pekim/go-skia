@@ -1,94 +1,116 @@
 package generate
 
 import (
-	"slices"
+	"fmt"
+	"strings"
 
 	"github.com/go-clang/clang-v15/clang"
 )
 
 type class struct {
-	cName    string
+	cursor   clang.Cursor
+	CName    string       `json:"name"`
+	Ctors    []*classCtor `json:"constructors"`
+	Enums    []enum       `json:"enums"`
+	Methods  []method     `json:"methods"`
+	dtor     classDtor
 	goName   string
-	comment  string
-	abstract bool
-	ctors    []classCtor
-	ctorN    int // for ctor name function uniqueness
-	dtors    []classDtor
-	enums    []enum
-	isPublic bool
+	doc      string
+	enriched bool
 }
 
-func newClass(cursor clang.Cursor) class {
-	name := cursor.Spelling()
-	c := class{
-		cName:    name,
-		goName:   trimSkiaPrefix(name),
-		abstract: cursor.CXXRecord_IsAbstract(),
-		comment:  parsedCommentToGoComment(cursor.ParsedComment()),
-	}
+func (c *class) enrich1(cursor clang.Cursor) {
+	c.cursor = cursor
+	c.goName = stripSkPrefix(c.CName)
+	c.doc = cursor.RawCommentText()
+	c.doc = strings.Replace(c.doc, fmt.Sprintf("\\class %s", c.CName), "", 1)
+	c.enriched = true
+}
 
-	cursor.Visit(func(cursor, _parent clang.Cursor) (status clang.ChildVisitResult) {
+func (c *class) enrich2(api api) {
+	var ctorCursors []clang.Cursor
+	c.cursor.Visit(func(cursor, parent clang.Cursor) (status clang.ChildVisitResult) {
 		switch cursor.Kind() {
-		case clang.Cursor_CXXAccessSpecifier:
-			if cursor.AccessSpecifier() == clang.AccessSpecifier_Public {
-				c.isPublic = true
-			}
-
 		case clang.Cursor_Constructor:
 			if cursor.AccessSpecifier() == clang.AccessSpecifier_Public {
-				c.ctors = append(c.ctors, newClassCtor(&c, cursor))
+				ctorCursors = append(ctorCursors, cursor)
 			}
 
 		case clang.Cursor_Destructor:
 			if cursor.AccessSpecifier() == clang.AccessSpecifier_Public {
-				c.dtors = append(c.dtors, classDtor{class: c})
+				c.dtor = newClassDtor(c, cursor)
 			}
 
 		case clang.Cursor_EnumDecl:
-			c.enums = append(c.enums, newEnum(cursor, &c))
+			if enum, ok := c.findEnum(cursor.Spelling()); ok {
+				enum.enrich(c, cursor, api)
+			}
+
+		case clang.Cursor_CXXMethod:
+			if method, ok := c.findMethod(cursor.Spelling()); ok {
+				method.enrich(api, c, cursor)
+			}
+
+		default:
 		}
 
 		return clang.ChildVisit_Continue
 	})
 
-	return c
+	if len(c.Ctors) != len(ctorCursors) {
+		fatalf("class %s has %d ctors, but expected %d", c.CName, len(ctorCursors), len(c.Ctors))
+	}
+	for i, cursor := range ctorCursors {
+		ctor := c.Ctors[i]
+		if ctor != nil {
+			ctor.enrich(api, c, cursor)
+		}
+	}
 }
 
-func (c *class) generate(g *generator) {
-	skipClasses := []string{
-		"SkArenaAlloc",
-		"SkAutoMutexExclusive",
-		"SkSVGRenderContext",
+func (c *class) findEnum(name string) (*enum, bool) {
+	for i, enum := range c.Enums {
+		if enum.CName == name {
+			return &c.Enums[i], true
+		}
 	}
-	if slices.Contains(skipClasses, c.cName) {
-		return
+	return nil, false
+}
+
+func (c *class) findMethod(name string) (*method, bool) {
+	for i, method := range c.Methods {
+		if method.CName == name {
+			return &c.Methods[i], true
+		}
+	}
+	return nil, false
+}
+
+func (c class) generate(g generator) {
+	if !c.enriched {
+		fatalf("class %s has not been enriched", c.CName)
 	}
 
-	if c.comment != "" {
-		g.goFile.writeln(c.comment)
-	}
-	g.goFile.writelnf("type %s struct {", c.goName)
-	g.goFile.writeln("  skia unsafe.Pointer")
-	g.goFile.writeln("}")
-	g.goFile.writeln("")
+	f := g.goFile
 
-	skipCtorsClasses := []string{
-		// class has an implicitly deleted ctor
-		"SkTableMaskFilter",
-		// "undefined symbol: typeinfo for SkWStream"
-		"SkNullWStream",
-	}
-	if !c.abstract && !slices.Contains(skipCtorsClasses, c.cName) {
-		for _, ctor := range c.ctors {
+	f.writeDocComment(c.doc)
+	f.writelnf("type %s struct {", c.goName)
+	f.writeln("  sk unsafe.Pointer")
+	f.writeln("}")
+	f.writeln()
+
+	for _, ctor := range c.Ctors {
+		if ctor != nil {
 			ctor.generate(g)
 		}
 	}
+	c.dtor.generate(g)
 
-	for _, dtor := range c.dtors {
-		dtor.generate(g)
+	for _, method := range c.Methods {
+		method.generate(g)
 	}
 
-	for _, enum := range c.enums {
+	for _, enum := range c.Enums {
 		enum.generate(g)
 	}
 }

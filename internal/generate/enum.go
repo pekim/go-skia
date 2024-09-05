@@ -2,90 +2,82 @@ package generate
 
 import (
 	"fmt"
-	"slices"
 	"strings"
 
 	"github.com/go-clang/clang-v15/clang"
 )
 
 type enum struct {
+	CName     string `json:"name"`
+	cType     typ
+	goName    string
 	class     *class
-	name      string
-	comment   string
+	doc       string
 	constants []enumConstant
+	enriched  bool
 }
 
 type enumConstant struct {
-	name    string
-	value   int64
-	comment string
+	goName string
+	value  int64
+	doc    string
 }
 
-func newEnum(cursor clang.Cursor, class *class) enum {
-	e := enum{
-		class:   class,
-		name:    cursor.Spelling(),
-		comment: parsedCommentToGoComment(cursor.ParsedComment()),
+func (e *enum) enrich(class *class, cursor clang.Cursor, api api) {
+	e.cType = typFromClangType(cursor.EnumDeclIntegerType(), api)
+	if class != nil {
+		e.goName = class.goName + e.CName
+	} else {
+		e.goName = stripSkPrefix(e.CName)
 	}
+	e.class = class
+	e.doc = cursor.RawCommentText()
+	if class != nil {
+		e.doc = strings.Replace(e.doc, fmt.Sprintf("\\enum %s::%s", class.CName, e.CName), "", 1)
+	}
+
 	cursor.Visit(func(cursor, parent clang.Cursor) (status clang.ChildVisitResult) {
-		if cursor.Kind() == clang.Cursor_EnumConstantDecl {
-			e.constants = append(e.constants, enumConstant{
-				name:    cursor.Spelling(),
-				value:   cursor.EnumConstantDeclValue(),
-				comment: parsedCommentToGoComment(cursor.ParsedComment()),
-			})
+		switch cursor.Kind() {
+		case clang.Cursor_EnumConstantDecl:
+			name := cursor.Spelling()
+			name = stripKPrefix(name)
+			name = strings.TrimSuffix(name, "_"+e.CName)
+			doc := cursor.RawCommentText()
+			doc = strings.Replace(doc, "!<", "", 1)
+
+			constant := enumConstant{
+				goName: e.goName + name,
+				// Assume that the value is signed, and will fit in an int64.
+				// Could use cursor.EnumDeclIntegerType().Kind() to find the type, but it rapidly
+				// gets rather involved as the type could in theory be any integer type.
+				value: cursor.EnumConstantDeclValue(),
+				doc:   doc,
+			}
+			e.constants = append(e.constants, constant)
 		}
+
 		return clang.ChildVisit_Continue
 	})
 
-	return e
+	e.enriched = true
 }
 
-func (e enum) generate(g *generator) {
-	if len(e.constants) == 0 {
-		return
+func (e enum) generate(g generator) {
+	if !e.enriched {
+		fatalf("enum %s has not been enriched", e.CName)
 	}
 
-	// Skip global enums that would result in a name conflict with a class enum.
-	if slices.Contains([]string{"SkPathSegmentMask", "SkPathVerb"}, e.name) {
-		return
-	}
+	f := g.goFile
 
-	// generate the enum type
-	if e.comment != "" {
-		g.goFile.writeln(e.comment)
-	}
-	goName := trimSkiaPrefix(e.name)
-	if e.class != nil {
-		goName = e.class.goName + e.name
-	}
-	g.goFile.writelnf("type %s int64", goName)
-	g.goFile.writeln("")
+	f.writeDocComment(e.doc)
+	f.writelnf("type %s int64", e.goName)
+	f.writeln()
 
-	// generate the enum's constants
-	g.goFile.writeln("const (")
+	f.writeln("const (")
 	for _, constant := range e.constants {
-		// skip legacy names that would generate duplicate names
-		if strings.HasSuffix(constant.name, "BackendHandleAccess") {
-			continue
-		}
-
-		name := constant.name
-		name = strings.TrimPrefix(name, "k")
-		name = strings.TrimSuffix(name, e.name)
-		name = strings.TrimSuffix(name, "_")
-		if strings.HasSuffix(e.name, "Flags") || strings.HasSuffix(e.name, "FlagsSet") {
-			name = strings.TrimSuffix(name, "Flag")
-			name = strings.TrimSuffix(name, "_")
-		}
-		name = fmt.Sprintf("%s_%s", goName, name)
-
-		if constant.comment != "" {
-			g.goFile.writeln(constant.comment)
-		}
-		g.goFile.writelnf("  %s %s = %d", name, goName, constant.value)
+		f.writeDocComment(constant.doc)
+		f.writelnf("%s %s = %d", constant.goName, e.goName, constant.value)
 	}
-	g.goFile.writeln(")")
-
-	g.goFile.writeln("")
+	f.writeln(")")
+	f.writeln()
 }
