@@ -72,7 +72,7 @@ func (c classCtor) generateHeader(g generator) {
 	for i, param := range c.params {
 		params[i] = param.cParam
 	}
-	f.writelnf("void * %s(%s);", c.cFuncName, strings.Join(params, ", "))
+	f.writelnf("%s * %s(%s);", c.class.cStructName, c.cFuncName, strings.Join(params, ", "))
 }
 
 func (c classCtor) generateCpp(g generator) {
@@ -85,8 +85,8 @@ func (c classCtor) generateCpp(g generator) {
 		args[i] = param.cArg
 	}
 
-	f.writelnf("void * %s(%s) {", c.cFuncName, strings.Join(params, ", "))
-	f.writelnf("  return reinterpret_cast<void*>(new %s(%s));", c.class.CName, strings.Join(args, ", "))
+	f.writelnf("%s * %s(%s) {", c.class.cStructName, c.cFuncName, strings.Join(params, ", "))
+	f.writelnf("  return reinterpret_cast<%s*>(new %s(%s));", c.class.cStructName, c.class.CName, strings.Join(args, ", "))
 	f.writeln("}")
 	f.writeln()
 }

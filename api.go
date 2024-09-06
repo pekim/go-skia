@@ -12,10 +12,6 @@ package skia
 // #include "api.h"
 import "C"
 
-import (
-	"unsafe"
-)
-
 /*
 SkBitmap describes a two-dimensional raster pixel array. SkBitmap is built on
 SkImageInfo, containing integer width and height, SkColorType and SkAlphaType
@@ -38,7 +34,7 @@ SkBitmap is not thread safe. Each thread must have its own copy of SkBitmap fiel
 although threads may share the underlying pixel array.
 */
 type Bitmap struct {
-	sk unsafe.Pointer
+	sk *C.sk_SkBitmap
 }
 
 /*
@@ -128,7 +124,7 @@ SkCanvas can be constructed to draw to SkBitmap without first creating raster su
 This approach may be deprecated in the future.
 */
 type Canvas struct {
-	sk unsafe.Pointer
+	sk *C.sk_SkCanvas
 }
 
 /*
@@ -297,7 +293,7 @@ const (
 )
 
 type ColorSpace struct {
-	sk unsafe.Pointer
+	sk *C.sk_SkColorSpace
 }
 
 /*
@@ -330,7 +326,7 @@ func ColorSpaceEquals(p0 ColorSpace, p1 ColorSpace) bool {
 }
 
 type FontMgr struct {
-	sk unsafe.Pointer
+	sk *C.sk_SkFontMgr
 }
 
 /*
@@ -344,7 +340,7 @@ algorithms that alter the drawing geometry, color, and transparency. For instanc
 SkPaint does not directly implement dashing or blur, but contains the objects that do so.
 */
 type Paint struct {
-	sk unsafe.Pointer
+	sk *C.sk_SkPaint
 }
 
 /*
@@ -474,7 +470,7 @@ Internally, SkPath lazily computes metrics likes bounds and convexity. Call
 SkPath::updateBoundsCache to make SkPath thread safe.
 */
 type Path struct {
-	sk unsafe.Pointer
+	sk *C.sk_SkPath
 }
 
 /*
@@ -590,7 +586,7 @@ during drawing, and can sometimes optimize its performance (e.g. disabling an ex
 feature).
 */
 type SurfaceProps struct {
-	sk unsafe.Pointer
+	sk *C.sk_SkSurfaceProps
 }
 
 /*
@@ -636,7 +632,7 @@ is less than or equal to its left, or if its bottom is less than or equal to
 its top, it is considered empty.
 */
 type IRect struct {
-	sk unsafe.Pointer
+	sk *C.sk_SkIRect
 }
 
 /*
@@ -648,7 +644,7 @@ is less than or equal to its left, or if its bottom is less than or equal to
 its top, it is considered empty.
 */
 type Rect struct {
-	sk unsafe.Pointer
+	sk *C.sk_SkRect
 }
 
 /*

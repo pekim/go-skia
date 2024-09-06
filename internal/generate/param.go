@@ -43,12 +43,12 @@ func newParam(paramIndex int, cursor clang.Cursor, api api) param {
 
 	} else if typ.isLValueReference && typ.subTyp.class != nil {
 		p.cgoVar = fmt.Sprintf("%s := %s.sk", p.cgoName, p.goName)
-		p.cParam = fmt.Sprintf("void *%s", p.cgoName)
+		p.cParam = fmt.Sprintf("sk_%s *%s", p.typ.subTyp.cName, p.cgoName)
 		p.cArg = fmt.Sprintf("*reinterpret_cast<%s*>(%s)", p.typ.subTyp.cName, p.cgoName)
 
 	} else if typ.isPointer && typ.subTyp.class != nil {
 		p.cgoVar = fmt.Sprintf("%s := %s.sk", p.cgoName, p.goName)
-		p.cParam = fmt.Sprintf("void *%s", p.cgoName)
+		p.cParam = fmt.Sprintf("sk_%s *%s", p.typ.subTyp.cName, p.cgoName)
 		p.cArg = fmt.Sprintf("reinterpret_cast<%s*>(%s)", p.typ.subTyp.cName, p.cgoName)
 
 	} else {

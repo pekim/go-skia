@@ -101,7 +101,7 @@ func (m method) generateHeader(g generator) {
 
 	returnDecl := m.retrn.cName
 	if m.retrn.class != nil {
-		returnDecl = "void *"
+		returnDecl = fmt.Sprintf("%s *", m.retrn.class.cStructName)
 	}
 
 	f.writelnf("%s %s(%s);", returnDecl, m.cFuncName, strings.Join(params, ", "))
@@ -119,7 +119,7 @@ func (m method) generateCpp(g generator) {
 
 	returnDecl := m.retrn.cName
 	if m.retrn.class != nil {
-		returnDecl = "void *"
+		returnDecl = fmt.Sprintf("%s *", m.retrn.class.cStructName)
 	}
 
 	skSpRelease := ""
@@ -129,7 +129,12 @@ func (m method) generateCpp(g generator) {
 
 	f.writelnf("%s %s(%s) {", returnDecl, m.cFuncName, strings.Join(params, ", "))
 	if m.retrn.class != nil {
-		f.writelnf("  return reinterpret_cast<void *> (%s::%s(%s)%s);", m.class.CName, m.CName, strings.Join(args, ", "), skSpRelease)
+		f.writelnf("  return reinterpret_cast<%s *> (%s::%s(%s)%s);",
+			m.retrn.class.cStructName,
+			m.class.CName,
+			m.CName,
+			strings.Join(args, ", "),
+			skSpRelease)
 	} else {
 		f.writelnf("  return %s::%s(%s)%s;", m.class.CName, m.CName, strings.Join(args, ", "), skSpRelease)
 	}

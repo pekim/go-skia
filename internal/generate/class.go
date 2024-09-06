@@ -103,11 +103,11 @@ func (c class) generate(g generator) {
 	f := g.goFile
 	f.writeDocComment(c.doc)
 	f.writelnf("type %s struct {", c.goName)
-	f.writeln("  sk unsafe.Pointer")
+	f.writelnf("  sk *C.%s", c.cStructName)
 	f.writeln("}")
 	f.writeln()
 
-	c.generateCStruct(g)
+	// c.generateCStruct(g)
 
 	for _, ctor := range c.Ctors {
 		if ctor != nil {
@@ -162,4 +162,5 @@ func (c class) generateCStruct(g generator) {
 	}
 
 	f.writelnf("} %s;", c.cStructName)
+	f.writeln()
 }

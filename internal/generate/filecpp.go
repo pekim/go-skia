@@ -40,14 +40,14 @@ func newFileCpp() *fileCpp {
 
 func (f fileCpp) finish() {
 	f.writelnf(`
-		void *sk_fontmgr_ref_default(void)
+		sk_SkFontMgr *sk_fontmgr_ref_default(void)
 		{
 			#if defined(SKIA_MAC)
-				return reinterpret_cast<void *>(SkFontMgr_New_CoreText(nullptr).release());
+				return reinterpret_cast<sk_SkFontMgr *>(SkFontMgr_New_CoreText(nullptr).release());
 			#elif defined(SKIA_UNIX)
-				return reinterpret_cast<void *>(SkFontMgr_New_FontConfig(nullptr).release());
+				return reinterpret_cast<sk_SkFontMgr *>(SkFontMgr_New_FontConfig(nullptr).release());
 			#elif defined(SKIA_WINDOWS)
-				return reinterpret_cast<void *>(SkFontMgr_New_DirectWrite().release());
+				return reinterpret_cast<sk_SkFontMgr *>(SkFontMgr_New_DirectWrite().release());
 			#else
 				#error "No font manager available for this platform"
 			#endif

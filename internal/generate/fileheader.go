@@ -20,12 +20,12 @@ func newFileHeader() *fileHeader {
 		#endif // __cplusplus
 	`)
 
-	f.writeln(`  void *sk_fontmgr_ref_default (void);`)
-
 	return f
 }
 
 func (f fileHeader) finish() {
+	f.writeln(`  sk_SkFontMgr *sk_fontmgr_ref_default (void);`)
+
 	f.writelnf(`
 		#ifdef __cplusplus
 		}

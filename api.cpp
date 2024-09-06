@@ -26,154 +26,158 @@ extern "C"
 {
 #include "api.h"
 
-  void *
+  sk_SkBitmap *
   misk_new_Bitmap ()
   {
-    return reinterpret_cast<void *> (new SkBitmap ());
+    return reinterpret_cast<sk_SkBitmap *> (new SkBitmap ());
   }
 
-  void *
-  misk_new_BitmapCopy (void *c_src)
+  sk_SkBitmap *
+  misk_new_BitmapCopy (sk_SkBitmap *c_src)
   {
-    return reinterpret_cast<void *> (
+    return reinterpret_cast<sk_SkBitmap *> (
         new SkBitmap (*reinterpret_cast<SkBitmap *> (c_src)));
   }
 
   void
-  misk_delete_SkBitmap (void *obj)
+  misk_delete_SkBitmap (sk_SkBitmap *obj)
   {
     delete reinterpret_cast<SkBitmap *> (obj);
   }
 
   bool
-  misk_Bitmap_ComputeIsOpaque (void *c_bm)
+  misk_Bitmap_ComputeIsOpaque (sk_SkBitmap *c_bm)
   {
     return SkBitmap::ComputeIsOpaque (*reinterpret_cast<SkBitmap *> (c_bm));
   }
 
-  void *
+  sk_SkCanvas *
   misk_new_Canvas ()
   {
-    return reinterpret_cast<void *> (new SkCanvas ());
+    return reinterpret_cast<sk_SkCanvas *> (new SkCanvas ());
   }
 
-  void *
-  misk_new_CanvasWithDimensions (int c_width, int c_height, void *c_props)
+  sk_SkCanvas *
+  misk_new_CanvasWithDimensions (int c_width, int c_height,
+                                 sk_SkSurfaceProps *c_props)
   {
-    return reinterpret_cast<void *> (new SkCanvas (
+    return reinterpret_cast<sk_SkCanvas *> (new SkCanvas (
         c_width, c_height, reinterpret_cast<SkSurfaceProps *> (c_props)));
   }
 
-  void *
-  misk_new_CanvasFromBitmap (void *c_bitmap)
+  sk_SkCanvas *
+  misk_new_CanvasFromBitmap (sk_SkBitmap *c_bitmap)
   {
-    return reinterpret_cast<void *> (
+    return reinterpret_cast<sk_SkCanvas *> (
         new SkCanvas (*reinterpret_cast<SkBitmap *> (c_bitmap)));
   }
 
-  void *
-  misk_new_CanvasFromBitmapSurfaceProps (void *c_bitmap, void *c_props)
+  sk_SkCanvas *
+  misk_new_CanvasFromBitmapSurfaceProps (sk_SkBitmap *c_bitmap,
+                                         sk_SkSurfaceProps *c_props)
   {
-    return reinterpret_cast<void *> (
+    return reinterpret_cast<sk_SkCanvas *> (
         new SkCanvas (*reinterpret_cast<SkBitmap *> (c_bitmap),
                       *reinterpret_cast<SkSurfaceProps *> (c_props)));
   }
 
   void
-  misk_delete_SkCanvas (void *obj)
+  misk_delete_SkCanvas (sk_SkCanvas *obj)
   {
     delete reinterpret_cast<SkCanvas *> (obj);
   }
 
-  void *
+  sk_SkColorSpace *
   misk_ColorSpace_MakeSRGB ()
   {
-    return reinterpret_cast<void *> (SkColorSpace::MakeSRGB ().release ());
+    return reinterpret_cast<sk_SkColorSpace *> (
+        SkColorSpace::MakeSRGB ().release ());
   }
 
-  void *
+  sk_SkColorSpace *
   misk_ColorSpace_MakeSRGBLinear ()
   {
-    return reinterpret_cast<void *> (
+    return reinterpret_cast<sk_SkColorSpace *> (
         SkColorSpace::MakeSRGBLinear ().release ());
   }
 
   bool
-  misk_ColorSpace_Equals (void *c_p0, void *c_p1)
+  misk_ColorSpace_Equals (sk_SkColorSpace *c_p0, sk_SkColorSpace *c_p1)
   {
     return SkColorSpace::Equals (reinterpret_cast<SkColorSpace *> (c_p0),
                                  reinterpret_cast<SkColorSpace *> (c_p1));
   }
 
-  void *
+  sk_SkPaint *
   misk_new_Paint ()
   {
-    return reinterpret_cast<void *> (new SkPaint ());
+    return reinterpret_cast<sk_SkPaint *> (new SkPaint ());
   }
 
-  void *
-  misk_new_PaintCopy (void *c_paint)
+  sk_SkPaint *
+  misk_new_PaintCopy (sk_SkPaint *c_paint)
   {
-    return reinterpret_cast<void *> (
+    return reinterpret_cast<sk_SkPaint *> (
         new SkPaint (*reinterpret_cast<SkPaint *> (c_paint)));
   }
 
   void
-  misk_delete_SkPaint (void *obj)
+  misk_delete_SkPaint (sk_SkPaint *obj)
   {
     delete reinterpret_cast<SkPaint *> (obj);
   }
 
-  void *
+  sk_SkPath *
   misk_new_Path ()
   {
-    return reinterpret_cast<void *> (new SkPath ());
+    return reinterpret_cast<sk_SkPath *> (new SkPath ());
   }
 
-  void *
-  misk_new_PathCopy (void *c_path)
+  sk_SkPath *
+  misk_new_PathCopy (sk_SkPath *c_path)
   {
-    return reinterpret_cast<void *> (
+    return reinterpret_cast<sk_SkPath *> (
         new SkPath (*reinterpret_cast<SkPath *> (c_path)));
   }
 
   void
-  misk_delete_SkPath (void *obj)
+  misk_delete_SkPath (sk_SkPath *obj)
   {
     delete reinterpret_cast<SkPath *> (obj);
   }
 
-  void *
+  sk_SkSurfaceProps *
   misk_new_SurfaceProps ()
   {
-    return reinterpret_cast<void *> (new SkSurfaceProps ());
+    return reinterpret_cast<sk_SkSurfaceProps *> (new SkSurfaceProps ());
   }
 
-  void *
+  sk_SkSurfaceProps *
   misk_new_SurfacePropsPixelGeometry (unsigned int c_flags, unsigned int c_p1)
   {
-    return reinterpret_cast<void *> (
+    return reinterpret_cast<sk_SkSurfaceProps *> (
         new SkSurfaceProps (c_flags, SkPixelGeometry (c_p1)));
   }
 
-  void *
-  misk_new_SurfacePropsCopy (void *c_p0)
+  sk_SkSurfaceProps *
+  misk_new_SurfacePropsCopy (sk_SkSurfaceProps *c_p0)
   {
-    return reinterpret_cast<void *> (
+    return reinterpret_cast<sk_SkSurfaceProps *> (
         new SkSurfaceProps (*reinterpret_cast<SkSurfaceProps *> (c_p0)));
   }
 
-  void *
+  sk_SkFontMgr *
   sk_fontmgr_ref_default (void)
   {
 #if defined(SKIA_MAC)
-    return reinterpret_cast<void *> (
+    return reinterpret_cast<sk_SkFontMgr *> (
         SkFontMgr_New_CoreText (nullptr).release ());
 #elif defined(SKIA_UNIX)
-    return reinterpret_cast<void *> (
+    return reinterpret_cast<sk_SkFontMgr *> (
         SkFontMgr_New_FontConfig (nullptr).release ());
 #elif defined(SKIA_WINDOWS)
-    return reinterpret_cast<void *> (SkFontMgr_New_DirectWrite ().release ());
+    return reinterpret_cast<sk_SkFontMgr *> (
+        SkFontMgr_New_DirectWrite ().release ());
 #else
 #error "No font manager available for this platform"
 #endif

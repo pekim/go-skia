@@ -42,12 +42,12 @@ func (d *classDtor) generateGo(g generator) {
 }
 
 func (d *classDtor) generateHeader(g generator) {
-	g.headerFile.writelnf("void  %s(void *obj);", d.cFuncName)
+	g.headerFile.writelnf("void  %s(%s *obj);", d.cFuncName, d.class.cStructName)
 }
 
 func (d *classDtor) generateCpp(g generator) {
 	f := g.cppFile
-	f.writelnf("void  %s(void *obj) {", d.cFuncName)
+	f.writelnf("void  %s(%s *obj) {", d.cFuncName, d.class.cStructName)
 	f.writelnf("  delete reinterpret_cast<%s*>(obj);", d.class.CName)
 	f.writeln("}")
 	f.writeln()

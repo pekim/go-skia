@@ -10,17 +10,12 @@ extern "C"
 {
 #endif // __cplusplus
 
-  void *sk_fontmgr_ref_default (void);
   typedef struct
   {
     uchar fPixelRef[8];
     uchar fPixmap[40];
     uchar fMips[8];
   } sk_SkBitmap;
-  void *misk_new_Bitmap ();
-  void *misk_new_BitmapCopy (void *c_src);
-  void misk_delete_SkBitmap (void *obj);
-  bool misk_Bitmap_ComputeIsOpaque (void *c_bm);
 
   typedef struct
   {
@@ -40,12 +35,6 @@ extern "C"
     uchar pad_11[4];
     uchar fScratchGlyphRunBuilder[8];
   } sk_SkCanvas;
-  void *misk_new_Canvas ();
-  void *misk_new_CanvasWithDimensions (int c_width, int c_height,
-                                       void *c_props);
-  void *misk_new_CanvasFromBitmap (void *c_bitmap);
-  void *misk_new_CanvasFromBitmapSurfaceProps (void *c_bitmap, void *c_props);
-  void misk_delete_SkCanvas (void *obj);
 
   typedef struct
   {
@@ -59,9 +48,6 @@ extern "C"
     uchar fLazyDstFieldsOnce[1];
     uchar pad_7[3];
   } sk_SkColorSpace;
-  void *misk_ColorSpace_MakeSRGB ();
-  void *misk_ColorSpace_MakeSRGBLinear ();
-  bool misk_ColorSpace_Equals (void *c_p0, void *c_p1);
 
   typedef struct
   {
@@ -81,9 +67,6 @@ extern "C"
     float fMiterLimit;
     uchar pad_9[8];
   } sk_SkPaint;
-  void *misk_new_Paint ();
-  void *misk_new_PaintCopy (void *c_paint);
-  void misk_delete_SkPaint (void *obj);
 
   typedef struct
   {
@@ -95,9 +78,6 @@ extern "C"
     // TODO misalignment (perhaps there are bitfields around here?)
     unsigned char fIsVolatile;
   } sk_SkPath;
-  void *misk_new_Path ();
-  void *misk_new_PathCopy (void *c_path);
-  void misk_delete_SkPath (void *obj);
 
   typedef struct
   {
@@ -106,10 +86,6 @@ extern "C"
     float fTextContrast;
     float fTextGamma;
   } sk_SkSurfaceProps;
-  void *misk_new_SurfaceProps ();
-  void *misk_new_SurfacePropsPixelGeometry (unsigned int c_flags,
-                                            unsigned int c_p1);
-  void *misk_new_SurfacePropsCopy (void *c_p0);
 
   typedef struct
   {
@@ -126,6 +102,39 @@ extern "C"
     float Right;
     float Bottom;
   } sk_SkRect;
+
+  sk_SkBitmap *misk_new_Bitmap ();
+  sk_SkBitmap *misk_new_BitmapCopy (sk_SkBitmap *c_src);
+  void misk_delete_SkBitmap (sk_SkBitmap *obj);
+  bool misk_Bitmap_ComputeIsOpaque (sk_SkBitmap *c_bm);
+
+  sk_SkCanvas *misk_new_Canvas ();
+  sk_SkCanvas *misk_new_CanvasWithDimensions (int c_width, int c_height,
+                                              sk_SkSurfaceProps *c_props);
+  sk_SkCanvas *misk_new_CanvasFromBitmap (sk_SkBitmap *c_bitmap);
+  sk_SkCanvas *
+  misk_new_CanvasFromBitmapSurfaceProps (sk_SkBitmap *c_bitmap,
+                                         sk_SkSurfaceProps *c_props);
+  void misk_delete_SkCanvas (sk_SkCanvas *obj);
+
+  sk_SkColorSpace *misk_ColorSpace_MakeSRGB ();
+  sk_SkColorSpace *misk_ColorSpace_MakeSRGBLinear ();
+  bool misk_ColorSpace_Equals (sk_SkColorSpace *c_p0, sk_SkColorSpace *c_p1);
+
+  sk_SkPaint *misk_new_Paint ();
+  sk_SkPaint *misk_new_PaintCopy (sk_SkPaint *c_paint);
+  void misk_delete_SkPaint (sk_SkPaint *obj);
+
+  sk_SkPath *misk_new_Path ();
+  sk_SkPath *misk_new_PathCopy (sk_SkPath *c_path);
+  void misk_delete_SkPath (sk_SkPath *obj);
+
+  sk_SkSurfaceProps *misk_new_SurfaceProps ();
+  sk_SkSurfaceProps *misk_new_SurfacePropsPixelGeometry (unsigned int c_flags,
+                                                         unsigned int c_p1);
+  sk_SkSurfaceProps *misk_new_SurfacePropsCopy (sk_SkSurfaceProps *c_p0);
+
+  sk_SkFontMgr *sk_fontmgr_ref_default (void);
 
 #ifdef __cplusplus
 }

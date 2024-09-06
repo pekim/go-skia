@@ -73,6 +73,13 @@ func (a api) generate(g generator) {
 	fmt.Println("generate")
 
 	for _, class := range a.Classes {
+		class.generateCStruct(g)
+	}
+	for _, struct_ := range a.Structs {
+		struct_.generateCStruct(g)
+	}
+
+	for _, class := range a.Classes {
 		class.generate(g)
 	}
 
