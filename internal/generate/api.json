@@ -72,6 +72,9 @@
   "structs": [
     {
       "name": "SkIRect"
+    },
+    {
+      "name": "SkRect"
     }
   ]
 }

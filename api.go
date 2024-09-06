@@ -640,6 +640,18 @@ type IRect struct {
 }
 
 /*
+\struct SkRect
+SkRect holds four float coordinates describing the upper and
+lower bounds of a rectangle. SkRect may be created from outer bounds or
+from position, width, and height. SkRect describes an area; if its right
+is less than or equal to its left, or if its bottom is less than or equal to
+its top, it is considered empty.
+*/
+type Rect struct {
+	sk unsafe.Pointer
+}
+
+/*
 Description of how the LCD strips are arranged for each pixel. If this is unknown, or the
 pixels are meant to be "portable" and/or transformed before showing (e.g. rotated, scaled)
 then use kUnknown_SkPixelGeometry.

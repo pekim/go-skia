@@ -77,8 +77,8 @@ extern "C"
     uchar fImageFilter[8];
     uchar fBlender[8];
     uchar fColor4f[16];
-    uchar fWidth[4];
-    uchar fMiterLimit[4];
+    float fWidth;
+    float fMiterLimit;
     uchar pad_9[8];
   } sk_SkPaint;
   void *misk_new_Paint ();
@@ -103,8 +103,8 @@ extern "C"
   {
     unsigned int fFlags;
     uchar fPixelGeometry[4];
-    uchar fTextContrast[4];
-    uchar fTextGamma[4];
+    float fTextContrast;
+    float fTextGamma;
   } sk_SkSurfaceProps;
   void *misk_new_SurfaceProps ();
   void *misk_new_SurfacePropsPixelGeometry (unsigned int c_flags,
@@ -118,6 +118,14 @@ extern "C"
     int Right;
     int Bottom;
   } sk_SkIRect;
+
+  typedef struct
+  {
+    float Left;
+    float Top;
+    float Right;
+    float Bottom;
+  } sk_SkRect;
 
 #ifdef __cplusplus
 }
