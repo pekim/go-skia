@@ -10,9 +10,10 @@ import (
 var apiJson []byte
 
 type api struct {
-	Classes []class   `json:"classes"`
-	Structs []struct_ `json:"structs"`
-	Enums   []enum    `json:"enums"`
+	Classes []class `json:"classes"`
+	Structs []class `json:"structs"`
+	// Structs []struct_ `json:"structs"`
+	Enums []enum `json:"enums"`
 }
 
 func loadApi() api {
@@ -59,7 +60,7 @@ func (a api) findEnum(name string) (*enum, bool) {
 	return nil, false
 }
 
-func (a api) findStruct(name string) (*struct_, bool) {
+func (a api) findStruct(name string) (*class, bool) {
 	for i, struct_ := range a.Structs {
 		if struct_.CName == name {
 			return &a.Structs[i], true

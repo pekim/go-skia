@@ -71,7 +71,15 @@
 
   "structs": [
     {
-      "name": "SkIRect"
+      "name": "SkIRect",
+      "methodsHIDE": [
+        { "name": "x" },
+        { "name": "y" },
+        { "name": "left" },
+        { "name": "top" },
+        { "name": "MakeLTRB" }
+      ],
+      "methods": []
     },
     {
       "name": "SkRect"
