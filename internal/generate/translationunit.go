@@ -77,7 +77,13 @@ func (tu translationUnit) enrichApi(api *api) {
 			}
 
 		case clang.Cursor_StructDecl:
-			// TODO
+			if !cursorHasChildren(cursor) {
+				// Skip forward declarations.
+				break
+			}
+			if struct_, ok := api.findStruct(cursor.Spelling()); ok {
+				struct_.enrich1(cursor)
+			}
 		}
 
 		return clang.ChildVisit_Continue

@@ -10,8 +10,9 @@ import (
 var apiJson []byte
 
 type api struct {
-	Classes []class `json:"classes"`
-	Enums   []enum  `json:"enums"`
+	Classes []class   `json:"classes"`
+	Structs []struct_ `json:"structs"`
+	Enums   []enum    `json:"enums"`
 }
 
 func loadApi() api {
@@ -30,6 +31,11 @@ func loadApi() api {
 	for i := range api.Classes {
 		class := &api.Classes[i]
 		class.enrich2(api)
+	}
+
+	for i := range api.Structs {
+		struct_ := &api.Structs[i]
+		struct_.enrich2(api)
 	}
 
 	return api
@@ -53,11 +59,24 @@ func (a api) findEnum(name string) (*enum, bool) {
 	return nil, false
 }
 
+func (a api) findStruct(name string) (*struct_, bool) {
+	for i, struct_ := range a.Structs {
+		if struct_.CName == name {
+			return &a.Structs[i], true
+		}
+	}
+	return nil, false
+}
+
 func (a api) generate(g generator) {
 	fmt.Println("generate")
 
 	for _, class := range a.Classes {
 		class.generate(g)
+	}
+
+	for _, struct_ := range a.Structs {
+		struct_.generate(g)
 	}
 
 	for _, enum := range a.Enums {

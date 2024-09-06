@@ -67,5 +67,11 @@
     }
   ],
 
-  "enums": [{ "name": "SkPixelGeometry" }]
+  "enums": [{ "name": "SkPixelGeometry" }],
+
+  "structs": [
+    {
+      "name": "SkIRect"
+    }
+  ]
 }

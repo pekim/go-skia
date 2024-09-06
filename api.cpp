@@ -7,6 +7,7 @@
 #include <include/core/SkFontStyle.h>
 #include <include/core/SkPaint.h>
 #include <include/core/SkPath.h>
+#include <include/core/SkRect.h>
 #include <include/core/SkSurfaceProps.h>
 
 #if defined(SKIA_MAC)

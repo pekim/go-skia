@@ -111,6 +111,14 @@ extern "C"
                                             unsigned int c_p1);
   void *misk_new_SurfacePropsCopy (void *c_p0);
 
+  typedef struct
+  {
+    int Left;
+    int Top;
+    int Right;
+    int Bottom;
+  } sk_SkIRect;
+
 #ifdef __cplusplus
 }
 #endif // __cplusplus
