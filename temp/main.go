@@ -1,5 +1,11 @@
 package main
 
+import (
+	"fmt"
+
+	"github.com/pekim/go-skia"
+)
+
 func main() {
 	// fs := skia.FontStyleNormal()
 	// fmt.Println(fs.FValue)
@@ -16,4 +22,7 @@ func main() {
 	// fmt.Println(rect.Left)
 
 	// fmt.Println(skia.ColorSpaceMakeSRGB())
+
+	rect := skia.IRectMakeLTRB(1, 2, 3, 10)
+	fmt.Println(rect)
 }

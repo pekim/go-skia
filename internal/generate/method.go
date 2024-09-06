@@ -82,7 +82,11 @@ func (m method) generateGo(g generator) {
 		if m.retrn.isPrimitive {
 			f.writelnf("  return %s(retC)", m.retrn.goName)
 		} else if m.retrn.class != nil {
-			f.writelnf("  return %s{sk: retC}", m.retrn.class.goName)
+			if m.retrn.isPointer || m.retrn.isSmartPointer {
+				f.writelnf("  return %s{sk: retC}", m.retrn.class.goName)
+			} else {
+				f.writelnf("  return %s{sk: &retC}", m.retrn.class.goName)
+			}
 		} else {
 			fatalf("return type '%s' not supported", m.retrn.goName)
 		}
@@ -100,8 +104,12 @@ func (m method) generateHeader(g generator) {
 	}
 
 	returnDecl := m.retrn.cName
+	returnPtr := ""
 	if m.retrn.class != nil {
-		returnDecl = fmt.Sprintf("%s *", m.retrn.class.cStructName)
+		if m.retrn.isPointer || m.retrn.isSmartPointer {
+			returnPtr = "*"
+		}
+		returnDecl = fmt.Sprintf("%s%s", m.retrn.class.cStructName, returnPtr)
 	}
 
 	f.writelnf("%s %s(%s);", returnDecl, m.cFuncName, strings.Join(params, ", "))
@@ -118,8 +126,12 @@ func (m method) generateCpp(g generator) {
 	}
 
 	returnDecl := m.retrn.cName
+	returnPtr := ""
 	if m.retrn.class != nil {
-		returnDecl = fmt.Sprintf("%s *", m.retrn.class.cStructName)
+		if m.retrn.isPointer || m.retrn.isSmartPointer {
+			returnPtr = "*"
+		}
+		returnDecl = fmt.Sprintf("%s%s", m.retrn.class.cStructName, returnPtr)
 	}
 
 	skSpRelease := ""
@@ -129,12 +141,23 @@ func (m method) generateCpp(g generator) {
 
 	f.writelnf("%s %s(%s) {", returnDecl, m.cFuncName, strings.Join(params, ", "))
 	if m.retrn.class != nil {
-		f.writelnf("  return reinterpret_cast<%s *> (%s::%s(%s)%s);",
-			m.retrn.class.cStructName,
-			m.class.CName,
-			m.CName,
-			strings.Join(args, ", "),
-			skSpRelease)
+		if m.retrn.isPointer || m.retrn.isSmartPointer {
+			f.writelnf("  return reinterpret_cast<%s *> (%s::%s(%s)%s);",
+				m.retrn.class.cStructName,
+				m.class.CName,
+				m.CName,
+				strings.Join(args, ", "),
+				skSpRelease)
+		} else {
+			f.writelnf("  auto ret = (%s::%s(%s)%s);",
+				m.class.CName,
+				m.CName,
+				strings.Join(args, ", "),
+				skSpRelease)
+			f.writelnf("  return *(reinterpret_cast<%s *> (&ret));",
+				m.retrn.class.cStructName,
+			)
+		}
 	} else {
 		f.writelnf("  return %s::%s(%s)%s;", m.class.CName, m.CName, strings.Join(args, ", "), skSpRelease)
 	}

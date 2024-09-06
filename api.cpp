@@ -166,6 +166,13 @@ extern "C"
         new SkSurfaceProps (*reinterpret_cast<SkSurfaceProps *> (c_p0)));
   }
 
+  sk_SkIRect
+  misk_IRect_MakeLTRB (int c_l, int c_t, int c_r, int c_b)
+  {
+    auto ret = (SkIRect::MakeLTRB (c_l, c_t, c_r, c_b));
+    return *(reinterpret_cast<sk_SkIRect *> (&ret));
+  }
+
   sk_SkFontMgr *
   sk_fontmgr_ref_default (void)
   {

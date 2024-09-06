@@ -636,6 +636,25 @@ type IRect struct {
 }
 
 /*
+Returns constructed SkIRect set to (l, t, r, b). Does not sort input; SkIRect may
+result in fLeft greater than fRight, or fTop greater than fBottom.
+
+@param l  integer stored in fLeft
+@param t  integer stored in fTop
+@param r  integer stored in fRight
+@param b  integer stored in fBottom
+@return   bounds (l, t, r, b)
+*/
+func IRectMakeLTRB(l int, t int, r int, b int) IRect {
+	c_l := C.int(l)
+	c_t := C.int(t)
+	c_r := C.int(r)
+	c_b := C.int(b)
+	retC := C.misk_IRect_MakeLTRB(c_l, c_t, c_r, c_b)
+	return IRect{sk: &retC}
+}
+
+/*
 \struct SkRect
 SkRect holds four float coordinates describing the upper and
 lower bounds of a rectangle. SkRect may be created from outer bounds or

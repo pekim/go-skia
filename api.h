@@ -134,6 +134,8 @@ extern "C"
                                                          unsigned int c_p1);
   sk_SkSurfaceProps *misk_new_SurfacePropsCopy (sk_SkSurfaceProps *c_p0);
 
+  sk_SkIRect misk_IRect_MakeLTRB (int c_l, int c_t, int c_r, int c_b);
+
   sk_SkFontMgr *sk_fontmgr_ref_default (void);
 
 #ifdef __cplusplus

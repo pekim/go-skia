@@ -32,6 +32,10 @@ func typFromClangType(cType clang.Type, api api) (typ, error) {
 		typ.class = class
 		typ.goName = typ.class.goName
 
+	} else if struct_, ok := api.findStruct(typ.cName); ok {
+		typ.class = struct_
+		typ.goName = typ.class.goName
+
 	} else if enum, ok := api.findEnum(typ.cName); ok {
 		typ.enum = enum
 		typ.goName = typ.enum.goName

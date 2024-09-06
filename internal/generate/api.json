@@ -76,10 +76,9 @@
         { "name": "x" },
         { "name": "y" },
         { "name": "left" },
-        { "name": "top" },
-        { "name": "MakeLTRB" }
+        { "name": "top" }
       ],
-      "methods": []
+      "methods": [{ "name": "MakeLTRB" }]
     },
     {
       "name": "SkRect"
