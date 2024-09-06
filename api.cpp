@@ -180,6 +180,20 @@ extern "C"
     return *(reinterpret_cast<sk_SkIRect *> (&ret));
   }
 
+  sk_SkIRect
+  misk_IRect_MakeXYWH (int c_x, int c_y, int c_w, int c_h)
+  {
+    auto ret = (SkIRect::MakeXYWH (c_x, c_y, c_w, c_h));
+    return *(reinterpret_cast<sk_SkIRect *> (&ret));
+  }
+
+  bool
+  misk_IRect_Intersects (sk_SkIRect *c_a, sk_SkIRect *c_b)
+  {
+    return SkIRect::Intersects (*reinterpret_cast<SkIRect *> (c_a),
+                                *reinterpret_cast<SkIRect *> (c_b));
+  }
+
   sk_SkRect
   misk_Rect_MakeEmpty ()
   {
@@ -192,6 +206,20 @@ extern "C"
   {
     auto ret = (SkRect::MakeLTRB (c_l, c_t, c_r, c_b));
     return *(reinterpret_cast<sk_SkRect *> (&ret));
+  }
+
+  sk_SkRect
+  misk_Rect_MakeXYWH (float c_x, float c_y, float c_w, float c_h)
+  {
+    auto ret = (SkRect::MakeXYWH (c_x, c_y, c_w, c_h));
+    return *(reinterpret_cast<sk_SkRect *> (&ret));
+  }
+
+  bool
+  misk_Rect_Intersects (sk_SkRect *c_a, sk_SkRect *c_b)
+  {
+    return SkRect::Intersects (*reinterpret_cast<SkRect *> (c_a),
+                               *reinterpret_cast<SkRect *> (c_b));
   }
 
   sk_SkFontMgr *

@@ -669,6 +669,40 @@ func IRectMakeLTRB(l int, t int, r int, b int) IRect {
 }
 
 /*
+Returns constructed SkIRect set to: (x, y, x + w, y + h).
+Does not validate input; w or h may be negative.
+
+@param x  stored in fLeft
+@param y  stored in fTop
+@param w  added to x and stored in fRight
+@param h  added to y and stored in fBottom
+@return   bounds at (x, y) with width w and height h
+*/
+func IRectMakeXYWH(x int, y int, w int, h int) IRect {
+	c_x := C.int(x)
+	c_y := C.int(y)
+	c_w := C.int(w)
+	c_h := C.int(h)
+	retC := C.misk_IRect_MakeXYWH(c_x, c_y, c_w, c_h)
+	return IRect{sk: &retC}
+}
+
+/*
+Returns true if a intersects b.
+Returns false if either a or b is empty, or do not intersect.
+
+@param a  SkIRect to intersect
+@param b  SkIRect to intersect
+@return   true if a and b have area in common
+*/
+func IRectIntersects(a IRect, b IRect) bool {
+	c_a := a.sk
+	c_b := b.sk
+	retC := C.misk_IRect_Intersects(c_a, c_b)
+	return bool(retC)
+}
+
+/*
 \struct SkRect
 SkRect holds four float coordinates describing the upper and
 lower bounds of a rectangle. SkRect may be created from outer bounds or
@@ -711,6 +745,40 @@ func RectMakeLTRB(l float32, t float32, r float32, b float32) Rect {
 	c_b := C.float(b)
 	retC := C.misk_Rect_MakeLTRB(c_l, c_t, c_r, c_b)
 	return Rect{sk: &retC}
+}
+
+/*
+Returns constructed SkRect set to (x, y, x + w, y + h).
+Does not validate input; w or h may be negative.
+
+@param x  stored in fLeft
+@param y  stored in fTop
+@param w  added to x and stored in fRight
+@param h  added to y and stored in fBottom
+@return   bounds at (x, y) with width w and height h
+*/
+func RectMakeXYWH(x float32, y float32, w float32, h float32) Rect {
+	c_x := C.float(x)
+	c_y := C.float(y)
+	c_w := C.float(w)
+	c_h := C.float(h)
+	retC := C.misk_Rect_MakeXYWH(c_x, c_y, c_w, c_h)
+	return Rect{sk: &retC}
+}
+
+/*
+Returns true if a intersects b.
+Returns false if either a or b is empty, or do not intersect.
+
+@param a  SkRect to intersect
+@param b  SkRect to intersect
+@return   true if a and b have area in common
+*/
+func RectIntersects(a Rect, b Rect) bool {
+	c_a := a.sk
+	c_b := b.sk
+	retC := C.misk_Rect_Intersects(c_a, c_b)
+	return bool(retC)
 }
 
 /*

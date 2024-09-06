@@ -78,11 +78,21 @@
         { "name": "left" },
         { "name": "top" }
       ],
-      "methods": [{ "name": "MakeEmpty" }, { "name": "MakeLTRB" }]
+      "methods": [
+        { "name": "MakeEmpty" },
+        { "name": "MakeLTRB" },
+        { "name": "MakeXYWH" },
+        { "name": "Intersects" }
+      ]
     },
     {
       "name": "SkRect",
-      "methods": [{ "name": "MakeEmpty" }, { "name": "MakeLTRB" }]
+      "methods": [
+        { "name": "MakeEmpty" },
+        { "name": "MakeLTRB" },
+        { "name": "MakeXYWH" },
+        { "name": "Intersects" }
+      ]
     }
   ]
 }
