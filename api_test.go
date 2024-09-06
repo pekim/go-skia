@@ -26,4 +26,9 @@ func TestClassStaticMethod(t *testing.T) {
 func TestFontMgr(t *testing.T) {
 	fm := FontMgrRefDefault()
 	fmt.Println(fm)
+
+	// var fs FontStyle
+	// fs.Qaz = 5
+	// fs.qwerty = 4
+	// fmt.Println(fs)
 }

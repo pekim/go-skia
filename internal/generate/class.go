@@ -8,27 +8,28 @@ import (
 )
 
 type class struct {
-	cursor   clang.Cursor
-	CName    string       `json:"name"`
-	Ctors    []*classCtor `json:"constructors"`
-	Enums    []enum       `json:"enums"`
-	Methods  []method     `json:"methods"`
-	dtor     classDtor
-	goName   string
-	doc      string
-	enriched bool
+	cursor      clang.Cursor
+	CName       string       `json:"name"`
+	Ctors       []*classCtor `json:"constructors"`
+	Enums       []enum       `json:"enums"`
+	Methods     []method     `json:"methods"`
+	dtor        classDtor
+	fields      []field
+	size        int
+	goName      string
+	cStructName string
+	doc         string
+	enriched    bool
 }
 
 func (c *class) enrich1(cursor clang.Cursor) {
 	c.cursor = cursor
 	c.goName = stripSkPrefix(c.CName)
+	c.cStructName = fmt.Sprintf("sk_%s", c.CName)
 	c.doc = cursor.RawCommentText()
 	c.doc = strings.Replace(c.doc, fmt.Sprintf("\\class %s", c.CName), "", 1)
+	c.size = int(cursor.Type().SizeOf())
 	c.enriched = true
-
-	if c.CName == "SkFontStyle" {
-		dumpCursor(cursor, "")
-	}
 }
 
 func (c *class) enrich2(api api) {
@@ -55,11 +56,15 @@ func (c *class) enrich2(api api) {
 				method.enrich(api, c, cursor)
 			}
 
-		default:
+		case clang.Cursor_FieldDecl:
+			c.fields = append(c.fields, newField(cursor, api))
+
 		}
 
 		return clang.ChildVisit_Continue
 	})
+	// fmt.Println(c.CName, c.fields)
+	// fmt.Println(c.cursor.Type().SizeOf())
 
 	if len(c.Ctors) != len(ctorCursors) {
 		fatalf("class %s has %d ctors, but expected %d", c.CName, len(ctorCursors), len(c.Ctors))
@@ -96,12 +101,13 @@ func (c class) generate(g generator) {
 	}
 
 	f := g.goFile
-
 	f.writeDocComment(c.doc)
 	f.writelnf("type %s struct {", c.goName)
 	f.writeln("  sk unsafe.Pointer")
 	f.writeln("}")
 	f.writeln()
+
+	c.generateCStruct(g)
 
 	for _, ctor := range c.Ctors {
 		if ctor != nil {
@@ -117,4 +123,43 @@ func (c class) generate(g generator) {
 	for _, enum := range c.Enums {
 		enum.generate(g)
 	}
+
+	g.headerFile.writeln()
+}
+
+func (c class) generateCStruct(g generator) {
+	f := g.headerFile
+
+	f.writeln("typedef struct {")
+
+	offset := 0
+	for i, field := range c.fields {
+		fieldOffset := (field.offset / 8)
+		if fieldOffset > offset {
+			f.writelnf("  uchar pad_%d[%d];", i, fieldOffset-offset)
+			offset = fieldOffset
+		}
+		if fieldOffset < offset {
+			f.writeln("  // TODO misalignment (perhaps there are bitfields around here?)")
+		}
+
+		name := field.name
+		if strings.HasPrefix(field.name, "f") && field.public {
+			name = name[1:]
+		}
+
+		if field.typ != "" {
+			f.writelnf("  %s %s;", field.typ, name)
+		} else {
+			f.writelnf("  uchar %s[%d];", name, field.size)
+		}
+
+		offset += field.size
+	}
+
+	if offset < c.size {
+		f.writelnf("  uchar pad_%d[%d];", len(c.fields), c.size-offset)
+	}
+
+	f.writelnf("} %s;", c.cStructName)
 }

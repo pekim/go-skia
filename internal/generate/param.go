@@ -21,7 +21,7 @@ func newParam(paramIndex int, cursor clang.Cursor, api api) param {
 	if cName == "" {
 		cName = fmt.Sprintf("p%d", paramIndex)
 	}
-	typ := typFromClangType(cursor.Type(), api)
+	typ := mustTypFromClangType(cursor.Type(), api)
 	cgoName := "c_" + cName
 
 	p := param{
@@ -52,7 +52,7 @@ func newParam(paramIndex int, cursor clang.Cursor, api api) param {
 		p.cArg = fmt.Sprintf("reinterpret_cast<%s*>(%s)", p.typ.subTyp.cName, p.cgoName)
 
 	} else {
-		fatalf("unhandled cgoVar for param with typ %#v", typ)
+		fatalf("unhandled cgoVar %s for param with typ %#v", cName, typ)
 	}
 
 	return p

@@ -8,6 +8,7 @@ var headerFiles = []string{
 	"include/core/SkFontStyle.h",
 	"include/core/SkPaint.h",
 	"include/core/SkPath.h",
+	// "include/core/SkRect.h",
 	"include/core/SkSurfaceProps.h",
 	// "include/core/SkTypeface.h",
 }

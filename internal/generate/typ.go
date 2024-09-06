@@ -1,6 +1,7 @@
 package generate
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/go-clang/clang-v15/clang"
@@ -20,7 +21,7 @@ type typ struct {
 	subTyp            *typ
 }
 
-func typFromClangType(cType clang.Type, api api) typ {
+func typFromClangType(cType clang.Type, api api) (typ, error) {
 	cName := strings.TrimPrefix(cType.Spelling(), "const ")
 	typ := typ{
 		cName:   cName,
@@ -30,11 +31,6 @@ func typFromClangType(cType clang.Type, api api) typ {
 	if class, ok := api.findClass(typ.cName); ok {
 		typ.class = class
 		typ.goName = typ.class.goName
-		// fmt.Println(typ.cName, cType.SizeOf(),
-		// 	clang.TypeLayoutError_Invalid,
-		// 	clang.TypeLayoutError_Incomplete,
-		// 	clang.TypeLayoutError_Dependent,
-		// )
 
 	} else if enum, ok := api.findEnum(typ.cName); ok {
 		typ.enum = enum
@@ -45,7 +41,11 @@ func typFromClangType(cType clang.Type, api api) typ {
 		// Its CanonicalType's kind is clang.Type_Record.
 		// The template argument 'SkSomeClass' can be got, but it is not clear how to get the 'sk_sp'
 		// So determine it's a smart pointer from the C name starting with "sk_sp<".
-		typ = typFromClangType(cType.TemplateArgumentAsType(0), api)
+		typ_, err := typFromClangType(cType.TemplateArgumentAsType(0), api)
+		if err != nil {
+			return typ, err
+		}
+		typ = typ_
 		typ.isSmartPointer = true
 		typ.cName = "void *"
 
@@ -74,24 +74,40 @@ func typFromClangType(cType clang.Type, api api) typ {
 			typ.isPrimitive = true
 
 		case clang.Type_Elaborated:
-			typ = typFromClangType(cType.CanonicalType(), api)
+			typ_, err := typFromClangType(cType.CanonicalType(), api)
+			if err != nil {
+				return typ, err
+			}
+			typ = typ_
 
 		case clang.Type_Pointer:
-			subTyp := typFromClangType(cType.PointeeType(), api)
+			subTyp, err := typFromClangType(cType.PointeeType(), api)
+			if err != nil {
+				return typ, err
+			}
 			typ.subTyp = &subTyp
 			typ.isPointer = true
 			typ.goName = typ.subTyp.goName
 
 		case clang.Type_LValueReference:
-			subTyp := typFromClangType(cType.PointeeType(), api)
+			subTyp, err := typFromClangType(cType.PointeeType(), api)
+			if err != nil {
+				return typ, err
+			}
 			typ.subTyp = &subTyp
 			typ.isLValueReference = true
 			typ.goName = typ.subTyp.goName
 
 		default:
-			fatalf("unsupported type '%s', of kind %s", cType.Spelling(), cType.Kind())
+			return typ, fmt.Errorf("unsupported type '%s', of kind %s", cType.Spelling(), cType.Kind())
 		}
 	}
 
+	return typ, nil
+}
+
+func mustTypFromClangType(cType clang.Type, api api) typ {
+	typ, err := typFromClangType(cType, api)
+	fatalOnError(err)
 	return typ
 }

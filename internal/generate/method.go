@@ -38,7 +38,7 @@ func (m *method) enrich(api api, class *class, cursor clang.Cursor) {
 		m.params[i] = param
 	}
 
-	m.retrn = typFromClangType(cursor.ResultType(), api)
+	m.retrn = mustTypFromClangType(cursor.ResultType(), api)
 
 	m.enriched = true
 }

@@ -24,7 +24,7 @@ type enumConstant struct {
 }
 
 func (e *enum) enrich(class *class, cursor clang.Cursor, api api) {
-	e.cType = typFromClangType(cursor.EnumDeclIntegerType(), api)
+	e.cType = mustTypFromClangType(cursor.EnumDeclIntegerType(), api)
 	if class != nil {
 		e.goName = class.goName + e.CName
 	} else {
