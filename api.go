@@ -636,6 +636,20 @@ type IRect struct {
 }
 
 /*
+Returns constructed SkIRect set to (0, 0, 0, 0).
+Many other rectangles are empty; if left is equal to or greater than right,
+or if top is equal to or greater than bottom. Setting all members to zero
+is a convenience, but does not designate a special empty rectangle.
+
+@return  bounds (0, 0, 0, 0)
+*/
+func IRectMakeEmpty() IRect {
+
+	retC := C.misk_IRect_MakeEmpty()
+	return IRect{sk: &retC}
+}
+
+/*
 Returns constructed SkIRect set to (l, t, r, b). Does not sort input; SkIRect may
 result in fLeft greater than fRight, or fTop greater than fBottom.
 
@@ -664,6 +678,39 @@ its top, it is considered empty.
 */
 type Rect struct {
 	sk *C.sk_SkRect
+}
+
+/*
+Returns constructed SkRect set to (0, 0, 0, 0).
+Many other rectangles are empty; if left is equal to or greater than right,
+or if top is equal to or greater than bottom. Setting all members to zero
+is a convenience, but does not designate a special empty rectangle.
+
+@return  bounds (0, 0, 0, 0)
+*/
+func RectMakeEmpty() Rect {
+
+	retC := C.misk_Rect_MakeEmpty()
+	return Rect{sk: &retC}
+}
+
+/*
+Returns constructed SkRect set to (l, t, r, b). Does not sort input; SkRect may
+result in fLeft greater than fRight, or fTop greater than fBottom.
+
+@param l  float stored in fLeft
+@param t  float stored in fTop
+@param r  float stored in fRight
+@param b  float stored in fBottom
+@return   bounds (l, t, r, b)
+*/
+func RectMakeLTRB(l float32, t float32, r float32, b float32) Rect {
+	c_l := C.float(l)
+	c_t := C.float(t)
+	c_r := C.float(r)
+	c_b := C.float(b)
+	retC := C.misk_Rect_MakeLTRB(c_l, c_t, c_r, c_b)
+	return Rect{sk: &retC}
 }
 
 /*

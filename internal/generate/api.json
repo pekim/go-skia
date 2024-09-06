@@ -78,10 +78,11 @@
         { "name": "left" },
         { "name": "top" }
       ],
-      "methods": [{ "name": "MakeLTRB" }]
+      "methods": [{ "name": "MakeEmpty" }, { "name": "MakeLTRB" }]
     },
     {
-      "name": "SkRect"
+      "name": "SkRect",
+      "methods": [{ "name": "MakeEmpty" }, { "name": "MakeLTRB" }]
     }
   ]
 }

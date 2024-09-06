@@ -167,10 +167,31 @@ extern "C"
   }
 
   sk_SkIRect
+  misk_IRect_MakeEmpty ()
+  {
+    auto ret = (SkIRect::MakeEmpty ());
+    return *(reinterpret_cast<sk_SkIRect *> (&ret));
+  }
+
+  sk_SkIRect
   misk_IRect_MakeLTRB (int c_l, int c_t, int c_r, int c_b)
   {
     auto ret = (SkIRect::MakeLTRB (c_l, c_t, c_r, c_b));
     return *(reinterpret_cast<sk_SkIRect *> (&ret));
+  }
+
+  sk_SkRect
+  misk_Rect_MakeEmpty ()
+  {
+    auto ret = (SkRect::MakeEmpty ());
+    return *(reinterpret_cast<sk_SkRect *> (&ret));
+  }
+
+  sk_SkRect
+  misk_Rect_MakeLTRB (float c_l, float c_t, float c_r, float c_b)
+  {
+    auto ret = (SkRect::MakeLTRB (c_l, c_t, c_r, c_b));
+    return *(reinterpret_cast<sk_SkRect *> (&ret));
   }
 
   sk_SkFontMgr *
