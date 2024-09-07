@@ -56,6 +56,12 @@ extern "C"
 
   typedef struct
   {
+    int Width;
+    int Height;
+  } sk_SkISize;
+
+  typedef struct
+  {
     uchar fPathEffect[8];
     uchar fShader[8];
     uchar fMaskFilter[8];
@@ -103,6 +109,12 @@ extern "C"
     float Bottom;
   } sk_SkRect;
 
+  typedef struct
+  {
+    float Width;
+    float Height;
+  } sk_SkSize;
+
   sk_SkBitmap *misk_new_Bitmap ();
   sk_SkBitmap *misk_new_BitmapCopy (sk_SkBitmap *c_src);
   void misk_delete_SkBitmap (sk_SkBitmap *obj);
@@ -142,8 +154,11 @@ extern "C"
 
   sk_SkRect misk_Rect_MakeEmpty ();
   sk_SkRect misk_Rect_MakeWH (float c_w, float c_h);
+  sk_SkRect misk_Rect_MakeSize (sk_SkSize *c_size);
   sk_SkRect misk_Rect_MakeLTRB (float c_l, float c_t, float c_r, float c_b);
   sk_SkRect misk_Rect_MakeXYWH (float c_x, float c_y, float c_w, float c_h);
+  sk_SkRect misk_Rect_MakeISize (sk_SkISize *c_size);
+  sk_SkRect misk_Rect_MakeIRect (sk_SkIRect *c_irect);
   bool misk_Rect_Intersects (sk_SkRect *c_a, sk_SkRect *c_b);
 
   sk_SkFontMgr *sk_fontmgr_ref_default (void);

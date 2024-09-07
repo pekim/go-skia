@@ -8,6 +8,7 @@ import (
 )
 
 type methodOverload struct {
+	Suffix     string `json:"suffix"`
 	cName      string
 	goFuncName string
 	cFuncName  string
@@ -16,28 +17,31 @@ type methodOverload struct {
 	isStatic   bool
 	params     []param
 	retrn      typ
-	enriched   bool
 }
 
 type method struct {
-	CName     string `json:"name"`
-	overloads []methodOverload
-	Suffixes  []string `json:"suffixes"`
+	CName         string            `json:"name"`
+	Overloads     []*methodOverload `json:"overloads"`
+	enrichedCount int
 }
 
 func (m *method) enrich(api api, record *record, cursor clang.Cursor) {
-	var suffix string
-	if len(m.overloads) > 0 {
-		suffix = m.Suffixes[len(m.overloads)]
+	var overload *methodOverload
+	if len(m.Overloads) == 0 {
+		m.Overloads = []*methodOverload{{}}
 	}
-	overload := methodOverload{
-		cName:      m.CName + suffix,
-		record:     record,
-		goFuncName: fmt.Sprintf("%s%s%s", record.goName, m.CName, suffix),
-		cFuncName:  fmt.Sprintf("misk_%s_%s%s", record.goName, m.CName, suffix),
-		doc:        cursor.RawCommentText(),
-		isStatic:   cursor.CXXMethod_IsStatic(),
+	overload = m.Overloads[m.enrichedCount]
+	if overload == nil {
+		m.enrichedCount++
+		return
 	}
+
+	overload.cName = m.CName
+	overload.record = record
+	overload.goFuncName = fmt.Sprintf("%s%s%s", record.goName, m.CName, overload.Suffix)
+	overload.cFuncName = fmt.Sprintf("misk_%s_%s%s", record.goName, m.CName, overload.Suffix)
+	overload.doc = cursor.RawCommentText()
+	overload.isStatic = cursor.CXXMethod_IsStatic()
 
 	if !overload.isStatic {
 		panic("TODO non-static methods")
@@ -52,27 +56,19 @@ func (m *method) enrich(api api, record *record, cursor clang.Cursor) {
 	}
 
 	overload.retrn = mustTypFromClangType(cursor.ResultType(), api)
-	overload.enriched = true
-
-	m.overloads = append(m.overloads, overload)
+	m.enrichedCount++
 }
 
 func (m method) generate(g generator) {
-
-	if len(m.overloads) > 1 && len(m.Suffixes) != 0 {
-		if len(m.overloads) != len(m.Suffixes) {
-			fmt.Println(m.CName, len(m.overloads), len(m.Suffixes))
-			panic(42)
-			// fatalf("record %s has %d ctors, but expected %d", r.CName, len(ctorCursors), len(r.Ctors))
-		}
+	if m.enrichedCount < len(m.Overloads) {
+		fatalf("class %s, method %s, only %d of %d overloads enriched",
+			m.Overloads[0].record.CName, m.CName, m.enrichedCount, len(m.Overloads))
 	}
 
-	for i, method := range m.overloads {
-		if !method.enriched {
-			fatalf("method %s (overload %d) has not been enriched", m.CName, i)
+	for _, method := range m.Overloads {
+		if method != nil {
+			method.generate(g)
 		}
-
-		method.generate(g)
 	}
 }
 

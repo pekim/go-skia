@@ -8,6 +8,7 @@
 #include <include/core/SkPaint.h>
 #include <include/core/SkPath.h>
 #include <include/core/SkRect.h>
+#include <include/core/SkSize.h>
 #include <include/core/SkSurfaceProps.h>
 
 #if defined(SKIA_MAC)
@@ -216,6 +217,13 @@ extern "C"
   }
 
   sk_SkRect
+  misk_Rect_MakeSize (sk_SkSize *c_size)
+  {
+    auto ret = (SkRect::MakeSize (*reinterpret_cast<SkSize *> (c_size)));
+    return *(reinterpret_cast<sk_SkRect *> (&ret));
+  }
+
+  sk_SkRect
   misk_Rect_MakeLTRB (float c_l, float c_t, float c_r, float c_b)
   {
     auto ret = (SkRect::MakeLTRB (c_l, c_t, c_r, c_b));
@@ -226,6 +234,20 @@ extern "C"
   misk_Rect_MakeXYWH (float c_x, float c_y, float c_w, float c_h)
   {
     auto ret = (SkRect::MakeXYWH (c_x, c_y, c_w, c_h));
+    return *(reinterpret_cast<sk_SkRect *> (&ret));
+  }
+
+  sk_SkRect
+  misk_Rect_MakeISize (sk_SkISize *c_size)
+  {
+    auto ret = (SkRect::Make (*reinterpret_cast<SkISize *> (c_size)));
+    return *(reinterpret_cast<sk_SkRect *> (&ret));
+  }
+
+  sk_SkRect
+  misk_Rect_MakeIRect (sk_SkIRect *c_irect)
+  {
+    auto ret = (SkRect::Make (*reinterpret_cast<SkIRect *> (c_irect)));
     return *(reinterpret_cast<sk_SkRect *> (&ret));
   }
 

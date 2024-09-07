@@ -41,6 +41,11 @@
     },
 
     {
+      "name": "SkISize",
+      "methods": []
+    },
+
+    {
       "name": "SkPaint",
       "constructors": [{}, null, { "suffix": "Copy" }, null],
       "enums": [{ "name": "Cap" }, { "name": "Join" }, { "name": "Style" }]
@@ -78,15 +83,26 @@
         { "name": "Intersects" }
       ]
     },
+
     {
       "name": "SkRect",
       "methods": [
         { "name": "MakeEmpty" },
         { "name": "MakeWH" },
+        { "name": "MakeSize" },
         { "name": "MakeLTRB" },
         { "name": "MakeXYWH" },
+        {
+          "name": "Make",
+          "overloads": [{ "suffix": "ISize" }, { "suffix": "IRect" }]
+        },
         { "name": "Intersects" }
       ]
+    },
+
+    {
+      "name": "SkSize",
+      "methods": []
     }
   ]
 }

@@ -329,6 +329,10 @@ type FontMgr struct {
 	sk *C.sk_SkFontMgr
 }
 
+type ISize struct {
+	sk *C.sk_SkISize
+}
+
 /*
 SkPaint controls options applied when drawing. SkPaint collects all
 options outside of the SkCanvas clip and SkCanvas matrix.
@@ -762,6 +766,19 @@ func RectMakeWH(w float32, h float32) Rect {
 }
 
 /*
+Returns constructed SkRect set to (0, 0, size.width(), size.height()). Does not
+validate input; size.width() or size.height() may be negative.
+
+@param size  float values for SkRect width and height
+@return      bounds (0, 0, size.width(), size.height())
+*/
+func RectMakeSize(size Size) Rect {
+	c_size := size.sk
+	retC := C.misk_Rect_MakeSize(c_size)
+	return Rect{sk: &retC}
+}
+
+/*
 Returns constructed SkRect set to (l, t, r, b). Does not sort input; SkRect may
 result in fLeft greater than fRight, or fTop greater than fBottom.
 
@@ -800,6 +817,33 @@ func RectMakeXYWH(x float32, y float32, w float32, h float32) Rect {
 }
 
 /*
+Returns constructed SkIRect set to (0, 0, size.width(), size.height()).
+Does not validate input; size.width() or size.height() may be negative.
+
+@param size  integer values for SkRect width and height
+@return      bounds (0, 0, size.width(), size.height())
+*/
+func RectMakeISize(size ISize) Rect {
+	c_size := size.sk
+	retC := C.misk_Rect_MakeISize(c_size)
+	return Rect{sk: &retC}
+}
+
+/*
+Returns constructed SkIRect set to irect, promoting integers to float.
+Does not validate input; fLeft may be greater than fRight, fTop may be greater
+than fBottom.
+
+@param irect  integer unsorted bounds
+@return       irect members converted to float
+*/
+func RectMakeIRect(irect IRect) Rect {
+	c_irect := irect.sk
+	retC := C.misk_Rect_MakeIRect(c_irect)
+	return Rect{sk: &retC}
+}
+
+/*
 Returns true if a intersects b.
 Returns false if either a or b is empty, or do not intersect.
 
@@ -812,6 +856,11 @@ func RectIntersects(a Rect, b Rect) bool {
 	c_b := b.sk
 	retC := C.misk_Rect_Intersects(c_a, c_b)
 	return bool(retC)
+}
+
+// /////////////////////////////////////////////////////////////////////////////
+type Size struct {
+	sk *C.sk_SkSize
 }
 
 /*
