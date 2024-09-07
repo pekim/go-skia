@@ -29,6 +29,7 @@ func (r *record) enrich1(cursor clang.Cursor) {
 	r.cStructName = fmt.Sprintf("sk_%s", r.CName)
 	r.doc = cursor.RawCommentText()
 	r.doc = strings.Replace(r.doc, fmt.Sprintf("\\class %s", r.CName), "", 1)
+	r.doc = strings.Replace(r.doc, fmt.Sprintf("\\struct %s", r.CName), "", 1)
 	r.size = int(cursor.Type().SizeOf())
 	r.enriched = true
 }

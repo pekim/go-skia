@@ -628,7 +628,6 @@ const (
 )
 
 /*
-\struct SkIRect
 SkIRect holds four 32-bit integer coordinates describing the upper and
 lower bounds of a rectangle. SkIRect may be created from outer bounds or
 from position, width, and height. SkIRect describes an area; if its right
@@ -722,7 +721,6 @@ func IRectIntersects(a IRect, b IRect) bool {
 }
 
 /*
-\struct SkRect
 SkRect holds four float coordinates describing the upper and
 lower bounds of a rectangle. SkRect may be created from outer bounds or
 from position, width, and height. SkRect describes an area; if its right
