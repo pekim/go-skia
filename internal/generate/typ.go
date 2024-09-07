@@ -16,7 +16,7 @@ type typ struct {
 	isPointer         bool
 	isVoid            bool
 	isSmartPointer    bool
-	class             *class
+	record            *record
 	enum              *enum
 	subTyp            *typ
 }
@@ -28,13 +28,9 @@ func typFromClangType(cType clang.Type, api api) (typ, error) {
 		cgoName: cName,
 	}
 
-	if class, ok := api.findClass(typ.cName); ok {
-		typ.class = class
-		typ.goName = typ.class.goName
-
-	} else if struct_, ok := api.findStruct(typ.cName); ok {
-		typ.class = struct_
-		typ.goName = typ.class.goName
+	if record, ok := api.findRecord(typ.cName); ok {
+		typ.record = record
+		typ.goName = typ.record.goName
 
 	} else if enum, ok := api.findEnum(typ.cName); ok {
 		typ.enum = enum

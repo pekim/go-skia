@@ -11,7 +11,7 @@ type enum struct {
 	CName     string `json:"name"`
 	cType     typ
 	goName    string
-	class     *class
+	record    *record
 	doc       string
 	constants []enumConstant
 	enriched  bool
@@ -23,17 +23,17 @@ type enumConstant struct {
 	doc    string
 }
 
-func (e *enum) enrich(class *class, cursor clang.Cursor, api api) {
+func (e *enum) enrich(record *record, cursor clang.Cursor, api api) {
 	e.cType = mustTypFromClangType(cursor.EnumDeclIntegerType(), api)
-	if class != nil {
-		e.goName = class.goName + e.CName
+	if record != nil {
+		e.goName = record.goName + e.CName
 	} else {
 		e.goName = stripSkPrefix(e.CName)
 	}
-	e.class = class
+	e.record = record
 	e.doc = cursor.RawCommentText()
-	if class != nil {
-		e.doc = strings.Replace(e.doc, fmt.Sprintf("\\enum %s::%s", class.CName, e.CName), "", 1)
+	if record != nil {
+		e.doc = strings.Replace(e.doc, fmt.Sprintf("\\enum %s::%s", record.CName, e.CName), "", 1)
 	}
 
 	cursor.Visit(func(cursor, parent clang.Cursor) (status clang.ChildVisitResult) {

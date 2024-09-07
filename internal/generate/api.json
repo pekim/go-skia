@@ -1,5 +1,7 @@
 {
-  "classes": [
+  "enums": [{ "name": "SkPixelGeometry" }],
+
+  "records": [
     {
       "name": "SkBitmap",
       "constructors": [{}, { "suffix": "Copy" }, null],
@@ -64,12 +66,8 @@
         { "suffix": "Copy" }
       ],
       "enums": [{ "name": "Flags" }]
-    }
-  ],
+    },
 
-  "enums": [{ "name": "SkPixelGeometry" }],
-
-  "structs": [
     {
       "name": "SkIRect",
       "methodsHIDE": [

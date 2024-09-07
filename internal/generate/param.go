@@ -41,12 +41,12 @@ func newParam(paramIndex int, cursor clang.Cursor, api api) param {
 		p.cParam = fmt.Sprintf("%s %s", typ.enum.cType.cName, p.cgoName)
 		p.cArg = fmt.Sprintf("%s(%s)", typ.cName, p.cgoName)
 
-	} else if typ.isLValueReference && typ.subTyp.class != nil {
+	} else if typ.isLValueReference && typ.subTyp.record != nil {
 		p.cgoVar = fmt.Sprintf("%s := %s.sk", p.cgoName, p.goName)
 		p.cParam = fmt.Sprintf("sk_%s *%s", p.typ.subTyp.cName, p.cgoName)
 		p.cArg = fmt.Sprintf("*reinterpret_cast<%s*>(%s)", p.typ.subTyp.cName, p.cgoName)
 
-	} else if typ.isPointer && typ.subTyp.class != nil {
+	} else if typ.isPointer && typ.subTyp.record != nil {
 		p.cgoVar = fmt.Sprintf("%s := %s.sk", p.cgoName, p.goName)
 		p.cParam = fmt.Sprintf("sk_%s *%s", p.typ.subTyp.cName, p.cgoName)
 		p.cArg = fmt.Sprintf("reinterpret_cast<%s*>(%s)", p.typ.subTyp.cName, p.cgoName)

@@ -11,7 +11,7 @@ type method struct {
 	CName      string `json:"name"`
 	goFuncName string
 	cFuncName  string
-	class      *class
+	record     *record
 	doc        string
 	isStatic   bool
 	params     []param
@@ -19,10 +19,10 @@ type method struct {
 	enriched   bool
 }
 
-func (m *method) enrich(api api, class *class, cursor clang.Cursor) {
-	m.class = class
-	m.goFuncName = fmt.Sprintf("%s%s", m.class.goName, m.CName)
-	m.cFuncName = fmt.Sprintf("misk_%s_%s", m.class.goName, m.CName)
+func (m *method) enrich(api api, record *record, cursor clang.Cursor) {
+	m.record = record
+	m.goFuncName = fmt.Sprintf("%s%s", m.record.goName, m.CName)
+	m.cFuncName = fmt.Sprintf("misk_%s_%s", m.record.goName, m.CName)
 	m.doc = cursor.RawCommentText()
 	m.isStatic = cursor.CXXMethod_IsStatic()
 
@@ -81,11 +81,11 @@ func (m method) generateGo(g generator) {
 		f.writelnf("  retC := %s", call)
 		if m.retrn.isPrimitive {
 			f.writelnf("  return %s(retC)", m.retrn.goName)
-		} else if m.retrn.class != nil {
+		} else if m.retrn.record != nil {
 			if m.retrn.isPointer || m.retrn.isSmartPointer {
-				f.writelnf("  return %s{sk: retC}", m.retrn.class.goName)
+				f.writelnf("  return %s{sk: retC}", m.retrn.record.goName)
 			} else {
-				f.writelnf("  return %s{sk: &retC}", m.retrn.class.goName)
+				f.writelnf("  return %s{sk: &retC}", m.retrn.record.goName)
 			}
 		} else {
 			fatalf("return type '%s' not supported", m.retrn.goName)
@@ -105,11 +105,11 @@ func (m method) generateHeader(g generator) {
 
 	returnDecl := m.retrn.cName
 	returnPtr := ""
-	if m.retrn.class != nil {
+	if m.retrn.record != nil {
 		if m.retrn.isPointer || m.retrn.isSmartPointer {
 			returnPtr = "*"
 		}
-		returnDecl = fmt.Sprintf("%s%s", m.retrn.class.cStructName, returnPtr)
+		returnDecl = fmt.Sprintf("%s%s", m.retrn.record.cStructName, returnPtr)
 	}
 
 	f.writelnf("%s %s(%s);", returnDecl, m.cFuncName, strings.Join(params, ", "))
@@ -127,11 +127,11 @@ func (m method) generateCpp(g generator) {
 
 	returnDecl := m.retrn.cName
 	returnPtr := ""
-	if m.retrn.class != nil {
+	if m.retrn.record != nil {
 		if m.retrn.isPointer || m.retrn.isSmartPointer {
 			returnPtr = "*"
 		}
-		returnDecl = fmt.Sprintf("%s%s", m.retrn.class.cStructName, returnPtr)
+		returnDecl = fmt.Sprintf("%s%s", m.retrn.record.cStructName, returnPtr)
 	}
 
 	skSpRelease := ""
@@ -140,26 +140,26 @@ func (m method) generateCpp(g generator) {
 	}
 
 	f.writelnf("%s %s(%s) {", returnDecl, m.cFuncName, strings.Join(params, ", "))
-	if m.retrn.class != nil {
+	if m.retrn.record != nil {
 		if m.retrn.isPointer || m.retrn.isSmartPointer {
 			f.writelnf("  return reinterpret_cast<%s *> (%s::%s(%s)%s);",
-				m.retrn.class.cStructName,
-				m.class.CName,
+				m.retrn.record.cStructName,
+				m.record.CName,
 				m.CName,
 				strings.Join(args, ", "),
 				skSpRelease)
 		} else {
 			f.writelnf("  auto ret = (%s::%s(%s)%s);",
-				m.class.CName,
+				m.record.CName,
 				m.CName,
 				strings.Join(args, ", "),
 				skSpRelease)
 			f.writelnf("  return *(reinterpret_cast<%s *> (&ret));",
-				m.retrn.class.cStructName,
+				m.retrn.record.cStructName,
 			)
 		}
 	} else {
-		f.writelnf("  return %s::%s(%s)%s;", m.class.CName, m.CName, strings.Join(args, ", "), skSpRelease)
+		f.writelnf("  return %s::%s(%s)%s;", m.record.CName, m.CName, strings.Join(args, ", "), skSpRelease)
 	}
 	f.writeln("}")
 	f.writeln()

@@ -67,8 +67,8 @@ func (tu translationUnit) enrichApi(api *api) {
 				// Skip forward declarations.
 				break
 			}
-			if class, ok := api.findClass(cursor.Spelling()); ok {
-				class.enrich1(cursor)
+			if record, ok := api.findRecord(cursor.Spelling()); ok {
+				record.enrich1(cursor)
 			}
 
 		case clang.Cursor_EnumDecl:
@@ -81,7 +81,7 @@ func (tu translationUnit) enrichApi(api *api) {
 				// Skip forward declarations.
 				break
 			}
-			if struct_, ok := api.findStruct(cursor.Spelling()); ok {
+			if struct_, ok := api.findRecord(cursor.Spelling()); ok {
 				struct_.enrich1(cursor)
 			}
 		}

@@ -10,10 +10,8 @@ import (
 var apiJson []byte
 
 type api struct {
-	Classes []class `json:"classes"`
-	Structs []class `json:"structs"`
-	// Structs []struct_ `json:"structs"`
-	Enums []enum `json:"enums"`
+	Records []record `json:"records"`
+	Enums   []enum   `json:"enums"`
 }
 
 func loadApi() api {
@@ -29,23 +27,18 @@ func loadApi() api {
 	}
 	fmt.Println()
 
-	for i := range api.Classes {
-		class := &api.Classes[i]
-		class.enrich2(api)
-	}
-
-	for i := range api.Structs {
-		struct_ := &api.Structs[i]
-		struct_.enrich2(api)
+	for i := range api.Records {
+		record := &api.Records[i]
+		record.enrich2(api)
 	}
 
 	return api
 }
 
-func (a api) findClass(name string) (*class, bool) {
-	for i, class := range a.Classes {
-		if class.CName == name {
-			return &a.Classes[i], true
+func (a api) findRecord(name string) (*record, bool) {
+	for i, record := range a.Records {
+		if record.CName == name {
+			return &a.Records[i], true
 		}
 	}
 	return nil, false
@@ -60,31 +53,15 @@ func (a api) findEnum(name string) (*enum, bool) {
 	return nil, false
 }
 
-func (a api) findStruct(name string) (*class, bool) {
-	for i, struct_ := range a.Structs {
-		if struct_.CName == name {
-			return &a.Structs[i], true
-		}
-	}
-	return nil, false
-}
-
 func (a api) generate(g generator) {
 	fmt.Println("generate")
 
-	for _, class := range a.Classes {
-		class.generateCStruct(g)
-	}
-	for _, struct_ := range a.Structs {
-		struct_.generateCStruct(g)
+	for _, record := range a.Records {
+		record.generateCStruct(g)
 	}
 
-	for _, class := range a.Classes {
-		class.generate(g)
-	}
-
-	for _, struct_ := range a.Structs {
-		struct_.generate(g)
+	for _, record := range a.Records {
+		record.generate(g)
 	}
 
 	for _, enum := range a.Enums {
