@@ -64,8 +64,11 @@ func (m *method) enrich(api api, record *record, cursor clang.Cursor) {
 }
 
 func (m method) generate(g generator) {
+	if len(m.Overloads) == 0 {
+		fatalf("method %s, 0 overloads configured, and none enriched", m.CName)
+	}
 	if m.enrichedCount < len(m.Overloads) {
-		fatalf("class %s, method %s, only %d of %d overloads enriched",
+		fatalf("record %s, method %s, only %d of %d overloads enriched",
 			m.Overloads[0].record.CName, m.CName, m.enrichedCount, len(m.Overloads))
 	}
 
