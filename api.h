@@ -56,6 +56,14 @@ extern "C"
 
   typedef struct
   {
+    int Left;
+    int Top;
+    int Right;
+    int Bottom;
+  } sk_SkIRect;
+
+  typedef struct
+  {
     int Width;
     int Height;
   } sk_SkISize;
@@ -95,14 +103,6 @@ extern "C"
 
   typedef struct
   {
-    int Left;
-    int Top;
-    int Right;
-    int Bottom;
-  } sk_SkIRect;
-
-  typedef struct
-  {
     float Left;
     float Top;
     float Right;
@@ -114,6 +114,17 @@ extern "C"
     float Width;
     float Height;
   } sk_SkSize;
+
+  typedef struct
+  {
+    uchar pad_0[16];
+    unsigned int fUniqueID;
+    uchar fStyle[4];
+    uchar fBounds[16];
+    uchar fBoundsOnce[1];
+    bool fIsFixedPitch;
+    uchar pad_5[6];
+  } sk_SkTypeface;
 
   sk_SkBitmap *misk_new_Bitmap ();
   sk_SkBitmap *misk_new_BitmapCopy (sk_SkBitmap *c_src);
@@ -133,6 +144,12 @@ extern "C"
   sk_SkColorSpace *misk_ColorSpace_MakeSRGBLinear ();
   bool misk_ColorSpace_Equals (sk_SkColorSpace *c_p0, sk_SkColorSpace *c_p1);
 
+  sk_SkIRect misk_IRect_MakeEmpty ();
+  sk_SkIRect misk_IRect_MakeWH (int c_w, int c_h);
+  sk_SkIRect misk_IRect_MakeLTRB (int c_l, int c_t, int c_r, int c_b);
+  sk_SkIRect misk_IRect_MakeXYWH (int c_x, int c_y, int c_w, int c_h);
+  bool misk_IRect_Intersects (sk_SkIRect *c_a, sk_SkIRect *c_b);
+
   sk_SkPaint *misk_new_Paint ();
   sk_SkPaint *misk_new_PaintCopy (sk_SkPaint *c_paint);
   void misk_delete_SkPaint (sk_SkPaint *obj);
@@ -146,12 +163,6 @@ extern "C"
                                                          unsigned int c_p1);
   sk_SkSurfaceProps *misk_new_SurfacePropsCopy (sk_SkSurfaceProps *c_p0);
 
-  sk_SkIRect misk_IRect_MakeEmpty ();
-  sk_SkIRect misk_IRect_MakeWH (int c_w, int c_h);
-  sk_SkIRect misk_IRect_MakeLTRB (int c_l, int c_t, int c_r, int c_b);
-  sk_SkIRect misk_IRect_MakeXYWH (int c_x, int c_y, int c_w, int c_h);
-  bool misk_IRect_Intersects (sk_SkIRect *c_a, sk_SkIRect *c_b);
-
   sk_SkRect misk_Rect_MakeEmpty ();
   sk_SkRect misk_Rect_MakeWH (float c_w, float c_h);
   sk_SkRect misk_Rect_MakeSize (sk_SkSize *c_size);
@@ -160,6 +171,9 @@ extern "C"
   sk_SkRect misk_Rect_MakeISize (sk_SkISize *c_size);
   sk_SkRect misk_Rect_MakeIRect (sk_SkIRect *c_irect);
   bool misk_Rect_Intersects (sk_SkRect *c_a, sk_SkRect *c_b);
+
+  bool misk_Typeface_Equal (sk_SkTypeface *c_facea, sk_SkTypeface *c_faceb);
+  sk_SkTypeface *misk_Typeface_MakeEmpty ();
 
   sk_SkFontMgr *sk_fontmgr_ref_default (void);
 

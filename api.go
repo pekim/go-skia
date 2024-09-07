@@ -329,6 +329,99 @@ type FontMgr struct {
 	sk *C.sk_SkFontMgr
 }
 
+/*
+SkIRect holds four 32-bit integer coordinates describing the upper and
+lower bounds of a rectangle. SkIRect may be created from outer bounds or
+from position, width, and height. SkIRect describes an area; if its right
+is less than or equal to its left, or if its bottom is less than or equal to
+its top, it is considered empty.
+*/
+type IRect struct {
+	sk *C.sk_SkIRect
+}
+
+/*
+Returns constructed SkIRect set to (0, 0, 0, 0).
+Many other rectangles are empty; if left is equal to or greater than right,
+or if top is equal to or greater than bottom. Setting all members to zero
+is a convenience, but does not designate a special empty rectangle.
+
+@return  bounds (0, 0, 0, 0)
+*/
+func IRectMakeEmpty() IRect {
+
+	retC := C.misk_IRect_MakeEmpty()
+	return IRect{sk: &retC}
+}
+
+/*
+Returns constructed SkIRect set to (0, 0, w, h). Does not validate input; w or h
+may be negative.
+
+@param w  width of constructed SkIRect
+@param h  height of constructed SkIRect
+@return   bounds (0, 0, w, h)
+*/
+func IRectMakeWH(w int, h int) IRect {
+	c_w := C.int(w)
+	c_h := C.int(h)
+	retC := C.misk_IRect_MakeWH(c_w, c_h)
+	return IRect{sk: &retC}
+}
+
+/*
+Returns constructed SkIRect set to (l, t, r, b). Does not sort input; SkIRect may
+result in fLeft greater than fRight, or fTop greater than fBottom.
+
+@param l  integer stored in fLeft
+@param t  integer stored in fTop
+@param r  integer stored in fRight
+@param b  integer stored in fBottom
+@return   bounds (l, t, r, b)
+*/
+func IRectMakeLTRB(l int, t int, r int, b int) IRect {
+	c_l := C.int(l)
+	c_t := C.int(t)
+	c_r := C.int(r)
+	c_b := C.int(b)
+	retC := C.misk_IRect_MakeLTRB(c_l, c_t, c_r, c_b)
+	return IRect{sk: &retC}
+}
+
+/*
+Returns constructed SkIRect set to: (x, y, x + w, y + h).
+Does not validate input; w or h may be negative.
+
+@param x  stored in fLeft
+@param y  stored in fTop
+@param w  added to x and stored in fRight
+@param h  added to y and stored in fBottom
+@return   bounds at (x, y) with width w and height h
+*/
+func IRectMakeXYWH(x int, y int, w int, h int) IRect {
+	c_x := C.int(x)
+	c_y := C.int(y)
+	c_w := C.int(w)
+	c_h := C.int(h)
+	retC := C.misk_IRect_MakeXYWH(c_x, c_y, c_w, c_h)
+	return IRect{sk: &retC}
+}
+
+/*
+Returns true if a intersects b.
+Returns false if either a or b is empty, or do not intersect.
+
+@param a  SkIRect to intersect
+@param b  SkIRect to intersect
+@return   true if a and b have area in common
+*/
+func IRectIntersects(a IRect, b IRect) bool {
+	c_a := a.sk
+	c_b := b.sk
+	retC := C.misk_IRect_Intersects(c_a, c_b)
+	return bool(retC)
+}
+
 type ISize struct {
 	sk *C.sk_SkISize
 }
@@ -628,99 +721,6 @@ const (
 )
 
 /*
-SkIRect holds four 32-bit integer coordinates describing the upper and
-lower bounds of a rectangle. SkIRect may be created from outer bounds or
-from position, width, and height. SkIRect describes an area; if its right
-is less than or equal to its left, or if its bottom is less than or equal to
-its top, it is considered empty.
-*/
-type IRect struct {
-	sk *C.sk_SkIRect
-}
-
-/*
-Returns constructed SkIRect set to (0, 0, 0, 0).
-Many other rectangles are empty; if left is equal to or greater than right,
-or if top is equal to or greater than bottom. Setting all members to zero
-is a convenience, but does not designate a special empty rectangle.
-
-@return  bounds (0, 0, 0, 0)
-*/
-func IRectMakeEmpty() IRect {
-
-	retC := C.misk_IRect_MakeEmpty()
-	return IRect{sk: &retC}
-}
-
-/*
-Returns constructed SkIRect set to (0, 0, w, h). Does not validate input; w or h
-may be negative.
-
-@param w  width of constructed SkIRect
-@param h  height of constructed SkIRect
-@return   bounds (0, 0, w, h)
-*/
-func IRectMakeWH(w int, h int) IRect {
-	c_w := C.int(w)
-	c_h := C.int(h)
-	retC := C.misk_IRect_MakeWH(c_w, c_h)
-	return IRect{sk: &retC}
-}
-
-/*
-Returns constructed SkIRect set to (l, t, r, b). Does not sort input; SkIRect may
-result in fLeft greater than fRight, or fTop greater than fBottom.
-
-@param l  integer stored in fLeft
-@param t  integer stored in fTop
-@param r  integer stored in fRight
-@param b  integer stored in fBottom
-@return   bounds (l, t, r, b)
-*/
-func IRectMakeLTRB(l int, t int, r int, b int) IRect {
-	c_l := C.int(l)
-	c_t := C.int(t)
-	c_r := C.int(r)
-	c_b := C.int(b)
-	retC := C.misk_IRect_MakeLTRB(c_l, c_t, c_r, c_b)
-	return IRect{sk: &retC}
-}
-
-/*
-Returns constructed SkIRect set to: (x, y, x + w, y + h).
-Does not validate input; w or h may be negative.
-
-@param x  stored in fLeft
-@param y  stored in fTop
-@param w  added to x and stored in fRight
-@param h  added to y and stored in fBottom
-@return   bounds at (x, y) with width w and height h
-*/
-func IRectMakeXYWH(x int, y int, w int, h int) IRect {
-	c_x := C.int(x)
-	c_y := C.int(y)
-	c_w := C.int(w)
-	c_h := C.int(h)
-	retC := C.misk_IRect_MakeXYWH(c_x, c_y, c_w, c_h)
-	return IRect{sk: &retC}
-}
-
-/*
-Returns true if a intersects b.
-Returns false if either a or b is empty, or do not intersect.
-
-@param a  SkIRect to intersect
-@param b  SkIRect to intersect
-@return   true if a and b have area in common
-*/
-func IRectIntersects(a IRect, b IRect) bool {
-	c_a := a.sk
-	c_b := b.sk
-	retC := C.misk_IRect_Intersects(c_a, c_b)
-	return bool(retC)
-}
-
-/*
 SkRect holds four float coordinates describing the upper and
 lower bounds of a rectangle. SkRect may be created from outer bounds or
 from position, width, and height. SkRect describes an area; if its right
@@ -859,6 +859,38 @@ func RectIntersects(a Rect, b Rect) bool {
 // /////////////////////////////////////////////////////////////////////////////
 type Size struct {
 	sk *C.sk_SkSize
+}
+
+/*
+The SkTypeface class specifies the typeface and intrinsic style of a font.
+This is used in the paint, along with optionally algorithmic settings like
+textSize, textSkewX, textScaleX, kFakeBoldText_Mask, to specify
+how text appears when drawn (and measured).
+
+Typeface objects are immutable, and so they can be shared between threads.
+*/
+type Typeface struct {
+	sk *C.sk_SkTypeface
+}
+
+/*
+Returns true if the two typefaces reference the same underlying font,
+handling either being null (treating null as not equal to any font).
+*/
+func TypefaceEqual(facea Typeface, faceb Typeface) bool {
+	c_facea := facea.sk
+	c_faceb := faceb.sk
+	retC := C.misk_Typeface_Equal(c_facea, c_faceb)
+	return bool(retC)
+}
+
+/*
+Returns a non-null typeface which contains no glyphs.
+*/
+func TypefaceMakeEmpty() Typeface {
+
+	retC := C.misk_Typeface_MakeEmpty()
+	return Typeface{sk: retC}
 }
 
 /*

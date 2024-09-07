@@ -10,6 +10,7 @@
 #include <include/core/SkRect.h>
 #include <include/core/SkSize.h>
 #include <include/core/SkSurfaceProps.h>
+#include <include/core/SkTypeface.h>
 
 #if defined(SKIA_MAC)
 #include "include/ports/SkFontMgr_mac_ct.h"
@@ -109,6 +110,41 @@ extern "C"
                                  reinterpret_cast<SkColorSpace *> (c_p1));
   }
 
+  sk_SkIRect
+  misk_IRect_MakeEmpty ()
+  {
+    auto ret = (SkIRect::MakeEmpty ());
+    return *(reinterpret_cast<sk_SkIRect *> (&ret));
+  }
+
+  sk_SkIRect
+  misk_IRect_MakeWH (int c_w, int c_h)
+  {
+    auto ret = (SkIRect::MakeWH (c_w, c_h));
+    return *(reinterpret_cast<sk_SkIRect *> (&ret));
+  }
+
+  sk_SkIRect
+  misk_IRect_MakeLTRB (int c_l, int c_t, int c_r, int c_b)
+  {
+    auto ret = (SkIRect::MakeLTRB (c_l, c_t, c_r, c_b));
+    return *(reinterpret_cast<sk_SkIRect *> (&ret));
+  }
+
+  sk_SkIRect
+  misk_IRect_MakeXYWH (int c_x, int c_y, int c_w, int c_h)
+  {
+    auto ret = (SkIRect::MakeXYWH (c_x, c_y, c_w, c_h));
+    return *(reinterpret_cast<sk_SkIRect *> (&ret));
+  }
+
+  bool
+  misk_IRect_Intersects (sk_SkIRect *c_a, sk_SkIRect *c_b)
+  {
+    return SkIRect::Intersects (*reinterpret_cast<SkIRect *> (c_a),
+                                *reinterpret_cast<SkIRect *> (c_b));
+  }
+
   sk_SkPaint *
   misk_new_Paint ()
   {
@@ -167,41 +203,6 @@ extern "C"
         new SkSurfaceProps (*reinterpret_cast<SkSurfaceProps *> (c_p0)));
   }
 
-  sk_SkIRect
-  misk_IRect_MakeEmpty ()
-  {
-    auto ret = (SkIRect::MakeEmpty ());
-    return *(reinterpret_cast<sk_SkIRect *> (&ret));
-  }
-
-  sk_SkIRect
-  misk_IRect_MakeWH (int c_w, int c_h)
-  {
-    auto ret = (SkIRect::MakeWH (c_w, c_h));
-    return *(reinterpret_cast<sk_SkIRect *> (&ret));
-  }
-
-  sk_SkIRect
-  misk_IRect_MakeLTRB (int c_l, int c_t, int c_r, int c_b)
-  {
-    auto ret = (SkIRect::MakeLTRB (c_l, c_t, c_r, c_b));
-    return *(reinterpret_cast<sk_SkIRect *> (&ret));
-  }
-
-  sk_SkIRect
-  misk_IRect_MakeXYWH (int c_x, int c_y, int c_w, int c_h)
-  {
-    auto ret = (SkIRect::MakeXYWH (c_x, c_y, c_w, c_h));
-    return *(reinterpret_cast<sk_SkIRect *> (&ret));
-  }
-
-  bool
-  misk_IRect_Intersects (sk_SkIRect *c_a, sk_SkIRect *c_b)
-  {
-    return SkIRect::Intersects (*reinterpret_cast<SkIRect *> (c_a),
-                                *reinterpret_cast<SkIRect *> (c_b));
-  }
-
   sk_SkRect
   misk_Rect_MakeEmpty ()
   {
@@ -256,6 +257,20 @@ extern "C"
   {
     return SkRect::Intersects (*reinterpret_cast<SkRect *> (c_a),
                                *reinterpret_cast<SkRect *> (c_b));
+  }
+
+  bool
+  misk_Typeface_Equal (sk_SkTypeface *c_facea, sk_SkTypeface *c_faceb)
+  {
+    return SkTypeface::Equal (reinterpret_cast<SkTypeface *> (c_facea),
+                              reinterpret_cast<SkTypeface *> (c_faceb));
+  }
+
+  sk_SkTypeface *
+  misk_Typeface_MakeEmpty ()
+  {
+    return reinterpret_cast<sk_SkTypeface *> (
+        SkTypeface::MakeEmpty ().release ());
   }
 
   sk_SkFontMgr *

@@ -11,7 +11,7 @@ var headerFiles = []string{
 	"include/core/SkRect.h",
 	"include/core/SkSize.h",
 	"include/core/SkSurfaceProps.h",
-	// "include/core/SkTypeface.h",
+	"include/core/SkTypeface.h",
 }
 
 type generator struct {

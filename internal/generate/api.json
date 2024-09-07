@@ -41,6 +41,17 @@
     },
 
     {
+      "name": "SkIRect",
+      "methods": [
+        { "name": "MakeEmpty" },
+        { "name": "MakeWH" },
+        { "name": "MakeLTRB" },
+        { "name": "MakeXYWH" },
+        { "name": "Intersects" }
+      ]
+    },
+
+    {
       "name": "SkISize",
       "methods": []
     },
@@ -74,17 +85,6 @@
     },
 
     {
-      "name": "SkIRect",
-      "methods": [
-        { "name": "MakeEmpty" },
-        { "name": "MakeWH" },
-        { "name": "MakeLTRB" },
-        { "name": "MakeXYWH" },
-        { "name": "Intersects" }
-      ]
-    },
-
-    {
       "name": "SkRect",
       "methods": [
         { "name": "MakeEmpty" },
@@ -101,8 +101,12 @@
     },
 
     {
-      "name": "SkSize",
-      "methods": []
+      "name": "SkSize"
+    },
+
+    {
+      "name": "SkTypeface",
+      "methods": [{ "name": "Equal" }, { "name": "MakeEmpty" }]
     }
   ]
 }
