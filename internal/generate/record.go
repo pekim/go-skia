@@ -53,8 +53,10 @@ func (r *record) enrich2(api api) {
 			}
 
 		case clang.Cursor_CXXMethod:
-			if method, ok := r.findMethod(cursor.Spelling()); ok {
-				method.enrich(api, r, cursor)
+			if cursor.AccessSpecifier() == clang.AccessSpecifier_Public {
+				if method, ok := r.findMethod(cursor.Spelling()); ok {
+					method.enrich(api, r, cursor)
+				}
 			}
 
 		case clang.Cursor_FieldDecl:

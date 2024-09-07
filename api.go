@@ -650,6 +650,21 @@ func IRectMakeEmpty() IRect {
 }
 
 /*
+Returns constructed SkIRect set to (0, 0, w, h). Does not validate input; w or h
+may be negative.
+
+@param w  width of constructed SkIRect
+@param h  height of constructed SkIRect
+@return   bounds (0, 0, w, h)
+*/
+func IRectMakeWH(w int, h int) IRect {
+	c_w := C.int(w)
+	c_h := C.int(h)
+	retC := C.misk_IRect_MakeWH(c_w, c_h)
+	return IRect{sk: &retC}
+}
+
+/*
 Returns constructed SkIRect set to (l, t, r, b). Does not sort input; SkIRect may
 result in fLeft greater than fRight, or fTop greater than fBottom.
 
@@ -725,6 +740,24 @@ is a convenience, but does not designate a special empty rectangle.
 func RectMakeEmpty() Rect {
 
 	retC := C.misk_Rect_MakeEmpty()
+	return Rect{sk: &retC}
+}
+
+/*
+Returns constructed SkRect set to float values (0, 0, w, h). Does not
+validate input; w or h may be negative.
+
+Passing integer values may generate a compiler warning since SkRect cannot
+represent 32-bit integers exactly. Use SkIRect for an exact integer rectangle.
+
+@param w  float width of constructed SkRect
+@param h  float height of constructed SkRect
+@return   bounds (0, 0, w, h)
+*/
+func RectMakeWH(w float32, h float32) Rect {
+	c_w := C.float(w)
+	c_h := C.float(h)
+	retC := C.misk_Rect_MakeWH(c_w, c_h)
 	return Rect{sk: &retC}
 }
 

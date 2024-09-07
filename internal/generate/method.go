@@ -7,8 +7,8 @@ import (
 	"github.com/go-clang/clang-v15/clang"
 )
 
-type method struct {
-	CName      string `json:"name"`
+type methodOverload struct {
+	cName      string
 	goFuncName string
 	cFuncName  string
 	record     *record
@@ -19,41 +19,70 @@ type method struct {
 	enriched   bool
 }
 
-func (m *method) enrich(api api, record *record, cursor clang.Cursor) {
-	m.record = record
-	m.goFuncName = fmt.Sprintf("%s%s", m.record.goName, m.CName)
-	m.cFuncName = fmt.Sprintf("misk_%s_%s", m.record.goName, m.CName)
-	m.doc = cursor.RawCommentText()
-	m.isStatic = cursor.CXXMethod_IsStatic()
+type method struct {
+	CName     string `json:"name"`
+	overloads []methodOverload
+	Suffixes  []string `json:"suffixes"`
+}
 
-	if !m.isStatic {
+func (m *method) enrich(api api, record *record, cursor clang.Cursor) {
+	var suffix string
+	if len(m.overloads) > 0 {
+		suffix = m.Suffixes[len(m.overloads)]
+	}
+	overload := methodOverload{
+		cName:      m.CName + suffix,
+		record:     record,
+		goFuncName: fmt.Sprintf("%s%s%s", record.goName, m.CName, suffix),
+		cFuncName:  fmt.Sprintf("misk_%s_%s%s", record.goName, m.CName, suffix),
+		doc:        cursor.RawCommentText(),
+		isStatic:   cursor.CXXMethod_IsStatic(),
+	}
+
+	if !overload.isStatic {
 		panic("TODO non-static methods")
 	}
 
 	paramCount := int(cursor.NumArguments())
-	m.params = make([]param, paramCount)
+	overload.params = make([]param, paramCount)
 	for i := 0; i < paramCount; i++ {
 		arg := cursor.Argument(uint32(i))
 		param := newParam(i, arg, api)
-		m.params[i] = param
+		overload.params[i] = param
 	}
 
-	m.retrn = mustTypFromClangType(cursor.ResultType(), api)
+	overload.retrn = mustTypFromClangType(cursor.ResultType(), api)
+	overload.enriched = true
 
-	m.enriched = true
+	m.overloads = append(m.overloads, overload)
 }
 
 func (m method) generate(g generator) {
+
+	if len(m.overloads) > 1 && len(m.Suffixes) != 0 {
+		if len(m.overloads) != len(m.Suffixes) {
+			fmt.Println(m.CName, len(m.overloads), len(m.Suffixes))
+			panic(42)
+			// fatalf("record %s has %d ctors, but expected %d", r.CName, len(ctorCursors), len(r.Ctors))
+		}
+	}
+
+	for i, method := range m.overloads {
+		if !method.enriched {
+			fatalf("method %s (overload %d) has not been enriched", m.CName, i)
+		}
+
+		method.generate(g)
+	}
+}
+
+func (m methodOverload) generate(g generator) {
 	m.generateGo(g)
 	m.generateHeader(g)
 	m.generateCpp(g)
 }
 
-func (m method) generateGo(g generator) {
-	if !m.enriched {
-		fatalf("method %s has not been enriched", m.CName)
-	}
-
+func (m methodOverload) generateGo(g generator) {
 	f := g.goFile
 
 	params := make([]string, len(m.params))
@@ -95,7 +124,7 @@ func (m method) generateGo(g generator) {
 	f.writeln()
 }
 
-func (m method) generateHeader(g generator) {
+func (m methodOverload) generateHeader(g generator) {
 	f := g.headerFile
 
 	params := make([]string, len(m.params))
@@ -115,7 +144,7 @@ func (m method) generateHeader(g generator) {
 	f.writelnf("%s %s(%s);", returnDecl, m.cFuncName, strings.Join(params, ", "))
 }
 
-func (m method) generateCpp(g generator) {
+func (m methodOverload) generateCpp(g generator) {
 	f := g.cppFile
 
 	params := make([]string, len(m.params))
@@ -145,13 +174,13 @@ func (m method) generateCpp(g generator) {
 			f.writelnf("  return reinterpret_cast<%s *> (%s::%s(%s)%s);",
 				m.retrn.record.cStructName,
 				m.record.CName,
-				m.CName,
+				m.cName,
 				strings.Join(args, ", "),
 				skSpRelease)
 		} else {
 			f.writelnf("  auto ret = (%s::%s(%s)%s);",
 				m.record.CName,
-				m.CName,
+				m.cName,
 				strings.Join(args, ", "),
 				skSpRelease)
 			f.writelnf("  return *(reinterpret_cast<%s *> (&ret));",
@@ -159,7 +188,7 @@ func (m method) generateCpp(g generator) {
 			)
 		}
 	} else {
-		f.writelnf("  return %s::%s(%s)%s;", m.record.CName, m.CName, strings.Join(args, ", "), skSpRelease)
+		f.writelnf("  return %s::%s(%s)%s;", m.record.CName, m.cName, strings.Join(args, ", "), skSpRelease)
 	}
 	f.writeln("}")
 	f.writeln()

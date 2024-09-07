@@ -174,6 +174,13 @@ extern "C"
   }
 
   sk_SkIRect
+  misk_IRect_MakeWH (int c_w, int c_h)
+  {
+    auto ret = (SkIRect::MakeWH (c_w, c_h));
+    return *(reinterpret_cast<sk_SkIRect *> (&ret));
+  }
+
+  sk_SkIRect
   misk_IRect_MakeLTRB (int c_l, int c_t, int c_r, int c_b)
   {
     auto ret = (SkIRect::MakeLTRB (c_l, c_t, c_r, c_b));
@@ -198,6 +205,13 @@ extern "C"
   misk_Rect_MakeEmpty ()
   {
     auto ret = (SkRect::MakeEmpty ());
+    return *(reinterpret_cast<sk_SkRect *> (&ret));
+  }
+
+  sk_SkRect
+  misk_Rect_MakeWH (float c_w, float c_h)
+  {
+    auto ret = (SkRect::MakeWH (c_w, c_h));
     return *(reinterpret_cast<sk_SkRect *> (&ret));
   }
 

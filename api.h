@@ -135,11 +135,13 @@ extern "C"
   sk_SkSurfaceProps *misk_new_SurfacePropsCopy (sk_SkSurfaceProps *c_p0);
 
   sk_SkIRect misk_IRect_MakeEmpty ();
+  sk_SkIRect misk_IRect_MakeWH (int c_w, int c_h);
   sk_SkIRect misk_IRect_MakeLTRB (int c_l, int c_t, int c_r, int c_b);
   sk_SkIRect misk_IRect_MakeXYWH (int c_x, int c_y, int c_w, int c_h);
   bool misk_IRect_Intersects (sk_SkIRect *c_a, sk_SkIRect *c_b);
 
   sk_SkRect misk_Rect_MakeEmpty ();
+  sk_SkRect misk_Rect_MakeWH (float c_w, float c_h);
   sk_SkRect misk_Rect_MakeLTRB (float c_l, float c_t, float c_r, float c_b);
   sk_SkRect misk_Rect_MakeXYWH (float c_x, float c_y, float c_w, float c_h);
   bool misk_Rect_Intersects (sk_SkRect *c_a, sk_SkRect *c_b);
