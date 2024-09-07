@@ -30,6 +30,10 @@ func (m *method) enrich(api api, record *record, cursor clang.Cursor) {
 	if len(m.Overloads) == 0 {
 		m.Overloads = []*methodOverload{{}}
 	}
+	if m.enrichedCount >= len(m.Overloads) {
+		fatalf("class %s, method %s, %d overloads configured, but more encountered",
+			m.Overloads[0].record.CName, m.CName, len(m.Overloads))
+	}
 	overload = m.Overloads[m.enrichedCount]
 	if overload == nil {
 		m.enrichedCount++
