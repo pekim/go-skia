@@ -64,7 +64,6 @@ func typFromClangType(cType clang.Type, api api) (typ, error) {
 		}
 		typ = typ_
 		typ.isSmartPointer = true
-		typ.cName = "void *"
 
 	} else {
 		switch cType.Kind() {

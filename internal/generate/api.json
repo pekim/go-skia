@@ -37,6 +37,11 @@
     },
 
     {
+      "name": "SkFont",
+      "constructors": [{}, null, { "suffix": "Typeface" }, null]
+    },
+
+    {
       "name": "SkFontMgr"
     },
 

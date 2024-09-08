@@ -323,6 +323,36 @@ func ColorSpaceEquals(p0 ColorSpace, p1 ColorSpace) bool {
 	return bool(retC)
 }
 
+/*
+SkFont controls options applied when drawing and measuring text.
+*/
+type Font struct {
+	sk *C.sk_SkFont
+}
+
+/*
+Constructs SkFont with default values.
+
+@return  default initialized SkFont
+*/
+func NewFont() Font {
+
+	retC := C.misk_new_Font()
+	return Font{sk: retC}
+}
+
+/*
+Constructs SkFont with default values with SkTypeface.
+
+@param typeface  font and style used to draw and measure text
+@return          initialized SkFont
+*/
+func NewFontTypeface(typeface Typeface) Font {
+	c_typeface := typeface.sk
+	retC := C.misk_new_FontTypeface(c_typeface)
+	return Font{sk: retC}
+}
+
 type FontMgr struct {
 	sk *C.sk_SkFontMgr
 }

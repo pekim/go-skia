@@ -51,6 +51,18 @@ extern "C"
 
   typedef struct
   {
+    uchar fTypeface[8];
+    float fSize;
+    float fScaleX;
+    float fSkewX;
+    unsigned char fFlags;
+    unsigned char fEdging;
+    unsigned char fHinting;
+    uchar pad_7[1];
+  } sk_SkFont;
+
+  typedef struct
+  {
     uchar pad_0[16];
   } sk_SkFontMgr;
 
@@ -148,6 +160,9 @@ extern "C"
   sk_SkColorSpace *misk_ColorSpace_MakeSRGB ();
   sk_SkColorSpace *misk_ColorSpace_MakeSRGBLinear ();
   bool misk_ColorSpace_Equals (sk_SkColorSpace *c_p0, sk_SkColorSpace *c_p1);
+
+  sk_SkFont *misk_new_Font ();
+  sk_SkFont *misk_new_FontTypeface (sk_SkTypeface *c_typeface);
 
   sk_SkFontStyle *misk_new_FontStyle2 (int c_weight, int c_width,
                                        unsigned int c_slant);

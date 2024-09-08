@@ -3,6 +3,7 @@
 #include <include/core/SkBitmap.h>
 #include <include/core/SkCanvas.h>
 #include <include/core/SkColorSpace.h>
+#include <include/core/SkFont.h>
 #include <include/core/SkFontMgr.h>
 #include <include/core/SkFontStyle.h>
 #include <include/core/SkPaint.h>
@@ -108,6 +109,19 @@ extern "C"
   {
     return SkColorSpace::Equals (reinterpret_cast<SkColorSpace *> (c_p0),
                                  reinterpret_cast<SkColorSpace *> (c_p1));
+  }
+
+  sk_SkFont *
+  misk_new_Font ()
+  {
+    return reinterpret_cast<sk_SkFont *> (new SkFont ());
+  }
+
+  sk_SkFont *
+  misk_new_FontTypeface (sk_SkTypeface *c_typeface)
+  {
+    return reinterpret_cast<sk_SkFont *> (
+        new SkFont (sk_ref_sp (reinterpret_cast<SkTypeface *> (c_typeface))));
   }
 
   sk_SkFontStyle *

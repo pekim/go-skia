@@ -51,6 +51,11 @@ func newParam(paramIndex int, cursor clang.Cursor, api api) param {
 		p.cParam = fmt.Sprintf("sk_%s *%s", p.typ.subTyp.cName, p.cgoName)
 		p.cArg = fmt.Sprintf("reinterpret_cast<%s*>(%s)", p.typ.subTyp.cName, p.cgoName)
 
+	} else if typ.isSmartPointer && typ.record != nil {
+		p.cgoVar = fmt.Sprintf("%s := %s.sk", p.cgoName, p.goName)
+		p.cParam = fmt.Sprintf("sk_%s *%s", p.typ.cName, p.cgoName)
+		p.cArg = fmt.Sprintf("sk_ref_sp(reinterpret_cast<%s*>(%s))", p.typ.cName, p.cgoName)
+
 	} else {
 		fatalf("unhandled cgoVar %s for param with typ %#v", cName, typ)
 	}
