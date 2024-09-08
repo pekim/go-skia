@@ -110,6 +110,47 @@ extern "C"
                                  reinterpret_cast<SkColorSpace *> (c_p1));
   }
 
+  sk_SkFontStyle *
+  misk_new_FontStyle2 (int c_weight, int c_width, unsigned int c_slant)
+  {
+    return reinterpret_cast<sk_SkFontStyle *> (
+        new SkFontStyle (c_weight, c_width, SkFontStyle::Slant (c_slant)));
+  }
+
+  sk_SkFontStyle *
+  misk_new_FontStyle ()
+  {
+    return reinterpret_cast<sk_SkFontStyle *> (new SkFontStyle ());
+  }
+
+  sk_SkFontStyle
+  misk_FontStyle_Normal ()
+  {
+    auto ret = (SkFontStyle::Normal ());
+    return *(reinterpret_cast<sk_SkFontStyle *> (&ret));
+  }
+
+  sk_SkFontStyle
+  misk_FontStyle_Bold ()
+  {
+    auto ret = (SkFontStyle::Bold ());
+    return *(reinterpret_cast<sk_SkFontStyle *> (&ret));
+  }
+
+  sk_SkFontStyle
+  misk_FontStyle_Italic ()
+  {
+    auto ret = (SkFontStyle::Italic ());
+    return *(reinterpret_cast<sk_SkFontStyle *> (&ret));
+  }
+
+  sk_SkFontStyle
+  misk_FontStyle_BoldItalic ()
+  {
+    auto ret = (SkFontStyle::BoldItalic ());
+    return *(reinterpret_cast<sk_SkFontStyle *> (&ret));
+  }
+
   sk_SkIRect
   misk_IRect_MakeEmpty ()
   {

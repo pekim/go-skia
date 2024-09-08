@@ -28,9 +28,26 @@ func typFromClangType(cType clang.Type, api api) (typ, error) {
 		cgoName: cName,
 	}
 
-	if record, ok := api.findRecord(typ.cName); ok {
-		typ.record = record
-		typ.goName = typ.record.goName
+	var recordName string
+	var recordEnumName string
+	nameParts := strings.Split(typ.cName, "::")
+	if len(nameParts) > 0 {
+		recordName = nameParts[0]
+	}
+	if len(nameParts) > 1 {
+		recordEnumName = nameParts[1]
+	}
+
+	if record, ok := api.findRecord(recordName); ok {
+		if recordEnumName == "" {
+			typ.record = record
+			typ.goName = typ.record.goName
+		} else {
+			if enum, ok := record.findEnum(recordEnumName); ok {
+				typ.enum = enum
+				typ.goName = typ.enum.goName
+			}
+		}
 
 	} else if enum, ok := api.findEnum(typ.cName); ok {
 		typ.enum = enum

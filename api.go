@@ -329,6 +329,56 @@ type FontMgr struct {
 	sk *C.sk_SkFontMgr
 }
 
+type FontStyle struct {
+	sk *C.sk_SkFontStyle
+}
+
+func NewFontStyle2(weight int, width int, slant FontStyleSlant) FontStyle {
+	c_weight := C.int(weight)
+	c_width := C.int(width)
+	c_slant := C.uint(slant)
+	retC := C.misk_new_FontStyle2(c_weight, c_width, c_slant)
+	return FontStyle{sk: retC}
+}
+
+func NewFontStyle() FontStyle {
+
+	retC := C.misk_new_FontStyle()
+	return FontStyle{sk: retC}
+}
+
+func FontStyleNormal() FontStyle {
+
+	retC := C.misk_FontStyle_Normal()
+	return FontStyle{sk: &retC}
+}
+
+func FontStyleBold() FontStyle {
+
+	retC := C.misk_FontStyle_Bold()
+	return FontStyle{sk: &retC}
+}
+
+func FontStyleItalic() FontStyle {
+
+	retC := C.misk_FontStyle_Italic()
+	return FontStyle{sk: &retC}
+}
+
+func FontStyleBoldItalic() FontStyle {
+
+	retC := C.misk_FontStyle_BoldItalic()
+	return FontStyle{sk: &retC}
+}
+
+type FontStyleSlant int64
+
+const (
+	FontStyleSlantUpright FontStyleSlant = 0
+	FontStyleSlantItalic  FontStyleSlant = 1
+	FontStyleSlantOblique FontStyleSlant = 2
+)
+
 /*
 SkIRect holds four 32-bit integer coordinates describing the upper and
 lower bounds of a rectangle. SkIRect may be created from outer bounds or

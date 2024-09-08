@@ -41,6 +41,18 @@
     },
 
     {
+      "name": "SkFontStyle",
+      "constructors": [{ "suffix": "2" }, {}],
+      "enums": [{ "name": "Slant" }],
+      "methods": [
+        { "name": "Normal" },
+        { "name": "Bold" },
+        { "name": "Italic" },
+        { "name": "BoldItalic" }
+      ]
+    },
+
+    {
       "name": "SkIRect",
       "methods": [
         { "name": "MakeEmpty" },
