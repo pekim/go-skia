@@ -126,6 +126,14 @@ extern "C"
 
   typedef struct
   {
+    unsigned int fFlags;
+    uchar fPixelGeometry[4];
+    float fTextContrast;
+    float fTextGamma;
+  } sk_SkSurfaceProps;
+
+  typedef struct
+  {
     uchar pad_0[16];
     unsigned int fUniqueID;
     uchar fStyle[4];
@@ -134,14 +142,6 @@ extern "C"
     bool fIsFixedPitch;
     uchar pad_5[6];
   } sk_SkTypeface;
-
-  typedef struct
-  {
-    unsigned int fFlags;
-    uchar fPixelGeometry[4];
-    float fTextContrast;
-    float fTextGamma;
-  } sk_SkSurfaceProps;
 
   sk_SkBitmap *misk_new_Bitmap ();
   sk_SkBitmap *misk_new_BitmapCopy (sk_SkBitmap *c_src);
@@ -200,13 +200,13 @@ extern "C"
   sk_SkRect misk_Rect_MakeIRect (sk_SkIRect *c_irect);
   bool misk_Rect_Intersects (sk_SkRect *c_a, sk_SkRect *c_b);
 
-  bool misk_Typeface_Equal (sk_SkTypeface *c_facea, sk_SkTypeface *c_faceb);
-  sk_SkTypeface *misk_Typeface_MakeEmpty ();
-
   sk_SkSurfaceProps *misk_new_SurfaceProps ();
   sk_SkSurfaceProps *misk_new_SurfacePropsPixelGeometry (unsigned int c_flags,
                                                          unsigned int c_p1);
   sk_SkSurfaceProps *misk_new_SurfacePropsCopy (sk_SkSurfaceProps *c_p0);
+
+  bool misk_Typeface_Equal (sk_SkTypeface *c_facea, sk_SkTypeface *c_faceb);
+  sk_SkTypeface *misk_Typeface_MakeEmpty ();
 
   sk_SkFontMgr *sk_fontmgr_ref_default (void);
 

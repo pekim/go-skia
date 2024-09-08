@@ -310,20 +310,6 @@ extern "C"
                                *reinterpret_cast<SkRect *> (c_b));
   }
 
-  bool
-  misk_Typeface_Equal (sk_SkTypeface *c_facea, sk_SkTypeface *c_faceb)
-  {
-    return SkTypeface::Equal (reinterpret_cast<SkTypeface *> (c_facea),
-                              reinterpret_cast<SkTypeface *> (c_faceb));
-  }
-
-  sk_SkTypeface *
-  misk_Typeface_MakeEmpty ()
-  {
-    return reinterpret_cast<sk_SkTypeface *> (
-        SkTypeface::MakeEmpty ().release ());
-  }
-
   sk_SkSurfaceProps *
   misk_new_SurfaceProps ()
   {
@@ -342,6 +328,20 @@ extern "C"
   {
     return reinterpret_cast<sk_SkSurfaceProps *> (
         new SkSurfaceProps (*reinterpret_cast<SkSurfaceProps *> (c_p0)));
+  }
+
+  bool
+  misk_Typeface_Equal (sk_SkTypeface *c_facea, sk_SkTypeface *c_faceb)
+  {
+    return SkTypeface::Equal (reinterpret_cast<SkTypeface *> (c_facea),
+                              reinterpret_cast<SkTypeface *> (c_faceb));
+  }
+
+  sk_SkTypeface *
+  misk_Typeface_MakeEmpty ()
+  {
+    return reinterpret_cast<sk_SkTypeface *> (
+        SkTypeface::MakeEmpty ().release ());
   }
 
   sk_SkFontMgr *

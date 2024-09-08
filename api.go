@@ -925,37 +925,6 @@ type Size struct {
 }
 
 /*
-The SkTypeface class specifies the typeface and intrinsic style of a font.
-This is used in the paint, along with optionally algorithmic settings like
-textSize, textSkewX, textScaleX, kFakeBoldText_Mask, to specify
-how text appears when drawn (and measured).
-
-Typeface objects are immutable, and so they can be shared between threads.
-*/
-type Typeface struct {
-	sk *C.sk_SkTypeface
-}
-
-/*
-Returns true if the two typefaces reference the same underlying font,
-handling either being null (treating null as not equal to any font).
-*/
-func TypefaceEqual(facea Typeface, faceb Typeface) bool {
-	c_facea := facea.sk
-	c_faceb := faceb.sk
-	retC := C.misk_Typeface_Equal(c_facea, c_faceb)
-	return bool(retC)
-}
-
-/*
-Returns a non-null typeface which contains no glyphs.
-*/
-func TypefaceMakeEmpty() Typeface {
-	retC := C.misk_Typeface_MakeEmpty()
-	return Typeface{sk: retC}
-}
-
-/*
 Describes properties and constraints of a given SkSurface. The rendering engine can parse these
 during drawing, and can sometimes optimize its performance (e.g. disabling an expensive
 feature).
@@ -997,6 +966,37 @@ const (
 	SurfacePropsFlagsDynamicMSAA_Flag               SurfacePropsFlags = 2
 	SurfacePropsFlagsAlwaysDither_Flag              SurfacePropsFlags = 4
 )
+
+/*
+The SkTypeface class specifies the typeface and intrinsic style of a font.
+This is used in the paint, along with optionally algorithmic settings like
+textSize, textSkewX, textScaleX, kFakeBoldText_Mask, to specify
+how text appears when drawn (and measured).
+
+Typeface objects are immutable, and so they can be shared between threads.
+*/
+type Typeface struct {
+	sk *C.sk_SkTypeface
+}
+
+/*
+Returns true if the two typefaces reference the same underlying font,
+handling either being null (treating null as not equal to any font).
+*/
+func TypefaceEqual(facea Typeface, faceb Typeface) bool {
+	c_facea := facea.sk
+	c_faceb := faceb.sk
+	retC := C.misk_Typeface_Equal(c_facea, c_faceb)
+	return bool(retC)
+}
+
+/*
+Returns a non-null typeface which contains no glyphs.
+*/
+func TypefaceMakeEmpty() Typeface {
+	retC := C.misk_Typeface_MakeEmpty()
+	return Typeface{sk: retC}
+}
 
 /*
 Description of how the LCD strips are arranged for each pixel. If this is unknown, or the

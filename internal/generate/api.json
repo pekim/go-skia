@@ -116,11 +116,6 @@
     },
 
     {
-      "name": "SkTypeface",
-      "methods": [{ "name": "Equal" }, { "name": "MakeEmpty" }]
-    },
-
-    {
       "name": "SkSurfaceProps",
       "constructors": [
         {},
@@ -129,6 +124,11 @@
         { "suffix": "Copy" }
       ],
       "enums": [{ "name": "Flags" }]
+    },
+
+    {
+      "name": "SkTypeface",
+      "methods": [{ "name": "Equal" }, { "name": "MakeEmpty" }]
     }
   ]
 }
