@@ -143,6 +143,18 @@ extern "C"
     uchar pad_5[6];
   } sk_SkTypeface;
 
+  typedef struct
+  {
+    uchar pad_0[12];
+    bool fOOMed;
+    bool fSuppressErrorLogging;
+    uchar pad_2[2];
+    uchar Standard[4];
+    uchar pad_3[4];
+    uchar Extensions[24];
+    uchar Functions[8240];
+  } sk_GrGLInterface;
+
   sk_SkBitmap *misk_new_Bitmap ();
   sk_SkBitmap *misk_new_BitmapCopy (sk_SkBitmap *c_src);
   void misk_delete_SkBitmap (sk_SkBitmap *obj);
@@ -208,6 +220,7 @@ extern "C"
   bool misk_Typeface_Equal (sk_SkTypeface *c_facea, sk_SkTypeface *c_faceb);
   sk_SkTypeface *misk_Typeface_MakeEmpty ();
 
+  sk_GrGLInterface *misk_GrGLMakeNativeInterface ();
   sk_SkFontMgr *sk_fontmgr_ref_default (void);
 
 #ifdef __cplusplus

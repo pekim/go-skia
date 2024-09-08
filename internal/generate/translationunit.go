@@ -84,6 +84,12 @@ func (tu translationUnit) enrichApi(api *api) {
 			if struct_, ok := api.findRecord(cursor.Spelling()); ok {
 				struct_.enrich1(cursor)
 			}
+
+		case clang.Cursor_FunctionDecl:
+			if function, ok := api.findFunction(cursor.Spelling()); ok {
+				function.cursor = cursor
+				function.enrich(cursor)
+			}
 		}
 
 		return clang.ChildVisit_Continue

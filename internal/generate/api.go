@@ -10,8 +10,9 @@ import (
 var apiJson []byte
 
 type api struct {
-	Records []record `json:"records"`
-	Enums   []enum   `json:"enums"`
+	Records   []record   `json:"records"`
+	Enums     []enum     `json:"enums"`
+	Functions []function `json:"functions"`
 }
 
 func loadApi() api {
@@ -27,13 +28,13 @@ func loadApi() api {
 	}
 	fmt.Println()
 
-	// for i := range api.Functions {
-	// 	function := &api.Functions[i]
-	// 	function.enrich2(api)
-	// }
 	for i := range api.Enums {
 		enum := &api.Enums[i]
 		enum.enrich2(api)
+	}
+	for i := range api.Functions {
+		function := &api.Functions[i]
+		function.enrich2(api)
 	}
 	for i := range api.Records {
 		record := &api.Records[i]
@@ -61,6 +62,15 @@ func (a api) findEnum(name string) (*enum, bool) {
 	return nil, false
 }
 
+func (a api) findFunction(name string) (*function, bool) {
+	for i, function := range a.Functions {
+		if function.CName == name {
+			return &a.Functions[i], true
+		}
+	}
+	return nil, false
+}
+
 func (a api) generate(g generator) {
 	fmt.Println("generate")
 
@@ -74,5 +84,9 @@ func (a api) generate(g generator) {
 
 	for _, enum := range a.Enums {
 		enum.generate(g)
+	}
+
+	for _, function := range a.Functions {
+		function.generate(g)
 	}
 }

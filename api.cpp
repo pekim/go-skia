@@ -12,6 +12,7 @@
 #include <include/core/SkSize.h>
 #include <include/core/SkSurfaceProps.h>
 #include <include/core/SkTypeface.h>
+#include <include/gpu/gl/GrGLInterface.h>
 
 #if defined(SKIA_MAC)
 #include "include/ports/SkFontMgr_mac_ct.h"
@@ -342,6 +343,14 @@ extern "C"
   {
     return reinterpret_cast<sk_SkTypeface *> (
         SkTypeface::MakeEmpty ().release ());
+  }
+
+  sk_GrGLInterface *
+  misk_GrGLMakeNativeInterface ()
+  {
+    return const_cast<sk_GrGLInterface *> (
+        reinterpret_cast<const sk_GrGLInterface *> (
+            GrGLMakeNativeInterface ().release ()));
   }
 
   sk_SkFontMgr *

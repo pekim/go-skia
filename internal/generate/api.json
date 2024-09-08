@@ -129,6 +129,10 @@
     {
       "name": "SkTypeface",
       "methods": [{ "name": "Equal" }, { "name": "MakeEmpty" }]
-    }
-  ]
+    },
+
+    { "name": "GrGLInterface", "constructors": [null] }
+  ],
+
+  "functions": [{ "name": "GrGLMakeNativeInterface" }]
 }
