@@ -106,7 +106,9 @@ func (m methodOverload) generateGo(g generator) {
 
 	f.writeDocComment(m.doc)
 	f.writelnf("func %s(%s) %s {", m.goFuncName, strings.Join(params, ", "), returnDecl)
-	f.writeln(strings.Join(cVars, "\n"))
+	if len(cVars) > 0 {
+		f.writeln(strings.Join(cVars, "\n"))
+	}
 	if m.retrn.isVoid {
 		f.writelnf("  %s", call)
 	} else {

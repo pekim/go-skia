@@ -300,7 +300,6 @@ type ColorSpace struct {
 Create the sRGB color space.
 */
 func ColorSpaceMakeSRGB() ColorSpace {
-
 	retC := C.misk_ColorSpace_MakeSRGB()
 	return ColorSpace{sk: retC}
 }
@@ -309,7 +308,6 @@ func ColorSpaceMakeSRGB() ColorSpace {
 Colorspace with the sRGB primaries, but a linear (1.0) gamma.
 */
 func ColorSpaceMakeSRGBLinear() ColorSpace {
-
 	retC := C.misk_ColorSpace_MakeSRGBLinear()
 	return ColorSpace{sk: retC}
 }
@@ -348,25 +346,21 @@ func NewFontStyle() FontStyle {
 }
 
 func FontStyleNormal() FontStyle {
-
 	retC := C.misk_FontStyle_Normal()
 	return FontStyle{sk: &retC}
 }
 
 func FontStyleBold() FontStyle {
-
 	retC := C.misk_FontStyle_Bold()
 	return FontStyle{sk: &retC}
 }
 
 func FontStyleItalic() FontStyle {
-
 	retC := C.misk_FontStyle_Italic()
 	return FontStyle{sk: &retC}
 }
 
 func FontStyleBoldItalic() FontStyle {
-
 	retC := C.misk_FontStyle_BoldItalic()
 	return FontStyle{sk: &retC}
 }
@@ -399,7 +393,6 @@ is a convenience, but does not designate a special empty rectangle.
 @return  bounds (0, 0, 0, 0)
 */
 func IRectMakeEmpty() IRect {
-
 	retC := C.misk_IRect_MakeEmpty()
 	return IRect{sk: &retC}
 }
@@ -790,7 +783,6 @@ is a convenience, but does not designate a special empty rectangle.
 @return  bounds (0, 0, 0, 0)
 */
 func RectMakeEmpty() Rect {
-
 	retC := C.misk_Rect_MakeEmpty()
 	return Rect{sk: &retC}
 }
@@ -938,7 +930,6 @@ func TypefaceEqual(facea Typeface, faceb Typeface) bool {
 Returns a non-null typeface which contains no glyphs.
 */
 func TypefaceMakeEmpty() Typeface {
-
 	retC := C.misk_Typeface_MakeEmpty()
 	return Typeface{sk: retC}
 }
