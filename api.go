@@ -342,6 +342,20 @@ func NewFont() Font {
 }
 
 /*
+Constructs SkFont with default values with SkTypeface and size in points.
+
+@param typeface  font and style used to draw and measure text
+@param size      typographic height of text
+@return          initialized SkFont
+*/
+func NewFontTypefaceSize(typeface Typeface, size float32) Font {
+	c_typeface := typeface.sk
+	c_size := C.float(size)
+	retC := C.misk_new_FontTypefaceSize(c_typeface, c_size)
+	return Font{sk: retC}
+}
+
+/*
 Constructs SkFont with default values with SkTypeface.
 
 @param typeface  font and style used to draw and measure text
@@ -350,6 +364,26 @@ Constructs SkFont with default values with SkTypeface.
 func NewFontTypeface(typeface Typeface) Font {
 	c_typeface := typeface.sk
 	retC := C.misk_new_FontTypeface(c_typeface)
+	return Font{sk: retC}
+}
+
+/*
+Constructs SkFont with default values with SkTypeface and size in points,
+horizontal scale, and horizontal skew. Horizontal scale emulates condensed
+and expanded fonts. Horizontal skew emulates oblique fonts.
+
+@param typeface  font and style used to draw and measure text
+@param size      typographic height of text
+@param scaleX    text horizontal scale
+@param skewX     additional shear on x-axis relative to y-axis
+@return          initialized SkFont
+*/
+func NewFontTypefaceSizeScaleSkew(typeface Typeface, size float32, scaleX float32, skewX float32) Font {
+	c_typeface := typeface.sk
+	c_size := C.float(size)
+	c_scaleX := C.float(scaleX)
+	c_skewX := C.float(skewX)
+	retC := C.misk_new_FontTypefaceSizeScaleSkew(c_typeface, c_size, c_scaleX, c_skewX)
 	return Font{sk: retC}
 }
 

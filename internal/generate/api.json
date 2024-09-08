@@ -38,7 +38,12 @@
 
     {
       "name": "SkFont",
-      "constructors": [{}, null, { "suffix": "Typeface" }, null]
+      "constructors": [
+        {},
+        { "suffix": "TypefaceSize" },
+        { "suffix": "Typeface" },
+        { "suffix": "TypefaceSizeScaleSkew" }
+      ]
     },
 
     {

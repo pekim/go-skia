@@ -118,10 +118,26 @@ extern "C"
   }
 
   sk_SkFont *
+  misk_new_FontTypefaceSize (sk_SkTypeface *c_typeface, float c_size)
+  {
+    return reinterpret_cast<sk_SkFont *> (new SkFont (
+        sk_ref_sp (reinterpret_cast<SkTypeface *> (c_typeface)), c_size));
+  }
+
+  sk_SkFont *
   misk_new_FontTypeface (sk_SkTypeface *c_typeface)
   {
     return reinterpret_cast<sk_SkFont *> (
         new SkFont (sk_ref_sp (reinterpret_cast<SkTypeface *> (c_typeface))));
+  }
+
+  sk_SkFont *
+  misk_new_FontTypefaceSizeScaleSkew (sk_SkTypeface *c_typeface, float c_size,
+                                      float c_scaleX, float c_skewX)
+  {
+    return reinterpret_cast<sk_SkFont *> (
+        new SkFont (sk_ref_sp (reinterpret_cast<SkTypeface *> (c_typeface)),
+                    c_size, c_scaleX, c_skewX));
   }
 
   sk_SkFontStyle *
