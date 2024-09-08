@@ -96,17 +96,6 @@
     },
 
     {
-      "name": "SkSurfaceProps",
-      "constructors": [
-        {},
-        { "suffix": "PixelGeometry" },
-        null,
-        { "suffix": "Copy" }
-      ],
-      "enums": [{ "name": "Flags" }]
-    },
-
-    {
       "name": "SkRect",
       "methods": [
         { "name": "MakeEmpty" },
@@ -129,6 +118,17 @@
     {
       "name": "SkTypeface",
       "methods": [{ "name": "Equal" }, { "name": "MakeEmpty" }]
+    },
+
+    {
+      "name": "SkSurfaceProps",
+      "constructors": [
+        {},
+        { "suffix": "PixelGeometry" },
+        null,
+        { "suffix": "Copy" }
+      ],
+      "enums": [{ "name": "Flags" }]
     }
   ]
 }

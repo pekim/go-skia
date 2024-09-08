@@ -254,26 +254,6 @@ extern "C"
     delete reinterpret_cast<SkPath *> (obj);
   }
 
-  sk_SkSurfaceProps *
-  misk_new_SurfaceProps ()
-  {
-    return reinterpret_cast<sk_SkSurfaceProps *> (new SkSurfaceProps ());
-  }
-
-  sk_SkSurfaceProps *
-  misk_new_SurfacePropsPixelGeometry (unsigned int c_flags, unsigned int c_p1)
-  {
-    return reinterpret_cast<sk_SkSurfaceProps *> (
-        new SkSurfaceProps (c_flags, SkPixelGeometry (c_p1)));
-  }
-
-  sk_SkSurfaceProps *
-  misk_new_SurfacePropsCopy (sk_SkSurfaceProps *c_p0)
-  {
-    return reinterpret_cast<sk_SkSurfaceProps *> (
-        new SkSurfaceProps (*reinterpret_cast<SkSurfaceProps *> (c_p0)));
-  }
-
   sk_SkRect
   misk_Rect_MakeEmpty ()
   {
@@ -342,6 +322,26 @@ extern "C"
   {
     return reinterpret_cast<sk_SkTypeface *> (
         SkTypeface::MakeEmpty ().release ());
+  }
+
+  sk_SkSurfaceProps *
+  misk_new_SurfaceProps ()
+  {
+    return reinterpret_cast<sk_SkSurfaceProps *> (new SkSurfaceProps ());
+  }
+
+  sk_SkSurfaceProps *
+  misk_new_SurfacePropsPixelGeometry (unsigned int c_flags, unsigned int c_p1)
+  {
+    return reinterpret_cast<sk_SkSurfaceProps *> (
+        new SkSurfaceProps (c_flags, SkPixelGeometry (c_p1)));
+  }
+
+  sk_SkSurfaceProps *
+  misk_new_SurfacePropsCopy (sk_SkSurfaceProps *c_p0)
+  {
+    return reinterpret_cast<sk_SkSurfaceProps *> (
+        new SkSurfaceProps (*reinterpret_cast<SkSurfaceProps *> (c_p0)));
   }
 
   sk_SkFontMgr *

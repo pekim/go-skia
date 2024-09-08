@@ -785,49 +785,6 @@ const (
 )
 
 /*
-Describes properties and constraints of a given SkSurface. The rendering engine can parse these
-during drawing, and can sometimes optimize its performance (e.g. disabling an expensive
-feature).
-*/
-type SurfaceProps struct {
-	sk *C.sk_SkSurfaceProps
-}
-
-/*
-No flags, unknown pixel geometry, platform-default contrast/gamma.
-*/
-func NewSurfaceProps() SurfaceProps {
-
-	retC := C.misk_new_SurfaceProps()
-	return SurfaceProps{sk: retC}
-}
-
-/*
-TODO(kschmi): Remove this constructor and replace with the one below. *
-*/
-func NewSurfacePropsPixelGeometry(flags uint, p1 PixelGeometry) SurfaceProps {
-	c_flags := C.uint(flags)
-	c_p1 := C.uint(p1)
-	retC := C.misk_new_SurfacePropsPixelGeometry(c_flags, c_p1)
-	return SurfaceProps{sk: retC}
-}
-
-func NewSurfacePropsCopy(p0 SurfaceProps) SurfaceProps {
-	c_p0 := p0.sk
-	retC := C.misk_new_SurfacePropsCopy(c_p0)
-	return SurfaceProps{sk: retC}
-}
-
-type SurfacePropsFlags int64
-
-const (
-	SurfacePropsFlagsDefault_Flag                   SurfacePropsFlags = 0
-	SurfacePropsFlagsUseDeviceIndependentFonts_Flag SurfacePropsFlags = 1
-	SurfacePropsFlagsDynamicMSAA_Flag               SurfacePropsFlags = 2
-	SurfacePropsFlagsAlwaysDither_Flag              SurfacePropsFlags = 4
-)
-
-/*
 SkRect holds four float coordinates describing the upper and
 lower bounds of a rectangle. SkRect may be created from outer bounds or
 from position, width, and height. SkRect describes an area; if its right
@@ -997,6 +954,49 @@ func TypefaceMakeEmpty() Typeface {
 	retC := C.misk_Typeface_MakeEmpty()
 	return Typeface{sk: retC}
 }
+
+/*
+Describes properties and constraints of a given SkSurface. The rendering engine can parse these
+during drawing, and can sometimes optimize its performance (e.g. disabling an expensive
+feature).
+*/
+type SurfaceProps struct {
+	sk *C.sk_SkSurfaceProps
+}
+
+/*
+No flags, unknown pixel geometry, platform-default contrast/gamma.
+*/
+func NewSurfaceProps() SurfaceProps {
+
+	retC := C.misk_new_SurfaceProps()
+	return SurfaceProps{sk: retC}
+}
+
+/*
+TODO(kschmi): Remove this constructor and replace with the one below. *
+*/
+func NewSurfacePropsPixelGeometry(flags uint, p1 PixelGeometry) SurfaceProps {
+	c_flags := C.uint(flags)
+	c_p1 := C.uint(p1)
+	retC := C.misk_new_SurfacePropsPixelGeometry(c_flags, c_p1)
+	return SurfaceProps{sk: retC}
+}
+
+func NewSurfacePropsCopy(p0 SurfaceProps) SurfaceProps {
+	c_p0 := p0.sk
+	retC := C.misk_new_SurfacePropsCopy(c_p0)
+	return SurfaceProps{sk: retC}
+}
+
+type SurfacePropsFlags int64
+
+const (
+	SurfacePropsFlagsDefault_Flag                   SurfacePropsFlags = 0
+	SurfacePropsFlagsUseDeviceIndependentFonts_Flag SurfacePropsFlags = 1
+	SurfacePropsFlagsDynamicMSAA_Flag               SurfacePropsFlags = 2
+	SurfacePropsFlagsAlwaysDither_Flag              SurfacePropsFlags = 4
+)
 
 /*
 Description of how the LCD strips are arranged for each pixel. If this is unknown, or the

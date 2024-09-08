@@ -112,14 +112,6 @@ extern "C"
 
   typedef struct
   {
-    unsigned int fFlags;
-    uchar fPixelGeometry[4];
-    float fTextContrast;
-    float fTextGamma;
-  } sk_SkSurfaceProps;
-
-  typedef struct
-  {
     float Left;
     float Top;
     float Right;
@@ -142,6 +134,14 @@ extern "C"
     bool fIsFixedPitch;
     uchar pad_5[6];
   } sk_SkTypeface;
+
+  typedef struct
+  {
+    unsigned int fFlags;
+    uchar fPixelGeometry[4];
+    float fTextContrast;
+    float fTextGamma;
+  } sk_SkSurfaceProps;
 
   sk_SkBitmap *misk_new_Bitmap ();
   sk_SkBitmap *misk_new_BitmapCopy (sk_SkBitmap *c_src);
@@ -191,11 +191,6 @@ extern "C"
   sk_SkPath *misk_new_PathCopy (sk_SkPath *c_path);
   void misk_delete_SkPath (sk_SkPath *obj);
 
-  sk_SkSurfaceProps *misk_new_SurfaceProps ();
-  sk_SkSurfaceProps *misk_new_SurfacePropsPixelGeometry (unsigned int c_flags,
-                                                         unsigned int c_p1);
-  sk_SkSurfaceProps *misk_new_SurfacePropsCopy (sk_SkSurfaceProps *c_p0);
-
   sk_SkRect misk_Rect_MakeEmpty ();
   sk_SkRect misk_Rect_MakeWH (float c_w, float c_h);
   sk_SkRect misk_Rect_MakeSize (sk_SkSize *c_size);
@@ -207,6 +202,11 @@ extern "C"
 
   bool misk_Typeface_Equal (sk_SkTypeface *c_facea, sk_SkTypeface *c_faceb);
   sk_SkTypeface *misk_Typeface_MakeEmpty ();
+
+  sk_SkSurfaceProps *misk_new_SurfaceProps ();
+  sk_SkSurfaceProps *misk_new_SurfacePropsPixelGeometry (unsigned int c_flags,
+                                                         unsigned int c_p1);
+  sk_SkSurfaceProps *misk_new_SurfacePropsCopy (sk_SkSurfaceProps *c_p0);
 
   sk_SkFontMgr *sk_fontmgr_ref_default (void);
 
