@@ -32,15 +32,17 @@ func (r *record) enrich1(cursor clang.Cursor) {
 	r.doc = strings.Replace(r.doc, fmt.Sprintf("\\struct %s", r.CName), "", 1)
 	r.size = int(cursor.Type().SizeOf())
 	r.enriched = true
-}
 
-func (r *record) enrich2(api api) {
-	var ctorCursors []clang.Cursor
+	var ctorsEnriched int
 	r.cursor.Visit(func(cursor, parent clang.Cursor) (status clang.ChildVisitResult) {
 		switch cursor.Kind() {
 		case clang.Cursor_Constructor:
 			if cursor.AccessSpecifier() == clang.AccessSpecifier_Public {
-				ctorCursors = append(ctorCursors, cursor)
+				ctor := r.Ctors[ctorsEnriched]
+				if ctor != nil {
+					r.Ctors[ctorsEnriched].enrich(r, cursor)
+				}
+				ctorsEnriched++
 			}
 
 		case clang.Cursor_Destructor:
@@ -50,18 +52,18 @@ func (r *record) enrich2(api api) {
 
 		case clang.Cursor_EnumDecl:
 			if enum, ok := r.findEnum(cursor.Spelling()); ok {
-				enum.enrich(r, cursor, api)
+				enum.enrich(r, cursor)
 			}
 
 		case clang.Cursor_CXXMethod:
 			if cursor.AccessSpecifier() == clang.AccessSpecifier_Public {
 				if method, ok := r.findMethod(cursor.Spelling()); ok {
-					method.enrich(api, r, cursor)
+					method.enrich(r, cursor)
 				}
 			}
 
 		case clang.Cursor_FieldDecl:
-			r.fields = append(r.fields, newField(cursor, api))
+			r.fields = append(r.fields, newField(cursor))
 
 		}
 
@@ -70,14 +72,32 @@ func (r *record) enrich2(api api) {
 	// fmt.Println(c.CName, c.fields)
 	// fmt.Println(c.cursor.Type().SizeOf())
 
-	if len(r.Ctors) != len(ctorCursors) {
-		fatalf("record %s has %d ctors, but expected %d", r.CName, len(ctorCursors), len(r.Ctors))
+	if len(r.Ctors) != ctorsEnriched {
+		fatalf("record %s has %d ctors, but expected %d", r.CName, ctorsEnriched, len(r.Ctors))
 	}
-	for i, cursor := range ctorCursors {
+}
+
+func (r *record) enrich2(api api) {
+	for i := range r.Enums {
+		enum := &r.Enums[i]
+		enum.enrich2(api)
+	}
+
+	for i := range r.fields {
+		field := &r.fields[i]
+		field.enrich2(api)
+	}
+
+	for i := range r.Ctors {
 		ctor := r.Ctors[i]
 		if ctor != nil {
-			ctor.enrich(api, r, cursor)
+			ctor.enrich2(api)
 		}
+	}
+
+	for i := range r.Methods {
+		method := &r.Methods[i]
+		method.enrich2(api)
 	}
 }
 

@@ -16,6 +16,7 @@ type methodOverload struct {
 	doc        string
 	isStatic   bool
 	params     []param
+	resultType clang.Type
 	retrn      typ
 }
 
@@ -25,7 +26,7 @@ type method struct {
 	enrichedCount int
 }
 
-func (m *method) enrich(api api, record *record, cursor clang.Cursor) {
+func (m *method) enrich(record *record, cursor clang.Cursor) {
 	var overload *methodOverload
 	if len(m.Overloads) == 0 {
 		m.Overloads = []*methodOverload{{}}
@@ -46,6 +47,7 @@ func (m *method) enrich(api api, record *record, cursor clang.Cursor) {
 	overload.cFuncName = fmt.Sprintf("misk_%s_%s%s", record.goName, m.CName, overload.Suffix)
 	overload.doc = cursor.RawCommentText()
 	overload.isStatic = cursor.CXXMethod_IsStatic()
+	overload.resultType = cursor.ResultType()
 
 	if !overload.isStatic {
 		panic("TODO non-static methods")
@@ -55,12 +57,22 @@ func (m *method) enrich(api api, record *record, cursor clang.Cursor) {
 	overload.params = make([]param, paramCount)
 	for i := 0; i < paramCount; i++ {
 		arg := cursor.Argument(uint32(i))
-		param := newParam(i, arg, api)
+		param := newParam(i, arg)
 		overload.params[i] = param
 	}
 
-	overload.retrn = mustTypFromClangType(cursor.ResultType(), api)
 	m.enrichedCount++
+}
+
+func (m *method) enrich2(api api) {
+	for i := range m.Overloads {
+		overload := m.Overloads[i]
+		for i := range overload.params {
+			param := &overload.params[i]
+			param.enrich2(api)
+		}
+		overload.retrn = mustTypFromClangType(overload.resultType, api)
+	}
 }
 
 func (m method) generate(g generator) {

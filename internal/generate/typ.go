@@ -13,6 +13,7 @@ type typ struct {
 	goName            string
 	isPrimitive       bool // a simple type, that can be converted from Go type to C type with a type conversion
 	isLValueReference bool
+	isConst           bool
 	isPointer         bool
 	isVoid            bool
 	isSmartPointer    bool
@@ -26,6 +27,7 @@ func typFromClangType(cType clang.Type, api api) (typ, error) {
 	typ := typ{
 		cName:   cName,
 		cgoName: cName,
+		isConst: cType.IsConstQualifiedType(),
 	}
 
 	var recordName string

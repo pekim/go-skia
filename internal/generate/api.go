@@ -27,6 +27,14 @@ func loadApi() api {
 	}
 	fmt.Println()
 
+	// for i := range api.Functions {
+	// 	function := &api.Functions[i]
+	// 	function.enrich2(api)
+	// }
+	for i := range api.Enums {
+		enum := &api.Enums[i]
+		enum.enrich2(api)
+	}
 	for i := range api.Records {
 		record := &api.Records[i]
 		record.enrich2(api)

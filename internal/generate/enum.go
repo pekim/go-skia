@@ -10,6 +10,7 @@ import (
 type enum struct {
 	CName     string `json:"name"`
 	cType     typ
+	clangType clang.Type
 	goName    string
 	record    *record
 	doc       string
@@ -23,8 +24,8 @@ type enumConstant struct {
 	doc    string
 }
 
-func (e *enum) enrich(record *record, cursor clang.Cursor, api api) {
-	e.cType = mustTypFromClangType(cursor.EnumDeclIntegerType(), api)
+func (e *enum) enrich(record *record, cursor clang.Cursor) {
+	e.clangType = cursor.EnumDeclIntegerType()
 	if record != nil {
 		e.goName = record.goName + e.CName
 	} else {
@@ -58,7 +59,10 @@ func (e *enum) enrich(record *record, cursor clang.Cursor, api api) {
 
 		return clang.ChildVisit_Continue
 	})
+}
 
+func (e *enum) enrich2(api api) {
+	e.cType = mustTypFromClangType(e.clangType, api)
 	e.enriched = true
 }
 
