@@ -36,6 +36,41 @@ type GrGLInterface struct {
 	sk *C.sk_GrGLInterface
 }
 
+type GrContextOptions struct {
+	sk *C.sk_GrContextOptions
+}
+
+func NewGrContextOptions() GrContextOptions {
+
+	retC := C.misk_new_GrContextOptions()
+	return GrContextOptions{sk: retC}
+}
+
+type GrContextOptionsEnable int64
+
+const (
+	/*
+	   Forces an option to be disabled.
+	*/
+	GrContextOptionsEnableNo GrContextOptionsEnable = 0
+	/*
+	   Forces an option to be enabled.
+	*/
+	GrContextOptionsEnableYes GrContextOptionsEnable = 1
+	/*
+	   Uses Skia's default behavior, which may use runtime properties (e.g. driver version).
+	*/
+	GrContextOptionsEnableDefault GrContextOptionsEnable = 2
+)
+
+type GrContextOptionsShaderCacheStrategy int64
+
+const (
+	GrContextOptionsShaderCacheStrategySkSL          GrContextOptionsShaderCacheStrategy = 0
+	GrContextOptionsShaderCacheStrategyBackendSource GrContextOptionsShaderCacheStrategy = 1
+	GrContextOptionsShaderCacheStrategyBackendBinary GrContextOptionsShaderCacheStrategy = 2
+)
+
 /*
 SkBitmap describes a two-dimensional raster pixel array. SkBitmap is built on
 SkImageInfo, containing integer width and height, SkColorType and SkAlphaType
@@ -1054,9 +1089,30 @@ func GrGLMakeNativeInterface() GrGLInterface {
 	return GrGLInterface{sk: retC}
 }
 
-func GrDirectContextsMakeGL(p0 GrGLInterface) GrDirectContext {
+/*
+Creates a GrDirectContext for a backend context. GrGLInterface must be non-null.
+*/
+func GrDirectContextsMakeGLInterfaceOptions(p0 GrGLInterface, p1 GrContextOptions) GrDirectContext {
 	c_p0 := p0.sk
-	retC := C.misk_GrDirectContextsMakeGL(c_p0)
+	c_p1 := p1.sk
+	retC := C.misk_GrDirectContextsMakeGLInterfaceOptions(c_p0, c_p1)
+	return GrDirectContext{sk: retC}
+}
+
+func GrDirectContextsMakeGLInterface(p0 GrGLInterface) GrDirectContext {
+	c_p0 := p0.sk
+	retC := C.misk_GrDirectContextsMakeGLInterface(c_p0)
+	return GrDirectContext{sk: retC}
+}
+
+func GrDirectContextsMakeGLOptions(p0 GrContextOptions) GrDirectContext {
+	c_p0 := p0.sk
+	retC := C.misk_GrDirectContextsMakeGLOptions(c_p0)
+	return GrDirectContext{sk: retC}
+}
+
+func GrDirectContextsMakeGL() GrDirectContext {
+	retC := C.misk_GrDirectContextsMakeGL()
 	return GrDirectContext{sk: retC}
 }
 

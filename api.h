@@ -45,6 +45,53 @@ extern "C"
 
   typedef struct
   {
+    bool SuppressPrints;
+    uchar pad_1[3];
+    uchar SkipGLErrorChecks[4];
+    int MaxTextureSizeOverride;
+    int BufferMapThreshold;
+    uchar MinimumStagingBufferSize[8];
+    uchar Executor[8];
+    bool DoManualMipmapping;
+    bool DisableCoverageCountingPaths;
+    bool DisableDistanceFieldPaths;
+    bool AllowPathMaskCaching;
+    bool DisableGpuYUVConversion;
+    uchar pad_11[3];
+    uchar GlyphCacheTextureMaximumBytes[8];
+    float MinDistanceFieldFontSize;
+    float GlyphsAsPathsFontSize;
+    uchar AllowMultipleGlyphCacheTextures[4];
+    bool AvoidStencilBuffers;
+    uchar pad_16[3];
+    uchar UseDrawInsteadOfClear[4];
+    uchar ReduceOpsTaskSplitting[4];
+    bool PreferExternalImagesOverES3;
+    bool DisableDriverCorrectnessWorkarounds;
+    uchar pad_20[2];
+    int RuntimeProgramCacheSize;
+    uchar PersistentCache[8];
+    uchar ShaderCacheStrategy[4];
+    uchar pad_23[4];
+    uchar ShaderErrorHandler[8];
+    int InternalMultisampleCount;
+    int MaxCachedVulkanSecondaryCommandBuffers;
+    bool SuppressMipmapSupport;
+    bool DisableTessellationPathRenderer;
+    bool EnableExperimentalHardwareTessellation;
+    bool SupportBilerpFromGlyphAtlas;
+    bool ReducedShaderVariations;
+    bool AllowMSAAOnNewIntel;
+    bool AlwaysUseTexStorageWhenAvailable;
+    uchar pad_33[1];
+    uchar ContextDeleteContext[8];
+    uchar ContextDeleteProc[8];
+    uchar DriverBugWorkarounds[17];
+    uchar pad_36[7];
+  } sk_GrContextOptions;
+
+  typedef struct
+  {
     uchar fPixelRef[8];
     uchar fPixmap[40];
     uchar fMips[8];
@@ -178,6 +225,8 @@ extern "C"
 
   void misk_delete_GrDirectContext (sk_GrDirectContext *obj);
 
+  sk_GrContextOptions *misk_new_GrContextOptions ();
+
   sk_SkBitmap *misk_new_Bitmap ();
   sk_SkBitmap *misk_new_BitmapCopy (sk_SkBitmap *c_src);
   void misk_delete_SkBitmap (sk_SkBitmap *obj);
@@ -244,7 +293,14 @@ extern "C"
   sk_SkTypeface *misk_Typeface_MakeEmpty ();
 
   sk_GrGLInterface *misk_GrGLMakeNativeInterface ();
-  sk_GrDirectContext *misk_GrDirectContextsMakeGL (sk_GrGLInterface *c_p0);
+  sk_GrDirectContext *
+  misk_GrDirectContextsMakeGLInterfaceOptions (sk_GrGLInterface *c_p0,
+                                               sk_GrContextOptions *c_p1);
+  sk_GrDirectContext *
+  misk_GrDirectContextsMakeGLInterface (sk_GrGLInterface *c_p0);
+  sk_GrDirectContext *
+  misk_GrDirectContextsMakeGLOptions (sk_GrContextOptions *c_p0);
+  sk_GrDirectContext *misk_GrDirectContextsMakeGL ();
   sk_SkFontMgr *sk_fontmgr_ref_default (void);
 
 #ifdef __cplusplus

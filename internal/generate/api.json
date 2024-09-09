@@ -7,6 +7,11 @@
     },
 
     { "name": "GrGLInterface", "constructors": [null] },
+    {
+      "name": "GrContextOptions",
+      "constructors": [{}],
+      "enums": [{ "name": "Enable" }, { "name": "ShaderCacheStrategy" }]
+    },
 
     {
       "name": "SkBitmap",
@@ -140,6 +145,14 @@
 
   "functions": [
     { "name": "GrGLMakeNativeInterface" },
-    { "name": "GrDirectContexts::MakeGL", "overloads": [null, {}, null, null] }
+    {
+      "name": "GrDirectContexts::MakeGL",
+      "overloads": [
+        { "suffix": "InterfaceOptions" },
+        { "suffix": "Interface" },
+        { "suffix": "Options" },
+        {}
+      ]
+    }
   ]
 }

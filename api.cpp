@@ -12,6 +12,7 @@
 #include <include/core/SkSize.h>
 #include <include/core/SkSurfaceProps.h>
 #include <include/core/SkTypeface.h>
+#include <include/gpu/GrContextOptions.h>
 #include <include/gpu/GrDirectContext.h>
 #include <include/gpu/ganesh/gl/GrGLDirectContext.h>
 #include <include/gpu/gl/GrGLInterface.h>
@@ -36,6 +37,12 @@ extern "C"
   misk_delete_GrDirectContext (sk_GrDirectContext *obj)
   {
     delete reinterpret_cast<GrDirectContext *> (obj);
+  }
+
+  sk_GrContextOptions *
+  misk_new_GrContextOptions ()
+  {
+    return reinterpret_cast<sk_GrContextOptions *> (new GrContextOptions ());
   }
 
   sk_SkBitmap *
@@ -362,12 +369,38 @@ extern "C"
   }
 
   sk_GrDirectContext *
-  misk_GrDirectContextsMakeGL (sk_GrGLInterface *c_p0)
+  misk_GrDirectContextsMakeGLInterfaceOptions (sk_GrGLInterface *c_p0,
+                                               sk_GrContextOptions *c_p1)
+  {
+    return reinterpret_cast<sk_GrDirectContext *> (
+        GrDirectContexts::MakeGL (
+            sk_ref_sp (reinterpret_cast<GrGLInterface *> (c_p0)),
+            *reinterpret_cast<GrContextOptions *> (c_p1))
+            .release ());
+  }
+
+  sk_GrDirectContext *
+  misk_GrDirectContextsMakeGLInterface (sk_GrGLInterface *c_p0)
   {
     return reinterpret_cast<sk_GrDirectContext *> (
         GrDirectContexts::MakeGL (
             sk_ref_sp (reinterpret_cast<GrGLInterface *> (c_p0)))
             .release ());
+  }
+
+  sk_GrDirectContext *
+  misk_GrDirectContextsMakeGLOptions (sk_GrContextOptions *c_p0)
+  {
+    return reinterpret_cast<sk_GrDirectContext *> (
+        GrDirectContexts::MakeGL (*reinterpret_cast<GrContextOptions *> (c_p0))
+            .release ());
+  }
+
+  sk_GrDirectContext *
+  misk_GrDirectContextsMakeGL ()
+  {
+    return reinterpret_cast<sk_GrDirectContext *> (
+        GrDirectContexts::MakeGL ().release ());
   }
 
   sk_SkFontMgr *
