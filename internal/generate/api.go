@@ -4,6 +4,9 @@ import (
 	_ "embed"
 	"encoding/json"
 	"fmt"
+	"runtime"
+
+	"golang.org/x/sync/errgroup"
 )
 
 //go:embed api.json
@@ -21,13 +24,21 @@ func loadApi() api {
 	fatalOnError(err)
 
 	fmt.Print("load api ")
+	var group errgroup.Group
+	group.SetLimit(runtime.NumCPU() / 2)
 	for _, headerFile := range headerFiles {
-		fmt.Print(".")
-		tu := newTranslationUnit("_skia/skia/" + headerFile)
-		tu.enrichApi(&api)
+		group.Go(func() error {
+			tu := newTranslationUnit("_skia/skia/" + headerFile)
+			tu.enrichApi(&api)
+			fmt.Print(".")
+			return nil
+		})
 	}
+	err = group.Wait()
+	fatalOnError(err)
 	fmt.Println()
 
+	// 2nd enrichment phase
 	for i := range api.Enums {
 		enum := &api.Enums[i]
 		enum.enrich2(api)

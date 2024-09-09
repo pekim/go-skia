@@ -7,6 +7,7 @@ replace github.com/go-clang/clang-v15 => github.com/pekim/clang-v15 v0.0.0-20240
 require (
 	github.com/go-clang/clang-v15 v0.0.0-20230222085438-ee3102fa0c71
 	github.com/stretchr/testify v1.9.0
+	golang.org/x/sync v0.8.0
 )
 
 require (
