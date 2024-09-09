@@ -3,6 +3,12 @@
 
   "records": [
     {
+      "name": "GrDirectContext"
+    },
+
+    { "name": "GrGLInterface", "constructors": [null] },
+
+    {
       "name": "SkBitmap",
       "constructors": [{}, { "suffix": "Copy" }, null],
       "methods": [{ "name": "ComputeIsOpaque" }]
@@ -129,10 +135,11 @@
     {
       "name": "SkTypeface",
       "methods": [{ "name": "Equal" }, { "name": "MakeEmpty" }]
-    },
-
-    { "name": "GrGLInterface", "constructors": [null] }
+    }
   ],
 
-  "functions": [{ "name": "GrGLMakeNativeInterface" }]
+  "functions": [
+    { "name": "GrGLMakeNativeInterface" },
+    { "name": "GrDirectContexts::MakeGL", "overloads": [null, {}, null, null] }
+  ]
 }

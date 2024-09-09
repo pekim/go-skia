@@ -62,6 +62,20 @@ func (tu translationUnit) enrichApi(api *api) {
 		}
 
 		switch cursor.Kind() {
+		case clang.Cursor_Namespace:
+			namespace := cursor.Spelling()
+			cursor.Visit(func(cursor, parent clang.Cursor) (status clang.ChildVisitResult) {
+				switch cursor.Kind() {
+				case clang.Cursor_FunctionDecl:
+					qualifiedFunctionName := fmt.Sprintf("%s::%s", namespace, cursor.Spelling())
+					if function, ok := api.findFunction(qualifiedFunctionName); ok {
+						function.cursor = cursor
+						function.enrich(cursor)
+					}
+				}
+				return clang.ChildVisit_Continue
+			})
+
 		case clang.Cursor_ClassDecl:
 			if !cursorHasChildren(cursor) {
 				// Skip forward declarations.

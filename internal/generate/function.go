@@ -40,8 +40,9 @@ func (f *function) enrich(cursor clang.Cursor) {
 	}
 
 	overload.cName = f.CName
-	overload.goFuncName = fmt.Sprintf("%s%s", f.CName, overload.Suffix)
-	overload.cFuncName = fmt.Sprintf("misk_%s%s", f.CName, overload.Suffix)
+	cName := strings.Join(strings.Split(f.CName, "::"), "") // remove any "::" in the name
+	overload.goFuncName = fmt.Sprintf("%s%s", cName, overload.Suffix)
+	overload.cFuncName = fmt.Sprintf("misk_%s%s", cName, overload.Suffix)
 	overload.doc = cursor.RawCommentText()
 	overload.resultType = cursor.ResultType()
 
@@ -59,7 +60,14 @@ func (f *function) enrich(cursor clang.Cursor) {
 func (f *function) enrich2(api api) {
 	for i := range f.Overloads {
 		overload := f.Overloads[i]
-		overload.retrn = mustTypFromClangType(overload.resultType, api)
+		if overload != nil {
+			for j := range overload.params {
+				param := &overload.params[j]
+				param.enrich2(api)
+			}
+
+			overload.retrn = mustTypFromClangType(overload.resultType, api)
+		}
 	}
 }
 

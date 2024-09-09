@@ -12,6 +12,8 @@
 #include <include/core/SkSize.h>
 #include <include/core/SkSurfaceProps.h>
 #include <include/core/SkTypeface.h>
+#include <include/gpu/GrDirectContext.h>
+#include <include/gpu/ganesh/gl/GrGLDirectContext.h>
 #include <include/gpu/gl/GrGLInterface.h>
 
 #if defined(SKIA_MAC)
@@ -29,6 +31,12 @@
 extern "C"
 {
 #include "api.h"
+
+  void
+  misk_delete_GrDirectContext (sk_GrDirectContext *obj)
+  {
+    delete reinterpret_cast<GrDirectContext *> (obj);
+  }
 
   sk_SkBitmap *
   misk_new_Bitmap ()
@@ -351,6 +359,15 @@ extern "C"
     return const_cast<sk_GrGLInterface *> (
         reinterpret_cast<const sk_GrGLInterface *> (
             GrGLMakeNativeInterface ().release ()));
+  }
+
+  sk_GrDirectContext *
+  misk_GrDirectContextsMakeGL (sk_GrGLInterface *c_p0)
+  {
+    return reinterpret_cast<sk_GrDirectContext *> (
+        GrDirectContexts::MakeGL (
+            sk_ref_sp (reinterpret_cast<GrGLInterface *> (c_p0)))
+            .release ());
   }
 
   sk_SkFontMgr *

@@ -12,6 +12,39 @@ extern "C"
 
   typedef struct
   {
+    uchar pad_0[120];
+    uchar fDeleteCallbackHelper[8];
+    uchar fDirectContextID[4];
+    uchar pad_2[4];
+    uchar fTaskGroup[8];
+    uchar fStrikeCache[8];
+    uchar fGpu[8];
+    uchar fResourceCache[8];
+    uchar fResourceProvider[8];
+    int fInsideReleaseProcCnt;
+    bool fDidTestPMConversions;
+    bool fPMUPMConversionsRoundTrip;
+    uchar pad_10[2];
+    uchar fPersistentCache[8];
+    uchar fMappedBufferManager[8];
+    uchar fAtlasManager[8];
+    uchar fSmallPathAtlasMgr[8];
+  } sk_GrDirectContext;
+
+  typedef struct
+  {
+    uchar pad_0[12];
+    bool fOOMed;
+    bool fSuppressErrorLogging;
+    uchar pad_2[2];
+    uchar Standard[4];
+    uchar pad_3[4];
+    uchar Extensions[24];
+    uchar Functions[8240];
+  } sk_GrGLInterface;
+
+  typedef struct
+  {
     uchar fPixelRef[8];
     uchar fPixmap[40];
     uchar fMips[8];
@@ -143,17 +176,7 @@ extern "C"
     uchar pad_5[6];
   } sk_SkTypeface;
 
-  typedef struct
-  {
-    uchar pad_0[12];
-    bool fOOMed;
-    bool fSuppressErrorLogging;
-    uchar pad_2[2];
-    uchar Standard[4];
-    uchar pad_3[4];
-    uchar Extensions[24];
-    uchar Functions[8240];
-  } sk_GrGLInterface;
+  void misk_delete_GrDirectContext (sk_GrDirectContext *obj);
 
   sk_SkBitmap *misk_new_Bitmap ();
   sk_SkBitmap *misk_new_BitmapCopy (sk_SkBitmap *c_src);
@@ -221,6 +244,7 @@ extern "C"
   sk_SkTypeface *misk_Typeface_MakeEmpty ();
 
   sk_GrGLInterface *misk_GrGLMakeNativeInterface ();
+  sk_GrDirectContext *misk_GrDirectContextsMakeGL (sk_GrGLInterface *c_p0);
   sk_SkFontMgr *sk_fontmgr_ref_default (void);
 
 #ifdef __cplusplus

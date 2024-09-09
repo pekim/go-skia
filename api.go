@@ -13,6 +13,29 @@ package skia
 // #include "api.h"
 import "C"
 
+type GrDirectContext struct {
+	sk *C.sk_GrDirectContext
+}
+
+func (o GrDirectContext) Delete() {
+	C.misk_delete_GrDirectContext(o.sk)
+}
+
+/*
+GrContext uses the following interface to make all calls into OpenGL. When a
+GrContext is created it is given a GrGLInterface. The interface's function
+pointers must be valid for the OpenGL context associated with the GrContext.
+On some platforms, such as Windows, function pointers for OpenGL extensions
+may vary between OpenGL contexts. So the caller must be careful to use a
+GrGLInterface initialized for the correct context. All functions that should
+be available based on the OpenGL's version and extension string must be
+non-NULL or GrContext creation will fail. This can be tested with the
+validate() method when the OpenGL context has been made current.
+*/
+type GrGLInterface struct {
+	sk *C.sk_GrGLInterface
+}
+
 /*
 SkBitmap describes a two-dimensional raster pixel array. SkBitmap is built on
 SkImageInfo, containing integer width and height, SkColorType and SkAlphaType
@@ -1000,21 +1023,6 @@ func TypefaceMakeEmpty() Typeface {
 }
 
 /*
-GrContext uses the following interface to make all calls into OpenGL. When a
-GrContext is created it is given a GrGLInterface. The interface's function
-pointers must be valid for the OpenGL context associated with the GrContext.
-On some platforms, such as Windows, function pointers for OpenGL extensions
-may vary between OpenGL contexts. So the caller must be careful to use a
-GrGLInterface initialized for the correct context. All functions that should
-be available based on the OpenGL's version and extension string must be
-non-NULL or GrContext creation will fail. This can be tested with the
-validate() method when the OpenGL context has been made current.
-*/
-type GrGLInterface struct {
-	sk *C.sk_GrGLInterface
-}
-
-/*
 Description of how the LCD strips are arranged for each pixel. If this is unknown, or the
 pixels are meant to be "portable" and/or transformed before showing (e.g. rotated, scaled)
 then use kUnknown_SkPixelGeometry.
@@ -1044,6 +1052,12 @@ appropriate one to build.
 func GrGLMakeNativeInterface() GrGLInterface {
 	retC := C.misk_GrGLMakeNativeInterface()
 	return GrGLInterface{sk: retC}
+}
+
+func GrDirectContextsMakeGL(p0 GrGLInterface) GrDirectContext {
+	c_p0 := p0.sk
+	retC := C.misk_GrDirectContextsMakeGL(c_p0)
+	return GrDirectContext{sk: retC}
 }
 
 func FontMgrRefDefault() FontMgr {
