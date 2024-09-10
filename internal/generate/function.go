@@ -40,7 +40,7 @@ func (f *function) enrich(cursor clang.Cursor) {
 	}
 
 	overload.cName = f.CName
-	cName := strings.Join(strings.Split(f.CName, "::"), "") // remove any "::" in the name
+	cName := strings.ReplaceAll(f.CName, "::", "") // remove any "::" in the name
 	overload.goFuncName = fmt.Sprintf("%s%s", cName, overload.Suffix)
 	overload.cFuncName = fmt.Sprintf("misk_%s%s", cName, overload.Suffix)
 	overload.doc = cursor.RawCommentText()

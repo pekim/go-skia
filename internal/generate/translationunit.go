@@ -65,12 +65,18 @@ func (tu translationUnit) enrichApi(api *api) {
 		case clang.Cursor_Namespace:
 			namespace := cursor.Spelling()
 			cursor.Visit(func(cursor, parent clang.Cursor) (status clang.ChildVisitResult) {
+				qualifiedName := fmt.Sprintf("%s::%s", namespace, cursor.Spelling())
+
 				switch cursor.Kind() {
 				case clang.Cursor_FunctionDecl:
-					qualifiedFunctionName := fmt.Sprintf("%s::%s", namespace, cursor.Spelling())
-					if function, ok := api.findFunction(qualifiedFunctionName); ok {
+					if function, ok := api.findFunction(qualifiedName); ok {
 						function.cursor = cursor
 						function.enrich(cursor)
+					}
+
+				case clang.Cursor_EnumDecl:
+					if enum, ok := api.findEnum(qualifiedName); ok {
+						enum.enrich(nil, cursor)
 					}
 				}
 				return clang.ChildVisit_Continue

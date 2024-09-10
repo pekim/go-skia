@@ -31,6 +31,7 @@ func (e *enum) enrich(record *record, cursor clang.Cursor) {
 	} else {
 		e.goName = stripSkPrefix(e.CName)
 	}
+	e.goName = goExportedName(e.goName)
 	e.record = record
 	e.doc = cursor.RawCommentText()
 	if record != nil {

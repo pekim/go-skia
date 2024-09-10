@@ -12,6 +12,14 @@ extern "C"
 
   typedef struct
   {
+    unsigned int FBOID;
+    unsigned int Format;
+    uchar Protected[1];
+    uchar pad_3[3];
+  } sk_GrGLFramebufferInfo;
+
+  typedef struct
+  {
     uchar pad_0[120];
     uchar fDeleteCallbackHelper[8];
     uchar fDirectContextID[4];

@@ -1,7 +1,9 @@
 {
-  "enums": [{ "name": "SkPixelGeometry" }],
+  "enums": [{ "name": "SkPixelGeometry" }, { "name": "skgpu::Protected" }],
 
   "records": [
+    { "name": "GrGLFramebufferInfo" },
+
     {
       "name": "GrDirectContext"
     },

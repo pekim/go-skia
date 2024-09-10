@@ -12,10 +12,13 @@
 #include <include/core/SkSize.h>
 #include <include/core/SkSurfaceProps.h>
 #include <include/core/SkTypeface.h>
+#include <include/gpu/GpuTypes.h>
+#include <include/gpu/GrBackendSurface.h>
 #include <include/gpu/GrContextOptions.h>
 #include <include/gpu/GrDirectContext.h>
 #include <include/gpu/ganesh/gl/GrGLDirectContext.h>
 #include <include/gpu/gl/GrGLInterface.h>
+#include <include/gpu/gl/GrGLTypes.h>
 
 #if defined(SKIA_MAC)
 #include "include/ports/SkFontMgr_mac_ct.h"

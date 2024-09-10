@@ -1,6 +1,8 @@
 package generate
 
-import "strings"
+import (
+	"strings"
+)
 
 func stripSkPrefix(name string) string {
 	return strings.TrimPrefix(name, "Sk")
@@ -14,5 +16,11 @@ func validGoName(name string) string {
 	if name == "type" {
 		return "typ"
 	}
+	return name
+}
+
+func goExportedName(name string) string {
+	name = strings.ReplaceAll(name, "::", "")
+	name = strings.ToUpper(name[:1]) + name[1:]
 	return name
 }

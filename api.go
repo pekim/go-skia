@@ -13,6 +13,10 @@ package skia
 // #include "api.h"
 import "C"
 
+type GrGLFramebufferInfo struct {
+	sk *C.sk_GrGLFramebufferInfo
+}
+
 type GrDirectContext struct {
 	sk *C.sk_GrDirectContext
 }
@@ -1070,6 +1074,16 @@ const (
 	PixelGeometryBGR_H   PixelGeometry = 2
 	PixelGeometryRGB_V   PixelGeometry = 3
 	PixelGeometryBGR_V   PixelGeometry = 4
+)
+
+/*
+Is the data protected on the GPU or not.
+*/
+type SkgpuProtected int64
+
+const (
+	SkgpuProtectedNo  SkgpuProtected = 0
+	SkgpuProtectedYes SkgpuProtected = -1
 )
 
 /*
