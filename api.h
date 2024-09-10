@@ -20,6 +20,20 @@ extern "C"
 
   typedef struct
   {
+    bool fIsValid;
+    bool fFramebufferOnly;
+    uchar pad_2[2];
+    int fWidth;
+    int fHeight;
+    int fSampleCnt;
+    int fStencilBits;
+    uchar fBackend[4];
+    uchar fRTData[184];
+    uchar pad_8[16];
+  } sk_GrBackendRenderTarget;
+
+  typedef struct
+  {
     uchar pad_0[120];
     uchar fDeleteCallbackHelper[8];
     uchar fDirectContextID[4];
@@ -231,6 +245,11 @@ extern "C"
     uchar pad_5[6];
   } sk_SkTypeface;
 
+  sk_GrBackendRenderTarget *misk_new_GrBackendRenderTarget ();
+  sk_GrBackendRenderTarget *
+  misk_new_GrBackendRenderTargetCopy (sk_GrBackendRenderTarget *c_that);
+  void misk_delete_GrBackendRenderTarget (sk_GrBackendRenderTarget *obj);
+
   void misk_delete_GrDirectContext (sk_GrDirectContext *obj);
 
   sk_GrContextOptions *misk_new_GrContextOptions ();
@@ -301,6 +320,10 @@ extern "C"
   sk_SkTypeface *misk_Typeface_MakeEmpty ();
 
   sk_GrGLInterface *misk_GrGLMakeNativeInterface ();
+  sk_GrBackendRenderTarget
+  misk_GrBackendRenderTargetsMakeGL (int c_width, int c_height,
+                                     int c_sampleCnt, int c_stencilBits,
+                                     sk_GrGLFramebufferInfo *c_glInfo);
   sk_GrDirectContext *
   misk_GrDirectContextsMakeGLInterfaceOptions (sk_GrGLInterface *c_p0,
                                                sk_GrContextOptions *c_p1);

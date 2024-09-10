@@ -16,6 +16,7 @@
 #include <include/gpu/GrBackendSurface.h>
 #include <include/gpu/GrContextOptions.h>
 #include <include/gpu/GrDirectContext.h>
+#include <include/gpu/ganesh/gl/GrGLBackendSurface.h>
 #include <include/gpu/ganesh/gl/GrGLDirectContext.h>
 #include <include/gpu/gl/GrGLInterface.h>
 #include <include/gpu/gl/GrGLTypes.h>
@@ -35,6 +36,27 @@
 extern "C"
 {
 #include "api.h"
+
+  sk_GrBackendRenderTarget *
+  misk_new_GrBackendRenderTarget ()
+  {
+    return reinterpret_cast<sk_GrBackendRenderTarget *> (
+        new GrBackendRenderTarget ());
+  }
+
+  sk_GrBackendRenderTarget *
+  misk_new_GrBackendRenderTargetCopy (sk_GrBackendRenderTarget *c_that)
+  {
+    return reinterpret_cast<sk_GrBackendRenderTarget *> (
+        new GrBackendRenderTarget (
+            *reinterpret_cast<GrBackendRenderTarget *> (c_that)));
+  }
+
+  void
+  misk_delete_GrBackendRenderTarget (sk_GrBackendRenderTarget *obj)
+  {
+    delete reinterpret_cast<GrBackendRenderTarget *> (obj);
+  }
 
   void
   misk_delete_GrDirectContext (sk_GrDirectContext *obj)
@@ -369,6 +391,17 @@ extern "C"
     return const_cast<sk_GrGLInterface *> (
         reinterpret_cast<const sk_GrGLInterface *> (
             GrGLMakeNativeInterface ().release ()));
+  }
+
+  sk_GrBackendRenderTarget
+  misk_GrBackendRenderTargetsMakeGL (int c_width, int c_height,
+                                     int c_sampleCnt, int c_stencilBits,
+                                     sk_GrGLFramebufferInfo *c_glInfo)
+  {
+    auto ret = (GrBackendRenderTargets::MakeGL (
+        c_width, c_height, c_sampleCnt, c_stencilBits,
+        *reinterpret_cast<GrGLFramebufferInfo *> (c_glInfo)));
+    return *(reinterpret_cast<sk_GrBackendRenderTarget *> (&ret));
   }
 
   sk_GrDirectContext *

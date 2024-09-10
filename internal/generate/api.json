@@ -5,6 +5,11 @@
     { "name": "GrGLFramebufferInfo" },
 
     {
+      "name": "GrBackendRenderTarget",
+      "constructors": [{}, null, { "suffix": "Copy" }]
+    },
+
+    {
       "name": "GrDirectContext"
     },
 
@@ -147,6 +152,7 @@
 
   "functions": [
     { "name": "GrGLMakeNativeInterface" },
+    { "name": "GrBackendRenderTargets::MakeGL" },
     {
       "name": "GrDirectContexts::MakeGL",
       "overloads": [

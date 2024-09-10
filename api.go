@@ -17,6 +17,26 @@ type GrGLFramebufferInfo struct {
 	sk *C.sk_GrGLFramebufferInfo
 }
 
+type GrBackendRenderTarget struct {
+	sk *C.sk_GrBackendRenderTarget
+}
+
+func NewGrBackendRenderTarget() GrBackendRenderTarget {
+
+	retC := C.misk_new_GrBackendRenderTarget()
+	return GrBackendRenderTarget{sk: retC}
+}
+
+func NewGrBackendRenderTargetCopy(that GrBackendRenderTarget) GrBackendRenderTarget {
+	c_that := that.sk
+	retC := C.misk_new_GrBackendRenderTargetCopy(c_that)
+	return GrBackendRenderTarget{sk: retC}
+}
+
+func (o GrBackendRenderTarget) Delete() {
+	C.misk_delete_GrBackendRenderTarget(o.sk)
+}
+
 type GrDirectContext struct {
 	sk *C.sk_GrDirectContext
 }
@@ -1101,6 +1121,16 @@ appropriate one to build.
 func GrGLMakeNativeInterface() GrGLInterface {
 	retC := C.misk_GrGLMakeNativeInterface()
 	return GrGLInterface{sk: retC}
+}
+
+func GrBackendRenderTargetsMakeGL(width int, height int, sampleCnt int, stencilBits int, glInfo GrGLFramebufferInfo) GrBackendRenderTarget {
+	c_width := C.int(width)
+	c_height := C.int(height)
+	c_sampleCnt := C.int(sampleCnt)
+	c_stencilBits := C.int(stencilBits)
+	c_glInfo := glInfo.sk
+	retC := C.misk_GrBackendRenderTargetsMakeGL(c_width, c_height, c_sampleCnt, c_stencilBits, c_glInfo)
+	return GrBackendRenderTarget{sk: &retC}
 }
 
 /*

@@ -15,6 +15,7 @@ var headerFiles = []string{
 	"include/core/SkTypeface.h",
 	"include/gpu/gl/GrGLInterface.h",
 	"include/gpu/gl/GrGLTypes.h",
+	"include/gpu/ganesh/gl/GrGLBackendSurface.h",
 	"include/gpu/ganesh/gl/GrGLDirectContext.h",
 	"include/gpu/GpuTypes.h",
 	"include/gpu/GrBackendSurface.h",
