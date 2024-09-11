@@ -182,7 +182,7 @@ extern "C"
   }
 
   sk_SkFontStyle *
-  misk_new_FontStyle2 (int c_weight, int c_width, unsigned int c_slant)
+  misk_new_FontStyle2 (int c_weight, int c_width, uint c_slant)
   {
     return reinterpret_cast<sk_SkFontStyle *> (
         new SkFontStyle (c_weight, c_width, SkFontStyle::Slant (c_slant)));
@@ -276,6 +276,13 @@ extern "C"
     delete reinterpret_cast<SkPaint *> (obj);
   }
 
+  void
+  misk_Paint_setStyle (sk_SkPaint *c_obj, uint c_style)
+  {
+    return reinterpret_cast<SkPaint *> (c_obj)->setStyle (
+        SkPaint::Style (c_style));
+  }
+
   sk_SkPath *
   misk_new_Path ()
   {
@@ -358,7 +365,7 @@ extern "C"
   }
 
   sk_SkSurfaceProps *
-  misk_new_SurfacePropsPixelGeometry (unsigned int c_flags, unsigned int c_p1)
+  misk_new_SurfacePropsPixelGeometry (unsigned int c_flags, uint c_p1)
   {
     return reinterpret_cast<sk_SkSurfaceProps *> (
         new SkSurfaceProps (c_flags, SkPixelGeometry (c_p1)));

@@ -43,15 +43,15 @@ func (m *method) enrich(record *record, cursor clang.Cursor) {
 
 	overload.cName = m.CName
 	overload.record = record
-	overload.goFuncName = fmt.Sprintf("%s%s%s", record.goName, m.CName, overload.Suffix)
+	overload.isStatic = cursor.CXXMethod_IsStatic()
+	if overload.isStatic {
+		overload.goFuncName = fmt.Sprintf("%s%s%s", record.goName, m.CName, overload.Suffix)
+	} else {
+		overload.goFuncName = fmt.Sprintf("%s%s", goExportedName(m.CName), overload.Suffix)
+	}
 	overload.cFuncName = fmt.Sprintf("misk_%s_%s%s", record.goName, m.CName, overload.Suffix)
 	overload.doc = cursor.RawCommentText()
-	overload.isStatic = cursor.CXXMethod_IsStatic()
 	overload.resultType = cursor.ResultType()
-
-	if !overload.isStatic {
-		panic("TODO non-static methods")
-	}
 
 	paramCount := int(cursor.NumArguments())
 	overload.params = make([]param, paramCount)
@@ -100,13 +100,23 @@ func (m methodOverload) generate(g generator) {
 func (m methodOverload) generateGo(g generator) {
 	f := g.goFile
 
+	argsCount := len(m.params)
+	argsOffset := 0
+	if !m.isStatic {
+		argsCount++
+		argsOffset = 1
+	}
 	params := make([]string, len(m.params))
-	cVars := make([]string, len(m.params))
-	cArgs := make([]string, len(m.params))
+	cVars := make([]string, argsCount)
+	cArgs := make([]string, argsCount)
+	if !m.isStatic {
+		cVars[0] = "c_obj := o.sk"
+		cArgs[0] = "c_obj"
+	}
 	for i, param := range m.params {
 		params[i] = fmt.Sprintf("%s %s", param.goName, param.typ.goName)
-		cVars[i] = param.cgoVar
-		cArgs[i] = param.cgoName
+		cVars[argsOffset+i] = param.cgoVar
+		cArgs[argsOffset+i] = param.cgoName
 	}
 
 	var returnDecl string
@@ -114,10 +124,14 @@ func (m methodOverload) generateGo(g generator) {
 		returnDecl = m.retrn.goName
 	}
 
+	var receiver string
+	if !m.isStatic {
+		receiver = fmt.Sprintf("(o %s)", m.record.goName)
+	}
 	call := fmt.Sprintf("C.%s(%s)", m.cFuncName, strings.Join(cArgs, ", "))
 
 	f.writeDocComment(m.doc)
-	f.writelnf("func %s(%s) %s {", m.goFuncName, strings.Join(params, ", "), returnDecl)
+	f.writelnf("func %s %s(%s) %s {", receiver, m.goFuncName, strings.Join(params, ", "), returnDecl)
 	if len(cVars) > 0 {
 		f.writeln(strings.Join(cVars, "\n"))
 	}
@@ -146,9 +160,18 @@ func (m methodOverload) generateGo(g generator) {
 func (m methodOverload) generateHeader(g generator) {
 	f := g.headerFile
 
-	params := make([]string, len(m.params))
+	paramsCount := len(m.params)
+	paramOffset := 0
+	if !m.isStatic {
+		paramsCount++
+		paramOffset = 1
+	}
+	params := make([]string, paramsCount)
+	if !m.isStatic {
+		params[0] = fmt.Sprintf("%s *c_obj", m.record.cStructName)
+	}
 	for i, param := range m.params {
-		params[i] = param.cParam
+		params[paramOffset+i] = param.cParam
 	}
 
 	returnDecl := m.retrn.cName
@@ -166,10 +189,19 @@ func (m methodOverload) generateHeader(g generator) {
 func (m methodOverload) generateCpp(g generator) {
 	f := g.cppFile
 
-	params := make([]string, len(m.params))
+	paramsCount := len(m.params)
+	paramOffset := 0
+	if !m.isStatic {
+		paramsCount++
+		paramOffset = 1
+	}
+	params := make([]string, paramsCount)
 	args := make([]string, len(m.params))
+	if !m.isStatic {
+		params[0] = fmt.Sprintf("%s *c_obj", m.record.cStructName)
+	}
 	for i, param := range m.params {
-		params[i] = param.cParam
+		params[paramOffset+i] = param.cParam
 		args[i] = param.cArg
 	}
 
@@ -189,25 +221,56 @@ func (m methodOverload) generateCpp(g generator) {
 
 	f.writelnf("%s %s(%s) {", returnDecl, m.cFuncName, strings.Join(params, ", "))
 	if m.retrn.record != nil {
-		if m.retrn.isPointer || m.retrn.isSmartPointer {
-			f.writelnf("  return reinterpret_cast<%s *> (%s::%s(%s)%s);",
-				m.retrn.record.cStructName,
-				m.record.CName,
-				m.cName,
-				strings.Join(args, ", "),
-				skSpRelease)
+		if m.isStatic {
+			if m.retrn.isPointer || m.retrn.isSmartPointer {
+				f.writelnf("  return reinterpret_cast<%s *> (%s::%s(%s)%s);",
+					m.retrn.record.cStructName,
+					m.record.CName,
+					m.cName,
+					strings.Join(args, ", "),
+					skSpRelease)
+			} else {
+				f.writelnf("  auto ret = (%s::%s(%s)%s);",
+					m.record.CName,
+					m.cName,
+					strings.Join(args, ", "),
+					skSpRelease)
+				f.writelnf("  return *(reinterpret_cast<%s *> (&ret));",
+					m.retrn.record.cStructName,
+				)
+			}
 		} else {
-			f.writelnf("  auto ret = (%s::%s(%s)%s);",
-				m.record.CName,
-				m.cName,
-				strings.Join(args, ", "),
-				skSpRelease)
-			f.writelnf("  return *(reinterpret_cast<%s *> (&ret));",
-				m.retrn.record.cStructName,
-			)
+			// TODO
+
+			if m.retrn.isPointer || m.retrn.isSmartPointer {
+				f.writelnf("  return reinterpret_cast<%s *> (%s::%s(%s)%s);",
+					m.retrn.record.cStructName,
+					m.record.CName,
+					m.cName,
+					strings.Join(args, ", "),
+					skSpRelease)
+			} else {
+				f.writelnf("  auto ret = (%s::%s(%s)%s);",
+					m.record.CName,
+					m.cName,
+					strings.Join(args, ", "),
+					skSpRelease)
+				f.writelnf("  return *(reinterpret_cast<%s *> (&ret));",
+					m.retrn.record.cStructName,
+				)
+			}
 		}
 	} else {
-		f.writelnf("  return %s::%s(%s)%s;", m.record.CName, m.cName, strings.Join(args, ", "), skSpRelease)
+		if m.isStatic {
+			f.writelnf("  return %s::%s(%s)%s;", m.record.CName, m.cName, strings.Join(args, ", "), skSpRelease)
+		} else {
+			f.writelnf("  return reinterpret_cast<%s*>(c_obj)->%s(%s)%s;",
+				m.record.CName,
+				m.cName,
+				strings.Join(args, ", "),
+				skSpRelease,
+			)
+		}
 	}
 	f.writeln("}")
 	f.writeln()

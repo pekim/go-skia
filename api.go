@@ -730,6 +730,19 @@ func (o Paint) Delete() {
 }
 
 /*
+Sets whether the geometry is filled, stroked, or filled and stroked.
+Has no effect if style is not a legal SkPaint::Style value.
+
+example: https://fiddle.skia.org/c/@Paint_setStyle
+example: https://fiddle.skia.org/c/@Stroke_Width
+*/
+func (o Paint) SetStyle(style PaintStyle) {
+	c_obj := o.sk
+	c_style := C.uint(style)
+	C.misk_Paint_setStyle(c_obj, c_style)
+}
+
+/*
 Cap draws at the beginning and end of an open path contour.
 */
 type PaintCap int64

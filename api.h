@@ -281,7 +281,7 @@ extern "C"
                                                  float c_skewX);
 
   sk_SkFontStyle *misk_new_FontStyle2 (int c_weight, int c_width,
-                                       unsigned int c_slant);
+                                       uint c_slant);
   sk_SkFontStyle *misk_new_FontStyle ();
   sk_SkFontStyle misk_FontStyle_Normal ();
   sk_SkFontStyle misk_FontStyle_Bold ();
@@ -297,6 +297,7 @@ extern "C"
   sk_SkPaint *misk_new_Paint ();
   sk_SkPaint *misk_new_PaintCopy (sk_SkPaint *c_paint);
   void misk_delete_SkPaint (sk_SkPaint *obj);
+  void misk_Paint_setStyle (sk_SkPaint *c_obj, uint c_style);
 
   sk_SkPath *misk_new_Path ();
   sk_SkPath *misk_new_PathCopy (sk_SkPath *c_path);
@@ -313,7 +314,7 @@ extern "C"
 
   sk_SkSurfaceProps *misk_new_SurfaceProps ();
   sk_SkSurfaceProps *misk_new_SurfacePropsPixelGeometry (unsigned int c_flags,
-                                                         unsigned int c_p1);
+                                                         uint c_p1);
   sk_SkSurfaceProps *misk_new_SurfacePropsCopy (sk_SkSurfaceProps *c_p0);
 
   bool misk_Typeface_Equal (sk_SkTypeface *c_facea, sk_SkTypeface *c_faceb);

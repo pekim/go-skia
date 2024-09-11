@@ -44,7 +44,7 @@ func (p *param) enrich2(api api) {
 
 	} else if p.typ.enum != nil {
 		p.cgoVar = fmt.Sprintf("%s := C.%s(%s)", p.cgoName, p.typ.enum.cType.cgoName, p.goName)
-		p.cParam = fmt.Sprintf("%s %s", p.typ.enum.cType.cName, p.cgoName)
+		p.cParam = fmt.Sprintf("%s %s", p.typ.enum.cType.cgoName, p.cgoName)
 		p.cArg = fmt.Sprintf("%s(%s)", p.typ.cName, p.cgoName)
 
 	} else if p.typ.isLValueReference && p.typ.subTyp.record != nil {

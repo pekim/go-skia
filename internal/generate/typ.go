@@ -53,6 +53,7 @@ func typFromClangType(cType clang.Type, api api) (typ, error) {
 
 	} else if enum, ok := api.findEnum(typ.cName); ok {
 		typ.enum = enum
+		typ.cgoName = "qaz"
 		typ.goName = typ.enum.goName
 
 	} else if strings.HasPrefix(typ.cName, "sk_sp<") {

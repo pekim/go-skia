@@ -102,6 +102,7 @@
     {
       "name": "SkPaint",
       "constructors": [{}, null, { "suffix": "Copy" }, null],
+      "methods": [{ "name": "setStyle" }],
       "enums": [{ "name": "Cap" }, { "name": "Join" }, { "name": "Style" }]
     },
 
