@@ -12,6 +12,7 @@
 #include <include/core/SkSize.h>
 #include <include/core/SkSurfaceProps.h>
 #include <include/core/SkTypeface.h>
+#include <include/core/SkTypes.h>
 #include <include/gpu/GpuTypes.h>
 #include <include/gpu/GrBackendSurface.h>
 #include <include/gpu/GrContextOptions.h>
@@ -274,6 +275,70 @@ extern "C"
   misk_delete_SkPaint (sk_SkPaint *obj)
   {
     delete reinterpret_cast<SkPaint *> (obj);
+  }
+
+  void
+  misk_Paint_reset (sk_SkPaint *c_obj)
+  {
+    return reinterpret_cast<SkPaint *> (c_obj)->reset ();
+  }
+
+  void
+  misk_Paint_setAlpha (sk_SkPaint *c_obj, unsigned int c_a)
+  {
+    return reinterpret_cast<SkPaint *> (c_obj)->setAlpha (c_a);
+  }
+
+  void
+  misk_Paint_setARGB (sk_SkPaint *c_obj, unsigned int c_a, unsigned int c_r,
+                      unsigned int c_g, unsigned int c_b)
+  {
+    return reinterpret_cast<SkPaint *> (c_obj)->setARGB (c_a, c_r, c_g, c_b);
+  }
+
+  void
+  misk_Paint_setAntiAlias (sk_SkPaint *c_obj, bool c_aa)
+  {
+    return reinterpret_cast<SkPaint *> (c_obj)->setAntiAlias (c_aa);
+  }
+
+  void
+  misk_Paint_setBlendMode (sk_SkPaint *c_obj, int c_mode)
+  {
+    return reinterpret_cast<SkPaint *> (c_obj)->setBlendMode (
+        SkBlendMode (c_mode));
+  }
+
+  void
+  misk_Paint_setDither (sk_SkPaint *c_obj, bool c_dither)
+  {
+    return reinterpret_cast<SkPaint *> (c_obj)->setDither (c_dither);
+  }
+
+  void
+  misk_Paint_setStrokeCap (sk_SkPaint *c_obj, uint c_cap)
+  {
+    return reinterpret_cast<SkPaint *> (c_obj)->setStrokeCap (
+        SkPaint::Cap (c_cap));
+  }
+
+  void
+  misk_Paint_setStrokeJoin (sk_SkPaint *c_obj, uint c_join)
+  {
+    return reinterpret_cast<SkPaint *> (c_obj)->setStrokeJoin (
+        SkPaint::Join (c_join));
+  }
+
+  void
+  misk_Paint_setStrokeMiter (sk_SkPaint *c_obj, float c_miter)
+  {
+    return reinterpret_cast<SkPaint *> (c_obj)->setStrokeMiter (c_miter);
+  }
+
+  void
+  misk_Paint_setStrokeWidth (sk_SkPaint *c_obj, float c_width)
+  {
+    return reinterpret_cast<SkPaint *> (c_obj)->setStrokeWidth (c_width);
   }
 
   void

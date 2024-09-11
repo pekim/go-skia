@@ -13,6 +13,7 @@ var headerFiles = []string{
 	"include/core/SkSize.h",
 	"include/core/SkSurfaceProps.h",
 	"include/core/SkTypeface.h",
+	"include/core/SkTypes.h",
 	"include/gpu/gl/GrGLInterface.h",
 	"include/gpu/gl/GrGLTypes.h",
 	"include/gpu/ganesh/gl/GrGLBackendSurface.h",

@@ -1,5 +1,9 @@
 {
-  "enums": [{ "name": "SkPixelGeometry" }, { "name": "skgpu::Protected" }],
+  "enums": [
+    { "name": "SkBlendMode" },
+    { "name": "SkPixelGeometry" },
+    { "name": "skgpu::Protected" }
+  ],
 
   "records": [
     { "name": "GrGLFramebufferInfo", "noWrapper": true },
@@ -102,7 +106,19 @@
     {
       "name": "SkPaint",
       "constructors": [{}, null, { "suffix": "Copy" }, null],
-      "methods": [{ "name": "setStyle" }],
+      "methods": [
+        { "name": "reset" },
+        { "name": "setAlpha" },
+        { "name": "setARGB" },
+        { "name": "setAntiAlias" },
+        { "name": "setBlendMode" },
+        { "name": "setDither" },
+        { "name": "setStrokeCap" },
+        { "name": "setStrokeJoin" },
+        { "name": "setStrokeMiter" },
+        { "name": "setStrokeWidth" },
+        { "name": "setStyle" }
+      ],
       "enums": [{ "name": "Cap" }, { "name": "Join" }, { "name": "Style" }]
     },
 

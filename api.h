@@ -297,6 +297,18 @@ extern "C"
   sk_SkPaint *misk_new_Paint ();
   sk_SkPaint *misk_new_PaintCopy (sk_SkPaint *c_paint);
   void misk_delete_SkPaint (sk_SkPaint *obj);
+  void misk_Paint_reset (sk_SkPaint *c_obj);
+  void misk_Paint_setAlpha (sk_SkPaint *c_obj, unsigned int c_a);
+  void misk_Paint_setARGB (sk_SkPaint *c_obj, unsigned int c_a,
+                           unsigned int c_r, unsigned int c_g,
+                           unsigned int c_b);
+  void misk_Paint_setAntiAlias (sk_SkPaint *c_obj, bool c_aa);
+  void misk_Paint_setBlendMode (sk_SkPaint *c_obj, int c_mode);
+  void misk_Paint_setDither (sk_SkPaint *c_obj, bool c_dither);
+  void misk_Paint_setStrokeCap (sk_SkPaint *c_obj, uint c_cap);
+  void misk_Paint_setStrokeJoin (sk_SkPaint *c_obj, uint c_join);
+  void misk_Paint_setStrokeMiter (sk_SkPaint *c_obj, float c_miter);
+  void misk_Paint_setStrokeWidth (sk_SkPaint *c_obj, float c_width);
   void misk_Paint_setStyle (sk_SkPaint *c_obj, uint c_style);
 
   sk_SkPath *misk_new_Path ();

@@ -730,6 +730,130 @@ func (o Paint) Delete() {
 }
 
 /*
+Sets all SkPaint contents to their initial values. This is equivalent to replacing
+SkPaint with the result of SkPaint().
+
+example: https://fiddle.skia.org/c/@Paint_reset
+*/
+func (o Paint) Reset() {
+	c_obj := o.sk
+	C.misk_Paint_reset(c_obj)
+}
+
+func (o Paint) SetAlpha(a uint) {
+	c_obj := o.sk
+	c_a := C.uint(a)
+	C.misk_Paint_setAlpha(c_obj, c_a)
+}
+
+/*
+Sets color used when drawing solid fills. The color components range from 0 to 255.
+The color is unpremultiplied; alpha sets the transparency independent of RGB.
+
+@param a  amount of alpha, from fully transparent (0) to fully opaque (255)
+@param r  amount of red, from no red (0) to full red (255)
+@param g  amount of green, from no green (0) to full green (255)
+@param b  amount of blue, from no blue (0) to full blue (255)
+
+example: https://fiddle.skia.org/c/@Paint_setARGB
+*/
+func (o Paint) SetARGB(a uint, r uint, g uint, b uint) {
+	c_obj := o.sk
+	c_a := C.uint(a)
+	c_r := C.uint(r)
+	c_g := C.uint(g)
+	c_b := C.uint(b)
+	C.misk_Paint_setARGB(c_obj, c_a, c_r, c_g, c_b)
+}
+
+/*
+Requests, but does not require, that edge pixels draw opaque or with
+partial transparency.
+@param aa  setting for antialiasing
+*/
+func (o Paint) SetAntiAlias(aa bool) {
+	c_obj := o.sk
+	c_aa := C.bool(aa)
+	C.misk_Paint_setAntiAlias(c_obj, c_aa)
+}
+
+/*
+Helper method for calling setBlender().
+
+	This sets a blender that implements the specified blendmode enum.
+*/
+func (o Paint) SetBlendMode(mode BlendMode) {
+	c_obj := o.sk
+	c_mode := C.int(mode)
+	C.misk_Paint_setBlendMode(c_obj, c_mode)
+}
+
+/*
+Requests, but does not require, to distribute color error.
+@param dither  setting for ditering
+*/
+func (o Paint) SetDither(dither bool) {
+	c_obj := o.sk
+	c_dither := C.bool(dither)
+	C.misk_Paint_setDither(c_obj, c_dither)
+}
+
+/*
+Sets the geometry drawn at the beginning and end of strokes.
+
+example: https://fiddle.skia.org/c/@Paint_setStrokeCap_a
+example: https://fiddle.skia.org/c/@Paint_setStrokeCap_b
+*/
+func (o Paint) SetStrokeCap(cap PaintCap) {
+	c_obj := o.sk
+	c_cap := C.uint(cap)
+	C.misk_Paint_setStrokeCap(c_obj, c_cap)
+}
+
+/*
+Sets the geometry drawn at the corners of strokes.
+
+example: https://fiddle.skia.org/c/@Paint_setStrokeJoin
+*/
+func (o Paint) SetStrokeJoin(join PaintJoin) {
+	c_obj := o.sk
+	c_join := C.uint(join)
+	C.misk_Paint_setStrokeJoin(c_obj, c_join)
+}
+
+/*
+Sets the limit at which a sharp corner is drawn beveled.
+Valid values are zero and greater.
+Has no effect if miter is less than zero.
+
+@param miter  zero and greater miter limit
+
+example: https://fiddle.skia.org/c/@Paint_setStrokeMiter
+*/
+func (o Paint) SetStrokeMiter(miter float32) {
+	c_obj := o.sk
+	c_miter := C.float(miter)
+	C.misk_Paint_setStrokeMiter(c_obj, c_miter)
+}
+
+/*
+Sets the thickness of the pen used by the paint to outline the shape.
+A stroke-width of zero is treated as "hairline" width. Hairlines are always exactly one
+pixel wide in device space (their thickness does not change as the canvas is scaled).
+Negative stroke-widths are invalid; setting a negative width will have no effect.
+
+@param width  zero thickness for hairline; greater than zero for pen thickness
+
+example: https://fiddle.skia.org/c/@Miter_Limit
+example: https://fiddle.skia.org/c/@Paint_setStrokeWidth
+*/
+func (o Paint) SetStrokeWidth(width float32) {
+	c_obj := o.sk
+	c_width := C.float(width)
+	C.misk_Paint_setStrokeWidth(c_obj, c_width)
+}
+
+/*
 Sets whether the geometry is filled, stroked, or filled and stroked.
 Has no effect if style is not a legal SkPaint::Style value.
 
@@ -1163,6 +1287,10 @@ func TypefaceMakeEmpty() Typeface {
 	retC := C.misk_Typeface_MakeEmpty()
 	return Typeface{sk: retC}
 }
+
+type BlendMode int64
+
+const ()
 
 /*
 Description of how the LCD strips are arranged for each pixel. If this is unknown, or the
