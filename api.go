@@ -23,6 +23,12 @@ type GrBackendRenderTarget struct {
 	sk *C.sk_GrBackendRenderTarget
 }
 
+// IsNil returns true if the raw skia object pointer is nil.
+// If it is nil is may indicate that the GrBackendRenderTarget has not been created.
+func (o GrBackendRenderTarget) IsNil() bool {
+	return o.sk == nil
+}
+
 func NewGrBackendRenderTarget() GrBackendRenderTarget {
 
 	retC := C.misk_new_GrBackendRenderTarget()
@@ -43,6 +49,12 @@ type GrDirectContext struct {
 	sk *C.sk_GrDirectContext
 }
 
+// IsNil returns true if the raw skia object pointer is nil.
+// If it is nil is may indicate that the GrDirectContext has not been created.
+func (o GrDirectContext) IsNil() bool {
+	return o.sk == nil
+}
+
 func (o GrDirectContext) Delete() {
 	C.misk_delete_GrDirectContext(o.sk)
 }
@@ -60,6 +72,12 @@ validate() method when the OpenGL context has been made current.
 */
 type GrGLInterface struct {
 	sk *C.sk_GrGLInterface
+}
+
+// IsNil returns true if the raw skia object pointer is nil.
+// If it is nil is may indicate that the GrGLInterface has not been created.
+func (o GrGLInterface) IsNil() bool {
+	return o.sk == nil
 }
 
 type GrContextOptions C.sk_GrContextOptions
@@ -118,6 +136,12 @@ although threads may share the underlying pixel array.
 */
 type Bitmap struct {
 	sk *C.sk_SkBitmap
+}
+
+// IsNil returns true if the raw skia object pointer is nil.
+// If it is nil is may indicate that the Bitmap has not been created.
+func (o Bitmap) IsNil() bool {
+	return o.sk == nil
 }
 
 /*
@@ -208,6 +232,12 @@ This approach may be deprecated in the future.
 */
 type Canvas struct {
 	sk *C.sk_SkCanvas
+}
+
+// IsNil returns true if the raw skia object pointer is nil.
+// If it is nil is may indicate that the Canvas has not been created.
+func (o Canvas) IsNil() bool {
+	return o.sk == nil
 }
 
 /*
@@ -379,6 +409,12 @@ type ColorSpace struct {
 	sk *C.sk_SkColorSpace
 }
 
+// IsNil returns true if the raw skia object pointer is nil.
+// If it is nil is may indicate that the ColorSpace has not been created.
+func (o ColorSpace) IsNil() bool {
+	return o.sk == nil
+}
+
 /*
 Create the sRGB color space.
 */
@@ -411,6 +447,12 @@ SkFont controls options applied when drawing and measuring text.
 */
 type Font struct {
 	sk *C.sk_SkFont
+}
+
+// IsNil returns true if the raw skia object pointer is nil.
+// If it is nil is may indicate that the Font has not been created.
+func (o Font) IsNil() bool {
+	return o.sk == nil
 }
 
 /*
@@ -474,8 +516,20 @@ type FontMgr struct {
 	sk *C.sk_SkFontMgr
 }
 
+// IsNil returns true if the raw skia object pointer is nil.
+// If it is nil is may indicate that the FontMgr has not been created.
+func (o FontMgr) IsNil() bool {
+	return o.sk == nil
+}
+
 type FontStyle struct {
 	sk *C.sk_SkFontStyle
+}
+
+// IsNil returns true if the raw skia object pointer is nil.
+// If it is nil is may indicate that the FontStyle has not been created.
+func (o FontStyle) IsNil() bool {
+	return o.sk == nil
 }
 
 func NewFontStyle2(weight int, width int, slant FontStyleSlant) FontStyle {
@@ -626,6 +680,12 @@ type Paint struct {
 	sk *C.sk_SkPaint
 }
 
+// IsNil returns true if the raw skia object pointer is nil.
+// If it is nil is may indicate that the Paint has not been created.
+func (o Paint) IsNil() bool {
+	return o.sk == nil
+}
+
 /*
 Constructs SkPaint with default values.
 
@@ -754,6 +814,12 @@ SkPath::updateBoundsCache to make SkPath thread safe.
 */
 type Path struct {
 	sk *C.sk_SkPath
+}
+
+// IsNil returns true if the raw skia object pointer is nil.
+// If it is nil is may indicate that the Path has not been created.
+func (o Path) IsNil() bool {
+	return o.sk == nil
 }
 
 /*
@@ -1008,6 +1074,12 @@ type SurfaceProps struct {
 	sk *C.sk_SkSurfaceProps
 }
 
+// IsNil returns true if the raw skia object pointer is nil.
+// If it is nil is may indicate that the SurfaceProps has not been created.
+func (o SurfaceProps) IsNil() bool {
+	return o.sk == nil
+}
+
 /*
 No flags, unknown pixel geometry, platform-default contrast/gamma.
 */
@@ -1052,6 +1124,12 @@ Typeface objects are immutable, and so they can be shared between threads.
 */
 type Typeface struct {
 	sk *C.sk_SkTypeface
+}
+
+// IsNil returns true if the raw skia object pointer is nil.
+// If it is nil is may indicate that the Typeface has not been created.
+func (o Typeface) IsNil() bool {
+	return o.sk == nil
 }
 
 /*

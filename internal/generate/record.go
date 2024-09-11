@@ -125,16 +125,8 @@ func (r record) generate(g generator) {
 		fatalf("record %s has not been enriched", r.CName)
 	}
 
-	f := g.goFile
-	f.writeDocComment(r.doc)
-	if r.NoWrapper {
-		f.writelnf("type %s C.%s", r.goName, r.cStructName)
-	} else {
-		f.writelnf("type %s struct {", r.goName)
-		f.writelnf("  sk *C.%s", r.cStructName)
-		f.writeln("}")
-	}
-	f.writeln()
+	r.generateGoType(g)
+	r.generateNilMethod(g)
 
 	for _, ctor := range r.Ctors {
 		if ctor != nil {
@@ -152,6 +144,33 @@ func (r record) generate(g generator) {
 	}
 
 	g.headerFile.writeln()
+}
+
+func (r record) generateGoType(g generator) {
+	f := g.goFile
+	f.writeDocComment(r.doc)
+	if r.NoWrapper {
+		f.writelnf("type %s C.%s", r.goName, r.cStructName)
+	} else {
+		f.writelnf("type %s struct {", r.goName)
+		f.writelnf("  sk *C.%s", r.cStructName)
+		f.writeln("}")
+	}
+	f.writeln()
+}
+
+func (r record) generateNilMethod(g generator) {
+	if r.NoWrapper {
+		return
+	}
+
+	f := g.goFile
+	f.writeln("// IsNil returns true if the raw skia object pointer is nil.")
+	f.writelnf("// If it is nil is may indicate that the %s has not been created.", r.goName)
+	f.writelnf("func (o %s) IsNil() bool {", r.goName)
+	f.writeln("  return o.sk == nil")
+	f.writeln("}")
+	f.writeln()
 }
 
 func (r record) generateCStruct(g generator) {
