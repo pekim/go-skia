@@ -251,10 +251,10 @@ extern "C"
   }
 
   bool
-  misk_IRect_Intersects (sk_SkIRect *c_a, sk_SkIRect *c_b)
+  misk_IRect_Intersects (sk_SkIRect c_a, sk_SkIRect c_b)
   {
-    return SkIRect::Intersects (*reinterpret_cast<SkIRect *> (c_a),
-                                *reinterpret_cast<SkIRect *> (c_b));
+    return SkIRect::Intersects (*reinterpret_cast<SkIRect *> (&c_a),
+                                *reinterpret_cast<SkIRect *> (&c_b));
   }
 
   sk_SkPaint *
@@ -310,9 +310,9 @@ extern "C"
   }
 
   sk_SkRect
-  misk_Rect_MakeSize (sk_SkSize *c_size)
+  misk_Rect_MakeSize (sk_SkSize c_size)
   {
-    auto ret = (SkRect::MakeSize (*reinterpret_cast<SkSize *> (c_size)));
+    auto ret = (SkRect::MakeSize (*reinterpret_cast<SkSize *> (&c_size)));
     return *(reinterpret_cast<sk_SkRect *> (&ret));
   }
 
@@ -331,24 +331,24 @@ extern "C"
   }
 
   sk_SkRect
-  misk_Rect_MakeISize (sk_SkISize *c_size)
+  misk_Rect_MakeISize (sk_SkISize c_size)
   {
-    auto ret = (SkRect::Make (*reinterpret_cast<SkISize *> (c_size)));
+    auto ret = (SkRect::Make (*reinterpret_cast<SkISize *> (&c_size)));
     return *(reinterpret_cast<sk_SkRect *> (&ret));
   }
 
   sk_SkRect
-  misk_Rect_MakeIRect (sk_SkIRect *c_irect)
+  misk_Rect_MakeIRect (sk_SkIRect c_irect)
   {
-    auto ret = (SkRect::Make (*reinterpret_cast<SkIRect *> (c_irect)));
+    auto ret = (SkRect::Make (*reinterpret_cast<SkIRect *> (&c_irect)));
     return *(reinterpret_cast<sk_SkRect *> (&ret));
   }
 
   bool
-  misk_Rect_Intersects (sk_SkRect *c_a, sk_SkRect *c_b)
+  misk_Rect_Intersects (sk_SkRect c_a, sk_SkRect c_b)
   {
-    return SkRect::Intersects (*reinterpret_cast<SkRect *> (c_a),
-                               *reinterpret_cast<SkRect *> (c_b));
+    return SkRect::Intersects (*reinterpret_cast<SkRect *> (&c_a),
+                               *reinterpret_cast<SkRect *> (&c_b));
   }
 
   sk_SkSurfaceProps *
@@ -396,22 +396,22 @@ extern "C"
   sk_GrBackendRenderTarget
   misk_GrBackendRenderTargetsMakeGL (int c_width, int c_height,
                                      int c_sampleCnt, int c_stencilBits,
-                                     sk_GrGLFramebufferInfo *c_glInfo)
+                                     sk_GrGLFramebufferInfo c_glInfo)
   {
     auto ret = (GrBackendRenderTargets::MakeGL (
         c_width, c_height, c_sampleCnt, c_stencilBits,
-        *reinterpret_cast<GrGLFramebufferInfo *> (c_glInfo)));
+        *reinterpret_cast<GrGLFramebufferInfo *> (&c_glInfo)));
     return *(reinterpret_cast<sk_GrBackendRenderTarget *> (&ret));
   }
 
   sk_GrDirectContext *
   misk_GrDirectContextsMakeGLInterfaceOptions (sk_GrGLInterface *c_p0,
-                                               sk_GrContextOptions *c_p1)
+                                               sk_GrContextOptions c_p1)
   {
     return reinterpret_cast<sk_GrDirectContext *> (
         GrDirectContexts::MakeGL (
             sk_ref_sp (reinterpret_cast<GrGLInterface *> (c_p0)),
-            *reinterpret_cast<GrContextOptions *> (c_p1))
+            *reinterpret_cast<GrContextOptions *> (&c_p1))
             .release ());
   }
 
@@ -425,10 +425,11 @@ extern "C"
   }
 
   sk_GrDirectContext *
-  misk_GrDirectContextsMakeGLOptions (sk_GrContextOptions *c_p0)
+  misk_GrDirectContextsMakeGLOptions (sk_GrContextOptions c_p0)
   {
     return reinterpret_cast<sk_GrDirectContext *> (
-        GrDirectContexts::MakeGL (*reinterpret_cast<GrContextOptions *> (c_p0))
+        GrDirectContexts::MakeGL (
+            *reinterpret_cast<GrContextOptions *> (&c_p0))
             .release ());
   }
 

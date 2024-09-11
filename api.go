@@ -13,9 +13,11 @@ package skia
 // #include "api.h"
 import "C"
 
-type GrGLFramebufferInfo struct {
-	sk *C.sk_GrGLFramebufferInfo
-}
+import (
+	"unsafe"
+)
+
+type GrGLFramebufferInfo C.sk_GrGLFramebufferInfo
 
 type GrBackendRenderTarget struct {
 	sk *C.sk_GrBackendRenderTarget
@@ -60,14 +62,12 @@ type GrGLInterface struct {
 	sk *C.sk_GrGLInterface
 }
 
-type GrContextOptions struct {
-	sk *C.sk_GrContextOptions
-}
+type GrContextOptions C.sk_GrContextOptions
 
 func NewGrContextOptions() GrContextOptions {
 
 	retC := C.misk_new_GrContextOptions()
-	return GrContextOptions{sk: retC}
+	return *(*GrContextOptions)(unsafe.Pointer(&retC))
 }
 
 type GrContextOptionsEnable int64
@@ -527,9 +527,7 @@ from position, width, and height. SkIRect describes an area; if its right
 is less than or equal to its left, or if its bottom is less than or equal to
 its top, it is considered empty.
 */
-type IRect struct {
-	sk *C.sk_SkIRect
-}
+type IRect C.sk_SkIRect
 
 /*
 Returns constructed SkIRect set to (0, 0, 0, 0).
@@ -541,7 +539,7 @@ is a convenience, but does not designate a special empty rectangle.
 */
 func IRectMakeEmpty() IRect {
 	retC := C.misk_IRect_MakeEmpty()
-	return IRect{sk: &retC}
+	return IRect(retC)
 }
 
 /*
@@ -556,7 +554,7 @@ func IRectMakeWH(w int, h int) IRect {
 	c_w := C.int(w)
 	c_h := C.int(h)
 	retC := C.misk_IRect_MakeWH(c_w, c_h)
-	return IRect{sk: &retC}
+	return IRect(retC)
 }
 
 /*
@@ -575,7 +573,7 @@ func IRectMakeLTRB(l int, t int, r int, b int) IRect {
 	c_r := C.int(r)
 	c_b := C.int(b)
 	retC := C.misk_IRect_MakeLTRB(c_l, c_t, c_r, c_b)
-	return IRect{sk: &retC}
+	return IRect(retC)
 }
 
 /*
@@ -594,7 +592,7 @@ func IRectMakeXYWH(x int, y int, w int, h int) IRect {
 	c_w := C.int(w)
 	c_h := C.int(h)
 	retC := C.misk_IRect_MakeXYWH(c_x, c_y, c_w, c_h)
-	return IRect{sk: &retC}
+	return IRect(retC)
 }
 
 /*
@@ -606,15 +604,13 @@ Returns false if either a or b is empty, or do not intersect.
 @return   true if a and b have area in common
 */
 func IRectIntersects(a IRect, b IRect) bool {
-	c_a := a.sk
-	c_b := b.sk
+	c_a := *(*C.sk_SkIRect)(unsafe.Pointer(&a))
+	c_b := *(*C.sk_SkIRect)(unsafe.Pointer(&b))
 	retC := C.misk_IRect_Intersects(c_a, c_b)
 	return bool(retC)
 }
 
-type ISize struct {
-	sk *C.sk_SkISize
-}
+type ISize C.sk_SkISize
 
 /*
 SkPaint controls options applied when drawing. SkPaint collects all
@@ -874,9 +870,7 @@ from position, width, and height. SkRect describes an area; if its right
 is less than or equal to its left, or if its bottom is less than or equal to
 its top, it is considered empty.
 */
-type Rect struct {
-	sk *C.sk_SkRect
-}
+type Rect C.sk_SkRect
 
 /*
 Returns constructed SkRect set to (0, 0, 0, 0).
@@ -888,7 +882,7 @@ is a convenience, but does not designate a special empty rectangle.
 */
 func RectMakeEmpty() Rect {
 	retC := C.misk_Rect_MakeEmpty()
-	return Rect{sk: &retC}
+	return Rect(retC)
 }
 
 /*
@@ -906,7 +900,7 @@ func RectMakeWH(w float32, h float32) Rect {
 	c_w := C.float(w)
 	c_h := C.float(h)
 	retC := C.misk_Rect_MakeWH(c_w, c_h)
-	return Rect{sk: &retC}
+	return Rect(retC)
 }
 
 /*
@@ -917,9 +911,9 @@ validate input; size.width() or size.height() may be negative.
 @return      bounds (0, 0, size.width(), size.height())
 */
 func RectMakeSize(size Size) Rect {
-	c_size := size.sk
+	c_size := *(*C.sk_SkSize)(unsafe.Pointer(&size))
 	retC := C.misk_Rect_MakeSize(c_size)
-	return Rect{sk: &retC}
+	return Rect(retC)
 }
 
 /*
@@ -938,7 +932,7 @@ func RectMakeLTRB(l float32, t float32, r float32, b float32) Rect {
 	c_r := C.float(r)
 	c_b := C.float(b)
 	retC := C.misk_Rect_MakeLTRB(c_l, c_t, c_r, c_b)
-	return Rect{sk: &retC}
+	return Rect(retC)
 }
 
 /*
@@ -957,7 +951,7 @@ func RectMakeXYWH(x float32, y float32, w float32, h float32) Rect {
 	c_w := C.float(w)
 	c_h := C.float(h)
 	retC := C.misk_Rect_MakeXYWH(c_x, c_y, c_w, c_h)
-	return Rect{sk: &retC}
+	return Rect(retC)
 }
 
 /*
@@ -968,9 +962,9 @@ Does not validate input; size.width() or size.height() may be negative.
 @return      bounds (0, 0, size.width(), size.height())
 */
 func RectMakeISize(size ISize) Rect {
-	c_size := size.sk
+	c_size := *(*C.sk_SkISize)(unsafe.Pointer(&size))
 	retC := C.misk_Rect_MakeISize(c_size)
-	return Rect{sk: &retC}
+	return Rect(retC)
 }
 
 /*
@@ -982,9 +976,9 @@ than fBottom.
 @return       irect members converted to float
 */
 func RectMakeIRect(irect IRect) Rect {
-	c_irect := irect.sk
+	c_irect := *(*C.sk_SkIRect)(unsafe.Pointer(&irect))
 	retC := C.misk_Rect_MakeIRect(c_irect)
-	return Rect{sk: &retC}
+	return Rect(retC)
 }
 
 /*
@@ -996,16 +990,14 @@ Returns false if either a or b is empty, or do not intersect.
 @return   true if a and b have area in common
 */
 func RectIntersects(a Rect, b Rect) bool {
-	c_a := a.sk
-	c_b := b.sk
+	c_a := *(*C.sk_SkRect)(unsafe.Pointer(&a))
+	c_b := *(*C.sk_SkRect)(unsafe.Pointer(&b))
 	retC := C.misk_Rect_Intersects(c_a, c_b)
 	return bool(retC)
 }
 
 // /////////////////////////////////////////////////////////////////////////////
-type Size struct {
-	sk *C.sk_SkSize
-}
+type Size C.sk_SkSize
 
 /*
 Describes properties and constraints of a given SkSurface. The rendering engine can parse these
@@ -1128,7 +1120,7 @@ func GrBackendRenderTargetsMakeGL(width int, height int, sampleCnt int, stencilB
 	c_height := C.int(height)
 	c_sampleCnt := C.int(sampleCnt)
 	c_stencilBits := C.int(stencilBits)
-	c_glInfo := glInfo.sk
+	c_glInfo := *(*C.sk_GrGLFramebufferInfo)(unsafe.Pointer(&glInfo))
 	retC := C.misk_GrBackendRenderTargetsMakeGL(c_width, c_height, c_sampleCnt, c_stencilBits, c_glInfo)
 	return GrBackendRenderTarget{sk: &retC}
 }
@@ -1138,7 +1130,7 @@ Creates a GrDirectContext for a backend context. GrGLInterface must be non-null.
 */
 func GrDirectContextsMakeGLInterfaceOptions(p0 GrGLInterface, p1 GrContextOptions) GrDirectContext {
 	c_p0 := p0.sk
-	c_p1 := p1.sk
+	c_p1 := *(*C.sk_GrContextOptions)(unsafe.Pointer(&p1))
 	retC := C.misk_GrDirectContextsMakeGLInterfaceOptions(c_p0, c_p1)
 	return GrDirectContext{sk: retC}
 }
@@ -1150,7 +1142,7 @@ func GrDirectContextsMakeGLInterface(p0 GrGLInterface) GrDirectContext {
 }
 
 func GrDirectContextsMakeGLOptions(p0 GrContextOptions) GrDirectContext {
-	c_p0 := p0.sk
+	c_p0 := *(*C.sk_GrContextOptions)(unsafe.Pointer(&p0))
 	retC := C.misk_GrDirectContextsMakeGLOptions(c_p0)
 	return GrDirectContext{sk: retC}
 }

@@ -128,7 +128,9 @@ func (m methodOverload) generateGo(g generator) {
 		if m.retrn.isPrimitive {
 			f.writelnf("  return %s(retC)", m.retrn.goName)
 		} else if m.retrn.record != nil {
-			if m.retrn.isPointer || m.retrn.isSmartPointer {
+			if m.retrn.record.NoWrapper {
+				f.writelnf("  return %s(retC)", m.retrn.record.goName)
+			} else if m.retrn.isPointer || m.retrn.isSmartPointer {
 				f.writelnf("  return %s{sk: retC}", m.retrn.record.goName)
 			} else {
 				f.writelnf("  return %s{sk: &retC}", m.retrn.record.goName)

@@ -292,7 +292,7 @@ extern "C"
   sk_SkIRect misk_IRect_MakeWH (int c_w, int c_h);
   sk_SkIRect misk_IRect_MakeLTRB (int c_l, int c_t, int c_r, int c_b);
   sk_SkIRect misk_IRect_MakeXYWH (int c_x, int c_y, int c_w, int c_h);
-  bool misk_IRect_Intersects (sk_SkIRect *c_a, sk_SkIRect *c_b);
+  bool misk_IRect_Intersects (sk_SkIRect c_a, sk_SkIRect c_b);
 
   sk_SkPaint *misk_new_Paint ();
   sk_SkPaint *misk_new_PaintCopy (sk_SkPaint *c_paint);
@@ -304,12 +304,12 @@ extern "C"
 
   sk_SkRect misk_Rect_MakeEmpty ();
   sk_SkRect misk_Rect_MakeWH (float c_w, float c_h);
-  sk_SkRect misk_Rect_MakeSize (sk_SkSize *c_size);
+  sk_SkRect misk_Rect_MakeSize (sk_SkSize c_size);
   sk_SkRect misk_Rect_MakeLTRB (float c_l, float c_t, float c_r, float c_b);
   sk_SkRect misk_Rect_MakeXYWH (float c_x, float c_y, float c_w, float c_h);
-  sk_SkRect misk_Rect_MakeISize (sk_SkISize *c_size);
-  sk_SkRect misk_Rect_MakeIRect (sk_SkIRect *c_irect);
-  bool misk_Rect_Intersects (sk_SkRect *c_a, sk_SkRect *c_b);
+  sk_SkRect misk_Rect_MakeISize (sk_SkISize c_size);
+  sk_SkRect misk_Rect_MakeIRect (sk_SkIRect c_irect);
+  bool misk_Rect_Intersects (sk_SkRect c_a, sk_SkRect c_b);
 
   sk_SkSurfaceProps *misk_new_SurfaceProps ();
   sk_SkSurfaceProps *misk_new_SurfacePropsPixelGeometry (unsigned int c_flags,
@@ -323,14 +323,14 @@ extern "C"
   sk_GrBackendRenderTarget
   misk_GrBackendRenderTargetsMakeGL (int c_width, int c_height,
                                      int c_sampleCnt, int c_stencilBits,
-                                     sk_GrGLFramebufferInfo *c_glInfo);
+                                     sk_GrGLFramebufferInfo c_glInfo);
   sk_GrDirectContext *
   misk_GrDirectContextsMakeGLInterfaceOptions (sk_GrGLInterface *c_p0,
-                                               sk_GrContextOptions *c_p1);
+                                               sk_GrContextOptions c_p1);
   sk_GrDirectContext *
   misk_GrDirectContextsMakeGLInterface (sk_GrGLInterface *c_p0);
   sk_GrDirectContext *
-  misk_GrDirectContextsMakeGLOptions (sk_GrContextOptions *c_p0);
+  misk_GrDirectContextsMakeGLOptions (sk_GrContextOptions c_p0);
   sk_GrDirectContext *misk_GrDirectContextsMakeGL ();
   sk_SkFontMgr *sk_fontmgr_ref_default (void);
 

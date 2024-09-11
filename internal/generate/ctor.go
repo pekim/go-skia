@@ -67,7 +67,12 @@ func (c recordCtor) generateGo(g generator) {
 	f.writelnf("func %s(%s) %s {", c.goFuncName, strings.Join(params, ", "), c.record.goName)
 	f.writeln(strings.Join(cVars, "\n"))
 	f.writelnf("  retC := C.%s(%s)", c.cFuncName, strings.Join(cArgs, ", "))
-	f.writelnf("  return %s{sk: retC}", c.record.goName)
+	if c.record.NoWrapper {
+		f.writelnf("  return *(*%s)(unsafe.Pointer(&retC))", c.record.goName)
+
+	} else {
+		f.writelnf("  return %s{sk: retC}", c.record.goName)
+	}
 	f.writeln("}")
 	f.writeln()
 }

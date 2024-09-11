@@ -14,6 +14,7 @@ type record struct {
 	Ctors       []*recordCtor `json:"constructors"`
 	Enums       []enum        `json:"enums"`
 	Methods     []method      `json:"methods"`
+	NoWrapper   bool          `json:"noWrapper"`
 	dtor        recordDtor
 	fields      []field
 	size        int
@@ -126,12 +127,14 @@ func (r record) generate(g generator) {
 
 	f := g.goFile
 	f.writeDocComment(r.doc)
-	f.writelnf("type %s struct {", r.goName)
-	f.writelnf("  sk *C.%s", r.cStructName)
-	f.writeln("}")
+	if r.NoWrapper {
+		f.writelnf("type %s C.%s", r.goName, r.cStructName)
+	} else {
+		f.writelnf("type %s struct {", r.goName)
+		f.writelnf("  sk *C.%s", r.cStructName)
+		f.writeln("}")
+	}
 	f.writeln()
-
-	// c.generateCStruct(g)
 
 	for _, ctor := range r.Ctors {
 		if ctor != nil {

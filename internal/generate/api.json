@@ -2,7 +2,7 @@
   "enums": [{ "name": "SkPixelGeometry" }, { "name": "skgpu::Protected" }],
 
   "records": [
-    { "name": "GrGLFramebufferInfo" },
+    { "name": "GrGLFramebufferInfo", "noWrapper": true },
 
     {
       "name": "GrBackendRenderTarget",
@@ -16,6 +16,7 @@
     { "name": "GrGLInterface", "constructors": [null] },
     {
       "name": "GrContextOptions",
+      "noWrapper": true,
       "constructors": [{}],
       "enums": [{ "name": "Enable" }, { "name": "ShaderCacheStrategy" }]
     },
@@ -82,6 +83,7 @@
 
     {
       "name": "SkIRect",
+      "noWrapper": true,
       "methods": [
         { "name": "MakeEmpty" },
         { "name": "MakeWH" },
@@ -93,6 +95,7 @@
 
     {
       "name": "SkISize",
+      "noWrapper": true,
       "methods": []
     },
 
@@ -115,6 +118,7 @@
 
     {
       "name": "SkRect",
+      "noWrapper": true,
       "methods": [
         { "name": "MakeEmpty" },
         { "name": "MakeWH" },
@@ -130,7 +134,8 @@
     },
 
     {
-      "name": "SkSize"
+      "name": "SkSize",
+      "noWrapper": true
     },
 
     {
