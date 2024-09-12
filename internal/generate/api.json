@@ -47,6 +47,18 @@
         { "name": "SaveLayerFlagsSet" },
         { "name": "SaveLayerStrategy" },
         { "name": "SrcRectConstraint" }
+      ],
+      "methods": [
+        { "name": "getProps" },
+        { "name": "peekPixels" },
+        { "name": "save" },
+        { "name": "restore" },
+        { "name": "getSaveCount" },
+        { "name": "restoreToCount" },
+        { "name": "translate" },
+        { "name": "scale" },
+        { "name": "rotate", "overloads": [{}, { "suffix": "AboutPoint" }] },
+        { "name": "skew" }
       ]
     },
 
@@ -83,6 +95,11 @@
         { "name": "Italic" },
         { "name": "BoldItalic" }
       ]
+    },
+
+    {
+      "name": "SkImageInfo",
+      "constructors": [{}]
     },
 
     {
@@ -175,6 +192,11 @@
 
     {
       "name": "SkPoint"
+    },
+
+    {
+      "name": "SkPixmap",
+      "constructors": [{}, null]
     },
 
     {

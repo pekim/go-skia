@@ -175,6 +175,12 @@ extern "C"
 
   typedef struct
   {
+    uchar fColorInfo[16];
+    uchar fDimensions[8];
+  } sk_SkImageInfo;
+
+  typedef struct
+  {
     int X;
     int Y;
   } sk_SkIPoint;
@@ -223,6 +229,13 @@ extern "C"
     float X;
     float Y;
   } sk_SkPoint;
+
+  typedef struct
+  {
+    uchar fPixels[8];
+    uchar fRowBytes[8];
+    uchar fInfo[24];
+  } sk_SkPixmap;
 
   typedef struct
   {
@@ -279,6 +292,18 @@ extern "C"
   misk_new_CanvasFromBitmapSurfaceProps (sk_SkBitmap *c_bitmap,
                                          sk_SkSurfaceProps *c_props);
   void misk_delete_SkCanvas (sk_SkCanvas *obj);
+  bool misk_Canvas_getProps (sk_SkCanvas *c_obj, sk_SkSurfaceProps *c_props);
+  bool misk_Canvas_peekPixels (sk_SkCanvas *c_obj, sk_SkPixmap *c_pixmap);
+  int misk_Canvas_save (sk_SkCanvas *c_obj);
+  void misk_Canvas_restore (sk_SkCanvas *c_obj);
+  int misk_Canvas_getSaveCount (sk_SkCanvas *c_obj);
+  void misk_Canvas_restoreToCount (sk_SkCanvas *c_obj, int c_saveCount);
+  void misk_Canvas_translate (sk_SkCanvas *c_obj, float c_dx, float c_dy);
+  void misk_Canvas_scale (sk_SkCanvas *c_obj, float c_sx, float c_sy);
+  void misk_Canvas_rotate (sk_SkCanvas *c_obj, float c_degrees);
+  void misk_Canvas_rotateAboutPoint (sk_SkCanvas *c_obj, float c_degrees,
+                                     float c_px, float c_py);
+  void misk_Canvas_skew (sk_SkCanvas *c_obj, float c_sx, float c_sy);
 
   sk_SkColorSpace *misk_ColorSpace_MakeSRGB ();
   sk_SkColorSpace *misk_ColorSpace_MakeSRGBLinear ();
@@ -299,6 +324,8 @@ extern "C"
   sk_SkFontStyle misk_FontStyle_Bold ();
   sk_SkFontStyle misk_FontStyle_Italic ();
   sk_SkFontStyle misk_FontStyle_BoldItalic ();
+
+  sk_SkImageInfo *misk_new_ImageInfo ();
 
   sk_SkIRect misk_IRect_MakeEmpty ();
   sk_SkIRect misk_IRect_MakeWH (int c_w, int c_h);
@@ -358,6 +385,8 @@ extern "C"
   sk_SkPath *misk_new_Path ();
   sk_SkPath *misk_new_PathCopy (sk_SkPath *c_path);
   void misk_delete_SkPath (sk_SkPath *obj);
+
+  sk_SkPixmap *misk_new_Pixmap ();
 
   sk_SkRect misk_Rect_MakeEmpty ();
   sk_SkRect misk_Rect_MakeWH (float c_w, float c_h);

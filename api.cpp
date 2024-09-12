@@ -7,8 +7,10 @@
 #include <include/core/SkFont.h>
 #include <include/core/SkFontMgr.h>
 #include <include/core/SkFontStyle.h>
+#include <include/core/SkImageInfo.h>
 #include <include/core/SkPaint.h>
 #include <include/core/SkPath.h>
+#include <include/core/SkPixmap.h>
 #include <include/core/SkRect.h>
 #include <include/core/SkSize.h>
 #include <include/core/SkSurfaceProps.h>
@@ -134,6 +136,76 @@ extern "C"
     delete reinterpret_cast<SkCanvas *> (obj);
   }
 
+  bool
+  misk_Canvas_getProps (sk_SkCanvas *c_obj, sk_SkSurfaceProps *c_props)
+  {
+    return reinterpret_cast<SkCanvas *> (c_obj)->getProps (
+        reinterpret_cast<SkSurfaceProps *> (c_props));
+  }
+
+  bool
+  misk_Canvas_peekPixels (sk_SkCanvas *c_obj, sk_SkPixmap *c_pixmap)
+  {
+    return reinterpret_cast<SkCanvas *> (c_obj)->peekPixels (
+        reinterpret_cast<SkPixmap *> (c_pixmap));
+  }
+
+  int
+  misk_Canvas_save (sk_SkCanvas *c_obj)
+  {
+    return reinterpret_cast<SkCanvas *> (c_obj)->save ();
+  }
+
+  void
+  misk_Canvas_restore (sk_SkCanvas *c_obj)
+  {
+    return reinterpret_cast<SkCanvas *> (c_obj)->restore ();
+  }
+
+  int
+  misk_Canvas_getSaveCount (sk_SkCanvas *c_obj)
+  {
+    return reinterpret_cast<SkCanvas *> (c_obj)->getSaveCount ();
+  }
+
+  void
+  misk_Canvas_restoreToCount (sk_SkCanvas *c_obj, int c_saveCount)
+  {
+    return reinterpret_cast<SkCanvas *> (c_obj)->restoreToCount (c_saveCount);
+  }
+
+  void
+  misk_Canvas_translate (sk_SkCanvas *c_obj, float c_dx, float c_dy)
+  {
+    return reinterpret_cast<SkCanvas *> (c_obj)->translate (c_dx, c_dy);
+  }
+
+  void
+  misk_Canvas_scale (sk_SkCanvas *c_obj, float c_sx, float c_sy)
+  {
+    return reinterpret_cast<SkCanvas *> (c_obj)->scale (c_sx, c_sy);
+  }
+
+  void
+  misk_Canvas_rotate (sk_SkCanvas *c_obj, float c_degrees)
+  {
+    return reinterpret_cast<SkCanvas *> (c_obj)->rotate (c_degrees);
+  }
+
+  void
+  misk_Canvas_rotateAboutPoint (sk_SkCanvas *c_obj, float c_degrees,
+                                float c_px, float c_py)
+  {
+    return reinterpret_cast<SkCanvas *> (c_obj)->rotate (c_degrees, c_px,
+                                                         c_py);
+  }
+
+  void
+  misk_Canvas_skew (sk_SkCanvas *c_obj, float c_sx, float c_sy)
+  {
+    return reinterpret_cast<SkCanvas *> (c_obj)->skew (c_sx, c_sy);
+  }
+
   sk_SkColorSpace *
   misk_ColorSpace_MakeSRGB ()
   {
@@ -223,6 +295,12 @@ extern "C"
   {
     auto ret = (SkFontStyle::BoldItalic ());
     return *(reinterpret_cast<sk_SkFontStyle *> (&ret));
+  }
+
+  sk_SkImageInfo *
+  misk_new_ImageInfo ()
+  {
+    return reinterpret_cast<sk_SkImageInfo *> (new SkImageInfo ());
   }
 
   sk_SkIRect
@@ -552,6 +630,12 @@ extern "C"
   misk_delete_SkPath (sk_SkPath *obj)
   {
     delete reinterpret_cast<SkPath *> (obj);
+  }
+
+  sk_SkPixmap *
+  misk_new_Pixmap ()
+  {
+    return reinterpret_cast<sk_SkPixmap *> (new SkPixmap ());
   }
 
   sk_SkRect

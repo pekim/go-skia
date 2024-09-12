@@ -333,6 +333,225 @@ func (o Canvas) Delete() {
 	C.misk_delete_SkCanvas(o.sk)
 }
 
+/*
+Copies SkSurfaceProps, if SkCanvas is associated with raster surface or
+GPU surface, and returns true. Otherwise, returns false and leave props unchanged.
+
+@param props  storage for writable SkSurfaceProps
+@return       true if SkSurfaceProps was copied
+
+DEPRECATED: Replace usage with getBaseProps() or getTopProps()
+
+example: https://fiddle.skia.org/c/@Canvas_getProps
+*/
+func (o Canvas) GetProps(props SurfaceProps) bool {
+	c_obj := o.sk
+	c_props := props.sk
+	retC := C.misk_Canvas_getProps(c_obj, c_props)
+	return bool(retC)
+}
+
+/*
+Returns true if SkCanvas has direct access to its pixels.
+
+Pixels are readable when SkDevice is raster. Pixels are not readable when SkCanvas
+is returned from GPU surface, returned by SkDocument::beginPage, returned by
+SkPictureRecorder::beginRecording, or SkCanvas is the base of a utility class
+like DebugCanvas.
+
+pixmap is valid only while SkCanvas is in scope and unchanged. Any
+SkCanvas or SkSurface call may invalidate the pixmap values.
+
+@param pixmap  storage for pixel state if pixels are readable; otherwise, ignored
+@return        true if SkCanvas has direct access to pixels
+
+example: https://fiddle.skia.org/c/@Canvas_peekPixels
+*/
+func (o Canvas) PeekPixels(pixmap Pixmap) bool {
+	c_obj := o.sk
+	c_pixmap := pixmap.sk
+	retC := C.misk_Canvas_peekPixels(c_obj, c_pixmap)
+	return bool(retC)
+}
+
+/*
+Saves SkMatrix and clip.
+Calling restore() discards changes to SkMatrix and clip,
+restoring the SkMatrix and clip to their state when save() was called.
+
+SkMatrix may be changed by translate(), scale(), rotate(), skew(), concat(), setMatrix(),
+and resetMatrix(). Clip may be changed by clipRect(), clipRRect(), clipPath(), clipRegion().
+
+Saved SkCanvas state is put on a stack; multiple calls to save() should be balance
+by an equal number of calls to restore().
+
+Call restoreToCount() with result to restore this and subsequent saves.
+
+@return  depth of saved stack
+
+example: https://fiddle.skia.org/c/@Canvas_save
+*/
+func (o Canvas) Save() int {
+	c_obj := o.sk
+	retC := C.misk_Canvas_save(c_obj)
+	return int(retC)
+}
+
+/*
+Removes changes to SkMatrix and clip since SkCanvas state was
+last saved. The state is removed from the stack.
+
+Does nothing if the stack is empty.
+
+example: https://fiddle.skia.org/c/@AutoCanvasRestore_restore
+
+example: https://fiddle.skia.org/c/@Canvas_restore
+*/
+func (o Canvas) Restore() {
+	c_obj := o.sk
+	C.misk_Canvas_restore(c_obj)
+}
+
+/*
+Returns the number of saved states, each containing: SkMatrix and clip.
+Equals the number of save() calls less the number of restore() calls plus one.
+The save count of a new canvas is one.
+
+@return  depth of save state stack
+
+example: https://fiddle.skia.org/c/@Canvas_getSaveCount
+*/
+func (o Canvas) GetSaveCount() int {
+	c_obj := o.sk
+	retC := C.misk_Canvas_getSaveCount(c_obj)
+	return int(retC)
+}
+
+/*
+Restores state to SkMatrix and clip values when save(), saveLayer(),
+saveLayerPreserveLCDTextRequests(), or saveLayerAlpha() returned saveCount.
+
+Does nothing if saveCount is greater than state stack count.
+Restores state to initial values if saveCount is less than or equal to one.
+
+@param saveCount  depth of state stack to restore
+
+example: https://fiddle.skia.org/c/@Canvas_restoreToCount
+*/
+func (o Canvas) RestoreToCount(saveCount int) {
+	c_obj := o.sk
+	c_saveCount := C.int(saveCount)
+	C.misk_Canvas_restoreToCount(c_obj, c_saveCount)
+}
+
+/*
+Translates SkMatrix by dx along the x-axis and dy along the y-axis.
+
+Mathematically, replaces SkMatrix with a translation matrix
+premultiplied with SkMatrix.
+
+This has the effect of moving the drawing by (dx, dy) before transforming
+the result with SkMatrix.
+
+@param dx  distance to translate on x-axis
+@param dy  distance to translate on y-axis
+
+example: https://fiddle.skia.org/c/@Canvas_translate
+*/
+func (o Canvas) Translate(dx float32, dy float32) {
+	c_obj := o.sk
+	c_dx := C.float(dx)
+	c_dy := C.float(dy)
+	C.misk_Canvas_translate(c_obj, c_dx, c_dy)
+}
+
+/*
+Scales SkMatrix by sx on the x-axis and sy on the y-axis.
+
+Mathematically, replaces SkMatrix with a scale matrix
+premultiplied with SkMatrix.
+
+This has the effect of scaling the drawing by (sx, sy) before transforming
+the result with SkMatrix.
+
+@param sx  amount to scale on x-axis
+@param sy  amount to scale on y-axis
+
+example: https://fiddle.skia.org/c/@Canvas_scale
+*/
+func (o Canvas) Scale(sx float32, sy float32) {
+	c_obj := o.sk
+	c_sx := C.float(sx)
+	c_sy := C.float(sy)
+	C.misk_Canvas_scale(c_obj, c_sx, c_sy)
+}
+
+/*
+Rotates SkMatrix by degrees. Positive degrees rotates clockwise.
+
+Mathematically, replaces SkMatrix with a rotation matrix
+premultiplied with SkMatrix.
+
+This has the effect of rotating the drawing by degrees before transforming
+the result with SkMatrix.
+
+@param degrees  amount to rotate, in degrees
+
+example: https://fiddle.skia.org/c/@Canvas_rotate
+*/
+func (o Canvas) Rotate(degrees float32) {
+	c_obj := o.sk
+	c_degrees := C.float(degrees)
+	C.misk_Canvas_rotate(c_obj, c_degrees)
+}
+
+/*
+Rotates SkMatrix by degrees about a point at (px, py). Positive degrees rotates
+clockwise.
+
+Mathematically, constructs a rotation matrix; premultiplies the rotation matrix by
+a translation matrix; then replaces SkMatrix with the resulting matrix
+premultiplied with SkMatrix.
+
+This has the effect of rotating the drawing about a given point before
+transforming the result with SkMatrix.
+
+@param degrees  amount to rotate, in degrees
+@param px       x-axis value of the point to rotate about
+@param py       y-axis value of the point to rotate about
+
+example: https://fiddle.skia.org/c/@Canvas_rotate_2
+*/
+func (o Canvas) RotateAboutPoint(degrees float32, px float32, py float32) {
+	c_obj := o.sk
+	c_degrees := C.float(degrees)
+	c_px := C.float(px)
+	c_py := C.float(py)
+	C.misk_Canvas_rotateAboutPoint(c_obj, c_degrees, c_px, c_py)
+}
+
+/*
+Skews SkMatrix by sx on the x-axis and sy on the y-axis. A positive value of sx
+skews the drawing right as y-axis values increase; a positive value of sy skews
+the drawing down as x-axis values increase.
+
+Mathematically, replaces SkMatrix with a skew matrix premultiplied with SkMatrix.
+
+This has the effect of skewing the drawing by (sx, sy) before transforming
+the result with SkMatrix.
+
+@param sx  amount to skew on x-axis
+@param sy  amount to skew on y-axis
+
+example: https://fiddle.skia.org/c/@Canvas_skew
+*/
+func (o Canvas) Skew(sx float32, sy float32) {
+	c_obj := o.sk
+	c_sx := C.float(sx)
+	c_sy := C.float(sy)
+	C.misk_Canvas_skew(c_obj, c_sx, c_sy)
+}
+
 type CanvasClipEdgeStyle int64
 
 const (
@@ -573,6 +792,38 @@ const (
 	FontStyleSlantItalic  FontStyleSlant = 1
 	FontStyleSlantOblique FontStyleSlant = 2
 )
+
+/*
+Describes pixel dimensions and encoding. SkBitmap, SkImage, PixMap, and SkSurface
+can be created from SkImageInfo. SkImageInfo can be retrieved from SkBitmap and
+SkPixmap, but not from SkImage and SkSurface. For example, SkImage and SkSurface
+implementations may defer pixel depth, so may not completely specify SkImageInfo.
+
+SkImageInfo contains dimensions, the pixel integral width and height. It encodes
+how pixel bits describe alpha, transparency; color components red, blue,
+and green; and SkColorSpace, the range and linearity of colors.
+*/
+type ImageInfo struct {
+	sk *C.sk_SkImageInfo
+}
+
+// IsNil returns true if the raw skia object pointer is nil.
+// If it is nil is may indicate that the ImageInfo has not been created.
+func (o ImageInfo) IsNil() bool {
+	return o.sk == nil
+}
+
+/*
+Creates an empty SkImageInfo with kUnknown_SkColorType, kUnknown_SkAlphaType,
+a width and height of zero, and no SkColorSpace.
+
+@return  empty SkImageInfo
+*/
+func NewImageInfo() ImageInfo {
+
+	retC := C.misk_new_ImageInfo()
+	return ImageInfo{sk: retC}
+}
 
 /*
 SkIPoint holds two 32-bit integer coordinates.
@@ -1491,6 +1742,42 @@ type Point struct {
 // If it is nil is may indicate that the Point has not been created.
 func (o Point) IsNil() bool {
 	return o.sk == nil
+}
+
+/*
+SkPixmap provides a utility to pair SkImageInfo with pixels and row bytes.
+SkPixmap is a low level class which provides convenience functions to access
+raster destinations. SkCanvas can not draw SkPixmap, nor does SkPixmap provide
+a direct drawing destination.
+
+Use SkBitmap to draw pixels referenced by SkPixmap; use SkSurface to draw into
+pixels referenced by SkPixmap.
+
+SkPixmap does not try to manage the lifetime of the pixel memory. Use SkPixelRef
+to manage pixel memory; SkPixelRef is safe across threads.
+*/
+type Pixmap struct {
+	sk *C.sk_SkPixmap
+}
+
+// IsNil returns true if the raw skia object pointer is nil.
+// If it is nil is may indicate that the Pixmap has not been created.
+func (o Pixmap) IsNil() bool {
+	return o.sk == nil
+}
+
+/*
+Creates an empty SkPixmap without pixels, with kUnknown_SkColorType, with
+kUnknown_SkAlphaType, and with a width and height of zero. Use
+reset() to associate pixels, SkColorType, SkAlphaType, width, and height
+after SkPixmap has been created.
+
+@return  empty SkPixmap
+*/
+func NewPixmap() Pixmap {
+
+	retC := C.misk_new_Pixmap()
+	return Pixmap{sk: retC}
 }
 
 /*
