@@ -2,6 +2,7 @@
   "enums": [
     { "name": "SkBlendMode" },
     { "name": "SkPixelGeometry" },
+    { "name": "SkClipOp" },
     { "name": "skgpu::Protected" }
   ],
 
@@ -58,7 +59,17 @@
         { "name": "translate" },
         { "name": "scale" },
         { "name": "rotate", "overloads": [{}, { "suffix": "AboutPoint" }] },
-        { "name": "skew" }
+        { "name": "skew" },
+        { "name": "setMatrix", "overloads": [{ "suffix": "M44" }, {}] },
+        { "name": "resetMatrix" },
+        { "name": "clipRect", "overloads": [{}, null, null] },
+        { "name": "clipRRect", "overloads": [{}, null, null] },
+        { "name": "clipPath", "overloads": [{}, null, null] },
+        { "name": "clipRegion" },
+        {
+          "name": "quickReject",
+          "overloads": [{ "suffix": "Rect" }, { "suffix": "Path" }]
+        }
       ]
     },
 
@@ -100,6 +111,19 @@
     {
       "name": "SkImageInfo",
       "constructors": [{}]
+    },
+
+    {
+      "name": "SkM44",
+      "constructors": [
+        { "suffix": "Copy" },
+        {},
+        { "suffix": "AB" },
+        null,
+        null,
+        { "suffix": "Scalars" },
+        null
+      ]
     },
 
     {
@@ -151,6 +175,11 @@
       "name": "SkISize",
       "noWrapper": true,
       "methods": []
+    },
+
+    {
+      "name": "SkMatrix",
+      "constructors": [{}]
     },
 
     {
@@ -240,6 +269,17 @@
         { "name": "join" },
         { "name": "sort" }
       ]
+    },
+
+    {
+      "name": "SkRRect",
+      "noWrapper": true,
+      "constructors": [{}, { "suffix": "Copy" }]
+    },
+
+    {
+      "name": "SkRegion",
+      "constructors": [{}, { "suffix": "Copy" }, { "suffix": "CopyRect" }]
     },
 
     {

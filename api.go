@@ -552,6 +552,150 @@ func (o Canvas) Skew(sx float32, sy float32) {
 	C.misk_Canvas_skew(c_obj, c_sx, c_sy)
 }
 
+/*
+Replaces SkMatrix with matrix.
+Unlike concat(), any prior matrix state is overwritten.
+
+@param matrix  matrix to copy, replacing existing SkMatrix
+
+example: https://fiddle.skia.org/c/@Canvas_setMatrix
+*/
+func (o Canvas) SetMatrixM44(matrix M44) {
+	c_obj := o.sk
+	c_matrix := matrix.sk
+	C.misk_Canvas_setMatrixM44(c_obj, c_matrix)
+}
+
+func (o Canvas) SetMatrix(matrix Matrix) {
+	c_obj := o.sk
+	c_matrix := matrix.sk
+	C.misk_Canvas_setMatrix(c_obj, c_matrix)
+}
+
+/*
+Sets SkMatrix to the identity matrix.
+Any prior matrix state is overwritten.
+
+example: https://fiddle.skia.org/c/@Canvas_resetMatrix
+*/
+func (o Canvas) ResetMatrix() {
+	c_obj := o.sk
+	C.misk_Canvas_resetMatrix(c_obj)
+}
+
+/*
+Replaces clip with the intersection or difference of clip and rect,
+with an aliased or anti-aliased clip edge. rect is transformed by SkMatrix
+before it is combined with clip.
+
+@param rect         SkRect to combine with clip
+@param op           SkClipOp to apply to clip
+@param doAntiAlias  true if clip is to be anti-aliased
+
+example: https://fiddle.skia.org/c/@Canvas_clipRect
+*/
+func (o Canvas) ClipRect(rect Rect, op ClipOp, doAntiAlias bool) {
+	c_obj := o.sk
+	c_rect := *(*C.sk_SkRect)(unsafe.Pointer(&rect))
+	c_op := C.int(op)
+	c_doAntiAlias := C.bool(doAntiAlias)
+	C.misk_Canvas_clipRect(c_obj, c_rect, c_op, c_doAntiAlias)
+}
+
+/*
+Replaces clip with the intersection or difference of clip and rrect,
+with an aliased or anti-aliased clip edge.
+rrect is transformed by SkMatrix
+before it is combined with clip.
+
+@param rrect        SkRRect to combine with clip
+@param op           SkClipOp to apply to clip
+@param doAntiAlias  true if clip is to be anti-aliased
+
+example: https://fiddle.skia.org/c/@Canvas_clipRRect
+*/
+func (o Canvas) ClipRRect(rrect RRect, op ClipOp, doAntiAlias bool) {
+	c_obj := o.sk
+	c_rrect := *(*C.sk_SkRRect)(unsafe.Pointer(&rrect))
+	c_op := C.int(op)
+	c_doAntiAlias := C.bool(doAntiAlias)
+	C.misk_Canvas_clipRRect(c_obj, c_rrect, c_op, c_doAntiAlias)
+}
+
+/*
+Replaces clip with the intersection or difference of clip and path,
+with an aliased or anti-aliased clip edge. SkPath::FillType determines if path
+describes the area inside or outside its contours; and if path contour overlaps
+itself or another path contour, whether the overlaps form part of the area.
+path is transformed by SkMatrix before it is combined with clip.
+
+@param path         SkPath to combine with clip
+@param op           SkClipOp to apply to clip
+@param doAntiAlias  true if clip is to be anti-aliased
+
+example: https://fiddle.skia.org/c/@Canvas_clipPath
+*/
+func (o Canvas) ClipPath(path Path, op ClipOp, doAntiAlias bool) {
+	c_obj := o.sk
+	c_path := path.sk
+	c_op := C.int(op)
+	c_doAntiAlias := C.bool(doAntiAlias)
+	C.misk_Canvas_clipPath(c_obj, c_path, c_op, c_doAntiAlias)
+}
+
+/*
+Replaces clip with the intersection or difference of clip and SkRegion deviceRgn.
+Resulting clip is aliased; pixels are fully contained by the clip.
+deviceRgn is unaffected by SkMatrix.
+
+@param deviceRgn  SkRegion to combine with clip
+@param op         SkClipOp to apply to clip
+
+example: https://fiddle.skia.org/c/@Canvas_clipRegion
+*/
+func (o Canvas) ClipRegion(deviceRgn Region, op ClipOp) {
+	c_obj := o.sk
+	c_deviceRgn := deviceRgn.sk
+	c_op := C.int(op)
+	C.misk_Canvas_clipRegion(c_obj, c_deviceRgn, c_op)
+}
+
+/*
+Returns true if SkRect rect, transformed by SkMatrix, can be quickly determined to be
+outside of clip. May return false even though rect is outside of clip.
+
+Use to check if an area to be drawn is clipped out, to skip subsequent draw calls.
+
+@param rect  SkRect to compare with clip
+@return      true if rect, transformed by SkMatrix, does not intersect clip
+
+example: https://fiddle.skia.org/c/@Canvas_quickReject
+*/
+func (o Canvas) QuickRejectRect(rect Rect) bool {
+	c_obj := o.sk
+	c_rect := *(*C.sk_SkRect)(unsafe.Pointer(&rect))
+	retC := C.misk_Canvas_quickRejectRect(c_obj, c_rect)
+	return bool(retC)
+}
+
+/*
+Returns true if path, transformed by SkMatrix, can be quickly determined to be
+outside of clip. May return false even though path is outside of clip.
+
+Use to check if an area to be drawn is clipped out, to skip subsequent draw calls.
+
+@param path  SkPath to compare with clip
+@return      true if path, transformed by SkMatrix, does not intersect clip
+
+example: https://fiddle.skia.org/c/@Canvas_quickReject_2
+*/
+func (o Canvas) QuickRejectPath(path Path) bool {
+	c_obj := o.sk
+	c_path := path.sk
+	retC := C.misk_Canvas_quickRejectPath(c_obj, c_path)
+	return bool(retC)
+}
+
 type CanvasClipEdgeStyle int64
 
 const (
@@ -823,6 +967,68 @@ func NewImageInfo() ImageInfo {
 
 	retC := C.misk_new_ImageInfo()
 	return ImageInfo{sk: retC}
+}
+
+/*
+4x4 matrix used by SkCanvas and other parts of Skia.
+
+Skia assumes a right-handed coordinate system:
+
+	+X goes to the right
+	+Y goes down
+	+Z goes into the screen (away from the viewer)
+*/
+type M44 struct {
+	sk *C.sk_SkM44
+}
+
+// IsNil returns true if the raw skia object pointer is nil.
+// If it is nil is may indicate that the M44 has not been created.
+func (o M44) IsNil() bool {
+	return o.sk == nil
+}
+
+func NewM44Copy(src M44) M44 {
+	c_src := src.sk
+	retC := C.misk_new_M44Copy(c_src)
+	return M44{sk: retC}
+}
+
+func NewM44() M44 {
+
+	retC := C.misk_new_M44()
+	return M44{sk: retC}
+}
+
+func NewM44AB(a M44, b M44) M44 {
+	c_a := a.sk
+	c_b := b.sk
+	retC := C.misk_new_M44AB(c_a, c_b)
+	return M44{sk: retC}
+}
+
+/*
+The constructor parameters are in row-major order.
+*/
+func NewM44Scalars(m0 float32, m4 float32, m8 float32, m12 float32, m1 float32, m5 float32, m9 float32, m13 float32, m2 float32, m6 float32, m10 float32, m14 float32, m3 float32, m7 float32, m11 float32, m15 float32) M44 {
+	c_m0 := C.float(m0)
+	c_m4 := C.float(m4)
+	c_m8 := C.float(m8)
+	c_m12 := C.float(m12)
+	c_m1 := C.float(m1)
+	c_m5 := C.float(m5)
+	c_m9 := C.float(m9)
+	c_m13 := C.float(m13)
+	c_m2 := C.float(m2)
+	c_m6 := C.float(m6)
+	c_m10 := C.float(m10)
+	c_m14 := C.float(m14)
+	c_m3 := C.float(m3)
+	c_m7 := C.float(m7)
+	c_m11 := C.float(m11)
+	c_m15 := C.float(m15)
+	retC := C.misk_new_M44Scalars(c_m0, c_m4, c_m8, c_m12, c_m1, c_m5, c_m9, c_m13, c_m2, c_m6, c_m10, c_m14, c_m3, c_m7, c_m11, c_m15)
+	return M44{sk: retC}
 }
 
 /*
@@ -1260,6 +1466,42 @@ func (o IRect) Sort() {
 }
 
 type ISize C.sk_SkISize
+
+/*
+SkMatrix holds a 3x3 matrix for transforming coordinates. This allows mapping
+SkPoint and vectors with translation, scaling, skewing, rotation, and
+perspective.
+
+SkMatrix elements are in row major order.
+SkMatrix constexpr default constructs to identity.
+
+SkMatrix includes a hidden variable that classifies the type of matrix to
+improve performance. SkMatrix is not thread safe unless getType() is called first.
+
+example: https://fiddle.skia.org/c/@Matrix_063
+*/
+type Matrix struct {
+	sk *C.sk_SkMatrix
+}
+
+// IsNil returns true if the raw skia object pointer is nil.
+// If it is nil is may indicate that the Matrix has not been created.
+func (o Matrix) IsNil() bool {
+	return o.sk == nil
+}
+
+/*
+Creates an identity SkMatrix:
+
+| 1 0 0 |
+| 0 1 0 |
+| 0 0 1 |
+*/
+func NewMatrix() Matrix {
+
+	retC := C.misk_new_Matrix()
+	return Matrix{sk: retC}
+}
 
 /*
 SkPaint controls options applied when drawing. SkPaint collects all
@@ -2205,6 +2447,120 @@ func (o Rect) Sort() {
 	C.misk_Rect_sort(c_obj)
 }
 
+/*
+SkRRect describes a rounded rectangle with a bounds and a pair of radii for each corner.
+The bounds and radii can be set so that SkRRect describes: a rectangle with sharp corners;
+a circle; an oval; or a rectangle with one or more rounded corners.
+
+SkRRect allows implementing CSS properties that describe rounded corners.
+SkRRect may have up to eight different radii, one for each axis on each of its four
+corners.
+
+SkRRect may modify the provided parameters when initializing bounds and radii.
+If either axis radii is zero or less: radii are stored as zero; corner is square.
+If corner curves overlap, radii are proportionally reduced to fit within bounds.
+*/
+type RRect C.sk_SkRRect
+
+/*
+Initializes bounds at (0, 0), the origin, with zero width and height.
+Initializes corner radii to (0, 0), and sets type of kEmpty_Type.
+
+@return  empty SkRRect
+*/
+func NewRRect() RRect {
+
+	retC := C.misk_new_RRect()
+	return *(*RRect)(unsafe.Pointer(&retC))
+}
+
+/*
+Initializes to copy of rrect bounds and corner radii.
+
+@param rrect  bounds and corner to copy
+@return       copy of rrect
+*/
+func NewRRectCopy(rrect RRect) RRect {
+	c_rrect := *(*C.sk_SkRRect)(unsafe.Pointer(&rrect))
+	retC := C.misk_new_RRectCopy(c_rrect)
+	return *(*RRect)(unsafe.Pointer(&retC))
+}
+
+/*
+SkRegion describes the set of pixels used to clip SkCanvas. SkRegion is compact,
+efficiently storing a single integer rectangle, or a run length encoded array
+of rectangles. SkRegion may reduce the current SkCanvas clip, or may be drawn as
+one or more integer rectangles. SkRegion iterator returns the scan lines or
+rectangles contained by it, optionally intersecting a bounding rectangle.
+*/
+type Region struct {
+	sk *C.sk_SkRegion
+}
+
+// IsNil returns true if the raw skia object pointer is nil.
+// If it is nil is may indicate that the Region has not been created.
+func (o Region) IsNil() bool {
+	return o.sk == nil
+}
+
+/*
+Constructs an empty SkRegion. SkRegion is set to empty bounds
+at (0, 0) with zero width and height.
+
+@return  empty SkRegion
+
+example: https://fiddle.skia.org/c/@Region_empty_constructor
+*/
+func NewRegion() Region {
+
+	retC := C.misk_new_Region()
+	return Region{sk: retC}
+}
+
+/*
+Constructs a copy of an existing region.
+Copy constructor makes two regions identical by value. Internally, region and
+the returned result share pointer values. The underlying SkRect array is
+copied when modified.
+
+Creating a SkRegion copy is very efficient and never allocates memory.
+SkRegion are always copied by value from the interface; the underlying shared
+pointers are not exposed.
+
+@param region  SkRegion to copy by value
+@return        copy of SkRegion
+
+example: https://fiddle.skia.org/c/@Region_copy_const_SkRegion
+*/
+func NewRegionCopy(region Region) Region {
+	c_region := region.sk
+	retC := C.misk_new_RegionCopy(c_region)
+	return Region{sk: retC}
+}
+
+/*
+Constructs a rectangular SkRegion matching the bounds of rect.
+
+@param rect  bounds of constructed SkRegion
+@return      rectangular SkRegion
+
+example: https://fiddle.skia.org/c/@Region_copy_const_SkIRect
+*/
+func NewRegionCopyRect(rect IRect) Region {
+	c_rect := *(*C.sk_SkIRect)(unsafe.Pointer(&rect))
+	retC := C.misk_new_RegionCopyRect(c_rect)
+	return Region{sk: retC}
+}
+
+/*
+Releases ownership of any shared data and deletes data if SkRegion is sole owner.
+
+example: https://fiddle.skia.org/c/@Region_destructor
+*/
+func (o Region) Delete() {
+	C.misk_delete_SkRegion(o.sk)
+}
+
 // /////////////////////////////////////////////////////////////////////////////
 type Size C.sk_SkSize
 
@@ -2311,6 +2667,14 @@ const (
 	PixelGeometryBGR_H   PixelGeometry = 2
 	PixelGeometryRGB_V   PixelGeometry = 3
 	PixelGeometryBGR_V   PixelGeometry = 4
+)
+
+type ClipOp int64
+
+const (
+	ClipOpDifference    ClipOp = 0
+	ClipOpIntersect     ClipOp = 1
+	ClipOpMax_EnumValue ClipOp = 1
 )
 
 /*

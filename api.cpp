@@ -2,16 +2,21 @@
 
 #include <include/core/SkBitmap.h>
 #include <include/core/SkCanvas.h>
+#include <include/core/SkClipOp.h>
 #include <include/core/SkColor.h>
 #include <include/core/SkColorSpace.h>
 #include <include/core/SkFont.h>
 #include <include/core/SkFontMgr.h>
 #include <include/core/SkFontStyle.h>
 #include <include/core/SkImageInfo.h>
+#include <include/core/SkM44.h>
+#include <include/core/SkMatrix.h>
 #include <include/core/SkPaint.h>
 #include <include/core/SkPath.h>
 #include <include/core/SkPixmap.h>
+#include <include/core/SkRRect.h>
 #include <include/core/SkRect.h>
+#include <include/core/SkRegion.h>
 #include <include/core/SkSize.h>
 #include <include/core/SkSurfaceProps.h>
 #include <include/core/SkTypeface.h>
@@ -206,6 +211,73 @@ extern "C"
     return reinterpret_cast<SkCanvas *> (c_obj)->skew (c_sx, c_sy);
   }
 
+  void
+  misk_Canvas_setMatrixM44 (sk_SkCanvas *c_obj, sk_SkM44 *c_matrix)
+  {
+    return reinterpret_cast<SkCanvas *> (c_obj)->setMatrix (
+        *reinterpret_cast<SkM44 *> (c_matrix));
+  }
+
+  void
+  misk_Canvas_setMatrix (sk_SkCanvas *c_obj, sk_SkMatrix *c_matrix)
+  {
+    return reinterpret_cast<SkCanvas *> (c_obj)->setMatrix (
+        *reinterpret_cast<SkMatrix *> (c_matrix));
+  }
+
+  void
+  misk_Canvas_resetMatrix (sk_SkCanvas *c_obj)
+  {
+    return reinterpret_cast<SkCanvas *> (c_obj)->resetMatrix ();
+  }
+
+  void
+  misk_Canvas_clipRect (sk_SkCanvas *c_obj, sk_SkRect c_rect, int c_op,
+                        bool c_doAntiAlias)
+  {
+    return reinterpret_cast<SkCanvas *> (c_obj)->clipRect (
+        *reinterpret_cast<SkRect *> (&c_rect), SkClipOp (c_op), c_doAntiAlias);
+  }
+
+  void
+  misk_Canvas_clipRRect (sk_SkCanvas *c_obj, sk_SkRRect c_rrect, int c_op,
+                         bool c_doAntiAlias)
+  {
+    return reinterpret_cast<SkCanvas *> (c_obj)->clipRRect (
+        *reinterpret_cast<SkRRect *> (&c_rrect), SkClipOp (c_op),
+        c_doAntiAlias);
+  }
+
+  void
+  misk_Canvas_clipPath (sk_SkCanvas *c_obj, sk_SkPath *c_path, int c_op,
+                        bool c_doAntiAlias)
+  {
+    return reinterpret_cast<SkCanvas *> (c_obj)->clipPath (
+        *reinterpret_cast<SkPath *> (c_path), SkClipOp (c_op), c_doAntiAlias);
+  }
+
+  void
+  misk_Canvas_clipRegion (sk_SkCanvas *c_obj, sk_SkRegion *c_deviceRgn,
+                          int c_op)
+  {
+    return reinterpret_cast<SkCanvas *> (c_obj)->clipRegion (
+        *reinterpret_cast<SkRegion *> (c_deviceRgn), SkClipOp (c_op));
+  }
+
+  bool
+  misk_Canvas_quickRejectRect (sk_SkCanvas *c_obj, sk_SkRect c_rect)
+  {
+    return reinterpret_cast<SkCanvas *> (c_obj)->quickReject (
+        *reinterpret_cast<SkRect *> (&c_rect));
+  }
+
+  bool
+  misk_Canvas_quickRejectPath (sk_SkCanvas *c_obj, sk_SkPath *c_path)
+  {
+    return reinterpret_cast<SkCanvas *> (c_obj)->quickReject (
+        *reinterpret_cast<SkPath *> (c_path));
+  }
+
   sk_SkColorSpace *
   misk_ColorSpace_MakeSRGB ()
   {
@@ -301,6 +373,37 @@ extern "C"
   misk_new_ImageInfo ()
   {
     return reinterpret_cast<sk_SkImageInfo *> (new SkImageInfo ());
+  }
+
+  sk_SkM44 *
+  misk_new_M44Copy (sk_SkM44 *c_src)
+  {
+    return reinterpret_cast<sk_SkM44 *> (
+        new SkM44 (*reinterpret_cast<SkM44 *> (c_src)));
+  }
+
+  sk_SkM44 *
+  misk_new_M44 ()
+  {
+    return reinterpret_cast<sk_SkM44 *> (new SkM44 ());
+  }
+
+  sk_SkM44 *
+  misk_new_M44AB (sk_SkM44 *c_a, sk_SkM44 *c_b)
+  {
+    return reinterpret_cast<sk_SkM44 *> (new SkM44 (
+        *reinterpret_cast<SkM44 *> (c_a), *reinterpret_cast<SkM44 *> (c_b)));
+  }
+
+  sk_SkM44 *
+  misk_new_M44Scalars (float c_m0, float c_m4, float c_m8, float c_m12,
+                       float c_m1, float c_m5, float c_m9, float c_m13,
+                       float c_m2, float c_m6, float c_m10, float c_m14,
+                       float c_m3, float c_m7, float c_m11, float c_m15)
+  {
+    return reinterpret_cast<sk_SkM44 *> (
+        new SkM44 (c_m0, c_m4, c_m8, c_m12, c_m1, c_m5, c_m9, c_m13, c_m2,
+                   c_m6, c_m10, c_m14, c_m3, c_m7, c_m11, c_m15));
   }
 
   sk_SkIRect
@@ -479,6 +582,12 @@ extern "C"
   misk_IRect_sort (sk_SkIRect *c_obj)
   {
     return reinterpret_cast<SkIRect *> (c_obj)->sort ();
+  }
+
+  sk_SkMatrix *
+  misk_new_Matrix ()
+  {
+    return reinterpret_cast<sk_SkMatrix *> (new SkMatrix ());
   }
 
   sk_SkPaint *
@@ -819,6 +928,45 @@ extern "C"
   misk_Rect_sort (sk_SkRect *c_obj)
   {
     return reinterpret_cast<SkRect *> (c_obj)->sort ();
+  }
+
+  sk_SkRRect *
+  misk_new_RRect ()
+  {
+    return reinterpret_cast<sk_SkRRect *> (new SkRRect ());
+  }
+
+  sk_SkRRect *
+  misk_new_RRectCopy (sk_SkRRect c_rrect)
+  {
+    return reinterpret_cast<sk_SkRRect *> (
+        new SkRRect (*reinterpret_cast<SkRRect *> (&c_rrect)));
+  }
+
+  sk_SkRegion *
+  misk_new_Region ()
+  {
+    return reinterpret_cast<sk_SkRegion *> (new SkRegion ());
+  }
+
+  sk_SkRegion *
+  misk_new_RegionCopy (sk_SkRegion *c_region)
+  {
+    return reinterpret_cast<sk_SkRegion *> (
+        new SkRegion (*reinterpret_cast<SkRegion *> (c_region)));
+  }
+
+  sk_SkRegion *
+  misk_new_RegionCopyRect (sk_SkIRect c_rect)
+  {
+    return reinterpret_cast<sk_SkRegion *> (
+        new SkRegion (*reinterpret_cast<SkIRect *> (&c_rect)));
+  }
+
+  void
+  misk_delete_SkRegion (sk_SkRegion *obj)
+  {
+    delete reinterpret_cast<SkRegion *> (obj);
   }
 
   sk_SkSurfaceProps *

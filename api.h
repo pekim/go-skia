@@ -181,6 +181,11 @@ extern "C"
 
   typedef struct
   {
+    uchar fMat[64];
+  } sk_SkM44;
+
+  typedef struct
+  {
     int X;
     int Y;
   } sk_SkIPoint;
@@ -198,6 +203,12 @@ extern "C"
     int Width;
     int Height;
   } sk_SkISize;
+
+  typedef struct
+  {
+    uchar fMat[36];
+    int fTypeMask;
+  } sk_SkMatrix;
 
   typedef struct
   {
@@ -244,6 +255,19 @@ extern "C"
     float Right;
     float Bottom;
   } sk_SkRect;
+
+  typedef struct
+  {
+    uchar fRect[16];
+    uchar fRadii[32];
+    int fType;
+  } sk_SkRRect;
+
+  typedef struct
+  {
+    uchar fBounds[16];
+    uchar fRunHead[8];
+  } sk_SkRegion;
 
   typedef struct
   {
@@ -304,6 +328,19 @@ extern "C"
   void misk_Canvas_rotateAboutPoint (sk_SkCanvas *c_obj, float c_degrees,
                                      float c_px, float c_py);
   void misk_Canvas_skew (sk_SkCanvas *c_obj, float c_sx, float c_sy);
+  void misk_Canvas_setMatrixM44 (sk_SkCanvas *c_obj, sk_SkM44 *c_matrix);
+  void misk_Canvas_setMatrix (sk_SkCanvas *c_obj, sk_SkMatrix *c_matrix);
+  void misk_Canvas_resetMatrix (sk_SkCanvas *c_obj);
+  void misk_Canvas_clipRect (sk_SkCanvas *c_obj, sk_SkRect c_rect, int c_op,
+                             bool c_doAntiAlias);
+  void misk_Canvas_clipRRect (sk_SkCanvas *c_obj, sk_SkRRect c_rrect, int c_op,
+                              bool c_doAntiAlias);
+  void misk_Canvas_clipPath (sk_SkCanvas *c_obj, sk_SkPath *c_path, int c_op,
+                             bool c_doAntiAlias);
+  void misk_Canvas_clipRegion (sk_SkCanvas *c_obj, sk_SkRegion *c_deviceRgn,
+                               int c_op);
+  bool misk_Canvas_quickRejectRect (sk_SkCanvas *c_obj, sk_SkRect c_rect);
+  bool misk_Canvas_quickRejectPath (sk_SkCanvas *c_obj, sk_SkPath *c_path);
 
   sk_SkColorSpace *misk_ColorSpace_MakeSRGB ();
   sk_SkColorSpace *misk_ColorSpace_MakeSRGBLinear ();
@@ -326,6 +363,16 @@ extern "C"
   sk_SkFontStyle misk_FontStyle_BoldItalic ();
 
   sk_SkImageInfo *misk_new_ImageInfo ();
+
+  sk_SkM44 *misk_new_M44Copy (sk_SkM44 *c_src);
+  sk_SkM44 *misk_new_M44 ();
+  sk_SkM44 *misk_new_M44AB (sk_SkM44 *c_a, sk_SkM44 *c_b);
+  sk_SkM44 *misk_new_M44Scalars (float c_m0, float c_m4, float c_m8,
+                                 float c_m12, float c_m1, float c_m5,
+                                 float c_m9, float c_m13, float c_m2,
+                                 float c_m6, float c_m10, float c_m14,
+                                 float c_m3, float c_m7, float c_m11,
+                                 float c_m15);
 
   sk_SkIRect misk_IRect_MakeEmpty ();
   sk_SkIRect misk_IRect_MakeWH (int c_w, int c_h);
@@ -357,6 +404,8 @@ extern "C"
   bool misk_IRect_intersect (sk_SkIRect *c_obj, sk_SkIRect c_r);
   void misk_IRect_join (sk_SkIRect *c_obj, sk_SkIRect c_r);
   void misk_IRect_sort (sk_SkIRect *c_obj);
+
+  sk_SkMatrix *misk_new_Matrix ();
 
   sk_SkPaint *misk_new_Paint ();
   sk_SkPaint *misk_new_PaintCopy (sk_SkPaint *c_paint);
@@ -418,6 +467,14 @@ extern "C"
   bool misk_Rect_intersect (sk_SkRect *c_obj, sk_SkRect c_r);
   void misk_Rect_join (sk_SkRect *c_obj, sk_SkRect c_r);
   void misk_Rect_sort (sk_SkRect *c_obj);
+
+  sk_SkRRect *misk_new_RRect ();
+  sk_SkRRect *misk_new_RRectCopy (sk_SkRRect c_rrect);
+
+  sk_SkRegion *misk_new_Region ();
+  sk_SkRegion *misk_new_RegionCopy (sk_SkRegion *c_region);
+  sk_SkRegion *misk_new_RegionCopyRect (sk_SkIRect c_rect);
+  void misk_delete_SkRegion (sk_SkRegion *obj);
 
   sk_SkSurfaceProps *misk_new_SurfaceProps ();
   sk_SkSurfaceProps *misk_new_SurfacePropsPixelGeometry (unsigned int c_flags,
