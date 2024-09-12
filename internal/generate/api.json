@@ -190,8 +190,16 @@
         { "suffix": "Options" },
         {}
       ]
-    }
+    },
+    { "name": "SkColorSetARGB" },
+    { "name": "SkColorSetA" },
+    { "name": "SkPreMultiplyARGB" },
+    { "name": "SkPreMultiplyColor" }
   ],
 
-  "typedefs": [{ "name": "SkColor" }]
+  "typedefs": [
+    { "name": "SkAlpha" },
+    { "name": "SkColor" },
+    { "name": "SkPMColor" }
+  ]
 }

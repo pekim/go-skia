@@ -128,6 +128,8 @@ func (f functionOverload) generateGo(g generator) {
 			} else {
 				file.writelnf("  return %s{sk: &retC}", f.retrn.record.goName)
 			}
+		} else if f.retrn.typedef != nil {
+			file.writelnf("  return %s(retC)", f.retrn.goName)
 		} else {
 			fatalf("return type '%s' not supported", f.retrn.goName)
 		}
@@ -151,6 +153,8 @@ func (f functionOverload) generateHeader(g generator) {
 			returnPtr = "*"
 		}
 		returnDecl = fmt.Sprintf("%s%s", f.retrn.record.cStructName, returnPtr)
+	} else if f.retrn.typedef != nil {
+		returnDecl = f.retrn.typedef.cName
 	}
 
 	file.writelnf("%s %s(%s);", returnDecl, f.cFuncName, strings.Join(params, ", "))

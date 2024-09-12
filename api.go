@@ -1442,6 +1442,77 @@ func GrDirectContextsMakeGL() GrDirectContext {
 }
 
 /*
+Returns color value from 8-bit component values. Asserts if SK_DEBUG is defined
+if a, r, g, or b exceed 255. Since color is unpremultiplied, a may be smaller
+than the largest of r, g, and b.
+
+@param a  amount of alpha, from fully transparent (0) to fully opaque (255)
+@param r  amount of red, from no red (0) to full red (255)
+@param g  amount of green, from no green (0) to full green (255)
+@param b  amount of blue, from no blue (0) to full blue (255)
+@return   color and alpha, unpremultiplied
+*/
+func SkColorSetARGB(a uint, r uint, g uint, b uint) Color {
+	c_a := C.uint(a)
+	c_r := C.uint(r)
+	c_g := C.uint(g)
+	c_b := C.uint(b)
+	retC := C.misk_SkColorSetARGB(c_a, c_r, c_g, c_b)
+	return Color(retC)
+}
+
+/*
+Returns unpremultiplied color with red, blue, and green set from c; and alpha set
+from a. Alpha component of c is ignored and is replaced by a in result.
+
+@param c  packed RGB, eight bits per component
+@param a  alpha: transparent at zero, fully opaque at 255
+@return   color with transparency
+*/
+func SkColorSetA(c Color, a uint) Color {
+	c_c := C.uint(c)
+	c_a := C.uint(a)
+	retC := C.misk_SkColorSetA(c_c, c_a)
+	return Color(retC)
+}
+
+/*
+Returns a SkPMColor value from unpremultiplied 8-bit component values.
+
+@param a  amount of alpha, from fully transparent (0) to fully opaque (255)
+@param r  amount of red, from no red (0) to full red (255)
+@param g  amount of green, from no green (0) to full green (255)
+@param b  amount of blue, from no blue (0) to full blue (255)
+@return   premultiplied color
+*/
+func SkPreMultiplyARGB(a uint, r uint, g uint, b uint) PMColor {
+	c_a := C.uint(a)
+	c_r := C.uint(r)
+	c_g := C.uint(g)
+	c_b := C.uint(b)
+	retC := C.misk_SkPreMultiplyARGB(c_a, c_r, c_g, c_b)
+	return PMColor(retC)
+}
+
+/*
+Returns pmcolor closest to color c. Multiplies c RGB components by the c alpha,
+and arranges the bytes to match the format of kN32_SkColorType.
+
+@param c  unpremultiplied ARGB color
+@return   premultiplied color
+*/
+func SkPreMultiplyColor(c Color) PMColor {
+	c_c := C.uint(c)
+	retC := C.misk_SkPreMultiplyColor(c_c)
+	return PMColor(retC)
+}
+
+/*
+8-bit type for an alpha value. 255 is 100% opaque, zero is 100% transparent.
+*/
+type Alpha C.uint
+
+/*
 32-bit ARGB color value, unpremultiplied. Color components are always in
 a known order. This is different from SkPMColor, which has its bytes in a configuration
 dependent order, to match the format of kBGRA_8888_SkColorType bitmaps. SkColor
@@ -1452,6 +1523,14 @@ that is unpremultiplied if alpha is 255, fully opaque, although may have the
 component values in a different order.
 */
 type Color C.uint
+
+/*
+32-bit ARGB color value, premultiplied. The byte order for this value is
+configuration dependent, matching the format of kBGRA_8888_SkColorType bitmaps.
+This is different from SkColor, which is unpremultiplied, and is always in the
+same byte order.
+*/
+type PMColor C.uint
 
 func FontMgrRefDefault() FontMgr {
 	return FontMgr{

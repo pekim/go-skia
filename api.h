@@ -352,6 +352,12 @@ extern "C"
   sk_GrDirectContext *
   misk_GrDirectContextsMakeGLOptions (sk_GrContextOptions c_p0);
   sk_GrDirectContext *misk_GrDirectContextsMakeGL ();
+  uint misk_SkColorSetARGB (unsigned int c_a, unsigned int c_r,
+                            unsigned int c_g, unsigned int c_b);
+  uint misk_SkColorSetA (uint c_c, unsigned int c_a);
+  uint misk_SkPreMultiplyARGB (unsigned int c_a, unsigned int c_r,
+                               unsigned int c_g, unsigned int c_b);
+  uint misk_SkPreMultiplyColor (uint c_c);
   sk_SkFontMgr *sk_fontmgr_ref_default (void);
 
 #ifdef __cplusplus

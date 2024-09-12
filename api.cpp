@@ -555,6 +555,32 @@ extern "C"
         GrDirectContexts::MakeGL ().release ());
   }
 
+  SkColor
+  misk_SkColorSetARGB (unsigned int c_a, unsigned int c_r, unsigned int c_g,
+                       unsigned int c_b)
+  {
+    return SkColorSetARGB (c_a, c_r, c_g, c_b);
+  }
+
+  SkColor
+  misk_SkColorSetA (uint c_c, unsigned int c_a)
+  {
+    return SkColorSetA (SkColor (c_c), c_a);
+  }
+
+  SkPMColor
+  misk_SkPreMultiplyARGB (unsigned int c_a, unsigned int c_r, unsigned int c_g,
+                          unsigned int c_b)
+  {
+    return SkPreMultiplyARGB (c_a, c_r, c_g, c_b);
+  }
+
+  SkPMColor
+  misk_SkPreMultiplyColor (uint c_c)
+  {
+    return SkPreMultiplyColor (SkColor (c_c));
+  }
+
   sk_SkFontMgr *
   sk_fontmgr_ref_default (void)
   {
