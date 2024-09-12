@@ -696,6 +696,40 @@ func (o Canvas) QuickRejectPath(path Path) bool {
 	return bool(retC)
 }
 
+/*
+Returns bounds of clip, transformed by inverse of SkMatrix. If clip is empty,
+return SkRect::MakeEmpty, where all SkRect sides equal zero.
+
+SkRect returned is outset by one to account for partial pixel coverage if clip
+is anti-aliased.
+
+@return  bounds of clip in local coordinates
+
+example: https://fiddle.skia.org/c/@Canvas_getLocalClipBounds
+*/
+func (o Canvas) GetLocalClipBoundsRect() Rect {
+	c_obj := o.sk
+	retC := C.misk_Canvas_getLocalClipBoundsRect(c_obj)
+	return Rect(retC)
+}
+
+/*
+Returns bounds of clip, transformed by inverse of SkMatrix. If clip is empty,
+return false, and set bounds to SkRect::MakeEmpty, where all SkRect sides equal zero.
+
+bounds is outset by one to account for partial pixel coverage if clip
+is anti-aliased.
+
+@param bounds  SkRect of clip in local coordinates
+@return        true if clip bounds is not empty
+*/
+func (o Canvas) GetLocalClipBoundsPath(bounds Rect) bool {
+	c_obj := o.sk
+	c_bounds := *(*C.sk_SkRect)(unsafe.Pointer(&bounds))
+	retC := C.misk_Canvas_getLocalClipBoundsPath(c_obj, c_bounds)
+	return bool(retC)
+}
+
 type CanvasClipEdgeStyle int64
 
 const (

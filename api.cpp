@@ -278,6 +278,20 @@ extern "C"
         *reinterpret_cast<SkPath *> (c_path));
   }
 
+  sk_SkRect
+  misk_Canvas_getLocalClipBoundsRect (sk_SkCanvas *c_obj)
+  {
+    auto ret = reinterpret_cast<SkCanvas *> (c_obj)->getLocalClipBounds ();
+    return *(reinterpret_cast<sk_SkRect *> (&ret));
+  }
+
+  bool
+  misk_Canvas_getLocalClipBoundsPath (sk_SkCanvas *c_obj, sk_SkRect c_bounds)
+  {
+    return reinterpret_cast<SkCanvas *> (c_obj)->getLocalClipBounds (
+        reinterpret_cast<SkRect *> (&c_bounds));
+  }
+
   sk_SkColorSpace *
   misk_ColorSpace_MakeSRGB ()
   {

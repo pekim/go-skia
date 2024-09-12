@@ -69,6 +69,10 @@
         {
           "name": "quickReject",
           "overloads": [{ "suffix": "Rect" }, { "suffix": "Path" }]
+        },
+        {
+          "name": "getLocalClipBounds",
+          "overloads": [{ "suffix": "Rect" }, { "suffix": "Path" }]
         }
       ]
     },

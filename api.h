@@ -341,6 +341,9 @@ extern "C"
                                int c_op);
   bool misk_Canvas_quickRejectRect (sk_SkCanvas *c_obj, sk_SkRect c_rect);
   bool misk_Canvas_quickRejectPath (sk_SkCanvas *c_obj, sk_SkPath *c_path);
+  sk_SkRect misk_Canvas_getLocalClipBoundsRect (sk_SkCanvas *c_obj);
+  bool misk_Canvas_getLocalClipBoundsPath (sk_SkCanvas *c_obj,
+                                           sk_SkRect c_bounds);
 
   sk_SkColorSpace *misk_ColorSpace_MakeSRGB ();
   sk_SkColorSpace *misk_ColorSpace_MakeSRGBLinear ();
