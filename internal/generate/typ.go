@@ -19,6 +19,7 @@ type typ struct {
 	isSmartPointer    bool
 	record            *record
 	enum              *enum
+	typedef           *typedef
 	subTyp            *typ
 }
 
@@ -53,8 +54,11 @@ func typFromClangType(cType clang.Type, api api) (typ, error) {
 
 	} else if enum, ok := api.findEnum(typ.cppName); ok {
 		typ.enum = enum
-		typ.cName = "qaz"
 		typ.goName = typ.enum.goName
+
+	} else if typedef, ok := api.findTypedef(typ.cppName); ok {
+		typ.typedef = typedef
+		typ.goName = typ.typedef.goName
 
 	} else if strings.HasPrefix(typ.cppName, "sk_sp<") {
 		// A type like "sk_sp<SkSomeClass>" is of kind clang.Type_Elaborated.

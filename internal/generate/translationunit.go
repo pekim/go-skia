@@ -110,6 +110,11 @@ func (tu translationUnit) enrichApi(api *api) {
 				function.cursor = cursor
 				function.enrich(cursor)
 			}
+
+		case clang.Cursor_TypedefDecl:
+			if typedef, ok := api.findTypedef(cursor.Spelling()); ok {
+				typedef.enrich(cursor)
+			}
 		}
 
 		return clang.ChildVisit_Continue

@@ -802,7 +802,7 @@ unpremultiplied, packing 8-bit components for alpha, red, blue, and green.
 
 example: https://fiddle.skia.org/c/@Paint_setColor
 */
-func (o Paint) SetColor(color uint) {
+func (o Paint) SetColor(color Color) {
 	c_obj := o.sk
 	c_color := C.uint(color)
 	C.misk_Paint_setColor(c_obj, c_color)
@@ -1440,6 +1440,18 @@ func GrDirectContextsMakeGL() GrDirectContext {
 	retC := C.misk_GrDirectContextsMakeGL()
 	return GrDirectContext{sk: retC}
 }
+
+/*
+32-bit ARGB color value, unpremultiplied. Color components are always in
+a known order. This is different from SkPMColor, which has its bytes in a configuration
+dependent order, to match the format of kBGRA_8888_SkColorType bitmaps. SkColor
+is the type used to specify colors in SkPaint and in gradients.
+
+Color that is premultiplied has the same component values as color
+that is unpremultiplied if alpha is 255, fully opaque, although may have the
+component values in a different order.
+*/
+type Color C.uint
 
 func FontMgrRefDefault() FontMgr {
 	return FontMgr{

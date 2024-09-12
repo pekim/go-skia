@@ -191,5 +191,7 @@
         {}
       ]
     }
-  ]
+  ],
+
+  "typedefs": [{ "name": "SkColor" }]
 }

@@ -2,6 +2,7 @@
 
 #include <include/core/SkBitmap.h>
 #include <include/core/SkCanvas.h>
+#include <include/core/SkColor.h>
 #include <include/core/SkColorSpace.h>
 #include <include/core/SkFont.h>
 #include <include/core/SkFontMgr.h>
@@ -316,9 +317,9 @@ extern "C"
   }
 
   void
-  misk_Paint_setColor (sk_SkPaint *c_obj, unsigned int c_color)
+  misk_Paint_setColor (sk_SkPaint *c_obj, uint c_color)
   {
-    return reinterpret_cast<SkPaint *> (c_obj)->setColor (c_color);
+    return reinterpret_cast<SkPaint *> (c_obj)->setColor (SkColor (c_color));
   }
 
   void

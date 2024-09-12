@@ -47,6 +47,11 @@ func (p *param) enrich2(api api) {
 		p.cParam = fmt.Sprintf("%s %s", p.typ.enum.cType.cName, p.cName)
 		p.cArg = fmt.Sprintf("%s(%s)", p.typ.cppName, p.cName)
 
+	} else if p.typ.typedef != nil {
+		p.cgoVar = fmt.Sprintf("%s := C.%s(%s)", p.cName, p.typ.typedef.cName, p.goName)
+		p.cParam = fmt.Sprintf("%s %s", p.typ.typedef.cType.cName, p.cName)
+		p.cArg = fmt.Sprintf("%s(%s)", p.typ.cppName, p.cName)
+
 	} else if p.typ.isLValueReference && p.typ.subTyp.record != nil {
 		if p.typ.subTyp.record.NoWrapper {
 			p.cgoVar = fmt.Sprintf("%s := *(*C.%s)(unsafe.Pointer(&%s))", p.cName, p.typ.subTyp.record.cStructName, p.goName)
@@ -71,5 +76,4 @@ func (p *param) enrich2(api api) {
 	} else {
 		fatalf("unhandled cgoVar %s for param with typ %#v", p.cppName, p.typ)
 	}
-
 }

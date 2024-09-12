@@ -16,6 +16,7 @@ type api struct {
 	Records   []record   `json:"records"`
 	Enums     []enum     `json:"enums"`
 	Functions []function `json:"functions"`
+	Typedefs  []typedef  `json:"typedefs"`
 }
 
 func loadApi() api {
@@ -42,6 +43,10 @@ func loadApi() api {
 	for i := range api.Enums {
 		enum := &api.Enums[i]
 		enum.enrich2(api)
+	}
+	for i := range api.Typedefs {
+		record := &api.Typedefs[i]
+		record.enrich2(api)
 	}
 	for i := range api.Functions {
 		function := &api.Functions[i]
@@ -82,6 +87,15 @@ func (a api) findFunction(name string) (*function, bool) {
 	return nil, false
 }
 
+func (a api) findTypedef(name string) (*typedef, bool) {
+	for i, typedef := range a.Typedefs {
+		if typedef.CppName == name {
+			return &a.Typedefs[i], true
+		}
+	}
+	return nil, false
+}
+
 func (a api) generate(g generator) {
 	fmt.Println("generate")
 
@@ -99,5 +113,9 @@ func (a api) generate(g generator) {
 
 	for _, function := range a.Functions {
 		function.generate(g)
+	}
+
+	for _, typedef := range a.Typedefs {
+		typedef.generate(g)
 	}
 }
