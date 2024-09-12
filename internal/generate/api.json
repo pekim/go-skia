@@ -108,15 +108,21 @@
       "constructors": [{}, null, { "suffix": "Copy" }, null],
       "methods": [
         { "name": "reset" },
+        { "name": "getAlpha" },
         { "name": "setAlpha" },
         { "name": "setARGB" },
         { "name": "setAntiAlias" },
         { "name": "setBlendMode" },
         { "name": "setDither" },
+        { "name": "getStrokeCap" },
         { "name": "setStrokeCap" },
+        { "name": "getStrokeJoin" },
         { "name": "setStrokeJoin" },
+        { "name": "getStrokeMiter" },
         { "name": "setStrokeMiter" },
+        { "name": "getStrokeWidth" },
         { "name": "setStrokeWidth" },
+        { "name": "getStyle" },
         { "name": "setStyle" }
       ],
       "enums": [{ "name": "Cap" }, { "name": "Join" }, { "name": "Style" }]

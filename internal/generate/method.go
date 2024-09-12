@@ -141,6 +141,8 @@ func (m methodOverload) generateGo(g generator) {
 		f.writelnf("  retC := %s", call)
 		if m.retrn.isPrimitive {
 			f.writelnf("  return %s(retC)", m.retrn.goName)
+		} else if m.retrn.enum != nil {
+			f.writelnf("  return %s(retC)", m.retrn.enum.goName)
 		} else if m.retrn.record != nil {
 			if m.retrn.record.NoWrapper {
 				f.writelnf("  return %s(retC)", m.retrn.record.goName)
@@ -176,7 +178,9 @@ func (m methodOverload) generateHeader(g generator) {
 
 	returnDecl := m.retrn.cName
 	returnPtr := ""
-	if m.retrn.record != nil {
+	if m.retrn.enum != nil {
+		returnDecl = m.retrn.enum.cType.cgoName
+	} else if m.retrn.record != nil {
 		if m.retrn.isPointer || m.retrn.isSmartPointer {
 			returnPtr = "*"
 		}
@@ -207,7 +211,9 @@ func (m methodOverload) generateCpp(g generator) {
 
 	returnDecl := m.retrn.cName
 	returnPtr := ""
-	if m.retrn.record != nil {
+	if m.retrn.enum != nil {
+		returnDecl = m.retrn.enum.cType.cgoName
+	} else if m.retrn.record != nil {
 		if m.retrn.isPointer || m.retrn.isSmartPointer {
 			returnPtr = "*"
 		}

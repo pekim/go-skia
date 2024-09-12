@@ -740,6 +740,12 @@ func (o Paint) Reset() {
 	C.misk_Paint_reset(c_obj)
 }
 
+func (o Paint) GetAlpha() uint {
+	c_obj := o.sk
+	retC := C.misk_Paint_getAlpha(c_obj)
+	return uint(retC)
+}
+
 func (o Paint) SetAlpha(a uint) {
 	c_obj := o.sk
 	c_a := C.uint(a)
@@ -799,6 +805,15 @@ func (o Paint) SetDither(dither bool) {
 }
 
 /*
+Returns the geometry drawn at the beginning and end of strokes.
+*/
+func (o Paint) GetStrokeCap() PaintCap {
+	c_obj := o.sk
+	retC := C.misk_Paint_getStrokeCap(c_obj)
+	return PaintCap(retC)
+}
+
+/*
 Sets the geometry drawn at the beginning and end of strokes.
 
 example: https://fiddle.skia.org/c/@Paint_setStrokeCap_a
@@ -811,6 +826,15 @@ func (o Paint) SetStrokeCap(cap PaintCap) {
 }
 
 /*
+Returns the geometry drawn at the corners of strokes.
+*/
+func (o Paint) GetStrokeJoin() PaintJoin {
+	c_obj := o.sk
+	retC := C.misk_Paint_getStrokeJoin(c_obj)
+	return PaintJoin(retC)
+}
+
+/*
 Sets the geometry drawn at the corners of strokes.
 
 example: https://fiddle.skia.org/c/@Paint_setStrokeJoin
@@ -819,6 +843,17 @@ func (o Paint) SetStrokeJoin(join PaintJoin) {
 	c_obj := o.sk
 	c_join := C.uint(join)
 	C.misk_Paint_setStrokeJoin(c_obj, c_join)
+}
+
+/*
+Returns the limit at which a sharp corner is drawn beveled.
+
+@return  zero and greater miter limit
+*/
+func (o Paint) GetStrokeMiter() float32 {
+	c_obj := o.sk
+	retC := C.misk_Paint_getStrokeMiter(c_obj)
+	return float32(retC)
 }
 
 /*
@@ -837,6 +872,18 @@ func (o Paint) SetStrokeMiter(miter float32) {
 }
 
 /*
+Returns the thickness of the pen used by SkPaint to
+outline the shape.
+
+@return  zero for hairline, greater than zero for pen thickness
+*/
+func (o Paint) GetStrokeWidth() float32 {
+	c_obj := o.sk
+	retC := C.misk_Paint_getStrokeWidth(c_obj)
+	return float32(retC)
+}
+
+/*
 Sets the thickness of the pen used by the paint to outline the shape.
 A stroke-width of zero is treated as "hairline" width. Hairlines are always exactly one
 pixel wide in device space (their thickness does not change as the canvas is scaled).
@@ -851,6 +898,15 @@ func (o Paint) SetStrokeWidth(width float32) {
 	c_obj := o.sk
 	c_width := C.float(width)
 	C.misk_Paint_setStrokeWidth(c_obj, c_width)
+}
+
+/*
+Returns whether the geometry is filled, stroked, or filled and stroked.
+*/
+func (o Paint) GetStyle() PaintStyle {
+	c_obj := o.sk
+	retC := C.misk_Paint_getStyle(c_obj)
+	return PaintStyle(retC)
 }
 
 /*

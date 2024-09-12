@@ -283,6 +283,12 @@ extern "C"
     return reinterpret_cast<SkPaint *> (c_obj)->reset ();
   }
 
+  unsigned char
+  misk_Paint_getAlpha (sk_SkPaint *c_obj)
+  {
+    return reinterpret_cast<SkPaint *> (c_obj)->getAlpha ();
+  }
+
   void
   misk_Paint_setAlpha (sk_SkPaint *c_obj, unsigned int c_a)
   {
@@ -315,11 +321,23 @@ extern "C"
     return reinterpret_cast<SkPaint *> (c_obj)->setDither (c_dither);
   }
 
+  uint
+  misk_Paint_getStrokeCap (sk_SkPaint *c_obj)
+  {
+    return reinterpret_cast<SkPaint *> (c_obj)->getStrokeCap ();
+  }
+
   void
   misk_Paint_setStrokeCap (sk_SkPaint *c_obj, uint c_cap)
   {
     return reinterpret_cast<SkPaint *> (c_obj)->setStrokeCap (
         SkPaint::Cap (c_cap));
+  }
+
+  uint
+  misk_Paint_getStrokeJoin (sk_SkPaint *c_obj)
+  {
+    return reinterpret_cast<SkPaint *> (c_obj)->getStrokeJoin ();
   }
 
   void
@@ -329,16 +347,34 @@ extern "C"
         SkPaint::Join (c_join));
   }
 
+  float
+  misk_Paint_getStrokeMiter (sk_SkPaint *c_obj)
+  {
+    return reinterpret_cast<SkPaint *> (c_obj)->getStrokeMiter ();
+  }
+
   void
   misk_Paint_setStrokeMiter (sk_SkPaint *c_obj, float c_miter)
   {
     return reinterpret_cast<SkPaint *> (c_obj)->setStrokeMiter (c_miter);
   }
 
+  float
+  misk_Paint_getStrokeWidth (sk_SkPaint *c_obj)
+  {
+    return reinterpret_cast<SkPaint *> (c_obj)->getStrokeWidth ();
+  }
+
   void
   misk_Paint_setStrokeWidth (sk_SkPaint *c_obj, float c_width)
   {
     return reinterpret_cast<SkPaint *> (c_obj)->setStrokeWidth (c_width);
+  }
+
+  uint
+  misk_Paint_getStyle (sk_SkPaint *c_obj)
+  {
+    return reinterpret_cast<SkPaint *> (c_obj)->getStyle ();
   }
 
   void
