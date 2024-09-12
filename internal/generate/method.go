@@ -67,6 +67,9 @@ func (m *method) enrich(record *record, cursor clang.Cursor) {
 func (m *method) enrich2(api api) {
 	for i := range m.Overloads {
 		overload := m.Overloads[i]
+		if overload == nil {
+			continue
+		}
 		for i := range overload.params {
 			param := &overload.params[i]
 			param.enrich2(api)

@@ -113,6 +113,7 @@
         { "name": "setARGB" },
         { "name": "setAntiAlias" },
         { "name": "setBlendMode" },
+        { "name": "setColor", "overloads": [{}, null] },
         { "name": "setDither" },
         { "name": "getStrokeCap" },
         { "name": "setStrokeCap" },

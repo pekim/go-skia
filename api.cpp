@@ -316,6 +316,12 @@ extern "C"
   }
 
   void
+  misk_Paint_setColor (sk_SkPaint *c_obj, unsigned int c_color)
+  {
+    return reinterpret_cast<SkPaint *> (c_obj)->setColor (c_color);
+  }
+
+  void
   misk_Paint_setDither (sk_SkPaint *c_obj, bool c_dither)
   {
     return reinterpret_cast<SkPaint *> (c_obj)->setDither (c_dither);

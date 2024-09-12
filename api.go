@@ -795,6 +795,20 @@ func (o Paint) SetBlendMode(mode BlendMode) {
 }
 
 /*
+Sets alpha and RGB used when stroking and filling. The color is a 32-bit value,
+unpremultiplied, packing 8-bit components for alpha, red, blue, and green.
+
+@param color  unpremultiplied ARGB
+
+example: https://fiddle.skia.org/c/@Paint_setColor
+*/
+func (o Paint) SetColor(color uint) {
+	c_obj := o.sk
+	c_color := C.uint(color)
+	C.misk_Paint_setColor(c_obj, c_color)
+}
+
+/*
 Requests, but does not require, to distribute color error.
 @param dither  setting for ditering
 */
