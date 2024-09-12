@@ -31,7 +31,7 @@ func (d *recordDtor) generate(g generator) {
 }
 
 func (d *recordDtor) generateGo(g generator) {
-	d.cFuncName = fmt.Sprintf("misk_delete_%s", d.record.CName)
+	d.cFuncName = fmt.Sprintf("misk_delete_%s", d.record.CppName)
 
 	f := g.goFile
 	f.writeDocComment(d.doc)
@@ -48,7 +48,7 @@ func (d *recordDtor) generateHeader(g generator) {
 func (d *recordDtor) generateCpp(g generator) {
 	f := g.cppFile
 	f.writelnf("void  %s(%s *obj) {", d.cFuncName, d.record.cStructName)
-	f.writelnf("  delete reinterpret_cast<%s*>(obj);", d.record.CName)
+	f.writelnf("  delete reinterpret_cast<%s*>(obj);", d.record.CppName)
 	f.writeln("}")
 	f.writeln()
 }

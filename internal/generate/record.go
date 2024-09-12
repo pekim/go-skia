@@ -10,7 +10,7 @@ import (
 // record represents a class or struct.
 type record struct {
 	cursor      clang.Cursor
-	CName       string        `json:"name"`
+	CppName     string        `json:"name"`
 	Ctors       []*recordCtor `json:"constructors"`
 	Enums       []enum        `json:"enums"`
 	Methods     []method      `json:"methods"`
@@ -26,11 +26,11 @@ type record struct {
 
 func (r *record) enrich1(cursor clang.Cursor) {
 	r.cursor = cursor
-	r.goName = stripSkPrefix(r.CName)
-	r.cStructName = fmt.Sprintf("sk_%s", r.CName)
+	r.goName = stripSkPrefix(r.CppName)
+	r.cStructName = fmt.Sprintf("sk_%s", r.CppName)
 	r.doc = cursor.RawCommentText()
-	r.doc = strings.Replace(r.doc, fmt.Sprintf("\\class %s", r.CName), "", 1)
-	r.doc = strings.Replace(r.doc, fmt.Sprintf("\\struct %s", r.CName), "", 1)
+	r.doc = strings.Replace(r.doc, fmt.Sprintf("\\class %s", r.CppName), "", 1)
+	r.doc = strings.Replace(r.doc, fmt.Sprintf("\\struct %s", r.CppName), "", 1)
 	r.size = int(cursor.Type().SizeOf())
 	r.enriched = true
 
@@ -70,11 +70,11 @@ func (r *record) enrich1(cursor clang.Cursor) {
 
 		return clang.ChildVisit_Continue
 	})
-	// fmt.Println(c.CName, c.fields)
+	// fmt.Println(c.CppName, c.fields)
 	// fmt.Println(c.cursor.Type().SizeOf())
 
 	if len(r.Ctors) != ctorsEnriched {
-		fatalf("record %s has %d ctors, but expected %d", r.CName, ctorsEnriched, len(r.Ctors))
+		fatalf("record %s has %d ctors, but expected %d", r.CppName, ctorsEnriched, len(r.Ctors))
 	}
 }
 
@@ -104,7 +104,7 @@ func (r *record) enrich2(api api) {
 
 func (r *record) findEnum(name string) (*enum, bool) {
 	for i, enum := range r.Enums {
-		if enum.CName == name {
+		if enum.CppName == name {
 			return &r.Enums[i], true
 		}
 	}
@@ -113,7 +113,7 @@ func (r *record) findEnum(name string) (*enum, bool) {
 
 func (r *record) findMethod(name string) (*method, bool) {
 	for i, method := range r.Methods {
-		if method.CName == name {
+		if method.CppName == name {
 			return &r.Methods[i], true
 		}
 	}
@@ -122,7 +122,7 @@ func (r *record) findMethod(name string) (*method, bool) {
 
 func (r record) generate(g generator) {
 	if !r.enriched {
-		fatalf("record %s has not been enriched", r.CName)
+		fatalf("record %s has not been enriched", r.CppName)
 	}
 
 	r.generateGoType(g)

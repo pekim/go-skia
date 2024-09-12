@@ -57,7 +57,7 @@ func loadApi() api {
 
 func (a api) findRecord(name string) (*record, bool) {
 	for i, record := range a.Records {
-		if record.CName == name {
+		if record.CppName == name {
 			return &a.Records[i], true
 		}
 	}
@@ -66,7 +66,7 @@ func (a api) findRecord(name string) (*record, bool) {
 
 func (a api) findEnum(name string) (*enum, bool) {
 	for i, enum := range a.Enums {
-		if enum.CName == name {
+		if enum.CppName == name {
 			return &a.Enums[i], true
 		}
 	}
@@ -75,7 +75,7 @@ func (a api) findEnum(name string) (*enum, bool) {
 
 func (a api) findFunction(name string) (*function, bool) {
 	for i, function := range a.Functions {
-		if function.CName == name {
+		if function.CppName == name {
 			return &a.Functions[i], true
 		}
 	}

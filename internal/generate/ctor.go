@@ -43,7 +43,7 @@ func (c recordCtor) enrich2(api api) {
 
 func (c recordCtor) generate(g generator) {
 	if !c.enriched {
-		fatalf("record %s ctor has not been enriched", c.record.CName)
+		fatalf("record %s ctor has not been enriched", c.record.CppName)
 	}
 
 	c.generateGo(g)
@@ -60,7 +60,7 @@ func (c recordCtor) generateGo(g generator) {
 	for i, param := range c.params {
 		params[i] = fmt.Sprintf("%s %s", param.goName, param.typ.goName)
 		cVars[i] = param.cgoVar
-		cArgs[i] = param.cgoName
+		cArgs[i] = param.cName
 	}
 
 	f.writeDocComment(c.doc)
@@ -98,7 +98,7 @@ func (c recordCtor) generateCpp(g generator) {
 	}
 
 	f.writelnf("%s * %s(%s) {", c.record.cStructName, c.cFuncName, strings.Join(params, ", "))
-	f.writelnf("  return reinterpret_cast<%s*>(new %s(%s));", c.record.cStructName, c.record.CName, strings.Join(args, ", "))
+	f.writelnf("  return reinterpret_cast<%s*>(new %s(%s));", c.record.cStructName, c.record.CppName, strings.Join(args, ", "))
 	f.writeln("}")
 	f.writeln()
 }

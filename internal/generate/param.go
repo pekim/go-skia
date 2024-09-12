@@ -7,8 +7,8 @@ import (
 )
 
 type param struct {
+	cppName   string
 	cName     string
-	cgoName   string
 	cgoVar    string
 	cParam    string
 	cArg      string
@@ -25,8 +25,8 @@ func newParam(paramIndex int, cursor clang.Cursor) param {
 	cgoName := "c_" + cName
 
 	p := param{
-		cName:     cName,
-		cgoName:   cgoName,
+		cppName:   cName,
+		cName:     cgoName,
 		goName:    validGoName(cName),
 		clangType: cursor.Type(),
 	}
@@ -38,38 +38,38 @@ func (p *param) enrich2(api api) {
 	p.typ = mustTypFromClangType(p.clangType, api)
 
 	if p.typ.isPrimitive {
-		p.cgoVar = fmt.Sprintf("%s := C.%s(%s)", p.cgoName, p.typ.cgoName, p.goName)
-		p.cParam = fmt.Sprintf("%s %s", p.typ.cName, p.cgoName)
-		p.cArg = p.cgoName
+		p.cgoVar = fmt.Sprintf("%s := C.%s(%s)", p.cName, p.typ.cName, p.goName)
+		p.cParam = fmt.Sprintf("%s %s", p.typ.cppName, p.cName)
+		p.cArg = p.cName
 
 	} else if p.typ.enum != nil {
-		p.cgoVar = fmt.Sprintf("%s := C.%s(%s)", p.cgoName, p.typ.enum.cType.cgoName, p.goName)
-		p.cParam = fmt.Sprintf("%s %s", p.typ.enum.cType.cgoName, p.cgoName)
-		p.cArg = fmt.Sprintf("%s(%s)", p.typ.cName, p.cgoName)
+		p.cgoVar = fmt.Sprintf("%s := C.%s(%s)", p.cName, p.typ.enum.cType.cName, p.goName)
+		p.cParam = fmt.Sprintf("%s %s", p.typ.enum.cType.cName, p.cName)
+		p.cArg = fmt.Sprintf("%s(%s)", p.typ.cppName, p.cName)
 
 	} else if p.typ.isLValueReference && p.typ.subTyp.record != nil {
 		if p.typ.subTyp.record.NoWrapper {
-			p.cgoVar = fmt.Sprintf("%s := *(*C.%s)(unsafe.Pointer(&%s))", p.cgoName, p.typ.subTyp.record.cStructName, p.goName)
-			p.cParam = fmt.Sprintf("sk_%s %s", p.typ.subTyp.cName, p.cgoName)
-			p.cArg = fmt.Sprintf("*reinterpret_cast<%s*>(&%s)", p.typ.subTyp.cName, p.cgoName)
+			p.cgoVar = fmt.Sprintf("%s := *(*C.%s)(unsafe.Pointer(&%s))", p.cName, p.typ.subTyp.record.cStructName, p.goName)
+			p.cParam = fmt.Sprintf("sk_%s %s", p.typ.subTyp.cppName, p.cName)
+			p.cArg = fmt.Sprintf("*reinterpret_cast<%s*>(&%s)", p.typ.subTyp.cppName, p.cName)
 		} else {
-			p.cgoVar = fmt.Sprintf("%s := %s.sk", p.cgoName, p.goName)
-			p.cParam = fmt.Sprintf("sk_%s *%s", p.typ.subTyp.cName, p.cgoName)
-			p.cArg = fmt.Sprintf("*reinterpret_cast<%s*>(%s)", p.typ.subTyp.cName, p.cgoName)
+			p.cgoVar = fmt.Sprintf("%s := %s.sk", p.cName, p.goName)
+			p.cParam = fmt.Sprintf("sk_%s *%s", p.typ.subTyp.cppName, p.cName)
+			p.cArg = fmt.Sprintf("*reinterpret_cast<%s*>(%s)", p.typ.subTyp.cppName, p.cName)
 		}
 
 	} else if p.typ.isPointer && p.typ.subTyp.record != nil {
-		p.cgoVar = fmt.Sprintf("%s := %s.sk", p.cgoName, p.goName)
-		p.cParam = fmt.Sprintf("sk_%s *%s", p.typ.subTyp.cName, p.cgoName)
-		p.cArg = fmt.Sprintf("reinterpret_cast<%s*>(%s)", p.typ.subTyp.cName, p.cgoName)
+		p.cgoVar = fmt.Sprintf("%s := %s.sk", p.cName, p.goName)
+		p.cParam = fmt.Sprintf("sk_%s *%s", p.typ.subTyp.cppName, p.cName)
+		p.cArg = fmt.Sprintf("reinterpret_cast<%s*>(%s)", p.typ.subTyp.cppName, p.cName)
 
 	} else if p.typ.isSmartPointer && p.typ.record != nil {
-		p.cgoVar = fmt.Sprintf("%s := %s.sk", p.cgoName, p.goName)
-		p.cParam = fmt.Sprintf("sk_%s *%s", p.typ.cName, p.cgoName)
-		p.cArg = fmt.Sprintf("sk_ref_sp(reinterpret_cast<%s*>(%s))", p.typ.cName, p.cgoName)
+		p.cgoVar = fmt.Sprintf("%s := %s.sk", p.cName, p.goName)
+		p.cParam = fmt.Sprintf("sk_%s *%s", p.typ.cppName, p.cName)
+		p.cArg = fmt.Sprintf("sk_ref_sp(reinterpret_cast<%s*>(%s))", p.typ.cppName, p.cName)
 
 	} else {
-		fatalf("unhandled cgoVar %s for param with typ %#v", p.cName, p.typ)
+		fatalf("unhandled cgoVar %s for param with typ %#v", p.cppName, p.typ)
 	}
 
 }

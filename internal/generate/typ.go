@@ -8,8 +8,8 @@ import (
 )
 
 type typ struct {
+	cppName           string
 	cName             string
-	cgoName           string
 	goName            string
 	isConst           bool
 	isPrimitive       bool // a simple type, that can be converted from Go type to C type with a type conversion
@@ -25,14 +25,14 @@ type typ struct {
 func typFromClangType(cType clang.Type, api api) (typ, error) {
 	cName := strings.TrimPrefix(cType.Spelling(), "const ")
 	typ := typ{
+		cppName: cName,
 		cName:   cName,
-		cgoName: cName,
 		isConst: cType.IsConstQualifiedType(),
 	}
 
 	var recordName string
 	var recordEnumName string
-	nameParts := strings.Split(typ.cName, "::")
+	nameParts := strings.Split(typ.cppName, "::")
 	if len(nameParts) > 0 {
 		recordName = nameParts[0]
 	}
@@ -51,12 +51,12 @@ func typFromClangType(cType clang.Type, api api) (typ, error) {
 			}
 		}
 
-	} else if enum, ok := api.findEnum(typ.cName); ok {
+	} else if enum, ok := api.findEnum(typ.cppName); ok {
 		typ.enum = enum
-		typ.cgoName = "qaz"
+		typ.cName = "qaz"
 		typ.goName = typ.enum.goName
 
-	} else if strings.HasPrefix(typ.cName, "sk_sp<") {
+	} else if strings.HasPrefix(typ.cppName, "sk_sp<") {
 		// A type like "sk_sp<SkSomeClass>" is of kind clang.Type_Elaborated.
 		// Its CanonicalType's kind is clang.Type_Record.
 		// The template argument 'SkSomeClass' can be got, but it is not clear how to get the 'sk_sp'
@@ -74,17 +74,17 @@ func typFromClangType(cType clang.Type, api api) (typ, error) {
 			typ.isVoid = true
 
 		case clang.Type_Bool:
-			typ.cgoName = "bool"
+			typ.cName = "bool"
 			typ.goName = "bool"
 			typ.isPrimitive = true
 
 		case clang.Type_UChar:
-			typ.cgoName = "uint"
+			typ.cName = "uint"
 			typ.goName = "uint"
 			typ.isPrimitive = true
 
 		case clang.Type_Float:
-			typ.cgoName = "float"
+			typ.cName = "float"
 			typ.goName = "float32"
 			typ.isPrimitive = true
 
@@ -93,7 +93,7 @@ func typFromClangType(cType clang.Type, api api) (typ, error) {
 			typ.isPrimitive = true
 
 		case clang.Type_UInt:
-			typ.cgoName = "uint"
+			typ.cName = "uint"
 			typ.goName = "uint"
 			typ.isPrimitive = true
 

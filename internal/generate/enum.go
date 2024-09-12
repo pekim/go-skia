@@ -8,7 +8,7 @@ import (
 )
 
 type enum struct {
-	CName     string `json:"name"`
+	CppName   string `json:"name"`
 	cType     typ
 	clangType clang.Type
 	goName    string
@@ -27,15 +27,15 @@ type enumConstant struct {
 func (e *enum) enrich(record *record, cursor clang.Cursor) {
 	e.clangType = cursor.EnumDeclIntegerType()
 	if record != nil {
-		e.goName = record.goName + e.CName
+		e.goName = record.goName + e.CppName
 	} else {
-		e.goName = stripSkPrefix(e.CName)
+		e.goName = stripSkPrefix(e.CppName)
 	}
 	e.goName = goExportedName(e.goName)
 	e.record = record
 	e.doc = cursor.RawCommentText()
 	if record != nil {
-		e.doc = strings.Replace(e.doc, fmt.Sprintf("\\enum %s::%s", record.CName, e.CName), "", 1)
+		e.doc = strings.Replace(e.doc, fmt.Sprintf("\\enum %s::%s", record.CppName, e.CppName), "", 1)
 	}
 
 	cursor.Visit(func(cursor, parent clang.Cursor) (status clang.ChildVisitResult) {
@@ -43,7 +43,7 @@ func (e *enum) enrich(record *record, cursor clang.Cursor) {
 		case clang.Cursor_EnumConstantDecl:
 			name := cursor.Spelling()
 			name = stripKPrefix(name)
-			name = strings.TrimSuffix(name, "_"+e.CName)
+			name = strings.TrimSuffix(name, "_"+e.CppName)
 			doc := cursor.RawCommentText()
 			doc = strings.Replace(doc, "!<", "", 1)
 
@@ -69,7 +69,7 @@ func (e *enum) enrich2(api api) {
 
 func (e enum) generate(g generator) {
 	if !e.enriched {
-		fatalf("enum %s has not been enriched", e.CName)
+		fatalf("enum %s has not been enriched", e.CppName)
 	}
 
 	f := g.goFile

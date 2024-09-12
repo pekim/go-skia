@@ -9,7 +9,7 @@ import (
 
 type methodOverload struct {
 	Suffix     string `json:"suffix"`
-	cName      string
+	cppName    string
 	goFuncName string
 	cFuncName  string
 	record     *record
@@ -21,7 +21,7 @@ type methodOverload struct {
 }
 
 type method struct {
-	CName         string            `json:"name"`
+	CppName       string            `json:"name"`
 	Overloads     []*methodOverload `json:"overloads"`
 	enrichedCount int
 }
@@ -33,7 +33,7 @@ func (m *method) enrich(record *record, cursor clang.Cursor) {
 	}
 	if m.enrichedCount >= len(m.Overloads) {
 		fatalf("record %s, method %s, %d overloads configured, but more encountered",
-			m.Overloads[0].record.CName, m.CName, len(m.Overloads))
+			m.Overloads[0].record.CppName, m.CppName, len(m.Overloads))
 	}
 	overload = m.Overloads[m.enrichedCount]
 	if overload == nil {
@@ -41,15 +41,15 @@ func (m *method) enrich(record *record, cursor clang.Cursor) {
 		return
 	}
 
-	overload.cName = m.CName
+	overload.cppName = m.CppName
 	overload.record = record
 	overload.isStatic = cursor.CXXMethod_IsStatic()
 	if overload.isStatic {
-		overload.goFuncName = fmt.Sprintf("%s%s%s", record.goName, m.CName, overload.Suffix)
+		overload.goFuncName = fmt.Sprintf("%s%s%s", record.goName, m.CppName, overload.Suffix)
 	} else {
-		overload.goFuncName = fmt.Sprintf("%s%s", goExportedName(m.CName), overload.Suffix)
+		overload.goFuncName = fmt.Sprintf("%s%s", goExportedName(m.CppName), overload.Suffix)
 	}
-	overload.cFuncName = fmt.Sprintf("misk_%s_%s%s", record.goName, m.CName, overload.Suffix)
+	overload.cFuncName = fmt.Sprintf("misk_%s_%s%s", record.goName, m.CppName, overload.Suffix)
 	overload.doc = cursor.RawCommentText()
 	overload.resultType = cursor.ResultType()
 
@@ -77,11 +77,11 @@ func (m *method) enrich2(api api) {
 
 func (m method) generate(g generator) {
 	if len(m.Overloads) == 0 {
-		fatalf("method %s, 0 overloads configured, and none enriched", m.CName)
+		fatalf("method %s, 0 overloads configured, and none enriched", m.CppName)
 	}
 	if m.enrichedCount < len(m.Overloads) {
 		fatalf("record %s, method %s, only %d of %d overloads enriched",
-			m.Overloads[0].record.CName, m.CName, m.enrichedCount, len(m.Overloads))
+			m.Overloads[0].record.CppName, m.CppName, m.enrichedCount, len(m.Overloads))
 	}
 
 	for _, method := range m.Overloads {
@@ -116,7 +116,7 @@ func (m methodOverload) generateGo(g generator) {
 	for i, param := range m.params {
 		params[i] = fmt.Sprintf("%s %s", param.goName, param.typ.goName)
 		cVars[argsOffset+i] = param.cgoVar
-		cArgs[argsOffset+i] = param.cgoName
+		cArgs[argsOffset+i] = param.cName
 	}
 
 	var returnDecl string
@@ -176,10 +176,10 @@ func (m methodOverload) generateHeader(g generator) {
 		params[paramOffset+i] = param.cParam
 	}
 
-	returnDecl := m.retrn.cName
+	returnDecl := m.retrn.cppName
 	returnPtr := ""
 	if m.retrn.enum != nil {
-		returnDecl = m.retrn.enum.cType.cgoName
+		returnDecl = m.retrn.enum.cType.cName
 	} else if m.retrn.record != nil {
 		if m.retrn.isPointer || m.retrn.isSmartPointer {
 			returnPtr = "*"
@@ -209,10 +209,10 @@ func (m methodOverload) generateCpp(g generator) {
 		args[i] = param.cArg
 	}
 
-	returnDecl := m.retrn.cName
+	returnDecl := m.retrn.cppName
 	returnPtr := ""
 	if m.retrn.enum != nil {
-		returnDecl = m.retrn.enum.cType.cgoName
+		returnDecl = m.retrn.enum.cType.cName
 	} else if m.retrn.record != nil {
 		if m.retrn.isPointer || m.retrn.isSmartPointer {
 			returnPtr = "*"
@@ -231,14 +231,14 @@ func (m methodOverload) generateCpp(g generator) {
 			if m.retrn.isPointer || m.retrn.isSmartPointer {
 				f.writelnf("  return reinterpret_cast<%s *> (%s::%s(%s)%s);",
 					m.retrn.record.cStructName,
-					m.record.CName,
-					m.cName,
+					m.record.CppName,
+					m.cppName,
 					strings.Join(args, ", "),
 					skSpRelease)
 			} else {
 				f.writelnf("  auto ret = (%s::%s(%s)%s);",
-					m.record.CName,
-					m.cName,
+					m.record.CppName,
+					m.cppName,
 					strings.Join(args, ", "),
 					skSpRelease)
 				f.writelnf("  return *(reinterpret_cast<%s *> (&ret));",
@@ -251,14 +251,14 @@ func (m methodOverload) generateCpp(g generator) {
 			if m.retrn.isPointer || m.retrn.isSmartPointer {
 				f.writelnf("  return reinterpret_cast<%s *> (%s::%s(%s)%s);",
 					m.retrn.record.cStructName,
-					m.record.CName,
-					m.cName,
+					m.record.CppName,
+					m.cppName,
 					strings.Join(args, ", "),
 					skSpRelease)
 			} else {
 				f.writelnf("  auto ret = (%s::%s(%s)%s);",
-					m.record.CName,
-					m.cName,
+					m.record.CppName,
+					m.cppName,
 					strings.Join(args, ", "),
 					skSpRelease)
 				f.writelnf("  return *(reinterpret_cast<%s *> (&ret));",
@@ -268,11 +268,11 @@ func (m methodOverload) generateCpp(g generator) {
 		}
 	} else {
 		if m.isStatic {
-			f.writelnf("  return %s::%s(%s)%s;", m.record.CName, m.cName, strings.Join(args, ", "), skSpRelease)
+			f.writelnf("  return %s::%s(%s)%s;", m.record.CppName, m.cppName, strings.Join(args, ", "), skSpRelease)
 		} else {
 			f.writelnf("  return reinterpret_cast<%s*>(c_obj)->%s(%s)%s;",
-				m.record.CName,
-				m.cName,
+				m.record.CppName,
+				m.cppName,
 				strings.Join(args, ", "),
 				skSpRelease,
 			)

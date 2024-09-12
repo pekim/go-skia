@@ -9,7 +9,7 @@ import (
 
 type functionOverload struct {
 	Suffix     string `json:"suffix"`
-	cName      string
+	cppName    string
 	goFuncName string
 	cFuncName  string
 	doc        string
@@ -19,7 +19,7 @@ type functionOverload struct {
 }
 
 type function struct {
-	CName         string              `json:"name"`
+	CppName       string              `json:"name"`
 	Overloads     []*functionOverload `json:"overloads"`
 	cursor        clang.Cursor
 	enrichedCount int
@@ -31,7 +31,7 @@ func (f *function) enrich(cursor clang.Cursor) {
 		f.Overloads = []*functionOverload{{}}
 	}
 	if f.enrichedCount >= len(f.Overloads) {
-		fatalf("function %s, %d overloads configured, but more encountered", f.CName, len(f.Overloads))
+		fatalf("function %s, %d overloads configured, but more encountered", f.CppName, len(f.Overloads))
 	}
 	overload = f.Overloads[f.enrichedCount]
 	if overload == nil {
@@ -39,8 +39,8 @@ func (f *function) enrich(cursor clang.Cursor) {
 		return
 	}
 
-	overload.cName = f.CName
-	cName := strings.ReplaceAll(f.CName, "::", "") // remove any "::" in the name
+	overload.cppName = f.CppName
+	cName := strings.ReplaceAll(f.CppName, "::", "") // remove any "::" in the name
 	overload.goFuncName = fmt.Sprintf("%s%s", cName, overload.Suffix)
 	overload.cFuncName = fmt.Sprintf("misk_%s%s", cName, overload.Suffix)
 	overload.doc = cursor.RawCommentText()
@@ -73,10 +73,10 @@ func (f *function) enrich2(api api) {
 
 func (f function) generate(g generator) {
 	if len(f.Overloads) == 0 {
-		fatalf("function %s, 0 overloads configured, and none enriched", f.CName)
+		fatalf("function %s, 0 overloads configured, and none enriched", f.CppName)
 	}
 	if f.enrichedCount < len(f.Overloads) {
-		fatalf("function %s, only %d of %d overloads enriched", f.CName, f.enrichedCount, len(f.Overloads))
+		fatalf("function %s, only %d of %d overloads enriched", f.CppName, f.enrichedCount, len(f.Overloads))
 	}
 
 	for _, function := range f.Overloads {
@@ -101,7 +101,7 @@ func (f functionOverload) generateGo(g generator) {
 	for i, param := range f.params {
 		params[i] = fmt.Sprintf("%s %s", param.goName, param.typ.goName)
 		cVars[i] = param.cgoVar
-		cArgs[i] = param.cgoName
+		cArgs[i] = param.cName
 	}
 
 	var returnDecl string
@@ -144,7 +144,7 @@ func (f functionOverload) generateHeader(g generator) {
 		params[i] = param.cParam
 	}
 
-	returnDecl := f.retrn.cName
+	returnDecl := f.retrn.cppName
 	returnPtr := ""
 	if f.retrn.record != nil {
 		if f.retrn.isPointer || f.retrn.isSmartPointer {
@@ -166,7 +166,7 @@ func (f functionOverload) generateCpp(g generator) {
 		args[i] = param.cArg
 	}
 
-	returnDecl := f.retrn.cName
+	returnDecl := f.retrn.cppName
 	returnPtr := ""
 	if f.retrn.record != nil {
 		if f.retrn.isPointer || f.retrn.isSmartPointer {
@@ -196,13 +196,13 @@ func (f functionOverload) generateCpp(g generator) {
 				constCastStart,
 				returnConst,
 				f.retrn.record.cStructName,
-				f.cName,
+				f.cppName,
 				strings.Join(args, ", "),
 				skSpRelease,
 				constCastEnd)
 		} else {
 			file.writelnf("  auto ret = (%s(%s)%s);",
-				f.cName,
+				f.cppName,
 				strings.Join(args, ", "),
 				skSpRelease)
 			file.writelnf("  return *(reinterpret_cast<%s %s *> (&ret));",
@@ -211,7 +211,7 @@ func (f functionOverload) generateCpp(g generator) {
 			)
 		}
 	} else {
-		file.writelnf("  return %s(%s)%s;", f.cName, strings.Join(args, ", "), skSpRelease)
+		file.writelnf("  return %s(%s)%s;", f.cppName, strings.Join(args, ", "), skSpRelease)
 	}
 	file.writeln("}")
 	file.writeln()
