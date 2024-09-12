@@ -86,6 +86,10 @@
     },
 
     {
+      "name": "SkIPoint"
+    },
+
+    {
       "name": "SkIRect",
       "noWrapper": true,
       "methods": [
@@ -93,7 +97,36 @@
         { "name": "MakeWH" },
         { "name": "MakeLTRB" },
         { "name": "MakeXYWH" },
-        { "name": "Intersects" }
+        { "name": "MakeSize" },
+        { "name": "Intersects" },
+
+        { "name": "x" },
+        { "name": "y" },
+        { "name": "width" },
+        { "name": "height" },
+        { "name": "isEmpty" },
+        { "name": "setEmpty" },
+        { "name": "setLTRB" },
+        { "name": "setXYWH" },
+        { "name": "setWH" },
+        { "name": "offset", "overloads": [{}, { "suffix": "Point" }] },
+        { "name": "offsetTo" },
+        { "name": "inset" },
+        { "name": "outset" },
+        { "name": "adjust" },
+        {
+          "name": "contains",
+          "overloads": [{}, { "suffix": "Rect" }, null]
+        },
+        {
+          "name": "containsNoEmptyCheck"
+        },
+        {
+          "name": "intersect",
+          "overloads": [{}, null]
+        },
+        { "name": "join" },
+        { "name": "sort" }
       ]
     },
 
@@ -141,6 +174,10 @@
     },
 
     {
+      "name": "SkPoint"
+    },
+
+    {
       "name": "SkRect",
       "noWrapper": true,
       "methods": [
@@ -153,7 +190,33 @@
           "name": "Make",
           "overloads": [{ "suffix": "ISize" }, { "suffix": "IRect" }]
         },
-        { "name": "Intersects" }
+        { "name": "Intersects" },
+
+        { "name": "x" },
+        { "name": "y" },
+        { "name": "width" },
+        { "name": "height" },
+        { "name": "centerX" },
+        { "name": "centerY" },
+        { "name": "isEmpty" },
+        { "name": "setEmpty" },
+        { "name": "setLTRB" },
+        { "name": "setXYWH" },
+        { "name": "setWH" },
+        { "name": "offset", "overloads": [{}, null] },
+        { "name": "offsetTo" },
+        { "name": "inset" },
+        { "name": "outset" },
+        {
+          "name": "contains",
+          "overloads": [{}, { "suffix": "Rect" }, null]
+        },
+        {
+          "name": "intersect",
+          "overloads": [{}, null]
+        },
+        { "name": "join" },
+        { "name": "sort" }
       ]
     },
 

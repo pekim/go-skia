@@ -175,6 +175,12 @@ extern "C"
 
   typedef struct
   {
+    int X;
+    int Y;
+  } sk_SkIPoint;
+
+  typedef struct
+  {
     int Left;
     int Top;
     int Right;
@@ -211,6 +217,12 @@ extern "C"
     // TODO misalignment (perhaps there are bitfields around here?)
     unsigned char fIsVolatile;
   } sk_SkPath;
+
+  typedef struct
+  {
+    float X;
+    float Y;
+  } sk_SkPoint;
 
   typedef struct
   {
@@ -292,7 +304,32 @@ extern "C"
   sk_SkIRect misk_IRect_MakeWH (int c_w, int c_h);
   sk_SkIRect misk_IRect_MakeLTRB (int c_l, int c_t, int c_r, int c_b);
   sk_SkIRect misk_IRect_MakeXYWH (int c_x, int c_y, int c_w, int c_h);
+  sk_SkIRect misk_IRect_MakeSize (sk_SkISize c_size);
   bool misk_IRect_Intersects (sk_SkIRect c_a, sk_SkIRect c_b);
+  int misk_IRect_x (sk_SkIRect *c_obj);
+  int misk_IRect_y (sk_SkIRect *c_obj);
+  int misk_IRect_width (sk_SkIRect *c_obj);
+  int misk_IRect_height (sk_SkIRect *c_obj);
+  bool misk_IRect_isEmpty (sk_SkIRect *c_obj);
+  void misk_IRect_setEmpty (sk_SkIRect *c_obj);
+  void misk_IRect_setLTRB (sk_SkIRect *c_obj, int c_left, int c_top,
+                           int c_right, int c_bottom);
+  void misk_IRect_setXYWH (sk_SkIRect *c_obj, int c_x, int c_y, int c_width,
+                           int c_height);
+  void misk_IRect_setWH (sk_SkIRect *c_obj, int c_width, int c_height);
+  void misk_IRect_offset (sk_SkIRect *c_obj, int c_dx, int c_dy);
+  void misk_IRect_offsetPoint (sk_SkIRect *c_obj, sk_SkIPoint *c_delta);
+  void misk_IRect_offsetTo (sk_SkIRect *c_obj, int c_newX, int c_newY);
+  void misk_IRect_inset (sk_SkIRect *c_obj, int c_dx, int c_dy);
+  void misk_IRect_outset (sk_SkIRect *c_obj, int c_dx, int c_dy);
+  void misk_IRect_adjust (sk_SkIRect *c_obj, int c_dL, int c_dT, int c_dR,
+                          int c_dB);
+  bool misk_IRect_contains (sk_SkIRect *c_obj, int c_x, int c_y);
+  bool misk_IRect_containsRect (sk_SkIRect *c_obj, sk_SkIRect c_r);
+  bool misk_IRect_containsNoEmptyCheck (sk_SkIRect *c_obj, sk_SkIRect c_r);
+  bool misk_IRect_intersect (sk_SkIRect *c_obj, sk_SkIRect c_r);
+  void misk_IRect_join (sk_SkIRect *c_obj, sk_SkIRect c_r);
+  void misk_IRect_sort (sk_SkIRect *c_obj);
 
   sk_SkPaint *misk_new_Paint ();
   sk_SkPaint *misk_new_PaintCopy (sk_SkPaint *c_paint);
@@ -330,6 +367,28 @@ extern "C"
   sk_SkRect misk_Rect_MakeISize (sk_SkISize c_size);
   sk_SkRect misk_Rect_MakeIRect (sk_SkIRect c_irect);
   bool misk_Rect_Intersects (sk_SkRect c_a, sk_SkRect c_b);
+  float misk_Rect_x (sk_SkRect *c_obj);
+  float misk_Rect_y (sk_SkRect *c_obj);
+  float misk_Rect_width (sk_SkRect *c_obj);
+  float misk_Rect_height (sk_SkRect *c_obj);
+  float misk_Rect_centerX (sk_SkRect *c_obj);
+  float misk_Rect_centerY (sk_SkRect *c_obj);
+  bool misk_Rect_isEmpty (sk_SkRect *c_obj);
+  void misk_Rect_setEmpty (sk_SkRect *c_obj);
+  void misk_Rect_setLTRB (sk_SkRect *c_obj, float c_left, float c_top,
+                          float c_right, float c_bottom);
+  void misk_Rect_setXYWH (sk_SkRect *c_obj, float c_x, float c_y,
+                          float c_width, float c_height);
+  void misk_Rect_setWH (sk_SkRect *c_obj, float c_width, float c_height);
+  void misk_Rect_offset (sk_SkRect *c_obj, float c_dx, float c_dy);
+  void misk_Rect_offsetTo (sk_SkRect *c_obj, float c_newX, float c_newY);
+  void misk_Rect_inset (sk_SkRect *c_obj, float c_dx, float c_dy);
+  void misk_Rect_outset (sk_SkRect *c_obj, float c_dx, float c_dy);
+  bool misk_Rect_contains (sk_SkRect *c_obj, float c_x, float c_y);
+  bool misk_Rect_containsRect (sk_SkRect *c_obj, sk_SkRect c_r);
+  bool misk_Rect_intersect (sk_SkRect *c_obj, sk_SkRect c_r);
+  void misk_Rect_join (sk_SkRect *c_obj, sk_SkRect c_r);
+  void misk_Rect_sort (sk_SkRect *c_obj);
 
   sk_SkSurfaceProps *misk_new_SurfaceProps ();
   sk_SkSurfaceProps *misk_new_SurfacePropsPixelGeometry (unsigned int c_flags,

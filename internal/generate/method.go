@@ -113,7 +113,11 @@ func (m methodOverload) generateGo(g generator) {
 	cVars := make([]string, argsCount)
 	cArgs := make([]string, argsCount)
 	if !m.isStatic {
-		cVars[0] = "c_obj := o.sk"
+		if m.record.NoWrapper {
+			cVars[0] = fmt.Sprintf("c_obj := (*C.%s)(&o)", m.record.cStructName)
+		} else {
+			cVars[0] = "c_obj := o.sk"
+		}
 		cArgs[0] = "c_obj"
 	}
 	for i, param := range m.params {
@@ -249,18 +253,16 @@ func (m methodOverload) generateCpp(g generator) {
 				)
 			}
 		} else {
-			// TODO
-
 			if m.retrn.isPointer || m.retrn.isSmartPointer {
-				f.writelnf("  return reinterpret_cast<%s *> (%s::%s(%s)%s);",
-					m.retrn.record.cStructName,
+				f.writelnf("  return reinterpret_cast<%s *>(c_obj)->%s(%s)%s;",
+					// m.retrn.record.cStructName,
 					m.record.CppName,
 					m.cppName,
 					strings.Join(args, ", "),
 					skSpRelease)
 			} else {
-				f.writelnf("  auto ret = (%s::%s(%s)%s);",
-					m.record.CppName,
+				f.writelnf("  auto ret = (c_obj)->%s(%s)%s;",
+					// m.record.CppName,
 					m.cppName,
 					strings.Join(args, ", "),
 					skSpRelease)
