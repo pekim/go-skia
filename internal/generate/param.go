@@ -79,6 +79,11 @@ func (p *param) enrich2(api api) {
 		p.cParam = fmt.Sprintf("sk_%s *%s", p.typ.cName, p.cName)
 		p.cArg = fmt.Sprintf("sk_ref_sp(reinterpret_cast<%s*>(%s))", p.typ.cppName, p.cName)
 
+	} else if p.typ.record != nil {
+		p.cgoVar = fmt.Sprintf("%s := *(*C.%s)(unsafe.Pointer(&%s))", p.cName, p.typ.record.cStructName, p.goName)
+		p.cParam = fmt.Sprintf("sk_%s %s", p.typ.cppName, p.cName)
+		p.cArg = fmt.Sprintf("*reinterpret_cast<%s*>(&%s)", p.typ.cppName, p.cName)
+
 	} else {
 		fatalf("unhandled cgoVar %s for param with typ %#v", p.cppName, p.typ)
 	}

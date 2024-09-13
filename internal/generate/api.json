@@ -81,7 +81,25 @@
         {
           "name": "drawColor",
           "overloads": [{}, { "suffix": "4f" }]
-        }
+        },
+        {
+          "name": "clear",
+          "overloads": [{}, { "suffix": "4f" }]
+        },
+        { "name": "discard" },
+        { "name": "drawPaint" },
+        {
+          "name": "drawPoint",
+          "overloads": [{ "suffix": "Scalars" }, {}]
+        },
+        {
+          "name": "drawLine",
+          "overloads": [{ "suffix": "Scalars" }, { "suffix": "Points" }]
+        },
+        { "name": "drawRect" },
+        { "name": "drawIRect" },
+        { "name": "drawOval" },
+        { "name": "drawRRect" }
       ]
     },
 

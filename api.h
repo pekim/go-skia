@@ -361,6 +361,27 @@ extern "C"
   void misk_Canvas_drawColor (sk_SkCanvas *c_obj, uint c_color, int c_mode);
   void misk_Canvas_drawColor4f (sk_SkCanvas *c_obj, sk_SkRGBA4f c_color,
                                 int c_mode);
+  void misk_Canvas_clear (sk_SkCanvas *c_obj, uint c_color);
+  void misk_Canvas_clear4f (sk_SkCanvas *c_obj, sk_SkRGBA4f c_color);
+  void misk_Canvas_discard (sk_SkCanvas *c_obj);
+  void misk_Canvas_drawPaint (sk_SkCanvas *c_obj, sk_SkPaint *c_paint);
+  void misk_Canvas_drawPointScalars (sk_SkCanvas *c_obj, float c_x, float c_y,
+                                     sk_SkPaint *c_paint);
+  void misk_Canvas_drawPoint (sk_SkCanvas *c_obj, sk_SkPoint c_p,
+                              sk_SkPaint *c_paint);
+  void misk_Canvas_drawLineScalars (sk_SkCanvas *c_obj, float c_x0, float c_y0,
+                                    float c_x1, float c_y1,
+                                    sk_SkPaint *c_paint);
+  void misk_Canvas_drawLinePoints (sk_SkCanvas *c_obj, sk_SkPoint c_p0,
+                                   sk_SkPoint c_p1, sk_SkPaint *c_paint);
+  void misk_Canvas_drawRect (sk_SkCanvas *c_obj, sk_SkRect c_rect,
+                             sk_SkPaint *c_paint);
+  void misk_Canvas_drawIRect (sk_SkCanvas *c_obj, sk_SkIRect c_rect,
+                              sk_SkPaint *c_paint);
+  void misk_Canvas_drawOval (sk_SkCanvas *c_obj, sk_SkRect c_oval,
+                             sk_SkPaint *c_paint);
+  void misk_Canvas_drawRRect (sk_SkCanvas *c_obj, sk_SkRRect c_rrect,
+                              sk_SkPaint *c_paint);
 
   sk_SkColorSpace *misk_ColorSpace_MakeSRGB ();
   sk_SkColorSpace *misk_ColorSpace_MakeSRGBLinear ();

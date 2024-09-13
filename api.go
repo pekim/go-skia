@@ -792,6 +792,218 @@ func (o Canvas) DrawColor4f(color RGBA4f, mode BlendMode) {
 	C.misk_Canvas_drawColor4f(c_obj, c_color, c_mode)
 }
 
+/*
+Fills clip with color color using SkBlendMode::kSrc.
+This has the effect of replacing all pixels contained by clip with color.
+
+@param color  unpremultiplied ARGB
+*/
+func (o Canvas) Clear(color Color) {
+	c_obj := o.sk
+	c_color := C.uint(color)
+	C.misk_Canvas_clear(c_obj, c_color)
+}
+
+/*
+Fills clip with color color using SkBlendMode::kSrc.
+This has the effect of replacing all pixels contained by clip with color.
+
+@param color  SkColor4f representing unpremultiplied color.
+*/
+func (o Canvas) Clear4f(color RGBA4f) {
+	c_obj := o.sk
+	c_color := *(*C.sk_SkRGBA4f)(unsafe.Pointer(&color))
+	C.misk_Canvas_clear4f(c_obj, c_color)
+}
+
+/*
+Makes SkCanvas contents undefined. Subsequent calls that read SkCanvas pixels,
+such as drawing with SkBlendMode, return undefined results. discard() does
+not change clip or SkMatrix.
+
+discard() may do nothing, depending on the implementation of SkSurface or SkDevice
+that created SkCanvas.
+
+discard() allows optimized performance on subsequent draws by removing
+cached data associated with SkSurface or SkDevice.
+It is not necessary to call discard() once done with SkCanvas;
+any cached data is deleted when owning SkSurface or SkDevice is deleted.
+*/
+func (o Canvas) Discard() {
+	c_obj := o.sk
+	C.misk_Canvas_discard(c_obj)
+}
+
+/*
+Fills clip with SkPaint paint. SkPaint components, SkShader,
+SkColorFilter, SkImageFilter, and SkBlendMode affect drawing;
+SkMaskFilter and SkPathEffect in paint are ignored.
+
+@param paint  graphics state used to fill SkCanvas
+
+example: https://fiddle.skia.org/c/@Canvas_drawPaint
+*/
+func (o Canvas) DrawPaint(paint Paint) {
+	c_obj := o.sk
+	c_paint := paint.sk
+	C.misk_Canvas_drawPaint(c_obj, c_paint)
+}
+
+/*
+Draws point at (x, y) using clip, SkMatrix and SkPaint paint.
+
+The shape of point drawn depends on paint SkPaint::Cap.
+If paint is set to SkPaint::kRound_Cap, draw a circle of diameter
+SkPaint stroke width. If paint is set to SkPaint::kSquare_Cap or SkPaint::kButt_Cap,
+draw a square of width and height SkPaint stroke width.
+SkPaint::Style is ignored, as if were set to SkPaint::kStroke_Style.
+
+@param x      left edge of circle or square
+@param y      top edge of circle or square
+@param paint  stroke, blend, color, and so on, used to draw
+
+example: https://fiddle.skia.org/c/@Canvas_drawPoint
+*/
+func (o Canvas) DrawPointScalars(x float32, y float32, paint Paint) {
+	c_obj := o.sk
+	c_x := C.float(x)
+	c_y := C.float(y)
+	c_paint := paint.sk
+	C.misk_Canvas_drawPointScalars(c_obj, c_x, c_y, c_paint)
+}
+
+/*
+Draws point p using clip, SkMatrix and SkPaint paint.
+
+The shape of point drawn depends on paint SkPaint::Cap.
+If paint is set to SkPaint::kRound_Cap, draw a circle of diameter
+SkPaint stroke width. If paint is set to SkPaint::kSquare_Cap or SkPaint::kButt_Cap,
+draw a square of width and height SkPaint stroke width.
+SkPaint::Style is ignored, as if were set to SkPaint::kStroke_Style.
+
+@param p      top-left edge of circle or square
+@param paint  stroke, blend, color, and so on, used to draw
+*/
+func (o Canvas) DrawPoint(p Point, paint Paint) {
+	c_obj := o.sk
+	c_p := *(*C.sk_SkPoint)(unsafe.Pointer(&p))
+	c_paint := paint.sk
+	C.misk_Canvas_drawPoint(c_obj, c_p, c_paint)
+}
+
+/*
+Draws line segment from (x0, y0) to (x1, y1) using clip, SkMatrix, and SkPaint paint.
+In paint: SkPaint stroke width describes the line thickness;
+SkPaint::Cap draws the end rounded or square;
+SkPaint::Style is ignored, as if were set to SkPaint::kStroke_Style.
+
+@param x0     start of line segment on x-axis
+@param y0     start of line segment on y-axis
+@param x1     end of line segment on x-axis
+@param y1     end of line segment on y-axis
+@param paint  stroke, blend, color, and so on, used to draw
+
+example: https://fiddle.skia.org/c/@Canvas_drawLine
+*/
+func (o Canvas) DrawLineScalars(x0 float32, y0 float32, x1 float32, y1 float32, paint Paint) {
+	c_obj := o.sk
+	c_x0 := C.float(x0)
+	c_y0 := C.float(y0)
+	c_x1 := C.float(x1)
+	c_y1 := C.float(y1)
+	c_paint := paint.sk
+	C.misk_Canvas_drawLineScalars(c_obj, c_x0, c_y0, c_x1, c_y1, c_paint)
+}
+
+/*
+Draws line segment from p0 to p1 using clip, SkMatrix, and SkPaint paint.
+In paint: SkPaint stroke width describes the line thickness;
+SkPaint::Cap draws the end rounded or square;
+SkPaint::Style is ignored, as if were set to SkPaint::kStroke_Style.
+
+@param p0     start of line segment
+@param p1     end of line segment
+@param paint  stroke, blend, color, and so on, used to draw
+*/
+func (o Canvas) DrawLinePoints(p0 Point, p1 Point, paint Paint) {
+	c_obj := o.sk
+	c_p0 := *(*C.sk_SkPoint)(unsafe.Pointer(&p0))
+	c_p1 := *(*C.sk_SkPoint)(unsafe.Pointer(&p1))
+	c_paint := paint.sk
+	C.misk_Canvas_drawLinePoints(c_obj, c_p0, c_p1, c_paint)
+}
+
+/*
+Draws SkRect rect using clip, SkMatrix, and SkPaint paint.
+In paint: SkPaint::Style determines if rectangle is stroked or filled;
+if stroked, SkPaint stroke width describes the line thickness, and
+SkPaint::Join draws the corners rounded or square.
+
+@param rect   rectangle to draw
+@param paint  stroke or fill, blend, color, and so on, used to draw
+
+example: https://fiddle.skia.org/c/@Canvas_drawRect
+*/
+func (o Canvas) DrawRect(rect Rect, paint Paint) {
+	c_obj := o.sk
+	c_rect := *(*C.sk_SkRect)(unsafe.Pointer(&rect))
+	c_paint := paint.sk
+	C.misk_Canvas_drawRect(c_obj, c_rect, c_paint)
+}
+
+/*
+Draws SkIRect rect using clip, SkMatrix, and SkPaint paint.
+In paint: SkPaint::Style determines if rectangle is stroked or filled;
+if stroked, SkPaint stroke width describes the line thickness, and
+SkPaint::Join draws the corners rounded or square.
+
+@param rect   rectangle to draw
+@param paint  stroke or fill, blend, color, and so on, used to draw
+*/
+func (o Canvas) DrawIRect(rect IRect, paint Paint) {
+	c_obj := o.sk
+	c_rect := *(*C.sk_SkIRect)(unsafe.Pointer(&rect))
+	c_paint := paint.sk
+	C.misk_Canvas_drawIRect(c_obj, c_rect, c_paint)
+}
+
+/*
+Draws oval oval using clip, SkMatrix, and SkPaint.
+In paint: SkPaint::Style determines if oval is stroked or filled;
+if stroked, SkPaint stroke width describes the line thickness.
+
+@param oval   SkRect bounds of oval
+@param paint  SkPaint stroke or fill, blend, color, and so on, used to draw
+
+example: https://fiddle.skia.org/c/@Canvas_drawOval
+*/
+func (o Canvas) DrawOval(oval Rect, paint Paint) {
+	c_obj := o.sk
+	c_oval := *(*C.sk_SkRect)(unsafe.Pointer(&oval))
+	c_paint := paint.sk
+	C.misk_Canvas_drawOval(c_obj, c_oval, c_paint)
+}
+
+/*
+Draws SkRRect rrect using clip, SkMatrix, and SkPaint paint.
+In paint: SkPaint::Style determines if rrect is stroked or filled;
+if stroked, SkPaint stroke width describes the line thickness.
+
+rrect may represent a rectangle, circle, oval, uniformly rounded rectangle, or
+may have any combination of positive non-square radii for the four corners.
+
+@param rrect  SkRRect with up to eight corner radii to draw
+@param paint  SkPaint stroke or fill, blend, color, and so on, used to draw
+
+example: https://fiddle.skia.org/c/@Canvas_drawRRect
+*/
+func (o Canvas) DrawRRect(rrect RRect, paint Paint) {
+	c_obj := o.sk
+	c_rrect := *(*C.sk_SkRRect)(unsafe.Pointer(&rrect))
+	c_paint := paint.sk
+	C.misk_Canvas_drawRRect(c_obj, c_rrect, c_paint)
+}
+
 type CanvasClipEdgeStyle int64
 
 const (

@@ -321,6 +321,103 @@ extern "C"
         SkBlendMode (c_mode));
   }
 
+  void
+  misk_Canvas_clear (sk_SkCanvas *c_obj, uint c_color)
+  {
+    return reinterpret_cast<SkCanvas *> (c_obj)->clear (SkColor (c_color));
+  }
+
+  void
+  misk_Canvas_clear4f (sk_SkCanvas *c_obj, sk_SkRGBA4f c_color)
+  {
+    return reinterpret_cast<SkCanvas *> (c_obj)->clear (
+        *reinterpret_cast<SkRGBA4f<kUnpremul_SkAlphaType> *> (&c_color));
+  }
+
+  void
+  misk_Canvas_discard (sk_SkCanvas *c_obj)
+  {
+    return reinterpret_cast<SkCanvas *> (c_obj)->discard ();
+  }
+
+  void
+  misk_Canvas_drawPaint (sk_SkCanvas *c_obj, sk_SkPaint *c_paint)
+  {
+    return reinterpret_cast<SkCanvas *> (c_obj)->drawPaint (
+        *reinterpret_cast<SkPaint *> (c_paint));
+  }
+
+  void
+  misk_Canvas_drawPointScalars (sk_SkCanvas *c_obj, float c_x, float c_y,
+                                sk_SkPaint *c_paint)
+  {
+    return reinterpret_cast<SkCanvas *> (c_obj)->drawPoint (
+        c_x, c_y, *reinterpret_cast<SkPaint *> (c_paint));
+  }
+
+  void
+  misk_Canvas_drawPoint (sk_SkCanvas *c_obj, sk_SkPoint c_p,
+                         sk_SkPaint *c_paint)
+  {
+    return reinterpret_cast<SkCanvas *> (c_obj)->drawPoint (
+        *reinterpret_cast<SkPoint *> (&c_p),
+        *reinterpret_cast<SkPaint *> (c_paint));
+  }
+
+  void
+  misk_Canvas_drawLineScalars (sk_SkCanvas *c_obj, float c_x0, float c_y0,
+                               float c_x1, float c_y1, sk_SkPaint *c_paint)
+  {
+    return reinterpret_cast<SkCanvas *> (c_obj)->drawLine (
+        c_x0, c_y0, c_x1, c_y1, *reinterpret_cast<SkPaint *> (c_paint));
+  }
+
+  void
+  misk_Canvas_drawLinePoints (sk_SkCanvas *c_obj, sk_SkPoint c_p0,
+                              sk_SkPoint c_p1, sk_SkPaint *c_paint)
+  {
+    return reinterpret_cast<SkCanvas *> (c_obj)->drawLine (
+        *reinterpret_cast<SkPoint *> (&c_p0),
+        *reinterpret_cast<SkPoint *> (&c_p1),
+        *reinterpret_cast<SkPaint *> (c_paint));
+  }
+
+  void
+  misk_Canvas_drawRect (sk_SkCanvas *c_obj, sk_SkRect c_rect,
+                        sk_SkPaint *c_paint)
+  {
+    return reinterpret_cast<SkCanvas *> (c_obj)->drawRect (
+        *reinterpret_cast<SkRect *> (&c_rect),
+        *reinterpret_cast<SkPaint *> (c_paint));
+  }
+
+  void
+  misk_Canvas_drawIRect (sk_SkCanvas *c_obj, sk_SkIRect c_rect,
+                         sk_SkPaint *c_paint)
+  {
+    return reinterpret_cast<SkCanvas *> (c_obj)->drawIRect (
+        *reinterpret_cast<SkIRect *> (&c_rect),
+        *reinterpret_cast<SkPaint *> (c_paint));
+  }
+
+  void
+  misk_Canvas_drawOval (sk_SkCanvas *c_obj, sk_SkRect c_oval,
+                        sk_SkPaint *c_paint)
+  {
+    return reinterpret_cast<SkCanvas *> (c_obj)->drawOval (
+        *reinterpret_cast<SkRect *> (&c_oval),
+        *reinterpret_cast<SkPaint *> (c_paint));
+  }
+
+  void
+  misk_Canvas_drawRRect (sk_SkCanvas *c_obj, sk_SkRRect c_rrect,
+                         sk_SkPaint *c_paint)
+  {
+    return reinterpret_cast<SkCanvas *> (c_obj)->drawRRect (
+        *reinterpret_cast<SkRRect *> (&c_rrect),
+        *reinterpret_cast<SkPaint *> (c_paint));
+  }
+
   sk_SkColorSpace *
   misk_ColorSpace_MakeSRGB ()
   {
