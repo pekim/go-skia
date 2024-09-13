@@ -3,6 +3,7 @@
     { "name": "SkBlendMode" },
     { "name": "SkPixelGeometry" },
     { "name": "SkClipOp" },
+    { "name": "SkFilterMode" },
     { "name": "skgpu::Protected" }
   ],
 
@@ -24,6 +25,11 @@
       "noWrapper": true,
       "constructors": [{}],
       "enums": [{ "name": "Enable" }, { "name": "ShaderCacheStrategy" }]
+    },
+
+    {
+      "name": "SkArc",
+      "constructors": [{}, { "suffix": "Copy" }]
     },
 
     {
@@ -98,8 +104,26 @@
         },
         { "name": "drawRect" },
         { "name": "drawIRect" },
+        { "name": "drawRegion" },
         { "name": "drawOval" },
-        { "name": "drawRRect" }
+        { "name": "drawRRect" },
+        { "name": "drawDRRect" },
+        {
+          "name": "drawCircle",
+          "overloads": [{ "suffix": "Scalars" }, { "suffix": "Point" }]
+        },
+        { "name": "drawArc", "overloads": [{}, { "suffix": "Arc" }] },
+        { "name": "drawRoundRect" },
+        { "name": "drawPath" },
+        {
+          "name": "drawImage",
+          "overloads": [{}, null, { "suffix": "SamplingOptions" }, null]
+        },
+        {
+          "name": "drawImageRect",
+          "overloads": [{}, null, null, null]
+        },
+        { "name": "drawImageNine" }
       ]
     },
 
@@ -136,6 +160,10 @@
         { "name": "Italic" },
         { "name": "BoldItalic" }
       ]
+    },
+
+    {
+      "name": "SkImage"
     },
 
     {
@@ -315,6 +343,11 @@
     {
       "name": "SkRGBA4f",
       "noWrapper": true
+    },
+
+    {
+      "name": "SkSamplingOptions",
+      "constructors": [{}, { "suffix": "Copy" }, null, null, null]
     },
 
     {

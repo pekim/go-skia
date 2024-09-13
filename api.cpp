@@ -1,5 +1,6 @@
 // This is a generated file. DO NOT EDIT.
 
+#include <include/core/SkArc.h>
 #include <include/core/SkBitmap.h>
 #include <include/core/SkCanvas.h>
 #include <include/core/SkClipOp.h>
@@ -8,6 +9,7 @@
 #include <include/core/SkFont.h>
 #include <include/core/SkFontMgr.h>
 #include <include/core/SkFontStyle.h>
+#include <include/core/SkImage.h>
 #include <include/core/SkImageInfo.h>
 #include <include/core/SkM44.h>
 #include <include/core/SkMatrix.h>
@@ -17,6 +19,7 @@
 #include <include/core/SkRRect.h>
 #include <include/core/SkRect.h>
 #include <include/core/SkRegion.h>
+#include <include/core/SkSamplingOptions.h>
 #include <include/core/SkSize.h>
 #include <include/core/SkSurfaceProps.h>
 #include <include/core/SkTypeface.h>
@@ -78,6 +81,19 @@ extern "C"
   misk_new_GrContextOptions ()
   {
     return reinterpret_cast<sk_GrContextOptions *> (new GrContextOptions ());
+  }
+
+  sk_SkArc *
+  misk_new_Arc ()
+  {
+    return reinterpret_cast<sk_SkArc *> (new SkArc ());
+  }
+
+  sk_SkArc *
+  misk_new_ArcCopy (sk_SkArc *c_arc)
+  {
+    return reinterpret_cast<sk_SkArc *> (
+        new SkArc (*reinterpret_cast<SkArc *> (c_arc)));
   }
 
   sk_SkBitmap *
@@ -401,6 +417,15 @@ extern "C"
   }
 
   void
+  misk_Canvas_drawRegion (sk_SkCanvas *c_obj, sk_SkRegion *c_region,
+                          sk_SkPaint *c_paint)
+  {
+    return reinterpret_cast<SkCanvas *> (c_obj)->drawRegion (
+        *reinterpret_cast<SkRegion *> (c_region),
+        *reinterpret_cast<SkPaint *> (c_paint));
+  }
+
+  void
   misk_Canvas_drawOval (sk_SkCanvas *c_obj, sk_SkRect c_oval,
                         sk_SkPaint *c_paint)
   {
@@ -416,6 +441,117 @@ extern "C"
     return reinterpret_cast<SkCanvas *> (c_obj)->drawRRect (
         *reinterpret_cast<SkRRect *> (&c_rrect),
         *reinterpret_cast<SkPaint *> (c_paint));
+  }
+
+  void
+  misk_Canvas_drawDRRect (sk_SkCanvas *c_obj, sk_SkRRect c_outer,
+                          sk_SkRRect c_inner, sk_SkPaint *c_paint)
+  {
+    return reinterpret_cast<SkCanvas *> (c_obj)->drawDRRect (
+        *reinterpret_cast<SkRRect *> (&c_outer),
+        *reinterpret_cast<SkRRect *> (&c_inner),
+        *reinterpret_cast<SkPaint *> (c_paint));
+  }
+
+  void
+  misk_Canvas_drawCircleScalars (sk_SkCanvas *c_obj, float c_cx, float c_cy,
+                                 float c_radius, sk_SkPaint *c_paint)
+  {
+    return reinterpret_cast<SkCanvas *> (c_obj)->drawCircle (
+        c_cx, c_cy, c_radius, *reinterpret_cast<SkPaint *> (c_paint));
+  }
+
+  void
+  misk_Canvas_drawCirclePoint (sk_SkCanvas *c_obj, sk_SkPoint c_center,
+                               float c_radius, sk_SkPaint *c_paint)
+  {
+    return reinterpret_cast<SkCanvas *> (c_obj)->drawCircle (
+        *reinterpret_cast<SkPoint *> (&c_center), c_radius,
+        *reinterpret_cast<SkPaint *> (c_paint));
+  }
+
+  void
+  misk_Canvas_drawArc (sk_SkCanvas *c_obj, sk_SkRect c_oval,
+                       float c_startAngle, float c_sweepAngle,
+                       bool c_useCenter, sk_SkPaint *c_paint)
+  {
+    return reinterpret_cast<SkCanvas *> (c_obj)->drawArc (
+        *reinterpret_cast<SkRect *> (&c_oval), c_startAngle, c_sweepAngle,
+        c_useCenter, *reinterpret_cast<SkPaint *> (c_paint));
+  }
+
+  void
+  misk_Canvas_drawArcArc (sk_SkCanvas *c_obj, sk_SkArc *c_arc,
+                          sk_SkPaint *c_paint)
+  {
+    return reinterpret_cast<SkCanvas *> (c_obj)->drawArc (
+        *reinterpret_cast<SkArc *> (c_arc),
+        *reinterpret_cast<SkPaint *> (c_paint));
+  }
+
+  void
+  misk_Canvas_drawRoundRect (sk_SkCanvas *c_obj, sk_SkRect c_rect, float c_rx,
+                             float c_ry, sk_SkPaint *c_paint)
+  {
+    return reinterpret_cast<SkCanvas *> (c_obj)->drawRoundRect (
+        *reinterpret_cast<SkRect *> (&c_rect), c_rx, c_ry,
+        *reinterpret_cast<SkPaint *> (c_paint));
+  }
+
+  void
+  misk_Canvas_drawPath (sk_SkCanvas *c_obj, sk_SkPath *c_path,
+                        sk_SkPaint *c_paint)
+  {
+    return reinterpret_cast<SkCanvas *> (c_obj)->drawPath (
+        *reinterpret_cast<SkPath *> (c_path),
+        *reinterpret_cast<SkPaint *> (c_paint));
+  }
+
+  void
+  misk_Canvas_drawImage (sk_SkCanvas *c_obj, sk_SkImage *c_image, float c_left,
+                         float c_top)
+  {
+    return reinterpret_cast<SkCanvas *> (c_obj)->drawImage (
+        reinterpret_cast<SkImage *> (c_image), c_left, c_top);
+  }
+
+  void
+  misk_Canvas_drawImageSamplingOptions (sk_SkCanvas *c_obj, sk_SkImage *c_p0,
+                                        float c_x, float c_y,
+                                        sk_SkSamplingOptions *c_p3,
+                                        sk_SkPaint *c_p4)
+  {
+    return reinterpret_cast<SkCanvas *> (c_obj)->drawImage (
+        reinterpret_cast<SkImage *> (c_p0), c_x, c_y,
+        *reinterpret_cast<SkSamplingOptions *> (c_p3),
+        reinterpret_cast<SkPaint *> (c_p4));
+  }
+
+  void
+  misk_Canvas_drawImageRect (sk_SkCanvas *c_obj, sk_SkImage *c_p0,
+                             sk_SkRect c_src, sk_SkRect c_dst,
+                             sk_SkSamplingOptions *c_p3, sk_SkPaint *c_p4,
+                             uint c_p5)
+  {
+    return reinterpret_cast<SkCanvas *> (c_obj)->drawImageRect (
+        reinterpret_cast<SkImage *> (c_p0),
+        *reinterpret_cast<SkRect *> (&c_src),
+        *reinterpret_cast<SkRect *> (&c_dst),
+        *reinterpret_cast<SkSamplingOptions *> (c_p3),
+        reinterpret_cast<SkPaint *> (c_p4),
+        SkCanvas::SrcRectConstraint (c_p5));
+  }
+
+  void
+  misk_Canvas_drawImageNine (sk_SkCanvas *c_obj, sk_SkImage *c_image,
+                             sk_SkIRect c_center, sk_SkRect c_dst,
+                             int c_filter, sk_SkPaint *c_paint)
+  {
+    return reinterpret_cast<SkCanvas *> (c_obj)->drawImageNine (
+        reinterpret_cast<SkImage *> (c_image),
+        *reinterpret_cast<SkIRect *> (&c_center),
+        *reinterpret_cast<SkRect *> (&c_dst), SkFilterMode (c_filter),
+        reinterpret_cast<SkPaint *> (c_paint));
   }
 
   sk_SkColorSpace *
@@ -1107,6 +1243,19 @@ extern "C"
   misk_delete_SkRegion (sk_SkRegion *obj)
   {
     delete reinterpret_cast<SkRegion *> (obj);
+  }
+
+  sk_SkSamplingOptions *
+  misk_new_SamplingOptions ()
+  {
+    return reinterpret_cast<sk_SkSamplingOptions *> (new SkSamplingOptions ());
+  }
+
+  sk_SkSamplingOptions *
+  misk_new_SamplingOptionsCopy (sk_SkSamplingOptions *c_p0)
+  {
+    return reinterpret_cast<sk_SkSamplingOptions *> (
+        new SkSamplingOptions (*reinterpret_cast<SkSamplingOptions *> (c_p0)));
   }
 
   sk_SkSurfaceProps *

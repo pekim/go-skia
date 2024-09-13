@@ -1,6 +1,7 @@
 package generate
 
 var headerFiles = []string{
+	"include/core/SkArc.h",
 	"include/core/SkBitmap.h",
 	"include/core/SkCanvas.h",
 	"include/core/SkClipOp.h",
@@ -9,6 +10,7 @@ var headerFiles = []string{
 	"include/core/SkFont.h",
 	"include/core/SkFontMgr.h",
 	"include/core/SkFontStyle.h",
+	"include/core/SkImage.h",
 	"include/core/SkImageInfo.h",
 	"include/core/SkM44.h",
 	"include/core/SkMatrix.h",
@@ -20,6 +22,7 @@ var headerFiles = []string{
 	"include/core/SkRRect.h",
 	"include/core/SkRegion.h",
 	"include/core/SkSize.h",
+	"include/core/SkSamplingOptions.h",
 	"include/core/SkSurfaceProps.h",
 	"include/core/SkTypeface.h",
 	"include/core/SkTypes.h",

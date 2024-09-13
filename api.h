@@ -114,6 +114,15 @@ extern "C"
 
   typedef struct
   {
+    uchar Oval[16];
+    float StartAngle;
+    float SweepAngle;
+    uchar Type[1];
+    uchar pad_4[3];
+  } sk_SkArc;
+
+  typedef struct
+  {
     uchar fPixelRef[8];
     uchar fPixmap[40];
     uchar fMips[8];
@@ -172,6 +181,14 @@ extern "C"
   {
     int fValue;
   } sk_SkFontStyle;
+
+  typedef struct
+  {
+    uchar pad_0[16];
+    uchar fInfo[24];
+    unsigned int fUniqueID;
+    uchar pad_2[4];
+  } sk_SkImage;
 
   typedef struct
   {
@@ -282,6 +299,16 @@ extern "C"
 
   typedef struct
   {
+    int maxAniso;
+    bool useCubic;
+    uchar pad_2[3];
+    uchar cubic[8];
+    uchar ilter[4];
+    uchar mipmap[4];
+  } sk_SkSamplingOptions;
+
+  typedef struct
+  {
     float Width;
     float Height;
   } sk_SkSize;
@@ -313,6 +340,9 @@ extern "C"
   void misk_delete_GrDirectContext (sk_GrDirectContext *obj);
 
   sk_GrContextOptions *misk_new_GrContextOptions ();
+
+  sk_SkArc *misk_new_Arc ();
+  sk_SkArc *misk_new_ArcCopy (sk_SkArc *c_arc);
 
   sk_SkBitmap *misk_new_Bitmap ();
   sk_SkBitmap *misk_new_BitmapCopy (sk_SkBitmap *c_src);
@@ -378,10 +408,42 @@ extern "C"
                              sk_SkPaint *c_paint);
   void misk_Canvas_drawIRect (sk_SkCanvas *c_obj, sk_SkIRect c_rect,
                               sk_SkPaint *c_paint);
+  void misk_Canvas_drawRegion (sk_SkCanvas *c_obj, sk_SkRegion *c_region,
+                               sk_SkPaint *c_paint);
   void misk_Canvas_drawOval (sk_SkCanvas *c_obj, sk_SkRect c_oval,
                              sk_SkPaint *c_paint);
   void misk_Canvas_drawRRect (sk_SkCanvas *c_obj, sk_SkRRect c_rrect,
                               sk_SkPaint *c_paint);
+  void misk_Canvas_drawDRRect (sk_SkCanvas *c_obj, sk_SkRRect c_outer,
+                               sk_SkRRect c_inner, sk_SkPaint *c_paint);
+  void misk_Canvas_drawCircleScalars (sk_SkCanvas *c_obj, float c_cx,
+                                      float c_cy, float c_radius,
+                                      sk_SkPaint *c_paint);
+  void misk_Canvas_drawCirclePoint (sk_SkCanvas *c_obj, sk_SkPoint c_center,
+                                    float c_radius, sk_SkPaint *c_paint);
+  void misk_Canvas_drawArc (sk_SkCanvas *c_obj, sk_SkRect c_oval,
+                            float c_startAngle, float c_sweepAngle,
+                            bool c_useCenter, sk_SkPaint *c_paint);
+  void misk_Canvas_drawArcArc (sk_SkCanvas *c_obj, sk_SkArc *c_arc,
+                               sk_SkPaint *c_paint);
+  void misk_Canvas_drawRoundRect (sk_SkCanvas *c_obj, sk_SkRect c_rect,
+                                  float c_rx, float c_ry, sk_SkPaint *c_paint);
+  void misk_Canvas_drawPath (sk_SkCanvas *c_obj, sk_SkPath *c_path,
+                             sk_SkPaint *c_paint);
+  void misk_Canvas_drawImage (sk_SkCanvas *c_obj, sk_SkImage *c_image,
+                              float c_left, float c_top);
+  void misk_Canvas_drawImageSamplingOptions (sk_SkCanvas *c_obj,
+                                             sk_SkImage *c_p0, float c_x,
+                                             float c_y,
+                                             sk_SkSamplingOptions *c_p3,
+                                             sk_SkPaint *c_p4);
+  void misk_Canvas_drawImageRect (sk_SkCanvas *c_obj, sk_SkImage *c_p0,
+                                  sk_SkRect c_src, sk_SkRect c_dst,
+                                  sk_SkSamplingOptions *c_p3, sk_SkPaint *c_p4,
+                                  uint c_p5);
+  void misk_Canvas_drawImageNine (sk_SkCanvas *c_obj, sk_SkImage *c_image,
+                                  sk_SkIRect c_center, sk_SkRect c_dst,
+                                  int c_filter, sk_SkPaint *c_paint);
 
   sk_SkColorSpace *misk_ColorSpace_MakeSRGB ();
   sk_SkColorSpace *misk_ColorSpace_MakeSRGBLinear ();
@@ -516,6 +578,10 @@ extern "C"
   sk_SkRegion *misk_new_RegionCopy (sk_SkRegion *c_region);
   sk_SkRegion *misk_new_RegionCopyRect (sk_SkIRect c_rect);
   void misk_delete_SkRegion (sk_SkRegion *obj);
+
+  sk_SkSamplingOptions *misk_new_SamplingOptions ();
+  sk_SkSamplingOptions *
+  misk_new_SamplingOptionsCopy (sk_SkSamplingOptions *c_p0);
 
   sk_SkSurfaceProps *misk_new_SurfaceProps ();
   sk_SkSurfaceProps *misk_new_SurfacePropsPixelGeometry (unsigned int c_flags,

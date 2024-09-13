@@ -113,6 +113,28 @@ const (
 	GrContextOptionsShaderCacheStrategyBackendBinary GrContextOptionsShaderCacheStrategy = 2
 )
 
+type Arc struct {
+	sk *C.sk_SkArc
+}
+
+// IsNil returns true if the raw skia object pointer is nil.
+// If it is nil is may indicate that the Arc has not been created.
+func (o Arc) IsNil() bool {
+	return o.sk == nil
+}
+
+func NewArc() Arc {
+
+	retC := C.misk_new_Arc()
+	return Arc{sk: retC}
+}
+
+func NewArcCopy(arc Arc) Arc {
+	c_arc := arc.sk
+	retC := C.misk_new_ArcCopy(c_arc)
+	return Arc{sk: retC}
+}
+
 /*
 SkBitmap describes a two-dimensional raster pixel array. SkBitmap is built on
 SkImageInfo, containing integer width and height, SkColorType and SkAlphaType
@@ -968,6 +990,24 @@ func (o Canvas) DrawIRect(rect IRect, paint Paint) {
 }
 
 /*
+Draws SkRegion region using clip, SkMatrix, and SkPaint paint.
+In paint: SkPaint::Style determines if rectangle is stroked or filled;
+if stroked, SkPaint stroke width describes the line thickness, and
+SkPaint::Join draws the corners rounded or square.
+
+@param region  region to draw
+@param paint   SkPaint stroke or fill, blend, color, and so on, used to draw
+
+example: https://fiddle.skia.org/c/@Canvas_drawRegion
+*/
+func (o Canvas) DrawRegion(region Region, paint Paint) {
+	c_obj := o.sk
+	c_region := region.sk
+	c_paint := paint.sk
+	C.misk_Canvas_drawRegion(c_obj, c_region, c_paint)
+}
+
+/*
 Draws oval oval using clip, SkMatrix, and SkPaint.
 In paint: SkPaint::Style determines if oval is stroked or filled;
 if stroked, SkPaint stroke width describes the line thickness.
@@ -1002,6 +1042,242 @@ func (o Canvas) DrawRRect(rrect RRect, paint Paint) {
 	c_rrect := *(*C.sk_SkRRect)(unsafe.Pointer(&rrect))
 	c_paint := paint.sk
 	C.misk_Canvas_drawRRect(c_obj, c_rrect, c_paint)
+}
+
+/*
+Draws SkRRect outer and inner
+using clip, SkMatrix, and SkPaint paint.
+outer must contain inner or the drawing is undefined.
+In paint: SkPaint::Style determines if SkRRect is stroked or filled;
+if stroked, SkPaint stroke width describes the line thickness.
+If stroked and SkRRect corner has zero length radii, SkPaint::Join can
+draw corners rounded or square.
+
+GPU-backed platforms optimize drawing when both outer and inner are
+concave and outer contains inner. These platforms may not be able to draw
+SkPath built with identical data as fast.
+
+@param outer  SkRRect outer bounds to draw
+@param inner  SkRRect inner bounds to draw
+@param paint  SkPaint stroke or fill, blend, color, and so on, used to draw
+
+example: https://fiddle.skia.org/c/@Canvas_drawDRRect_a
+example: https://fiddle.skia.org/c/@Canvas_drawDRRect_b
+*/
+func (o Canvas) DrawDRRect(outer RRect, inner RRect, paint Paint) {
+	c_obj := o.sk
+	c_outer := *(*C.sk_SkRRect)(unsafe.Pointer(&outer))
+	c_inner := *(*C.sk_SkRRect)(unsafe.Pointer(&inner))
+	c_paint := paint.sk
+	C.misk_Canvas_drawDRRect(c_obj, c_outer, c_inner, c_paint)
+}
+
+/*
+Draws circle at (cx, cy) with radius using clip, SkMatrix, and SkPaint paint.
+If radius is zero or less, nothing is drawn.
+In paint: SkPaint::Style determines if circle is stroked or filled;
+if stroked, SkPaint stroke width describes the line thickness.
+
+@param cx      circle center on the x-axis
+@param cy      circle center on the y-axis
+@param radius  half the diameter of circle
+@param paint   SkPaint stroke or fill, blend, color, and so on, used to draw
+
+example: https://fiddle.skia.org/c/@Canvas_drawCircle
+*/
+func (o Canvas) DrawCircleScalars(cx float32, cy float32, radius float32, paint Paint) {
+	c_obj := o.sk
+	c_cx := C.float(cx)
+	c_cy := C.float(cy)
+	c_radius := C.float(radius)
+	c_paint := paint.sk
+	C.misk_Canvas_drawCircleScalars(c_obj, c_cx, c_cy, c_radius, c_paint)
+}
+
+/*
+Draws circle at center with radius using clip, SkMatrix, and SkPaint paint.
+If radius is zero or less, nothing is drawn.
+In paint: SkPaint::Style determines if circle is stroked or filled;
+if stroked, SkPaint stroke width describes the line thickness.
+
+@param center  circle center
+@param radius  half the diameter of circle
+@param paint   SkPaint stroke or fill, blend, color, and so on, used to draw
+*/
+func (o Canvas) DrawCirclePoint(center Point, radius float32, paint Paint) {
+	c_obj := o.sk
+	c_center := *(*C.sk_SkPoint)(unsafe.Pointer(&center))
+	c_radius := C.float(radius)
+	c_paint := paint.sk
+	C.misk_Canvas_drawCirclePoint(c_obj, c_center, c_radius, c_paint)
+}
+
+/*
+Draws arc using clip, SkMatrix, and SkPaint paint.
+
+Arc is part of oval bounded by oval, sweeping from startAngle to startAngle plus
+sweepAngle. startAngle and sweepAngle are in degrees.
+
+startAngle of zero places start point at the right middle edge of oval.
+A positive sweepAngle places arc end point clockwise from start point;
+a negative sweepAngle places arc end point counterclockwise from start point.
+sweepAngle may exceed 360 degrees, a full circle.
+If useCenter is true, draw a wedge that includes lines from oval
+center to arc end points. If useCenter is false, draw arc between end points.
+
+If SkRect oval is empty or sweepAngle is zero, nothing is drawn.
+
+@param oval        SkRect bounds of oval containing arc to draw
+@param startAngle  angle in degrees where arc begins
+@param sweepAngle  sweep angle in degrees; positive is clockwise
+@param useCenter   if true, include the center of the oval
+@param paint       SkPaint stroke or fill, blend, color, and so on, used to draw
+*/
+func (o Canvas) DrawArc(oval Rect, startAngle float32, sweepAngle float32, useCenter bool, paint Paint) {
+	c_obj := o.sk
+	c_oval := *(*C.sk_SkRect)(unsafe.Pointer(&oval))
+	c_startAngle := C.float(startAngle)
+	c_sweepAngle := C.float(sweepAngle)
+	c_useCenter := C.bool(useCenter)
+	c_paint := paint.sk
+	C.misk_Canvas_drawArc(c_obj, c_oval, c_startAngle, c_sweepAngle, c_useCenter, c_paint)
+}
+
+/*
+Draws arc using clip, SkMatrix, and SkPaint paint.
+
+Arc is part of oval bounded by oval, sweeping from startAngle to startAngle plus
+sweepAngle. startAngle and sweepAngle are in degrees.
+
+startAngle of zero places start point at the right middle edge of oval.
+A positive sweepAngle places arc end point clockwise from start point;
+a negative sweepAngle places arc end point counterclockwise from start point.
+sweepAngle may exceed 360 degrees, a full circle.
+If useCenter is true, draw a wedge that includes lines from oval
+center to arc end points. If useCenter is false, draw arc between end points.
+
+If SkRect oval is empty or sweepAngle is zero, nothing is drawn.
+
+@param arc    SkArc specifying oval, startAngle, sweepAngle, and arc-vs-wedge
+@param paint  SkPaint stroke or fill, blend, color, and so on, used to draw
+*/
+func (o Canvas) DrawArcArc(arc Arc, paint Paint) {
+	c_obj := o.sk
+	c_arc := arc.sk
+	c_paint := paint.sk
+	C.misk_Canvas_drawArcArc(c_obj, c_arc, c_paint)
+}
+
+/*
+Draws SkRRect bounded by SkRect rect, with corner radii (rx, ry) using clip,
+SkMatrix, and SkPaint paint.
+
+In paint: SkPaint::Style determines if SkRRect is stroked or filled;
+if stroked, SkPaint stroke width describes the line thickness.
+If rx or ry are less than zero, they are treated as if they are zero.
+If rx plus ry exceeds rect width or rect height, radii are scaled down to fit.
+If rx and ry are zero, SkRRect is drawn as SkRect and if stroked is affected by
+SkPaint::Join.
+
+@param rect   SkRect bounds of SkRRect to draw
+@param rx     axis length on x-axis of oval describing rounded corners
+@param ry     axis length on y-axis of oval describing rounded corners
+@param paint  stroke, blend, color, and so on, used to draw
+
+example: https://fiddle.skia.org/c/@Canvas_drawRoundRect
+*/
+func (o Canvas) DrawRoundRect(rect Rect, rx float32, ry float32, paint Paint) {
+	c_obj := o.sk
+	c_rect := *(*C.sk_SkRect)(unsafe.Pointer(&rect))
+	c_rx := C.float(rx)
+	c_ry := C.float(ry)
+	c_paint := paint.sk
+	C.misk_Canvas_drawRoundRect(c_obj, c_rect, c_rx, c_ry, c_paint)
+}
+
+/*
+Draws SkPath path using clip, SkMatrix, and SkPaint paint.
+SkPath contains an array of path contour, each of which may be open or closed.
+
+In paint: SkPaint::Style determines if SkRRect is stroked or filled:
+if filled, SkPath::FillType determines whether path contour describes inside or
+outside of fill; if stroked, SkPaint stroke width describes the line thickness,
+SkPaint::Cap describes line ends, and SkPaint::Join describes how
+corners are drawn.
+
+@param path   SkPath to draw
+@param paint  stroke, blend, color, and so on, used to draw
+
+example: https://fiddle.skia.org/c/@Canvas_drawPath
+*/
+func (o Canvas) DrawPath(path Path, paint Paint) {
+	c_obj := o.sk
+	c_path := path.sk
+	c_paint := paint.sk
+	C.misk_Canvas_drawPath(c_obj, c_path, c_paint)
+}
+
+func (o Canvas) DrawImage(image Image, left float32, top float32) {
+	c_obj := o.sk
+	c_image := image.sk
+	c_left := C.float(left)
+	c_top := C.float(top)
+	C.misk_Canvas_drawImage(c_obj, c_image, c_left, c_top)
+}
+
+func (o Canvas) DrawImageSamplingOptions(p0 Image, x float32, y float32, p3 SamplingOptions, p4 Paint) {
+	c_obj := o.sk
+	c_p0 := p0.sk
+	c_x := C.float(x)
+	c_y := C.float(y)
+	c_p3 := p3.sk
+	c_p4 := p4.sk
+	C.misk_Canvas_drawImageSamplingOptions(c_obj, c_p0, c_x, c_y, c_p3, c_p4)
+}
+
+func (o Canvas) DrawImageRect(p0 Image, src Rect, dst Rect, p3 SamplingOptions, p4 Paint, p5 CanvasSrcRectConstraint) {
+	c_obj := o.sk
+	c_p0 := p0.sk
+	c_src := *(*C.sk_SkRect)(unsafe.Pointer(&src))
+	c_dst := *(*C.sk_SkRect)(unsafe.Pointer(&dst))
+	c_p3 := p3.sk
+	c_p4 := p4.sk
+	c_p5 := C.uint(p5)
+	C.misk_Canvas_drawImageRect(c_obj, c_p0, c_src, c_dst, c_p3, c_p4, c_p5)
+}
+
+/*
+Draws SkImage image stretched proportionally to fit into SkRect dst.
+SkIRect center divides the image into nine sections: four sides, four corners, and
+the center. Corners are unmodified or scaled down proportionately if their sides
+are larger than dst; center and four sides are scaled to fit remaining space, if any.
+
+Additionally transform draw using clip, SkMatrix, and optional SkPaint paint.
+
+If SkPaint paint is supplied, apply SkColorFilter, alpha, SkImageFilter, and
+SkBlendMode. If image is kAlpha_8_SkColorType, apply SkShader.
+If paint contains SkMaskFilter, generate mask from image bounds.
+Any SkMaskFilter on paint is ignored as is paint anti-aliasing state.
+
+If generated mask extends beyond image bounds, replicate image edge colors, just
+as SkShader made from SkImage::makeShader with SkShader::kClamp_TileMode set
+replicates the image edge color when it samples outside of its bounds.
+
+@param image   SkImage containing pixels, dimensions, and format
+@param center  SkIRect edge of image corners and sides
+@param dst     destination SkRect of image to draw to
+@param filter  what technique to use when sampling the image
+@param paint   SkPaint containing SkBlendMode, SkColorFilter, SkImageFilter,
+and so on; or nullptr
+*/
+func (o Canvas) DrawImageNine(image Image, center IRect, dst Rect, filter FilterMode, paint Paint) {
+	c_obj := o.sk
+	c_image := image.sk
+	c_center := *(*C.sk_SkIRect)(unsafe.Pointer(&center))
+	c_dst := *(*C.sk_SkRect)(unsafe.Pointer(&dst))
+	c_filter := C.int(filter)
+	c_paint := paint.sk
+	C.misk_Canvas_drawImageNine(c_obj, c_image, c_center, c_dst, c_filter, c_paint)
 }
 
 type CanvasClipEdgeStyle int64
@@ -1244,6 +1520,37 @@ const (
 	FontStyleSlantItalic  FontStyleSlant = 1
 	FontStyleSlantOblique FontStyleSlant = 2
 )
+
+/*
+SkImage describes a two dimensional array of pixels to draw. The pixels may be
+decoded in a raster bitmap, encoded in a SkPicture or compressed data stream,
+or located in GPU memory as a GPU texture.
+
+SkImage cannot be modified after it is created. SkImage may allocate additional
+storage as needed; for instance, an encoded SkImage may decode when drawn.
+
+SkImage width and height are greater than zero. Creating an SkImage with zero width
+or height returns SkImage equal to nullptr.
+
+SkImage may be created from SkBitmap, SkPixmap, SkSurface, SkPicture, encoded streams,
+GPU texture, YUV_ColorSpace data, or hardware buffer. Encoded streams supported
+include BMP, GIF, HEIF, ICO, JPEG, PNG, WBMP, WebP. Supported encoding details
+vary with platform.
+
+See SkImages namespace for the static factory methods to make SkImages.
+
+Clients should *not* subclass SkImage as there is a lot of internal machinery that is
+not publicly accessible.
+*/
+type Image struct {
+	sk *C.sk_SkImage
+}
+
+// IsNil returns true if the raw skia object pointer is nil.
+// If it is nil is may indicate that the Image has not been created.
+func (o Image) IsNil() bool {
+	return o.sk == nil
+}
 
 /*
 Describes pixel dimensions and encoding. SkBitmap, SkImage, PixMap, and SkSurface
@@ -2880,6 +3187,28 @@ as SkColor4f.
 */
 type RGBA4f C.sk_SkRGBA4f
 
+type SamplingOptions struct {
+	sk *C.sk_SkSamplingOptions
+}
+
+// IsNil returns true if the raw skia object pointer is nil.
+// If it is nil is may indicate that the SamplingOptions has not been created.
+func (o SamplingOptions) IsNil() bool {
+	return o.sk == nil
+}
+
+func NewSamplingOptions() SamplingOptions {
+
+	retC := C.misk_new_SamplingOptions()
+	return SamplingOptions{sk: retC}
+}
+
+func NewSamplingOptionsCopy(p0 SamplingOptions) SamplingOptions {
+	c_p0 := p0.sk
+	retC := C.misk_new_SamplingOptionsCopy(c_p0)
+	return SamplingOptions{sk: retC}
+}
+
 // /////////////////////////////////////////////////////////////////////////////
 type Size C.sk_SkSize
 
@@ -2994,6 +3323,14 @@ const (
 	ClipOpDifference    ClipOp = 0
 	ClipOpIntersect     ClipOp = 1
 	ClipOpMax_EnumValue ClipOp = 1
+)
+
+type FilterMode int64
+
+const (
+	FilterModeNearest FilterMode = 0
+	FilterModeLinear  FilterMode = 1
+	FilterModeLast    FilterMode = 1
 )
 
 /*
