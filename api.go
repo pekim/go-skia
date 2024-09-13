@@ -730,6 +730,68 @@ func (o Canvas) GetLocalClipBoundsPath(bounds Rect) bool {
 	return bool(retC)
 }
 
+/*
+Returns SkIRect bounds of clip, unaffected by SkMatrix. If clip is empty,
+return SkRect::MakeEmpty, where all SkRect sides equal zero.
+
+Unlike getLocalClipBounds(), returned SkIRect is not outset.
+
+@return  bounds of clip in base device coordinates
+
+example: https://fiddle.skia.org/c/@Canvas_getDeviceClipBounds
+*/
+func (o Canvas) GetDeviceClipBounds() IRect {
+	c_obj := o.sk
+	retC := C.misk_Canvas_getDeviceClipBounds(c_obj)
+	return IRect(retC)
+}
+
+/*
+Returns SkIRect bounds of clip, unaffected by SkMatrix. If clip is empty,
+return false, and set bounds to SkRect::MakeEmpty, where all SkRect sides equal zero.
+
+Unlike getLocalClipBounds(), bounds is not outset.
+
+@param bounds  SkRect of clip in device coordinates
+@return        true if clip bounds is not empty
+*/
+func (o Canvas) GetDeviceClipBoundsRect(bounds IRect) bool {
+	c_obj := o.sk
+	c_bounds := *(*C.sk_SkIRect)(unsafe.Pointer(&bounds))
+	retC := C.misk_Canvas_getDeviceClipBoundsRect(c_obj, c_bounds)
+	return bool(retC)
+}
+
+/*
+Fills clip with color color.
+mode determines how ARGB is combined with destination.
+
+@param color  unpremultiplied ARGB
+@param mode   SkBlendMode used to combine source color and destination
+
+example: https://fiddle.skia.org/c/@Canvas_drawColor
+*/
+func (o Canvas) DrawColor(color Color, mode BlendMode) {
+	c_obj := o.sk
+	c_color := C.uint(color)
+	c_mode := C.int(mode)
+	C.misk_Canvas_drawColor(c_obj, c_color, c_mode)
+}
+
+/*
+Fills clip with color color.
+mode determines how ARGB is combined with destination.
+
+@param color  SkColor4f representing unpremultiplied color.
+@param mode   SkBlendMode used to combine source color and destination
+*/
+func (o Canvas) DrawColor4f(color RGBA4f, mode BlendMode) {
+	c_obj := o.sk
+	c_color := *(*C.sk_SkRGBA4f)(unsafe.Pointer(&color))
+	c_mode := C.int(mode)
+	C.misk_Canvas_drawColor4f(c_obj, c_color, c_mode)
+}
+
 type CanvasClipEdgeStyle int64
 
 const (
@@ -2594,6 +2656,17 @@ example: https://fiddle.skia.org/c/@Region_destructor
 func (o Region) Delete() {
 	C.misk_delete_SkRegion(o.sk)
 }
+
+/*
+RGBA color value, holding four floating point components. Color components are always in
+a known order. kAT determines if the SkRGBA4f's R, G, and B components are premultiplied
+by alpha or not.
+
+Skia's public API always uses unpremultiplied colors, which can be stored as
+SkRGBA4f<kUnpremul_SkAlphaType>. For convenience, this type can also be referred to
+as SkColor4f.
+*/
+type RGBA4f C.sk_SkRGBA4f
 
 // /////////////////////////////////////////////////////////////////////////////
 type Size C.sk_SkSize

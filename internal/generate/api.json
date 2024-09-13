@@ -73,6 +73,14 @@
         {
           "name": "getLocalClipBounds",
           "overloads": [{ "suffix": "Rect" }, { "suffix": "Path" }]
+        },
+        {
+          "name": "getDeviceClipBounds",
+          "overloads": [{}, { "suffix": "Rect" }]
+        },
+        {
+          "name": "drawColor",
+          "overloads": [{}, { "suffix": "4f" }]
         }
       ]
     },
@@ -284,6 +292,11 @@
     {
       "name": "SkRegion",
       "constructors": [{}, { "suffix": "Copy" }, { "suffix": "CopyRect" }]
+    },
+
+    {
+      "name": "SkRGBA4f",
+      "noWrapper": true
     },
 
     {

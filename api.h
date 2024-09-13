@@ -271,6 +271,17 @@ extern "C"
 
   typedef struct
   {
+    float R;
+    // TODO misalignment (perhaps there are bitfields around here?)
+    float G;
+    // TODO misalignment (perhaps there are bitfields around here?)
+    float B;
+    // TODO misalignment (perhaps there are bitfields around here?)
+    float A;
+  } sk_SkRGBA4f;
+
+  typedef struct
+  {
     float Width;
     float Height;
   } sk_SkSize;
@@ -344,6 +355,12 @@ extern "C"
   sk_SkRect misk_Canvas_getLocalClipBoundsRect (sk_SkCanvas *c_obj);
   bool misk_Canvas_getLocalClipBoundsPath (sk_SkCanvas *c_obj,
                                            sk_SkRect c_bounds);
+  sk_SkIRect misk_Canvas_getDeviceClipBounds (sk_SkCanvas *c_obj);
+  bool misk_Canvas_getDeviceClipBoundsRect (sk_SkCanvas *c_obj,
+                                            sk_SkIRect c_bounds);
+  void misk_Canvas_drawColor (sk_SkCanvas *c_obj, uint c_color, int c_mode);
+  void misk_Canvas_drawColor4f (sk_SkCanvas *c_obj, sk_SkRGBA4f c_color,
+                                int c_mode);
 
   sk_SkColorSpace *misk_ColorSpace_MakeSRGB ();
   sk_SkColorSpace *misk_ColorSpace_MakeSRGBLinear ();

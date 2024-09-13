@@ -79,6 +79,7 @@ func (tu translationUnit) enrichApi(api *api) {
 						enum.enrich(nil, cursor)
 					}
 				}
+
 				return clang.ChildVisit_Continue
 			})
 
@@ -87,6 +88,11 @@ func (tu translationUnit) enrichApi(api *api) {
 				// Skip forward declarations.
 				break
 			}
+			if record, ok := api.findRecord(cursor.Spelling()); ok {
+				record.enrich1(cursor)
+			}
+
+		case clang.Cursor_ClassTemplate:
 			if record, ok := api.findRecord(cursor.Spelling()); ok {
 				record.enrich1(cursor)
 			}

@@ -292,6 +292,35 @@ extern "C"
         reinterpret_cast<SkRect *> (&c_bounds));
   }
 
+  sk_SkIRect
+  misk_Canvas_getDeviceClipBounds (sk_SkCanvas *c_obj)
+  {
+    auto ret = reinterpret_cast<SkCanvas *> (c_obj)->getDeviceClipBounds ();
+    return *(reinterpret_cast<sk_SkIRect *> (&ret));
+  }
+
+  bool
+  misk_Canvas_getDeviceClipBoundsRect (sk_SkCanvas *c_obj, sk_SkIRect c_bounds)
+  {
+    return reinterpret_cast<SkCanvas *> (c_obj)->getDeviceClipBounds (
+        reinterpret_cast<SkIRect *> (&c_bounds));
+  }
+
+  void
+  misk_Canvas_drawColor (sk_SkCanvas *c_obj, uint c_color, int c_mode)
+  {
+    return reinterpret_cast<SkCanvas *> (c_obj)->drawColor (
+        SkColor (c_color), SkBlendMode (c_mode));
+  }
+
+  void
+  misk_Canvas_drawColor4f (sk_SkCanvas *c_obj, sk_SkRGBA4f c_color, int c_mode)
+  {
+    return reinterpret_cast<SkCanvas *> (c_obj)->drawColor (
+        *reinterpret_cast<SkRGBA4f<kUnpremul_SkAlphaType> *> (&c_color),
+        SkBlendMode (c_mode));
+  }
+
   sk_SkColorSpace *
   misk_ColorSpace_MakeSRGB ()
   {

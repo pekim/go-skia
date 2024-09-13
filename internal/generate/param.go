@@ -55,11 +55,11 @@ func (p *param) enrich2(api api) {
 	} else if p.typ.isLValueReference && p.typ.subTyp.record != nil {
 		if p.typ.subTyp.record.NoWrapper {
 			p.cgoVar = fmt.Sprintf("%s := *(*C.%s)(unsafe.Pointer(&%s))", p.cName, p.typ.subTyp.record.cStructName, p.goName)
-			p.cParam = fmt.Sprintf("sk_%s %s", p.typ.subTyp.cppName, p.cName)
+			p.cParam = fmt.Sprintf("sk_%s %s", p.typ.subTyp.cName, p.cName)
 			p.cArg = fmt.Sprintf("*reinterpret_cast<%s*>(&%s)", p.typ.subTyp.cppName, p.cName)
 		} else {
 			p.cgoVar = fmt.Sprintf("%s := %s.sk", p.cName, p.goName)
-			p.cParam = fmt.Sprintf("sk_%s *%s", p.typ.subTyp.cppName, p.cName)
+			p.cParam = fmt.Sprintf("sk_%s *%s", p.typ.subTyp.cName, p.cName)
 			p.cArg = fmt.Sprintf("*reinterpret_cast<%s*>(%s)", p.typ.subTyp.cppName, p.cName)
 		}
 
@@ -70,13 +70,13 @@ func (p *param) enrich2(api api) {
 			p.cArg = fmt.Sprintf("reinterpret_cast<%s*>(&%s)", p.typ.subTyp.cppName, p.cName)
 		} else {
 			p.cgoVar = fmt.Sprintf("%s := %s.sk", p.cName, p.goName)
-			p.cParam = fmt.Sprintf("sk_%s *%s", p.typ.subTyp.cppName, p.cName)
+			p.cParam = fmt.Sprintf("sk_%s *%s", p.typ.subTyp.cName, p.cName)
 			p.cArg = fmt.Sprintf("reinterpret_cast<%s*>(%s)", p.typ.subTyp.cppName, p.cName)
 		}
 
 	} else if p.typ.isSmartPointer && p.typ.record != nil {
 		p.cgoVar = fmt.Sprintf("%s := %s.sk", p.cName, p.goName)
-		p.cParam = fmt.Sprintf("sk_%s *%s", p.typ.cppName, p.cName)
+		p.cParam = fmt.Sprintf("sk_%s *%s", p.typ.cName, p.cName)
 		p.cArg = fmt.Sprintf("sk_ref_sp(reinterpret_cast<%s*>(%s))", p.typ.cppName, p.cName)
 
 	} else {

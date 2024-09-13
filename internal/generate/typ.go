@@ -30,10 +30,14 @@ func typFromClangType(cType clang.Type, api api) (typ, error) {
 		cName:   cName,
 		isConst: cType.IsConstQualifiedType(),
 	}
+	// Not sure how to deal with class templates properly. So treat as a special case for now.
+	if typ.cName == "SkRGBA4f<kUnpremul_SkAlphaType>" {
+		typ.cName = "SkRGBA4f"
+	}
 
 	var recordName string
 	var recordEnumName string
-	nameParts := strings.Split(typ.cppName, "::")
+	nameParts := strings.Split(typ.cName, "::")
 	if len(nameParts) > 0 {
 		recordName = nameParts[0]
 	}
