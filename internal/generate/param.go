@@ -15,6 +15,7 @@ type param struct {
 	goName    string
 	clangType clang.Type
 	typ       typ
+	ValueNil  bool `json:"valueNil"`
 }
 
 func newParam(paramIndex int, cursor clang.Cursor) param {
@@ -35,6 +36,10 @@ func newParam(paramIndex int, cursor clang.Cursor) param {
 }
 
 func (p *param) enrich2(api api) {
+	if p.ValueNil {
+		return
+	}
+
 	p.typ = mustTypFromClangType(p.clangType, api)
 
 	if p.typ.isPrimitive {

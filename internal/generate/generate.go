@@ -23,6 +23,7 @@ var headerFiles = []string{
 	"include/core/SkRegion.h",
 	"include/core/SkSize.h",
 	"include/core/SkSamplingOptions.h",
+	"include/core/SkSurface.h",
 	"include/core/SkSurfaceProps.h",
 	"include/core/SkTypeface.h",
 	"include/core/SkTypes.h",
@@ -30,10 +31,13 @@ var headerFiles = []string{
 	"include/gpu/gl/GrGLTypes.h",
 	"include/gpu/ganesh/gl/GrGLBackendSurface.h",
 	"include/gpu/ganesh/gl/GrGLDirectContext.h",
+	"include/gpu/ganesh/SkSurfaceGanesh.h",
+	"include/gpu/GrTypes.h",
 	"include/gpu/GpuTypes.h",
 	"include/gpu/GrBackendSurface.h",
 	"include/gpu/GrContextOptions.h",
 	"include/gpu/GrDirectContext.h",
+	"include/gpu/GrRecordingContext.h",
 }
 
 type generator struct {

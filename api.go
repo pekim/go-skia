@@ -59,6 +59,20 @@ func (o GrDirectContext) Delete() {
 	C.misk_delete_GrDirectContext(o.sk)
 }
 
+type GrRecordingContext struct {
+	sk *C.sk_GrRecordingContext
+}
+
+// IsNil returns true if the raw skia object pointer is nil.
+// If it is nil is may indicate that the GrRecordingContext has not been created.
+func (o GrRecordingContext) IsNil() bool {
+	return o.sk == nil
+}
+
+func (o GrRecordingContext) Delete() {
+	C.misk_delete_GrRecordingContext(o.sk)
+}
+
 /*
 GrContext uses the following interface to make all calls into OpenGL. When a
 GrContext is created it is given a GrGLInterface. The interface's function
@@ -3213,6 +3227,27 @@ func NewSamplingOptionsCopy(p0 SamplingOptions) SamplingOptions {
 type Size C.sk_SkSize
 
 /*
+SkSurface is responsible for managing the pixels that a canvas draws into. The pixels can be
+allocated either in CPU memory (a raster surface) or on the GPU (a GrRenderTarget surface).
+SkSurface takes care of allocating a SkCanvas that will draw into the surface. Call
+surface->getCanvas() to use that canvas (but don't delete it, it is owned by the surface).
+SkSurface always has non-zero dimensions. If there is a request for a new surface, and either
+of the requested dimensions are zero, then nullptr will be returned.
+
+Clients should *not* subclass SkSurface as there is a lot of internal machinery that is
+not publicly accessible.
+*/
+type Surface struct {
+	sk *C.sk_SkSurface
+}
+
+// IsNil returns true if the raw skia object pointer is nil.
+// If it is nil is may indicate that the Surface has not been created.
+func (o Surface) IsNil() bool {
+	return o.sk == nil
+}
+
+/*
 Describes properties and constraints of a given SkSurface. The rendering engine can parse these
 during drawing, and can sometimes optimize its performance (e.g. disabling an expensive
 feature).
@@ -3298,7 +3333,25 @@ func TypefaceMakeEmpty() Typeface {
 	return Typeface{sk: retC}
 }
 
+type GrSurfaceOrigin int64
+
+const (
+	GrSurfaceOriginTopLeft    GrSurfaceOrigin = 0
+	GrSurfaceOriginBottomLeft GrSurfaceOrigin = 1
+)
+
 type BlendMode int64
+
+const ()
+
+/*
+\enum SkColorType
+Describes how pixel bits encode color. A pixel may be an alpha mask, a grayscale, RGB, or ARGB.
+
+kN32_SkColorType selects the native 32-bit ARGB format for the current configuration. This can
+lead to inconsistent results across platforms, so use with caution.
+*/
+type ColorType int64
 
 const ()
 
@@ -3368,6 +3421,41 @@ func GrBackendRenderTargetsMakeGL(width int, height int, sampleCnt int, stencilB
 	c_glInfo := *(*C.sk_GrGLFramebufferInfo)(unsafe.Pointer(&glInfo))
 	retC := C.misk_GrBackendRenderTargetsMakeGL(c_width, c_height, c_sampleCnt, c_stencilBits, c_glInfo)
 	return GrBackendRenderTarget{sk: &retC}
+}
+
+/*
+Wraps a GPU-backed buffer into SkSurface. Caller must ensure backendRenderTarget
+is valid for the lifetime of returned SkSurface.
+
+SkSurface is returned if all parameters are valid. backendRenderTarget is valid if
+its pixel configuration agrees with colorSpace and context; for instance, if
+backendRenderTarget has an sRGB configuration, then context must support sRGB,
+and colorSpace must be present. Further, backendRenderTarget width and height must
+not exceed context capabilities, and the context must be able to support
+back-end render targets.
+
+Upon success releaseProc is called when it is safe to delete the render target in the
+backend API (accounting only for use of the render target by this surface). If SkSurface
+creation fails releaseProc is called before this function returns.
+
+@param context                  GPU context
+@param backendRenderTarget      GPU intermediate memory buffer
+@param colorSpace               range of colors
+@param surfaceProps             LCD striping orientation and setting for device independent
+fonts; may be nullptr
+@param releaseProc              function called when backendRenderTarget can be released
+@param releaseContext           state passed to releaseProc
+@return                         SkSurface if all parameters are valid; otherwise, nullptr
+*/
+func SkSurfacesWrapBackendRenderTarget(context GrRecordingContext, backendRenderTarget GrBackendRenderTarget, origin GrSurfaceOrigin, colorType ColorType, colorSpace ColorSpace, surfaceProps SurfaceProps) Surface {
+	c_context := context.sk
+	c_backendRenderTarget := backendRenderTarget.sk
+	c_origin := C.int(origin)
+	c_colorType := C.int(colorType)
+	c_colorSpace := colorSpace.sk
+	c_surfaceProps := surfaceProps.sk
+	retC := C.misk_SkSurfacesWrapBackendRenderTarget(c_context, c_backendRenderTarget, c_origin, c_colorType, c_colorSpace, c_surfaceProps)
+	return Surface{sk: retC}
 }
 
 /*

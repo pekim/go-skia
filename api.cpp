@@ -21,6 +21,7 @@
 #include <include/core/SkRegion.h>
 #include <include/core/SkSamplingOptions.h>
 #include <include/core/SkSize.h>
+#include <include/core/SkSurface.h>
 #include <include/core/SkSurfaceProps.h>
 #include <include/core/SkTypeface.h>
 #include <include/core/SkTypes.h>
@@ -28,6 +29,9 @@
 #include <include/gpu/GrBackendSurface.h>
 #include <include/gpu/GrContextOptions.h>
 #include <include/gpu/GrDirectContext.h>
+#include <include/gpu/GrRecordingContext.h>
+#include <include/gpu/GrTypes.h>
+#include <include/gpu/ganesh/SkSurfaceGanesh.h>
 #include <include/gpu/ganesh/gl/GrGLBackendSurface.h>
 #include <include/gpu/ganesh/gl/GrGLDirectContext.h>
 #include <include/gpu/gl/GrGLInterface.h>
@@ -75,6 +79,12 @@ extern "C"
   misk_delete_GrDirectContext (sk_GrDirectContext *obj)
   {
     delete reinterpret_cast<GrDirectContext *> (obj);
+  }
+
+  void
+  misk_delete_GrRecordingContext (sk_GrRecordingContext *obj)
+  {
+    delete reinterpret_cast<GrRecordingContext *> (obj);
   }
 
   sk_GrContextOptions *
@@ -1309,6 +1319,23 @@ extern "C"
         c_width, c_height, c_sampleCnt, c_stencilBits,
         *reinterpret_cast<GrGLFramebufferInfo *> (&c_glInfo)));
     return *(reinterpret_cast<sk_GrBackendRenderTarget *> (&ret));
+  }
+
+  sk_SkSurface *
+  misk_SkSurfacesWrapBackendRenderTarget (
+      sk_GrRecordingContext *c_context,
+      sk_GrBackendRenderTarget *c_backendRenderTarget, int c_origin,
+      int c_colorType, sk_SkColorSpace *c_colorSpace,
+      sk_SkSurfaceProps *c_surfaceProps)
+  {
+    return reinterpret_cast<sk_SkSurface *> (
+        SkSurfaces::WrapBackendRenderTarget (
+            reinterpret_cast<GrRecordingContext *> (c_context),
+            *reinterpret_cast<GrBackendRenderTarget *> (c_backendRenderTarget),
+            GrSurfaceOrigin (c_origin), SkColorType (c_colorType),
+            sk_ref_sp (reinterpret_cast<SkColorSpace *> (c_colorSpace)),
+            reinterpret_cast<SkSurfaceProps *> (c_surfaceProps))
+            .release ());
   }
 
   sk_GrDirectContext *

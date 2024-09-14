@@ -13,7 +13,7 @@ type functionOverload struct {
 	goFuncName string
 	cFuncName  string
 	doc        string
-	params     []param
+	Params     []param `json:"params"`
 	resultType clang.Type
 	retrn      typ
 }
@@ -47,11 +47,20 @@ func (f *function) enrich(cursor clang.Cursor) {
 	overload.resultType = cursor.ResultType()
 
 	paramCount := int(cursor.NumArguments())
-	overload.params = make([]param, paramCount)
+	if len(overload.Params) > 0 {
+		if len(overload.Params) > 0 && len(overload.Params) != paramCount {
+			fatalf("function %s, expected %d params but have %d", overload.cppName, len(overload.Params), paramCount)
+		}
+		// Do not make overload.Params, as it's already present from unmarshalled JSON.
+	} else {
+		overload.Params = make([]param, paramCount)
+	}
 	for i := 0; i < paramCount; i++ {
+		valueNil := overload.Params[i].ValueNil
 		arg := cursor.Argument(uint32(i))
 		param := newParam(i, arg)
-		overload.params[i] = param
+		param.ValueNil = valueNil
+		overload.Params[i] = param
 	}
 
 	f.enrichedCount++
@@ -61,8 +70,8 @@ func (f *function) enrich2(api api) {
 	for i := range f.Overloads {
 		overload := f.Overloads[i]
 		if overload != nil {
-			for j := range overload.params {
-				param := &overload.params[j]
+			for j := range overload.Params {
+				param := &overload.Params[j]
 				param.enrich2(api)
 			}
 
@@ -95,14 +104,23 @@ func (f functionOverload) generate(g generator) {
 func (f functionOverload) generateGo(g generator) {
 	file := g.goFile
 
-	params := make([]string, len(f.params))
-	cVars := make([]string, len(f.params))
-	cArgs := make([]string, len(f.params))
-	for i, param := range f.params {
+	params := make([]string, len(f.Params))
+	cVars := make([]string, len(f.Params))
+	cArgs := make([]string, len(f.Params))
+	paramCount := 0
+	for i, param := range f.Params {
+		if param.ValueNil {
+			// no more params
+			break
+		}
 		params[i] = fmt.Sprintf("%s %s", param.goName, param.typ.goName)
 		cVars[i] = param.cgoVar
 		cArgs[i] = param.cName
+		paramCount++
 	}
+	params = params[:paramCount]
+	cVars = cVars[:paramCount]
+	cArgs = cArgs[:paramCount]
 
 	var returnDecl string
 	if !f.retrn.isVoid {
@@ -141,10 +159,17 @@ func (f functionOverload) generateGo(g generator) {
 func (f functionOverload) generateHeader(g generator) {
 	file := g.headerFile
 
-	params := make([]string, len(f.params))
-	for i, param := range f.params {
+	params := make([]string, len(f.Params))
+	paramCount := 0
+	for i, param := range f.Params {
+		if param.ValueNil {
+			// no more params
+			break
+		}
 		params[i] = param.cParam
+		paramCount++
 	}
+	params = params[:paramCount]
 
 	returnDecl := f.retrn.cppName
 	returnPtr := ""
@@ -163,12 +188,20 @@ func (f functionOverload) generateHeader(g generator) {
 func (f functionOverload) generateCpp(g generator) {
 	file := g.cppFile
 
-	params := make([]string, len(f.params))
-	args := make([]string, len(f.params))
-	for i, param := range f.params {
+	params := make([]string, len(f.Params))
+	args := make([]string, len(f.Params))
+	paramCount := 0
+	for i, param := range f.Params {
+		if param.ValueNil {
+			// no more params
+			break
+		}
 		params[i] = param.cParam
 		args[i] = param.cArg
+		paramCount++
 	}
+	params = params[:paramCount]
+	args = args[:paramCount]
 
 	returnDecl := f.retrn.cppName
 	returnPtr := ""

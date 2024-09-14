@@ -55,6 +55,16 @@ extern "C"
 
   typedef struct
   {
+    uchar pad_0[64];
+    uchar fStats[8];
+    uchar fAuditTrail[8];
+    uchar fArenas[24];
+    uchar fDrawingManager[8];
+    uchar fProxyProvider[8];
+  } sk_GrRecordingContext;
+
+  typedef struct
+  {
     uchar pad_0[12];
     bool fOOMed;
     bool fSuppressErrorLogging;
@@ -315,6 +325,15 @@ extern "C"
 
   typedef struct
   {
+    uchar pad_0[12];
+    uchar fProps[16];
+    int fWidth;
+    int fHeight;
+    unsigned int fGenerationID;
+  } sk_SkSurface;
+
+  typedef struct
+  {
     unsigned int fFlags;
     uchar fPixelGeometry[4];
     float fTextContrast;
@@ -338,6 +357,8 @@ extern "C"
   void misk_delete_GrBackendRenderTarget (sk_GrBackendRenderTarget *obj);
 
   void misk_delete_GrDirectContext (sk_GrDirectContext *obj);
+
+  void misk_delete_GrRecordingContext (sk_GrRecordingContext *obj);
 
   sk_GrContextOptions *misk_new_GrContextOptions ();
 
@@ -596,6 +617,11 @@ extern "C"
   misk_GrBackendRenderTargetsMakeGL (int c_width, int c_height,
                                      int c_sampleCnt, int c_stencilBits,
                                      sk_GrGLFramebufferInfo c_glInfo);
+  sk_SkSurface *misk_SkSurfacesWrapBackendRenderTarget (
+      sk_GrRecordingContext *c_context,
+      sk_GrBackendRenderTarget *c_backendRenderTarget, int c_origin,
+      int c_colorType, sk_SkColorSpace *c_colorSpace,
+      sk_SkSurfaceProps *c_surfaceProps);
   sk_GrDirectContext *
   misk_GrDirectContextsMakeGLInterfaceOptions (sk_GrGLInterface *c_p0,
                                                sk_GrContextOptions c_p1);

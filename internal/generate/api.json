@@ -1,6 +1,8 @@
 {
   "enums": [
+    { "name": "GrSurfaceOrigin" },
     { "name": "SkBlendMode" },
+    { "name": "SkColorType" },
     { "name": "SkPixelGeometry" },
     { "name": "SkClipOp" },
     { "name": "SkFilterMode" },
@@ -15,9 +17,8 @@
       "constructors": [{}, null, { "suffix": "Copy" }]
     },
 
-    {
-      "name": "GrDirectContext"
-    },
+    { "name": "GrDirectContext" },
+    { "name": "GrRecordingContext" },
 
     { "name": "GrGLInterface", "constructors": [null] },
     {
@@ -356,6 +357,10 @@
     },
 
     {
+      "name": "SkSurface"
+    },
+
+    {
       "name": "SkSurfaceProps",
       "constructors": [
         {},
@@ -375,6 +380,23 @@
   "functions": [
     { "name": "GrGLMakeNativeInterface" },
     { "name": "GrBackendRenderTargets::MakeGL" },
+    {
+      "name": "SkSurfaces::WrapBackendRenderTarget",
+      "overloads": [
+        {
+          "params": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            { "valueNil": true },
+            { "valueNil": true }
+          ]
+        }
+      ]
+    },
     {
       "name": "GrDirectContexts::MakeGL",
       "overloads": [
