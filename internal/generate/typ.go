@@ -35,6 +35,27 @@ func typFromClangType(cType clang.Type, api api) (typ, error) {
 		typ.cName = "SkRGBA4f"
 	}
 
+	if cType.Kind() == clang.Type_Pointer {
+		subTyp, err := typFromClangType(cType.PointeeType(), api)
+		if err != nil {
+			return typ, err
+		}
+		typ.subTyp = &subTyp
+		typ.isPointer = true
+		typ.goName = typ.subTyp.goName
+		return typ, nil
+	}
+	if cType.Kind() == clang.Type_LValueReference {
+		subTyp, err := typFromClangType(cType.PointeeType(), api)
+		if err != nil {
+			return typ, err
+		}
+		typ.subTyp = &subTyp
+		typ.isLValueReference = true
+		typ.goName = typ.subTyp.goName
+		return typ, nil
+	}
+
 	var recordName string
 	var recordEnumName string
 	nameParts := strings.Split(typ.cName, "::")
@@ -111,24 +132,6 @@ func typFromClangType(cType clang.Type, api api) (typ, error) {
 				return typ, err
 			}
 			typ = typ_
-
-		case clang.Type_Pointer:
-			subTyp, err := typFromClangType(cType.PointeeType(), api)
-			if err != nil {
-				return typ, err
-			}
-			typ.subTyp = &subTyp
-			typ.isPointer = true
-			typ.goName = typ.subTyp.goName
-
-		case clang.Type_LValueReference:
-			subTyp, err := typFromClangType(cType.PointeeType(), api)
-			if err != nil {
-				return typ, err
-			}
-			typ.subTyp = &subTyp
-			typ.isLValueReference = true
-			typ.goName = typ.subTyp.goName
 
 		default:
 			return typ, fmt.Errorf("unsupported type '%s', of kind %s", cType.Spelling(), cType.Kind())

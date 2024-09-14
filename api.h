@@ -357,6 +357,8 @@ extern "C"
   void misk_delete_GrBackendRenderTarget (sk_GrBackendRenderTarget *obj);
 
   void misk_delete_GrDirectContext (sk_GrDirectContext *obj);
+  void misk_GrDirectContext_flushAndSubmit (sk_GrDirectContext *c_obj,
+                                            int c_sync);
 
   void misk_delete_GrRecordingContext (sk_GrRecordingContext *obj);
 

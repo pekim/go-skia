@@ -81,6 +81,7 @@ func main() {
 		canvas := surface.GetCanvas()
 		rect := skia.RectMakeXYWH(100, 100, 100, 100)
 		canvas.DrawRect(rect, paint)
+		context.FlushAndSubmit(skia.GrSyncCpuYes)
 
 		window.SwapBuffers()
 		glfw.WaitEvents()

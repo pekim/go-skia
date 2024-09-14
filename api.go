@@ -59,6 +59,17 @@ func (o GrDirectContext) Delete() {
 	C.misk_delete_GrDirectContext(o.sk)
 }
 
+/*
+Call to ensure all drawing to the context has been flushed and submitted to the underlying 3D
+API. This is equivalent to calling GrContext::flush with a default GrFlushInfo followed by
+GrContext::submit(sync).
+*/
+func (o GrDirectContext) FlushAndSubmit(sync GrSyncCpu) {
+	c_obj := o.sk
+	c_sync := C.int(sync)
+	C.misk_GrDirectContext_flushAndSubmit(c_obj, c_sync)
+}
+
 type GrRecordingContext struct {
 	sk *C.sk_GrRecordingContext
 }
@@ -3355,6 +3366,13 @@ const (
 	GrSurfaceOriginBottomLeft GrSurfaceOrigin = 1
 )
 
+type GrSyncCpu int64
+
+const (
+	GrSyncCpuNo  GrSyncCpu = 0
+	GrSyncCpuYes GrSyncCpu = -1
+)
+
 type BlendMode int64
 
 const ()
@@ -3456,6 +3474,9 @@ const (
 	FilterModeLast    FilterMode = 1
 )
 
+/*
+Is the data protected on the GPU or not.
+*/
 type SkgpuProtected int64
 
 const (

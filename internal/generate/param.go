@@ -48,8 +48,12 @@ func (p *param) enrich2(api api) {
 		p.cArg = p.cName
 
 	} else if p.typ.enum != nil {
-		p.cgoVar = fmt.Sprintf("%s := C.%s(%s)", p.cName, p.typ.enum.cType.cName, p.goName)
-		p.cParam = fmt.Sprintf("%s %s", p.typ.enum.cType.cName, p.cName)
+		cType := p.typ.enum.cType.cName
+		if cType == "bool" {
+			cType = "int"
+		}
+		p.cgoVar = fmt.Sprintf("%s := C.%s(%s)", p.cName, cType, p.goName)
+		p.cParam = fmt.Sprintf("%s %s", cType, p.cName)
 		p.cArg = fmt.Sprintf("%s(%s)", p.typ.cppName, p.cName)
 
 	} else if p.typ.typedef != nil {

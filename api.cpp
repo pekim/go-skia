@@ -83,6 +83,13 @@ extern "C"
   }
 
   void
+  misk_GrDirectContext_flushAndSubmit (sk_GrDirectContext *c_obj, int c_sync)
+  {
+    return reinterpret_cast<GrDirectContext *> (c_obj)->flushAndSubmit (
+        GrSyncCpu (c_sync));
+  }
+
+  void
   misk_delete_GrRecordingContext (sk_GrRecordingContext *obj)
   {
     delete reinterpret_cast<GrRecordingContext *> (obj);

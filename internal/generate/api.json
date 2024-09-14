@@ -1,6 +1,7 @@
 {
   "enums": [
     { "name": "GrSurfaceOrigin" },
+    { "name": "GrSyncCpu" },
     { "name": "SkBlendMode" },
     { "name": "SkColorType" },
     { "name": "SkPixelGeometry" },
@@ -17,7 +18,15 @@
       "constructors": [{}, null, { "suffix": "Copy" }]
     },
 
-    { "name": "GrDirectContext" },
+    {
+      "name": "GrDirectContext",
+      "methods": [
+        {
+          "name": "flushAndSubmit",
+          "overloads": [{}, null, null]
+        }
+      ]
+    },
     { "name": "GrRecordingContext" },
 
     { "name": "GrGLInterface", "constructors": [null] },
