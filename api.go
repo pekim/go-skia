@@ -3248,6 +3248,21 @@ func (o Surface) IsNil() bool {
 }
 
 /*
+Returns SkCanvas that draws into SkSurface. Subsequent calls return the same SkCanvas.
+SkCanvas returned is managed and owned by SkSurface, and is deleted when SkSurface
+is deleted.
+
+@return  drawing SkCanvas for SkSurface
+
+example: https://fiddle.skia.org/c/@Surface_getCanvas
+*/
+func (o Surface) GetCanvas() Canvas {
+	c_obj := o.sk
+	retC := C.misk_Surface_getCanvas(c_obj)
+	return Canvas{sk: retC}
+}
+
+/*
 Describes properties and constraints of a given SkSurface. The rendering engine can parse these
 during drawing, and can sometimes optimize its performance (e.g. disabling an expensive
 feature).
@@ -3353,7 +3368,62 @@ lead to inconsistent results across platforms, so use with caution.
 */
 type ColorType int64
 
-const ()
+const (
+	// uninitialized
+	ColorTypeUnknown ColorType = 0
+	// pixel with alpha in 8-bit byte
+	ColorTypeAlpha_8 ColorType = 1
+	// pixel with 5 bits red, 6 bits green, 5 bits blue, in 16-bit word
+	ColorTypeRGB_565 ColorType = 2
+	// pixel with 4 bits for alpha, red, green, blue; in 16-bit word
+	ColorTypeARGB_4444 ColorType = 3
+	// pixel with 8 bits for red, green, blue, alpha; in 32-bit word
+	ColorTypeRGBA_8888 ColorType = 4
+	// pixel with 8 bits each for red, green, blue; in 32-bit word
+	ColorTypeRGB_888x ColorType = 5
+	// pixel with 8 bits for blue, green, red, alpha; in 32-bit word
+	ColorTypeBGRA_8888 ColorType = 6
+	// 10 bits for red, green, blue; 2 bits for alpha; in 32-bit word
+	ColorTypeRGBA_1010102 ColorType = 7
+	// 10 bits for blue, green, red; 2 bits for alpha; in 32-bit word
+	ColorTypeBGRA_1010102 ColorType = 8
+	// pixel with 10 bits each for red, green, blue; in 32-bit word
+	ColorTypeRGB_101010x ColorType = 9
+	// pixel with 10 bits each for blue, green, red; in 32-bit word
+	ColorTypeBGR_101010x ColorType = 10
+	// pixel with 10 bits each for blue, green, red; in 32-bit word, extended range
+	ColorTypeBGR_101010x_XR ColorType = 11
+	// pixel with 10 bits each for blue, green, red, alpha; in 64-bit word, extended range
+	ColorTypeBGRA_10101010_XR ColorType = 12
+	// pixel with 10 used bits (most significant) followed by 6 unused
+	ColorTypeRGBA_10x6 ColorType = 13
+	// pixel with grayscale level in 8-bit byte
+	ColorTypeGray_8 ColorType = 14
+	// pixel with half floats in [0,1] for red, green, blue, alpha;
+	ColorTypeRGBA_F16Norm ColorType = 15
+	// pixel with half floats for red, green, blue, alpha;
+	ColorTypeRGBA_F16 ColorType = 16
+	// pixel using C float for red, green, blue, alpha; in 128-bit word
+	ColorTypeRGBA_F32 ColorType = 17
+	// pixel with a uint8_t for red and green
+	ColorTypeR8G8_unorm ColorType = 18
+	// pixel with a half float for alpha
+	ColorTypeA16_float ColorType = 19
+	// pixel with a half float for red and green
+	ColorTypeR16G16_float ColorType = 20
+	// pixel with a little endian uint16_t for alpha
+	ColorTypeA16_unorm ColorType = 21
+	// pixel with a little endian uint16_t for red and green
+	ColorTypeR16G16_unorm ColorType = 22
+	// pixel with a little endian uint16_t for red, green, blue
+	ColorTypeR16G16B16A16_unorm ColorType = 23
+	ColorTypeSRGBA_8888         ColorType = 24
+	ColorTypeR8_unorm           ColorType = 25
+	// last valid value
+	ColorTypeLastEnum ColorType = 25
+	// native 32-bit RGBA encoding
+	ColorTypeN32 ColorType = 4
+)
 
 /*
 Description of how the LCD strips are arranged for each pixel. If this is unknown, or the
@@ -3386,9 +3456,6 @@ const (
 	FilterModeLast    FilterMode = 1
 )
 
-/*
-Is the data protected on the GPU or not.
-*/
 type SkgpuProtected int64
 
 const (
@@ -3580,4 +3647,8 @@ func FontMgrRefDefault() FontMgr {
 	return FontMgr{
 		sk: C.sk_fontmgr_ref_default(),
 	}
+}
+
+func (o GrDirectContext) AsGrRecordingContext() GrRecordingContext {
+	return GrRecordingContext{sk: (*C.sk_GrRecordingContext)(unsafe.Pointer(o.sk))}
 }

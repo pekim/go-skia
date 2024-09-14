@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	_ "image/png"
 	"log"
 	"runtime"
@@ -49,15 +48,39 @@ func main() {
 	gl.DepthFunc(gl.LESS)
 	gl.ClearColor(1.0, 1.0, 1.0, 1.0)
 
-	glInterface, err := skia.GrGLMakeNativeInterface()
-	if err != nil {
-		panic(err)
+	iface := skia.GrGLMakeNativeInterface()
+	context := skia.GrDirectContextsMakeGLInterface(iface)
+	// var fbo int32
+	// gl.GetIntegerv(gl.FRAMEBUFFER_BINDING, &fbo)
+	fbInfo := skia.GrGLFramebufferInfo{
+		FBOID:  0, // should come from gl.GetIntegerv(gl.FRAMEBUFFER_BINDING, &fbo)
+		Format: gl.RGBA8,
 	}
-	fmt.Println(glInterface)
+	backend := skia.GrBackendRenderTargetsMakeGL(800, 600, 1, 8, fbInfo)
+	if backend.IsNil() {
+		panic("failed to create backend")
+	}
+	target := skia.NewGrBackendRenderTargetCopy(backend)
+	if target.IsNil() {
+		panic("failed to create target")
+	}
+	var colorspace skia.ColorSpace
+
+	surface := skia.SkSurfacesWrapBackendRenderTarget(context.AsGrRecordingContext(), backend, skia.GrSurfaceOriginBottomLeft,
+		skia.ColorTypeBGRA_8888, colorspace, skia.NewSurfacePropsPixelGeometry(0, skia.PixelGeometryRGB_H))
+	if surface.IsNil() {
+		panic("failed to create surface")
+	}
 
 	for !window.ShouldClose() {
 		gl.Clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
-		// Render
+
+		paint := skia.NewPaint()
+		// paint.SetColor()
+		paint.SetStyle(skia.PaintStyleFill)
+		canvas := surface.GetCanvas()
+		rect := skia.RectMakeXYWH(100, 100, 100, 100)
+		canvas.DrawRect(rect, paint)
 
 		window.SwapBuffers()
 		glfw.WaitEvents()

@@ -357,7 +357,8 @@
     },
 
     {
-      "name": "SkSurface"
+      "name": "SkSurface",
+      "methods": [{ "name": "getCanvas" }]
     },
 
     {

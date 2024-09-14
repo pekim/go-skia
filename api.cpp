@@ -6,6 +6,7 @@
 #include <include/core/SkClipOp.h>
 #include <include/core/SkColor.h>
 #include <include/core/SkColorSpace.h>
+#include <include/core/SkColorType.h>
 #include <include/core/SkFont.h>
 #include <include/core/SkFontMgr.h>
 #include <include/core/SkFontStyle.h>
@@ -1266,6 +1267,13 @@ extern "C"
   {
     return reinterpret_cast<sk_SkSamplingOptions *> (
         new SkSamplingOptions (*reinterpret_cast<SkSamplingOptions *> (c_p0)));
+  }
+
+  sk_SkCanvas *
+  misk_Surface_getCanvas (sk_SkSurface *c_obj)
+  {
+    auto ret = reinterpret_cast<SkSurface *> (c_obj)->getCanvas ();
+    return (reinterpret_cast<sk_SkCanvas *> (ret));
   }
 
   sk_SkSurfaceProps *

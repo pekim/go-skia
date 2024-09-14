@@ -158,6 +158,8 @@ func (m methodOverload) generateGo(g generator) {
 			} else {
 				f.writelnf("  return %s{sk: &retC}", m.retrn.record.goName)
 			}
+		} else if (m.retrn.isPointer || m.retrn.isSmartPointer) && m.retrn.subTyp.record != nil {
+			f.writelnf("  return %s{sk: retC}", m.retrn.subTyp.record.goName)
 		} else {
 			fatalf("return type '%s' not supported", m.retrn.goName)
 		}
@@ -192,6 +194,9 @@ func (m methodOverload) generateHeader(g generator) {
 			returnPtr = "*"
 		}
 		returnDecl = fmt.Sprintf("%s%s", m.retrn.record.cStructName, returnPtr)
+	} else if (m.retrn.isPointer || m.retrn.isSmartPointer) && m.retrn.subTyp.record != nil {
+		returnPtr = "*"
+		returnDecl = fmt.Sprintf("%s%s", m.retrn.subTyp.record.cStructName, returnPtr)
 	}
 
 	f.writelnf("%s %s(%s);", returnDecl, m.cFuncName, strings.Join(params, ", "))
@@ -225,6 +230,9 @@ func (m methodOverload) generateCpp(g generator) {
 			returnPtr = "*"
 		}
 		returnDecl = fmt.Sprintf("%s%s", m.retrn.record.cStructName, returnPtr)
+	} else if (m.retrn.isPointer || m.retrn.isSmartPointer) && m.retrn.subTyp.record != nil {
+		returnPtr = "*"
+		returnDecl = fmt.Sprintf("%s%s", m.retrn.subTyp.record.cStructName, returnPtr)
 	}
 
 	skSpRelease := ""
@@ -274,12 +282,23 @@ func (m methodOverload) generateCpp(g generator) {
 		if m.isStatic {
 			f.writelnf("  return %s::%s(%s)%s;", m.record.CppName, m.cppName, strings.Join(args, ", "), skSpRelease)
 		} else {
-			f.writelnf("  return reinterpret_cast<%s*>(c_obj)->%s(%s)%s;",
-				m.record.CppName,
-				m.cppName,
-				strings.Join(args, ", "),
-				skSpRelease,
-			)
+			if m.retrn.isPointer || m.retrn.isSmartPointer {
+				f.writelnf("  auto ret = reinterpret_cast<%s *>(c_obj)->%s(%s)%s;",
+					m.record.CppName,
+					m.cppName,
+					strings.Join(args, ", "),
+					skSpRelease)
+				f.writelnf("  return (reinterpret_cast<%s *> (ret));",
+					m.retrn.subTyp.record.cStructName,
+				)
+			} else {
+				f.writelnf("  return reinterpret_cast<%s*>(c_obj)->%s(%s)%s;",
+					m.record.CppName,
+					m.cppName,
+					strings.Join(args, ", "),
+					skSpRelease,
+				)
+			}
 		}
 	}
 	f.writeln("}")

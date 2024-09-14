@@ -604,6 +604,8 @@ extern "C"
   sk_SkSamplingOptions *
   misk_new_SamplingOptionsCopy (sk_SkSamplingOptions *c_p0);
 
+  sk_SkCanvas *misk_Surface_getCanvas (sk_SkSurface *c_obj);
+
   sk_SkSurfaceProps *misk_new_SurfaceProps ();
   sk_SkSurfaceProps *misk_new_SurfacePropsPixelGeometry (unsigned int c_flags,
                                                          uint c_p1);
