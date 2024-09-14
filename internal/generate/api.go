@@ -17,6 +17,7 @@ type api struct {
 	Enums     []enum     `json:"enums"`
 	Functions []function `json:"functions"`
 	Typedefs  []typedef  `json:"typedefs"`
+	Variables []variable
 }
 
 func loadApi() api {
@@ -55,6 +56,10 @@ func loadApi() api {
 	for i := range api.Records {
 		record := &api.Records[i]
 		record.enrich2(api)
+	}
+	for i := range api.Variables {
+		variable := &api.Variables[i]
+		variable.enrich2(api)
 	}
 
 	return api
@@ -118,4 +123,10 @@ func (a api) generate(g generator) {
 	for _, typedef := range a.Typedefs {
 		typedef.generate(g)
 	}
+
+	g.headerFile.writeln()
+	for _, variable := range a.Variables {
+		variable.generate(g)
+	}
+	g.headerFile.writeln()
 }

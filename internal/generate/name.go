@@ -5,7 +5,9 @@ import (
 )
 
 func stripSkPrefix(name string) string {
-	return strings.TrimPrefix(name, "Sk")
+	name = strings.TrimPrefix(name, "Sk")
+	name = strings.TrimPrefix(name, "SK_")
+	return name
 }
 
 func stripKPrefix(name string) string {

@@ -66,6 +66,8 @@ func (r *record) enrich1(cursor clang.Cursor) {
 		case clang.Cursor_FieldDecl:
 			r.fields = append(r.fields, newField(cursor))
 
+			// case clang.Cursor_VarDecl:
+			// 	fmt.Println(cursor.Spelling())
 		}
 
 		return clang.ChildVisit_Continue

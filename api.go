@@ -3474,9 +3474,6 @@ const (
 	FilterModeLast    FilterMode = 1
 )
 
-/*
-Is the data protected on the GPU or not.
-*/
 type SkgpuProtected int64
 
 const (
@@ -3663,6 +3660,21 @@ This is different from SkColor, which is unpremultiplied, and is always in the
 same byte order.
 */
 type PMColor C.uint
+
+var AlphaTRANSPARENT = (Alpha)(C.sk_SK_AlphaTRANSPARENT)
+var AlphaOPAQUE = (Alpha)(C.sk_SK_AlphaOPAQUE)
+var ColorTRANSPARENT = (Color)(C.sk_SK_ColorTRANSPARENT)
+var ColorBLACK = (Color)(C.sk_SK_ColorBLACK)
+var ColorDKGRAY = (Color)(C.sk_SK_ColorDKGRAY)
+var ColorGRAY = (Color)(C.sk_SK_ColorGRAY)
+var ColorLTGRAY = (Color)(C.sk_SK_ColorLTGRAY)
+var ColorWHITE = (Color)(C.sk_SK_ColorWHITE)
+var ColorRED = (Color)(C.sk_SK_ColorRED)
+var ColorGREEN = (Color)(C.sk_SK_ColorGREEN)
+var ColorBLUE = (Color)(C.sk_SK_ColorBLUE)
+var ColorYELLOW = (Color)(C.sk_SK_ColorYELLOW)
+var ColorCYAN = (Color)(C.sk_SK_ColorCYAN)
+var ColorMAGENTA = (Color)(C.sk_SK_ColorMAGENTA)
 
 func FontMgrRefDefault() FontMgr {
 	return FontMgr{

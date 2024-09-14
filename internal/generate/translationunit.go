@@ -121,6 +121,9 @@ func (tu translationUnit) enrichApi(api *api) {
 			if typedef, ok := api.findTypedef(cursor.Spelling()); ok {
 				typedef.enrich(cursor)
 			}
+
+		case clang.Cursor_VarDecl:
+			api.Variables = append(api.Variables, newVariable(cursor))
 		}
 
 		return clang.ChildVisit_Continue

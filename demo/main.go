@@ -76,7 +76,7 @@ func main() {
 		gl.Clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 
 		paint := skia.NewPaint()
-		// paint.SetColor()
+		paint.SetColor(skia.ColorRED)
 		paint.SetStyle(skia.PaintStyleFill)
 		canvas := surface.GetCanvas()
 		rect := skia.RectMakeXYWH(100, 100, 100, 100)

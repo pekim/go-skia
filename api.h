@@ -640,6 +640,22 @@ extern "C"
   uint misk_SkPreMultiplyARGB (unsigned int c_a, unsigned int c_r,
                                unsigned int c_g, unsigned int c_b);
   uint misk_SkPreMultiplyColor (uint c_c);
+
+  extern uint sk_SK_AlphaTRANSPARENT;
+  extern uint sk_SK_AlphaOPAQUE;
+  extern uint sk_SK_ColorTRANSPARENT;
+  extern uint sk_SK_ColorBLACK;
+  extern uint sk_SK_ColorDKGRAY;
+  extern uint sk_SK_ColorGRAY;
+  extern uint sk_SK_ColorLTGRAY;
+  extern uint sk_SK_ColorWHITE;
+  extern uint sk_SK_ColorRED;
+  extern uint sk_SK_ColorGREEN;
+  extern uint sk_SK_ColorBLUE;
+  extern uint sk_SK_ColorYELLOW;
+  extern uint sk_SK_ColorCYAN;
+  extern uint sk_SK_ColorMAGENTA;
+
   sk_SkFontMgr *sk_fontmgr_ref_default (void);
 
 #ifdef __cplusplus
