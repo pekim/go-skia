@@ -3661,6 +3661,8 @@ same byte order.
 */
 type PMColor C.uint
 
+var KSkColorTypeCnt = (int)(C.sk_kSkColorTypeCnt)
+
 /*
 Represents fully transparent SkAlpha value. SkAlpha ranges from zero,
 fully transparent; to 255, fully opaque.
@@ -3737,6 +3739,29 @@ var ColorCYAN = (Color)(C.sk_SK_ColorCYAN)
 Represents fully opaque magenta. HTML fuchsia is equivalent.
 */
 var ColorMAGENTA = (Color)(C.sk_SK_ColorMAGENTA)
+var KSkFilterModeCount = (int)(C.sk_kSkFilterModeCount)
+var KSkMipmapModeCount = (int)(C.sk_kSkMipmapModeCount)
+
+/*
+Maximum representable milliseconds; 24d 20h 31m 23.647s.
+*/
+var MSecMax = (uint)(C.sk_SK_MSecMax)
+
+/*
+The generation IDs in Skia reserve 0 has an invalid marker.
+*/
+var InvalidGenID = (uint)(C.sk_SK_InvalidGenID)
+
+/*
+The unique IDs in Skia reserve 0 has an invalid marker.
+*/
+var InvalidUniqueID = (uint)(C.sk_SK_InvalidUniqueID)
+var KGrGLStandardCnt = (int)(C.sk_kGrGLStandardCnt)
+
+/*
+This value translates to reseting all the context state for any backend.
+*/
+var KAll_GrBackendState = (uint)(C.sk_kAll_GrBackendState)
 
 func FontMgrRefDefault() FontMgr {
 	return FontMgr{

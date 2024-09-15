@@ -1415,6 +1415,7 @@ extern "C"
     return SkPreMultiplyColor (SkColor (c_c));
   }
 
+  int sk_kSkColorTypeCnt = kSkColorTypeCnt;
   uint sk_SK_AlphaTRANSPARENT = SK_AlphaTRANSPARENT;
   uint sk_SK_AlphaOPAQUE = SK_AlphaOPAQUE;
   uint sk_SK_ColorTRANSPARENT = SK_ColorTRANSPARENT;
@@ -1429,6 +1430,13 @@ extern "C"
   uint sk_SK_ColorYELLOW = SK_ColorYELLOW;
   uint sk_SK_ColorCYAN = SK_ColorCYAN;
   uint sk_SK_ColorMAGENTA = SK_ColorMAGENTA;
+  int sk_kSkFilterModeCount = kSkFilterModeCount;
+  int sk_kSkMipmapModeCount = kSkMipmapModeCount;
+  uint sk_SK_MSecMax = SK_MSecMax;
+  uint sk_SK_InvalidGenID = SK_InvalidGenID;
+  uint sk_SK_InvalidUniqueID = SK_InvalidUniqueID;
+  int sk_kGrGLStandardCnt = kGrGLStandardCnt;
+  uint sk_kAll_GrBackendState = kAll_GrBackendState;
 
   sk_SkFontMgr *
   sk_fontmgr_ref_default (void)

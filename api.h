@@ -641,6 +641,7 @@ extern "C"
                                unsigned int c_g, unsigned int c_b);
   uint misk_SkPreMultiplyColor (uint c_c);
 
+  extern int sk_kSkColorTypeCnt;
   extern uint sk_SK_AlphaTRANSPARENT;
   extern uint sk_SK_AlphaOPAQUE;
   extern uint sk_SK_ColorTRANSPARENT;
@@ -655,6 +656,13 @@ extern "C"
   extern uint sk_SK_ColorYELLOW;
   extern uint sk_SK_ColorCYAN;
   extern uint sk_SK_ColorMAGENTA;
+  extern int sk_kSkFilterModeCount;
+  extern int sk_kSkMipmapModeCount;
+  extern uint sk_SK_MSecMax;
+  extern uint sk_SK_InvalidGenID;
+  extern uint sk_SK_InvalidUniqueID;
+  extern int sk_kGrGLStandardCnt;
+  extern uint sk_kAll_GrBackendState;
 
   sk_SkFontMgr *sk_fontmgr_ref_default (void);
 

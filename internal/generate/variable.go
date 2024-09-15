@@ -1,18 +1,17 @@
 package generate
 
 import (
-	"fmt"
-
 	"github.com/go-clang/clang-v15/clang"
 )
 
 type variable struct {
-	cursor  clang.Cursor
-	cppName string
-	cName   string
-	goName  string
-	typ     *typ
-	doc     string
+	cursor     clang.Cursor
+	cppName    string
+	cName      string
+	goName     string
+	typeCName  string
+	typeGoName string
+	doc        string
 }
 
 func newVariable(cursor clang.Cursor) variable {
@@ -30,20 +29,27 @@ func newVariable(cursor clang.Cursor) variable {
 
 func (v *variable) enrich2(api api) {
 	typ, err := typFromClangType(v.cursor.Type(), api)
-	if err == nil && typ.typedef != nil {
-		v.typ = &typ
-		fmt.Println("TODO if its not a typdef")
+	if err == nil {
+		if typ.isPrimitive {
+			v.typeCName = typ.cName
+			v.typeGoName = typ.goName
+		} else if typ.typedef != nil {
+			v.typeCName = typ.typedef.cName
+			v.typeGoName = typ.goName
+		} else {
+			fatalf("unsupported type for variable, %#v", typ)
+		}
 	}
 }
 
 func (v *variable) generate(g generator) {
-	if v.typ == nil {
+	if v.typeCName == "" || v.typeGoName == "" {
 		return
 	}
 
 	g.goFile.writeDocComment(v.doc)
-	g.goFile.writelnf("var %s = (%s)(C.%s)", v.goName, v.typ.goName, v.cName)
+	g.goFile.writelnf("var %s = (%s)(C.%s)", v.goName, v.typeGoName, v.cName)
 
-	g.headerFile.writelnf("extern %s %s;", v.typ.typedef.cName, v.cName)
-	g.cppFile.writelnf("%s %s = %s;", v.typ.typedef.cName, v.cName, v.cppName)
+	g.headerFile.writelnf("extern %s %s;", v.typeCName, v.cName)
+	g.cppFile.writelnf("%s %s = %s;", v.typeCName, v.cName, v.cppName)
 }
