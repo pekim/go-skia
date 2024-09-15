@@ -656,11 +656,11 @@ extern "C"
   extern uint sk_SK_ColorYELLOW;
   extern uint sk_SK_ColorCYAN;
   extern uint sk_SK_ColorMAGENTA;
-  extern int sk_kSkFilterModeCount;
-  extern int sk_kSkMipmapModeCount;
   extern uint sk_SK_MSecMax;
   extern uint sk_SK_InvalidGenID;
   extern uint sk_SK_InvalidUniqueID;
+  extern int sk_kSkFilterModeCount;
+  extern int sk_kSkMipmapModeCount;
   extern int sk_kGrGLStandardCnt;
   extern uint sk_kAll_GrBackendState;
 

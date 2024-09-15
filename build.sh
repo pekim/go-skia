@@ -202,6 +202,16 @@ bin/gn gen "${BUILD_DIR}" --args="${COMMON_ARGS} ${PLATFORM_ARGS}"
 ninja -C "${BUILD_DIR}"
 cd ../..
 
+# copy headers
+rm -fr header
+mkdir header
+cp -r _skia/skia/include _skia/skia/modules header
+
+# copy  libs
+rm -fr lib
+mkdir lib
+cp _skia/build/libskia.a _skia/build/libskshaper.a _skia/build/libsvg.a lib
+
 # Generate & verify
 PATH=$ORIGINAL_PATH
 go run internal/generate/cmd/main.go

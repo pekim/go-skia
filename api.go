@@ -2,8 +2,8 @@
 
 package skia
 
-// #cgo CXXFLAGS: -I ${SRCDIR}/_skia/skia
-// #cgo LDFLAGS: -L ${SRCDIR}/_skia/build
+// #cgo CXXFLAGS: -I ${SRCDIR}/header
+// #cgo LDFLAGS: -L ${SRCDIR}/lib
 // #cgo LDFLAGS: -l skia
 // #cgo LDFLAGS: -l skshaper
 // #cgo LDFLAGS: -l svg
@@ -3474,6 +3474,9 @@ const (
 	FilterModeLast    FilterMode = 1
 )
 
+/*
+Is the data protected on the GPU or not.
+*/
 type SkgpuProtected int64
 
 const (
@@ -3739,8 +3742,6 @@ var ColorCYAN = (Color)(C.sk_SK_ColorCYAN)
 Represents fully opaque magenta. HTML fuchsia is equivalent.
 */
 var ColorMAGENTA = (Color)(C.sk_SK_ColorMAGENTA)
-var KSkFilterModeCount = (int)(C.sk_kSkFilterModeCount)
-var KSkMipmapModeCount = (int)(C.sk_kSkMipmapModeCount)
 
 /*
 Maximum representable milliseconds; 24d 20h 31m 23.647s.
@@ -3756,6 +3757,8 @@ var InvalidGenID = (uint)(C.sk_SK_InvalidGenID)
 The unique IDs in Skia reserve 0 has an invalid marker.
 */
 var InvalidUniqueID = (uint)(C.sk_SK_InvalidUniqueID)
+var KSkFilterModeCount = (int)(C.sk_kSkFilterModeCount)
+var KSkMipmapModeCount = (int)(C.sk_kSkMipmapModeCount)
 var KGrGLStandardCnt = (int)(C.sk_kGrGLStandardCnt)
 
 /*
