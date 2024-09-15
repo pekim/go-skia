@@ -75,6 +75,12 @@ func (tu translationUnit) enrichApi(api *api) {
 					}
 
 				case clang.Cursor_EnumDecl:
+					if cursor.Spelling() == "Protected" && tu.headerFile == "_skia/skia/include/gpu/GrTypes.h" {
+						// The 'Protected' enum is present in both gpu/GpuTypes.h and gpu/GrTypes.h.
+						// Don't use the one that doesn't have a doc comment.
+						break
+					}
+
 					if enum, ok := api.findEnum(qualifiedName); ok {
 						enum.enrich(nil, cursor)
 					}
