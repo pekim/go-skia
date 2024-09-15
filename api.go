@@ -3661,19 +3661,81 @@ same byte order.
 */
 type PMColor C.uint
 
+/*
+Represents fully transparent SkAlpha value. SkAlpha ranges from zero,
+fully transparent; to 255, fully opaque.
+*/
 var AlphaTRANSPARENT = (Alpha)(C.sk_SK_AlphaTRANSPARENT)
+
+/*
+Represents fully opaque SkAlpha value. SkAlpha ranges from zero,
+fully transparent; to 255, fully opaque.
+*/
 var AlphaOPAQUE = (Alpha)(C.sk_SK_AlphaOPAQUE)
+
+/*
+Represents fully transparent SkColor. May be used to initialize a destination
+containing a mask or a non-rectangular image.
+*/
 var ColorTRANSPARENT = (Color)(C.sk_SK_ColorTRANSPARENT)
+
+/*
+Represents fully opaque black.
+*/
 var ColorBLACK = (Color)(C.sk_SK_ColorBLACK)
+
+/*
+Represents fully opaque dark gray.
+Note that SVG dark gray is equivalent to 0xFFA9A9A9.
+*/
 var ColorDKGRAY = (Color)(C.sk_SK_ColorDKGRAY)
+
+/*
+Represents fully opaque gray.
+Note that HTML gray is equivalent to 0xFF808080.
+*/
 var ColorGRAY = (Color)(C.sk_SK_ColorGRAY)
+
+/*
+Represents fully opaque light gray. HTML silver is equivalent to 0xFFC0C0C0.
+Note that SVG light gray is equivalent to 0xFFD3D3D3.
+*/
 var ColorLTGRAY = (Color)(C.sk_SK_ColorLTGRAY)
+
+/*
+Represents fully opaque white.
+*/
 var ColorWHITE = (Color)(C.sk_SK_ColorWHITE)
+
+/*
+Represents fully opaque red.
+*/
 var ColorRED = (Color)(C.sk_SK_ColorRED)
+
+/*
+Represents fully opaque green. HTML lime is equivalent.
+Note that HTML green is equivalent to 0xFF008000.
+*/
 var ColorGREEN = (Color)(C.sk_SK_ColorGREEN)
+
+/*
+Represents fully opaque blue.
+*/
 var ColorBLUE = (Color)(C.sk_SK_ColorBLUE)
+
+/*
+Represents fully opaque yellow.
+*/
 var ColorYELLOW = (Color)(C.sk_SK_ColorYELLOW)
+
+/*
+Represents fully opaque cyan. HTML aqua is equivalent.
+*/
 var ColorCYAN = (Color)(C.sk_SK_ColorCYAN)
+
+/*
+Represents fully opaque magenta. HTML fuchsia is equivalent.
+*/
 var ColorMAGENTA = (Color)(C.sk_SK_ColorMAGENTA)
 
 func FontMgrRefDefault() FontMgr {

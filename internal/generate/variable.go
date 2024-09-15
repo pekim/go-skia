@@ -41,7 +41,9 @@ func (v *variable) generate(g generator) {
 		return
 	}
 
+	g.goFile.writeDocComment(v.doc)
 	g.goFile.writelnf("var %s = (%s)(C.%s)", v.goName, v.typ.goName, v.cName)
+
 	g.headerFile.writelnf("extern %s %s;", v.typ.typedef.cName, v.cName)
 	g.cppFile.writelnf("%s %s = %s;", v.typ.typedef.cName, v.cName, v.cppName)
 }

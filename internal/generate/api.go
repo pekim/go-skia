@@ -128,5 +128,4 @@ func (a api) generate(g generator) {
 	for _, variable := range a.Variables {
 		variable.generate(g)
 	}
-	g.headerFile.writeln()
 }
