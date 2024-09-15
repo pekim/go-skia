@@ -3664,7 +3664,11 @@ same byte order.
 */
 type PMColor C.uint
 
-var KSkColorTypeCnt = (int)(C.sk_kSkColorTypeCnt)
+/*
+Represents fully opaque SkAlpha value. SkAlpha ranges from zero,
+fully transparent; to 255, fully opaque.
+*/
+var AlphaOPAQUE = (Alpha)(C.sk_SK_AlphaOPAQUE)
 
 /*
 Represents fully transparent SkAlpha value. SkAlpha ranges from zero,
@@ -3673,21 +3677,19 @@ fully transparent; to 255, fully opaque.
 var AlphaTRANSPARENT = (Alpha)(C.sk_SK_AlphaTRANSPARENT)
 
 /*
-Represents fully opaque SkAlpha value. SkAlpha ranges from zero,
-fully transparent; to 255, fully opaque.
-*/
-var AlphaOPAQUE = (Alpha)(C.sk_SK_AlphaOPAQUE)
-
-/*
-Represents fully transparent SkColor. May be used to initialize a destination
-containing a mask or a non-rectangular image.
-*/
-var ColorTRANSPARENT = (Color)(C.sk_SK_ColorTRANSPARENT)
-
-/*
 Represents fully opaque black.
 */
 var ColorBLACK = (Color)(C.sk_SK_ColorBLACK)
+
+/*
+Represents fully opaque blue.
+*/
+var ColorBLUE = (Color)(C.sk_SK_ColorBLUE)
+
+/*
+Represents fully opaque cyan. HTML aqua is equivalent.
+*/
+var ColorCYAN = (Color)(C.sk_SK_ColorCYAN)
 
 /*
 Represents fully opaque dark gray.
@@ -3702,41 +3704,16 @@ Note that HTML gray is equivalent to 0xFF808080.
 var ColorGRAY = (Color)(C.sk_SK_ColorGRAY)
 
 /*
-Represents fully opaque light gray. HTML silver is equivalent to 0xFFC0C0C0.
-Note that SVG light gray is equivalent to 0xFFD3D3D3.
-*/
-var ColorLTGRAY = (Color)(C.sk_SK_ColorLTGRAY)
-
-/*
-Represents fully opaque white.
-*/
-var ColorWHITE = (Color)(C.sk_SK_ColorWHITE)
-
-/*
-Represents fully opaque red.
-*/
-var ColorRED = (Color)(C.sk_SK_ColorRED)
-
-/*
 Represents fully opaque green. HTML lime is equivalent.
 Note that HTML green is equivalent to 0xFF008000.
 */
 var ColorGREEN = (Color)(C.sk_SK_ColorGREEN)
 
 /*
-Represents fully opaque blue.
+Represents fully opaque light gray. HTML silver is equivalent to 0xFFC0C0C0.
+Note that SVG light gray is equivalent to 0xFFD3D3D3.
 */
-var ColorBLUE = (Color)(C.sk_SK_ColorBLUE)
-
-/*
-Represents fully opaque yellow.
-*/
-var ColorYELLOW = (Color)(C.sk_SK_ColorYELLOW)
-
-/*
-Represents fully opaque cyan. HTML aqua is equivalent.
-*/
-var ColorCYAN = (Color)(C.sk_SK_ColorCYAN)
+var ColorLTGRAY = (Color)(C.sk_SK_ColorLTGRAY)
 
 /*
 Represents fully opaque magenta. HTML fuchsia is equivalent.
@@ -3744,9 +3721,25 @@ Represents fully opaque magenta. HTML fuchsia is equivalent.
 var ColorMAGENTA = (Color)(C.sk_SK_ColorMAGENTA)
 
 /*
-Maximum representable milliseconds; 24d 20h 31m 23.647s.
+Represents fully opaque red.
 */
-var MSecMax = (uint)(C.sk_SK_MSecMax)
+var ColorRED = (Color)(C.sk_SK_ColorRED)
+
+/*
+Represents fully transparent SkColor. May be used to initialize a destination
+containing a mask or a non-rectangular image.
+*/
+var ColorTRANSPARENT = (Color)(C.sk_SK_ColorTRANSPARENT)
+
+/*
+Represents fully opaque white.
+*/
+var ColorWHITE = (Color)(C.sk_SK_ColorWHITE)
+
+/*
+Represents fully opaque yellow.
+*/
+var ColorYELLOW = (Color)(C.sk_SK_ColorYELLOW)
 
 /*
 The generation IDs in Skia reserve 0 has an invalid marker.
@@ -3757,14 +3750,20 @@ var InvalidGenID = (uint)(C.sk_SK_InvalidGenID)
 The unique IDs in Skia reserve 0 has an invalid marker.
 */
 var InvalidUniqueID = (uint)(C.sk_SK_InvalidUniqueID)
-var KSkFilterModeCount = (int)(C.sk_kSkFilterModeCount)
-var KSkMipmapModeCount = (int)(C.sk_kSkMipmapModeCount)
-var KGrGLStandardCnt = (int)(C.sk_kGrGLStandardCnt)
+
+/*
+Maximum representable milliseconds; 24d 20h 31m 23.647s.
+*/
+var MSecMax = (uint)(C.sk_SK_MSecMax)
 
 /*
 This value translates to reseting all the context state for any backend.
 */
 var KAll_GrBackendState = (uint)(C.sk_kAll_GrBackendState)
+var KGrGLStandardCnt = (int)(C.sk_kGrGLStandardCnt)
+var KSkColorTypeCnt = (int)(C.sk_kSkColorTypeCnt)
+var KSkFilterModeCount = (int)(C.sk_kSkFilterModeCount)
+var KSkMipmapModeCount = (int)(C.sk_kSkMipmapModeCount)
 
 func FontMgrRefDefault() FontMgr {
 	return FontMgr{

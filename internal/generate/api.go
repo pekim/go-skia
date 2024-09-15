@@ -5,6 +5,9 @@ import (
 	"encoding/json"
 	"fmt"
 	"runtime"
+	"slices"
+	"strings"
+	"sync"
 
 	"golang.org/x/sync/errgroup"
 )
@@ -13,11 +16,12 @@ import (
 var apiJson []byte
 
 type api struct {
-	Records   []record   `json:"records"`
-	Enums     []enum     `json:"enums"`
-	Functions []function `json:"functions"`
-	Typedefs  []typedef  `json:"typedefs"`
-	Variables []variable
+	Records       []record   `json:"records"`
+	Enums         []enum     `json:"enums"`
+	Functions     []function `json:"functions"`
+	Typedefs      []typedef  `json:"typedefs"`
+	Variables     []variable
+	variablesLock *sync.Mutex
 }
 
 func loadApi() api {
@@ -26,6 +30,7 @@ func loadApi() api {
 	fatalOnError(err)
 
 	fmt.Print("load api ")
+	api.variablesLock = new(sync.Mutex)
 	var group errgroup.Group
 	group.SetLimit(runtime.NumCPU() / 2)
 	for _, headerFile := range headerFiles {
@@ -125,6 +130,9 @@ func (a api) generate(g generator) {
 	}
 
 	g.headerFile.writeln()
+	slices.SortFunc(a.Variables, func(a, b variable) int {
+		return strings.Compare(a.cppName, b.cppName)
+	})
 	for _, variable := range a.Variables {
 		variable.generate(g)
 	}

@@ -123,7 +123,9 @@ func (tu translationUnit) enrichApi(api *api) {
 			}
 
 		case clang.Cursor_VarDecl:
+			api.variablesLock.Lock() // multiple translation units may append in different Go routines
 			api.Variables = append(api.Variables, newVariable(cursor))
+			api.variablesLock.Unlock()
 		}
 
 		return clang.ChildVisit_Continue

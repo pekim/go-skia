@@ -1415,28 +1415,28 @@ extern "C"
     return SkPreMultiplyColor (SkColor (c_c));
   }
 
-  int sk_kSkColorTypeCnt = kSkColorTypeCnt;
-  uint sk_SK_AlphaTRANSPARENT = SK_AlphaTRANSPARENT;
   uint sk_SK_AlphaOPAQUE = SK_AlphaOPAQUE;
-  uint sk_SK_ColorTRANSPARENT = SK_ColorTRANSPARENT;
+  uint sk_SK_AlphaTRANSPARENT = SK_AlphaTRANSPARENT;
   uint sk_SK_ColorBLACK = SK_ColorBLACK;
+  uint sk_SK_ColorBLUE = SK_ColorBLUE;
+  uint sk_SK_ColorCYAN = SK_ColorCYAN;
   uint sk_SK_ColorDKGRAY = SK_ColorDKGRAY;
   uint sk_SK_ColorGRAY = SK_ColorGRAY;
-  uint sk_SK_ColorLTGRAY = SK_ColorLTGRAY;
-  uint sk_SK_ColorWHITE = SK_ColorWHITE;
-  uint sk_SK_ColorRED = SK_ColorRED;
   uint sk_SK_ColorGREEN = SK_ColorGREEN;
-  uint sk_SK_ColorBLUE = SK_ColorBLUE;
-  uint sk_SK_ColorYELLOW = SK_ColorYELLOW;
-  uint sk_SK_ColorCYAN = SK_ColorCYAN;
+  uint sk_SK_ColorLTGRAY = SK_ColorLTGRAY;
   uint sk_SK_ColorMAGENTA = SK_ColorMAGENTA;
-  uint sk_SK_MSecMax = SK_MSecMax;
+  uint sk_SK_ColorRED = SK_ColorRED;
+  uint sk_SK_ColorTRANSPARENT = SK_ColorTRANSPARENT;
+  uint sk_SK_ColorWHITE = SK_ColorWHITE;
+  uint sk_SK_ColorYELLOW = SK_ColorYELLOW;
   uint sk_SK_InvalidGenID = SK_InvalidGenID;
   uint sk_SK_InvalidUniqueID = SK_InvalidUniqueID;
+  uint sk_SK_MSecMax = SK_MSecMax;
+  uint sk_kAll_GrBackendState = kAll_GrBackendState;
+  int sk_kGrGLStandardCnt = kGrGLStandardCnt;
+  int sk_kSkColorTypeCnt = kSkColorTypeCnt;
   int sk_kSkFilterModeCount = kSkFilterModeCount;
   int sk_kSkMipmapModeCount = kSkMipmapModeCount;
-  int sk_kGrGLStandardCnt = kGrGLStandardCnt;
-  uint sk_kAll_GrBackendState = kAll_GrBackendState;
 
   sk_SkFontMgr *
   sk_fontmgr_ref_default (void)
