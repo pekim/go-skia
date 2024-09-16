@@ -294,7 +294,7 @@
 
     {
       "name": "SkPixmap",
-      "constructors": [{}, null]
+      "constructors": [{}, { "suffix": "ImageInfo" }]
     },
 
     {

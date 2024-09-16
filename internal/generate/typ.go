@@ -146,6 +146,11 @@ func typFromClangType(cType clang.Type, api api) (typ, error) {
 			typ.goName = "uint"
 			typ.isPrimitive = true
 
+		case clang.Type_ULong:
+			typ.cName = "ulong"
+			typ.goName = "uint64"
+			typ.isPrimitive = true
+
 		case clang.Type_Elaborated:
 			typ_, err := typFromClangType(cType.CanonicalType(), api)
 			if err != nil {

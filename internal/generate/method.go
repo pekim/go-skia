@@ -121,7 +121,7 @@ func (m methodOverload) generateGo(g generator) {
 		cArgs[0] = "c_obj"
 	}
 	for i, param := range m.params {
-		params[i] = fmt.Sprintf("%s %s", param.goName, param.typ.goName)
+		params[i] = fmt.Sprintf("%s %s", param.goName, param.typGoName)
 		cVars[argsOffset+i] = param.cgoVar
 		cArgs[argsOffset+i] = param.cName
 	}
@@ -218,7 +218,7 @@ func (m methodOverload) generateCpp(g generator) {
 	}
 	for i, param := range m.params {
 		params[paramOffset+i] = param.cParam
-		args[i] = param.cArg
+		args[i] = param.cppArg
 	}
 
 	returnDecl := m.retrn.cppName

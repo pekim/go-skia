@@ -58,7 +58,7 @@ func (c recordCtor) generateGo(g generator) {
 	cVars := make([]string, len(c.params))
 	cArgs := make([]string, len(c.params))
 	for i, param := range c.params {
-		params[i] = fmt.Sprintf("%s %s", param.goName, param.typ.goName)
+		params[i] = fmt.Sprintf("%s %s", param.goName, param.typGoName)
 		cVars[i] = param.cgoVar
 		cArgs[i] = param.cName
 	}
@@ -94,7 +94,7 @@ func (c recordCtor) generateCpp(g generator) {
 	args := make([]string, len(c.params))
 	for i, param := range c.params {
 		params[i] = param.cParam
-		args[i] = param.cArg
+		args[i] = param.cppArg
 	}
 
 	f.writelnf("%s * %s(%s) {", c.record.cStructName, c.cFuncName, strings.Join(params, ", "))

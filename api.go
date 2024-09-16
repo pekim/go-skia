@@ -158,6 +158,20 @@ func (o *GrContextOptions) SetBufferMapThreshold(value int) {
 }
 
 /*
+Default minimum size to use when allocating buffers for uploading data to textures. The
+larger the value the more uploads can be packed into one buffer, but at the cost of
+more gpu memory allocated that may not be used. Uploads larger than the minimum will still
+work by allocating a dedicated buffer.
+*/
+func (o GrContextOptions) MinimumStagingBufferSize() uint64 {
+	return uint64(o.fMinimumStagingBufferSize)
+}
+
+func (o *GrContextOptions) SetMinimumStagingBufferSize(value uint64) {
+	o.fMinimumStagingBufferSize = C.ulong(value)
+}
+
+/*
 Construct mipmaps manually, via repeated downsampling draw-calls. This is used when
 the driver's implementation (glGenerateMipmap) contains bugs. This requires mipmap
 level control (ie desktop or ES3).
@@ -217,6 +231,17 @@ func (o GrContextOptions) DisableGpuYUVConversion() bool {
 
 func (o *GrContextOptions) SetDisableGpuYUVConversion(value bool) {
 	o.fDisableGpuYUVConversion = C.bool(value)
+}
+
+/*
+The maximum size of cache textures used for Skia's Glyph cache.
+*/
+func (o GrContextOptions) GlyphCacheTextureMaximumBytes() uint64 {
+	return uint64(o.fGlyphCacheTextureMaximumBytes)
+}
+
+func (o *GrContextOptions) SetGlyphCacheTextureMaximumBytes(value uint64) {
+	o.fGlyphCacheTextureMaximumBytes = C.ulong(value)
 }
 
 /*
@@ -3080,6 +3105,33 @@ after SkPixmap has been created.
 func NewPixmap() Pixmap {
 
 	retC := C.misk_new_Pixmap()
+	return Pixmap{sk: retC}
+}
+
+/*
+Creates SkPixmap from info width, height, SkAlphaType, and SkColorType.
+addr points to pixels, or nullptr. rowBytes should be info.width() times
+info.bytesPerPixel(), or larger.
+
+No parameter checking is performed; it is up to the caller to ensure that
+addr and rowBytes agree with info.
+
+The memory lifetime of pixels is managed by the caller. When SkPixmap goes
+out of scope, addr is unaffected.
+
+SkPixmap may be later modified by reset() to change its size, pixel type, or
+storage.
+
+@param info      width, height, SkAlphaType, SkColorType of SkImageInfo
+@param addr      pointer to pixels allocated by caller; may be nullptr
+@param rowBytes  size of one row of addr; width times pixel size, or larger
+@return          initialized SkPixmap
+*/
+func NewPixmapImageInfo(info ImageInfo, addr []byte, rowBytes uint64) Pixmap {
+	c_info := info.sk
+	c_addr := unsafe.Pointer(&addr[0])
+	c_rowBytes := C.ulong(rowBytes)
+	retC := C.misk_new_PixmapImageInfo(c_info, c_addr, c_rowBytes)
 	return Pixmap{sk: retC}
 }
 

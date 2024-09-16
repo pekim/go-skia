@@ -197,7 +197,7 @@ func (f functionOverload) generateCpp(g generator) {
 			break
 		}
 		params[i] = param.cParam
-		args[i] = param.cArg
+		args[i] = param.cppArg
 		paramCount++
 	}
 	params = params[:paramCount]

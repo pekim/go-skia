@@ -1052,6 +1052,15 @@ extern "C"
     return reinterpret_cast<sk_SkPixmap *> (new SkPixmap ());
   }
 
+  sk_SkPixmap *
+  misk_new_PixmapImageInfo (sk_SkImageInfo *c_info, void *c_addr,
+                            unsigned long c_rowBytes)
+  {
+    return reinterpret_cast<sk_SkPixmap *> (
+        new SkPixmap (*reinterpret_cast<SkImageInfo *> (c_info),
+                      reinterpret_cast<void *> (c_addr), c_rowBytes));
+  }
+
   sk_SkRect
   misk_Rect_MakeEmpty ()
   {

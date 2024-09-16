@@ -82,7 +82,7 @@ extern "C"
     uchar fSkipGLErrorChecks[4];
     int fMaxTextureSizeOverride;
     int fBufferMapThreshold;
-    uchar fMinimumStagingBufferSize[8];
+    ulong fMinimumStagingBufferSize;
     uchar fExecutor[8];
     bool fDoManualMipmapping;
     bool fDisableCoverageCountingPaths;
@@ -90,7 +90,7 @@ extern "C"
     bool fAllowPathMaskCaching;
     bool fDisableGpuYUVConversion;
     uchar pad_11[3];
-    uchar fGlyphCacheTextureMaximumBytes[8];
+    ulong fGlyphCacheTextureMaximumBytes;
     float fMinDistanceFieldFontSize;
     float fGlyphsAsPathsFontSize;
     uchar fAllowMultipleGlyphCacheTextures[4];
@@ -271,7 +271,7 @@ extern "C"
   typedef struct
   {
     uchar fPixels[8];
-    uchar fRowBytes[8];
+    ulong fRowBytes;
     uchar fInfo[24];
   } sk_SkPixmap;
 
@@ -566,6 +566,8 @@ extern "C"
   void misk_delete_SkPath (sk_SkPath *obj);
 
   sk_SkPixmap *misk_new_Pixmap ();
+  sk_SkPixmap *misk_new_PixmapImageInfo (sk_SkImageInfo *c_info, void *c_addr,
+                                         unsigned long c_rowBytes);
 
   sk_SkRect misk_Rect_MakeEmpty ();
   sk_SkRect misk_Rect_MakeWH (float c_w, float c_h);
