@@ -182,6 +182,52 @@ extern "C"
         reinterpret_cast<SkSurfaceProps *> (c_props));
   }
 
+  sk_SkSurfaceProps
+  misk_Canvas_getBaseProps (sk_SkCanvas *c_obj)
+  {
+    auto ret = reinterpret_cast<SkCanvas *> (c_obj)->getBaseProps ();
+    return *(reinterpret_cast<sk_SkSurfaceProps *> (&ret));
+  }
+
+  sk_SkSurfaceProps
+  misk_Canvas_getTopProps (sk_SkCanvas *c_obj)
+  {
+    auto ret = reinterpret_cast<SkCanvas *> (c_obj)->getTopProps ();
+    return *(reinterpret_cast<sk_SkSurfaceProps *> (&ret));
+  }
+
+  sk_SkISize
+  misk_Canvas_getBaseLayerSize (sk_SkCanvas *c_obj)
+  {
+    auto ret = reinterpret_cast<SkCanvas *> (c_obj)->getBaseLayerSize ();
+    return *(reinterpret_cast<sk_SkISize *> (&ret));
+  }
+
+  sk_SkSurface *
+  misk_Canvas_makeSurface (sk_SkCanvas *c_obj, sk_SkImageInfo *c_info,
+                           sk_SkSurfaceProps *c_props)
+  {
+    auto ret = reinterpret_cast<SkCanvas *> (c_obj)
+                   ->makeSurface (*reinterpret_cast<SkImageInfo *> (c_info),
+                                  reinterpret_cast<SkSurfaceProps *> (c_props))
+                   .release ();
+    return (reinterpret_cast<sk_SkSurface *> (ret));
+  }
+
+  sk_SkSurface *
+  misk_Canvas_getSurface (sk_SkCanvas *c_obj)
+  {
+    auto ret = reinterpret_cast<SkCanvas *> (c_obj)->getSurface ();
+    return (reinterpret_cast<sk_SkSurface *> (ret));
+  }
+
+  sk_GrRecordingContext *
+  misk_Canvas_recordingContext (sk_SkCanvas *c_obj)
+  {
+    auto ret = reinterpret_cast<SkCanvas *> (c_obj)->recordingContext ();
+    return (reinterpret_cast<sk_GrRecordingContext *> (ret));
+  }
+
   bool
   misk_Canvas_peekPixels (sk_SkCanvas *c_obj, sk_SkPixmap *c_pixmap)
   {
@@ -189,10 +235,73 @@ extern "C"
         reinterpret_cast<SkPixmap *> (c_pixmap));
   }
 
+  bool
+  misk_Canvas_readPixelsImageInfo (sk_SkCanvas *c_obj,
+                                   sk_SkImageInfo *c_dstInfo,
+                                   void *c_dstPixels,
+                                   unsigned long c_dstRowBytes, int c_srcX,
+                                   int c_srcY)
+  {
+    return reinterpret_cast<SkCanvas *> (c_obj)->readPixels (
+        *reinterpret_cast<SkImageInfo *> (c_dstInfo),
+        reinterpret_cast<void *> (c_dstPixels), c_dstRowBytes, c_srcX, c_srcY);
+  }
+
+  bool
+  misk_Canvas_readPixelsPixmap (sk_SkCanvas *c_obj, sk_SkPixmap *c_pixmap,
+                                int c_srcX, int c_srcY)
+  {
+    return reinterpret_cast<SkCanvas *> (c_obj)->readPixels (
+        *reinterpret_cast<SkPixmap *> (c_pixmap), c_srcX, c_srcY);
+  }
+
+  bool
+  misk_Canvas_readPixelsBitmap (sk_SkCanvas *c_obj, sk_SkBitmap *c_bitmap,
+                                int c_srcX, int c_srcY)
+  {
+    return reinterpret_cast<SkCanvas *> (c_obj)->readPixels (
+        *reinterpret_cast<SkBitmap *> (c_bitmap), c_srcX, c_srcY);
+  }
+
+  bool
+  misk_Canvas_writePixelsImageInfo (sk_SkCanvas *c_obj, sk_SkImageInfo *c_info,
+                                    void *c_pixels, unsigned long c_rowBytes,
+                                    int c_x, int c_y)
+  {
+    return reinterpret_cast<SkCanvas *> (c_obj)->writePixels (
+        *reinterpret_cast<SkImageInfo *> (c_info),
+        reinterpret_cast<void *> (c_pixels), c_rowBytes, c_x, c_y);
+  }
+
+  bool
+  misk_Canvas_writePixelsBitmap (sk_SkCanvas *c_obj, sk_SkBitmap *c_bitmap,
+                                 int c_x, int c_y)
+  {
+    return reinterpret_cast<SkCanvas *> (c_obj)->writePixels (
+        *reinterpret_cast<SkBitmap *> (c_bitmap), c_x, c_y);
+  }
+
   int
   misk_Canvas_save (sk_SkCanvas *c_obj)
   {
     return reinterpret_cast<SkCanvas *> (c_obj)->save ();
+  }
+
+  int
+  misk_Canvas_saveLayer (sk_SkCanvas *c_obj, sk_SkRect c_bounds,
+                         sk_SkPaint *c_paint)
+  {
+    return reinterpret_cast<SkCanvas *> (c_obj)->saveLayer (
+        reinterpret_cast<SkRect *> (&c_bounds),
+        reinterpret_cast<SkPaint *> (c_paint));
+  }
+
+  int
+  misk_Canvas_saveLayerAlpha (sk_SkCanvas *c_obj, sk_SkRect c_bounds,
+                              unsigned int c_alpha)
+  {
+    return reinterpret_cast<SkCanvas *> (c_obj)->saveLayerAlpha (
+        reinterpret_cast<SkRect *> (&c_bounds), c_alpha);
   }
 
   void
@@ -243,6 +352,20 @@ extern "C"
   misk_Canvas_skew (sk_SkCanvas *c_obj, float c_sx, float c_sy)
   {
     return reinterpret_cast<SkCanvas *> (c_obj)->skew (c_sx, c_sy);
+  }
+
+  void
+  misk_Canvas_concatMatrix (sk_SkCanvas *c_obj, sk_SkMatrix *c_matrix)
+  {
+    return reinterpret_cast<SkCanvas *> (c_obj)->concat (
+        *reinterpret_cast<SkMatrix *> (c_matrix));
+  }
+
+  void
+  misk_Canvas_concatM44 (sk_SkCanvas *c_obj, sk_SkM44 *c_p0)
+  {
+    return reinterpret_cast<SkCanvas *> (c_obj)->concat (
+        *reinterpret_cast<SkM44 *> (c_p0));
   }
 
   void

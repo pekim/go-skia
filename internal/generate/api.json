@@ -67,8 +67,31 @@
       ],
       "methods": [
         { "name": "getProps" },
+        { "name": "getBaseProps" },
+        { "name": "getTopProps" },
+        { "name": "getBaseLayerSize" },
+        { "name": "makeSurface" },
+        { "name": "getSurface" },
+        { "name": "recordingContext" },
         { "name": "peekPixels" },
+        {
+          "name": "readPixels",
+          "overloads": [
+            { "suffix": "ImageInfo" },
+            { "suffix": "Pixmap" },
+            { "suffix": "Bitmap" }
+          ]
+        },
+        {
+          "name": "writePixels",
+          "overloads": [{ "suffix": "ImageInfo" }, { "suffix": "Bitmap" }]
+        },
         { "name": "save" },
+        {
+          "name": "saveLayer",
+          "overloads": [{}, null, null]
+        },
+        { "name": "saveLayerAlpha" },
         { "name": "restore" },
         { "name": "getSaveCount" },
         { "name": "restoreToCount" },
@@ -76,7 +99,14 @@
         { "name": "scale" },
         { "name": "rotate", "overloads": [{}, { "suffix": "AboutPoint" }] },
         { "name": "skew" },
-        { "name": "setMatrix", "overloads": [{ "suffix": "M44" }, {}] },
+        {
+          "name": "concat",
+          "overloads": [{ "suffix": "Matrix" }, { "suffix": "M44" }]
+        },
+        {
+          "name": "setMatrix",
+          "overloads": [{ "suffix": "M44" }, {}]
+        },
         { "name": "resetMatrix" },
         { "name": "clipRect", "overloads": [{}, null, null] },
         { "name": "clipRRect", "overloads": [{}, null, null] },

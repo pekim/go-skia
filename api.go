@@ -737,6 +737,91 @@ func (o Canvas) GetProps(props SurfaceProps) bool {
 }
 
 /*
+Returns the SkSurfaceProps associated with the canvas (i.e., at the base of the layer
+stack).
+
+@return  base SkSurfaceProps
+*/
+func (o Canvas) GetBaseProps() SurfaceProps {
+	c_obj := o.sk
+	retC := C.misk_Canvas_getBaseProps(c_obj)
+	return SurfaceProps{sk: &retC}
+}
+
+/*
+Returns the SkSurfaceProps associated with the canvas that are currently active (i.e., at
+the top of the layer stack). This can differ from getBaseProps depending on the flags
+passed to saveLayer (see SaveLayerFlagsSet).
+
+@return  SkSurfaceProps active in the current/top layer
+*/
+func (o Canvas) GetTopProps() SurfaceProps {
+	c_obj := o.sk
+	retC := C.misk_Canvas_getTopProps(c_obj)
+	return SurfaceProps{sk: &retC}
+}
+
+/*
+Gets the size of the base or root layer in global canvas coordinates. The
+origin of the base layer is always (0,0). The area available for drawing may be
+smaller (due to clipping or saveLayer).
+
+@return  integral width and height of base layer
+
+example: https://fiddle.skia.org/c/@Canvas_getBaseLayerSize
+*/
+func (o Canvas) GetBaseLayerSize() ISize {
+	c_obj := o.sk
+	retC := C.misk_Canvas_getBaseLayerSize(c_obj)
+	return ISize(retC)
+}
+
+/*
+Creates SkSurface matching info and props, and associates it with SkCanvas.
+Returns nullptr if no match found.
+
+If props is nullptr, matches SkSurfaceProps in SkCanvas. If props is nullptr and SkCanvas
+does not have SkSurfaceProps, creates SkSurface with default SkSurfaceProps.
+
+@param info   width, height, SkColorType, SkAlphaType, and SkColorSpace
+@param props  SkSurfaceProps to match; may be nullptr to match SkCanvas
+@return       SkSurface matching info and props, or nullptr if no match is available
+
+example: https://fiddle.skia.org/c/@Canvas_makeSurface
+*/
+func (o Canvas) MakeSurface(info ImageInfo, props SurfaceProps) Surface {
+	c_obj := o.sk
+	c_info := info.sk
+	c_props := props.sk
+	retC := C.misk_Canvas_makeSurface(c_obj, c_info, c_props)
+	return Surface{sk: retC}
+}
+
+/*
+Sometimes a canvas is owned by a surface. If it is, getSurface() will return a bare
+
+	pointer to that surface, else this will return nullptr.
+*/
+func (o Canvas) GetSurface() Surface {
+	c_obj := o.sk
+	retC := C.misk_Canvas_getSurface(c_obj)
+	return Surface{sk: retC}
+}
+
+/*
+Returns Ganesh context of the GPU surface associated with SkCanvas.
+
+@return  GPU context, if available; nullptr otherwise
+
+example: https://fiddle.skia.org/c/@Canvas_recordingContext
+*/
+func (o Canvas) RecordingContext() GrRecordingContext {
+	c_obj := o.sk
+	retC := C.misk_Canvas_recordingContext(c_obj)
+	return GrRecordingContext{sk: retC}
+}
+
+/*
 Returns true if SkCanvas has direct access to its pixels.
 
 Pixels are readable when SkDevice is raster. Pixels are not readable when SkCanvas
@@ -760,6 +845,238 @@ func (o Canvas) PeekPixels(pixmap Pixmap) bool {
 }
 
 /*
+Copies SkRect of pixels from SkCanvas into dstPixels. SkMatrix and clip are
+ignored.
+
+Source SkRect corners are (srcX, srcY) and (imageInfo().width(), imageInfo().height()).
+Destination SkRect corners are (0, 0) and (dstInfo.width(), dstInfo.height()).
+Copies each readable pixel intersecting both rectangles, without scaling,
+converting to dstInfo.colorType() and dstInfo.alphaType() if required.
+
+Pixels are readable when SkDevice is raster, or backed by a GPU.
+Pixels are not readable when SkCanvas is returned by SkDocument::beginPage,
+returned by SkPictureRecorder::beginRecording, or SkCanvas is the base of a utility
+class like DebugCanvas.
+
+The destination pixel storage must be allocated by the caller.
+
+Pixel values are converted only if SkColorType and SkAlphaType
+do not match. Only pixels within both source and destination rectangles
+are copied. dstPixels contents outside SkRect intersection are unchanged.
+
+Pass negative values for srcX or srcY to offset pixels across or down destination.
+
+Does not copy, and returns false if:
+- Source and destination rectangles do not intersect.
+- SkCanvas pixels could not be converted to dstInfo.colorType() or dstInfo.alphaType().
+- SkCanvas pixels are not readable; for instance, SkCanvas is document-based.
+- dstRowBytes is too small to contain one row of pixels.
+
+@param dstInfo      width, height, SkColorType, and SkAlphaType of dstPixels
+@param dstPixels    storage for pixels; dstInfo.height() times dstRowBytes, or larger
+@param dstRowBytes  size of one destination row; dstInfo.width() times pixel size, or larger
+@param srcX         offset into readable pixels on x-axis; may be negative
+@param srcY         offset into readable pixels on y-axis; may be negative
+@return             true if pixels were copied
+*/
+func (o Canvas) ReadPixelsImageInfo(dstInfo ImageInfo, dstPixels []byte, dstRowBytes uint64, srcX int, srcY int) bool {
+	c_obj := o.sk
+	c_dstInfo := dstInfo.sk
+	c_dstPixels := unsafe.Pointer(&dstPixels[0])
+	c_dstRowBytes := C.ulong(dstRowBytes)
+	c_srcX := C.int(srcX)
+	c_srcY := C.int(srcY)
+	retC := C.misk_Canvas_readPixelsImageInfo(c_obj, c_dstInfo, c_dstPixels, c_dstRowBytes, c_srcX, c_srcY)
+	return bool(retC)
+}
+
+/*
+Copies SkRect of pixels from SkCanvas into pixmap. SkMatrix and clip are
+ignored.
+
+Source SkRect corners are (srcX, srcY) and (imageInfo().width(), imageInfo().height()).
+Destination SkRect corners are (0, 0) and (pixmap.width(), pixmap.height()).
+Copies each readable pixel intersecting both rectangles, without scaling,
+converting to pixmap.colorType() and pixmap.alphaType() if required.
+
+Pixels are readable when SkDevice is raster, or backed by a GPU.
+Pixels are not readable when SkCanvas is returned by SkDocument::beginPage,
+returned by SkPictureRecorder::beginRecording, or SkCanvas is the base of a utility
+class like DebugCanvas.
+
+Caller must allocate pixel storage in pixmap if needed.
+
+Pixel values are converted only if SkColorType and SkAlphaType
+do not match. Only pixels within both source and destination SkRect
+are copied. pixmap pixels contents outside SkRect intersection are unchanged.
+
+Pass negative values for srcX or srcY to offset pixels across or down pixmap.
+
+Does not copy, and returns false if:
+- Source and destination rectangles do not intersect.
+- SkCanvas pixels could not be converted to pixmap.colorType() or pixmap.alphaType().
+- SkCanvas pixels are not readable; for instance, SkCanvas is document-based.
+- SkPixmap pixels could not be allocated.
+- pixmap.rowBytes() is too small to contain one row of pixels.
+
+@param pixmap  storage for pixels copied from SkCanvas
+@param srcX    offset into readable pixels on x-axis; may be negative
+@param srcY    offset into readable pixels on y-axis; may be negative
+@return        true if pixels were copied
+
+example: https://fiddle.skia.org/c/@Canvas_readPixels_2
+*/
+func (o Canvas) ReadPixelsPixmap(pixmap Pixmap, srcX int, srcY int) bool {
+	c_obj := o.sk
+	c_pixmap := pixmap.sk
+	c_srcX := C.int(srcX)
+	c_srcY := C.int(srcY)
+	retC := C.misk_Canvas_readPixelsPixmap(c_obj, c_pixmap, c_srcX, c_srcY)
+	return bool(retC)
+}
+
+/*
+Copies SkRect of pixels from SkCanvas into bitmap. SkMatrix and clip are
+ignored.
+
+Source SkRect corners are (srcX, srcY) and (imageInfo().width(), imageInfo().height()).
+Destination SkRect corners are (0, 0) and (bitmap.width(), bitmap.height()).
+Copies each readable pixel intersecting both rectangles, without scaling,
+converting to bitmap.colorType() and bitmap.alphaType() if required.
+
+Pixels are readable when SkDevice is raster, or backed by a GPU.
+Pixels are not readable when SkCanvas is returned by SkDocument::beginPage,
+returned by SkPictureRecorder::beginRecording, or SkCanvas is the base of a utility
+class like DebugCanvas.
+
+Caller must allocate pixel storage in bitmap if needed.
+
+SkBitmap values are converted only if SkColorType and SkAlphaType
+do not match. Only pixels within both source and destination rectangles
+are copied. SkBitmap pixels outside SkRect intersection are unchanged.
+
+Pass negative values for srcX or srcY to offset pixels across or down bitmap.
+
+Does not copy, and returns false if:
+- Source and destination rectangles do not intersect.
+- SkCanvas pixels could not be converted to bitmap.colorType() or bitmap.alphaType().
+- SkCanvas pixels are not readable; for instance, SkCanvas is document-based.
+- bitmap pixels could not be allocated.
+- bitmap.rowBytes() is too small to contain one row of pixels.
+
+@param bitmap  storage for pixels copied from SkCanvas
+@param srcX    offset into readable pixels on x-axis; may be negative
+@param srcY    offset into readable pixels on y-axis; may be negative
+@return        true if pixels were copied
+
+example: https://fiddle.skia.org/c/@Canvas_readPixels_3
+*/
+func (o Canvas) ReadPixelsBitmap(bitmap Bitmap, srcX int, srcY int) bool {
+	c_obj := o.sk
+	c_bitmap := bitmap.sk
+	c_srcX := C.int(srcX)
+	c_srcY := C.int(srcY)
+	retC := C.misk_Canvas_readPixelsBitmap(c_obj, c_bitmap, c_srcX, c_srcY)
+	return bool(retC)
+}
+
+/*
+Copies SkRect from pixels to SkCanvas. SkMatrix and clip are ignored.
+Source SkRect corners are (0, 0) and (info.width(), info.height()).
+Destination SkRect corners are (x, y) and
+(imageInfo().width(), imageInfo().height()).
+
+Copies each readable pixel intersecting both rectangles, without scaling,
+converting to imageInfo().colorType() and imageInfo().alphaType() if required.
+
+Pixels are writable when SkDevice is raster, or backed by a GPU.
+Pixels are not writable when SkCanvas is returned by SkDocument::beginPage,
+returned by SkPictureRecorder::beginRecording, or SkCanvas is the base of a utility
+class like DebugCanvas.
+
+Pixel values are converted only if SkColorType and SkAlphaType
+do not match. Only pixels within both source and destination rectangles
+are copied. SkCanvas pixels outside SkRect intersection are unchanged.
+
+Pass negative values for x or y to offset pixels to the left or
+above SkCanvas pixels.
+
+Does not copy, and returns false if:
+- Source and destination rectangles do not intersect.
+- pixels could not be converted to SkCanvas imageInfo().colorType() or
+imageInfo().alphaType().
+- SkCanvas pixels are not writable; for instance, SkCanvas is document-based.
+- rowBytes is too small to contain one row of pixels.
+
+@param info      width, height, SkColorType, and SkAlphaType of pixels
+@param pixels    pixels to copy, of size info.height() times rowBytes, or larger
+@param rowBytes  size of one row of pixels; info.width() times pixel size, or larger
+@param x         offset into SkCanvas writable pixels on x-axis; may be negative
+@param y         offset into SkCanvas writable pixels on y-axis; may be negative
+@return          true if pixels were written to SkCanvas
+
+example: https://fiddle.skia.org/c/@Canvas_writePixels
+*/
+func (o Canvas) WritePixelsImageInfo(info ImageInfo, pixels []byte, rowBytes uint64, x int, y int) bool {
+	c_obj := o.sk
+	c_info := info.sk
+	c_pixels := unsafe.Pointer(&pixels[0])
+	c_rowBytes := C.ulong(rowBytes)
+	c_x := C.int(x)
+	c_y := C.int(y)
+	retC := C.misk_Canvas_writePixelsImageInfo(c_obj, c_info, c_pixels, c_rowBytes, c_x, c_y)
+	return bool(retC)
+}
+
+/*
+Copies SkRect from pixels to SkCanvas. SkMatrix and clip are ignored.
+Source SkRect corners are (0, 0) and (bitmap.width(), bitmap.height()).
+
+Destination SkRect corners are (x, y) and
+(imageInfo().width(), imageInfo().height()).
+
+Copies each readable pixel intersecting both rectangles, without scaling,
+converting to imageInfo().colorType() and imageInfo().alphaType() if required.
+
+Pixels are writable when SkDevice is raster, or backed by a GPU.
+Pixels are not writable when SkCanvas is returned by SkDocument::beginPage,
+returned by SkPictureRecorder::beginRecording, or SkCanvas is the base of a utility
+class like DebugCanvas.
+
+Pixel values are converted only if SkColorType and SkAlphaType
+do not match. Only pixels within both source and destination rectangles
+are copied. SkCanvas pixels outside SkRect intersection are unchanged.
+
+Pass negative values for x or y to offset pixels to the left or
+above SkCanvas pixels.
+
+Does not copy, and returns false if:
+- Source and destination rectangles do not intersect.
+- bitmap does not have allocated pixels.
+- bitmap pixels could not be converted to SkCanvas imageInfo().colorType() or
+imageInfo().alphaType().
+- SkCanvas pixels are not writable; for instance, SkCanvas is document based.
+- bitmap pixels are inaccessible; for instance, bitmap wraps a texture.
+
+@param bitmap  contains pixels copied to SkCanvas
+@param x       offset into SkCanvas writable pixels on x-axis; may be negative
+@param y       offset into SkCanvas writable pixels on y-axis; may be negative
+@return        true if pixels were written to SkCanvas
+
+example: https://fiddle.skia.org/c/@Canvas_writePixels_2
+example: https://fiddle.skia.org/c/@State_Stack_a
+example: https://fiddle.skia.org/c/@State_Stack_b
+*/
+func (o Canvas) WritePixelsBitmap(bitmap Bitmap, x int, y int) bool {
+	c_obj := o.sk
+	c_bitmap := bitmap.sk
+	c_x := C.int(x)
+	c_y := C.int(y)
+	retC := C.misk_Canvas_writePixelsBitmap(c_obj, c_bitmap, c_x, c_y)
+	return bool(retC)
+}
+
+/*
 Saves SkMatrix and clip.
 Calling restore() discards changes to SkMatrix and clip,
 restoring the SkMatrix and clip to their state when save() was called.
@@ -779,6 +1096,45 @@ example: https://fiddle.skia.org/c/@Canvas_save
 func (o Canvas) Save() int {
 	c_obj := o.sk
 	retC := C.misk_Canvas_save(c_obj)
+	return int(retC)
+}
+
+/*
+Saves SkMatrix and clip, and allocates a SkSurface for subsequent drawing.
+Calling restore() discards changes to SkMatrix and clip, and draws the SkSurface.
+
+SkMatrix may be changed by translate(), scale(), rotate(), skew(), concat(),
+setMatrix(), and resetMatrix(). Clip may be changed by clipRect(), clipRRect(),
+clipPath(), clipRegion().
+
+SkRect bounds suggests but does not define the SkSurface size. To clip drawing to
+a specific rectangle, use clipRect().
+
+Optional SkPaint paint applies alpha, SkColorFilter, SkImageFilter, and
+SkBlendMode when restore() is called.
+
+Call restoreToCount() with returned value to restore this and subsequent saves.
+
+@param bounds  hint to limit the size of the layer; may be nullptr
+@param paint   graphics state for layer; may be nullptr
+@return        depth of saved stack
+
+example: https://fiddle.skia.org/c/@Canvas_saveLayer
+example: https://fiddle.skia.org/c/@Canvas_saveLayer_4
+*/
+func (o Canvas) SaveLayer(bounds Rect, paint Paint) int {
+	c_obj := o.sk
+	c_bounds := *(*C.sk_SkRect)(unsafe.Pointer(&bounds))
+	c_paint := paint.sk
+	retC := C.misk_Canvas_saveLayer(c_obj, c_bounds, c_paint)
+	return int(retC)
+}
+
+func (o Canvas) SaveLayerAlpha(bounds Rect, alpha uint) int {
+	c_obj := o.sk
+	c_bounds := *(*C.sk_SkRect)(unsafe.Pointer(&bounds))
+	c_alpha := C.uint(alpha)
+	retC := C.misk_Canvas_saveLayerAlpha(c_obj, c_bounds, c_alpha)
 	return int(retC)
 }
 
@@ -935,6 +1291,28 @@ func (o Canvas) Skew(sx float32, sy float32) {
 	c_sx := C.float(sx)
 	c_sy := C.float(sy)
 	C.misk_Canvas_skew(c_obj, c_sx, c_sy)
+}
+
+/*
+Replaces SkMatrix with matrix premultiplied with existing SkMatrix.
+
+This has the effect of transforming the drawn geometry by matrix, before
+transforming the result with existing SkMatrix.
+
+@param matrix  matrix to premultiply with existing SkMatrix
+
+example: https://fiddle.skia.org/c/@Canvas_concat
+*/
+func (o Canvas) ConcatMatrix(matrix Matrix) {
+	c_obj := o.sk
+	c_matrix := matrix.sk
+	C.misk_Canvas_concatMatrix(c_obj, c_matrix)
+}
+
+func (o Canvas) ConcatM44(p0 M44) {
+	c_obj := o.sk
+	c_p0 := p0.sk
+	C.misk_Canvas_concatM44(c_obj, c_p0)
 }
 
 /*

@@ -381,8 +381,36 @@ extern "C"
                                          sk_SkSurfaceProps *c_props);
   void misk_delete_SkCanvas (sk_SkCanvas *obj);
   bool misk_Canvas_getProps (sk_SkCanvas *c_obj, sk_SkSurfaceProps *c_props);
+  sk_SkSurfaceProps misk_Canvas_getBaseProps (sk_SkCanvas *c_obj);
+  sk_SkSurfaceProps misk_Canvas_getTopProps (sk_SkCanvas *c_obj);
+  sk_SkISize misk_Canvas_getBaseLayerSize (sk_SkCanvas *c_obj);
+  sk_SkSurface *misk_Canvas_makeSurface (sk_SkCanvas *c_obj,
+                                         sk_SkImageInfo *c_info,
+                                         sk_SkSurfaceProps *c_props);
+  sk_SkSurface *misk_Canvas_getSurface (sk_SkCanvas *c_obj);
+  sk_GrRecordingContext *misk_Canvas_recordingContext (sk_SkCanvas *c_obj);
   bool misk_Canvas_peekPixels (sk_SkCanvas *c_obj, sk_SkPixmap *c_pixmap);
+  bool misk_Canvas_readPixelsImageInfo (sk_SkCanvas *c_obj,
+                                        sk_SkImageInfo *c_dstInfo,
+                                        void *c_dstPixels,
+                                        unsigned long c_dstRowBytes,
+                                        int c_srcX, int c_srcY);
+  bool misk_Canvas_readPixelsPixmap (sk_SkCanvas *c_obj, sk_SkPixmap *c_pixmap,
+                                     int c_srcX, int c_srcY);
+  bool misk_Canvas_readPixelsBitmap (sk_SkCanvas *c_obj, sk_SkBitmap *c_bitmap,
+                                     int c_srcX, int c_srcY);
+  bool misk_Canvas_writePixelsImageInfo (sk_SkCanvas *c_obj,
+                                         sk_SkImageInfo *c_info,
+                                         void *c_pixels,
+                                         unsigned long c_rowBytes, int c_x,
+                                         int c_y);
+  bool misk_Canvas_writePixelsBitmap (sk_SkCanvas *c_obj,
+                                      sk_SkBitmap *c_bitmap, int c_x, int c_y);
   int misk_Canvas_save (sk_SkCanvas *c_obj);
+  int misk_Canvas_saveLayer (sk_SkCanvas *c_obj, sk_SkRect c_bounds,
+                             sk_SkPaint *c_paint);
+  int misk_Canvas_saveLayerAlpha (sk_SkCanvas *c_obj, sk_SkRect c_bounds,
+                                  unsigned int c_alpha);
   void misk_Canvas_restore (sk_SkCanvas *c_obj);
   int misk_Canvas_getSaveCount (sk_SkCanvas *c_obj);
   void misk_Canvas_restoreToCount (sk_SkCanvas *c_obj, int c_saveCount);
@@ -392,6 +420,8 @@ extern "C"
   void misk_Canvas_rotateAboutPoint (sk_SkCanvas *c_obj, float c_degrees,
                                      float c_px, float c_py);
   void misk_Canvas_skew (sk_SkCanvas *c_obj, float c_sx, float c_sy);
+  void misk_Canvas_concatMatrix (sk_SkCanvas *c_obj, sk_SkMatrix *c_matrix);
+  void misk_Canvas_concatM44 (sk_SkCanvas *c_obj, sk_SkM44 *c_p0);
   void misk_Canvas_setMatrixM44 (sk_SkCanvas *c_obj, sk_SkM44 *c_matrix);
   void misk_Canvas_setMatrix (sk_SkCanvas *c_obj, sk_SkMatrix *c_matrix);
   void misk_Canvas_resetMatrix (sk_SkCanvas *c_obj);
