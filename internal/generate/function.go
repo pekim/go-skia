@@ -25,7 +25,7 @@ type function struct {
 	enrichedCount int
 }
 
-func (f *function) enrich(cursor clang.Cursor) {
+func (f *function) enrich1(cursor clang.Cursor) {
 	var overload *functionOverload
 	if len(f.Overloads) == 0 {
 		f.Overloads = []*functionOverload{{}}

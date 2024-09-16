@@ -71,7 +71,7 @@ func (tu translationUnit) enrichApi(api *api) {
 				case clang.Cursor_FunctionDecl:
 					if function, ok := api.findFunction(qualifiedName); ok {
 						function.cursor = cursor
-						function.enrich(cursor)
+						function.enrich1(cursor)
 					}
 
 				case clang.Cursor_EnumDecl:
@@ -82,7 +82,7 @@ func (tu translationUnit) enrichApi(api *api) {
 					}
 
 					if enum, ok := api.findEnum(qualifiedName); ok {
-						enum.enrich(nil, cursor)
+						enum.enrich1(nil, cursor)
 					}
 				}
 
@@ -105,7 +105,7 @@ func (tu translationUnit) enrichApi(api *api) {
 
 		case clang.Cursor_EnumDecl:
 			if enum, ok := api.findEnum(cursor.Spelling()); ok {
-				enum.enrich(nil, cursor)
+				enum.enrich1(nil, cursor)
 			}
 
 		case clang.Cursor_StructDecl:
@@ -120,12 +120,12 @@ func (tu translationUnit) enrichApi(api *api) {
 		case clang.Cursor_FunctionDecl:
 			if function, ok := api.findFunction(cursor.Spelling()); ok {
 				function.cursor = cursor
-				function.enrich(cursor)
+				function.enrich1(cursor)
 			}
 
 		case clang.Cursor_TypedefDecl:
 			if typedef, ok := api.findTypedef(cursor.Spelling()); ok {
-				typedef.enrich(cursor)
+				typedef.enrich1(cursor)
 			}
 
 		case clang.Cursor_VarDecl:

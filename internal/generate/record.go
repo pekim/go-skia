@@ -41,7 +41,7 @@ func (r *record) enrich1(cursor clang.Cursor) {
 			if cursor.AccessSpecifier() == clang.AccessSpecifier_Public {
 				ctor := r.Ctors[ctorsEnriched]
 				if ctor != nil {
-					r.Ctors[ctorsEnriched].enrich(r, cursor)
+					r.Ctors[ctorsEnriched].enrich1(r, cursor)
 				}
 				ctorsEnriched++
 			}
@@ -53,13 +53,13 @@ func (r *record) enrich1(cursor clang.Cursor) {
 
 		case clang.Cursor_EnumDecl:
 			if enum, ok := r.findEnum(cursor.Spelling()); ok {
-				enum.enrich(r, cursor)
+				enum.enrich1(r, cursor)
 			}
 
 		case clang.Cursor_CXXMethod:
 			if cursor.AccessSpecifier() == clang.AccessSpecifier_Public {
 				if method, ok := r.findMethod(cursor.Spelling()); ok {
-					method.enrich(r, cursor)
+					method.enrich1(r, cursor)
 				}
 			}
 

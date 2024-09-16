@@ -14,7 +14,7 @@ type typedef struct {
 	enriched  bool
 }
 
-func (t *typedef) enrich(cursor clang.Cursor) {
+func (t *typedef) enrich1(cursor clang.Cursor) {
 	t.goName = goExportedName(stripSkPrefix(cursor.Spelling()))
 	t.clangType = cursor.TypedefDeclUnderlyingType()
 	t.doc = cursor.RawCommentText()

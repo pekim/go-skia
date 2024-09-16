@@ -17,7 +17,7 @@ type recordCtor struct {
 	enriched   bool
 }
 
-func (c *recordCtor) enrich(record *record, cursor clang.Cursor) {
+func (c *recordCtor) enrich1(record *record, cursor clang.Cursor) {
 	c.record = record
 	c.goFuncName = fmt.Sprintf("New%s%s", c.record.goName, c.Suffix)
 	c.cFuncName = fmt.Sprintf("misk_new_%s%s", c.record.goName, c.Suffix)

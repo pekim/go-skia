@@ -24,7 +24,7 @@ type enumConstant struct {
 	doc    string
 }
 
-func (e *enum) enrich(record *record, cursor clang.Cursor) {
+func (e *enum) enrich1(record *record, cursor clang.Cursor) {
 	e.clangType = cursor.EnumDeclIntegerType()
 	if record != nil {
 		e.goName = record.goName + e.CppName

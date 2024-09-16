@@ -26,7 +26,7 @@ type method struct {
 	enrichedCount int
 }
 
-func (m *method) enrich(record *record, cursor clang.Cursor) {
+func (m *method) enrich1(record *record, cursor clang.Cursor) {
 	var overload *methodOverload
 	if len(m.Overloads) == 0 {
 		m.Overloads = []*methodOverload{{}}
