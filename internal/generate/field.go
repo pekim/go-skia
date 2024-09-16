@@ -13,6 +13,7 @@ type field struct {
 	offset    int // bits
 	public    bool
 	clangType clang.Type
+	doc       string
 }
 
 func newField(cursor clang.Cursor) field {
@@ -23,8 +24,8 @@ func newField(cursor clang.Cursor) field {
 		offset:    int(cursor.OffsetOfField()),
 		public:    cursor.AccessSpecifier() == clang.AccessSpecifier_Public,
 		clangType: cursor.Type(),
+		doc:       cursor.RawCommentText(),
 	}
-
 	return f
 }
 

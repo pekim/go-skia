@@ -131,6 +131,11 @@ func (o *GrContextOptions) SetSuppressPrints(value bool) {
 	o.fSuppressPrints = C.bool(value)
 }
 
+/*
+Overrides: These options override feature detection using backend API queries. These
+overrides can only reduce the feature set or limits, never increase them beyond the
+detected values.
+*/
 func (o GrContextOptions) MaxTextureSizeOverride() int {
 	return int(o.fMaxTextureSizeOverride)
 }
@@ -139,6 +144,11 @@ func (o *GrContextOptions) SetMaxTextureSizeOverride(value int) {
 	o.fMaxTextureSizeOverride = C.int(value)
 }
 
+/*
+the threshold in bytes above which we will use a buffer mapping API to map vertex and index
+buffers to CPU memory in order to update them.  A value of -1 means the GrContext should
+deduce the optimal value for this platform.
+*/
 func (o GrContextOptions) BufferMapThreshold() int {
 	return int(o.fBufferMapThreshold)
 }
@@ -147,6 +157,11 @@ func (o *GrContextOptions) SetBufferMapThreshold(value int) {
 	o.fBufferMapThreshold = C.int(value)
 }
 
+/*
+Construct mipmaps manually, via repeated downsampling draw-calls. This is used when
+the driver's implementation (glGenerateMipmap) contains bugs. This requires mipmap
+level control (ie desktop or ES3).
+*/
 func (o GrContextOptions) DoManualMipmapping() bool {
 	return bool(o.fDoManualMipmapping)
 }
@@ -155,6 +170,11 @@ func (o *GrContextOptions) SetDoManualMipmapping(value bool) {
 	o.fDoManualMipmapping = C.bool(value)
 }
 
+/*
+Disables the use of coverage counting shortcuts to render paths. Coverage counting can cause
+artifacts along shared edges if care isn't taken to ensure both contours wind in the same
+direction.
+*/
 func (o GrContextOptions) DisableCoverageCountingPaths() bool {
 	return bool(o.fDisableCoverageCountingPaths)
 }
@@ -163,6 +183,10 @@ func (o *GrContextOptions) SetDisableCoverageCountingPaths(value bool) {
 	o.fDisableCoverageCountingPaths = C.bool(value)
 }
 
+/*
+Disables distance field rendering for paths. Distance field computation can be expensive,
+and yields no benefit if a path is not rendered multiple times with different transforms.
+*/
 func (o GrContextOptions) DisableDistanceFieldPaths() bool {
 	return bool(o.fDisableDistanceFieldPaths)
 }
@@ -171,6 +195,10 @@ func (o *GrContextOptions) SetDisableDistanceFieldPaths(value bool) {
 	o.fDisableDistanceFieldPaths = C.bool(value)
 }
 
+/*
+If true this allows path mask textures to be cached. This is only really useful if paths
+are commonly rendered at the same scale and fractional translation.
+*/
 func (o GrContextOptions) AllowPathMaskCaching() bool {
 	return bool(o.fAllowPathMaskCaching)
 }
@@ -179,6 +207,10 @@ func (o *GrContextOptions) SetAllowPathMaskCaching(value bool) {
 	o.fAllowPathMaskCaching = C.bool(value)
 }
 
+/*
+If true, the GPU will not be used to perform YUV -> RGB conversion when generating
+textures from codec-backed images.
+*/
 func (o GrContextOptions) DisableGpuYUVConversion() bool {
 	return bool(o.fDisableGpuYUVConversion)
 }
@@ -187,6 +219,10 @@ func (o *GrContextOptions) SetDisableGpuYUVConversion(value bool) {
 	o.fDisableGpuYUVConversion = C.bool(value)
 }
 
+/*
+Below this threshold size in device space distance field fonts won't be used. Distance field
+fonts don't support hinting which is more important at smaller sizes.
+*/
 func (o GrContextOptions) MinDistanceFieldFontSize() float32 {
 	return float32(o.fMinDistanceFieldFontSize)
 }
@@ -203,6 +239,10 @@ func (o *GrContextOptions) SetGlyphsAsPathsFontSize(value float32) {
 	o.fGlyphsAsPathsFontSize = C.float(value)
 }
 
+/*
+Bugs on certain drivers cause stencil buffers to leak. This flag causes Skia to avoid
+allocating stencil buffers and use alternate rasterization paths, avoiding the leak.
+*/
 func (o GrContextOptions) AvoidStencilBuffers() bool {
 	return bool(o.fAvoidStencilBuffers)
 }
@@ -211,6 +251,11 @@ func (o *GrContextOptions) SetAvoidStencilBuffers(value bool) {
 	o.fAvoidStencilBuffers = C.bool(value)
 }
 
+/*
+Some ES3 contexts report the ES2 external image extension, but not the ES3 version.
+If support for external images is critical, enabling this option will cause Ganesh to limit
+shaders to the ES2 shading language in that situation.
+*/
 func (o GrContextOptions) PreferExternalImagesOverES3() bool {
 	return bool(o.fPreferExternalImagesOverES3)
 }
@@ -219,6 +264,11 @@ func (o *GrContextOptions) SetPreferExternalImagesOverES3(value bool) {
 	o.fPreferExternalImagesOverES3 = C.bool(value)
 }
 
+/*
+Disables correctness workarounds that are enabled for particular GPUs, OSes, or drivers.
+This does not affect code path choices that are made for perfomance reasons nor does it
+override other GrContextOption settings.
+*/
 func (o GrContextOptions) DisableDriverCorrectnessWorkarounds() bool {
 	return bool(o.fDisableDriverCorrectnessWorkarounds)
 }
@@ -227,6 +277,9 @@ func (o *GrContextOptions) SetDisableDriverCorrectnessWorkarounds(value bool) {
 	o.fDisableDriverCorrectnessWorkarounds = C.bool(value)
 }
 
+/*
+Maximum number of GPU programs or pipelines to keep active in the runtime cache.
+*/
 func (o GrContextOptions) RuntimeProgramCacheSize() int {
 	return int(o.fRuntimeProgramCacheSize)
 }
@@ -235,6 +288,12 @@ func (o *GrContextOptions) SetRuntimeProgramCacheSize(value int) {
 	o.fRuntimeProgramCacheSize = C.int(value)
 }
 
+/*
+Specifies the number of samples Ganesh should use when performing internal draws with MSAA
+(hardware capabilities permitting).
+
+If 0, Ganesh will disable internal code paths that use multisampling.
+*/
 func (o GrContextOptions) InternalMultisampleCount() int {
 	return int(o.fInternalMultisampleCount)
 }
@@ -243,6 +302,15 @@ func (o *GrContextOptions) SetInternalMultisampleCount(value int) {
 	o.fInternalMultisampleCount = C.int(value)
 }
 
+/*
+In Skia's vulkan backend a single GrContext submit equates to the submission of a single
+primary command buffer to the VkQueue. This value specifies how many vulkan secondary command
+buffers we will cache for reuse on a given primary command buffer. A single submit may use
+more than this many secondary command buffers, but after the primary command buffer is
+finished on the GPU it will only hold on to this many secondary command buffers for reuse.
+
+A value of -1 means we will pick a limit value internally.
+*/
 func (o GrContextOptions) MaxCachedVulkanSecondaryCommandBuffers() int {
 	return int(o.fMaxCachedVulkanSecondaryCommandBuffers)
 }
@@ -251,6 +319,9 @@ func (o *GrContextOptions) SetMaxCachedVulkanSecondaryCommandBuffers(value int) 
 	o.fMaxCachedVulkanSecondaryCommandBuffers = C.int(value)
 }
 
+/*
+If true, the caps will never support mipmaps.
+*/
 func (o GrContextOptions) SuppressMipmapSupport() bool {
 	return bool(o.fSuppressMipmapSupport)
 }
@@ -259,6 +330,10 @@ func (o *GrContextOptions) SetSuppressMipmapSupport(value bool) {
 	o.fSuppressMipmapSupport = C.bool(value)
 }
 
+/*
+If true, the TessellationPathRenderer will not be used for path rendering.
+If false, will fallback to any driver workarounds, if set.
+*/
 func (o GrContextOptions) DisableTessellationPathRenderer() bool {
 	return bool(o.fDisableTessellationPathRenderer)
 }
@@ -267,6 +342,10 @@ func (o *GrContextOptions) SetDisableTessellationPathRenderer(value bool) {
 	o.fDisableTessellationPathRenderer = C.bool(value)
 }
 
+/*
+If true, and if supported, enables hardware tessellation in the caps.
+DEPRECATED: This value is ignored; experimental hardware tessellation is always disabled.
+*/
 func (o GrContextOptions) EnableExperimentalHardwareTessellation() bool {
 	return bool(o.fEnableExperimentalHardwareTessellation)
 }
@@ -275,6 +354,10 @@ func (o *GrContextOptions) SetEnableExperimentalHardwareTessellation(value bool)
 	o.fEnableExperimentalHardwareTessellation = C.bool(value)
 }
 
+/*
+If true, then add 1 pixel padding to all glyph masks in the atlas to support bi-lerp
+rendering of all glyphs. This must be set to true to use Slugs.
+*/
 func (o GrContextOptions) SupportBilerpFromGlyphAtlas() bool {
 	return bool(o.fSupportBilerpFromGlyphAtlas)
 }
@@ -283,6 +366,10 @@ func (o *GrContextOptions) SetSupportBilerpFromGlyphAtlas(value bool) {
 	o.fSupportBilerpFromGlyphAtlas = C.bool(value)
 }
 
+/*
+Uses a reduced variety of shaders. May perform less optimally in steady state but can reduce
+jank due to shader compilations.
+*/
 func (o GrContextOptions) ReducedShaderVariations() bool {
 	return bool(o.fReducedShaderVariations)
 }
@@ -291,6 +378,9 @@ func (o *GrContextOptions) SetReducedShaderVariations(value bool) {
 	o.fReducedShaderVariations = C.bool(value)
 }
 
+/*
+If true, then allow to enable MSAA on new Intel GPUs.
+*/
 func (o GrContextOptions) AllowMSAAOnNewIntel() bool {
 	return bool(o.fAllowMSAAOnNewIntel)
 }
@@ -299,6 +389,13 @@ func (o *GrContextOptions) SetAllowMSAAOnNewIntel(value bool) {
 	o.fAllowMSAAOnNewIntel = C.bool(value)
 }
 
+/*
+Currently on ARM Android we disable the use of GL TexStorage because of memory regressions.
+However, some clients may still want to use TexStorage. For example, TexStorage support is
+required for creating protected textures.
+
+This flag has no impact on non GL backends.
+*/
 func (o GrContextOptions) AlwaysUseTexStorageWhenAvailable() bool {
 	return bool(o.fAlwaysUseTexStorageWhenAvailable)
 }
@@ -1894,6 +1991,7 @@ type IPoint struct {
 	sk *C.sk_SkIPoint
 }
 
+// !< x-axis value
 func (o IPoint) X() int {
 	return int(o.sk.fX)
 }
@@ -1902,6 +2000,7 @@ func (o *IPoint) SetX(value int) {
 	o.sk.fX = C.int(value)
 }
 
+// !< y-axis value
 func (o IPoint) Y() int {
 	return int(o.sk.fY)
 }
@@ -1925,6 +2024,7 @@ its top, it is considered empty.
 */
 type IRect C.sk_SkIRect
 
+// !< smaller x-axis bounds
 func (o IRect) Left() int {
 	return int(o.fLeft)
 }
@@ -1933,6 +2033,7 @@ func (o *IRect) SetLeft(value int) {
 	o.fLeft = C.int(value)
 }
 
+// !< smaller y-axis bounds
 func (o IRect) Top() int {
 	return int(o.fTop)
 }
@@ -1941,6 +2042,7 @@ func (o *IRect) SetTop(value int) {
 	o.fTop = C.int(value)
 }
 
+// !< larger x-axis bounds
 func (o IRect) Right() int {
 	return int(o.fRight)
 }
@@ -1949,6 +2051,7 @@ func (o *IRect) SetRight(value int) {
 	o.fRight = C.int(value)
 }
 
+// !< larger y-axis bounds
 func (o IRect) Bottom() int {
 	return int(o.fBottom)
 }
@@ -2900,6 +3003,7 @@ type Point struct {
 	sk *C.sk_SkPoint
 }
 
+// !< x-axis value
 func (o Point) X() float32 {
 	return float32(o.sk.fX)
 }
@@ -2908,6 +3012,7 @@ func (o *Point) SetX(value float32) {
 	o.sk.fX = C.float(value)
 }
 
+// !< y-axis value
 func (o Point) Y() float32 {
 	return float32(o.sk.fY)
 }
@@ -2967,6 +3072,7 @@ its top, it is considered empty.
 */
 type Rect C.sk_SkRect
 
+// !< smaller x-axis bounds
 func (o Rect) Left() float32 {
 	return float32(o.fLeft)
 }
@@ -2975,6 +3081,7 @@ func (o *Rect) SetLeft(value float32) {
 	o.fLeft = C.float(value)
 }
 
+// !< smaller y-axis bounds
 func (o Rect) Top() float32 {
 	return float32(o.fTop)
 }
@@ -2983,6 +3090,7 @@ func (o *Rect) SetTop(value float32) {
 	o.fTop = C.float(value)
 }
 
+// !< larger x-axis bounds
 func (o Rect) Right() float32 {
 	return float32(o.fRight)
 }
@@ -2991,6 +3099,7 @@ func (o *Rect) SetRight(value float32) {
 	o.fRight = C.float(value)
 }
 
+// !< larger y-axis bounds
 func (o Rect) Bottom() float32 {
 	return float32(o.fBottom)
 }
@@ -3540,6 +3649,7 @@ as SkColor4f.
 */
 type RGBA4f C.sk_SkRGBA4f
 
+// !< red component
 func (o RGBA4f) R() float32 {
 	return float32(o.fR)
 }
@@ -3548,6 +3658,7 @@ func (o *RGBA4f) SetR(value float32) {
 	o.fR = C.float(value)
 }
 
+// !< green component
 func (o RGBA4f) G() float32 {
 	return float32(o.fG)
 }
@@ -3556,6 +3667,7 @@ func (o *RGBA4f) SetG(value float32) {
 	o.fG = C.float(value)
 }
 
+// !< blue component
 func (o RGBA4f) B() float32 {
 	return float32(o.fB)
 }
@@ -3564,6 +3676,7 @@ func (o *RGBA4f) SetB(value float32) {
 	o.fB = C.float(value)
 }
 
+// !< alpha component
 func (o RGBA4f) A() float32 {
 	return float32(o.fA)
 }
