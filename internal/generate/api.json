@@ -157,7 +157,8 @@
     },
 
     {
-      "name": "SkFontMgr"
+      "name": "SkFontMgr",
+      "methods": [{ "name": "matchFamilyStyle" }]
     },
 
     {

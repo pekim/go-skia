@@ -262,11 +262,14 @@ func (m methodOverload) generateCpp(g generator) {
 			}
 		} else {
 			if m.retrn.isPointer || m.retrn.isSmartPointer {
-				f.writelnf("  return reinterpret_cast<%s *>(c_obj)->%s(%s)%s;",
+				f.writelnf("  auto ret = reinterpret_cast<%s *>(c_obj)->%s(%s)%s;",
 					m.record.CppName,
 					m.cppName,
 					strings.Join(args, ", "),
 					skSpRelease)
+				f.writelnf("  return (reinterpret_cast<%s *> (ret));",
+					m.retrn.record.cStructName,
+				)
 			} else {
 				f.writelnf("  auto ret = reinterpret_cast<%s *>(c_obj)->%s(%s)%s;",
 					m.record.CppName,

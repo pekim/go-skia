@@ -13,6 +13,7 @@ type typ struct {
 	goName            string
 	isConst           bool
 	isPrimitive       bool // a simple type, that can be converted from Go type to C type with a type conversion
+	isArray           bool
 	isLValueReference bool
 	isPointer         bool
 	isVoid            bool
@@ -35,7 +36,8 @@ func typFromClangType(cType clang.Type, api api) (typ, error) {
 		typ.cName = "SkRGBA4f"
 	}
 
-	if cType.Kind() == clang.Type_Pointer {
+	switch cType.Kind() {
+	case clang.Type_Pointer:
 		subTyp, err := typFromClangType(cType.PointeeType(), api)
 		if err != nil {
 			return typ, err
@@ -44,8 +46,8 @@ func typFromClangType(cType clang.Type, api api) (typ, error) {
 		typ.isPointer = true
 		typ.goName = typ.subTyp.goName
 		return typ, nil
-	}
-	if cType.Kind() == clang.Type_LValueReference {
+
+	case clang.Type_LValueReference:
 		subTyp, err := typFromClangType(cType.PointeeType(), api)
 		if err != nil {
 			return typ, err
@@ -53,6 +55,19 @@ func typFromClangType(cType clang.Type, api api) (typ, error) {
 		typ.subTyp = &subTyp
 		typ.isLValueReference = true
 		typ.goName = typ.subTyp.goName
+		return typ, nil
+
+	case clang.Type_IncompleteArray:
+		subTyp, err := typFromClangType(cType.ArrayElementType(), api)
+		if err != nil {
+			return typ, err
+		}
+		typ.subTyp = &subTyp
+		typ.isArray = true
+		typ.goName = fmt.Sprintf("[]%s", typ.subTyp.goName)
+		if typ.subTyp.goName == "byte" {
+			typ.goName = "string"
+		}
 		return typ, nil
 	}
 
@@ -105,6 +120,11 @@ func typFromClangType(cType clang.Type, api api) (typ, error) {
 		case clang.Type_Bool:
 			typ.cName = "bool"
 			typ.goName = "bool"
+			typ.isPrimitive = true
+
+		case clang.Type_Char_S:
+			typ.cName = "char"
+			typ.goName = "byte"
 			typ.isPrimitive = true
 
 		case clang.Type_UChar:

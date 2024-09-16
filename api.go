@@ -1807,6 +1807,26 @@ func (o FontMgr) IsNil() bool {
 	return o.sk == nil
 }
 
+/*
+Find the closest matching typeface to the specified familyName and style
+and return a ref to it. The caller must call unref() on the returned
+object. Will return nullptr if no 'good' match is found.
+
+Passing |nullptr| as the parameter for |familyName| will return the
+default system font.
+
+It is possible that this will return a style set not accessible from
+createStyleSet(int) or matchFamily(const char[]) due to hidden or
+auto-activated fonts.
+*/
+func (o FontMgr) MatchFamilyStyle(familyName string, p1 FontStyle) Typeface {
+	c_obj := o.sk
+	c_familyName := C.CString(familyName)
+	c_p1 := p1.sk
+	retC := C.misk_FontMgr_matchFamilyStyle(c_obj, c_familyName, c_p1)
+	return Typeface{sk: retC}
+}
+
 type FontStyle struct {
 	sk *C.sk_SkFontStyle
 }

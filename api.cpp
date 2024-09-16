@@ -622,6 +622,17 @@ extern "C"
                     c_size, c_scaleX, c_skewX));
   }
 
+  sk_SkTypeface *
+  misk_FontMgr_matchFamilyStyle (sk_SkFontMgr *c_obj, char *c_familyName,
+                                 sk_SkFontStyle *c_p1)
+  {
+    auto ret = reinterpret_cast<SkFontMgr *> (c_obj)
+                   ->matchFamilyStyle ((char *)c_familyName,
+                                       *reinterpret_cast<SkFontStyle *> (c_p1))
+                   .release ();
+    return (reinterpret_cast<sk_SkTypeface *> (ret));
+  }
+
   sk_SkFontStyle *
   misk_new_FontStyle2 (int c_weight, int c_width, uint c_slant)
   {

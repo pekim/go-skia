@@ -1,7 +1,6 @@
 package skia
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -32,6 +31,7 @@ func TestMethodReturningNonPointerRecord(t *testing.T) {
 }
 
 func TestFontMgr(t *testing.T) {
-	fm := FontMgrRefDefault()
-	fmt.Println(fm)
+	fontMgr := FontMgrRefDefault()
+	typeface := fontMgr.MatchFamilyStyle("monospace", FontStyleNormal())
+	assert.NotNil(t, typeface.sk)
 }

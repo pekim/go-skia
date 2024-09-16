@@ -480,6 +480,10 @@ extern "C"
                                                  float c_size, float c_scaleX,
                                                  float c_skewX);
 
+  sk_SkTypeface *misk_FontMgr_matchFamilyStyle (sk_SkFontMgr *c_obj,
+                                                char *c_familyName,
+                                                sk_SkFontStyle *c_p1);
+
   sk_SkFontStyle *misk_new_FontStyle2 (int c_weight, int c_width,
                                        uint c_slant);
   sk_SkFontStyle *misk_new_FontStyle ();
