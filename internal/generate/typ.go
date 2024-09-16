@@ -108,8 +108,8 @@ func typFromClangType(cType clang.Type, api api) (typ, error) {
 			typ.isPrimitive = true
 
 		case clang.Type_UChar:
-			typ.cName = "uint"
-			typ.goName = "uint"
+			typ.cName = "uchar"
+			typ.goName = "byte"
 			typ.isPrimitive = true
 
 		case clang.Type_Float:

@@ -2600,10 +2600,10 @@ func (o Paint) Reset() {
 	C.misk_Paint_reset(c_obj)
 }
 
-func (o Paint) GetAlpha() uint {
+func (o Paint) GetAlpha() byte {
 	c_obj := o.sk
 	retC := C.misk_Paint_getAlpha(c_obj)
-	return uint(retC)
+	return byte(retC)
 }
 
 func (o Paint) SetAlpha(a uint) {
@@ -2715,7 +2715,7 @@ example: https://fiddle.skia.org/c/@Paint_setStrokeJoin
 */
 func (o Paint) SetStrokeJoin(join PaintJoin) {
 	c_obj := o.sk
-	c_join := C.uint(join)
+	c_join := C.uchar(join)
 	C.misk_Paint_setStrokeJoin(c_obj, c_join)
 }
 
@@ -2792,7 +2792,7 @@ example: https://fiddle.skia.org/c/@Stroke_Width
 */
 func (o Paint) SetStyle(style PaintStyle) {
 	c_obj := o.sk
-	c_style := C.uint(style)
+	c_style := C.uchar(style)
 	C.misk_Paint_setStyle(c_obj, c_style)
 }
 
@@ -4147,7 +4147,7 @@ func SkPreMultiplyColor(c Color) PMColor {
 /*
 8-bit type for an alpha value. 255 is 100% opaque, zero is 100% transparent.
 */
-type Alpha C.uint
+type Alpha C.uchar
 
 /*
 32-bit ARGB color value, unpremultiplied. Color components are always in

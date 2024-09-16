@@ -176,9 +176,9 @@ extern "C"
     float fSize;
     float fScaleX;
     float fSkewX;
-    uint fFlags;
-    uint fEdging;
-    uint fHinting;
+    uchar fFlags;
+    uchar fEdging;
+    uchar fHinting;
     uchar pad_7[1];
   } sk_SkFont;
 
@@ -257,9 +257,9 @@ extern "C"
     int fLastMoveToIndex;
     uchar fConvexity[1];
     uchar fFirstDirection[1];
-    uint fFillType;
+    uchar fFillType;
     // TODO misalignment (perhaps there are bitfields around here?)
-    uint fIsVolatile;
+    uchar fIsVolatile;
   } sk_SkPath;
 
   typedef struct
@@ -548,14 +548,14 @@ extern "C"
   void misk_Paint_setDither (sk_SkPaint *c_obj, bool c_dither);
   uint misk_Paint_getStrokeCap (sk_SkPaint *c_obj);
   void misk_Paint_setStrokeCap (sk_SkPaint *c_obj, uint c_cap);
-  uint misk_Paint_getStrokeJoin (sk_SkPaint *c_obj);
-  void misk_Paint_setStrokeJoin (sk_SkPaint *c_obj, uint c_join);
+  uchar misk_Paint_getStrokeJoin (sk_SkPaint *c_obj);
+  void misk_Paint_setStrokeJoin (sk_SkPaint *c_obj, uchar c_join);
   float misk_Paint_getStrokeMiter (sk_SkPaint *c_obj);
   void misk_Paint_setStrokeMiter (sk_SkPaint *c_obj, float c_miter);
   float misk_Paint_getStrokeWidth (sk_SkPaint *c_obj);
   void misk_Paint_setStrokeWidth (sk_SkPaint *c_obj, float c_width);
-  uint misk_Paint_getStyle (sk_SkPaint *c_obj);
-  void misk_Paint_setStyle (sk_SkPaint *c_obj, uint c_style);
+  uchar misk_Paint_getStyle (sk_SkPaint *c_obj);
+  void misk_Paint_setStyle (sk_SkPaint *c_obj, uchar c_style);
 
   sk_SkPath *misk_new_Path ();
   sk_SkPath *misk_new_PathCopy (sk_SkPath *c_path);
@@ -641,8 +641,8 @@ extern "C"
                                unsigned int c_g, unsigned int c_b);
   uint misk_SkPreMultiplyColor (uint c_c);
 
-  extern uint sk_SK_AlphaOPAQUE;
-  extern uint sk_SK_AlphaTRANSPARENT;
+  extern uchar sk_SK_AlphaOPAQUE;
+  extern uchar sk_SK_AlphaTRANSPARENT;
   extern uint sk_SK_ColorBLACK;
   extern uint sk_SK_ColorBLUE;
   extern uint sk_SK_ColorCYAN;

@@ -966,14 +966,14 @@ extern "C"
         SkPaint::Cap (c_cap));
   }
 
-  uint
+  uchar
   misk_Paint_getStrokeJoin (sk_SkPaint *c_obj)
   {
     return reinterpret_cast<SkPaint *> (c_obj)->getStrokeJoin ();
   }
 
   void
-  misk_Paint_setStrokeJoin (sk_SkPaint *c_obj, uint c_join)
+  misk_Paint_setStrokeJoin (sk_SkPaint *c_obj, uchar c_join)
   {
     return reinterpret_cast<SkPaint *> (c_obj)->setStrokeJoin (
         SkPaint::Join (c_join));
@@ -1003,14 +1003,14 @@ extern "C"
     return reinterpret_cast<SkPaint *> (c_obj)->setStrokeWidth (c_width);
   }
 
-  uint
+  uchar
   misk_Paint_getStyle (sk_SkPaint *c_obj)
   {
     return reinterpret_cast<SkPaint *> (c_obj)->getStyle ();
   }
 
   void
-  misk_Paint_setStyle (sk_SkPaint *c_obj, uint c_style)
+  misk_Paint_setStyle (sk_SkPaint *c_obj, uchar c_style)
   {
     return reinterpret_cast<SkPaint *> (c_obj)->setStyle (
         SkPaint::Style (c_style));
@@ -1415,8 +1415,8 @@ extern "C"
     return SkPreMultiplyColor (SkColor (c_c));
   }
 
-  uint sk_SK_AlphaOPAQUE = SK_AlphaOPAQUE;
-  uint sk_SK_AlphaTRANSPARENT = SK_AlphaTRANSPARENT;
+  uchar sk_SK_AlphaOPAQUE = SK_AlphaOPAQUE;
+  uchar sk_SK_AlphaTRANSPARENT = SK_AlphaTRANSPARENT;
   uint sk_SK_ColorBLACK = SK_ColorBLACK;
   uint sk_SK_ColorBLUE = SK_ColorBLUE;
   uint sk_SK_ColorCYAN = SK_ColorCYAN;
