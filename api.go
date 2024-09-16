@@ -19,6 +19,22 @@ import (
 
 type GrGLFramebufferInfo C.sk_GrGLFramebufferInfo
 
+func (o GrGLFramebufferInfo) FBOID() uint {
+	return uint(o.fFBOID)
+}
+
+func (o *GrGLFramebufferInfo) SetFBOID(value uint) {
+	o.fFBOID = C.uint(value)
+}
+
+func (o GrGLFramebufferInfo) Format() uint {
+	return uint(o.fFormat)
+}
+
+func (o *GrGLFramebufferInfo) SetFormat(value uint) {
+	o.fFormat = C.uint(value)
+}
+
 type GrBackendRenderTarget struct {
 	sk *C.sk_GrBackendRenderTarget
 }
@@ -107,6 +123,190 @@ func (o GrGLInterface) IsNil() bool {
 
 type GrContextOptions C.sk_GrContextOptions
 
+func (o GrContextOptions) SuppressPrints() bool {
+	return bool(o.fSuppressPrints)
+}
+
+func (o *GrContextOptions) SetSuppressPrints(value bool) {
+	o.fSuppressPrints = C.bool(value)
+}
+
+func (o GrContextOptions) MaxTextureSizeOverride() int {
+	return int(o.fMaxTextureSizeOverride)
+}
+
+func (o *GrContextOptions) SetMaxTextureSizeOverride(value int) {
+	o.fMaxTextureSizeOverride = C.int(value)
+}
+
+func (o GrContextOptions) BufferMapThreshold() int {
+	return int(o.fBufferMapThreshold)
+}
+
+func (o *GrContextOptions) SetBufferMapThreshold(value int) {
+	o.fBufferMapThreshold = C.int(value)
+}
+
+func (o GrContextOptions) DoManualMipmapping() bool {
+	return bool(o.fDoManualMipmapping)
+}
+
+func (o *GrContextOptions) SetDoManualMipmapping(value bool) {
+	o.fDoManualMipmapping = C.bool(value)
+}
+
+func (o GrContextOptions) DisableCoverageCountingPaths() bool {
+	return bool(o.fDisableCoverageCountingPaths)
+}
+
+func (o *GrContextOptions) SetDisableCoverageCountingPaths(value bool) {
+	o.fDisableCoverageCountingPaths = C.bool(value)
+}
+
+func (o GrContextOptions) DisableDistanceFieldPaths() bool {
+	return bool(o.fDisableDistanceFieldPaths)
+}
+
+func (o *GrContextOptions) SetDisableDistanceFieldPaths(value bool) {
+	o.fDisableDistanceFieldPaths = C.bool(value)
+}
+
+func (o GrContextOptions) AllowPathMaskCaching() bool {
+	return bool(o.fAllowPathMaskCaching)
+}
+
+func (o *GrContextOptions) SetAllowPathMaskCaching(value bool) {
+	o.fAllowPathMaskCaching = C.bool(value)
+}
+
+func (o GrContextOptions) DisableGpuYUVConversion() bool {
+	return bool(o.fDisableGpuYUVConversion)
+}
+
+func (o *GrContextOptions) SetDisableGpuYUVConversion(value bool) {
+	o.fDisableGpuYUVConversion = C.bool(value)
+}
+
+func (o GrContextOptions) MinDistanceFieldFontSize() float32 {
+	return float32(o.fMinDistanceFieldFontSize)
+}
+
+func (o *GrContextOptions) SetMinDistanceFieldFontSize(value float32) {
+	o.fMinDistanceFieldFontSize = C.float(value)
+}
+
+func (o GrContextOptions) GlyphsAsPathsFontSize() float32 {
+	return float32(o.fGlyphsAsPathsFontSize)
+}
+
+func (o *GrContextOptions) SetGlyphsAsPathsFontSize(value float32) {
+	o.fGlyphsAsPathsFontSize = C.float(value)
+}
+
+func (o GrContextOptions) AvoidStencilBuffers() bool {
+	return bool(o.fAvoidStencilBuffers)
+}
+
+func (o *GrContextOptions) SetAvoidStencilBuffers(value bool) {
+	o.fAvoidStencilBuffers = C.bool(value)
+}
+
+func (o GrContextOptions) PreferExternalImagesOverES3() bool {
+	return bool(o.fPreferExternalImagesOverES3)
+}
+
+func (o *GrContextOptions) SetPreferExternalImagesOverES3(value bool) {
+	o.fPreferExternalImagesOverES3 = C.bool(value)
+}
+
+func (o GrContextOptions) DisableDriverCorrectnessWorkarounds() bool {
+	return bool(o.fDisableDriverCorrectnessWorkarounds)
+}
+
+func (o *GrContextOptions) SetDisableDriverCorrectnessWorkarounds(value bool) {
+	o.fDisableDriverCorrectnessWorkarounds = C.bool(value)
+}
+
+func (o GrContextOptions) RuntimeProgramCacheSize() int {
+	return int(o.fRuntimeProgramCacheSize)
+}
+
+func (o *GrContextOptions) SetRuntimeProgramCacheSize(value int) {
+	o.fRuntimeProgramCacheSize = C.int(value)
+}
+
+func (o GrContextOptions) InternalMultisampleCount() int {
+	return int(o.fInternalMultisampleCount)
+}
+
+func (o *GrContextOptions) SetInternalMultisampleCount(value int) {
+	o.fInternalMultisampleCount = C.int(value)
+}
+
+func (o GrContextOptions) MaxCachedVulkanSecondaryCommandBuffers() int {
+	return int(o.fMaxCachedVulkanSecondaryCommandBuffers)
+}
+
+func (o *GrContextOptions) SetMaxCachedVulkanSecondaryCommandBuffers(value int) {
+	o.fMaxCachedVulkanSecondaryCommandBuffers = C.int(value)
+}
+
+func (o GrContextOptions) SuppressMipmapSupport() bool {
+	return bool(o.fSuppressMipmapSupport)
+}
+
+func (o *GrContextOptions) SetSuppressMipmapSupport(value bool) {
+	o.fSuppressMipmapSupport = C.bool(value)
+}
+
+func (o GrContextOptions) DisableTessellationPathRenderer() bool {
+	return bool(o.fDisableTessellationPathRenderer)
+}
+
+func (o *GrContextOptions) SetDisableTessellationPathRenderer(value bool) {
+	o.fDisableTessellationPathRenderer = C.bool(value)
+}
+
+func (o GrContextOptions) EnableExperimentalHardwareTessellation() bool {
+	return bool(o.fEnableExperimentalHardwareTessellation)
+}
+
+func (o *GrContextOptions) SetEnableExperimentalHardwareTessellation(value bool) {
+	o.fEnableExperimentalHardwareTessellation = C.bool(value)
+}
+
+func (o GrContextOptions) SupportBilerpFromGlyphAtlas() bool {
+	return bool(o.fSupportBilerpFromGlyphAtlas)
+}
+
+func (o *GrContextOptions) SetSupportBilerpFromGlyphAtlas(value bool) {
+	o.fSupportBilerpFromGlyphAtlas = C.bool(value)
+}
+
+func (o GrContextOptions) ReducedShaderVariations() bool {
+	return bool(o.fReducedShaderVariations)
+}
+
+func (o *GrContextOptions) SetReducedShaderVariations(value bool) {
+	o.fReducedShaderVariations = C.bool(value)
+}
+
+func (o GrContextOptions) AllowMSAAOnNewIntel() bool {
+	return bool(o.fAllowMSAAOnNewIntel)
+}
+
+func (o *GrContextOptions) SetAllowMSAAOnNewIntel(value bool) {
+	o.fAllowMSAAOnNewIntel = C.bool(value)
+}
+
+func (o GrContextOptions) AlwaysUseTexStorageWhenAvailable() bool {
+	return bool(o.fAlwaysUseTexStorageWhenAvailable)
+}
+
+func (o *GrContextOptions) SetAlwaysUseTexStorageWhenAvailable(value bool) {
+	o.fAlwaysUseTexStorageWhenAvailable = C.bool(value)
+}
+
 func NewGrContextOptions() GrContextOptions {
 
 	retC := C.misk_new_GrContextOptions()
@@ -140,6 +340,22 @@ const (
 
 type Arc struct {
 	sk *C.sk_SkArc
+}
+
+func (o Arc) StartAngle() float32 {
+	return float32(o.sk.fStartAngle)
+}
+
+func (o *Arc) SetStartAngle(value float32) {
+	o.sk.fStartAngle = C.float(value)
+}
+
+func (o Arc) SweepAngle() float32 {
+	return float32(o.sk.fSweepAngle)
+}
+
+func (o *Arc) SetSweepAngle(value float32) {
+	o.sk.fSweepAngle = C.float(value)
 }
 
 // IsNil returns true if the raw skia object pointer is nil.
@@ -1678,6 +1894,22 @@ type IPoint struct {
 	sk *C.sk_SkIPoint
 }
 
+func (o IPoint) X() int {
+	return int(o.sk.fX)
+}
+
+func (o *IPoint) SetX(value int) {
+	o.sk.fX = C.int(value)
+}
+
+func (o IPoint) Y() int {
+	return int(o.sk.fY)
+}
+
+func (o *IPoint) SetY(value int) {
+	o.sk.fY = C.int(value)
+}
+
 // IsNil returns true if the raw skia object pointer is nil.
 // If it is nil is may indicate that the IPoint has not been created.
 func (o IPoint) IsNil() bool {
@@ -1692,6 +1924,38 @@ is less than or equal to its left, or if its bottom is less than or equal to
 its top, it is considered empty.
 */
 type IRect C.sk_SkIRect
+
+func (o IRect) Left() int {
+	return int(o.fLeft)
+}
+
+func (o *IRect) SetLeft(value int) {
+	o.fLeft = C.int(value)
+}
+
+func (o IRect) Top() int {
+	return int(o.fTop)
+}
+
+func (o *IRect) SetTop(value int) {
+	o.fTop = C.int(value)
+}
+
+func (o IRect) Right() int {
+	return int(o.fRight)
+}
+
+func (o *IRect) SetRight(value int) {
+	o.fRight = C.int(value)
+}
+
+func (o IRect) Bottom() int {
+	return int(o.fBottom)
+}
+
+func (o *IRect) SetBottom(value int) {
+	o.fBottom = C.int(value)
+}
 
 /*
 Returns constructed SkIRect set to (0, 0, 0, 0).
@@ -2106,6 +2370,22 @@ func (o IRect) Sort() {
 }
 
 type ISize C.sk_SkISize
+
+func (o ISize) Width() int {
+	return int(o.fWidth)
+}
+
+func (o *ISize) SetWidth(value int) {
+	o.fWidth = C.int(value)
+}
+
+func (o ISize) Height() int {
+	return int(o.fHeight)
+}
+
+func (o *ISize) SetHeight(value int) {
+	o.fHeight = C.int(value)
+}
 
 /*
 SkMatrix holds a 3x3 matrix for transforming coordinates. This allows mapping
@@ -2620,6 +2900,22 @@ type Point struct {
 	sk *C.sk_SkPoint
 }
 
+func (o Point) X() float32 {
+	return float32(o.sk.fX)
+}
+
+func (o *Point) SetX(value float32) {
+	o.sk.fX = C.float(value)
+}
+
+func (o Point) Y() float32 {
+	return float32(o.sk.fY)
+}
+
+func (o *Point) SetY(value float32) {
+	o.sk.fY = C.float(value)
+}
+
 // IsNil returns true if the raw skia object pointer is nil.
 // If it is nil is may indicate that the Point has not been created.
 func (o Point) IsNil() bool {
@@ -2670,6 +2966,38 @@ is less than or equal to its left, or if its bottom is less than or equal to
 its top, it is considered empty.
 */
 type Rect C.sk_SkRect
+
+func (o Rect) Left() float32 {
+	return float32(o.fLeft)
+}
+
+func (o *Rect) SetLeft(value float32) {
+	o.fLeft = C.float(value)
+}
+
+func (o Rect) Top() float32 {
+	return float32(o.fTop)
+}
+
+func (o *Rect) SetTop(value float32) {
+	o.fTop = C.float(value)
+}
+
+func (o Rect) Right() float32 {
+	return float32(o.fRight)
+}
+
+func (o *Rect) SetRight(value float32) {
+	o.fRight = C.float(value)
+}
+
+func (o Rect) Bottom() float32 {
+	return float32(o.fBottom)
+}
+
+func (o *Rect) SetBottom(value float32) {
+	o.fBottom = C.float(value)
+}
 
 /*
 Returns constructed SkRect set to (0, 0, 0, 0).
@@ -3212,8 +3540,56 @@ as SkColor4f.
 */
 type RGBA4f C.sk_SkRGBA4f
 
+func (o RGBA4f) R() float32 {
+	return float32(o.fR)
+}
+
+func (o *RGBA4f) SetR(value float32) {
+	o.fR = C.float(value)
+}
+
+func (o RGBA4f) G() float32 {
+	return float32(o.fG)
+}
+
+func (o *RGBA4f) SetG(value float32) {
+	o.fG = C.float(value)
+}
+
+func (o RGBA4f) B() float32 {
+	return float32(o.fB)
+}
+
+func (o *RGBA4f) SetB(value float32) {
+	o.fB = C.float(value)
+}
+
+func (o RGBA4f) A() float32 {
+	return float32(o.fA)
+}
+
+func (o *RGBA4f) SetA(value float32) {
+	o.fA = C.float(value)
+}
+
 type SamplingOptions struct {
 	sk *C.sk_SkSamplingOptions
+}
+
+func (o SamplingOptions) MaxAniso() int {
+	return int(o.sk.maxAniso)
+}
+
+func (o *SamplingOptions) SetmaxAniso(value int) {
+	o.sk.maxAniso = C.int(value)
+}
+
+func (o SamplingOptions) UseCubic() bool {
+	return bool(o.sk.useCubic)
+}
+
+func (o *SamplingOptions) SetuseCubic(value bool) {
+	o.sk.useCubic = C.bool(value)
 }
 
 // IsNil returns true if the raw skia object pointer is nil.
@@ -3236,6 +3612,22 @@ func NewSamplingOptionsCopy(p0 SamplingOptions) SamplingOptions {
 
 // /////////////////////////////////////////////////////////////////////////////
 type Size C.sk_SkSize
+
+func (o Size) Width() float32 {
+	return float32(o.fWidth)
+}
+
+func (o *Size) SetWidth(value float32) {
+	o.fWidth = C.float(value)
+}
+
+func (o Size) Height() float32 {
+	return float32(o.fHeight)
+}
+
+func (o *Size) SetHeight(value float32) {
+	o.fHeight = C.float(value)
+}
 
 /*
 SkSurface is responsible for managing the pixels that a canvas draws into. The pixels can be

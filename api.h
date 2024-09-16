@@ -12,9 +12,9 @@ extern "C"
 
   typedef struct
   {
-    unsigned int FBOID;
-    unsigned int Format;
-    uchar Protected[1];
+    uint fFBOID;
+    uint fFormat;
+    uchar fProtected[1];
     uchar pad_3[3];
   } sk_GrGLFramebufferInfo;
 
@@ -69,65 +69,65 @@ extern "C"
     bool fOOMed;
     bool fSuppressErrorLogging;
     uchar pad_2[2];
-    uchar Standard[4];
+    uchar fStandard[4];
     uchar pad_3[4];
-    uchar Extensions[24];
-    uchar Functions[8240];
+    uchar fExtensions[24];
+    uchar fFunctions[8240];
   } sk_GrGLInterface;
 
   typedef struct
   {
-    bool SuppressPrints;
+    bool fSuppressPrints;
     uchar pad_1[3];
-    uchar SkipGLErrorChecks[4];
-    int MaxTextureSizeOverride;
-    int BufferMapThreshold;
-    uchar MinimumStagingBufferSize[8];
-    uchar Executor[8];
-    bool DoManualMipmapping;
-    bool DisableCoverageCountingPaths;
-    bool DisableDistanceFieldPaths;
-    bool AllowPathMaskCaching;
-    bool DisableGpuYUVConversion;
+    uchar fSkipGLErrorChecks[4];
+    int fMaxTextureSizeOverride;
+    int fBufferMapThreshold;
+    uchar fMinimumStagingBufferSize[8];
+    uchar fExecutor[8];
+    bool fDoManualMipmapping;
+    bool fDisableCoverageCountingPaths;
+    bool fDisableDistanceFieldPaths;
+    bool fAllowPathMaskCaching;
+    bool fDisableGpuYUVConversion;
     uchar pad_11[3];
-    uchar GlyphCacheTextureMaximumBytes[8];
-    float MinDistanceFieldFontSize;
-    float GlyphsAsPathsFontSize;
-    uchar AllowMultipleGlyphCacheTextures[4];
-    bool AvoidStencilBuffers;
+    uchar fGlyphCacheTextureMaximumBytes[8];
+    float fMinDistanceFieldFontSize;
+    float fGlyphsAsPathsFontSize;
+    uchar fAllowMultipleGlyphCacheTextures[4];
+    bool fAvoidStencilBuffers;
     uchar pad_16[3];
-    uchar UseDrawInsteadOfClear[4];
-    uchar ReduceOpsTaskSplitting[4];
-    bool PreferExternalImagesOverES3;
-    bool DisableDriverCorrectnessWorkarounds;
+    uchar fUseDrawInsteadOfClear[4];
+    uchar fReduceOpsTaskSplitting[4];
+    bool fPreferExternalImagesOverES3;
+    bool fDisableDriverCorrectnessWorkarounds;
     uchar pad_20[2];
-    int RuntimeProgramCacheSize;
-    uchar PersistentCache[8];
-    uchar ShaderCacheStrategy[4];
+    int fRuntimeProgramCacheSize;
+    uchar fPersistentCache[8];
+    uchar fShaderCacheStrategy[4];
     uchar pad_23[4];
-    uchar ShaderErrorHandler[8];
-    int InternalMultisampleCount;
-    int MaxCachedVulkanSecondaryCommandBuffers;
-    bool SuppressMipmapSupport;
-    bool DisableTessellationPathRenderer;
-    bool EnableExperimentalHardwareTessellation;
-    bool SupportBilerpFromGlyphAtlas;
-    bool ReducedShaderVariations;
-    bool AllowMSAAOnNewIntel;
-    bool AlwaysUseTexStorageWhenAvailable;
+    uchar fShaderErrorHandler[8];
+    int fInternalMultisampleCount;
+    int fMaxCachedVulkanSecondaryCommandBuffers;
+    bool fSuppressMipmapSupport;
+    bool fDisableTessellationPathRenderer;
+    bool fEnableExperimentalHardwareTessellation;
+    bool fSupportBilerpFromGlyphAtlas;
+    bool fReducedShaderVariations;
+    bool fAllowMSAAOnNewIntel;
+    bool fAlwaysUseTexStorageWhenAvailable;
     uchar pad_33[1];
-    uchar ContextDeleteContext[8];
-    uchar ContextDeleteProc[8];
-    uchar DriverBugWorkarounds[17];
+    uchar fContextDeleteContext[8];
+    uchar fContextDeleteProc[8];
+    uchar fDriverBugWorkarounds[17];
     uchar pad_36[7];
   } sk_GrContextOptions;
 
   typedef struct
   {
-    uchar Oval[16];
-    float StartAngle;
-    float SweepAngle;
-    uchar Type[1];
+    uchar fOval[16];
+    float fStartAngle;
+    float fSweepAngle;
+    uchar fType[1];
     uchar pad_4[3];
   } sk_SkArc;
 
@@ -160,8 +160,8 @@ extern "C"
   typedef struct
   {
     uchar pad_0[4];
-    unsigned int fTransferFnHash;
-    unsigned int fToXYZD50Hash;
+    uint fTransferFnHash;
+    uint fToXYZD50Hash;
     uchar fTransferFn[28];
     uchar fToXYZD50[36];
     uchar fInvTransferFn[28];
@@ -176,9 +176,9 @@ extern "C"
     float fSize;
     float fScaleX;
     float fSkewX;
-    unsigned char fFlags;
-    unsigned char fEdging;
-    unsigned char fHinting;
+    uint fFlags;
+    uint fEdging;
+    uint fHinting;
     uchar pad_7[1];
   } sk_SkFont;
 
@@ -196,7 +196,7 @@ extern "C"
   {
     uchar pad_0[16];
     uchar fInfo[24];
-    unsigned int fUniqueID;
+    uint fUniqueID;
     uchar pad_2[4];
   } sk_SkImage;
 
@@ -213,22 +213,22 @@ extern "C"
 
   typedef struct
   {
-    int X;
-    int Y;
+    int fX;
+    int fY;
   } sk_SkIPoint;
 
   typedef struct
   {
-    int Left;
-    int Top;
-    int Right;
-    int Bottom;
+    int fLeft;
+    int fTop;
+    int fRight;
+    int fBottom;
   } sk_SkIRect;
 
   typedef struct
   {
-    int Width;
-    int Height;
+    int fWidth;
+    int fHeight;
   } sk_SkISize;
 
   typedef struct
@@ -257,15 +257,15 @@ extern "C"
     int fLastMoveToIndex;
     uchar fConvexity[1];
     uchar fFirstDirection[1];
-    unsigned char fFillType;
+    uint fFillType;
     // TODO misalignment (perhaps there are bitfields around here?)
-    unsigned char fIsVolatile;
+    uint fIsVolatile;
   } sk_SkPath;
 
   typedef struct
   {
-    float X;
-    float Y;
+    float fX;
+    float fY;
   } sk_SkPoint;
 
   typedef struct
@@ -277,10 +277,10 @@ extern "C"
 
   typedef struct
   {
-    float Left;
-    float Top;
-    float Right;
-    float Bottom;
+    float fLeft;
+    float fTop;
+    float fRight;
+    float fBottom;
   } sk_SkRect;
 
   typedef struct
@@ -298,13 +298,13 @@ extern "C"
 
   typedef struct
   {
-    float R;
+    float fR;
     // TODO misalignment (perhaps there are bitfields around here?)
-    float G;
+    float fG;
     // TODO misalignment (perhaps there are bitfields around here?)
-    float B;
+    float fB;
     // TODO misalignment (perhaps there are bitfields around here?)
-    float A;
+    float fA;
   } sk_SkRGBA4f;
 
   typedef struct
@@ -313,14 +313,14 @@ extern "C"
     bool useCubic;
     uchar pad_2[3];
     uchar cubic[8];
-    uchar ilter[4];
+    uchar filter[4];
     uchar mipmap[4];
   } sk_SkSamplingOptions;
 
   typedef struct
   {
-    float Width;
-    float Height;
+    float fWidth;
+    float fHeight;
   } sk_SkSize;
 
   typedef struct
@@ -329,12 +329,12 @@ extern "C"
     uchar fProps[16];
     int fWidth;
     int fHeight;
-    unsigned int fGenerationID;
+    uint fGenerationID;
   } sk_SkSurface;
 
   typedef struct
   {
-    unsigned int fFlags;
+    uint fFlags;
     uchar fPixelGeometry[4];
     float fTextContrast;
     float fTextGamma;
@@ -343,7 +343,7 @@ extern "C"
   typedef struct
   {
     uchar pad_0[16];
-    unsigned int fUniqueID;
+    uint fUniqueID;
     uchar fStyle[4];
     uchar fBounds[16];
     uchar fBoundsOnce[1];

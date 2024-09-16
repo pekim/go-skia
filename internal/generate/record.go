@@ -72,8 +72,6 @@ func (r *record) enrich1(cursor clang.Cursor) {
 
 		return clang.ChildVisit_Continue
 	})
-	// fmt.Println(c.CppName, c.fields)
-	// fmt.Println(c.cursor.Type().SizeOf())
 
 	if len(r.Ctors) != ctorsEnriched {
 		fatalf("record %s has %d ctors, but expected %d", r.CppName, ctorsEnriched, len(r.Ctors))
@@ -128,6 +126,7 @@ func (r record) generate(g generator) {
 	}
 
 	r.generateGoType(g)
+	r.generateFieldsMethods(g)
 	r.generateNilMethod(g)
 
 	for _, ctor := range r.Ctors {
@@ -158,6 +157,60 @@ func (r record) generateGoType(g generator) {
 		f.writelnf("  sk *C.%s", r.cStructName)
 		f.writeln("}")
 	}
+	f.writeln()
+}
+
+func (r record) generateFieldsMethods(g generator) {
+	for _, field := range r.fields {
+		if !field.public || field.cType == "" {
+			continue
+		}
+
+		r.generateFieldGetter(g, field)
+		r.generateFieldSetter(g, field)
+	}
+}
+
+func (r record) generateFieldGetter(g generator, field field) {
+	methodName := goExportedName(field.name)
+	if field.name[0] == 'f' {
+		methodName = goExportedName(field.name[1:])
+	}
+
+	cStruct := "o"
+	if !r.NoWrapper {
+		cStruct = "o.sk"
+	}
+
+	f := g.goFile
+	f.writelnf(`func (o %s) %s() %s {
+			return %s(%s.%s)
+		}`,
+		r.goName, methodName, field.goType,
+		field.goType, cStruct, field.name,
+	)
+	f.writeln()
+}
+
+func (r record) generateFieldSetter(g generator, field field) {
+	fieldName := field.name
+	if field.name[0] == 'f' {
+		fieldName = field.name[1:]
+	}
+	methodName := goExportedName("Set" + fieldName)
+
+	cStruct := "o"
+	if !r.NoWrapper {
+		cStruct = "o.sk"
+	}
+
+	f := g.goFile
+	f.writelnf(`func (o *%s) %s(value %s) {
+			%s.%s = C.%s(value)
+		}`,
+		r.goName, methodName, field.goType,
+		cStruct, field.name, field.cType,
+	)
 	f.writeln()
 }
 
@@ -192,12 +245,8 @@ func (r record) generateCStruct(g generator) {
 		}
 
 		name := field.name
-		if strings.HasPrefix(field.name, "f") && field.public {
-			name = name[1:]
-		}
-
-		if field.typ != "" {
-			f.writelnf("  %s %s;", field.typ, name)
+		if field.cType != "" {
+			f.writelnf("  %s %s;", field.cType, name)
 		} else {
 			f.writelnf("  uchar %s[%d];", name, field.size)
 		}

@@ -50,12 +50,12 @@ func main() {
 
 	iface := skia.GrGLMakeNativeInterface()
 	context := skia.GrDirectContextsMakeGLInterface(iface)
-	// var fbo int32
-	// gl.GetIntegerv(gl.FRAMEBUFFER_BINDING, &fbo)
-	fbInfo := skia.GrGLFramebufferInfo{
-		FBOID:  0, // should come from gl.GetIntegerv(gl.FRAMEBUFFER_BINDING, &fbo)
-		Format: gl.RGBA8,
-	}
+	var fbo int32
+	gl.GetIntegerv(gl.FRAMEBUFFER_BINDING, &fbo)
+	var fbInfo skia.GrGLFramebufferInfo
+	fbInfo.SetFBOID(uint(fbo))
+	fbInfo.SetFormat(gl.RGBA8)
+
 	backend := skia.GrBackendRenderTargetsMakeGL(800, 600, 1, 8, fbInfo)
 	if backend.IsNil() {
 		panic("failed to create backend")

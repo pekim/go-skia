@@ -6,7 +6,8 @@ import (
 
 type field struct {
 	name      string
-	typ       string
+	cType     string
+	goType    string
 	size      int // bytes
 	align     int // bytes
 	offset    int // bits
@@ -30,6 +31,7 @@ func newField(cursor clang.Cursor) field {
 func (f *field) enrich2(api api) {
 	typ, err := typFromClangType(f.clangType, api)
 	if err == nil && typ.isPrimitive {
-		f.typ = typ.cppName
+		f.cType = typ.cName
+		f.goType = typ.goName
 	}
 }

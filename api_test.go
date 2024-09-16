@@ -25,10 +25,10 @@ func TestClassStaticMethod(t *testing.T) {
 
 func TestMethodReturningNonPointerRecord(t *testing.T) {
 	rect := IRectMakeLTRB(1, 2, 3, 10)
-	assert.Equal(t, 1, int(rect.Left))
-	assert.Equal(t, 2, int(rect.Top))
-	assert.Equal(t, 3, int(rect.Right))
-	assert.Equal(t, 10, int(rect.Bottom))
+	assert.Equal(t, 1, int(rect.Left()))
+	assert.Equal(t, 2, int(rect.Top()))
+	assert.Equal(t, 3, int(rect.Right()))
+	assert.Equal(t, 10, int(rect.Bottom()))
 }
 
 func TestFontMgr(t *testing.T) {
