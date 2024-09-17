@@ -696,6 +696,15 @@ extern "C"
         reinterpret_cast<SkPaint *> (c_paint));
   }
 
+  void
+  misk_Canvas_drawString (sk_SkCanvas *c_obj, char *c_str, float c_x,
+                          float c_y, sk_SkFont *c_font, sk_SkPaint *c_paint)
+  {
+    return reinterpret_cast<SkCanvas *> (c_obj)->drawString (
+        (char *)c_str, c_x, c_y, *reinterpret_cast<SkFont *> (c_font),
+        *reinterpret_cast<SkPaint *> (c_paint));
+  }
+
   sk_SkColorSpace *
   misk_ColorSpace_MakeSRGB ()
   {

@@ -163,7 +163,8 @@
           "name": "drawImageRect",
           "overloads": [{}, null, null, null]
         },
-        { "name": "drawImageNine" }
+        { "name": "drawImageNine" },
+        { "name": "drawString", "overloads": [{}, null] }
       ]
     },
 

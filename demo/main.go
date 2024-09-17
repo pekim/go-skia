@@ -75,12 +75,19 @@ func main() {
 	for !window.ShouldClose() {
 		gl.Clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
 
+		canvas := surface.GetCanvas()
 		paint := skia.NewPaint()
 		paint.SetColor(skia.ColorRED)
 		paint.SetStyle(skia.PaintStyleFill)
-		canvas := surface.GetCanvas()
+
 		rect := skia.RectMakeXYWH(100, 100, 100, 100)
 		canvas.DrawRect(rect, paint)
+
+		typeface := skia.FontMgrRefDefault().MatchFamilyStyle("sans-serif", skia.FontStyleNormal())
+		font := skia.NewFontTypefaceSize(typeface, 22)
+		paint.SetColor(skia.ColorBLACK)
+		canvas.DrawString("Some text", 100, 250, font, paint)
+
 		context.FlushAndSubmit(skia.GrSyncCpuYes)
 
 		window.SwapBuffers()

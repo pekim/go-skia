@@ -502,6 +502,9 @@ extern "C"
   void misk_Canvas_drawImageNine (sk_SkCanvas *c_obj, sk_SkImage *c_image,
                                   sk_SkIRect c_center, sk_SkRect c_dst,
                                   int c_filter, sk_SkPaint *c_paint);
+  void misk_Canvas_drawString (sk_SkCanvas *c_obj, char *c_str, float c_x,
+                               float c_y, sk_SkFont *c_font,
+                               sk_SkPaint *c_paint);
 
   sk_SkColorSpace *misk_ColorSpace_MakeSRGB ();
   sk_SkColorSpace *misk_ColorSpace_MakeSRGBLinear ();

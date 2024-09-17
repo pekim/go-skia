@@ -2022,6 +2022,42 @@ func (o Canvas) DrawImageNine(image Image, center IRect, dst Rect, filter Filter
 	C.misk_Canvas_drawImageNine(c_obj, c_image, c_center, c_dst, c_filter, c_paint)
 }
 
+/*
+Draws null terminated string, with origin at (x, y), using clip, SkMatrix,
+SkFont font, and SkPaint paint.
+
+This function uses the default character-to-glyph mapping from the
+SkTypeface in font.  It does not perform typeface fallback for
+characters not found in the SkTypeface.  It does not perform kerning;
+glyphs are positioned based on their default advances.
+
+String str is encoded as UTF-8.
+
+Text size is affected by SkMatrix and font text size. Default text
+size is 12 point.
+
+All elements of paint: SkPathEffect, SkMaskFilter, SkShader,
+SkColorFilter, and SkImageFilter; apply to text. By
+default, draws filled black glyphs.
+
+@param str     character code points drawn,
+ending with a char value of zero
+@param x       start of string on x-axis
+@param y       start of string on y-axis
+@param font    typeface, text size and so, used to describe the text
+@param paint   blend, color, and so on, used to draw
+*/
+func (o Canvas) DrawString(str string, x float32, y float32, font Font, paint Paint) {
+	c_obj := o.sk
+	c_str := C.CString(str)
+	defer C.free(unsafe.Pointer(c_str))
+	c_x := C.float(x)
+	c_y := C.float(y)
+	c_font := font.sk
+	c_paint := paint.sk
+	C.misk_Canvas_drawString(c_obj, c_str, c_x, c_y, c_font, c_paint)
+}
+
 type CanvasClipEdgeStyle int64
 
 const (
