@@ -325,6 +325,11 @@ extern "C"
 
   typedef struct
   {
+    uchar fRec[8];
+  } sk_SkString;
+
+  typedef struct
+  {
     uchar pad_0[12];
     uchar fProps[16];
     int fWidth;
@@ -642,6 +647,9 @@ extern "C"
   sk_SkSamplingOptions *
   misk_new_SamplingOptionsCopy (sk_SkSamplingOptions *c_p0);
 
+  sk_SkString *misk_new_String (char *c_text);
+  void misk_delete_SkString (sk_SkString *obj);
+
   sk_SkCanvas *misk_Surface_getCanvas (sk_SkSurface *c_obj);
 
   sk_SkSurfaceProps *misk_new_SurfaceProps ();
@@ -699,6 +707,11 @@ extern "C"
   extern int sk_kSkColorTypeCnt;
   extern int sk_kSkFilterModeCount;
   extern int sk_kSkMipmapModeCount;
+  extern int sk_kSkStrAppendS32_MaxSize;
+  extern int sk_kSkStrAppendS64_MaxSize;
+  extern int sk_kSkStrAppendScalar_MaxSize;
+  extern int sk_kSkStrAppendU32_MaxSize;
+  extern int sk_kSkStrAppendU64_MaxSize;
 
   sk_SkFontMgr *sk_fontmgr_ref_default (void);
 

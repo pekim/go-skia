@@ -24,6 +24,7 @@ var headerFiles = []string{
 	"include/core/SkRegion.h",
 	"include/core/SkSize.h",
 	"include/core/SkSamplingOptions.h",
+	"include/core/SkString.h",
 	"include/core/SkSurface.h",
 	"include/core/SkSurfaceProps.h",
 	"include/core/SkTypeface.h",

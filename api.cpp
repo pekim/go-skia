@@ -22,6 +22,7 @@
 #include <include/core/SkRegion.h>
 #include <include/core/SkSamplingOptions.h>
 #include <include/core/SkSize.h>
+#include <include/core/SkString.h>
 #include <include/core/SkSurface.h>
 #include <include/core/SkSurfaceProps.h>
 #include <include/core/SkTypeface.h>
@@ -1419,6 +1420,18 @@ extern "C"
         new SkSamplingOptions (*reinterpret_cast<SkSamplingOptions *> (c_p0)));
   }
 
+  sk_SkString *
+  misk_new_String (char *c_text)
+  {
+    return reinterpret_cast<sk_SkString *> (new SkString ((char *)c_text));
+  }
+
+  void
+  misk_delete_SkString (sk_SkString *obj)
+  {
+    delete reinterpret_cast<SkString *> (obj);
+  }
+
   sk_SkCanvas *
   misk_Surface_getCanvas (sk_SkSurface *c_obj)
   {
@@ -1580,6 +1593,11 @@ extern "C"
   int sk_kSkColorTypeCnt = kSkColorTypeCnt;
   int sk_kSkFilterModeCount = kSkFilterModeCount;
   int sk_kSkMipmapModeCount = kSkMipmapModeCount;
+  int sk_kSkStrAppendS32_MaxSize = kSkStrAppendS32_MaxSize;
+  int sk_kSkStrAppendS64_MaxSize = kSkStrAppendS64_MaxSize;
+  int sk_kSkStrAppendScalar_MaxSize = kSkStrAppendScalar_MaxSize;
+  int sk_kSkStrAppendU32_MaxSize = kSkStrAppendU32_MaxSize;
+  int sk_kSkStrAppendU64_MaxSize = kSkStrAppendU64_MaxSize;
 
   sk_SkFontMgr *
   sk_fontmgr_ref_default (void)

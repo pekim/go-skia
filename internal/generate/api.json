@@ -397,6 +397,11 @@
     },
 
     {
+      "name": "SkString",
+      "constructors": [null, null, {}, null, null, null, null, null]
+    },
+
+    {
       "name": "SkSurface",
       "methods": [{ "name": "getCanvas" }]
     },

@@ -4193,6 +4193,31 @@ func (o *Size) SetHeight(value float32) {
 }
 
 /*
+Light weight class for managing strings. Uses reference
+counting to make string assignments and copies very fast
+with no extra RAM cost. Assumes UTF8 encoding.
+*/
+type String struct {
+	sk *C.sk_SkString
+}
+
+// IsNil returns true if the raw skia object pointer is nil.
+// If it is nil is may indicate that the String has not been created.
+func (o String) IsNil() bool {
+	return o.sk == nil
+}
+
+func NewString(text string) String {
+	c_text := C.CString(text)
+	retC := C.misk_new_String(c_text)
+	return String{sk: retC}
+}
+
+func (o String) Delete() {
+	C.misk_delete_SkString(o.sk)
+}
+
+/*
 SkSurface is responsible for managing the pixels that a canvas draws into. The pixels can be
 allocated either in CPU memory (a raster surface) or on the GPU (a GrRenderTarget surface).
 SkSurface takes care of allocating a SkCanvas that will draw into the surface. Call
@@ -4714,11 +4739,24 @@ var MSecMax = (uint)(C.sk_SK_MSecMax)
 /*
 This value translates to reseting all the context state for any backend.
 */
-var KAll_GrBackendState = (uint)(C.sk_kAll_GrBackendState)
-var KGrGLStandardCnt = (int)(C.sk_kGrGLStandardCnt)
-var KSkColorTypeCnt = (int)(C.sk_kSkColorTypeCnt)
-var KSkFilterModeCount = (int)(C.sk_kSkFilterModeCount)
-var KSkMipmapModeCount = (int)(C.sk_kSkMipmapModeCount)
+var All_GrBackendState = (uint)(C.sk_kAll_GrBackendState)
+var GrGLStandardCnt = (int)(C.sk_kGrGLStandardCnt)
+var ColorTypeCnt = (int)(C.sk_kSkColorTypeCnt)
+var FilterModeCount = (int)(C.sk_kSkFilterModeCount)
+var MipmapModeCount = (int)(C.sk_kSkMipmapModeCount)
+var StrAppendS32_MaxSize = (int)(C.sk_kSkStrAppendS32_MaxSize)
+var StrAppendS64_MaxSize = (int)(C.sk_kSkStrAppendS64_MaxSize)
+
+/*
+Floats have at most 8 significant digits, so we limit our %g to that.
+However, the total string could be 15 characters: -1.2345678e-005
+
+In theory we should only expect up to 2 digits for the exponent, but on
+some platforms we have seen 3 (as in the example above).
+*/
+var StrAppendScalar_MaxSize = (int)(C.sk_kSkStrAppendScalar_MaxSize)
+var StrAppendU32_MaxSize = (int)(C.sk_kSkStrAppendU32_MaxSize)
+var StrAppendU64_MaxSize = (int)(C.sk_kSkStrAppendU64_MaxSize)
 
 func FontMgrRefDefault() FontMgr {
 	return FontMgr{
