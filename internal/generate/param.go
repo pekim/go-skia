@@ -79,6 +79,13 @@ func (p *param) enrich2(api api) {
 		p.cParam = fmt.Sprintf("void *%s", p.cName)
 		p.cppArg = fmt.Sprintf("reinterpret_cast<%s*>(%s)", p.typ.subTyp.cppName, p.cName)
 
+	} else if p.typ.goName == "string" {
+		p.cgoVar = fmt.Sprintf(`%s := C.CString(%s)
+	defer C.free(unsafe.Pointer(%s))`,
+			p.cName, p.goName, p.cName)
+		p.cParam = fmt.Sprintf("%s *%s", p.typ.subTyp.cName, p.cName)
+		p.cppArg = fmt.Sprintf("(%s*)%s", p.typ.subTyp.cppName, p.cName)
+
 	} else if p.typ.isLValueReference && p.typ.subTyp.record != nil {
 		if p.typ.subTyp.record.NoWrapper {
 			p.cgoVar = fmt.Sprintf("%s := *(*C.%s)(unsafe.Pointer(&%s))", p.cName, p.typ.subTyp.record.cStructName, p.goName)

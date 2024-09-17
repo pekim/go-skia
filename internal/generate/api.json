@@ -3,10 +3,11 @@
     { "name": "GrSurfaceOrigin" },
     { "name": "GrSyncCpu" },
     { "name": "SkBlendMode" },
-    { "name": "SkColorType" },
-    { "name": "SkPixelGeometry" },
     { "name": "SkClipOp" },
+    { "name": "SkColorType" },
     { "name": "SkFilterMode" },
+    { "name": "SkPixelGeometry" },
+    { "name": "SkTextEncoding" },
     { "name": "skgpu::Protected" }
   ],
 
@@ -418,6 +419,15 @@
         { "suffix": "Copy" }
       ],
       "enums": [{ "name": "Flags" }]
+    },
+
+    {
+      "name": "SkTextBlob",
+      "methods": [
+        { "name": "MakeFromString" },
+        { "name": "MakeFromPosTextH" },
+        { "name": "MakeFromPosText" }
+      ]
     },
 
     {

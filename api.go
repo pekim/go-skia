@@ -4386,6 +4386,94 @@ const (
 )
 
 /*
+SkTextBlob combines multiple text runs into an immutable container. Each text
+run consists of glyphs, SkPaint, and position. Only parts of SkPaint related to
+fonts and text rendering are used by run.
+*/
+type TextBlob struct {
+	sk *C.sk_SkTextBlob
+}
+
+// IsNil returns true if the raw skia object pointer is nil.
+// If it is nil is may indicate that the TextBlob has not been created.
+func (o TextBlob) IsNil() bool {
+	return o.sk == nil
+}
+
+/*
+Creates SkTextBlob with a single run. string meaning depends on SkTextEncoding;
+by default, string is encoded as UTF-8.
+
+font contains attributes used to define the run text.
+
+When encoding is SkTextEncoding::kUTF8, SkTextEncoding::kUTF16, or
+SkTextEncoding::kUTF32, this function uses the default
+character-to-glyph mapping from the SkTypeface in font.  It does not
+perform typeface fallback for characters not found in the SkTypeface.
+It does not perform kerning or other complex shaping; glyphs are
+positioned based on their default advances.
+
+@param string   character code points or glyphs drawn
+@param font     text size, typeface, text scale, and so on, used to draw
+@param encoding text encoding used in the text array
+@return         SkTextBlob constructed from one run
+*/
+func TextBlobMakeFromString(string string, font Font, encoding TextEncoding) TextBlob {
+	c_string := C.CString(string)
+	defer C.free(unsafe.Pointer(c_string))
+	c_font := font.sk
+	c_encoding := C.int(encoding)
+	retC := C.misk_TextBlob_MakeFromString(c_string, c_font, c_encoding)
+	return TextBlob{sk: retC}
+}
+
+/*
+Returns a textblob built from a single run of text with x-positions and a single y value.
+This is equivalent to using SkTextBlobBuilder and calling allocRunPosH().
+Returns nullptr if byteLength is zero.
+
+@param text        character code points or glyphs drawn (based on encoding)
+@param byteLength  byte length of text array
+@param xpos    array of x-positions, must contain values for all of the character points.
+@param constY  shared y-position for each character point, to be paired with each xpos.
+@param font    SkFont used for this run
+@param encoding specifies the encoding of the text array.
+@return        new textblob or nullptr
+*/
+func TextBlobMakeFromPosTextH(text []byte, byteLength uint64, xpos []float32, constY float32, font Font, encoding TextEncoding) TextBlob {
+	c_text := unsafe.Pointer(&text[0])
+	c_byteLength := C.ulong(byteLength)
+	c_xpos := (*C.float)(unsafe.Pointer(&xpos[0]))
+	c_constY := C.float(constY)
+	c_font := font.sk
+	c_encoding := C.int(encoding)
+	retC := C.misk_TextBlob_MakeFromPosTextH(c_text, c_byteLength, c_xpos, c_constY, c_font, c_encoding)
+	return TextBlob{sk: retC}
+}
+
+/*
+Returns a textblob built from a single run of text with positions.
+This is equivalent to using SkTextBlobBuilder and calling allocRunPos().
+Returns nullptr if byteLength is zero.
+
+@param text        character code points or glyphs drawn (based on encoding)
+@param byteLength  byte length of text array
+@param pos     array of positions, must contain values for all of the character points.
+@param font    SkFont used for this run
+@param encoding specifies the encoding of the text array.
+@return        new textblob or nullptr
+*/
+func TextBlobMakeFromPosText(text []byte, byteLength uint64, pos []Point, font Font, encoding TextEncoding) TextBlob {
+	c_text := unsafe.Pointer(&text[0])
+	c_byteLength := C.ulong(byteLength)
+	c_pos := (*C.sk_SkPoint)(unsafe.Pointer(&pos[0]))
+	c_font := font.sk
+	c_encoding := C.int(encoding)
+	retC := C.misk_TextBlob_MakeFromPosText(c_text, c_byteLength, c_pos, c_font, c_encoding)
+	return TextBlob{sk: retC}
+}
+
+/*
 The SkTypeface class specifies the typeface and intrinsic style of a font.
 This is used in the paint, along with optionally algorithmic settings like
 textSize, textSkewX, textScaleX, kFakeBoldText_Mask, to specify
@@ -4439,6 +4527,14 @@ const (
 type BlendMode int64
 
 const ()
+
+type ClipOp int64
+
+const (
+	ClipOpDifference    ClipOp = 0
+	ClipOpIntersect     ClipOp = 1
+	ClipOpMax_EnumValue ClipOp = 1
+)
 
 /*
 \enum SkColorType
@@ -4506,6 +4602,14 @@ const (
 	ColorTypeN32 ColorType = 4
 )
 
+type FilterMode int64
+
+const (
+	FilterModeNearest FilterMode = 0
+	FilterModeLinear  FilterMode = 1
+	FilterModeLast    FilterMode = 1
+)
+
 /*
 Description of how the LCD strips are arranged for each pixel. If this is unknown, or the
 pixels are meant to be "portable" and/or transformed before showing (e.g. rotated, scaled)
@@ -4521,20 +4625,17 @@ const (
 	PixelGeometryBGR_V   PixelGeometry = 4
 )
 
-type ClipOp int64
+type TextEncoding int64
 
 const (
-	ClipOpDifference    ClipOp = 0
-	ClipOpIntersect     ClipOp = 1
-	ClipOpMax_EnumValue ClipOp = 1
-)
-
-type FilterMode int64
-
-const (
-	FilterModeNearest FilterMode = 0
-	FilterModeLinear  FilterMode = 1
-	FilterModeLast    FilterMode = 1
+	// uses bytes to represent UTF-8 or ASCII
+	TextEncodingUTF8 TextEncoding = 0
+	// uses two byte words to represent most of Unicode
+	TextEncodingUTF16 TextEncoding = 1
+	// uses four byte words to represent all of Unicode
+	TextEncodingUTF32 TextEncoding = 2
+	// uses two byte words to represent glyph indices
+	TextEncodingGlyphID TextEncoding = 3
 )
 
 /*

@@ -10,6 +10,7 @@
 #include <include/core/SkFont.h>
 #include <include/core/SkFontMgr.h>
 #include <include/core/SkFontStyle.h>
+#include <include/core/SkFontTypes.h>
 #include <include/core/SkImage.h>
 #include <include/core/SkImageInfo.h>
 #include <include/core/SkM44.h>
@@ -25,6 +26,7 @@
 #include <include/core/SkString.h>
 #include <include/core/SkSurface.h>
 #include <include/core/SkSurfaceProps.h>
+#include <include/core/SkTextBlob.h>
 #include <include/core/SkTypeface.h>
 #include <include/core/SkTypes.h>
 #include <include/gpu/GpuTypes.h>
@@ -1487,6 +1489,42 @@ extern "C"
   {
     return reinterpret_cast<sk_SkSurfaceProps *> (
         new SkSurfaceProps (*reinterpret_cast<SkSurfaceProps *> (c_p0)));
+  }
+
+  sk_SkTextBlob *
+  misk_TextBlob_MakeFromString (char *c_string, sk_SkFont *c_font,
+                                int c_encoding)
+  {
+    return reinterpret_cast<sk_SkTextBlob *> (
+        SkTextBlob::MakeFromString ((char *)c_string,
+                                    *reinterpret_cast<SkFont *> (c_font),
+                                    SkTextEncoding (c_encoding))
+            .release ());
+  }
+
+  sk_SkTextBlob *
+  misk_TextBlob_MakeFromPosTextH (void *c_text, ulong c_byteLength,
+                                  float *c_xpos, float c_constY,
+                                  sk_SkFont *c_font, int c_encoding)
+  {
+    return reinterpret_cast<sk_SkTextBlob *> (
+        SkTextBlob::MakeFromPosTextH (reinterpret_cast<void *> (c_text),
+                                      c_byteLength, (float *)c_xpos, c_constY,
+                                      *reinterpret_cast<SkFont *> (c_font),
+                                      SkTextEncoding (c_encoding))
+            .release ());
+  }
+
+  sk_SkTextBlob *
+  misk_TextBlob_MakeFromPosText (void *c_text, ulong c_byteLength,
+                                 sk_SkPoint *c_pos, sk_SkFont *c_font,
+                                 int c_encoding)
+  {
+    return reinterpret_cast<sk_SkTextBlob *> (
+        SkTextBlob::MakeFromPosText (
+            reinterpret_cast<void *> (c_text), c_byteLength, (SkPoint *)c_pos,
+            *reinterpret_cast<SkFont *> (c_font), SkTextEncoding (c_encoding))
+            .release ());
   }
 
   bool

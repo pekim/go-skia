@@ -347,6 +347,17 @@ extern "C"
 
   typedef struct
   {
+    uchar pad_0[4];
+    uchar fBounds[16];
+    uint fUniqueID;
+    uchar fCacheID[4];
+    uchar pad_3[4];
+    uchar fPurgeDelegate[8];
+    ulong fStorageSize;
+  } sk_SkTextBlob;
+
+  typedef struct
+  {
     uchar pad_0[16];
     uint fUniqueID;
     uchar fStyle[4];
@@ -662,6 +673,20 @@ extern "C"
   sk_SkSurfaceProps *misk_new_SurfacePropsPixelGeometry (uint c_flags,
                                                          uint c_p1);
   sk_SkSurfaceProps *misk_new_SurfacePropsCopy (sk_SkSurfaceProps *c_p0);
+
+  sk_SkTextBlob *misk_TextBlob_MakeFromString (char *c_string,
+                                               sk_SkFont *c_font,
+                                               int c_encoding);
+  sk_SkTextBlob *misk_TextBlob_MakeFromPosTextH (void *c_text,
+                                                 ulong c_byteLength,
+                                                 float *c_xpos, float c_constY,
+                                                 sk_SkFont *c_font,
+                                                 int c_encoding);
+  sk_SkTextBlob *misk_TextBlob_MakeFromPosText (void *c_text,
+                                                ulong c_byteLength,
+                                                sk_SkPoint *c_pos,
+                                                sk_SkFont *c_font,
+                                                int c_encoding);
 
   bool misk_Typeface_Equal (sk_SkTypeface *c_facea, sk_SkTypeface *c_faceb);
   sk_SkTypeface *misk_Typeface_MakeEmpty ();
