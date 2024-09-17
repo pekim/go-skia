@@ -35,3 +35,9 @@ func TestFontMgr(t *testing.T) {
 	typeface := fontMgr.MatchFamilyStyle("monospace", FontStyleNormal())
 	assert.NotNil(t, typeface.sk)
 }
+
+func TestString(t *testing.T) {
+	s := "qwerty"
+	sk := NewString(s)
+	assert.Equal(t, s, sk.Data())
+}

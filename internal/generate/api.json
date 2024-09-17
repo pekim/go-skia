@@ -398,7 +398,8 @@
 
     {
       "name": "SkString",
-      "constructors": [null, null, {}, null, null, null, null, null]
+      "constructors": [null, null, {}, null, null, null, null, null],
+      "methods": [{ "name": "data", "overloads": [{}, null] }]
     },
 
     {

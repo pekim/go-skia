@@ -4217,6 +4217,12 @@ func (o String) Delete() {
 	C.misk_delete_SkString(o.sk)
 }
 
+func (o String) Data() string {
+	c_obj := o.sk
+	retC := C.misk_String_data(c_obj)
+	return C.GoString(retC)
+}
+
 /*
 SkSurface is responsible for managing the pixels that a canvas draws into. The pixels can be
 allocated either in CPU memory (a raster surface) or on the GPU (a GrRenderTarget surface).

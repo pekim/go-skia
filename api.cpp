@@ -1432,6 +1432,13 @@ extern "C"
     delete reinterpret_cast<SkString *> (obj);
   }
 
+  char *
+  misk_String_data (sk_SkString *c_obj)
+  {
+    auto ret = reinterpret_cast<SkString *> (c_obj)->data ();
+    return (reinterpret_cast<char *> (ret));
+  }
+
   sk_SkCanvas *
   misk_Surface_getCanvas (sk_SkSurface *c_obj)
   {

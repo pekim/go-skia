@@ -649,6 +649,7 @@ extern "C"
 
   sk_SkString *misk_new_String (char *c_text);
   void misk_delete_SkString (sk_SkString *obj);
+  char *misk_String_data (sk_SkString *c_obj);
 
   sk_SkCanvas *misk_Surface_getCanvas (sk_SkSurface *c_obj);
 

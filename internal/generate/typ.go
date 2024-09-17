@@ -45,6 +45,9 @@ func typFromClangType(cType clang.Type, api api) (typ, error) {
 		typ.subTyp = &subTyp
 		typ.isPointer = true
 		typ.goName = typ.subTyp.goName
+		if typ.subTyp.goName == "byte" {
+			typ.goName = "string"
+		}
 		return typ, nil
 
 	case clang.Type_LValueReference:

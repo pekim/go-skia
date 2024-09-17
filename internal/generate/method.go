@@ -160,6 +160,8 @@ func (m methodOverload) generateGo(g generator) {
 			}
 		} else if (m.retrn.isPointer || m.retrn.isSmartPointer) && m.retrn.subTyp.record != nil {
 			f.writelnf("  return %s{sk: retC}", m.retrn.subTyp.record.goName)
+		} else if m.retrn.goName == "string" {
+			f.writelnf("  return C.GoString( retC)")
 		} else {
 			fatalf("return type '%s' not supported", m.retrn.goName)
 		}
@@ -197,6 +199,8 @@ func (m methodOverload) generateHeader(g generator) {
 	} else if (m.retrn.isPointer || m.retrn.isSmartPointer) && m.retrn.subTyp.record != nil {
 		returnPtr = "*"
 		returnDecl = fmt.Sprintf("%s%s", m.retrn.subTyp.record.cStructName, returnPtr)
+	} else if m.retrn.goName == "string" {
+		returnDecl = "char*"
 	}
 
 	f.writelnf("%s %s(%s);", returnDecl, m.cFuncName, strings.Join(params, ", "))
@@ -285,7 +289,16 @@ func (m methodOverload) generateCpp(g generator) {
 		if m.isStatic {
 			f.writelnf("  return %s::%s(%s)%s;", m.record.CppName, m.cppName, strings.Join(args, ", "), skSpRelease)
 		} else {
-			if m.retrn.isPointer || m.retrn.isSmartPointer {
+			if m.retrn.isPointer && m.retrn.subTyp.isPrimitive {
+				f.writelnf("  auto ret = reinterpret_cast<%s *>(c_obj)->%s(%s)%s;",
+					m.record.CppName,
+					m.cppName,
+					strings.Join(args, ", "),
+					skSpRelease)
+				f.writelnf("  return (reinterpret_cast<%s *> (ret));",
+					m.retrn.subTyp.cName,
+				)
+			} else if m.retrn.isPointer || m.retrn.isSmartPointer && m.retrn.subTyp.record != nil {
 				f.writelnf("  auto ret = reinterpret_cast<%s *>(c_obj)->%s(%s)%s;",
 					m.record.CppName,
 					m.cppName,
