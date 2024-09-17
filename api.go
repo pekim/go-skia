@@ -2096,6 +2096,39 @@ func (o Canvas) DrawGlyphs(count int, glyphs []uint32, positions []Point, cluste
 	C.misk_Canvas_drawGlyphs(c_obj, c_count, c_glyphs, c_positions, c_clusters, c_textByteCount, c_utf8text, c_origin, c_font, c_paint)
 }
 
+/*
+Draws SkTextBlob blob at (x, y), using clip, SkMatrix, and SkPaint paint.
+
+blob contains glyphs, their positions, and paint attributes specific to text:
+SkTypeface, SkPaint text size, SkPaint text scale x,
+SkPaint text skew x, SkPaint::Align, SkPaint::Hinting, anti-alias, SkPaint fake bold,
+SkPaint font embedded bitmaps, SkPaint full hinting spacing, LCD text, SkPaint linear text,
+and SkPaint subpixel text.
+
+SkTextEncoding must be set to SkTextEncoding::kGlyphID.
+
+Elements of paint: anti-alias, SkBlendMode, color including alpha,
+SkColorFilter, SkPaint dither, SkMaskFilter, SkPathEffect, SkShader, and
+SkPaint::Style; apply to blob. If SkPaint contains SkPaint::kStroke_Style:
+SkPaint miter limit, SkPaint::Cap, SkPaint::Join, and SkPaint stroke width;
+apply to SkPath created from blob.
+
+@param blob   glyphs, positions, and their paints' text size, typeface, and so on
+@param x      horizontal offset applied to blob
+@param y      vertical offset applied to blob
+@param paint  blend, color, stroking, and so on, used to draw
+
+example: https://fiddle.skia.org/c/@Canvas_drawTextBlob
+*/
+func (o Canvas) DrawTextBlob(blob TextBlob, x float32, y float32, paint Paint) {
+	c_obj := o.sk
+	c_blob := blob.sk
+	c_x := C.float(x)
+	c_y := C.float(y)
+	c_paint := paint.sk
+	C.misk_Canvas_drawTextBlob(c_obj, c_blob, c_x, c_y, c_paint)
+}
+
 type CanvasClipEdgeStyle int64
 
 const (

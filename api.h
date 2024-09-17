@@ -519,6 +519,8 @@ extern "C"
                                uint *c_clusters, int c_textByteCount,
                                char *c_utf8text, sk_SkPoint c_origin,
                                sk_SkFont *c_font, sk_SkPaint *c_paint);
+  void misk_Canvas_drawTextBlob (sk_SkCanvas *c_obj, sk_SkTextBlob *c_blob,
+                                 float c_x, float c_y, sk_SkPaint *c_paint);
 
   sk_SkColorSpace *misk_ColorSpace_MakeSRGB ();
   sk_SkColorSpace *misk_ColorSpace_MakeSRGBLinear ();

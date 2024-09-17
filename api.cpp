@@ -721,6 +721,15 @@ extern "C"
         *reinterpret_cast<SkPaint *> (c_paint));
   }
 
+  void
+  misk_Canvas_drawTextBlob (sk_SkCanvas *c_obj, sk_SkTextBlob *c_blob,
+                            float c_x, float c_y, sk_SkPaint *c_paint)
+  {
+    return reinterpret_cast<SkCanvas *> (c_obj)->drawTextBlob (
+        reinterpret_cast<SkTextBlob *> (c_blob), c_x, c_y,
+        *reinterpret_cast<SkPaint *> (c_paint));
+  }
+
   sk_SkColorSpace *
   misk_ColorSpace_MakeSRGB ()
   {

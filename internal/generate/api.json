@@ -166,7 +166,8 @@
         },
         { "name": "drawImageNine" },
         { "name": "drawString", "overloads": [{}, null] },
-        { "name": "drawGlyphs", "overloads": [{}, null, null] }
+        { "name": "drawGlyphs", "overloads": [{}, null, null] },
+        { "name": "drawTextBlob", "overloads": [{}, null] }
       ]
     },
 
