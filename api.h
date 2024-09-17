@@ -397,8 +397,7 @@ extern "C"
   bool misk_Canvas_peekPixels (sk_SkCanvas *c_obj, sk_SkPixmap *c_pixmap);
   bool misk_Canvas_readPixelsImageInfo (sk_SkCanvas *c_obj,
                                         sk_SkImageInfo *c_dstInfo,
-                                        void *c_dstPixels,
-                                        unsigned long c_dstRowBytes,
+                                        void *c_dstPixels, ulong c_dstRowBytes,
                                         int c_srcX, int c_srcY);
   bool misk_Canvas_readPixelsPixmap (sk_SkCanvas *c_obj, sk_SkPixmap *c_pixmap,
                                      int c_srcX, int c_srcY);
@@ -406,16 +405,15 @@ extern "C"
                                      int c_srcX, int c_srcY);
   bool misk_Canvas_writePixelsImageInfo (sk_SkCanvas *c_obj,
                                          sk_SkImageInfo *c_info,
-                                         void *c_pixels,
-                                         unsigned long c_rowBytes, int c_x,
-                                         int c_y);
+                                         void *c_pixels, ulong c_rowBytes,
+                                         int c_x, int c_y);
   bool misk_Canvas_writePixelsBitmap (sk_SkCanvas *c_obj,
                                       sk_SkBitmap *c_bitmap, int c_x, int c_y);
   int misk_Canvas_save (sk_SkCanvas *c_obj);
   int misk_Canvas_saveLayer (sk_SkCanvas *c_obj, sk_SkRect c_bounds,
                              sk_SkPaint *c_paint);
   int misk_Canvas_saveLayerAlpha (sk_SkCanvas *c_obj, sk_SkRect c_bounds,
-                                  unsigned int c_alpha);
+                                  uint c_alpha);
   void misk_Canvas_restore (sk_SkCanvas *c_obj);
   int misk_Canvas_getSaveCount (sk_SkCanvas *c_obj);
   void misk_Canvas_restoreToCount (sk_SkCanvas *c_obj, int c_saveCount);
@@ -505,6 +503,11 @@ extern "C"
   void misk_Canvas_drawString (sk_SkCanvas *c_obj, char *c_str, float c_x,
                                float c_y, sk_SkFont *c_font,
                                sk_SkPaint *c_paint);
+  void misk_Canvas_drawGlyphs (sk_SkCanvas *c_obj, int c_count,
+                               ushort *c_glyphs, sk_SkPoint *c_positions,
+                               uint *c_clusters, int c_textByteCount,
+                               char *c_utf8text, sk_SkPoint c_origin,
+                               sk_SkFont *c_font, sk_SkPaint *c_paint);
 
   sk_SkColorSpace *misk_ColorSpace_MakeSRGB ();
   sk_SkColorSpace *misk_ColorSpace_MakeSRGBLinear ();
@@ -580,10 +583,9 @@ extern "C"
   void misk_delete_SkPaint (sk_SkPaint *obj);
   void misk_Paint_reset (sk_SkPaint *c_obj);
   unsigned char misk_Paint_getAlpha (sk_SkPaint *c_obj);
-  void misk_Paint_setAlpha (sk_SkPaint *c_obj, unsigned int c_a);
-  void misk_Paint_setARGB (sk_SkPaint *c_obj, unsigned int c_a,
-                           unsigned int c_r, unsigned int c_g,
-                           unsigned int c_b);
+  void misk_Paint_setAlpha (sk_SkPaint *c_obj, uint c_a);
+  void misk_Paint_setARGB (sk_SkPaint *c_obj, uint c_a, uint c_r, uint c_g,
+                           uint c_b);
   void misk_Paint_setAntiAlias (sk_SkPaint *c_obj, bool c_aa);
   void misk_Paint_setBlendMode (sk_SkPaint *c_obj, int c_mode);
   void misk_Paint_setColor (sk_SkPaint *c_obj, uint c_color);
@@ -605,7 +607,7 @@ extern "C"
 
   sk_SkPixmap *misk_new_Pixmap ();
   sk_SkPixmap *misk_new_PixmapImageInfo (sk_SkImageInfo *c_info, void *c_addr,
-                                         unsigned long c_rowBytes);
+                                         ulong c_rowBytes);
 
   sk_SkRect misk_Rect_MakeEmpty ();
   sk_SkRect misk_Rect_MakeWH (float c_w, float c_h);
@@ -657,7 +659,7 @@ extern "C"
   sk_SkCanvas *misk_Surface_getCanvas (sk_SkSurface *c_obj);
 
   sk_SkSurfaceProps *misk_new_SurfaceProps ();
-  sk_SkSurfaceProps *misk_new_SurfacePropsPixelGeometry (unsigned int c_flags,
+  sk_SkSurfaceProps *misk_new_SurfacePropsPixelGeometry (uint c_flags,
                                                          uint c_p1);
   sk_SkSurfaceProps *misk_new_SurfacePropsCopy (sk_SkSurfaceProps *c_p0);
 
@@ -682,11 +684,9 @@ extern "C"
   sk_GrDirectContext *
   misk_GrDirectContextsMakeGLOptions (sk_GrContextOptions c_p0);
   sk_GrDirectContext *misk_GrDirectContextsMakeGL ();
-  uint misk_SkColorSetARGB (unsigned int c_a, unsigned int c_r,
-                            unsigned int c_g, unsigned int c_b);
-  uint misk_SkColorSetA (uint c_c, unsigned int c_a);
-  uint misk_SkPreMultiplyARGB (unsigned int c_a, unsigned int c_r,
-                               unsigned int c_g, unsigned int c_b);
+  uint misk_SkColorSetARGB (uint c_a, uint c_r, uint c_g, uint c_b);
+  uint misk_SkColorSetA (uint c_c, uint c_a);
+  uint misk_SkPreMultiplyARGB (uint c_a, uint c_r, uint c_g, uint c_b);
   uint misk_SkPreMultiplyColor (uint c_c);
 
   extern uchar sk_SK_AlphaOPAQUE;

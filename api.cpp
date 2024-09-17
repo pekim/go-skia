@@ -239,9 +239,8 @@ extern "C"
   bool
   misk_Canvas_readPixelsImageInfo (sk_SkCanvas *c_obj,
                                    sk_SkImageInfo *c_dstInfo,
-                                   void *c_dstPixels,
-                                   unsigned long c_dstRowBytes, int c_srcX,
-                                   int c_srcY)
+                                   void *c_dstPixels, ulong c_dstRowBytes,
+                                   int c_srcX, int c_srcY)
   {
     return reinterpret_cast<SkCanvas *> (c_obj)->readPixels (
         *reinterpret_cast<SkImageInfo *> (c_dstInfo),
@@ -266,8 +265,8 @@ extern "C"
 
   bool
   misk_Canvas_writePixelsImageInfo (sk_SkCanvas *c_obj, sk_SkImageInfo *c_info,
-                                    void *c_pixels, unsigned long c_rowBytes,
-                                    int c_x, int c_y)
+                                    void *c_pixels, ulong c_rowBytes, int c_x,
+                                    int c_y)
   {
     return reinterpret_cast<SkCanvas *> (c_obj)->writePixels (
         *reinterpret_cast<SkImageInfo *> (c_info),
@@ -299,7 +298,7 @@ extern "C"
 
   int
   misk_Canvas_saveLayerAlpha (sk_SkCanvas *c_obj, sk_SkRect c_bounds,
-                              unsigned int c_alpha)
+                              uint c_alpha)
   {
     return reinterpret_cast<SkCanvas *> (c_obj)->saveLayerAlpha (
         reinterpret_cast<SkRect *> (&c_bounds), c_alpha);
@@ -705,6 +704,21 @@ extern "C"
         *reinterpret_cast<SkPaint *> (c_paint));
   }
 
+  void
+  misk_Canvas_drawGlyphs (sk_SkCanvas *c_obj, int c_count, ushort *c_glyphs,
+                          sk_SkPoint *c_positions, uint *c_clusters,
+                          int c_textByteCount, char *c_utf8text,
+                          sk_SkPoint c_origin, sk_SkFont *c_font,
+                          sk_SkPaint *c_paint)
+  {
+    return reinterpret_cast<SkCanvas *> (c_obj)->drawGlyphs (
+        c_count, (unsigned short *)c_glyphs, (SkPoint *)c_positions,
+        (unsigned int *)c_clusters, c_textByteCount, (char *)c_utf8text,
+        *reinterpret_cast<SkPoint *> (&c_origin),
+        *reinterpret_cast<SkFont *> (c_font),
+        *reinterpret_cast<SkPaint *> (c_paint));
+  }
+
   sk_SkColorSpace *
   misk_ColorSpace_MakeSRGB ()
   {
@@ -1060,14 +1074,14 @@ extern "C"
   }
 
   void
-  misk_Paint_setAlpha (sk_SkPaint *c_obj, unsigned int c_a)
+  misk_Paint_setAlpha (sk_SkPaint *c_obj, uint c_a)
   {
     return reinterpret_cast<SkPaint *> (c_obj)->setAlpha (c_a);
   }
 
   void
-  misk_Paint_setARGB (sk_SkPaint *c_obj, unsigned int c_a, unsigned int c_r,
-                      unsigned int c_g, unsigned int c_b)
+  misk_Paint_setARGB (sk_SkPaint *c_obj, uint c_a, uint c_r, uint c_g,
+                      uint c_b)
   {
     return reinterpret_cast<SkPaint *> (c_obj)->setARGB (c_a, c_r, c_g, c_b);
   }
@@ -1187,7 +1201,7 @@ extern "C"
 
   sk_SkPixmap *
   misk_new_PixmapImageInfo (sk_SkImageInfo *c_info, void *c_addr,
-                            unsigned long c_rowBytes)
+                            ulong c_rowBytes)
   {
     return reinterpret_cast<sk_SkPixmap *> (
         new SkPixmap (*reinterpret_cast<SkImageInfo *> (c_info),
@@ -1462,7 +1476,7 @@ extern "C"
   }
 
   sk_SkSurfaceProps *
-  misk_new_SurfacePropsPixelGeometry (unsigned int c_flags, uint c_p1)
+  misk_new_SurfacePropsPixelGeometry (uint c_flags, uint c_p1)
   {
     return reinterpret_cast<sk_SkSurfaceProps *> (
         new SkSurfaceProps (c_flags, SkPixelGeometry (c_p1)));
@@ -1562,21 +1576,19 @@ extern "C"
   }
 
   SkColor
-  misk_SkColorSetARGB (unsigned int c_a, unsigned int c_r, unsigned int c_g,
-                       unsigned int c_b)
+  misk_SkColorSetARGB (uint c_a, uint c_r, uint c_g, uint c_b)
   {
     return SkColorSetARGB (c_a, c_r, c_g, c_b);
   }
 
   SkColor
-  misk_SkColorSetA (uint c_c, unsigned int c_a)
+  misk_SkColorSetA (uint c_c, uint c_a)
   {
     return SkColorSetA (SkColor (c_c), c_a);
   }
 
   SkPMColor
-  misk_SkPreMultiplyARGB (unsigned int c_a, unsigned int c_r, unsigned int c_g,
-                          unsigned int c_b)
+  misk_SkPreMultiplyARGB (uint c_a, uint c_r, uint c_g, uint c_b)
   {
     return SkPreMultiplyARGB (c_a, c_r, c_g, c_b);
   }

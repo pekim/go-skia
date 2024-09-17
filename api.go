@@ -2058,6 +2058,44 @@ func (o Canvas) DrawString(str string, x float32, y float32, font Font, paint Pa
 	C.misk_Canvas_drawString(c_obj, c_str, c_x, c_y, c_font, c_paint)
 }
 
+/*
+Draws count glyphs, at positions relative to origin styled with font and paint with
+supporting utf8 and cluster information.
+
+This function draw glyphs at the given positions relative to the given origin.
+It does not perform typeface fallback for glyphs not found in the SkTypeface in font.
+
+The drawing obeys the current transform matrix and clipping.
+
+All elements of paint: SkPathEffect, SkMaskFilter, SkShader,
+SkColorFilter, and SkImageFilter; apply to text. By
+default, draws filled black glyphs.
+
+@param count           number of glyphs to draw
+@param glyphs          the array of glyphIDs to draw
+@param positions       where to draw each glyph relative to origin
+@param clusters        array of size count of cluster information
+@param textByteCount   size of the utf8text
+@param utf8text        utf8text supporting information for the glyphs
+@param origin          the origin of all the positions
+@param font            typeface, text size and so, used to describe the text
+@param paint           blend, color, and so on, used to draw
+*/
+func (o Canvas) DrawGlyphs(count int, glyphs []uint32, positions []Point, clusters []uint, textByteCount int, utf8text string, origin Point, font Font, paint Paint) {
+	c_obj := o.sk
+	c_count := C.int(count)
+	c_glyphs := (*C.ushort)(unsafe.Pointer(&glyphs[0]))
+	c_positions := (*C.sk_SkPoint)(unsafe.Pointer(&positions[0]))
+	c_clusters := (*C.uint)(unsafe.Pointer(&clusters[0]))
+	c_textByteCount := C.int(textByteCount)
+	c_utf8text := C.CString(utf8text)
+	defer C.free(unsafe.Pointer(c_utf8text))
+	c_origin := *(*C.sk_SkPoint)(unsafe.Pointer(&origin))
+	c_font := font.sk
+	c_paint := paint.sk
+	C.misk_Canvas_drawGlyphs(c_obj, c_count, c_glyphs, c_positions, c_clusters, c_textByteCount, c_utf8text, c_origin, c_font, c_paint)
+}
+
 type CanvasClipEdgeStyle int64
 
 const (

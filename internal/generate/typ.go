@@ -88,6 +88,7 @@ func typFromClangType(cType clang.Type, api api) (typ, error) {
 		if recordEnumName == "" {
 			typ.record = record
 			typ.goName = typ.record.goName
+			typ.cName = typ.record.cStructName
 		} else {
 			if enum, ok := record.findEnum(recordEnumName); ok {
 				typ.enum = enum
@@ -147,6 +148,11 @@ func typFromClangType(cType clang.Type, api api) (typ, error) {
 		case clang.Type_UInt:
 			typ.cName = "uint"
 			typ.goName = "uint"
+			typ.isPrimitive = true
+
+		case clang.Type_UShort:
+			typ.cName = "ushort"
+			typ.goName = "uint32"
 			typ.isPrimitive = true
 
 		case clang.Type_ULong:
