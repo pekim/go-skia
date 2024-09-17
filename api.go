@@ -11,6 +11,7 @@ package skia
 // #cgo pkg-config: gl
 //
 // #include "api.h"
+// #include <stdlib.h>
 import "C"
 
 import (
@@ -2225,6 +2226,7 @@ auto-activated fonts.
 func (o FontMgr) MatchFamilyStyle(familyName string, p1 FontStyle) Typeface {
 	c_obj := o.sk
 	c_familyName := C.CString(familyName)
+	defer C.free(unsafe.Pointer(c_familyName))
 	c_p1 := p1.sk
 	retC := C.misk_FontMgr_matchFamilyStyle(c_obj, c_familyName, c_p1)
 	return Typeface{sk: retC}
@@ -4209,6 +4211,7 @@ func (o String) IsNil() bool {
 
 func NewString(text string) String {
 	c_text := C.CString(text)
+	defer C.free(unsafe.Pointer(c_text))
 	retC := C.misk_new_String(c_text)
 	return String{sk: retC}
 }

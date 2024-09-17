@@ -66,7 +66,9 @@ func (p *param) enrich2(api api) {
 	} else if p.typ.isArray {
 		p.cgoVar = fmt.Sprintf("%s := &%s[0]", p.cName, p.goName)
 		if p.typ.goName == "string" {
-			p.cgoVar = fmt.Sprintf("%s := C.CString(%s)", p.cName, p.goName)
+			p.cgoVar = fmt.Sprintf(`%s := C.CString(%s)
+			defer C.free(unsafe.Pointer(%s))`,
+				p.cName, p.goName, p.cName)
 		}
 		p.cParam = fmt.Sprintf("%s *%s", p.typ.subTyp.cName, p.cName)
 		p.cppArg = fmt.Sprintf("(%s*)%s", p.typ.subTyp.cppName, p.cName)

@@ -26,6 +26,7 @@ func newFileGo() *fileGo {
   // #cgo pkg-config: gl
 	//
 	// #include "api.h"
+	// #include <stdlib.h>
 	import "C"
 
 	import (
