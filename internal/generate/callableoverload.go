@@ -56,56 +56,29 @@ func (o callableOverload) generate(g generator) {
 	o.generateCpp(g)
 }
 
-// firstCArg provides an (extra) first C arg if the overload is a non-static
-// class function.
-func (o callableOverload) firstCArg() (string, string, bool) {
-	if o.record == nil || o.isStatic {
-		return "", "", false
-	}
-
-	cVar := "c_obj := o.sk"
-	if o.record.NoWrapper {
-		cVar = fmt.Sprintf("c_obj := (*C.%s)(&o)", o.record.cStructName)
-	}
-	cArg := "c_obj"
-	return cVar, cArg, true
-}
-
-func (o callableOverload) generateGo(g generator) {
+func (o callableOverload) writeGoBody(g generator) {
 	f := g.goFile
-	var params []string
+
 	var cVars []string
 	var cArgs []string
-
-	firstCVar, firstCArg, haveExtraCArg := o.firstCArg()
+	firstCVar, firstCArg, haveExtraCArg := o.firstGoCArg()
 	if haveExtraCArg {
 		cVars = append(cVars, firstCVar)
 		cArgs = append(cArgs, firstCArg)
 	}
 	for _, param := range o.params {
-		params = append(params, fmt.Sprintf("%s %s", param.goName, param.typGoName))
 		cVars = append(cVars, param.cgoVar)
 		cArgs = append(cArgs, param.cName)
 	}
 
-	// make return declaration
-	var returnDecl string
-	if !o.retrn.isVoid {
-		returnDecl = o.retrn.goName
-	}
-
 	// build the call to the function/method
-	var receiver string
-	if o.record != nil && !o.isStatic {
-		receiver = fmt.Sprintf("(o %s)", o.record.goName)
-	}
 	call := fmt.Sprintf("C.%s(%s)", o.cFuncName, strings.Join(cArgs, ", "))
 
-	f.writeDocComment(o.doc)
-	f.writelnf("func %s %s(%s) %s {", receiver, o.goFuncName, strings.Join(params, ", "), returnDecl)
+	// write the creation of the vars that will be passed as args to the C function
 	if len(cVars) > 0 {
 		f.writeln(strings.Join(cVars, "\n"))
 	}
+
 	if o.retrn.isVoid {
 		f.writelnf("  %s", call)
 	} else {
@@ -130,6 +103,46 @@ func (o callableOverload) generateGo(g generator) {
 			fatalf("return type '%s' not supported", o.retrn.goName)
 		}
 	}
+}
+
+// firstCArg provides an (extra) first C arg if the overload is a non-static
+// class function.
+func (o callableOverload) firstGoCArg() (string, string, bool) {
+	if o.record == nil || o.isStatic {
+		return "", "", false
+	}
+
+	cVar := "c_obj := o.sk"
+	if o.record.NoWrapper {
+		cVar = fmt.Sprintf("c_obj := (*C.%s)(&o)", o.record.cStructName)
+	}
+	cArg := "c_obj"
+	return cVar, cArg, true
+}
+
+func (o callableOverload) generateGo(g generator) {
+	f := g.goFile
+
+	// make function's params declarations
+	var params []string
+	for _, param := range o.params {
+		params = append(params, fmt.Sprintf("%s %s", param.goName, param.typGoName))
+	}
+
+	// make return declaration
+	var returnDecl string
+	if !o.retrn.isVoid {
+		returnDecl = o.retrn.goName
+	}
+	// make receiver if a non-static class method
+	var receiver string
+	if o.record != nil && !o.isStatic {
+		receiver = fmt.Sprintf("(o %s)", o.record.goName)
+	}
+
+	f.writeDocComment(o.doc)
+	f.writelnf("func %s %s(%s) %s {", receiver, o.goFuncName, strings.Join(params, ", "), returnDecl)
+	o.writeGoBody(g)
 	f.writeln("}")
 	f.writeln()
 }
