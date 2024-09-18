@@ -20,6 +20,36 @@ type callableOverload struct {
 	retrn      typ
 }
 
+func (o *callableOverload) enrich1(callable *callable, record *record, cursor clang.Cursor) {
+	o.cppName = callable.CppName
+	o.record = record
+	o.isStatic = cursor.CXXMethod_IsStatic()
+	if o.isStatic {
+		o.goFuncName = fmt.Sprintf("%s%s%s", record.goName, o.cppName, o.Suffix)
+	} else {
+		o.goFuncName = fmt.Sprintf("%s%s", goExportedName(o.cppName), o.Suffix)
+	}
+	o.cFuncName = fmt.Sprintf("misk_%s_%s%s", record.goName, o.cppName, o.Suffix)
+	o.doc = cursor.RawCommentText()
+	o.resultType = cursor.ResultType()
+
+	paramCount := int(cursor.NumArguments())
+	o.params = make([]param, paramCount)
+	for i := 0; i < paramCount; i++ {
+		arg := cursor.Argument(uint32(i))
+		param := newParam(i, arg)
+		o.params[i] = param
+	}
+}
+
+func (o *callableOverload) enrich2(api api) {
+	for i := range o.params {
+		param := &o.params[i]
+		param.enrich2(api)
+	}
+	o.retrn = mustTypFromClangType(o.resultType, api)
+}
+
 func (o callableOverload) generate(g generator) {
 	o.generateGo(g)
 	o.generateHeader(g)
