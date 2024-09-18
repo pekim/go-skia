@@ -104,6 +104,12 @@ func (tu translationUnit) enrichApi(api *api) {
 			}
 
 		case clang.Cursor_EnumDecl:
+			if cursor.Spelling() == "GrSurfaceOrigin" && tu.headerFile == "_skia/skia/include/core/SkSurface.h" {
+				// The 'GrSurfaceOrigin' enum is present in both core/SkSurface.h and gpu/GrTypes.h.
+				// Don't use the one that doesn't have a doc comment.
+				break
+			}
+
 			if enum, ok := api.findEnum(cursor.Spelling()); ok {
 				enum.enrich1(nil, cursor)
 			}

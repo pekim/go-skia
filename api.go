@@ -4543,6 +4543,10 @@ func TypefaceMakeEmpty() Typeface {
 	return Typeface{sk: retC}
 }
 
+/*
+GPU SkImage and SkSurfaces can be stored such that (0, 0) in texture space may correspond to
+either the top-left or bottom-left content pixel.
+*/
 type GrSurfaceOrigin int64
 
 const (
