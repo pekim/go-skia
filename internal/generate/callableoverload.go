@@ -17,6 +17,7 @@ type callableOverload struct {
 	isStatic          bool
 	isNonStaticMethod bool    // Go function is a method, and C function has a receiver first parameter
 	Params            []param `json:"params"`
+	cParamsDecl       string
 	resultType        clang.Type
 	retrn             typ
 }
@@ -61,7 +62,23 @@ func (o *callableOverload) enrich2(api api) {
 		param := &o.Params[i]
 		param.enrich2(api)
 	}
+	o.setCParamsDecl()
 	o.retrn = mustTypFromClangType(o.resultType, api)
+}
+
+func (o *callableOverload) setCParamsDecl() {
+	var params []string
+	if o.isNonStaticMethod {
+		params = append(params, fmt.Sprintf("%s *c_obj", o.record.cStructName))
+	}
+	for _, param := range o.Params {
+		if param.ValueNil {
+			// no more params
+			break
+		}
+		params = append(params, param.cParam)
+	}
+	o.cParamsDecl = strings.Join(params, ", ")
 }
 
 func (o callableOverload) generate(g generator) {
@@ -174,18 +191,6 @@ func (o callableOverload) generateGo(g generator) {
 func (o callableOverload) generateHeader(g generator) {
 	f := g.headerFile
 
-	var params []string
-	if o.isNonStaticMethod {
-		params = append(params, fmt.Sprintf("%s *c_obj", o.record.cStructName))
-	}
-	for _, param := range o.Params {
-		if param.ValueNil {
-			// no more params
-			break
-		}
-		params = append(params, param.cParam)
-	}
-
 	returnDecl := o.retrn.cppName
 	returnPtr := ""
 	if o.retrn.enum != nil {
@@ -204,25 +209,21 @@ func (o callableOverload) generateHeader(g generator) {
 		returnDecl = "char*"
 	}
 
-	f.writelnf("%s %s(%s);", returnDecl, o.cFuncName, strings.Join(params, ", "))
+	f.writelnf("%s %s(%s);", returnDecl, o.cFuncName, o.cParamsDecl)
 }
 
 func (o callableOverload) generateCpp(g generator) {
 	f := g.cppFile
 
-	var params []string
 	var args []string
-	if o.isNonStaticMethod {
-		params = append(params, fmt.Sprintf("%s *c_obj", o.record.cStructName))
-	}
 	for _, param := range o.Params {
 		if param.ValueNil {
 			// no more params
 			break
 		}
-		params = append(params, param.cParam)
 		args = append(args, param.cppArg)
 	}
+	allArgs := strings.Join(args, ", ")
 
 	returnDecl := o.retrn.cppName
 	returnPtr := ""
@@ -245,7 +246,7 @@ func (o callableOverload) generateCpp(g generator) {
 		skSpRelease = ".release()"
 	}
 
-	f.writelnf("%s %s(%s) {", returnDecl, o.cFuncName, strings.Join(params, ", "))
+	f.writelnf("%s %s(%s) {", returnDecl, o.cFuncName, o.cParamsDecl)
 	if o.retrn.record != nil {
 		if o.isStatic {
 			if o.retrn.isPointer || o.retrn.isSmartPointer {
@@ -253,13 +254,13 @@ func (o callableOverload) generateCpp(g generator) {
 					o.retrn.record.cStructName,
 					o.record.CppName,
 					o.cppName,
-					strings.Join(args, ", "),
+					allArgs,
 					skSpRelease)
 			} else {
 				f.writelnf("  auto ret = (%s::%s(%s)%s);",
 					o.record.CppName,
 					o.cppName,
-					strings.Join(args, ", "),
+					allArgs,
 					skSpRelease)
 				f.writelnf("  return *(reinterpret_cast<%s *> (&ret));",
 					o.retrn.record.cStructName,
@@ -270,7 +271,7 @@ func (o callableOverload) generateCpp(g generator) {
 				f.writelnf("  auto ret = reinterpret_cast<%s *>(c_obj)->%s(%s)%s;",
 					o.record.CppName,
 					o.cppName,
-					strings.Join(args, ", "),
+					allArgs,
 					skSpRelease)
 				f.writelnf("  return (reinterpret_cast<%s *> (ret));",
 					o.retrn.record.cStructName,
@@ -279,7 +280,7 @@ func (o callableOverload) generateCpp(g generator) {
 				f.writelnf("  auto ret = reinterpret_cast<%s *>(c_obj)->%s(%s)%s;",
 					o.record.CppName,
 					o.cppName,
-					strings.Join(args, ", "),
+					allArgs,
 					skSpRelease)
 				f.writelnf("  return *(reinterpret_cast<%s *> (&ret));",
 					o.retrn.record.cStructName,
@@ -301,13 +302,13 @@ func (o callableOverload) generateCpp(g generator) {
 					returnConst,
 					o.retrn.record.cStructName,
 					o.cppName,
-					strings.Join(args, ", "),
+					allArgs,
 					skSpRelease,
 					constCastEnd)
 			} else {
 				f.writelnf("  auto ret = (%s(%s)%s);",
 					o.cppName,
-					strings.Join(args, ", "),
+					allArgs,
 					skSpRelease)
 				f.writelnf("  return *(reinterpret_cast<%s %s *> (&ret));",
 					returnConst,
@@ -317,13 +318,13 @@ func (o callableOverload) generateCpp(g generator) {
 		}
 	} else {
 		if o.isStatic {
-			f.writelnf("  return %s::%s(%s)%s;", o.record.CppName, o.cppName, strings.Join(args, ", "), skSpRelease)
+			f.writelnf("  return %s::%s(%s)%s;", o.record.CppName, o.cppName, allArgs, skSpRelease)
 		} else if o.record != nil {
 			if o.retrn.isPointer && o.retrn.subTyp.isPrimitive {
 				f.writelnf("  auto ret = reinterpret_cast<%s *>(c_obj)->%s(%s)%s;",
 					o.record.CppName,
 					o.cppName,
-					strings.Join(args, ", "),
+					allArgs,
 					skSpRelease)
 				f.writelnf("  return (reinterpret_cast<%s *> (ret));",
 					o.retrn.subTyp.cName,
@@ -332,7 +333,7 @@ func (o callableOverload) generateCpp(g generator) {
 				f.writelnf("  auto ret = reinterpret_cast<%s *>(c_obj)->%s(%s)%s;",
 					o.record.CppName,
 					o.cppName,
-					strings.Join(args, ", "),
+					allArgs,
 					skSpRelease)
 				f.writelnf("  return (reinterpret_cast<%s *> (ret));",
 					o.retrn.subTyp.record.cStructName,
@@ -341,7 +342,7 @@ func (o callableOverload) generateCpp(g generator) {
 				f.writelnf("  return reinterpret_cast<%s*>(c_obj)->%s(%s)%s;",
 					o.record.CppName,
 					o.cppName,
-					strings.Join(args, ", "),
+					allArgs,
 					skSpRelease,
 				)
 			}
@@ -362,13 +363,13 @@ func (o callableOverload) generateCpp(g generator) {
 						returnConst,
 						o.retrn.record.cStructName,
 						o.cppName,
-						strings.Join(args, ", "),
+						allArgs,
 						skSpRelease,
 						constCastEnd)
 				} else {
 					f.writelnf("  auto ret = (%s(%s)%s);",
 						o.cppName,
-						strings.Join(args, ", "),
+						allArgs,
 						skSpRelease)
 					f.writelnf("  return *(reinterpret_cast<%s %s *> (&ret));",
 						returnConst,
@@ -376,7 +377,7 @@ func (o callableOverload) generateCpp(g generator) {
 					)
 				}
 			} else {
-				f.writelnf("  return %s(%s)%s;", o.cppName, strings.Join(args, ", "), skSpRelease)
+				f.writelnf("  return %s(%s)%s;", o.cppName, allArgs, skSpRelease)
 			}
 		}
 	}
