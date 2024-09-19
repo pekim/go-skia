@@ -13,7 +13,7 @@ type record struct {
 	CppName     string        `json:"name"`
 	Ctors       []*recordCtor `json:"constructors"`
 	Enums       []enum        `json:"enums"`
-	Methods     []method      `json:"methods"`
+	Methods     []callable    `json:"methods"`
 	NoWrapper   bool          `json:"noWrapper"`
 	dtor        recordDtor
 	fields      []field
@@ -111,7 +111,7 @@ func (r *record) findEnum(name string) (*enum, bool) {
 	return nil, false
 }
 
-func (r *record) findMethod(name string) (*method, bool) {
+func (r *record) findMethod(name string) (*callable, bool) {
 	for i, method := range r.Methods {
 		if method.CppName == name {
 			return &r.Methods[i], true

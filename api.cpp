@@ -1622,25 +1622,25 @@ extern "C"
         GrDirectContexts::MakeGL ().release ());
   }
 
-  SkColor
+  uint
   misk_SkColorSetARGB (uint c_a, uint c_r, uint c_g, uint c_b)
   {
     return SkColorSetARGB (c_a, c_r, c_g, c_b);
   }
 
-  SkColor
+  uint
   misk_SkColorSetA (uint c_c, uint c_a)
   {
     return SkColorSetA (SkColor (c_c), c_a);
   }
 
-  SkPMColor
+  uint
   misk_SkPreMultiplyARGB (uint c_a, uint c_r, uint c_g, uint c_b)
   {
     return SkPreMultiplyARGB (c_a, c_r, c_g, c_b);
   }
 
-  SkPMColor
+  uint
   misk_SkPreMultiplyColor (uint c_c)
   {
     return SkPreMultiplyColor (SkColor (c_c));

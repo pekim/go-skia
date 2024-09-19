@@ -19,7 +19,7 @@ type param struct {
 	ValueNil  bool `json:"valueNil"`
 }
 
-func newParam(paramIndex int, cursor clang.Cursor) param {
+func newParam(paramIndex int, cursor clang.Cursor, valueNil bool) param {
 	cName := cursor.DisplayName()
 	if cName == "" {
 		cName = fmt.Sprintf("p%d", paramIndex)
@@ -31,6 +31,7 @@ func newParam(paramIndex int, cursor clang.Cursor) param {
 		cName:     cgoName,
 		goName:    validGoName(cName),
 		clangType: cursor.Type(),
+		ValueNil:  valueNil,
 	}
 
 	return p

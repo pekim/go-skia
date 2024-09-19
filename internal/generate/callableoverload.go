@@ -15,7 +15,7 @@ type callableOverload struct {
 	record     *record
 	doc        string
 	isStatic   bool
-	params     []param
+	Params     []param `json:"params"`
 	resultType clang.Type
 	retrn      typ
 }
@@ -29,22 +29,34 @@ func (o *callableOverload) enrich1(callable *callable, record *record, cursor cl
 	} else {
 		o.goFuncName = fmt.Sprintf("%s%s", goExportedName(o.cppName), o.Suffix)
 	}
-	o.cFuncName = fmt.Sprintf("misk_%s_%s%s", record.goName, o.cppName, o.Suffix)
+	if o.record != nil {
+		o.cFuncName = fmt.Sprintf("misk_%s_%s%s", o.record.goName, o.cppName, o.Suffix)
+	} else {
+		cName := strings.ReplaceAll(o.cppName, "::", "") // remove any "::" in the name
+		o.cFuncName = fmt.Sprintf("misk_%s%s", cName, o.Suffix)
+	}
 	o.doc = cursor.RawCommentText()
 	o.resultType = cursor.ResultType()
 
 	paramCount := int(cursor.NumArguments())
-	o.params = make([]param, paramCount)
+	if len(o.Params) > 0 {
+		if len(o.Params) > 0 && len(o.Params) != paramCount {
+			fatalf("function %s, expected %d params but have %d", o.cppName, len(o.Params), paramCount)
+		}
+		// Do not make o.Params, as it's already present from unmarshalled JSON.
+	} else {
+		o.Params = make([]param, paramCount)
+	}
 	for i := 0; i < paramCount; i++ {
 		arg := cursor.Argument(uint32(i))
-		param := newParam(i, arg)
-		o.params[i] = param
+		param := newParam(i, arg, o.Params[i].ValueNil)
+		o.Params[i] = param
 	}
 }
 
 func (o *callableOverload) enrich2(api api) {
-	for i := range o.params {
-		param := &o.params[i]
+	for i := range o.Params {
+		param := &o.Params[i]
 		param.enrich2(api)
 	}
 	o.retrn = mustTypFromClangType(o.resultType, api)
@@ -66,7 +78,11 @@ func (o callableOverload) writeGoBody(g generator) {
 		cVars = append(cVars, firstCVar)
 		cArgs = append(cArgs, firstCArg)
 	}
-	for _, param := range o.params {
+	for _, param := range o.Params {
+		if param.ValueNil {
+			// no more params
+			break
+		}
 		cVars = append(cVars, param.cgoVar)
 		cArgs = append(cArgs, param.cName)
 	}
@@ -99,6 +115,8 @@ func (o callableOverload) writeGoBody(g generator) {
 			f.writelnf("  return %s{sk: retC}", o.retrn.subTyp.record.goName)
 		} else if o.retrn.goName == "string" {
 			f.writelnf("  return C.GoString( retC)")
+		} else if o.retrn.typedef != nil {
+			f.writelnf("  return %s(retC)", o.retrn.goName)
 		} else {
 			fatalf("return type '%s' not supported", o.retrn.goName)
 		}
@@ -125,7 +143,11 @@ func (o callableOverload) generateGo(g generator) {
 
 	// make function's params declarations
 	var params []string
-	for _, param := range o.params {
+	for _, param := range o.Params {
+		if param.ValueNil {
+			// no more params
+			break
+		}
 		params = append(params, fmt.Sprintf("%s %s", param.goName, param.typGoName))
 	}
 
@@ -150,24 +172,24 @@ func (o callableOverload) generateGo(g generator) {
 func (o callableOverload) generateHeader(g generator) {
 	f := g.headerFile
 
-	paramsCount := len(o.params)
-	paramOffset := 0
-	if !o.isStatic {
-		paramsCount++
-		paramOffset = 1
+	var params []string
+	if o.record != nil && !o.isStatic {
+		params = append(params, fmt.Sprintf("%s *c_obj", o.record.cStructName))
 	}
-	params := make([]string, paramsCount)
-	if !o.isStatic {
-		params[0] = fmt.Sprintf("%s *c_obj", o.record.cStructName)
-	}
-	for i, param := range o.params {
-		params[paramOffset+i] = param.cParam
+	for _, param := range o.Params {
+		if param.ValueNil {
+			// no more params
+			break
+		}
+		params = append(params, param.cParam)
 	}
 
 	returnDecl := o.retrn.cppName
 	returnPtr := ""
 	if o.retrn.enum != nil {
 		returnDecl = o.retrn.enum.cType.cName
+	} else if o.retrn.typedef != nil {
+		returnDecl = o.retrn.typedef.cName
 	} else if o.retrn.record != nil {
 		if o.retrn.isPointer || o.retrn.isSmartPointer {
 			returnPtr = "*"
@@ -186,26 +208,26 @@ func (o callableOverload) generateHeader(g generator) {
 func (o callableOverload) generateCpp(g generator) {
 	f := g.cppFile
 
-	paramsCount := len(o.params)
-	paramOffset := 0
-	if !o.isStatic {
-		paramsCount++
-		paramOffset = 1
+	var params []string
+	var args []string
+	if o.record != nil && !o.isStatic {
+		params = append(params, fmt.Sprintf("%s *c_obj", o.record.cStructName))
 	}
-	params := make([]string, paramsCount)
-	args := make([]string, len(o.params))
-	if !o.isStatic {
-		params[0] = fmt.Sprintf("%s *c_obj", o.record.cStructName)
-	}
-	for i, param := range o.params {
-		params[paramOffset+i] = param.cParam
-		args[i] = param.cppArg
+	for _, param := range o.Params {
+		if param.ValueNil {
+			// no more params
+			break
+		}
+		params = append(params, param.cParam)
+		args = append(args, param.cppArg)
 	}
 
 	returnDecl := o.retrn.cppName
 	returnPtr := ""
 	if o.retrn.enum != nil {
 		returnDecl = o.retrn.enum.cType.cName
+	} else if o.retrn.typedef != nil {
+		returnDecl = o.retrn.typedef.cName
 	} else if o.retrn.record != nil {
 		if o.retrn.isPointer || o.retrn.isSmartPointer {
 			returnPtr = "*"
@@ -241,7 +263,7 @@ func (o callableOverload) generateCpp(g generator) {
 					o.retrn.record.cStructName,
 				)
 			}
-		} else {
+		} else if o.record != nil {
 			if o.retrn.isPointer || o.retrn.isSmartPointer {
 				f.writelnf("  auto ret = reinterpret_cast<%s *>(c_obj)->%s(%s)%s;",
 					o.record.CppName,
@@ -261,11 +283,58 @@ func (o callableOverload) generateCpp(g generator) {
 					o.retrn.record.cStructName,
 				)
 			}
+		} else {
+			var returnConst string
+			var constCastStart string
+			var constCastEnd string
+			if o.retrn.isConst {
+				returnConst = "const"
+				constCastStart = fmt.Sprintf("const_cast<%s *>(", o.retrn.record.cStructName)
+				constCastEnd = ")"
+			}
+
+			if o.retrn.isPointer || o.retrn.isSmartPointer {
+				f.writelnf("  return %sreinterpret_cast<%s %s *> (%s(%s)%s)%s;",
+					constCastStart,
+					returnConst,
+					o.retrn.record.cStructName,
+					o.cppName,
+					strings.Join(args, ", "),
+					skSpRelease,
+					constCastEnd)
+			} else {
+				f.writelnf("  auto ret = (%s(%s)%s);",
+					o.cppName,
+					strings.Join(args, ", "),
+					skSpRelease)
+				f.writelnf("  return *(reinterpret_cast<%s %s *> (&ret));",
+					returnConst,
+					o.retrn.record.cStructName,
+				)
+			}
+
+			// if o.retrn.isPointer || o.retrn.isSmartPointer {
+			// 	f.writelnf("  auto ret = %s(%s)%s;",
+			// 		o.cppName,
+			// 		strings.Join(args, ", "),
+			// 		skSpRelease)
+			// 	f.writelnf("  return (reinterpret_cast<%s *> (ret));",
+			// 		o.retrn.record.cStructName,
+			// 	)
+			// } else {
+			// 	f.writelnf("  auto ret = %s(%s)%s;",
+			// 		o.cppName,
+			// 		strings.Join(args, ", "),
+			// 		skSpRelease)
+			// 	f.writelnf("  return *(reinterpret_cast<%s *> (&ret));",
+			// 		o.retrn.record.cStructName,
+			// 	)
+			// }
 		}
 	} else {
 		if o.isStatic {
 			f.writelnf("  return %s::%s(%s)%s;", o.record.CppName, o.cppName, strings.Join(args, ", "), skSpRelease)
-		} else {
+		} else if o.record != nil {
 			if o.retrn.isPointer && o.retrn.subTyp.isPrimitive {
 				f.writelnf("  auto ret = reinterpret_cast<%s *>(c_obj)->%s(%s)%s;",
 					o.record.CppName,
@@ -291,6 +360,39 @@ func (o callableOverload) generateCpp(g generator) {
 					strings.Join(args, ", "),
 					skSpRelease,
 				)
+			}
+		} else {
+			var returnConst string
+			var constCastStart string
+			var constCastEnd string
+			if o.retrn.isConst {
+				returnConst = "const"
+				constCastStart = fmt.Sprintf("const_cast<%s *>(", o.retrn.record.cStructName)
+				constCastEnd = ")"
+			}
+
+			if o.retrn.record != nil {
+				if o.retrn.isPointer || o.retrn.isSmartPointer {
+					f.writelnf("  return %sreinterpret_cast<%s %s *> (%s(%s)%s)%s;",
+						constCastStart,
+						returnConst,
+						o.retrn.record.cStructName,
+						o.cppName,
+						strings.Join(args, ", "),
+						skSpRelease,
+						constCastEnd)
+				} else {
+					f.writelnf("  auto ret = (%s(%s)%s);",
+						o.cppName,
+						strings.Join(args, ", "),
+						skSpRelease)
+					f.writelnf("  return *(reinterpret_cast<%s %s *> (&ret));",
+						returnConst,
+						o.retrn.record.cStructName,
+					)
+				}
+			} else {
+				f.writelnf("  return %s(%s)%s;", o.cppName, strings.Join(args, ", "), skSpRelease)
 			}
 		}
 	}

@@ -70,8 +70,7 @@ func (tu translationUnit) enrichApi(api *api) {
 				switch cursor.Kind() {
 				case clang.Cursor_FunctionDecl:
 					if function, ok := api.findFunction(qualifiedName); ok {
-						function.cursor = cursor
-						function.enrich1(cursor)
+						function.enrich1(nil, cursor)
 					}
 
 				case clang.Cursor_EnumDecl:
@@ -125,8 +124,7 @@ func (tu translationUnit) enrichApi(api *api) {
 
 		case clang.Cursor_FunctionDecl:
 			if function, ok := api.findFunction(cursor.Spelling()); ok {
-				function.cursor = cursor
-				function.enrich1(cursor)
+				function.enrich1(nil, cursor)
 			}
 
 		case clang.Cursor_TypedefDecl:

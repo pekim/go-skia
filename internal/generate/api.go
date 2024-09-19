@@ -18,7 +18,7 @@ var apiJson []byte
 type api struct {
 	Records       []record   `json:"records"`
 	Enums         []enum     `json:"enums"`
-	Functions     []function `json:"functions"`
+	Functions     []callable `json:"functions"`
 	Typedefs      []typedef  `json:"typedefs"`
 	Variables     []variable
 	variablesLock *sync.Mutex
@@ -88,7 +88,7 @@ func (a api) findEnum(name string) (*enum, bool) {
 	return nil, false
 }
 
-func (a api) findFunction(name string) (*function, bool) {
+func (a api) findFunction(name string) (*callable, bool) {
 	for i, function := range a.Functions {
 		if function.CppName == name {
 			return &a.Functions[i], true
