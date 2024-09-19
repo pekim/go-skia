@@ -8,22 +8,24 @@ import (
 )
 
 type callableOverload struct {
-	Suffix     string `json:"suffix"`
-	cppName    string
-	goFuncName string
-	cFuncName  string
-	record     *record
-	doc        string
-	isStatic   bool
-	Params     []param `json:"params"`
-	resultType clang.Type
-	retrn      typ
+	Suffix            string `json:"suffix"`
+	cppName           string
+	goFuncName        string
+	cFuncName         string
+	record            *record
+	doc               string
+	isStatic          bool
+	isNonStaticMethod bool    // Go function is a method, and C function has a receiver first parameter
+	Params            []param `json:"params"`
+	resultType        clang.Type
+	retrn             typ
 }
 
 func (o *callableOverload) enrich1(callable *callable, record *record, cursor clang.Cursor) {
 	o.cppName = callable.CppName
 	o.record = record
 	o.isStatic = cursor.CXXMethod_IsStatic()
+	o.isNonStaticMethod = o.record != nil && !o.isStatic
 	if o.isStatic {
 		o.goFuncName = fmt.Sprintf("%s%s%s", record.goName, o.cppName, o.Suffix)
 	} else {
@@ -126,7 +128,7 @@ func (o callableOverload) writeGoBody(g generator) {
 // firstCArg provides an (extra) first C arg if the overload is a non-static
 // class function.
 func (o callableOverload) firstGoCArg() (string, string, bool) {
-	if o.record == nil || o.isStatic {
+	if !o.isNonStaticMethod {
 		return "", "", false
 	}
 
@@ -158,7 +160,7 @@ func (o callableOverload) generateGo(g generator) {
 	}
 	// make receiver if a non-static class method
 	var receiver string
-	if o.record != nil && !o.isStatic {
+	if o.isNonStaticMethod {
 		receiver = fmt.Sprintf("(o %s)", o.record.goName)
 	}
 
@@ -173,7 +175,7 @@ func (o callableOverload) generateHeader(g generator) {
 	f := g.headerFile
 
 	var params []string
-	if o.record != nil && !o.isStatic {
+	if o.isNonStaticMethod {
 		params = append(params, fmt.Sprintf("%s *c_obj", o.record.cStructName))
 	}
 	for _, param := range o.Params {
@@ -210,7 +212,7 @@ func (o callableOverload) generateCpp(g generator) {
 
 	var params []string
 	var args []string
-	if o.record != nil && !o.isStatic {
+	if o.isNonStaticMethod {
 		params = append(params, fmt.Sprintf("%s *c_obj", o.record.cStructName))
 	}
 	for _, param := range o.Params {
@@ -312,24 +314,6 @@ func (o callableOverload) generateCpp(g generator) {
 					o.retrn.record.cStructName,
 				)
 			}
-
-			// if o.retrn.isPointer || o.retrn.isSmartPointer {
-			// 	f.writelnf("  auto ret = %s(%s)%s;",
-			// 		o.cppName,
-			// 		strings.Join(args, ", "),
-			// 		skSpRelease)
-			// 	f.writelnf("  return (reinterpret_cast<%s *> (ret));",
-			// 		o.retrn.record.cStructName,
-			// 	)
-			// } else {
-			// 	f.writelnf("  auto ret = %s(%s)%s;",
-			// 		o.cppName,
-			// 		strings.Join(args, ", "),
-			// 		skSpRelease)
-			// 	f.writelnf("  return *(reinterpret_cast<%s *> (&ret));",
-			// 		o.retrn.record.cStructName,
-			// 	)
-			// }
 		}
 	} else {
 		if o.isStatic {
