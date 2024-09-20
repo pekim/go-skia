@@ -29,12 +29,20 @@ for arg in "$@"; do
 done
 
 if [ "$CLEAN"x == "fullx" ]; then
-	/bin/rm -rf api.* _skia
+	/bin/rm -rf \
+    api.* \
+    header \
+    lib \
+    _skia
 	exit 0
 fi
 
 if [ "$CLEAN"x == "restorex" ]; then
-	/bin/rm -rf api.* _skia/build
+	/bin/rm -rf \
+    api.* \
+    header \
+    lib \
+    _skia/build
 	if [ -d skia/skia ]; then
 		cd __skia/skia
 		git checkout -- .
@@ -202,15 +210,17 @@ SOURCE_DATE_EPOCH=1 ZERO_AR_DATE=1 bin/gn gen "${BUILD_DIR}" --args="${COMMON_AR
 ninja -C "${BUILD_DIR}"
 cd ../..
 
-# copy headers
-rm -fr header
-mkdir header
-cp -r _skia/skia/include _skia/skia/modules header
-
-# copy  libs
-rm -fr lib
-mkdir lib
-cp _skia/build/libskia.a _skia/build/libskshaper.a _skia/build/libsvg.a lib
+# Only copy header file and libraries if their parent dirs do not exist.
+if [ ! -e header ]; then
+  # copy headers
+  mkdir header
+  cp -r _skia/skia/include _skia/skia/modules header
+fi
+if [ ! -e lib ]; then
+  # copy libs
+  mkdir lib
+  cp _skia/build/libskia.a _skia/build/libskshaper.a _skia/build/libsvg.a lib
+fi
 
 # Generate & verify
 PATH=$ORIGINAL_PATH
