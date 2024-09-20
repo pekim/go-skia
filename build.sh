@@ -13,13 +13,11 @@ for arg in "$@"; do
 	--args | -a) SHOW_ARGS=1 ;;
 	--clean | -c) CLEAN=restore ;;
 	--CLEAN | -C) CLEAN=full ;;
-	--skia | -s) SKIA_BUILD=1 ;;
 	--help | -h)
 		echo "$0 [options]"
 		echo "  -a, --args  Display the available args list for the skia build (no build)"
 		echo "  -c, --clean Remove the generated files and _skia/build directories (no build)"
 		echo "  -C, --CLEAN Remove the generated files and _skia directories (no build)"
-		echo "  -s, --skia  Build the skia libraries"
 		echo "  -h, --help This help text"
 		exit 0
 		;;
@@ -194,29 +192,21 @@ if [ ! -e skia ]; then
 	cd ..
 fi
 
-# Apply changes.
+# Perform the build
 cd skia
-sed -e 's@^class SkData;$@#include "include/core/SkData.h"@' src/pdf/SkPDFSubsetFont.h >src/pdf/SkPDFSubsetFont.h.new
-/bin/mv src/pdf/SkPDFSubsetFont.h.new src/pdf/SkPDFSubsetFont.h
+SOURCE_DATE_EPOCH=1 ZERO_AR_DATE=1 bin/gn gen "${BUILD_DIR}" --args="${COMMON_ARGS} ${PLATFORM_ARGS}"
+ninja -C "${BUILD_DIR}"
+cd ../..
 
-if [ "$SKIA_BUILD"x == "1x" ]; then
-  # Perform the build
-  SOURCE_DATE_EPOCH=1 ZERO_AR_DATE=1 bin/gn gen "${BUILD_DIR}" --args="${COMMON_ARGS} ${PLATFORM_ARGS}"
-  ninja -C "${BUILD_DIR}"
-  cd ../..
+# copy headers
+rm -fr header
+mkdir header
+cp -r _skia/skia/include _skia/skia/modules header
 
-  # copy headers
-  rm -fr header
-  mkdir header
-  cp -r _skia/skia/include _skia/skia/modules header
-
-  # copy  libs
-  rm -fr lib
-  mkdir lib
-  cp _skia/build/libskia.a _skia/build/libskshaper.a _skia/build/libsvg.a lib
-else
-  cd ../..
-fi
+# copy  libs
+rm -fr lib
+mkdir lib
+cp _skia/build/libskia.a _skia/build/libskshaper.a _skia/build/libsvg.a lib
 
 # Generate & verify
 PATH=$ORIGINAL_PATH
