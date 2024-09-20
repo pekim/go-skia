@@ -31,12 +31,12 @@ func (o callableOverload) generateGo(g generator) {
 
 	f.writeDocComment(o.doc)
 	f.writelnf("func %s %s(%s) %s {", receiver, o.goFuncName, strings.Join(params, ", "), returnDecl)
-	o.writeGoBody(g)
+	o.generateGoBody(g)
 	f.writeln("}")
 	f.writeln()
 }
 
-func (o callableOverload) writeGoBody(g generator) {
+func (o callableOverload) generateGoBody(g generator) {
 	f := g.goFile
 
 	var cVars []string

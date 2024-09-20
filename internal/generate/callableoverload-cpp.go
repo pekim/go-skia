@@ -8,16 +8,6 @@ import (
 func (o callableOverload) generateCpp(g generator) {
 	f := g.cppFile
 
-	var args []string
-	for _, param := range o.Params {
-		if param.ValueNil {
-			// no more params
-			break
-		}
-		args = append(args, param.cppArg)
-	}
-	allArgs := strings.Join(args, ", ")
-
 	returnDecl := o.retrn.cppName
 	returnPtr := ""
 	if o.retrn.enum != nil {
@@ -34,12 +24,30 @@ func (o callableOverload) generateCpp(g generator) {
 		returnDecl = fmt.Sprintf("%s%s", o.retrn.subTyp.record.cStructName, returnPtr)
 	}
 
+	f.writelnf("%s %s(%s) {", returnDecl, o.cFuncName, o.cParamsDecl)
+	o.generateCppBody(g)
+	f.writeln("}")
+	f.writeln()
+}
+
+func (o callableOverload) generateCppBody(g generator) {
+	f := g.cppFile
+
+	var args []string
+	for _, param := range o.Params {
+		if param.ValueNil {
+			// no more params
+			break
+		}
+		args = append(args, param.cppArg)
+	}
+	o.cppArgs = strings.Join(args, ", ")
+
 	skSpRelease := ""
 	if o.retrn.isSmartPointer {
 		skSpRelease = ".release()"
 	}
 
-	f.writelnf("%s %s(%s) {", returnDecl, o.cFuncName, o.cParamsDecl)
 	if o.retrn.record != nil {
 		if o.isStatic {
 			if o.retrn.isPointer || o.retrn.isSmartPointer {
@@ -47,13 +55,13 @@ func (o callableOverload) generateCpp(g generator) {
 					o.retrn.record.cStructName,
 					o.record.CppName,
 					o.cppName,
-					allArgs,
+					o.cppArgs,
 					skSpRelease)
 			} else {
 				f.writelnf("  auto ret = (%s::%s(%s)%s);",
 					o.record.CppName,
 					o.cppName,
-					allArgs,
+					o.cppArgs,
 					skSpRelease)
 				f.writelnf("  return *(reinterpret_cast<%s *> (&ret));",
 					o.retrn.record.cStructName,
@@ -64,7 +72,7 @@ func (o callableOverload) generateCpp(g generator) {
 				f.writelnf("  auto ret = reinterpret_cast<%s *>(c_obj)->%s(%s)%s;",
 					o.record.CppName,
 					o.cppName,
-					allArgs,
+					o.cppArgs,
 					skSpRelease)
 				f.writelnf("  return (reinterpret_cast<%s *> (ret));",
 					o.retrn.record.cStructName,
@@ -73,7 +81,7 @@ func (o callableOverload) generateCpp(g generator) {
 				f.writelnf("  auto ret = reinterpret_cast<%s *>(c_obj)->%s(%s)%s;",
 					o.record.CppName,
 					o.cppName,
-					allArgs,
+					o.cppArgs,
 					skSpRelease)
 				f.writelnf("  return *(reinterpret_cast<%s *> (&ret));",
 					o.retrn.record.cStructName,
@@ -95,13 +103,13 @@ func (o callableOverload) generateCpp(g generator) {
 					returnConst,
 					o.retrn.record.cStructName,
 					o.cppName,
-					allArgs,
+					o.cppArgs,
 					skSpRelease,
 					constCastEnd)
 			} else {
 				f.writelnf("  auto ret = (%s(%s)%s);",
 					o.cppName,
-					allArgs,
+					o.cppArgs,
 					skSpRelease)
 				f.writelnf("  return *(reinterpret_cast<%s %s *> (&ret));",
 					returnConst,
@@ -111,13 +119,13 @@ func (o callableOverload) generateCpp(g generator) {
 		}
 	} else {
 		if o.isStatic {
-			f.writelnf("  return %s::%s(%s)%s;", o.record.CppName, o.cppName, allArgs, skSpRelease)
+			f.writelnf("  return %s::%s(%s)%s;", o.record.CppName, o.cppName, o.cppArgs, skSpRelease)
 		} else if o.record != nil {
 			if o.retrn.isPointer && o.retrn.subTyp.isPrimitive {
 				f.writelnf("  auto ret = reinterpret_cast<%s *>(c_obj)->%s(%s)%s;",
 					o.record.CppName,
 					o.cppName,
-					allArgs,
+					o.cppArgs,
 					skSpRelease)
 				f.writelnf("  return (reinterpret_cast<%s *> (ret));",
 					o.retrn.subTyp.cName,
@@ -126,7 +134,7 @@ func (o callableOverload) generateCpp(g generator) {
 				f.writelnf("  auto ret = reinterpret_cast<%s *>(c_obj)->%s(%s)%s;",
 					o.record.CppName,
 					o.cppName,
-					allArgs,
+					o.cppArgs,
 					skSpRelease)
 				f.writelnf("  return (reinterpret_cast<%s *> (ret));",
 					o.retrn.subTyp.record.cStructName,
@@ -135,7 +143,7 @@ func (o callableOverload) generateCpp(g generator) {
 				f.writelnf("  return reinterpret_cast<%s*>(c_obj)->%s(%s)%s;",
 					o.record.CppName,
 					o.cppName,
-					allArgs,
+					o.cppArgs,
 					skSpRelease,
 				)
 			}
@@ -156,13 +164,13 @@ func (o callableOverload) generateCpp(g generator) {
 						returnConst,
 						o.retrn.record.cStructName,
 						o.cppName,
-						allArgs,
+						o.cppArgs,
 						skSpRelease,
 						constCastEnd)
 				} else {
 					f.writelnf("  auto ret = (%s(%s)%s);",
 						o.cppName,
-						allArgs,
+						o.cppArgs,
 						skSpRelease)
 					f.writelnf("  return *(reinterpret_cast<%s %s *> (&ret));",
 						returnConst,
@@ -170,10 +178,8 @@ func (o callableOverload) generateCpp(g generator) {
 					)
 				}
 			} else {
-				f.writelnf("  return %s(%s)%s;", o.cppName, allArgs, skSpRelease)
+				f.writelnf("  return %s(%s)%s;", o.cppName, o.cppArgs, skSpRelease)
 			}
 		}
 	}
-	f.writeln("}")
-	f.writeln()
 }

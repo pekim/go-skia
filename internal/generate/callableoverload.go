@@ -18,6 +18,7 @@ type callableOverload struct {
 	isNonStaticMethod bool    // Go function is a method, and C function has a receiver first parameter
 	Params            []param `json:"params"`
 	cParamsDecl       string
+	cppArgs           string
 	resultType        clang.Type
 	retrn             typ
 }
