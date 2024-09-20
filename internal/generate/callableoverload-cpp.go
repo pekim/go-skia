@@ -51,12 +51,13 @@ func (o callableOverload) generateCppBody(g generator) {
 	if o.retrn.record != nil {
 		if o.isStatic {
 			if o.retrn.isPointer || o.retrn.isSmartPointer {
-				f.writelnf("  return reinterpret_cast<%s *> (%s::%s(%s)%s);",
+				f.writelnf("  auto ret = reinterpret_cast<%s *> (%s::%s(%s)%s);",
 					o.retrn.record.cStructName,
 					o.record.CppName,
 					o.cppName,
 					o.cppArgs,
 					skSpRelease)
+				f.writeln("  return ret;")
 			} else {
 				f.writelnf("  auto ret = (%s::%s(%s)%s);",
 					o.record.CppName,
@@ -98,7 +99,7 @@ func (o callableOverload) generateCppBody(g generator) {
 			}
 
 			if o.retrn.isPointer || o.retrn.isSmartPointer {
-				f.writelnf("  return %sreinterpret_cast<%s %s *> (%s(%s)%s)%s;",
+				f.writelnf("  auto ret = %sreinterpret_cast<%s %s *> (%s(%s)%s)%s;",
 					constCastStart,
 					returnConst,
 					o.retrn.record.cStructName,
@@ -106,6 +107,7 @@ func (o callableOverload) generateCppBody(g generator) {
 					o.cppArgs,
 					skSpRelease,
 					constCastEnd)
+				f.writeln("  return ret;")
 			} else {
 				f.writelnf("  auto ret = (%s(%s)%s);",
 					o.cppName,
@@ -146,6 +148,7 @@ func (o callableOverload) generateCppBody(g generator) {
 					o.cppArgs,
 					skSpRelease,
 				)
+				// f.writeln("  return ret;")
 			}
 		} else {
 			var returnConst string
@@ -159,7 +162,7 @@ func (o callableOverload) generateCppBody(g generator) {
 
 			if o.retrn.record != nil {
 				if o.retrn.isPointer || o.retrn.isSmartPointer {
-					f.writelnf("  return %sreinterpret_cast<%s %s *> (%s(%s)%s)%s;",
+					f.writelnf("  auto ret = %sreinterpret_cast<%s %s *> (%s(%s)%s)%s;",
 						constCastStart,
 						returnConst,
 						o.retrn.record.cStructName,
@@ -167,6 +170,7 @@ func (o callableOverload) generateCppBody(g generator) {
 						o.cppArgs,
 						skSpRelease,
 						constCastEnd)
+					f.writeln("  return ret;")
 				} else {
 					f.writelnf("  auto ret = (%s(%s)%s);",
 						o.cppName,

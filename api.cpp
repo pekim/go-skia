@@ -733,15 +733,17 @@ extern "C"
   sk_SkColorSpace *
   misk_ColorSpace_MakeSRGB ()
   {
-    return reinterpret_cast<sk_SkColorSpace *> (
+    auto ret = reinterpret_cast<sk_SkColorSpace *> (
         SkColorSpace::MakeSRGB ().release ());
+    return ret;
   }
 
   sk_SkColorSpace *
   misk_ColorSpace_MakeSRGBLinear ()
   {
-    return reinterpret_cast<sk_SkColorSpace *> (
+    auto ret = reinterpret_cast<sk_SkColorSpace *> (
         SkColorSpace::MakeSRGBLinear ().release ());
+    return ret;
   }
 
   bool
@@ -1504,11 +1506,12 @@ extern "C"
   misk_TextBlob_MakeFromString (char *c_string, sk_SkFont *c_font,
                                 int c_encoding)
   {
-    return reinterpret_cast<sk_SkTextBlob *> (
+    auto ret = reinterpret_cast<sk_SkTextBlob *> (
         SkTextBlob::MakeFromString ((char *)c_string,
                                     *reinterpret_cast<SkFont *> (c_font),
                                     SkTextEncoding (c_encoding))
             .release ());
+    return ret;
   }
 
   sk_SkTextBlob *
@@ -1516,12 +1519,13 @@ extern "C"
                                   float *c_xpos, float c_constY,
                                   sk_SkFont *c_font, int c_encoding)
   {
-    return reinterpret_cast<sk_SkTextBlob *> (
+    auto ret = reinterpret_cast<sk_SkTextBlob *> (
         SkTextBlob::MakeFromPosTextH (reinterpret_cast<void *> (c_text),
                                       c_byteLength, (float *)c_xpos, c_constY,
                                       *reinterpret_cast<SkFont *> (c_font),
                                       SkTextEncoding (c_encoding))
             .release ());
+    return ret;
   }
 
   sk_SkTextBlob *
@@ -1529,11 +1533,12 @@ extern "C"
                                  sk_SkPoint *c_pos, sk_SkFont *c_font,
                                  int c_encoding)
   {
-    return reinterpret_cast<sk_SkTextBlob *> (
+    auto ret = reinterpret_cast<sk_SkTextBlob *> (
         SkTextBlob::MakeFromPosText (
             reinterpret_cast<void *> (c_text), c_byteLength, (SkPoint *)c_pos,
             *reinterpret_cast<SkFont *> (c_font), SkTextEncoding (c_encoding))
             .release ());
+    return ret;
   }
 
   bool
@@ -1546,16 +1551,18 @@ extern "C"
   sk_SkTypeface *
   misk_Typeface_MakeEmpty ()
   {
-    return reinterpret_cast<sk_SkTypeface *> (
+    auto ret = reinterpret_cast<sk_SkTypeface *> (
         SkTypeface::MakeEmpty ().release ());
+    return ret;
   }
 
   sk_GrGLInterface *
   misk_GrGLMakeNativeInterface ()
   {
-    return const_cast<sk_GrGLInterface *> (
+    auto ret = const_cast<sk_GrGLInterface *> (
         reinterpret_cast<const sk_GrGLInterface *> (
             GrGLMakeNativeInterface ().release ()));
+    return ret;
   }
 
   sk_GrBackendRenderTarget
@@ -1576,7 +1583,7 @@ extern "C"
       int c_colorType, sk_SkColorSpace *c_colorSpace,
       sk_SkSurfaceProps *c_surfaceProps)
   {
-    return reinterpret_cast<sk_SkSurface *> (
+    auto ret = reinterpret_cast<sk_SkSurface *> (
         SkSurfaces::WrapBackendRenderTarget (
             reinterpret_cast<GrRecordingContext *> (c_context),
             *reinterpret_cast<GrBackendRenderTarget *> (c_backendRenderTarget),
@@ -1584,42 +1591,47 @@ extern "C"
             sk_ref_sp (reinterpret_cast<SkColorSpace *> (c_colorSpace)),
             reinterpret_cast<SkSurfaceProps *> (c_surfaceProps))
             .release ());
+    return ret;
   }
 
   sk_GrDirectContext *
   misk_GrDirectContextsMakeGLInterfaceOptions (sk_GrGLInterface *c_p0,
                                                sk_GrContextOptions c_p1)
   {
-    return reinterpret_cast<sk_GrDirectContext *> (
+    auto ret = reinterpret_cast<sk_GrDirectContext *> (
         GrDirectContexts::MakeGL (
             sk_ref_sp (reinterpret_cast<GrGLInterface *> (c_p0)),
             *reinterpret_cast<GrContextOptions *> (&c_p1))
             .release ());
+    return ret;
   }
 
   sk_GrDirectContext *
   misk_GrDirectContextsMakeGLInterface (sk_GrGLInterface *c_p0)
   {
-    return reinterpret_cast<sk_GrDirectContext *> (
+    auto ret = reinterpret_cast<sk_GrDirectContext *> (
         GrDirectContexts::MakeGL (
             sk_ref_sp (reinterpret_cast<GrGLInterface *> (c_p0)))
             .release ());
+    return ret;
   }
 
   sk_GrDirectContext *
   misk_GrDirectContextsMakeGLOptions (sk_GrContextOptions c_p0)
   {
-    return reinterpret_cast<sk_GrDirectContext *> (
+    auto ret = reinterpret_cast<sk_GrDirectContext *> (
         GrDirectContexts::MakeGL (
             *reinterpret_cast<GrContextOptions *> (&c_p0))
             .release ());
+    return ret;
   }
 
   sk_GrDirectContext *
   misk_GrDirectContextsMakeGL ()
   {
-    return reinterpret_cast<sk_GrDirectContext *> (
+    auto ret = reinterpret_cast<sk_GrDirectContext *> (
         GrDirectContexts::MakeGL ().release ());
+    return ret;
   }
 
   uint
