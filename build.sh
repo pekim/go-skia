@@ -62,7 +62,6 @@ COMMON_ARGS=" \
   skia_enable_fontmgr_fuchsia=false \
   skia_enable_fontmgr_win_gdi=false \
   skia_enable_gpu=true \
-  skia_enable_pdf=true \
   skia_enable_skottie=false \
   skia_enable_skshaper=true \
   skia_enable_skshaper_tests=false \
@@ -189,6 +188,11 @@ if [ ! -e skia ]; then
 	git checkout "${SKIA_BRANCH}"
 	python3 tools/git-sync-deps
 	python3 bin/fetch-ninja
+
+  # Apply changes.
+  sed -e 's@^class SkData;$@#include "include/core/SkData.h"@' src/pdf/SkPDFSubsetFont.h >src/pdf/SkPDFSubsetFont.h.new
+  /bin/mv src/pdf/SkPDFSubsetFont.h.new src/pdf/SkPDFSubsetFont.h
+
 	cd ..
 fi
 
