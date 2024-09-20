@@ -55,6 +55,16 @@ extern "C"
 
   typedef struct
   {
+    ulong fNumSemaphores;
+    uchar fSignalSemaphores[8];
+    uchar fFinishedProc[8];
+    uchar fFinishedContext[8];
+    uchar fSubmittedProc[8];
+    uchar fSubmittedContext[8];
+  } sk_GrFlushInfo;
+
+  typedef struct
+  {
     uchar pad_0[64];
     uchar fStats[8];
     uchar fAuditTrail[8];
@@ -371,10 +381,21 @@ extern "C"
   sk_GrBackendRenderTarget *
   misk_new_GrBackendRenderTargetCopy (sk_GrBackendRenderTarget *c_that);
   void misk_delete_GrBackendRenderTarget (sk_GrBackendRenderTarget *obj);
+  sk_SkISize
+  misk_GrBackendRenderTarget_dimensions (sk_GrBackendRenderTarget *c_obj);
+  int misk_GrBackendRenderTarget_width (sk_GrBackendRenderTarget *c_obj);
+  int misk_GrBackendRenderTarget_height (sk_GrBackendRenderTarget *c_obj);
+  int misk_GrBackendRenderTarget_sampleCnt (sk_GrBackendRenderTarget *c_obj);
+  int misk_GrBackendRenderTarget_stencilBits (sk_GrBackendRenderTarget *c_obj);
+  bool misk_GrBackendRenderTarget_isFramebufferOnly (
+      sk_GrBackendRenderTarget *c_obj);
 
   void misk_delete_GrDirectContext (sk_GrDirectContext *obj);
   void misk_GrDirectContext_flushAndSubmit (sk_GrDirectContext *c_obj,
-                                            int c_sync);
+                                            bool c_sync);
+  bool misk_GrDirectContext_flush (sk_GrDirectContext *c_obj,
+                                   sk_GrFlushInfo *c_info);
+  bool misk_GrDirectContext_submit (sk_GrDirectContext *c_obj, bool c_sync);
 
   void misk_delete_GrRecordingContext (sk_GrRecordingContext *obj);
 

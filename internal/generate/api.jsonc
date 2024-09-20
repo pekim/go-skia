@@ -2,6 +2,7 @@
   "enums": [
     { "name": "GrSurfaceOrigin" },
     { "name": "GrSyncCpu" },
+    { "name": "GrSemaphoresSubmitted" },
     { "name": "SkBlendMode" },
     { "name": "SkClipOp" },
     { "name": "SkColorType" },
@@ -17,7 +18,15 @@
 
     {
       "name": "GrBackendRenderTarget",
-      "constructors": [{}, null, { "suffix": "Copy" }]
+      "constructors": [{}, null, { "suffix": "Copy" }],
+      "methods": [
+        { "name": "dimensions" },
+        { "name": "width" },
+        { "name": "height" },
+        { "name": "sampleCnt" },
+        { "name": "stencilBits" },
+        { "name": "isFramebufferOnly" }
+      ]
     },
 
     {
@@ -26,9 +35,17 @@
         {
           "name": "flushAndSubmit",
           "overloads": [{}, null, null]
+        },
+        {
+          "name": "flush",
+          "overloads": [{}, null, null, null, null, null, null]
+        },
+        {
+          "name": "submit"
         }
       ]
     },
+    { "name": "GrFlushInfo" },
     { "name": "GrRecordingContext" },
 
     { "name": "GrGLInterface", "constructors": [null] },

@@ -79,6 +79,52 @@ extern "C"
     delete reinterpret_cast<GrBackendRenderTarget *> (obj);
   }
 
+  sk_SkISize
+  misk_GrBackendRenderTarget_dimensions (sk_GrBackendRenderTarget *c_obj)
+  {
+    auto ret
+        = reinterpret_cast<GrBackendRenderTarget *> (c_obj)->dimensions ();
+    return *(reinterpret_cast<sk_SkISize *> (&ret));
+  }
+
+  int
+  misk_GrBackendRenderTarget_width (sk_GrBackendRenderTarget *c_obj)
+  {
+    auto ret = reinterpret_cast<GrBackendRenderTarget *> (c_obj)->width ();
+    return ret;
+  }
+
+  int
+  misk_GrBackendRenderTarget_height (sk_GrBackendRenderTarget *c_obj)
+  {
+    auto ret = reinterpret_cast<GrBackendRenderTarget *> (c_obj)->height ();
+    return ret;
+  }
+
+  int
+  misk_GrBackendRenderTarget_sampleCnt (sk_GrBackendRenderTarget *c_obj)
+  {
+    auto ret = reinterpret_cast<GrBackendRenderTarget *> (c_obj)->sampleCnt ();
+    return ret;
+  }
+
+  int
+  misk_GrBackendRenderTarget_stencilBits (sk_GrBackendRenderTarget *c_obj)
+  {
+    auto ret
+        = reinterpret_cast<GrBackendRenderTarget *> (c_obj)->stencilBits ();
+    return ret;
+  }
+
+  bool
+  misk_GrBackendRenderTarget_isFramebufferOnly (
+      sk_GrBackendRenderTarget *c_obj)
+  {
+    auto ret = reinterpret_cast<GrBackendRenderTarget *> (c_obj)
+                   ->isFramebufferOnly ();
+    return ret;
+  }
+
   void
   misk_delete_GrDirectContext (sk_GrDirectContext *obj)
   {
@@ -86,10 +132,27 @@ extern "C"
   }
 
   void
-  misk_GrDirectContext_flushAndSubmit (sk_GrDirectContext *c_obj, int c_sync)
+  misk_GrDirectContext_flushAndSubmit (sk_GrDirectContext *c_obj, bool c_sync)
   {
     reinterpret_cast<GrDirectContext *> (c_obj)->flushAndSubmit (
         GrSyncCpu (c_sync));
+  }
+
+  bool
+  misk_GrDirectContext_flush (sk_GrDirectContext *c_obj,
+                              sk_GrFlushInfo *c_info)
+  {
+    auto ret = reinterpret_cast<GrDirectContext *> (c_obj)->flush (
+        *reinterpret_cast<GrFlushInfo *> (c_info));
+    return (bool)ret;
+  }
+
+  bool
+  misk_GrDirectContext_submit (sk_GrDirectContext *c_obj, bool c_sync)
+  {
+    auto ret = reinterpret_cast<GrDirectContext *> (c_obj)->submit (
+        GrSyncCpu (c_sync));
+    return ret;
   }
 
   void
@@ -1151,7 +1214,7 @@ extern "C"
   misk_Paint_getStrokeCap (sk_SkPaint *c_obj)
   {
     auto ret = reinterpret_cast<SkPaint *> (c_obj)->getStrokeCap ();
-    return ret;
+    return (uint)ret;
   }
 
   void
@@ -1164,7 +1227,7 @@ extern "C"
   misk_Paint_getStrokeJoin (sk_SkPaint *c_obj)
   {
     auto ret = reinterpret_cast<SkPaint *> (c_obj)->getStrokeJoin ();
-    return ret;
+    return (uchar)ret;
   }
 
   void
@@ -1204,7 +1267,7 @@ extern "C"
   misk_Paint_getStyle (sk_SkPaint *c_obj)
   {
     auto ret = reinterpret_cast<SkPaint *> (c_obj)->getStyle ();
-    return ret;
+    return (uchar)ret;
   }
 
   void

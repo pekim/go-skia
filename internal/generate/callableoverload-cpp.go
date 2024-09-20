@@ -79,6 +79,10 @@ func (o *callableOverload) generateCppReturnStatement(g generator) {
 	f := g.cppFile
 	isPointer := o.retrn.isPointer || o.retrn.isSmartPointer
 
+	if o.retrn.enum != nil {
+		f.writelnf("  return (%s)ret;", o.retrn.enum.cType.cName)
+		return
+	}
 	if !isPointer && o.retrn.record == nil {
 		// simple return type, with no conversion required
 		f.writeln("  return ret;")

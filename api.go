@@ -62,6 +62,42 @@ func (o GrBackendRenderTarget) Delete() {
 	C.misk_delete_GrBackendRenderTarget(o.sk)
 }
 
+func (o GrBackendRenderTarget) Dimensions() ISize {
+	c_obj := o.sk
+	retC := C.misk_GrBackendRenderTarget_dimensions(c_obj)
+	return ISize(retC)
+}
+
+func (o GrBackendRenderTarget) Width() int {
+	c_obj := o.sk
+	retC := C.misk_GrBackendRenderTarget_width(c_obj)
+	return int(retC)
+}
+
+func (o GrBackendRenderTarget) Height() int {
+	c_obj := o.sk
+	retC := C.misk_GrBackendRenderTarget_height(c_obj)
+	return int(retC)
+}
+
+func (o GrBackendRenderTarget) SampleCnt() int {
+	c_obj := o.sk
+	retC := C.misk_GrBackendRenderTarget_sampleCnt(c_obj)
+	return int(retC)
+}
+
+func (o GrBackendRenderTarget) StencilBits() int {
+	c_obj := o.sk
+	retC := C.misk_GrBackendRenderTarget_stencilBits(c_obj)
+	return int(retC)
+}
+
+func (o GrBackendRenderTarget) IsFramebufferOnly() bool {
+	c_obj := o.sk
+	retC := C.misk_GrBackendRenderTarget_isFramebufferOnly(c_obj)
+	return bool(retC)
+}
+
 type GrDirectContext struct {
 	sk *C.sk_GrDirectContext
 }
@@ -83,8 +119,108 @@ GrContext::submit(sync).
 */
 func (o GrDirectContext) FlushAndSubmit(sync GrSyncCpu) {
 	c_obj := o.sk
-	c_sync := C.int(sync)
+	c_sync := C.bool(sync)
 	C.misk_GrDirectContext_flushAndSubmit(c_obj, c_sync)
+}
+
+/*
+Call to ensure all drawing to the context has been flushed to underlying 3D API specific
+objects. A call to `submit` is always required to ensure work is actually sent to
+the gpu. Some specific API details:
+
+	GL: Commands are actually sent to the driver, but glFlush is never called. Thus some
+	    sync objects from the flush will not be valid until a submission occurs.
+
+	Vulkan/Metal/D3D/Dawn: Commands are recorded to the backend APIs corresponding command
+	    buffer or encoder objects. However, these objects are not sent to the gpu until a
+	    submission occurs.
+
+If the return is GrSemaphoresSubmitted::kYes, only initialized GrBackendSemaphores will be
+submitted to the gpu during the next submit call (it is possible Skia failed to create a
+subset of the semaphores). The client should not wait on these semaphores until after submit
+has been called, and must keep them alive until then. If this call returns
+GrSemaphoresSubmitted::kNo, the GPU backend will not submit any semaphores to be signaled on
+the GPU. Thus the client should not have the GPU wait on any of the semaphores passed in with
+the GrFlushInfo. Regardless of whether semaphores were submitted to the GPU or not, the
+client is still responsible for deleting any initialized semaphores.
+Regardless of semaphore submission the context will still be flushed. It should be
+emphasized that a return value of GrSemaphoresSubmitted::kNo does not mean the flush did not
+happen. It simply means there were no semaphores submitted to the GPU. A caller should only
+take this as a failure if they passed in semaphores to be submitted.
+*/
+func (o GrDirectContext) Flush(info GrFlushInfo) GrSemaphoresSubmitted {
+	c_obj := o.sk
+	c_info := info.sk
+	retC := C.misk_GrDirectContext_flush(c_obj, c_info)
+	return GrSemaphoresSubmitted(retC)
+}
+
+/*
+Submit outstanding work to the gpu from all previously un-submitted flushes. The return
+value of the submit will indicate whether or not the submission to the GPU was successful.
+
+If the call returns true, all previously passed in semaphores in flush calls will have been
+submitted to the GPU and they can safely be waited on. The caller should wait on those
+semaphores or perform some other global synchronization before deleting the semaphores.
+
+If it returns false, then those same semaphores will not have been submitted and we will not
+try to submit them again. The caller is free to delete the semaphores at any time.
+
+If sync flag is GrSyncCpu::kYes, this function will return once the gpu has finished with all
+submitted work.
+*/
+func (o GrDirectContext) Submit(sync GrSyncCpu) bool {
+	c_obj := o.sk
+	c_sync := C.bool(sync)
+	retC := C.misk_GrDirectContext_submit(c_obj, c_sync)
+	return bool(retC)
+}
+
+/*
+Struct to supply options to flush calls.
+
+After issuing all commands, fNumSemaphore semaphores will be signaled by the gpu. The client
+passes in an array of fNumSemaphores GrBackendSemaphores. In general these GrBackendSemaphore's
+can be either initialized or not. If they are initialized, the backend uses the passed in
+semaphore. If it is not initialized, a new semaphore is created and the GrBackendSemaphore
+object is initialized with that semaphore. The semaphores are not sent to the GPU until the next
+GrContext::submit call is made. See the GrContext::submit for more information.
+
+The client will own and be responsible for deleting the underlying semaphores that are stored
+and returned in initialized GrBackendSemaphore objects. The GrBackendSemaphore objects
+themselves can be deleted as soon as this function returns.
+
+If a finishedProc is provided, the finishedProc will be called when all work submitted to the gpu
+from this flush call and all previous flush calls has finished on the GPU. If the flush call
+fails due to an error and nothing ends up getting sent to the GPU, the finished proc is called
+immediately.
+
+If a submittedProc is provided, the submittedProc will be called when all work from this flush
+call is submitted to the GPU. If the flush call fails due to an error and nothing will get sent
+to the GPU, the submitted proc is called immediately. It is possibly that when work is finally
+submitted, that the submission actual fails. In this case we will not reattempt to do the
+submission. Skia notifies the client of these via the success bool passed into the submittedProc.
+The submittedProc is useful to the client to know when semaphores that were sent with the flush
+have actually been submitted to the GPU so that they can be waited on (or deleted if the submit
+fails).
+GrBackendSemaphores are not supported for the GL backend and will be ignored if set.
+*/
+type GrFlushInfo struct {
+	sk *C.sk_GrFlushInfo
+}
+
+func (o GrFlushInfo) NumSemaphores() uint64 {
+	return uint64(o.sk.fNumSemaphores)
+}
+
+func (o *GrFlushInfo) SetNumSemaphores(value uint64) {
+	o.sk.fNumSemaphores = C.ulong(value)
+}
+
+// IsNil returns true if the raw skia object pointer is nil.
+// If it is nil is may indicate that the GrFlushInfo has not been created.
+func (o GrFlushInfo) IsNil() bool {
+	return o.sk == nil
 }
 
 type GrRecordingContext struct {
@@ -436,7 +572,7 @@ func NewGrContextOptions() GrContextOptions {
 	return *(*GrContextOptions)(unsafe.Pointer(&retC))
 }
 
-type GrContextOptionsEnable int64
+type GrContextOptionsEnable int
 
 const (
 	/*
@@ -453,7 +589,7 @@ const (
 	GrContextOptionsEnableDefault GrContextOptionsEnable = 2
 )
 
-type GrContextOptionsShaderCacheStrategy int64
+type GrContextOptionsShaderCacheStrategy int
 
 const (
 	GrContextOptionsShaderCacheStrategySkSL          GrContextOptionsShaderCacheStrategy = 0
@@ -2129,7 +2265,7 @@ func (o Canvas) DrawTextBlob(blob TextBlob, x float32, y float32, paint Paint) {
 	C.misk_Canvas_drawTextBlob(c_obj, c_blob, c_x, c_y, c_paint)
 }
 
-type CanvasClipEdgeStyle int64
+type CanvasClipEdgeStyle uint
 
 const (
 	CanvasClipEdgeStyleHard CanvasClipEdgeStyle = 0
@@ -2140,7 +2276,7 @@ const (
 Selects if an array of points are drawn as discrete points, as lines, or as
 an open polygon.
 */
-type CanvasPointMode int64
+type CanvasPointMode uint
 
 const (
 	// draw each point separately
@@ -2154,7 +2290,7 @@ const (
 /*
 Experimental. Controls anti-aliasing of each edge of images in an image-set.
 */
-type CanvasQuadAAFlags int64
+type CanvasQuadAAFlags uint
 
 const (
 	CanvasQuadAAFlagsLeft_QuadAAFlag   CanvasQuadAAFlags = 1
@@ -2170,7 +2306,7 @@ SaveLayerFlags provides options that may be used in any combination in SaveLayer
 defining how layer allocated by saveLayer() operates. It may be set to zero,
 kPreserveLCDText_SaveLayerFlag, kInitWithPrevious_SaveLayerFlag, or both flags.
 */
-type CanvasSaveLayerFlagsSet int64
+type CanvasSaveLayerFlagsSet uint
 
 const (
 	CanvasSaveLayerFlagsSetPreserveLCDText_SaveLayerFlag CanvasSaveLayerFlagsSet = 2
@@ -2179,7 +2315,7 @@ const (
 	CanvasSaveLayerFlagsSetF16ColorType                   CanvasSaveLayerFlagsSet = 16
 )
 
-type CanvasSaveLayerStrategy int64
+type CanvasSaveLayerStrategy uint
 
 const (
 	CanvasSaveLayerStrategyFullLayer CanvasSaveLayerStrategy = 0
@@ -2192,7 +2328,7 @@ provided to drawImageRect() when there is any filtering. If kStrict is set,
 then extra code is used to ensure it never samples outside of the src-rect.
 kStrict_SrcRectConstraint disables the use of mipmaps and anisotropic filtering.
 */
-type CanvasSrcRectConstraint int64
+type CanvasSrcRectConstraint uint
 
 const (
 	// sample only inside bounds; slower
@@ -2383,7 +2519,7 @@ func FontStyleBoldItalic() FontStyle {
 	return FontStyle{sk: &retC}
 }
 
-type FontStyleSlant int64
+type FontStyleSlant uint
 
 const (
 	FontStyleSlantUpright FontStyleSlant = 0
@@ -3331,7 +3467,7 @@ func (o Paint) SetStyle(style PaintStyle) {
 /*
 Cap draws at the beginning and end of an open path contour.
 */
-type PaintCap int64
+type PaintCap uint
 
 const (
 	// no stroke extension
@@ -3359,7 +3495,7 @@ The fill path constructed to describe the stroked path respects the join setting
 not contain the actual join. For instance, a fill path constructed with round joins does
 not necessarily include circles at each connected segment.
 */
-type PaintJoin int64
+type PaintJoin byte
 
 const (
 	// extends to miter limit
@@ -3382,7 +3518,7 @@ share all paint attributes; for instance, they are drawn with the same color.
 Use kStrokeAndFill_Style to avoid hitting the same pixels twice with a stroke draw and
 a fill draw.
 */
-type PaintStyle int64
+type PaintStyle byte
 
 const (
 	// set to fill geometry
@@ -3469,7 +3605,7 @@ func (o Path) Delete() {
 AddPathMode chooses how addPath() appends. Adding one SkPath to another can extend
 the last contour or start a new contour.
 */
-type PathAddPathMode int64
+type PathAddPathMode uint
 
 const (
 	/*
@@ -3490,7 +3626,7 @@ const (
 Four oval parts with radii (rx, ry) start at last SkPath SkPoint and ends at (x, y).
 ArcSize and Direction select one of the four oval parts.
 */
-type PathArcSize int64
+type PathArcSize uint
 
 const (
 	// smaller of arc pair
@@ -3503,7 +3639,7 @@ const (
 SegmentMask constants correspond to each drawing Verb type in SkPath; for
 instance, if SkPath only contains lines, only the kLine_SegmentMask bit is set.
 */
-type PathSegmentMask int64
+type PathSegmentMask uint
 
 const (
 	PathSegmentMaskLine  PathSegmentMask = 1
@@ -3516,7 +3652,7 @@ const (
 Verb instructs SkPath how to interpret one or more SkPoint and optional conic weight;
 manage contour, and terminate SkPath.
 */
-type PathVerb int64
+type PathVerb uint
 
 const (
 	PathVerbMove  PathVerb = 0
@@ -4409,7 +4545,7 @@ func NewSurfacePropsCopy(p0 SurfaceProps) SurfaceProps {
 	return SurfaceProps{sk: retC}
 }
 
-type SurfacePropsFlags int64
+type SurfacePropsFlags uint
 
 const (
 	SurfacePropsFlagsDefault_Flag                   SurfacePropsFlags = 0
@@ -4547,25 +4683,36 @@ func TypefaceMakeEmpty() Typeface {
 GPU SkImage and SkSurfaces can be stored such that (0, 0) in texture space may correspond to
 either the top-left or bottom-left content pixel.
 */
-type GrSurfaceOrigin int64
+type GrSurfaceOrigin int
 
 const (
 	GrSurfaceOriginTopLeft    GrSurfaceOrigin = 0
 	GrSurfaceOriginBottomLeft GrSurfaceOrigin = 1
 )
 
-type GrSyncCpu int64
+type GrSyncCpu bool
 
 const (
-	GrSyncCpuNo  GrSyncCpu = 0
-	GrSyncCpuYes GrSyncCpu = -1
+	GrSyncCpuNo  GrSyncCpu = false
+	GrSyncCpuYes GrSyncCpu = true
 )
 
-type BlendMode int64
+/*
+Enum used as return value when flush with semaphores so the client knows whether the valid
+semaphores will be submitted on the next GrContext::submit call.
+*/
+type GrSemaphoresSubmitted bool
+
+const (
+	GrSemaphoresSubmittedNo  GrSemaphoresSubmitted = false
+	GrSemaphoresSubmittedYes GrSemaphoresSubmitted = true
+)
+
+type BlendMode int
 
 const ()
 
-type ClipOp int64
+type ClipOp int
 
 const (
 	ClipOpDifference    ClipOp = 0
@@ -4580,7 +4727,7 @@ Describes how pixel bits encode color. A pixel may be an alpha mask, a grayscale
 kN32_SkColorType selects the native 32-bit ARGB format for the current configuration. This can
 lead to inconsistent results across platforms, so use with caution.
 */
-type ColorType int64
+type ColorType int
 
 const (
 	// uninitialized
@@ -4639,7 +4786,7 @@ const (
 	ColorTypeN32 ColorType = 4
 )
 
-type FilterMode int64
+type FilterMode int
 
 const (
 	FilterModeNearest FilterMode = 0
@@ -4652,7 +4799,7 @@ Description of how the LCD strips are arranged for each pixel. If this is unknow
 pixels are meant to be "portable" and/or transformed before showing (e.g. rotated, scaled)
 then use kUnknown_SkPixelGeometry.
 */
-type PixelGeometry int64
+type PixelGeometry uint
 
 const (
 	PixelGeometryUnknown PixelGeometry = 0
@@ -4662,7 +4809,7 @@ const (
 	PixelGeometryBGR_V   PixelGeometry = 4
 )
 
-type TextEncoding int64
+type TextEncoding int
 
 const (
 	// uses bytes to represent UTF-8 or ASCII
@@ -4678,11 +4825,11 @@ const (
 /*
 Is the data protected on the GPU or not.
 */
-type SkgpuProtected int64
+type SkgpuProtected bool
 
 const (
-	SkgpuProtectedNo  SkgpuProtected = 0
-	SkgpuProtectedYes SkgpuProtected = -1
+	SkgpuProtectedNo  SkgpuProtected = false
+	SkgpuProtectedYes SkgpuProtected = true
 )
 
 /*

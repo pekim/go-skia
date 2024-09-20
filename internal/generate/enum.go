@@ -2,6 +2,7 @@ package generate
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/go-clang/clang-v15/clang"
@@ -16,6 +17,7 @@ type enum struct {
 	doc       string
 	constants []enumConstant
 	enriched  bool
+	goType    string
 }
 
 type enumConstant struct {
@@ -64,6 +66,7 @@ func (e *enum) enrich1(record *record, cursor clang.Cursor) {
 
 func (e *enum) enrich2(api api) {
 	e.cType = mustTypFromClangType(e.clangType, api)
+	e.goType = e.cType.goName
 	e.enriched = true
 }
 
@@ -75,13 +78,21 @@ func (e enum) generate(g generator) {
 	f := g.goFile
 
 	f.writeDocComment(e.doc)
-	f.writelnf("type %s int64", e.goName)
+	f.writelnf("type %s %s", e.goName, e.goType)
 	f.writeln()
 
 	f.writeln("const (")
 	for _, constant := range e.constants {
+		value := strconv.Itoa(int(constant.value))
+		if e.goType == "bool" {
+			value = "false"
+			if constant.value != 0 {
+				value = "true"
+			}
+		}
+
 		f.writeDocComment(constant.doc)
-		f.writelnf("%s %s = %d", constant.goName, e.goName, constant.value)
+		f.writelnf("%s %s = %s", constant.goName, e.goName, value)
 	}
 	f.writeln(")")
 	f.writeln()
