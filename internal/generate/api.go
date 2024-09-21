@@ -33,7 +33,7 @@ func loadApi() api {
 	fmt.Print("load api ")
 	api.variablesLock = new(sync.Mutex)
 	var group errgroup.Group
-	group.SetLimit(runtime.NumCPU() / 2)
+	group.SetLimit(runtime.NumCPU())
 	for _, headerFile := range headerFiles {
 		group.Go(func() error {
 			tu := newTranslationUnit("_skia/skia/" + headerFile)
