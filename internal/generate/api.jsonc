@@ -11,6 +11,7 @@
     { "name": "skgpu::Protected" }
   ],
 
+  /* Classes and structs. */
   "records": [
     { "name": "GrGLFramebufferInfo", "noWrapper": true },
 
@@ -437,6 +438,7 @@
     }
   ],
 
+  /* Non-record functions. */
   "functions": [
     { "name": "GrGLMakeNativeInterface" },
     { "name": "GrBackendRenderTargets::MakeGL" },

@@ -10,9 +10,10 @@ import (
 	"sync"
 
 	"golang.org/x/sync/errgroup"
+	"muzzammil.xyz/jsonc"
 )
 
-//go:embed api.json
+//go:embed api.jsonc
 var apiJson []byte
 
 type api struct {
@@ -26,7 +27,7 @@ type api struct {
 
 func loadApi() api {
 	var api api
-	err := json.Unmarshal(apiJson, &api)
+	err := json.Unmarshal(jsonc.ToJSON(apiJson), &api)
 	fatalOnError(err)
 
 	fmt.Print("load api ")
