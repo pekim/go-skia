@@ -24,12 +24,13 @@ func (o callableOverload) generateCpp(g generator) {
 	}
 
 	f.writelnf("%s %s(%s) {", returnDecl, o.cFuncName, o.cParamsDecl)
-	o.generateCppBody(g)
+	o.generateCppApiCallStatement(g)
+	o.generateCppReturnStatement(g)
 	f.writeln("}")
 	f.writeln()
 }
 
-func (o callableOverload) generateCppBody(g generator) {
+func (o callableOverload) generateCppApiCallStatement(g generator) {
 	f := g.cppFile
 
 	// Gather the arguments in a to string.
@@ -65,12 +66,14 @@ func (o callableOverload) generateCppBody(g generator) {
 		f.write(".release()")
 	}
 	f.writeln(";")
-
-	// Convert the return value (in 'ret' var), and return it.
-	o.generateCppReturn(g)
 }
 
-func (o *callableOverload) generateCppReturn(g generator) {
+// generateCppReturnStatement convert the return value (in 'ret' var), and returns it.
+func (o *callableOverload) generateCppReturnStatement(g generator) {
+	if o.retrn.isVoid {
+		return
+	}
+
 	returnConst := ""
 	constCastStart := ""
 	constCastEnd := ""
@@ -104,8 +107,6 @@ func (o *callableOverload) generateCppReturn(g generator) {
 				o.retrn.record.cStructName,
 			)
 		}
-	} else if o.retrn.isVoid {
-		returnValue = ""
 	} else {
 		returnValue = "ret"
 	}

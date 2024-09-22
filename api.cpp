@@ -90,7 +90,6 @@ extern "C"
   {
     reinterpret_cast<GrDirectContext *> (c_obj)->flushAndSubmit (
         GrSyncCpu (c_sync));
-    return;
   }
 
   void
@@ -323,7 +322,6 @@ extern "C"
   misk_Canvas_restore (sk_SkCanvas *c_obj)
   {
     reinterpret_cast<SkCanvas *> (c_obj)->restore ();
-    return;
   }
 
   int
@@ -337,28 +335,24 @@ extern "C"
   misk_Canvas_restoreToCount (sk_SkCanvas *c_obj, int c_saveCount)
   {
     reinterpret_cast<SkCanvas *> (c_obj)->restoreToCount (c_saveCount);
-    return;
   }
 
   void
   misk_Canvas_translate (sk_SkCanvas *c_obj, float c_dx, float c_dy)
   {
     reinterpret_cast<SkCanvas *> (c_obj)->translate (c_dx, c_dy);
-    return;
   }
 
   void
   misk_Canvas_scale (sk_SkCanvas *c_obj, float c_sx, float c_sy)
   {
     reinterpret_cast<SkCanvas *> (c_obj)->scale (c_sx, c_sy);
-    return;
   }
 
   void
   misk_Canvas_rotate (sk_SkCanvas *c_obj, float c_degrees)
   {
     reinterpret_cast<SkCanvas *> (c_obj)->rotate (c_degrees);
-    return;
   }
 
   void
@@ -366,14 +360,12 @@ extern "C"
                                 float c_px, float c_py)
   {
     reinterpret_cast<SkCanvas *> (c_obj)->rotate (c_degrees, c_px, c_py);
-    return;
   }
 
   void
   misk_Canvas_skew (sk_SkCanvas *c_obj, float c_sx, float c_sy)
   {
     reinterpret_cast<SkCanvas *> (c_obj)->skew (c_sx, c_sy);
-    return;
   }
 
   void
@@ -381,7 +373,6 @@ extern "C"
   {
     reinterpret_cast<SkCanvas *> (c_obj)->concat (
         *reinterpret_cast<SkMatrix *> (c_matrix));
-    return;
   }
 
   void
@@ -389,7 +380,6 @@ extern "C"
   {
     reinterpret_cast<SkCanvas *> (c_obj)->concat (
         *reinterpret_cast<SkM44 *> (c_p0));
-    return;
   }
 
   void
@@ -397,7 +387,6 @@ extern "C"
   {
     reinterpret_cast<SkCanvas *> (c_obj)->setMatrix (
         *reinterpret_cast<SkM44 *> (c_matrix));
-    return;
   }
 
   void
@@ -405,14 +394,12 @@ extern "C"
   {
     reinterpret_cast<SkCanvas *> (c_obj)->setMatrix (
         *reinterpret_cast<SkMatrix *> (c_matrix));
-    return;
   }
 
   void
   misk_Canvas_resetMatrix (sk_SkCanvas *c_obj)
   {
     reinterpret_cast<SkCanvas *> (c_obj)->resetMatrix ();
-    return;
   }
 
   void
@@ -421,7 +408,6 @@ extern "C"
   {
     reinterpret_cast<SkCanvas *> (c_obj)->clipRect (
         *reinterpret_cast<SkRect *> (&c_rect), SkClipOp (c_op), c_doAntiAlias);
-    return;
   }
 
   void
@@ -431,7 +417,6 @@ extern "C"
     reinterpret_cast<SkCanvas *> (c_obj)->clipRRect (
         *reinterpret_cast<SkRRect *> (&c_rrect), SkClipOp (c_op),
         c_doAntiAlias);
-    return;
   }
 
   void
@@ -440,7 +425,6 @@ extern "C"
   {
     reinterpret_cast<SkCanvas *> (c_obj)->clipPath (
         *reinterpret_cast<SkPath *> (c_path), SkClipOp (c_op), c_doAntiAlias);
-    return;
   }
 
   void
@@ -449,7 +433,6 @@ extern "C"
   {
     reinterpret_cast<SkCanvas *> (c_obj)->clipRegion (
         *reinterpret_cast<SkRegion *> (c_deviceRgn), SkClipOp (c_op));
-    return;
   }
 
   bool
@@ -503,7 +486,6 @@ extern "C"
   {
     reinterpret_cast<SkCanvas *> (c_obj)->drawColor (SkColor (c_color),
                                                      SkBlendMode (c_mode));
-    return;
   }
 
   void
@@ -512,14 +494,12 @@ extern "C"
     reinterpret_cast<SkCanvas *> (c_obj)->drawColor (
         *reinterpret_cast<SkRGBA4f<kUnpremul_SkAlphaType> *> (&c_color),
         SkBlendMode (c_mode));
-    return;
   }
 
   void
   misk_Canvas_clear (sk_SkCanvas *c_obj, uint c_color)
   {
     reinterpret_cast<SkCanvas *> (c_obj)->clear (SkColor (c_color));
-    return;
   }
 
   void
@@ -527,14 +507,12 @@ extern "C"
   {
     reinterpret_cast<SkCanvas *> (c_obj)->clear (
         *reinterpret_cast<SkRGBA4f<kUnpremul_SkAlphaType> *> (&c_color));
-    return;
   }
 
   void
   misk_Canvas_discard (sk_SkCanvas *c_obj)
   {
     reinterpret_cast<SkCanvas *> (c_obj)->discard ();
-    return;
   }
 
   void
@@ -542,7 +520,6 @@ extern "C"
   {
     reinterpret_cast<SkCanvas *> (c_obj)->drawPaint (
         *reinterpret_cast<SkPaint *> (c_paint));
-    return;
   }
 
   void
@@ -551,7 +528,6 @@ extern "C"
   {
     reinterpret_cast<SkCanvas *> (c_obj)->drawPoint (
         c_x, c_y, *reinterpret_cast<SkPaint *> (c_paint));
-    return;
   }
 
   void
@@ -561,7 +537,6 @@ extern "C"
     reinterpret_cast<SkCanvas *> (c_obj)->drawPoint (
         *reinterpret_cast<SkPoint *> (&c_p),
         *reinterpret_cast<SkPaint *> (c_paint));
-    return;
   }
 
   void
@@ -570,7 +545,6 @@ extern "C"
   {
     reinterpret_cast<SkCanvas *> (c_obj)->drawLine (
         c_x0, c_y0, c_x1, c_y1, *reinterpret_cast<SkPaint *> (c_paint));
-    return;
   }
 
   void
@@ -581,7 +555,6 @@ extern "C"
         *reinterpret_cast<SkPoint *> (&c_p0),
         *reinterpret_cast<SkPoint *> (&c_p1),
         *reinterpret_cast<SkPaint *> (c_paint));
-    return;
   }
 
   void
@@ -591,7 +564,6 @@ extern "C"
     reinterpret_cast<SkCanvas *> (c_obj)->drawRect (
         *reinterpret_cast<SkRect *> (&c_rect),
         *reinterpret_cast<SkPaint *> (c_paint));
-    return;
   }
 
   void
@@ -601,7 +573,6 @@ extern "C"
     reinterpret_cast<SkCanvas *> (c_obj)->drawIRect (
         *reinterpret_cast<SkIRect *> (&c_rect),
         *reinterpret_cast<SkPaint *> (c_paint));
-    return;
   }
 
   void
@@ -611,7 +582,6 @@ extern "C"
     reinterpret_cast<SkCanvas *> (c_obj)->drawRegion (
         *reinterpret_cast<SkRegion *> (c_region),
         *reinterpret_cast<SkPaint *> (c_paint));
-    return;
   }
 
   void
@@ -621,7 +591,6 @@ extern "C"
     reinterpret_cast<SkCanvas *> (c_obj)->drawOval (
         *reinterpret_cast<SkRect *> (&c_oval),
         *reinterpret_cast<SkPaint *> (c_paint));
-    return;
   }
 
   void
@@ -631,7 +600,6 @@ extern "C"
     reinterpret_cast<SkCanvas *> (c_obj)->drawRRect (
         *reinterpret_cast<SkRRect *> (&c_rrect),
         *reinterpret_cast<SkPaint *> (c_paint));
-    return;
   }
 
   void
@@ -642,7 +610,6 @@ extern "C"
         *reinterpret_cast<SkRRect *> (&c_outer),
         *reinterpret_cast<SkRRect *> (&c_inner),
         *reinterpret_cast<SkPaint *> (c_paint));
-    return;
   }
 
   void
@@ -651,7 +618,6 @@ extern "C"
   {
     reinterpret_cast<SkCanvas *> (c_obj)->drawCircle (
         c_cx, c_cy, c_radius, *reinterpret_cast<SkPaint *> (c_paint));
-    return;
   }
 
   void
@@ -661,7 +627,6 @@ extern "C"
     reinterpret_cast<SkCanvas *> (c_obj)->drawCircle (
         *reinterpret_cast<SkPoint *> (&c_center), c_radius,
         *reinterpret_cast<SkPaint *> (c_paint));
-    return;
   }
 
   void
@@ -672,7 +637,6 @@ extern "C"
     reinterpret_cast<SkCanvas *> (c_obj)->drawArc (
         *reinterpret_cast<SkRect *> (&c_oval), c_startAngle, c_sweepAngle,
         c_useCenter, *reinterpret_cast<SkPaint *> (c_paint));
-    return;
   }
 
   void
@@ -682,7 +646,6 @@ extern "C"
     reinterpret_cast<SkCanvas *> (c_obj)->drawArc (
         *reinterpret_cast<SkArc *> (c_arc),
         *reinterpret_cast<SkPaint *> (c_paint));
-    return;
   }
 
   void
@@ -692,7 +655,6 @@ extern "C"
     reinterpret_cast<SkCanvas *> (c_obj)->drawRoundRect (
         *reinterpret_cast<SkRect *> (&c_rect), c_rx, c_ry,
         *reinterpret_cast<SkPaint *> (c_paint));
-    return;
   }
 
   void
@@ -702,7 +664,6 @@ extern "C"
     reinterpret_cast<SkCanvas *> (c_obj)->drawPath (
         *reinterpret_cast<SkPath *> (c_path),
         *reinterpret_cast<SkPaint *> (c_paint));
-    return;
   }
 
   void
@@ -711,7 +672,6 @@ extern "C"
   {
     reinterpret_cast<SkCanvas *> (c_obj)->drawImage (
         reinterpret_cast<SkImage *> (c_image), c_left, c_top);
-    return;
   }
 
   void
@@ -724,7 +684,6 @@ extern "C"
         reinterpret_cast<SkImage *> (c_p0), c_x, c_y,
         *reinterpret_cast<SkSamplingOptions *> (c_p3),
         reinterpret_cast<SkPaint *> (c_p4));
-    return;
   }
 
   void
@@ -740,7 +699,6 @@ extern "C"
         *reinterpret_cast<SkSamplingOptions *> (c_p3),
         reinterpret_cast<SkPaint *> (c_p4),
         SkCanvas::SrcRectConstraint (c_p5));
-    return;
   }
 
   void
@@ -753,7 +711,6 @@ extern "C"
         *reinterpret_cast<SkIRect *> (&c_center),
         *reinterpret_cast<SkRect *> (&c_dst), SkFilterMode (c_filter),
         reinterpret_cast<SkPaint *> (c_paint));
-    return;
   }
 
   void
@@ -763,7 +720,6 @@ extern "C"
     reinterpret_cast<SkCanvas *> (c_obj)->drawString (
         (char *)c_str, c_x, c_y, *reinterpret_cast<SkFont *> (c_font),
         *reinterpret_cast<SkPaint *> (c_paint));
-    return;
   }
 
   void
@@ -779,7 +735,6 @@ extern "C"
         *reinterpret_cast<SkPoint *> (&c_origin),
         *reinterpret_cast<SkFont *> (c_font),
         *reinterpret_cast<SkPaint *> (c_paint));
-    return;
   }
 
   void
@@ -789,7 +744,6 @@ extern "C"
     reinterpret_cast<SkCanvas *> (c_obj)->drawTextBlob (
         reinterpret_cast<SkTextBlob *> (c_blob), c_x, c_y,
         *reinterpret_cast<SkPaint *> (c_paint));
-    return;
   }
 
   sk_SkColorSpace *
@@ -1014,7 +968,6 @@ extern "C"
   misk_IRect_setEmpty (sk_SkIRect *c_obj)
   {
     reinterpret_cast<SkIRect *> (c_obj)->setEmpty ();
-    return;
   }
 
   void
@@ -1023,7 +976,6 @@ extern "C"
   {
     reinterpret_cast<SkIRect *> (c_obj)->setLTRB (c_left, c_top, c_right,
                                                   c_bottom);
-    return;
   }
 
   void
@@ -1031,21 +983,18 @@ extern "C"
                       int c_height)
   {
     reinterpret_cast<SkIRect *> (c_obj)->setXYWH (c_x, c_y, c_width, c_height);
-    return;
   }
 
   void
   misk_IRect_setWH (sk_SkIRect *c_obj, int c_width, int c_height)
   {
     reinterpret_cast<SkIRect *> (c_obj)->setWH (c_width, c_height);
-    return;
   }
 
   void
   misk_IRect_offset (sk_SkIRect *c_obj, int c_dx, int c_dy)
   {
     reinterpret_cast<SkIRect *> (c_obj)->offset (c_dx, c_dy);
-    return;
   }
 
   void
@@ -1053,35 +1002,30 @@ extern "C"
   {
     reinterpret_cast<SkIRect *> (c_obj)->offset (
         *reinterpret_cast<SkIPoint *> (c_delta));
-    return;
   }
 
   void
   misk_IRect_offsetTo (sk_SkIRect *c_obj, int c_newX, int c_newY)
   {
     reinterpret_cast<SkIRect *> (c_obj)->offsetTo (c_newX, c_newY);
-    return;
   }
 
   void
   misk_IRect_inset (sk_SkIRect *c_obj, int c_dx, int c_dy)
   {
     reinterpret_cast<SkIRect *> (c_obj)->inset (c_dx, c_dy);
-    return;
   }
 
   void
   misk_IRect_outset (sk_SkIRect *c_obj, int c_dx, int c_dy)
   {
     reinterpret_cast<SkIRect *> (c_obj)->outset (c_dx, c_dy);
-    return;
   }
 
   void
   misk_IRect_adjust (sk_SkIRect *c_obj, int c_dL, int c_dT, int c_dR, int c_dB)
   {
     reinterpret_cast<SkIRect *> (c_obj)->adjust (c_dL, c_dT, c_dR, c_dB);
-    return;
   }
 
   bool
@@ -1120,14 +1064,12 @@ extern "C"
   {
     reinterpret_cast<SkIRect *> (c_obj)->join (
         *reinterpret_cast<SkIRect *> (&c_r));
-    return;
   }
 
   void
   misk_IRect_sort (sk_SkIRect *c_obj)
   {
     reinterpret_cast<SkIRect *> (c_obj)->sort ();
-    return;
   }
 
   sk_SkMatrix *
@@ -1159,7 +1101,6 @@ extern "C"
   misk_Paint_reset (sk_SkPaint *c_obj)
   {
     reinterpret_cast<SkPaint *> (c_obj)->reset ();
-    return;
   }
 
   unsigned char
@@ -1173,7 +1114,6 @@ extern "C"
   misk_Paint_setAlpha (sk_SkPaint *c_obj, uint c_a)
   {
     reinterpret_cast<SkPaint *> (c_obj)->setAlpha (c_a);
-    return;
   }
 
   void
@@ -1181,35 +1121,30 @@ extern "C"
                       uint c_b)
   {
     reinterpret_cast<SkPaint *> (c_obj)->setARGB (c_a, c_r, c_g, c_b);
-    return;
   }
 
   void
   misk_Paint_setAntiAlias (sk_SkPaint *c_obj, bool c_aa)
   {
     reinterpret_cast<SkPaint *> (c_obj)->setAntiAlias (c_aa);
-    return;
   }
 
   void
   misk_Paint_setBlendMode (sk_SkPaint *c_obj, int c_mode)
   {
     reinterpret_cast<SkPaint *> (c_obj)->setBlendMode (SkBlendMode (c_mode));
-    return;
   }
 
   void
   misk_Paint_setColor (sk_SkPaint *c_obj, uint c_color)
   {
     reinterpret_cast<SkPaint *> (c_obj)->setColor (SkColor (c_color));
-    return;
   }
 
   void
   misk_Paint_setDither (sk_SkPaint *c_obj, bool c_dither)
   {
     reinterpret_cast<SkPaint *> (c_obj)->setDither (c_dither);
-    return;
   }
 
   uint
@@ -1223,7 +1158,6 @@ extern "C"
   misk_Paint_setStrokeCap (sk_SkPaint *c_obj, uint c_cap)
   {
     reinterpret_cast<SkPaint *> (c_obj)->setStrokeCap (SkPaint::Cap (c_cap));
-    return;
   }
 
   uchar
@@ -1238,7 +1172,6 @@ extern "C"
   {
     reinterpret_cast<SkPaint *> (c_obj)->setStrokeJoin (
         SkPaint::Join (c_join));
-    return;
   }
 
   float
@@ -1252,7 +1185,6 @@ extern "C"
   misk_Paint_setStrokeMiter (sk_SkPaint *c_obj, float c_miter)
   {
     reinterpret_cast<SkPaint *> (c_obj)->setStrokeMiter (c_miter);
-    return;
   }
 
   float
@@ -1266,7 +1198,6 @@ extern "C"
   misk_Paint_setStrokeWidth (sk_SkPaint *c_obj, float c_width)
   {
     reinterpret_cast<SkPaint *> (c_obj)->setStrokeWidth (c_width);
-    return;
   }
 
   uchar
@@ -1280,7 +1211,6 @@ extern "C"
   misk_Paint_setStyle (sk_SkPaint *c_obj, uchar c_style)
   {
     reinterpret_cast<SkPaint *> (c_obj)->setStyle (SkPaint::Style (c_style));
-    return;
   }
 
   sk_SkPath *
@@ -1427,7 +1357,6 @@ extern "C"
   misk_Rect_setEmpty (sk_SkRect *c_obj)
   {
     reinterpret_cast<SkRect *> (c_obj)->setEmpty ();
-    return;
   }
 
   void
@@ -1436,7 +1365,6 @@ extern "C"
   {
     reinterpret_cast<SkRect *> (c_obj)->setLTRB (c_left, c_top, c_right,
                                                  c_bottom);
-    return;
   }
 
   void
@@ -1444,42 +1372,36 @@ extern "C"
                      float c_height)
   {
     reinterpret_cast<SkRect *> (c_obj)->setXYWH (c_x, c_y, c_width, c_height);
-    return;
   }
 
   void
   misk_Rect_setWH (sk_SkRect *c_obj, float c_width, float c_height)
   {
     reinterpret_cast<SkRect *> (c_obj)->setWH (c_width, c_height);
-    return;
   }
 
   void
   misk_Rect_offset (sk_SkRect *c_obj, float c_dx, float c_dy)
   {
     reinterpret_cast<SkRect *> (c_obj)->offset (c_dx, c_dy);
-    return;
   }
 
   void
   misk_Rect_offsetTo (sk_SkRect *c_obj, float c_newX, float c_newY)
   {
     reinterpret_cast<SkRect *> (c_obj)->offsetTo (c_newX, c_newY);
-    return;
   }
 
   void
   misk_Rect_inset (sk_SkRect *c_obj, float c_dx, float c_dy)
   {
     reinterpret_cast<SkRect *> (c_obj)->inset (c_dx, c_dy);
-    return;
   }
 
   void
   misk_Rect_outset (sk_SkRect *c_obj, float c_dx, float c_dy)
   {
     reinterpret_cast<SkRect *> (c_obj)->outset (c_dx, c_dy);
-    return;
   }
 
   bool
@@ -1510,14 +1432,12 @@ extern "C"
   {
     reinterpret_cast<SkRect *> (c_obj)->join (
         *reinterpret_cast<SkRect *> (&c_r));
-    return;
   }
 
   void
   misk_Rect_sort (sk_SkRect *c_obj)
   {
     reinterpret_cast<SkRect *> (c_obj)->sort ();
-    return;
   }
 
   sk_SkRRect *
