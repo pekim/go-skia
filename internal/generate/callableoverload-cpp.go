@@ -76,6 +76,12 @@ func (o *callableOverload) generateCppReturnStatement(g generator) {
 	}
 
 	f := g.cppFile
+	if !o.retrn.isPointer && !o.retrn.isSmartPointer && o.retrn.record == nil {
+		// simple return type, with no conversion required
+		f.writeln("  return ret;")
+		return
+	}
+
 	var pointerCTypeName string
 	if o.retrn.isPointer && o.retrn.subTyp.isPrimitive {
 		// pointer to a primitive
@@ -88,8 +94,7 @@ func (o *callableOverload) generateCppReturnStatement(g generator) {
 	} else if o.retrn.record != nil {
 		pointerCTypeName = o.retrn.record.cStructName
 	} else {
-		f.writeln("  return ret;")
-		return
+		fatal("unsupported return type")
 	}
 
 	returnConst := ""
