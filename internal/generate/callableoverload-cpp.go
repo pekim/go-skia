@@ -75,40 +75,36 @@ func (o *callableOverload) generateCppReturnStatement(g generator) {
 	}
 
 	returnConst := ""
-	constCastStart := ""
-	constCastEnd := ""
 	if o.retrn.isConst {
 		returnConst = "const"
-		constCastStart = fmt.Sprintf("const_cast<%s *>(", o.retrn.record.cStructName)
-		constCastEnd = ")"
 	}
 
 	var returnValue string
+	var pointerTypeName string
 	if o.retrn.isPointer && o.retrn.subTyp.isPrimitive {
-		returnValue = fmt.Sprintf("reinterpret_cast<%s *> (ret)", o.retrn.subTyp.cName)
+		// pointer to a primitive
+		returnValue = fmt.Sprintf("reinterpret_cast<%s %s *> (ret)", returnConst, o.retrn.subTyp.cName)
 	} else if o.retrn.isPointer || o.retrn.isSmartPointer && o.retrn.subTyp != nil && o.retrn.subTyp.record != nil {
-		returnValue = fmt.Sprintf("reinterpret_cast<%s *> (ret)", o.retrn.subTyp.record.cStructName)
+		// pointer to a record
+		returnValue = fmt.Sprintf("reinterpret_cast<%s %s *> (ret)", returnConst, o.retrn.subTyp.record.cStructName)
+		pointerTypeName = o.retrn.subTyp.record.cStructName
 	} else if o.retrn.isPointer || o.retrn.isSmartPointer {
-		if o.retrn.isConst {
-			returnValue = fmt.Sprintf("%sreinterpret_cast<%s %s *> (ret)%s",
-				constCastStart,
-				returnConst,
-				o.retrn.record.cStructName,
-				constCastEnd)
-		} else {
-			returnValue = fmt.Sprintf("reinterpret_cast<%s *> (ret)", o.retrn.record.cStructName)
-		}
+		returnValue = fmt.Sprintf("reinterpret_cast<%s %s *> (ret)", returnConst, o.retrn.record.cStructName)
+		pointerTypeName = o.retrn.record.cStructName
 	} else if o.retrn.record != nil {
 		if o.record != nil {
-			returnValue = fmt.Sprintf("*(reinterpret_cast<%s *> (&ret))", o.retrn.record.cStructName)
+			returnValue = fmt.Sprintf("*(reinterpret_cast<%s %s *> (&ret))", returnConst, o.retrn.record.cStructName)
 		} else {
-			returnValue = fmt.Sprintf("*(reinterpret_cast<%s %s *> (&ret))",
-				returnConst,
-				o.retrn.record.cStructName,
-			)
+			returnValue = fmt.Sprintf("*(reinterpret_cast<%s %s *> (&ret))", returnConst, o.retrn.record.cStructName)
 		}
 	} else {
 		returnValue = "ret"
+	}
+
+	if o.retrn.isConst {
+		returnValue = fmt.Sprintf("const_cast<%s *>(%s)",
+			pointerTypeName,
+			returnValue)
 	}
 
 	f := g.cppFile
