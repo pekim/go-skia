@@ -1,6 +1,7 @@
 package generate
 
 import (
+	"fmt"
 	"strings"
 )
 
@@ -69,30 +70,30 @@ func (o callableOverload) generateCppApiCallStatement(g generator) {
 	f.writeln(";")
 }
 
-// generateCppReturnStatement convert the return value (in 'ret' var), and returns it.
+// generateCppReturnStatement converts the return value (in 'ret' var), and returns it.
 func (o *callableOverload) generateCppReturnStatement(g generator) {
 	if o.retrn.isVoid {
 		return
 	}
 
 	f := g.cppFile
-	if !o.retrn.isPointer && !o.retrn.isSmartPointer && o.retrn.record == nil {
+	isPointer := o.retrn.isPointer || o.retrn.isSmartPointer
+
+	if !isPointer && o.retrn.record == nil {
 		// simple return type, with no conversion required
 		f.writeln("  return ret;")
 		return
 	}
 
-	var pointerCTypeName string
+	var cTypeName string
 	if o.retrn.isPointer && o.retrn.subTyp.isPrimitive {
-		// pointer to a primitive
-		pointerCTypeName = o.retrn.subTyp.cName
-	} else if o.retrn.isPointer || o.retrn.isSmartPointer && o.retrn.subTyp != nil && o.retrn.subTyp.record != nil {
-		// pointer to a record
-		pointerCTypeName = o.retrn.subTyp.record.cStructName
-	} else if o.retrn.isPointer || o.retrn.isSmartPointer {
-		pointerCTypeName = o.retrn.record.cStructName
+		cTypeName = o.retrn.subTyp.cName
+	} else if isPointer && o.retrn.subTyp != nil && o.retrn.subTyp.record != nil {
+		cTypeName = o.retrn.subTyp.record.cStructName
+	} else if isPointer {
+		cTypeName = o.retrn.record.cStructName
 	} else if o.retrn.record != nil {
-		pointerCTypeName = o.retrn.record.cStructName
+		cTypeName = o.retrn.record.cStructName
 	} else {
 		fatal("unsupported return type")
 	}
@@ -102,15 +103,13 @@ func (o *callableOverload) generateCppReturnStatement(g generator) {
 		returnConst = "const"
 	}
 
+	cast := fmt.Sprintf("reinterpret_cast<%s %s *>", returnConst, cTypeName)
+
 	f.write("  return ")
-	if !(o.retrn.isPointer || o.retrn.isSmartPointer) {
-		f.write("*(")
-	}
-	f.writef("reinterpret_cast<%s %s *>", returnConst, pointerCTypeName)
-	if o.retrn.isPointer || o.retrn.isSmartPointer {
-		f.write("(ret)")
+	if isPointer {
+		f.writef("%s(ret)", cast)
 	} else {
-		f.write("(&ret))")
+		f.writef("*(%s(&ret))", cast)
 	}
 	f.writeln(";")
 }
