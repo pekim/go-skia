@@ -9,19 +9,18 @@ func (o callableOverload) generateCpp(g generator) {
 	f := g.cppFile
 
 	returnDecl := o.retrn.cppName
-	returnPtr := ""
+	// returnPtr := ""
 	if o.retrn.enum != nil {
 		returnDecl = o.retrn.enum.cType.cName
 	} else if o.retrn.typedef != nil {
 		returnDecl = o.retrn.typedef.cName
 	} else if o.retrn.record != nil {
+		returnDecl = o.retrn.record.cStructName
 		if o.retrn.isPointer || o.retrn.isSmartPointer {
-			returnPtr = "*"
+			returnDecl += "*"
 		}
-		returnDecl = fmt.Sprintf("%s%s", o.retrn.record.cStructName, returnPtr)
 	} else if (o.retrn.isPointer || o.retrn.isSmartPointer) && o.retrn.subTyp.record != nil {
-		returnPtr = "*"
-		returnDecl = fmt.Sprintf("%s%s", o.retrn.subTyp.record.cStructName, returnPtr)
+		returnDecl = o.retrn.subTyp.record.cStructName + "*"
 	}
 
 	f.writelnf("%s %s(%s) {", returnDecl, o.cFuncName, o.cParamsDecl)
@@ -44,33 +43,28 @@ func (o callableOverload) generateCppBody(g generator) {
 	}
 	o.cppArgs = strings.Join(args, ", ")
 
-	// Smart pointers are released.
-	skSpRelease := ""
-	if o.retrn.isSmartPointer {
-		skSpRelease = ".release()"
-	}
-
 	// If returning something, assign it to a variable.
 	if !o.retrn.isVoid {
-		f.writeln("  auto ret =")
+		f.write("  auto ret = ")
 	}
 
 	// Generate the function call.
 	if o.isStatic {
 		// Call a class static member function.
-		f.writelnf("  %s::%s(%s)%s;", o.record.CppName, o.cppName, o.cppArgs, skSpRelease)
+		f.writef("%s::%s(%s)", o.record.CppName, o.cppName, o.cppArgs)
 	} else if o.record != nil {
 		// Call a class member function.
-		f.writelnf("  reinterpret_cast<%s*>(c_obj)->%s(%s)%s;",
-			o.record.CppName,
-			o.cppName,
-			o.cppArgs,
-			skSpRelease,
-		)
+		f.writef("reinterpret_cast<%s*>(c_obj)->%s(%s)", o.record.CppName, o.cppName, o.cppArgs)
 	} else {
 		// Call a plain (non-class) function.
-		f.writelnf("  %s(%s)%s;", o.cppName, o.cppArgs, skSpRelease)
+		f.writef("%s(%s)", o.cppName, o.cppArgs)
 	}
+
+	if o.retrn.isSmartPointer {
+		// Release smart pointers.
+		f.write(".release()")
+	}
+	f.writeln(";")
 
 	// Convert the return value (in 'ret' var), and return it.
 	o.generateCppReturn(g)
