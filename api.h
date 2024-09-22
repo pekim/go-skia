@@ -408,6 +408,15 @@ extern "C"
   sk_SkBitmap *misk_new_BitmapCopy (sk_SkBitmap *c_src);
   void misk_delete_SkBitmap (sk_SkBitmap *obj);
   bool misk_Bitmap_ComputeIsOpaque (sk_SkBitmap *c_bm);
+  int misk_Bitmap_bytesPerPixel (sk_SkBitmap *c_obj);
+  int misk_Bitmap_rowBytesAsPixels (sk_SkBitmap *c_obj);
+  int misk_Bitmap_shiftPerPixel (sk_SkBitmap *c_obj);
+  bool misk_Bitmap_drawsNothing (sk_SkBitmap *c_obj);
+  unsigned long misk_Bitmap_rowBytes (sk_SkBitmap *c_obj);
+  bool misk_Bitmap_isImmutable (sk_SkBitmap *c_obj);
+  void misk_Bitmap_setImmutable (sk_SkBitmap *c_obj);
+  sk_SkIRect misk_Bitmap_bounds (sk_SkBitmap *c_obj);
+  sk_SkISize misk_Bitmap_dimensions (sk_SkBitmap *c_obj);
 
   sk_SkCanvas *misk_new_Canvas ();
   sk_SkCanvas *misk_new_CanvasWithDimensions (int c_width, int c_height,

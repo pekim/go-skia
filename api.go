@@ -731,6 +731,120 @@ func BitmapComputeIsOpaque(bm Bitmap) bool {
 }
 
 /*
+Returns number of bytes per pixel required by SkColorType.
+Returns zero if colorType( is kUnknown_SkColorType.
+
+@return  bytes in pixel
+*/
+func (o Bitmap) BytesPerPixel() int {
+	c_obj := o.sk
+	retC := C.misk_Bitmap_bytesPerPixel(c_obj)
+	return int(retC)
+}
+
+/*
+Returns number of pixels that fit on row. Should be greater than or equal to
+width().
+
+@return  maximum pixels per row
+*/
+func (o Bitmap) RowBytesAsPixels() int {
+	c_obj := o.sk
+	retC := C.misk_Bitmap_rowBytesAsPixels(c_obj)
+	return int(retC)
+}
+
+/*
+Returns bit shift converting row bytes to row pixels.
+Returns zero for kUnknown_SkColorType.
+
+@return  one of: 0, 1, 2, 3; left shift to convert pixels to bytes
+*/
+func (o Bitmap) ShiftPerPixel() int {
+	c_obj := o.sk
+	retC := C.misk_Bitmap_shiftPerPixel(c_obj)
+	return int(retC)
+}
+
+/*
+Returns true if width() or height() are zero, or if SkPixelRef is nullptr.
+If true, SkBitmap has no effect when drawn or drawn into.
+
+@return  true if drawing has no effect
+*/
+func (o Bitmap) DrawsNothing() bool {
+	c_obj := o.sk
+	retC := C.misk_Bitmap_drawsNothing(c_obj)
+	return bool(retC)
+}
+
+/*
+Returns row bytes, the interval from one pixel row to the next. Row bytes
+is at least as large as: width() * info().bytesPerPixel().
+
+Returns zero if colorType() is kUnknown_SkColorType, or if row bytes supplied to
+setInfo() is not large enough to hold a row of pixels.
+
+@return  byte length of pixel row
+*/
+func (o Bitmap) RowBytes() uint64 {
+	c_obj := o.sk
+	retC := C.misk_Bitmap_rowBytes(c_obj)
+	return uint64(retC)
+}
+
+/*
+Returns true if pixels can not change.
+
+Most immutable SkBitmap checks trigger an assert only on debug builds.
+
+@return  true if pixels are immutable
+
+example: https://fiddle.skia.org/c/@Bitmap_isImmutable
+*/
+func (o Bitmap) IsImmutable() bool {
+	c_obj := o.sk
+	retC := C.misk_Bitmap_isImmutable(c_obj)
+	return bool(retC)
+}
+
+/*
+Sets internal flag to mark SkBitmap as immutable. Once set, pixels can not change.
+Any other bitmap sharing the same SkPixelRef are also marked as immutable.
+Once SkPixelRef is marked immutable, the setting cannot be cleared.
+
+Writing to immutable SkBitmap pixels triggers an assert on debug builds.
+
+example: https://fiddle.skia.org/c/@Bitmap_setImmutable
+*/
+func (o Bitmap) SetImmutable() {
+	c_obj := o.sk
+	C.misk_Bitmap_setImmutable(c_obj)
+}
+
+/*
+Returns SkIRect { 0, 0, width(), height() }.
+
+@return  integral rectangle from origin to width() and height()
+*/
+func (o Bitmap) Bounds() IRect {
+	c_obj := o.sk
+	retC := C.misk_Bitmap_bounds(c_obj)
+	return IRect(retC)
+}
+
+/*
+Returns SkISize { width(), height() }.
+
+@return  integral size of width() and height()
+*/
+func (o Bitmap) Dimensions() ISize {
+	c_obj := o.sk
+	retC := C.misk_Bitmap_dimensions(c_obj)
+	return ISize(retC)
+}
+
+/*
 SkCanvas provides an interface for drawing, and how the drawing is clipped and transformed.
 SkCanvas contains a stack of SkMatrix and clip values.
 

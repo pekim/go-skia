@@ -64,7 +64,18 @@
     {
       "name": "SkBitmap",
       "constructors": [{}, { "suffix": "Copy" }, null],
-      "methods": [{ "name": "ComputeIsOpaque" }]
+      "methods": [
+        { "name": "ComputeIsOpaque" },
+        { "name": "bytesPerPixel" },
+        { "name": "rowBytesAsPixels" },
+        { "name": "shiftPerPixel" },
+        { "name": "drawsNothing" },
+        { "name": "rowBytes" },
+        { "name": "isImmutable" },
+        { "name": "setImmutable" },
+        { "name": "bounds" },
+        { "name": "dimensions" }
+      ]
     },
 
     {

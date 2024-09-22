@@ -207,6 +207,68 @@ extern "C"
     return ret;
   }
 
+  int
+  misk_Bitmap_bytesPerPixel (sk_SkBitmap *c_obj)
+  {
+    auto ret = reinterpret_cast<SkBitmap *> (c_obj)->bytesPerPixel ();
+    return ret;
+  }
+
+  int
+  misk_Bitmap_rowBytesAsPixels (sk_SkBitmap *c_obj)
+  {
+    auto ret = reinterpret_cast<SkBitmap *> (c_obj)->rowBytesAsPixels ();
+    return ret;
+  }
+
+  int
+  misk_Bitmap_shiftPerPixel (sk_SkBitmap *c_obj)
+  {
+    auto ret = reinterpret_cast<SkBitmap *> (c_obj)->shiftPerPixel ();
+    return ret;
+  }
+
+  bool
+  misk_Bitmap_drawsNothing (sk_SkBitmap *c_obj)
+  {
+    auto ret = reinterpret_cast<SkBitmap *> (c_obj)->drawsNothing ();
+    return ret;
+  }
+
+  unsigned long
+  misk_Bitmap_rowBytes (sk_SkBitmap *c_obj)
+  {
+    auto ret = reinterpret_cast<SkBitmap *> (c_obj)->rowBytes ();
+    return ret;
+  }
+
+  bool
+  misk_Bitmap_isImmutable (sk_SkBitmap *c_obj)
+  {
+    auto ret = reinterpret_cast<SkBitmap *> (c_obj)->isImmutable ();
+    return ret;
+  }
+
+  void
+  misk_Bitmap_setImmutable (sk_SkBitmap *c_obj)
+  {
+    reinterpret_cast<SkBitmap *> (c_obj)->setImmutable ();
+  }
+
+  sk_SkIRect
+  misk_Bitmap_bounds (sk_SkBitmap *c_obj)
+  {
+    auto ret = reinterpret_cast<SkBitmap *> (c_obj)->bounds ();
+    return *(reinterpret_cast<sk_SkIRect *> (&ret));
+  }
+
+  sk_SkISize
+  misk_Bitmap_dimensions (sk_SkBitmap *c_obj)
+  {
+    auto ret = reinterpret_cast<SkBitmap *> (c_obj)->dimensions ();
+    return *(reinterpret_cast<sk_SkISize *> (&ret));
+  }
+
   sk_SkCanvas *
   misk_new_Canvas ()
   {
