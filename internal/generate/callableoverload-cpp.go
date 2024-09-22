@@ -9,7 +9,6 @@ func (o callableOverload) generateCpp(g generator) {
 	f := g.cppFile
 
 	returnDecl := o.retrn.cppName
-	// returnPtr := ""
 	if o.retrn.enum != nil {
 		returnDecl = o.retrn.enum.cType.cName
 	} else if o.retrn.typedef != nil {
@@ -74,39 +73,46 @@ func (o *callableOverload) generateCppReturnStatement(g generator) {
 		return
 	}
 
+	f := g.cppFile
+	var pointerCTypeName string
+	if o.retrn.isPointer && o.retrn.subTyp.isPrimitive {
+		// pointer to a primitive
+		pointerCTypeName = o.retrn.subTyp.cName
+	} else if o.retrn.isPointer || o.retrn.isSmartPointer && o.retrn.subTyp != nil && o.retrn.subTyp.record != nil {
+		// pointer to a record
+		pointerCTypeName = o.retrn.subTyp.record.cStructName
+	} else if o.retrn.isPointer || o.retrn.isSmartPointer {
+		pointerCTypeName = o.retrn.record.cStructName
+	} else if o.retrn.record != nil {
+		pointerCTypeName = o.retrn.record.cStructName
+	} else {
+		f.writeln("  return ret;")
+		return
+	}
+
+	// A cast to reinterpret the api return value to the appropriate C type.
 	returnConst := ""
 	if o.retrn.isConst {
 		returnConst = "const"
 	}
-
-	var returnValue string
-	var pointerTypeName string
-	if o.retrn.isPointer && o.retrn.subTyp.isPrimitive {
-		// pointer to a primitive
-		returnValue = fmt.Sprintf("reinterpret_cast<%s %s *> (ret)", returnConst, o.retrn.subTyp.cName)
-	} else if o.retrn.isPointer || o.retrn.isSmartPointer && o.retrn.subTyp != nil && o.retrn.subTyp.record != nil {
-		// pointer to a record
-		returnValue = fmt.Sprintf("reinterpret_cast<%s %s *> (ret)", returnConst, o.retrn.subTyp.record.cStructName)
-		pointerTypeName = o.retrn.subTyp.record.cStructName
-	} else if o.retrn.isPointer || o.retrn.isSmartPointer {
-		returnValue = fmt.Sprintf("reinterpret_cast<%s %s *> (ret)", returnConst, o.retrn.record.cStructName)
-		pointerTypeName = o.retrn.record.cStructName
-	} else if o.retrn.record != nil {
-		if o.record != nil {
-			returnValue = fmt.Sprintf("*(reinterpret_cast<%s %s *> (&ret))", returnConst, o.retrn.record.cStructName)
-		} else {
-			returnValue = fmt.Sprintf("*(reinterpret_cast<%s %s *> (&ret))", returnConst, o.retrn.record.cStructName)
-		}
-	} else {
-		returnValue = "ret"
-	}
+	cast := fmt.Sprintf("reinterpret_cast<%s %s *>", returnConst, pointerCTypeName)
 
 	if o.retrn.isConst {
-		returnValue = fmt.Sprintf("const_cast<%s *>(%s)",
-			pointerTypeName,
-			returnValue)
+		cast = fmt.Sprintf("const_cast<%s *>(%s", pointerCTypeName, cast)
 	}
 
-	f := g.cppFile
-	f.writelnf("  return %s;", returnValue)
+	f.write("  return ")
+	if !(o.retrn.isPointer || o.retrn.isSmartPointer) {
+		f.write("*(")
+	}
+	f.write(cast)
+	if o.retrn.isPointer || o.retrn.isSmartPointer {
+		f.write("(ret)")
+	} else {
+		f.write("(&ret))")
+	}
+	if o.retrn.isConst {
+		f.write(")")
+	}
+	f.writeln(";")
 }
