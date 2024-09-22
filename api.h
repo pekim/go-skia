@@ -693,7 +693,7 @@ extern "C"
   bool misk_Typeface_Equal (sk_SkTypeface *c_facea, sk_SkTypeface *c_faceb);
   sk_SkTypeface *misk_Typeface_MakeEmpty ();
 
-  sk_GrGLInterface *misk_GrGLMakeNativeInterface ();
+  const sk_GrGLInterface *misk_GrGLMakeNativeInterface ();
   sk_GrBackendRenderTarget
   misk_GrBackendRenderTargetsMakeGL (int c_width, int c_height,
                                      int c_sampleCnt, int c_stencilBits,

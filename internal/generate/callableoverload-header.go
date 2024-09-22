@@ -22,6 +22,9 @@ func (o callableOverload) generateHeader(g generator) {
 	} else if o.retrn.goName == "string" {
 		returnDecl = "char*"
 	}
+	if o.retrn.isConst {
+		returnDecl = "const " + returnDecl
+	}
 
 	f.writelnf("%s %s(%s);", returnDecl, o.cFuncName, o.cParamsDecl)
 }

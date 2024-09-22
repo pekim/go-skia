@@ -1591,12 +1591,11 @@ extern "C"
     return reinterpret_cast<sk_SkTypeface *> (ret);
   }
 
-  sk_GrGLInterface *
+  const sk_GrGLInterface *
   misk_GrGLMakeNativeInterface ()
   {
     auto ret = GrGLMakeNativeInterface ().release ();
-    return const_cast<sk_GrGLInterface *> (
-        reinterpret_cast<const sk_GrGLInterface *> (ret));
+    return reinterpret_cast<const sk_GrGLInterface *> (ret);
   }
 
   sk_GrBackendRenderTarget

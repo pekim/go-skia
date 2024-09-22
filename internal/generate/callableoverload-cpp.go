@@ -1,7 +1,6 @@
 package generate
 
 import (
-	"fmt"
 	"strings"
 )
 
@@ -20,6 +19,9 @@ func (o callableOverload) generateCpp(g generator) {
 		}
 	} else if (o.retrn.isPointer || o.retrn.isSmartPointer) && o.retrn.subTyp.record != nil {
 		returnDecl = o.retrn.subTyp.record.cStructName + "*"
+	}
+	if o.retrn.isConst {
+		returnDecl = "const " + returnDecl
 	}
 
 	f.writelnf("%s %s(%s) {", returnDecl, o.cFuncName, o.cParamsDecl)
@@ -90,29 +92,20 @@ func (o *callableOverload) generateCppReturnStatement(g generator) {
 		return
 	}
 
-	// A cast to reinterpret the api return value to the appropriate C type.
 	returnConst := ""
 	if o.retrn.isConst {
 		returnConst = "const"
-	}
-	cast := fmt.Sprintf("reinterpret_cast<%s %s *>", returnConst, pointerCTypeName)
-
-	if o.retrn.isConst {
-		cast = fmt.Sprintf("const_cast<%s *>(%s", pointerCTypeName, cast)
 	}
 
 	f.write("  return ")
 	if !(o.retrn.isPointer || o.retrn.isSmartPointer) {
 		f.write("*(")
 	}
-	f.write(cast)
+	f.writef("reinterpret_cast<%s %s *>", returnConst, pointerCTypeName)
 	if o.retrn.isPointer || o.retrn.isSmartPointer {
 		f.write("(ret)")
 	} else {
 		f.write("(&ret))")
-	}
-	if o.retrn.isConst {
-		f.write(")")
 	}
 	f.writeln(";")
 }
