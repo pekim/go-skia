@@ -974,6 +974,34 @@ extern "C"
     return *(reinterpret_cast<sk_SkFontStyle *> (&ret));
   }
 
+  int
+  misk_Image_width (sk_SkImage *c_obj)
+  {
+    auto ret = reinterpret_cast<SkImage *> (c_obj)->width ();
+    return ret;
+  }
+
+  int
+  misk_Image_height (sk_SkImage *c_obj)
+  {
+    auto ret = reinterpret_cast<SkImage *> (c_obj)->height ();
+    return ret;
+  }
+
+  sk_SkISize
+  misk_Image_dimensions (sk_SkImage *c_obj)
+  {
+    auto ret = reinterpret_cast<SkImage *> (c_obj)->dimensions ();
+    return *(reinterpret_cast<sk_SkISize *> (&ret));
+  }
+
+  sk_SkIRect
+  misk_Image_bounds (sk_SkImage *c_obj)
+  {
+    auto ret = reinterpret_cast<SkImage *> (c_obj)->bounds ();
+    return *(reinterpret_cast<sk_SkIRect *> (&ret));
+  }
+
   sk_SkImageInfo *
   misk_new_ImageInfo ()
   {

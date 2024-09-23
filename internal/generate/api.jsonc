@@ -237,7 +237,14 @@
     },
 
     {
-      "name": "SkImage"
+      "name": "SkImage",
+      "methods": [
+        // { "name": "imageInfo" },
+        { "name": "width" },
+        { "name": "height" },
+        { "name": "dimensions" },
+        { "name": "bounds" }
+      ]
     },
 
     {

@@ -576,6 +576,11 @@ extern "C"
   sk_SkFontStyle misk_FontStyle_Italic ();
   sk_SkFontStyle misk_FontStyle_BoldItalic ();
 
+  int misk_Image_width (sk_SkImage *c_obj);
+  int misk_Image_height (sk_SkImage *c_obj);
+  sk_SkISize misk_Image_dimensions (sk_SkImage *c_obj);
+  sk_SkIRect misk_Image_bounds (sk_SkImage *c_obj);
+
   sk_SkImageInfo *misk_new_ImageInfo ();
 
   sk_SkM44 *misk_new_M44Copy (sk_SkM44 *c_src);

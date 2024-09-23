@@ -2673,6 +2673,50 @@ func (o Image) IsNil() bool {
 }
 
 /*
+Returns pixel count in each row.
+
+@return  pixel width in SkImage
+*/
+func (o Image) Width() int {
+	c_obj := o.sk
+	retC := C.misk_Image_width(c_obj)
+	return int(retC)
+}
+
+/*
+Returns pixel row count.
+
+@return  pixel height in SkImage
+*/
+func (o Image) Height() int {
+	c_obj := o.sk
+	retC := C.misk_Image_height(c_obj)
+	return int(retC)
+}
+
+/*
+Returns SkISize { width(), height() }.
+
+@return  integral size of width() and height()
+*/
+func (o Image) Dimensions() ISize {
+	c_obj := o.sk
+	retC := C.misk_Image_dimensions(c_obj)
+	return ISize(retC)
+}
+
+/*
+Returns SkIRect { 0, 0, width(), height() }.
+
+@return  integral rectangle from origin to width() and height()
+*/
+func (o Image) Bounds() IRect {
+	c_obj := o.sk
+	retC := C.misk_Image_bounds(c_obj)
+	return IRect(retC)
+}
+
+/*
 Describes pixel dimensions and encoding. SkBitmap, SkImage, PixMap, and SkSurface
 can be created from SkImageInfo. SkImageInfo can be retrieved from SkBitmap and
 SkPixmap, but not from SkImage and SkSurface. For example, SkImage and SkSurface
