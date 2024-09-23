@@ -24,6 +24,7 @@
 #include <include/core/SkRegion.h>
 #include <include/core/SkSamplingOptions.h>
 #include <include/core/SkSize.h>
+#include <include/core/SkStream.h>
 #include <include/core/SkString.h>
 #include <include/core/SkSurface.h>
 #include <include/core/SkSurfaceProps.h>
@@ -1156,6 +1157,24 @@ extern "C"
     return reinterpret_cast<sk_SkM44 *> (
         new SkM44 (c_m0, c_m4, c_m8, c_m12, c_m1, c_m5, c_m9, c_m13, c_m2,
                    c_m6, c_m10, c_m14, c_m3, c_m7, c_m11, c_m15));
+  }
+
+  sk_SkMemoryStream *
+  misk_MemoryStream_Make (sk_SkData *c_data)
+  {
+    auto ret = SkMemoryStream::Make (
+                   sk_ref_sp (reinterpret_cast<SkData *> (c_data)))
+                   .release ();
+    return reinterpret_cast<sk_SkMemoryStream *> (ret);
+  }
+
+  sk_SkMemoryStream *
+  misk_MemoryStream_MakeDirect (void *c_data, ulong c_length)
+  {
+    auto ret = SkMemoryStream::MakeDirect (reinterpret_cast<void *> (c_data),
+                                           c_length)
+                   .release ();
+    return reinterpret_cast<sk_SkMemoryStream *> (ret);
   }
 
   sk_SkIRect

@@ -237,6 +237,13 @@ extern "C"
 
   typedef struct
   {
+    uchar pad_0[8];
+    uchar fData[8];
+    ulong fOffset;
+  } sk_SkMemoryStream;
+
+  typedef struct
+  {
     int fX;
     int fY;
   } sk_SkIPoint;
@@ -628,6 +635,10 @@ extern "C"
                                  float c_m6, float c_m10, float c_m14,
                                  float c_m3, float c_m7, float c_m11,
                                  float c_m15);
+
+  sk_SkMemoryStream *misk_MemoryStream_Make (sk_SkData *c_data);
+  sk_SkMemoryStream *misk_MemoryStream_MakeDirect (void *c_data,
+                                                   ulong c_length);
 
   sk_SkIRect misk_IRect_MakeEmpty ();
   sk_SkIRect misk_IRect_MakeWH (int c_w, int c_h);

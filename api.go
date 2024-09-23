@@ -2980,6 +2980,35 @@ func NewM44Scalars(m0 float32, m4 float32, m8 float32, m12 float32, m1 float32, 
 	return M44{sk: retC}
 }
 
+type MemoryStream struct {
+	sk *C.sk_SkMemoryStream
+}
+
+// IsNil returns true if the raw skia object pointer is nil.
+// If it is nil is may indicate that the MemoryStream has not been created.
+func (o MemoryStream) IsNil() bool {
+	return o.sk == nil
+}
+
+/*
+Returns a stream with a shared reference to the input data.
+*/
+func MemoryStreamMake(data Data) MemoryStream {
+	c_data := data.sk
+	retC := C.misk_MemoryStream_Make(c_data)
+	return MemoryStream{sk: retC}
+}
+
+/*
+Returns a stream with a bare pointer reference to the input data.
+*/
+func MemoryStreamMakeDirect(data []byte, length uint64) MemoryStream {
+	c_data := unsafe.Pointer(&data[0])
+	c_length := C.ulong(length)
+	retC := C.misk_MemoryStream_MakeDirect(c_data, c_length)
+	return MemoryStream{sk: retC}
+}
+
 /*
 SkIPoint holds two 32-bit integer coordinates.
 */

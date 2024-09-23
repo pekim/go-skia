@@ -104,11 +104,13 @@ func typFromClangType(cType clang.Type, api api) (typ, error) {
 		typ.typedef = typedef
 		typ.goName = typ.typedef.goName
 
-	} else if strings.HasPrefix(typ.cppName, "sk_sp<") {
+	} else if strings.HasPrefix(typ.cppName, "sk_sp<") || strings.HasPrefix(typ.cppName, "std::unique_ptr<") {
 		// A type like "sk_sp<SkSomeClass>" is of kind clang.Type_Elaborated.
 		// Its CanonicalType's kind is clang.Type_Record.
 		// The template argument 'SkSomeClass' can be got, but it is not clear how to get the 'sk_sp'
 		// So determine it's a smart pointer from the C name starting with "sk_sp<".
+		//
+		// Treat types like std::unique_ptr<SkSomeClass> similarly.
 		typ_, err := typFromClangType(cType.TemplateArgumentAsType(0), api)
 		if err != nil {
 			return typ, err

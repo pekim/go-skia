@@ -294,6 +294,12 @@
     },
 
     {
+      "name": "SkMemoryStream",
+      "constructors": [null, null, null, null],
+      "methods": [{ "name": "Make" }, { "name": "MakeDirect" }]
+    },
+
+    {
       "name": "SkIPoint"
     },
 
