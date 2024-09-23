@@ -20,19 +20,19 @@ import (
 
 type GrGLFramebufferInfo C.sk_GrGLFramebufferInfo
 
-func (o GrGLFramebufferInfo) FBOID() uint {
-	return uint(o.fFBOID)
+func (o GrGLFramebufferInfo) FBOID() uint32 {
+	return uint32(o.fFBOID)
 }
 
-func (o *GrGLFramebufferInfo) SetFBOID(value uint) {
+func (o *GrGLFramebufferInfo) SetFBOID(value uint32) {
 	o.fFBOID = C.uint(value)
 }
 
-func (o GrGLFramebufferInfo) Format() uint {
-	return uint(o.fFormat)
+func (o GrGLFramebufferInfo) Format() uint32 {
+	return uint32(o.fFormat)
 }
 
-func (o *GrGLFramebufferInfo) SetFormat(value uint) {
+func (o *GrGLFramebufferInfo) SetFormat(value uint32) {
 	o.fFormat = C.uint(value)
 }
 
@@ -68,28 +68,28 @@ func (o GrBackendRenderTarget) Dimensions() ISize {
 	return ISize(retC)
 }
 
-func (o GrBackendRenderTarget) Width() int {
+func (o GrBackendRenderTarget) Width() int32 {
 	c_obj := o.sk
 	retC := C.misk_GrBackendRenderTarget_width(c_obj)
-	return int(retC)
+	return int32(retC)
 }
 
-func (o GrBackendRenderTarget) Height() int {
+func (o GrBackendRenderTarget) Height() int32 {
 	c_obj := o.sk
 	retC := C.misk_GrBackendRenderTarget_height(c_obj)
-	return int(retC)
+	return int32(retC)
 }
 
-func (o GrBackendRenderTarget) SampleCnt() int {
+func (o GrBackendRenderTarget) SampleCnt() int32 {
 	c_obj := o.sk
 	retC := C.misk_GrBackendRenderTarget_sampleCnt(c_obj)
-	return int(retC)
+	return int32(retC)
 }
 
-func (o GrBackendRenderTarget) StencilBits() int {
+func (o GrBackendRenderTarget) StencilBits() int32 {
 	c_obj := o.sk
 	retC := C.misk_GrBackendRenderTarget_stencilBits(c_obj)
-	return int(retC)
+	return int32(retC)
 }
 
 func (o GrBackendRenderTarget) IsFramebufferOnly() bool {
@@ -209,11 +209,11 @@ type GrFlushInfo struct {
 	sk *C.sk_GrFlushInfo
 }
 
-func (o GrFlushInfo) NumSemaphores() uint64 {
-	return uint64(o.sk.fNumSemaphores)
+func (o GrFlushInfo) NumSemaphores() uint32 {
+	return uint32(o.sk.fNumSemaphores)
 }
 
-func (o *GrFlushInfo) SetNumSemaphores(value uint64) {
+func (o *GrFlushInfo) SetNumSemaphores(value uint32) {
 	o.sk.fNumSemaphores = C.ulong(value)
 }
 
@@ -273,11 +273,11 @@ Overrides: These options override feature detection using backend API queries. T
 overrides can only reduce the feature set or limits, never increase them beyond the
 detected values.
 */
-func (o GrContextOptions) MaxTextureSizeOverride() int {
-	return int(o.fMaxTextureSizeOverride)
+func (o GrContextOptions) MaxTextureSizeOverride() int32 {
+	return int32(o.fMaxTextureSizeOverride)
 }
 
-func (o *GrContextOptions) SetMaxTextureSizeOverride(value int) {
+func (o *GrContextOptions) SetMaxTextureSizeOverride(value int32) {
 	o.fMaxTextureSizeOverride = C.int(value)
 }
 
@@ -286,11 +286,11 @@ the threshold in bytes above which we will use a buffer mapping API to map verte
 buffers to CPU memory in order to update them.  A value of -1 means the GrContext should
 deduce the optimal value for this platform.
 */
-func (o GrContextOptions) BufferMapThreshold() int {
-	return int(o.fBufferMapThreshold)
+func (o GrContextOptions) BufferMapThreshold() int32 {
+	return int32(o.fBufferMapThreshold)
 }
 
-func (o *GrContextOptions) SetBufferMapThreshold(value int) {
+func (o *GrContextOptions) SetBufferMapThreshold(value int32) {
 	o.fBufferMapThreshold = C.int(value)
 }
 
@@ -300,11 +300,11 @@ larger the value the more uploads can be packed into one buffer, but at the cost
 more gpu memory allocated that may not be used. Uploads larger than the minimum will still
 work by allocating a dedicated buffer.
 */
-func (o GrContextOptions) MinimumStagingBufferSize() uint64 {
-	return uint64(o.fMinimumStagingBufferSize)
+func (o GrContextOptions) MinimumStagingBufferSize() uint32 {
+	return uint32(o.fMinimumStagingBufferSize)
 }
 
-func (o *GrContextOptions) SetMinimumStagingBufferSize(value uint64) {
+func (o *GrContextOptions) SetMinimumStagingBufferSize(value uint32) {
 	o.fMinimumStagingBufferSize = C.ulong(value)
 }
 
@@ -373,11 +373,11 @@ func (o *GrContextOptions) SetDisableGpuYUVConversion(value bool) {
 /*
 The maximum size of cache textures used for Skia's Glyph cache.
 */
-func (o GrContextOptions) GlyphCacheTextureMaximumBytes() uint64 {
-	return uint64(o.fGlyphCacheTextureMaximumBytes)
+func (o GrContextOptions) GlyphCacheTextureMaximumBytes() uint32 {
+	return uint32(o.fGlyphCacheTextureMaximumBytes)
 }
 
-func (o *GrContextOptions) SetGlyphCacheTextureMaximumBytes(value uint64) {
+func (o *GrContextOptions) SetGlyphCacheTextureMaximumBytes(value uint32) {
 	o.fGlyphCacheTextureMaximumBytes = C.ulong(value)
 }
 
@@ -442,11 +442,11 @@ func (o *GrContextOptions) SetDisableDriverCorrectnessWorkarounds(value bool) {
 /*
 Maximum number of GPU programs or pipelines to keep active in the runtime cache.
 */
-func (o GrContextOptions) RuntimeProgramCacheSize() int {
-	return int(o.fRuntimeProgramCacheSize)
+func (o GrContextOptions) RuntimeProgramCacheSize() int32 {
+	return int32(o.fRuntimeProgramCacheSize)
 }
 
-func (o *GrContextOptions) SetRuntimeProgramCacheSize(value int) {
+func (o *GrContextOptions) SetRuntimeProgramCacheSize(value int32) {
 	o.fRuntimeProgramCacheSize = C.int(value)
 }
 
@@ -456,11 +456,11 @@ Specifies the number of samples Ganesh should use when performing internal draws
 
 If 0, Ganesh will disable internal code paths that use multisampling.
 */
-func (o GrContextOptions) InternalMultisampleCount() int {
-	return int(o.fInternalMultisampleCount)
+func (o GrContextOptions) InternalMultisampleCount() int32 {
+	return int32(o.fInternalMultisampleCount)
 }
 
-func (o *GrContextOptions) SetInternalMultisampleCount(value int) {
+func (o *GrContextOptions) SetInternalMultisampleCount(value int32) {
 	o.fInternalMultisampleCount = C.int(value)
 }
 
@@ -473,11 +473,11 @@ finished on the GPU it will only hold on to this many secondary command buffers 
 
 A value of -1 means we will pick a limit value internally.
 */
-func (o GrContextOptions) MaxCachedVulkanSecondaryCommandBuffers() int {
-	return int(o.fMaxCachedVulkanSecondaryCommandBuffers)
+func (o GrContextOptions) MaxCachedVulkanSecondaryCommandBuffers() int32 {
+	return int32(o.fMaxCachedVulkanSecondaryCommandBuffers)
 }
 
-func (o *GrContextOptions) SetMaxCachedVulkanSecondaryCommandBuffers(value int) {
+func (o *GrContextOptions) SetMaxCachedVulkanSecondaryCommandBuffers(value int32) {
 	o.fMaxCachedVulkanSecondaryCommandBuffers = C.int(value)
 }
 
@@ -572,7 +572,7 @@ func NewGrContextOptions() GrContextOptions {
 	return *(*GrContextOptions)(unsafe.Pointer(&retC))
 }
 
-type GrContextOptionsEnable int
+type GrContextOptionsEnable int32
 
 const (
 	/*
@@ -589,7 +589,7 @@ const (
 	GrContextOptionsEnableDefault GrContextOptionsEnable = 2
 )
 
-type GrContextOptionsShaderCacheStrategy int
+type GrContextOptionsShaderCacheStrategy int32
 
 const (
 	GrContextOptionsShaderCacheStrategySkSL          GrContextOptionsShaderCacheStrategy = 0
@@ -736,10 +736,10 @@ Returns zero if colorType( is kUnknown_SkColorType.
 
 @return  bytes in pixel
 */
-func (o Bitmap) BytesPerPixel() int {
+func (o Bitmap) BytesPerPixel() int32 {
 	c_obj := o.sk
 	retC := C.misk_Bitmap_bytesPerPixel(c_obj)
-	return int(retC)
+	return int32(retC)
 }
 
 /*
@@ -748,10 +748,10 @@ width().
 
 @return  maximum pixels per row
 */
-func (o Bitmap) RowBytesAsPixels() int {
+func (o Bitmap) RowBytesAsPixels() int32 {
 	c_obj := o.sk
 	retC := C.misk_Bitmap_rowBytesAsPixels(c_obj)
-	return int(retC)
+	return int32(retC)
 }
 
 /*
@@ -760,10 +760,10 @@ Returns zero for kUnknown_SkColorType.
 
 @return  one of: 0, 1, 2, 3; left shift to convert pixels to bytes
 */
-func (o Bitmap) ShiftPerPixel() int {
+func (o Bitmap) ShiftPerPixel() int32 {
 	c_obj := o.sk
 	retC := C.misk_Bitmap_shiftPerPixel(c_obj)
-	return int(retC)
+	return int32(retC)
 }
 
 /*
@@ -787,10 +787,10 @@ setInfo() is not large enough to hold a row of pixels.
 
 @return  byte length of pixel row
 */
-func (o Bitmap) RowBytes() uint64 {
+func (o Bitmap) RowBytes() uint32 {
 	c_obj := o.sk
 	retC := C.misk_Bitmap_rowBytes(c_obj)
-	return uint64(retC)
+	return uint32(retC)
 }
 
 /*
@@ -908,7 +908,7 @@ may be nullptr
 
 example: https://fiddle.skia.org/c/@Canvas_int_int_const_SkSurfaceProps_star
 */
-func NewCanvasWithDimensions(width int, height int, props SurfaceProps) Canvas {
+func NewCanvasWithDimensions(width int32, height int32, props SurfaceProps) Canvas {
 	c_width := C.int(width)
 	c_height := C.int(height)
 	c_props := props.sk
@@ -1130,7 +1130,7 @@ Does not copy, and returns false if:
 @param srcY         offset into readable pixels on y-axis; may be negative
 @return             true if pixels were copied
 */
-func (o Canvas) ReadPixelsImageInfo(dstInfo ImageInfo, dstPixels []byte, dstRowBytes uint64, srcX int, srcY int) bool {
+func (o Canvas) ReadPixelsImageInfo(dstInfo ImageInfo, dstPixels []byte, dstRowBytes uint32, srcX int32, srcY int32) bool {
 	c_obj := o.sk
 	c_dstInfo := dstInfo.sk
 	c_dstPixels := unsafe.Pointer(&dstPixels[0])
@@ -1177,7 +1177,7 @@ Does not copy, and returns false if:
 
 example: https://fiddle.skia.org/c/@Canvas_readPixels_2
 */
-func (o Canvas) ReadPixelsPixmap(pixmap Pixmap, srcX int, srcY int) bool {
+func (o Canvas) ReadPixelsPixmap(pixmap Pixmap, srcX int32, srcY int32) bool {
 	c_obj := o.sk
 	c_pixmap := pixmap.sk
 	c_srcX := C.int(srcX)
@@ -1222,7 +1222,7 @@ Does not copy, and returns false if:
 
 example: https://fiddle.skia.org/c/@Canvas_readPixels_3
 */
-func (o Canvas) ReadPixelsBitmap(bitmap Bitmap, srcX int, srcY int) bool {
+func (o Canvas) ReadPixelsBitmap(bitmap Bitmap, srcX int32, srcY int32) bool {
 	c_obj := o.sk
 	c_bitmap := bitmap.sk
 	c_srcX := C.int(srcX)
@@ -1268,7 +1268,7 @@ imageInfo().alphaType().
 
 example: https://fiddle.skia.org/c/@Canvas_writePixels
 */
-func (o Canvas) WritePixelsImageInfo(info ImageInfo, pixels []byte, rowBytes uint64, x int, y int) bool {
+func (o Canvas) WritePixelsImageInfo(info ImageInfo, pixels []byte, rowBytes uint32, x int32, y int32) bool {
 	c_obj := o.sk
 	c_info := info.sk
 	c_pixels := unsafe.Pointer(&pixels[0])
@@ -1318,7 +1318,7 @@ example: https://fiddle.skia.org/c/@Canvas_writePixels_2
 example: https://fiddle.skia.org/c/@State_Stack_a
 example: https://fiddle.skia.org/c/@State_Stack_b
 */
-func (o Canvas) WritePixelsBitmap(bitmap Bitmap, x int, y int) bool {
+func (o Canvas) WritePixelsBitmap(bitmap Bitmap, x int32, y int32) bool {
 	c_obj := o.sk
 	c_bitmap := bitmap.sk
 	c_x := C.int(x)
@@ -1344,10 +1344,10 @@ Call restoreToCount() with result to restore this and subsequent saves.
 
 example: https://fiddle.skia.org/c/@Canvas_save
 */
-func (o Canvas) Save() int {
+func (o Canvas) Save() int32 {
 	c_obj := o.sk
 	retC := C.misk_Canvas_save(c_obj)
-	return int(retC)
+	return int32(retC)
 }
 
 /*
@@ -1373,20 +1373,20 @@ Call restoreToCount() with returned value to restore this and subsequent saves.
 example: https://fiddle.skia.org/c/@Canvas_saveLayer
 example: https://fiddle.skia.org/c/@Canvas_saveLayer_4
 */
-func (o Canvas) SaveLayer(bounds Rect, paint Paint) int {
+func (o Canvas) SaveLayer(bounds Rect, paint Paint) int32 {
 	c_obj := o.sk
 	c_bounds := *(*C.sk_SkRect)(unsafe.Pointer(&bounds))
 	c_paint := paint.sk
 	retC := C.misk_Canvas_saveLayer(c_obj, c_bounds, c_paint)
-	return int(retC)
+	return int32(retC)
 }
 
-func (o Canvas) SaveLayerAlpha(bounds Rect, alpha uint) int {
+func (o Canvas) SaveLayerAlpha(bounds Rect, alpha uint32) int32 {
 	c_obj := o.sk
 	c_bounds := *(*C.sk_SkRect)(unsafe.Pointer(&bounds))
 	c_alpha := C.uint(alpha)
 	retC := C.misk_Canvas_saveLayerAlpha(c_obj, c_bounds, c_alpha)
-	return int(retC)
+	return int32(retC)
 }
 
 /*
@@ -1413,10 +1413,10 @@ The save count of a new canvas is one.
 
 example: https://fiddle.skia.org/c/@Canvas_getSaveCount
 */
-func (o Canvas) GetSaveCount() int {
+func (o Canvas) GetSaveCount() int32 {
 	c_obj := o.sk
 	retC := C.misk_Canvas_getSaveCount(c_obj)
-	return int(retC)
+	return int32(retC)
 }
 
 /*
@@ -1430,7 +1430,7 @@ Restores state to initial values if saveCount is less than or equal to one.
 
 example: https://fiddle.skia.org/c/@Canvas_restoreToCount
 */
-func (o Canvas) RestoreToCount(saveCount int) {
+func (o Canvas) RestoreToCount(saveCount int32) {
 	c_obj := o.sk
 	c_saveCount := C.int(saveCount)
 	C.misk_Canvas_restoreToCount(c_obj, c_saveCount)
@@ -2331,7 +2331,7 @@ default, draws filled black glyphs.
 @param font            typeface, text size and so, used to describe the text
 @param paint           blend, color, and so on, used to draw
 */
-func (o Canvas) DrawGlyphs(count int, glyphs []uint32, positions []Point, clusters []uint, textByteCount int, utf8text string, origin Point, font Font, paint Paint) {
+func (o Canvas) DrawGlyphs(count int32, glyphs []uint16, positions []Point, clusters []uint32, textByteCount int32, utf8text string, origin Point, font Font, paint Paint) {
 	c_obj := o.sk
 	c_count := C.int(count)
 	c_glyphs := (*C.ushort)(unsafe.Pointer(&glyphs[0]))
@@ -2379,7 +2379,7 @@ func (o Canvas) DrawTextBlob(blob TextBlob, x float32, y float32, paint Paint) {
 	C.misk_Canvas_drawTextBlob(c_obj, c_blob, c_x, c_y, c_paint)
 }
 
-type CanvasClipEdgeStyle uint
+type CanvasClipEdgeStyle uint32
 
 const (
 	CanvasClipEdgeStyleHard CanvasClipEdgeStyle = 0
@@ -2390,7 +2390,7 @@ const (
 Selects if an array of points are drawn as discrete points, as lines, or as
 an open polygon.
 */
-type CanvasPointMode uint
+type CanvasPointMode uint32
 
 const (
 	// draw each point separately
@@ -2404,7 +2404,7 @@ const (
 /*
 Experimental. Controls anti-aliasing of each edge of images in an image-set.
 */
-type CanvasQuadAAFlags uint
+type CanvasQuadAAFlags uint32
 
 const (
 	CanvasQuadAAFlagsLeft_QuadAAFlag   CanvasQuadAAFlags = 1
@@ -2420,7 +2420,7 @@ SaveLayerFlags provides options that may be used in any combination in SaveLayer
 defining how layer allocated by saveLayer() operates. It may be set to zero,
 kPreserveLCDText_SaveLayerFlag, kInitWithPrevious_SaveLayerFlag, or both flags.
 */
-type CanvasSaveLayerFlagsSet uint
+type CanvasSaveLayerFlagsSet uint32
 
 const (
 	CanvasSaveLayerFlagsSetPreserveLCDText_SaveLayerFlag CanvasSaveLayerFlagsSet = 2
@@ -2429,7 +2429,7 @@ const (
 	CanvasSaveLayerFlagsSetF16ColorType                   CanvasSaveLayerFlagsSet = 16
 )
 
-type CanvasSaveLayerStrategy uint
+type CanvasSaveLayerStrategy uint32
 
 const (
 	CanvasSaveLayerStrategyFullLayer CanvasSaveLayerStrategy = 0
@@ -2442,7 +2442,7 @@ provided to drawImageRect() when there is any filtering. If kStrict is set,
 then extra code is used to ensure it never samples outside of the src-rect.
 kStrict_SrcRectConstraint disables the use of mipmaps and anisotropic filtering.
 */
-type CanvasSrcRectConstraint uint
+type CanvasSrcRectConstraint uint32
 
 const (
 	// sample only inside bounds; slower
@@ -2506,10 +2506,10 @@ func (o Data) IsNil() bool {
 /*
 Returns the number of bytes stored.
 */
-func (o Data) Size() uint64 {
+func (o Data) Size() uint32 {
 	c_obj := o.sk
 	retC := C.misk_Data_size(c_obj)
-	return uint64(retC)
+	return uint32(retC)
 }
 
 func (o Data) IsEmpty() bool {
@@ -2521,7 +2521,7 @@ func (o Data) IsEmpty() bool {
 /*
 Create a new dataref by copying the specified data
 */
-func DataMakeWithCopy(data []byte, length uint64) Data {
+func DataMakeWithCopy(data []byte, length uint32) Data {
 	c_data := unsafe.Pointer(&data[0])
 	c_length := C.ulong(length)
 	retC := C.misk_Data_MakeWithCopy(c_data, c_length)
@@ -2532,7 +2532,7 @@ func DataMakeWithCopy(data []byte, length uint64) Data {
 Create a new data with zero-initialized contents. The caller should call writable_data()
 to write into the buffer, but this must be done before another ref() is made.
 */
-func DataMakeZeroInitialized(length uint64) Data {
+func DataMakeZeroInitialized(length uint32) Data {
 	c_length := C.ulong(length)
 	retC := C.misk_Data_MakeZeroInitialized(c_length)
 	return Data{sk: retC}
@@ -2555,7 +2555,7 @@ func DataMakeWithCString(cstr string) Data {
 Call this when the data parameter is already const and will outlive the lifetime of the
 SkData. Suitable for with const globals.
 */
-func DataMakeWithoutCopy(data []byte, length uint64) Data {
+func DataMakeWithoutCopy(data []byte, length uint32) Data {
 	c_data := unsafe.Pointer(&data[0])
 	c_length := C.ulong(length)
 	retC := C.misk_Data_MakeWithoutCopy(c_data, c_length)
@@ -2663,17 +2663,40 @@ func (o Font) GetMetrics(metrics *FontMetrics) float32 {
 }
 
 /*
+Returns glyph index for Unicode character.
+
+If the character is not supported by the SkTypeface, returns 0.
+
+@param uni  Unicode character
+@return     glyph index
+*/
+func (o Font) UnicharToGlyph(uni int32) uint16 {
+	c_obj := o.sk
+	c_uni := C.int(uni)
+	retC := C.misk_Font_unicharToGlyph(c_obj, c_uni)
+	return uint16(retC)
+}
+
+func (o Font) UnicharsToGlyphs(uni []int32, count int32, glyphs []uint16) {
+	c_obj := o.sk
+	c_uni := (*C.int)(unsafe.Pointer(&uni[0]))
+	c_count := C.int(count)
+	c_glyphs := (*C.ushort)(unsafe.Pointer(&glyphs[0]))
+	C.misk_Font_unicharsToGlyphs(c_obj, c_uni, c_count, c_glyphs)
+}
+
+/*
 The metrics of an SkFont.
 The metric values are consistent with the Skia y-down coordinate system.
 */
 type FontMetrics C.sk_SkFontMetrics
 
 // !< FontMetricsFlags indicating which metrics are valid
-func (o FontMetrics) Flags() uint {
-	return uint(o.fFlags)
+func (o FontMetrics) Flags() uint32 {
+	return uint32(o.fFlags)
 }
 
-func (o *FontMetrics) SetFlags(value uint) {
+func (o *FontMetrics) SetFlags(value uint32) {
 	o.fFlags = C.uint(value)
 }
 
@@ -2867,7 +2890,7 @@ Create a typeface for the specified data and TTC index (pass 0 for none)
 or NULL if the data is not recognized. The caller must call unref() on
 the returned object if it is not null.
 */
-func (o FontMgr) MakeFromData(p0 Data, ttcIndex int) Typeface {
+func (o FontMgr) MakeFromData(p0 Data, ttcIndex int32) Typeface {
 	c_obj := o.sk
 	c_p0 := p0.sk
 	c_ttcIndex := C.int(ttcIndex)
@@ -2881,7 +2904,7 @@ Create a typeface for the specified fileName and TTC index
 not recognized. The caller must call unref() on the returned object
 if it is not null.
 */
-func (o FontMgr) MakeFromFile(path string, ttcIndex int) Typeface {
+func (o FontMgr) MakeFromFile(path string, ttcIndex int32) Typeface {
 	c_obj := o.sk
 	c_path := C.CString(path)
 	defer C.free(unsafe.Pointer(c_path))
@@ -2900,7 +2923,7 @@ func (o FontStyle) IsNil() bool {
 	return o.sk == nil
 }
 
-func NewFontStyle2(weight int, width int, slant FontStyleSlant) FontStyle {
+func NewFontStyle2(weight int32, width int32, slant FontStyleSlant) FontStyle {
 	c_weight := C.int(weight)
 	c_width := C.int(width)
 	c_slant := C.uint(slant)
@@ -2934,7 +2957,7 @@ func FontStyleBoldItalic() FontStyle {
 	return FontStyle{sk: &retC}
 }
 
-type FontStyleSlant uint
+type FontStyleSlant uint32
 
 const (
 	FontStyleSlantUpright FontStyleSlant = 0
@@ -2952,13 +2975,13 @@ func (o FontStyleSet) IsNil() bool {
 	return o.sk == nil
 }
 
-func (o FontStyleSet) Count() int {
+func (o FontStyleSet) Count() int32 {
 	c_obj := o.sk
 	retC := C.misk_FontStyleSet_count(c_obj)
-	return int(retC)
+	return int32(retC)
 }
 
-func (o FontStyleSet) GetStyle(index int, p1 FontStyle, style String) {
+func (o FontStyleSet) GetStyle(index int32, p1 FontStyle, style String) {
 	c_obj := o.sk
 	c_index := C.int(index)
 	c_p1 := p1.sk
@@ -2966,7 +2989,7 @@ func (o FontStyleSet) GetStyle(index int, p1 FontStyle, style String) {
 	C.misk_FontStyleSet_getStyle(c_obj, c_index, c_p1, c_style)
 }
 
-func (o FontStyleSet) CreateTypeface(index int) Typeface {
+func (o FontStyleSet) CreateTypeface(index int32) Typeface {
 	c_obj := o.sk
 	c_index := C.int(index)
 	retC := C.misk_FontStyleSet_createTypeface(c_obj, c_index)
@@ -3028,10 +3051,10 @@ Returns pixel count in each row.
 
 @return  pixel width in SkImage
 */
-func (o Image) Width() int {
+func (o Image) Width() int32 {
 	c_obj := o.sk
 	retC := C.misk_Image_width(c_obj)
-	return int(retC)
+	return int32(retC)
 }
 
 /*
@@ -3039,10 +3062,10 @@ Returns pixel row count.
 
 @return  pixel height in SkImage
 */
-func (o Image) Height() int {
+func (o Image) Height() int32 {
 	c_obj := o.sk
 	retC := C.misk_Image_height(c_obj)
-	return int(retC)
+	return int32(retC)
 }
 
 /*
@@ -3183,7 +3206,7 @@ func MemoryStreamMake(data Data) MemoryStream {
 /*
 Returns a stream with a bare pointer reference to the input data.
 */
-func MemoryStreamMakeDirect(data []byte, length uint64) MemoryStream {
+func MemoryStreamMakeDirect(data []byte, length uint32) MemoryStream {
 	c_data := unsafe.Pointer(&data[0])
 	c_length := C.ulong(length)
 	retC := C.misk_MemoryStream_MakeDirect(c_data, c_length)
@@ -3198,20 +3221,20 @@ type IPoint struct {
 }
 
 // !< x-axis value
-func (o IPoint) X() int {
-	return int(o.sk.fX)
+func (o IPoint) X() int32 {
+	return int32(o.sk.fX)
 }
 
-func (o *IPoint) SetX(value int) {
+func (o *IPoint) SetX(value int32) {
 	o.sk.fX = C.int(value)
 }
 
 // !< y-axis value
-func (o IPoint) Y() int {
-	return int(o.sk.fY)
+func (o IPoint) Y() int32 {
+	return int32(o.sk.fY)
 }
 
-func (o *IPoint) SetY(value int) {
+func (o *IPoint) SetY(value int32) {
 	o.sk.fY = C.int(value)
 }
 
@@ -3231,38 +3254,38 @@ its top, it is considered empty.
 type IRect C.sk_SkIRect
 
 // !< smaller x-axis bounds
-func (o IRect) Left() int {
-	return int(o.fLeft)
+func (o IRect) Left() int32 {
+	return int32(o.fLeft)
 }
 
-func (o *IRect) SetLeft(value int) {
+func (o *IRect) SetLeft(value int32) {
 	o.fLeft = C.int(value)
 }
 
 // !< smaller y-axis bounds
-func (o IRect) Top() int {
-	return int(o.fTop)
+func (o IRect) Top() int32 {
+	return int32(o.fTop)
 }
 
-func (o *IRect) SetTop(value int) {
+func (o *IRect) SetTop(value int32) {
 	o.fTop = C.int(value)
 }
 
 // !< larger x-axis bounds
-func (o IRect) Right() int {
-	return int(o.fRight)
+func (o IRect) Right() int32 {
+	return int32(o.fRight)
 }
 
-func (o *IRect) SetRight(value int) {
+func (o *IRect) SetRight(value int32) {
 	o.fRight = C.int(value)
 }
 
 // !< larger y-axis bounds
-func (o IRect) Bottom() int {
-	return int(o.fBottom)
+func (o IRect) Bottom() int32 {
+	return int32(o.fBottom)
 }
 
-func (o *IRect) SetBottom(value int) {
+func (o *IRect) SetBottom(value int32) {
 	o.fBottom = C.int(value)
 }
 
@@ -3287,7 +3310,7 @@ may be negative.
 @param h  height of constructed SkIRect
 @return   bounds (0, 0, w, h)
 */
-func IRectMakeWH(w int, h int) IRect {
+func IRectMakeWH(w int32, h int32) IRect {
 	c_w := C.int(w)
 	c_h := C.int(h)
 	retC := C.misk_IRect_MakeWH(c_w, c_h)
@@ -3304,7 +3327,7 @@ result in fLeft greater than fRight, or fTop greater than fBottom.
 @param b  integer stored in fBottom
 @return   bounds (l, t, r, b)
 */
-func IRectMakeLTRB(l int, t int, r int, b int) IRect {
+func IRectMakeLTRB(l int32, t int32, r int32, b int32) IRect {
 	c_l := C.int(l)
 	c_t := C.int(t)
 	c_r := C.int(r)
@@ -3323,7 +3346,7 @@ Does not validate input; w or h may be negative.
 @param h  added to y and stored in fBottom
 @return   bounds at (x, y) with width w and height h
 */
-func IRectMakeXYWH(x int, y int, w int, h int) IRect {
+func IRectMakeXYWH(x int32, y int32, w int32, h int32) IRect {
 	c_x := C.int(x)
 	c_y := C.int(y)
 	c_w := C.int(w)
@@ -3366,10 +3389,10 @@ and sort() to reverse fLeft and fRight if needed.
 
 @return  fLeft
 */
-func (o IRect) X() int {
+func (o IRect) X() int32 {
 	c_obj := (*C.sk_SkIRect)(&o)
 	retC := C.misk_IRect_x(c_obj)
-	return int(retC)
+	return int32(retC)
 }
 
 /*
@@ -3378,10 +3401,10 @@ and sort() to reverse fTop and fBottom if needed.
 
 @return  fTop
 */
-func (o IRect) Y() int {
+func (o IRect) Y() int32 {
 	c_obj := (*C.sk_SkIRect)(&o)
 	retC := C.misk_IRect_y(c_obj)
-	return int(retC)
+	return int32(retC)
 }
 
 /*
@@ -3390,10 +3413,10 @@ result fits in 32-bit signed integer; result may be negative.
 
 @return  fRight minus fLeft
 */
-func (o IRect) Width() int {
+func (o IRect) Width() int32 {
 	c_obj := (*C.sk_SkIRect)(&o)
 	retC := C.misk_IRect_width(c_obj)
-	return int(retC)
+	return int32(retC)
 }
 
 /*
@@ -3402,10 +3425,10 @@ result fits in 32-bit signed integer; result may be negative.
 
 @return  fBottom minus fTop
 */
-func (o IRect) Height() int {
+func (o IRect) Height() int32 {
 	c_obj := (*C.sk_SkIRect)(&o)
 	retC := C.misk_IRect_height(c_obj)
-	return int(retC)
+	return int32(retC)
 }
 
 /*
@@ -3441,7 +3464,7 @@ top and bottom are not sorted; top is not necessarily less than bottom.
 @param right   stored in fRight
 @param bottom  stored in fBottom
 */
-func (o IRect) SetLTRB(left int, top int, right int, bottom int) {
+func (o IRect) SetLTRB(left int32, top int32, right int32, bottom int32) {
 	c_obj := (*C.sk_SkIRect)(&o)
 	c_left := C.int(left)
 	c_top := C.int(top)
@@ -3459,7 +3482,7 @@ Does not validate input; width or height may be negative.
 @param width   added to x and stored in fRight
 @param height  added to y and stored in fBottom
 */
-func (o IRect) SetXYWH(x int, y int, width int, height int) {
+func (o IRect) SetXYWH(x int32, y int32, width int32, height int32) {
 	c_obj := (*C.sk_SkIRect)(&o)
 	c_x := C.int(x)
 	c_y := C.int(y)
@@ -3468,7 +3491,7 @@ func (o IRect) SetXYWH(x int, y int, width int, height int) {
 	C.misk_IRect_setXYWH(c_obj, c_x, c_y, c_width, c_height)
 }
 
-func (o IRect) SetWH(width int, height int) {
+func (o IRect) SetWH(width int32, height int32) {
 	c_obj := (*C.sk_SkIRect)(&o)
 	c_width := C.int(width)
 	c_height := C.int(height)
@@ -3486,7 +3509,7 @@ If dy is positive, moves SkIRect returned downward.
 @param dx  offset added to fLeft and fRight
 @param dy  offset added to fTop and fBottom
 */
-func (o IRect) Offset(dx int, dy int) {
+func (o IRect) Offset(dx int32, dy int32) {
 	c_obj := (*C.sk_SkIRect)(&o)
 	c_dx := C.int(dx)
 	c_dy := C.int(dy)
@@ -3517,7 +3540,7 @@ are unchanged.
 @param newX  stored in fLeft, preserving width()
 @param newY  stored in fTop, preserving height()
 */
-func (o IRect) OffsetTo(newX int, newY int) {
+func (o IRect) OffsetTo(newX int32, newY int32) {
 	c_obj := (*C.sk_SkIRect)(&o)
 	c_newX := C.int(newX)
 	c_newY := C.int(newY)
@@ -3535,7 +3558,7 @@ If dy is negative, makes SkIRect taller.
 @param dx  offset added to fLeft and subtracted from fRight
 @param dy  offset added to fTop and subtracted from fBottom
 */
-func (o IRect) Inset(dx int, dy int) {
+func (o IRect) Inset(dx int32, dy int32) {
 	c_obj := (*C.sk_SkIRect)(&o)
 	c_dx := C.int(dx)
 	c_dy := C.int(dy)
@@ -3553,7 +3576,7 @@ If dy is negative, makes SkIRect shorter.
 @param dx  subtracted to fLeft and added from fRight
 @param dy  subtracted to fTop and added from fBottom
 */
-func (o IRect) Outset(dx int, dy int) {
+func (o IRect) Outset(dx int32, dy int32) {
 	c_obj := (*C.sk_SkIRect)(&o)
 	c_dx := C.int(dx)
 	c_dy := C.int(dy)
@@ -3577,7 +3600,7 @@ if that is not the desired behavior.
 @param dR  offset added to fRight
 @param dB  offset added to fBottom
 */
-func (o IRect) Adjust(dL int, dT int, dR int, dB int) {
+func (o IRect) Adjust(dL int32, dT int32, dR int32, dB int32) {
 	c_obj := (*C.sk_SkIRect)(&o)
 	c_dL := C.int(dL)
 	c_dT := C.int(dT)
@@ -3597,7 +3620,7 @@ returns true if constructed area is completely enclosed by SkIRect area.
 @param y  test SkIPoint y-coordinate
 @return   true if (x, y) is inside SkIRect
 */
-func (o IRect) Contains(x int, y int) bool {
+func (o IRect) Contains(x int32, y int32) bool {
 	c_obj := (*C.sk_SkIRect)(&o)
 	c_x := C.int(x)
 	c_y := C.int(y)
@@ -3680,19 +3703,19 @@ func (o IRect) Sort() {
 
 type ISize C.sk_SkISize
 
-func (o ISize) Width() int {
-	return int(o.fWidth)
+func (o ISize) Width() int32 {
+	return int32(o.fWidth)
 }
 
-func (o *ISize) SetWidth(value int) {
+func (o *ISize) SetWidth(value int32) {
 	o.fWidth = C.int(value)
 }
 
-func (o ISize) Height() int {
-	return int(o.fHeight)
+func (o ISize) Height() int32 {
+	return int32(o.fHeight)
 }
 
-func (o *ISize) SetHeight(value int) {
+func (o *ISize) SetHeight(value int32) {
 	o.fHeight = C.int(value)
 }
 
@@ -3812,7 +3835,7 @@ func (o Paint) GetAlpha() byte {
 	return byte(retC)
 }
 
-func (o Paint) SetAlpha(a uint) {
+func (o Paint) SetAlpha(a uint32) {
 	c_obj := o.sk
 	c_a := C.uint(a)
 	C.misk_Paint_setAlpha(c_obj, c_a)
@@ -3829,7 +3852,7 @@ The color is unpremultiplied; alpha sets the transparency independent of RGB.
 
 example: https://fiddle.skia.org/c/@Paint_setARGB
 */
-func (o Paint) SetARGB(a uint, r uint, g uint, b uint) {
+func (o Paint) SetARGB(a uint32, r uint32, g uint32, b uint32) {
 	c_obj := o.sk
 	c_a := C.uint(a)
 	c_r := C.uint(r)
@@ -4005,7 +4028,7 @@ func (o Paint) SetStyle(style PaintStyle) {
 /*
 Cap draws at the beginning and end of an open path contour.
 */
-type PaintCap uint
+type PaintCap uint32
 
 const (
 	// no stroke extension
@@ -4143,7 +4166,7 @@ func (o Path) Delete() {
 AddPathMode chooses how addPath() appends. Adding one SkPath to another can extend
 the last contour or start a new contour.
 */
-type PathAddPathMode uint
+type PathAddPathMode uint32
 
 const (
 	/*
@@ -4164,7 +4187,7 @@ const (
 Four oval parts with radii (rx, ry) start at last SkPath SkPoint and ends at (x, y).
 ArcSize and Direction select one of the four oval parts.
 */
-type PathArcSize uint
+type PathArcSize uint32
 
 const (
 	// smaller of arc pair
@@ -4177,7 +4200,7 @@ const (
 SegmentMask constants correspond to each drawing Verb type in SkPath; for
 instance, if SkPath only contains lines, only the kLine_SegmentMask bit is set.
 */
-type PathSegmentMask uint
+type PathSegmentMask uint32
 
 const (
 	PathSegmentMaskLine  PathSegmentMask = 1
@@ -4190,7 +4213,7 @@ const (
 Verb instructs SkPath how to interpret one or more SkPoint and optional conic weight;
 manage contour, and terminate SkPath.
 */
-type PathVerb uint
+type PathVerb uint32
 
 const (
 	PathVerbMove  PathVerb = 0
@@ -4288,7 +4311,7 @@ storage.
 @param rowBytes  size of one row of addr; width times pixel size, or larger
 @return          initialized SkPixmap
 */
-func NewPixmapImageInfo(info ImageInfo, addr []byte, rowBytes uint64) Pixmap {
+func NewPixmapImageInfo(info ImageInfo, addr []byte, rowBytes uint32) Pixmap {
 	c_info := info.sk
 	c_addr := unsafe.Pointer(&addr[0])
 	c_rowBytes := C.ulong(rowBytes)
@@ -4922,11 +4945,11 @@ type SamplingOptions struct {
 	sk *C.sk_SkSamplingOptions
 }
 
-func (o SamplingOptions) MaxAniso() int {
-	return int(o.sk.maxAniso)
+func (o SamplingOptions) MaxAniso() int32 {
+	return int32(o.sk.maxAniso)
 }
 
-func (o *SamplingOptions) SetmaxAniso(value int) {
+func (o *SamplingOptions) SetmaxAniso(value int32) {
 	o.sk.maxAniso = C.int(value)
 }
 
@@ -5070,7 +5093,7 @@ func NewSurfaceProps() SurfaceProps {
 /*
 TODO(kschmi): Remove this constructor and replace with the one below. *
 */
-func NewSurfacePropsPixelGeometry(flags uint, p1 PixelGeometry) SurfaceProps {
+func NewSurfacePropsPixelGeometry(flags uint32, p1 PixelGeometry) SurfaceProps {
 	c_flags := C.uint(flags)
 	c_p1 := C.uint(p1)
 	retC := C.misk_new_SurfacePropsPixelGeometry(c_flags, c_p1)
@@ -5083,7 +5106,7 @@ func NewSurfacePropsCopy(p0 SurfaceProps) SurfaceProps {
 	return SurfaceProps{sk: retC}
 }
 
-type SurfacePropsFlags uint
+type SurfacePropsFlags uint32
 
 const (
 	SurfacePropsFlagsDefault_Flag                   SurfacePropsFlags = 0
@@ -5251,7 +5274,7 @@ Returns nullptr if byteLength is zero.
 @param encoding specifies the encoding of the text array.
 @return        new textblob or nullptr
 */
-func TextBlobMakeFromPosTextH(text []byte, byteLength uint64, xpos []float32, constY float32, font Font, encoding TextEncoding) TextBlob {
+func TextBlobMakeFromPosTextH(text []byte, byteLength uint32, xpos []float32, constY float32, font Font, encoding TextEncoding) TextBlob {
 	c_text := unsafe.Pointer(&text[0])
 	c_byteLength := C.ulong(byteLength)
 	c_xpos := (*C.float)(unsafe.Pointer(&xpos[0]))
@@ -5274,7 +5297,7 @@ Returns nullptr if byteLength is zero.
 @param encoding specifies the encoding of the text array.
 @return        new textblob or nullptr
 */
-func TextBlobMakeFromPosText(text []byte, byteLength uint64, pos []Point, font Font, encoding TextEncoding) TextBlob {
+func TextBlobMakeFromPosText(text []byte, byteLength uint32, pos []Point, font Font, encoding TextEncoding) TextBlob {
 	c_text := unsafe.Pointer(&text[0])
 	c_byteLength := C.ulong(byteLength)
 	c_pos := (*C.sk_SkPoint)(unsafe.Pointer(&pos[0]))
@@ -5325,7 +5348,7 @@ func TypefaceMakeEmpty() Typeface {
 GPU SkImage and SkSurfaces can be stored such that (0, 0) in texture space may correspond to
 either the top-left or bottom-left content pixel.
 */
-type GrSurfaceOrigin int
+type GrSurfaceOrigin int32
 
 const (
 	GrSurfaceOriginTopLeft    GrSurfaceOrigin = 0
@@ -5350,11 +5373,11 @@ const (
 	GrSemaphoresSubmittedYes GrSemaphoresSubmitted = true
 )
 
-type BlendMode int
+type BlendMode int32
 
 const ()
 
-type ClipOp int
+type ClipOp int32
 
 const (
 	ClipOpDifference    ClipOp = 0
@@ -5369,7 +5392,7 @@ Describes how pixel bits encode color. A pixel may be an alpha mask, a grayscale
 kN32_SkColorType selects the native 32-bit ARGB format for the current configuration. This can
 lead to inconsistent results across platforms, so use with caution.
 */
-type ColorType int
+type ColorType int32
 
 const (
 	// uninitialized
@@ -5428,7 +5451,7 @@ const (
 	ColorTypeN32 ColorType = 4
 )
 
-type FilterMode int
+type FilterMode int32
 
 const (
 	FilterModeNearest FilterMode = 0
@@ -5441,7 +5464,7 @@ Description of how the LCD strips are arranged for each pixel. If this is unknow
 pixels are meant to be "portable" and/or transformed before showing (e.g. rotated, scaled)
 then use kUnknown_SkPixelGeometry.
 */
-type PixelGeometry uint
+type PixelGeometry uint32
 
 const (
 	PixelGeometryUnknown PixelGeometry = 0
@@ -5451,7 +5474,7 @@ const (
 	PixelGeometryBGR_V   PixelGeometry = 4
 )
 
-type TextEncoding int
+type TextEncoding int32
 
 const (
 	// uses bytes to represent UTF-8 or ASCII
@@ -5491,7 +5514,7 @@ func GrGLMakeNativeInterface() GrGLInterface {
 	return GrGLInterface{sk: retC}
 }
 
-func GrBackendRenderTargetsMakeGL(width int, height int, sampleCnt int, stencilBits int, glInfo GrGLFramebufferInfo) GrBackendRenderTarget {
+func GrBackendRenderTargetsMakeGL(width int32, height int32, sampleCnt int32, stencilBits int32, glInfo GrGLFramebufferInfo) GrBackendRenderTarget {
 	c_width := C.int(width)
 	c_height := C.int(height)
 	c_sampleCnt := C.int(sampleCnt)
@@ -5574,7 +5597,7 @@ than the largest of r, g, and b.
 @param b  amount of blue, from no blue (0) to full blue (255)
 @return   color and alpha, unpremultiplied
 */
-func SkColorSetARGB(a uint, r uint, g uint, b uint) Color {
+func SkColorSetARGB(a uint32, r uint32, g uint32, b uint32) Color {
 	c_a := C.uint(a)
 	c_r := C.uint(r)
 	c_g := C.uint(g)
@@ -5591,7 +5614,7 @@ from a. Alpha component of c is ignored and is replaced by a in result.
 @param a  alpha: transparent at zero, fully opaque at 255
 @return   color with transparency
 */
-func SkColorSetA(c Color, a uint) Color {
+func SkColorSetA(c Color, a uint32) Color {
 	c_c := C.uint(c)
 	c_a := C.uint(a)
 	retC := C.misk_SkColorSetA(c_c, c_a)
@@ -5607,7 +5630,7 @@ Returns a SkPMColor value from unpremultiplied 8-bit component values.
 @param b  amount of blue, from no blue (0) to full blue (255)
 @return   premultiplied color
 */
-func SkPreMultiplyARGB(a uint, r uint, g uint, b uint) PMColor {
+func SkPreMultiplyARGB(a uint32, r uint32, g uint32, b uint32) PMColor {
 	c_a := C.uint(a)
 	c_r := C.uint(r)
 	c_g := C.uint(g)
@@ -5734,28 +5757,28 @@ var ColorYELLOW = (Color)(C.sk_SK_ColorYELLOW)
 /*
 The generation IDs in Skia reserve 0 has an invalid marker.
 */
-var InvalidGenID = (uint)(C.sk_SK_InvalidGenID)
+var InvalidGenID = (uint32)(C.sk_SK_InvalidGenID)
 
 /*
 The unique IDs in Skia reserve 0 has an invalid marker.
 */
-var InvalidUniqueID = (uint)(C.sk_SK_InvalidUniqueID)
+var InvalidUniqueID = (uint32)(C.sk_SK_InvalidUniqueID)
 
 /*
 Maximum representable milliseconds; 24d 20h 31m 23.647s.
 */
-var MSecMax = (uint)(C.sk_SK_MSecMax)
+var MSecMax = (uint32)(C.sk_SK_MSecMax)
 
 /*
 This value translates to reseting all the context state for any backend.
 */
-var All_GrBackendState = (uint)(C.sk_kAll_GrBackendState)
-var GrGLStandardCnt = (int)(C.sk_kGrGLStandardCnt)
-var ColorTypeCnt = (int)(C.sk_kSkColorTypeCnt)
-var FilterModeCount = (int)(C.sk_kSkFilterModeCount)
-var MipmapModeCount = (int)(C.sk_kSkMipmapModeCount)
-var StrAppendS32_MaxSize = (int)(C.sk_kSkStrAppendS32_MaxSize)
-var StrAppendS64_MaxSize = (int)(C.sk_kSkStrAppendS64_MaxSize)
+var All_GrBackendState = (uint32)(C.sk_kAll_GrBackendState)
+var GrGLStandardCnt = (int32)(C.sk_kGrGLStandardCnt)
+var ColorTypeCnt = (int32)(C.sk_kSkColorTypeCnt)
+var FilterModeCount = (int32)(C.sk_kSkFilterModeCount)
+var MipmapModeCount = (int32)(C.sk_kSkMipmapModeCount)
+var StrAppendS32_MaxSize = (int32)(C.sk_kSkStrAppendS32_MaxSize)
+var StrAppendS64_MaxSize = (int32)(C.sk_kSkStrAppendS64_MaxSize)
 
 /*
 Floats have at most 8 significant digits, so we limit our %g to that.
@@ -5764,9 +5787,9 @@ However, the total string could be 15 characters: -1.2345678e-005
 In theory we should only expect up to 2 digits for the exponent, but on
 some platforms we have seen 3 (as in the example above).
 */
-var StrAppendScalar_MaxSize = (int)(C.sk_kSkStrAppendScalar_MaxSize)
-var StrAppendU32_MaxSize = (int)(C.sk_kSkStrAppendU32_MaxSize)
-var StrAppendU64_MaxSize = (int)(C.sk_kSkStrAppendU64_MaxSize)
+var StrAppendScalar_MaxSize = (int32)(C.sk_kSkStrAppendScalar_MaxSize)
+var StrAppendU32_MaxSize = (int32)(C.sk_kSkStrAppendU32_MaxSize)
+var StrAppendU64_MaxSize = (int32)(C.sk_kSkStrAppendU64_MaxSize)
 
 func FontMgrRefDefault() FontMgr {
 	return FontMgr{

@@ -642,6 +642,9 @@ extern "C"
                                                  float c_size, float c_scaleX,
                                                  float c_skewX);
   float misk_Font_getMetrics (sk_SkFont *c_obj, sk_SkFontMetrics *c_metrics);
+  unsigned short misk_Font_unicharToGlyph (sk_SkFont *c_obj, int c_uni);
+  void misk_Font_unicharsToGlyphs (sk_SkFont *c_obj, int *c_uni, int c_count,
+                                   ushort *c_glyphs);
 
   sk_SkFontStyleSet *misk_FontMgr_matchFamily (sk_SkFontMgr *c_obj,
                                                char *c_familyName);

@@ -234,7 +234,9 @@
         {
           "name": "getMetrics",
           "overloads": [{ "params": [{ "asPointer": true }] }]
-        }
+        },
+        { "name": "unicharToGlyph" },
+        { "name": "unicharsToGlyphs" }
       ]
     },
 

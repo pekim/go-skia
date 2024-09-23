@@ -989,6 +989,21 @@ extern "C"
     return ret;
   }
 
+  unsigned short
+  misk_Font_unicharToGlyph (sk_SkFont *c_obj, int c_uni)
+  {
+    auto ret = reinterpret_cast<SkFont *> (c_obj)->unicharToGlyph (c_uni);
+    return ret;
+  }
+
+  void
+  misk_Font_unicharsToGlyphs (sk_SkFont *c_obj, int *c_uni, int c_count,
+                              ushort *c_glyphs)
+  {
+    reinterpret_cast<SkFont *> (c_obj)->unicharsToGlyphs (
+        (int *)c_uni, c_count, (unsigned short *)c_glyphs);
+  }
+
   sk_SkFontStyleSet *
   misk_FontMgr_matchFamily (sk_SkFontMgr *c_obj, char *c_familyName)
   {

@@ -54,7 +54,7 @@ func main() {
 	var fbo int32
 	gl.GetIntegerv(gl.FRAMEBUFFER_BINDING, &fbo)
 	var fbInfo skia.GrGLFramebufferInfo
-	fbInfo.SetFBOID(uint(fbo))
+	fbInfo.SetFBOID(uint32(fbo))
 	fbInfo.SetFormat(gl.RGBA8)
 
 	backend := skia.GrBackendRenderTargetsMakeGL(800, 600, 1, 8, fbInfo)
@@ -88,6 +88,13 @@ func main() {
 		font := skia.NewFontTypefaceSize(typeface, 22)
 		var metrics skia.FontMetrics
 		lineSpacing := font.GetMetrics(&metrics)
+
+		fmt.Println(font.UnicharToGlyph('B'))
+		chars := []int32{'A', 'B', 'C', 'D', 'Y', 'Z'}
+		glyphs := make([]uint16, len(chars))
+		font.UnicharsToGlyphs(chars, int32(len(chars)), glyphs)
+		fmt.Println(glyphs)
+
 		paint.SetColor(skia.ColorBLACK)
 		canvas.DrawString("Some text", 100, 250, font, paint)
 		canvas.DrawString(fmt.Sprintf("Font ascent = %.1f", metrics.Ascent()), 100, 250+lineSpacing, font, paint)
