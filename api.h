@@ -214,6 +214,11 @@ extern "C"
   typedef struct
   {
     uchar pad_0[16];
+  } sk_SkFontStyleSet;
+
+  typedef struct
+  {
+    uchar pad_0[16];
     uchar fInfo[24];
     uint fUniqueID;
     uchar pad_2[4];
@@ -581,9 +586,15 @@ extern "C"
                                                  float c_size, float c_scaleX,
                                                  float c_skewX);
 
+  sk_SkFontStyleSet *misk_FontMgr_matchFamily (sk_SkFontMgr *c_obj,
+                                               char *c_familyName);
   sk_SkTypeface *misk_FontMgr_matchFamilyStyle (sk_SkFontMgr *c_obj,
                                                 char *c_familyName,
                                                 sk_SkFontStyle *c_p1);
+  sk_SkTypeface *misk_FontMgr_makeFromData (sk_SkFontMgr *c_obj,
+                                            sk_SkData *c_p0, int c_ttcIndex);
+  sk_SkTypeface *misk_FontMgr_makeFromFile (sk_SkFontMgr *c_obj, char *c_path,
+                                            int c_ttcIndex);
 
   sk_SkFontStyle *misk_new_FontStyle2 (int c_weight, int c_width,
                                        uint c_slant);
@@ -592,6 +603,14 @@ extern "C"
   sk_SkFontStyle misk_FontStyle_Bold ();
   sk_SkFontStyle misk_FontStyle_Italic ();
   sk_SkFontStyle misk_FontStyle_BoldItalic ();
+
+  int misk_FontStyleSet_count (sk_SkFontStyleSet *c_obj);
+  void misk_FontStyleSet_getStyle (sk_SkFontStyleSet *c_obj, int c_index,
+                                   sk_SkFontStyle *c_p1, sk_SkString *c_style);
+  sk_SkTypeface *misk_FontStyleSet_createTypeface (sk_SkFontStyleSet *c_obj,
+                                                   int c_index);
+  sk_SkTypeface *misk_FontStyleSet_matchStyle (sk_SkFontStyleSet *c_obj,
+                                               sk_SkFontStyle *c_pattern);
 
   int misk_Image_width (sk_SkImage *c_obj);
   int misk_Image_height (sk_SkImage *c_obj);

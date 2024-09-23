@@ -2654,6 +2654,25 @@ func (o FontMgr) IsNil() bool {
 }
 
 /*
+The caller must call unref() on the returned object.
+Never returns NULL; will return an empty set if the name is not found.
+
+Passing nullptr as the parameter will return the default system family.
+Note that most systems don't have a default system family, so passing nullptr will often
+result in the empty set.
+
+It is possible that this will return a style set not accessible from
+createStyleSet(int) due to hidden or auto-activated fonts.
+*/
+func (o FontMgr) MatchFamily(familyName string) FontStyleSet {
+	c_obj := o.sk
+	c_familyName := C.CString(familyName)
+	defer C.free(unsafe.Pointer(c_familyName))
+	retC := C.misk_FontMgr_matchFamily(c_obj, c_familyName)
+	return FontStyleSet{sk: retC}
+}
+
+/*
 Find the closest matching typeface to the specified familyName and style
 and return a ref to it. The caller must call unref() on the returned
 object. Will return nullptr if no 'good' match is found.
@@ -2671,6 +2690,34 @@ func (o FontMgr) MatchFamilyStyle(familyName string, p1 FontStyle) Typeface {
 	defer C.free(unsafe.Pointer(c_familyName))
 	c_p1 := p1.sk
 	retC := C.misk_FontMgr_matchFamilyStyle(c_obj, c_familyName, c_p1)
+	return Typeface{sk: retC}
+}
+
+/*
+Create a typeface for the specified data and TTC index (pass 0 for none)
+or NULL if the data is not recognized. The caller must call unref() on
+the returned object if it is not null.
+*/
+func (o FontMgr) MakeFromData(p0 Data, ttcIndex int) Typeface {
+	c_obj := o.sk
+	c_p0 := p0.sk
+	c_ttcIndex := C.int(ttcIndex)
+	retC := C.misk_FontMgr_makeFromData(c_obj, c_p0, c_ttcIndex)
+	return Typeface{sk: retC}
+}
+
+/*
+Create a typeface for the specified fileName and TTC index
+(pass 0 for none) or NULL if the file is not found, or its contents are
+not recognized. The caller must call unref() on the returned object
+if it is not null.
+*/
+func (o FontMgr) MakeFromFile(path string, ttcIndex int) Typeface {
+	c_obj := o.sk
+	c_path := C.CString(path)
+	defer C.free(unsafe.Pointer(c_path))
+	c_ttcIndex := C.int(ttcIndex)
+	retC := C.misk_FontMgr_makeFromFile(c_obj, c_path, c_ttcIndex)
 	return Typeface{sk: retC}
 }
 
@@ -2725,6 +2772,44 @@ const (
 	FontStyleSlantItalic  FontStyleSlant = 1
 	FontStyleSlantOblique FontStyleSlant = 2
 )
+
+type FontStyleSet struct {
+	sk *C.sk_SkFontStyleSet
+}
+
+// IsNil returns true if the raw skia object pointer is nil.
+// If it is nil is may indicate that the FontStyleSet has not been created.
+func (o FontStyleSet) IsNil() bool {
+	return o.sk == nil
+}
+
+func (o FontStyleSet) Count() int {
+	c_obj := o.sk
+	retC := C.misk_FontStyleSet_count(c_obj)
+	return int(retC)
+}
+
+func (o FontStyleSet) GetStyle(index int, p1 FontStyle, style String) {
+	c_obj := o.sk
+	c_index := C.int(index)
+	c_p1 := p1.sk
+	c_style := style.sk
+	C.misk_FontStyleSet_getStyle(c_obj, c_index, c_p1, c_style)
+}
+
+func (o FontStyleSet) CreateTypeface(index int) Typeface {
+	c_obj := o.sk
+	c_index := C.int(index)
+	retC := C.misk_FontStyleSet_createTypeface(c_obj, c_index)
+	return Typeface{sk: retC}
+}
+
+func (o FontStyleSet) MatchStyle(pattern FontStyle) Typeface {
+	c_obj := o.sk
+	c_pattern := pattern.sk
+	retC := C.misk_FontStyleSet_matchStyle(c_obj, c_pattern)
+	return Typeface{sk: retC}
+}
 
 /*
 SkImage describes a two dimensional array of pixels to draw. The pixels may be

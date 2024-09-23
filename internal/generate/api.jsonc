@@ -234,7 +234,12 @@
 
     {
       "name": "SkFontMgr",
-      "methods": [{ "name": "matchFamilyStyle" }]
+      "methods": [
+        { "name": "matchFamily" },
+        { "name": "matchFamilyStyle" },
+        { "name": "makeFromData" },
+        { "name": "makeFromFile" }
+      ]
     },
 
     {
@@ -246,6 +251,16 @@
         { "name": "Bold" },
         { "name": "Italic" },
         { "name": "BoldItalic" }
+      ]
+    },
+
+    {
+      "name": "SkFontStyleSet",
+      "methods": [
+        { "name": "count" },
+        { "name": "getStyle" },
+        { "name": "createTypeface" },
+        { "name": "matchStyle" }
       ]
     },
 

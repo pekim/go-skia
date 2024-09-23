@@ -976,6 +976,15 @@ extern "C"
                     c_size, c_scaleX, c_skewX));
   }
 
+  sk_SkFontStyleSet *
+  misk_FontMgr_matchFamily (sk_SkFontMgr *c_obj, char *c_familyName)
+  {
+    auto ret = reinterpret_cast<SkFontMgr *> (c_obj)
+                   ->matchFamily ((char *)c_familyName)
+                   .release ();
+    return reinterpret_cast<sk_SkFontStyleSet *> (ret);
+  }
+
   sk_SkTypeface *
   misk_FontMgr_matchFamilyStyle (sk_SkFontMgr *c_obj, char *c_familyName,
                                  sk_SkFontStyle *c_p1)
@@ -983,6 +992,27 @@ extern "C"
     auto ret = reinterpret_cast<SkFontMgr *> (c_obj)
                    ->matchFamilyStyle ((char *)c_familyName,
                                        *reinterpret_cast<SkFontStyle *> (c_p1))
+                   .release ();
+    return reinterpret_cast<sk_SkTypeface *> (ret);
+  }
+
+  sk_SkTypeface *
+  misk_FontMgr_makeFromData (sk_SkFontMgr *c_obj, sk_SkData *c_p0,
+                             int c_ttcIndex)
+  {
+    auto ret
+        = reinterpret_cast<SkFontMgr *> (c_obj)
+              ->makeFromData (sk_ref_sp (reinterpret_cast<SkData *> (c_p0)),
+                              c_ttcIndex)
+              .release ();
+    return reinterpret_cast<sk_SkTypeface *> (ret);
+  }
+
+  sk_SkTypeface *
+  misk_FontMgr_makeFromFile (sk_SkFontMgr *c_obj, char *c_path, int c_ttcIndex)
+  {
+    auto ret = reinterpret_cast<SkFontMgr *> (c_obj)
+                   ->makeFromFile ((char *)c_path, c_ttcIndex)
                    .release ();
     return reinterpret_cast<sk_SkTypeface *> (ret);
   }
@@ -1026,6 +1056,41 @@ extern "C"
   {
     auto ret = SkFontStyle::BoldItalic ();
     return *(reinterpret_cast<sk_SkFontStyle *> (&ret));
+  }
+
+  int
+  misk_FontStyleSet_count (sk_SkFontStyleSet *c_obj)
+  {
+    auto ret = reinterpret_cast<SkFontStyleSet *> (c_obj)->count ();
+    return ret;
+  }
+
+  void
+  misk_FontStyleSet_getStyle (sk_SkFontStyleSet *c_obj, int c_index,
+                              sk_SkFontStyle *c_p1, sk_SkString *c_style)
+  {
+    reinterpret_cast<SkFontStyleSet *> (c_obj)->getStyle (
+        c_index, reinterpret_cast<SkFontStyle *> (c_p1),
+        reinterpret_cast<SkString *> (c_style));
+  }
+
+  sk_SkTypeface *
+  misk_FontStyleSet_createTypeface (sk_SkFontStyleSet *c_obj, int c_index)
+  {
+    auto ret = reinterpret_cast<SkFontStyleSet *> (c_obj)
+                   ->createTypeface (c_index)
+                   .release ();
+    return reinterpret_cast<sk_SkTypeface *> (ret);
+  }
+
+  sk_SkTypeface *
+  misk_FontStyleSet_matchStyle (sk_SkFontStyleSet *c_obj,
+                                sk_SkFontStyle *c_pattern)
+  {
+    auto ret = reinterpret_cast<SkFontStyleSet *> (c_obj)
+                   ->matchStyle (*reinterpret_cast<SkFontStyle *> (c_pattern))
+                   .release ();
+    return reinterpret_cast<sk_SkTypeface *> (ret);
   }
 
   int
