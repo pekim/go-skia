@@ -81,6 +81,12 @@ func (o callableOverload) generateGoBody(g generator) {
 			}
 		} else if (o.retrn.isPointer || o.retrn.isSmartPointer) && o.retrn.subTyp.record != nil {
 			f.writelnf("  return %s{sk: retC}", o.retrn.subTyp.record.goName)
+		} else if o.retrn.isLValueReference {
+			if o.retrn.subTyp.record.NoWrapper {
+				f.writelnf("  return %s(retC)", o.retrn.subTyp.record.goName)
+			} else {
+				f.writelnf("  return %s{sk: &retC}", o.retrn.subTyp.record.goName)
+			}
 		} else if o.retrn.goName == "string" {
 			f.writelnf("  return C.GoString( retC)")
 		} else if o.retrn.typedef != nil {

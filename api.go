@@ -2843,6 +2843,18 @@ func (o Image) IsNil() bool {
 }
 
 /*
+Returns a SkImageInfo describing the width, height, color type, alpha type, and color space
+of the SkImage.
+
+@return  image info of SkImage.
+*/
+func (o Image) ImageInfo() ImageInfo {
+	c_obj := o.sk
+	retC := C.misk_Image_imageInfo(c_obj)
+	return ImageInfo{sk: &retC}
+}
+
+/*
 Returns pixel count in each row.
 
 @return  pixel width in SkImage
@@ -4945,6 +4957,24 @@ func (o SVGDOM) SetContainerSize(p0 Size) {
 	C.misk_SVGDOM_setContainerSize(c_obj, c_p0)
 }
 
+/*
+DEPRECATED: use getRoot()->intrinsicSize() to query the root element intrinsic size.
+
+Returns the SVG dom container size.
+
+If the client specified a container size via setContainerSize(), then the same size is
+returned.
+
+When unspecified by clients, this returns the intrinsic size of the root element, as defined
+by its width/height attributes.  If either width or height is specified in relative units
+(e.g. "100%"), then the corresponding intrinsic size dimension is zero.
+*/
+func (o SVGDOM) ContainerSize() Size {
+	c_obj := o.sk
+	retC := C.misk_SVGDOM_containerSize(c_obj)
+	return Size(retC)
+}
+
 func (o SVGDOM) Render(p0 Canvas) {
 	c_obj := o.sk
 	c_p0 := p0.sk
@@ -4983,6 +5013,12 @@ func NewSVGLengthContext(viewport Size, dpi float32) SVGLengthContext {
 	c_dpi := C.float(dpi)
 	retC := C.misk_new_SVGLengthContext(c_viewport, c_dpi)
 	return SVGLengthContext{sk: retC}
+}
+
+func (o SVGLengthContext) ViewPort() Size {
+	c_obj := o.sk
+	retC := C.misk_SVGLengthContext_viewPort(c_obj)
+	return Size(retC)
 }
 
 func (o SVGLengthContext) SetViewPort(viewport Size) {

@@ -648,6 +648,7 @@ extern "C"
   sk_SkTypeface *misk_FontStyleSet_matchStyle (sk_SkFontStyleSet *c_obj,
                                                sk_SkFontStyle *c_pattern);
 
+  sk_SkImageInfo misk_Image_imageInfo (sk_SkImage *c_obj);
   int misk_Image_width (sk_SkImage *c_obj);
   int misk_Image_height (sk_SkImage *c_obj);
   sk_SkISize misk_Image_dimensions (sk_SkImage *c_obj);
@@ -789,6 +790,7 @@ extern "C"
 
   sk_SkSVGSVG *misk_SVGDOM_getRoot (sk_SkSVGDOM *c_obj);
   void misk_SVGDOM_setContainerSize (sk_SkSVGDOM *c_obj, sk_SkSize c_p0);
+  sk_SkSize misk_SVGDOM_containerSize (sk_SkSVGDOM *c_obj);
   void misk_SVGDOM_render (sk_SkSVGDOM *c_obj, sk_SkCanvas *c_p0);
 
   sk_SkSize misk_SVGSVG_intrinsicSize (sk_SkSVGSVG *c_obj,
@@ -796,6 +798,7 @@ extern "C"
 
   sk_SkSVGLengthContext *misk_new_SVGLengthContext (sk_SkSize c_viewport,
                                                     float c_dpi);
+  sk_SkSize misk_SVGLengthContext_viewPort (sk_SkSVGLengthContext *c_obj);
   void misk_SVGLengthContext_setViewPort (sk_SkSVGLengthContext *c_obj,
                                           sk_SkSize c_viewport);
 

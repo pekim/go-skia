@@ -16,6 +16,8 @@ func (o callableOverload) generateHeader(g generator) {
 			returnPtr = "*"
 		}
 		returnDecl = fmt.Sprintf("%s%s", o.retrn.record.cStructName, returnPtr)
+	} else if o.retrn.isLValueReference {
+		returnDecl = o.retrn.subTyp.record.cStructName
 	} else if (o.retrn.isPointer || o.retrn.isSmartPointer) && o.retrn.subTyp.record != nil {
 		returnPtr = "*"
 		returnDecl = fmt.Sprintf("%s%s", o.retrn.subTyp.record.cStructName, returnPtr)

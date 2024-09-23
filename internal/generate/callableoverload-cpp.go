@@ -20,6 +20,8 @@ func (o callableOverload) generateCpp(g generator) {
 		}
 	} else if (o.retrn.isPointer || o.retrn.isSmartPointer) && o.retrn.subTyp.record != nil {
 		returnDecl = o.retrn.subTyp.record.cStructName + "*"
+	} else if (o.retrn.isLValueReference) && o.retrn.subTyp.record != nil {
+		returnDecl = o.retrn.subTyp.record.cStructName
 	}
 	if o.retrn.isConst {
 		returnDecl = "const " + returnDecl
@@ -77,7 +79,7 @@ func (o *callableOverload) generateCppReturnStatement(g generator) {
 	}
 
 	f := g.cppFile
-	isPointer := o.retrn.isPointer || o.retrn.isSmartPointer
+	isPointer := o.retrn.isPointer || o.retrn.isSmartPointer || o.retrn.isLValueReference
 
 	if o.retrn.enum != nil {
 		f.writelnf("  return (%s)ret;", o.retrn.enum.cType.cName)
@@ -110,7 +112,7 @@ func (o *callableOverload) generateCppReturnStatement(g generator) {
 	cast := fmt.Sprintf("reinterpret_cast<%s %s *>", returnConst, cTypeName)
 
 	f.write("  return ")
-	if isPointer {
+	if isPointer && !o.retrn.isLValueReference {
 		f.writef("%s(ret)", cast)
 	} else {
 		f.writef("*(%s(&ret))", cast)

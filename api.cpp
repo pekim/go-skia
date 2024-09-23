@@ -1097,6 +1097,13 @@ extern "C"
     return reinterpret_cast<sk_SkTypeface *> (ret);
   }
 
+  sk_SkImageInfo
+  misk_Image_imageInfo (sk_SkImage *c_obj)
+  {
+    auto ret = reinterpret_cast<SkImage *> (c_obj)->imageInfo ();
+    return *(reinterpret_cast<sk_SkImageInfo *> (&ret));
+  }
+
   int
   misk_Image_width (sk_SkImage *c_obj)
   {
@@ -1846,6 +1853,13 @@ extern "C"
         *reinterpret_cast<SkSize *> (&c_p0));
   }
 
+  sk_SkSize
+  misk_SVGDOM_containerSize (sk_SkSVGDOM *c_obj)
+  {
+    auto ret = reinterpret_cast<SkSVGDOM *> (c_obj)->containerSize ();
+    return *(reinterpret_cast<sk_SkSize *> (&ret));
+  }
+
   void
   misk_SVGDOM_render (sk_SkSVGDOM *c_obj, sk_SkCanvas *c_p0)
   {
@@ -1866,6 +1880,13 @@ extern "C"
   {
     return reinterpret_cast<sk_SkSVGLengthContext *> (new SkSVGLengthContext (
         *reinterpret_cast<SkSize *> (&c_viewport), c_dpi));
+  }
+
+  sk_SkSize
+  misk_SVGLengthContext_viewPort (sk_SkSVGLengthContext *c_obj)
+  {
+    auto ret = reinterpret_cast<SkSVGLengthContext *> (c_obj)->viewPort ();
+    return *(reinterpret_cast<sk_SkSize *> (&ret));
   }
 
   void

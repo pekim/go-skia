@@ -267,7 +267,7 @@
     {
       "name": "SkImage",
       "methods": [
-        // { "name": "imageInfo" },
+        { "name": "imageInfo" },
         { "name": "width" },
         { "name": "height" },
         { "name": "dimensions" },
@@ -497,7 +497,7 @@
       "methods": [
         { "name": "getRoot" },
         { "name": "setContainerSize" },
-        //  { "name": "containerSize" }
+        { "name": "containerSize" },
         { "name": "render" }
       ]
     },
@@ -507,10 +507,7 @@
     {
       "name": "SkSVGLengthContext",
       "constructors": [{}],
-      "methods": [
-        // { "name": "viewPort" },
-        { "name": "setViewPort" }
-      ]
+      "methods": [{ "name": "viewPort" }, { "name": "setViewPort" }]
     },
 
     {
