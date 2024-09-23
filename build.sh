@@ -214,7 +214,20 @@ cd ../..
 if [ ! -e header ]; then
   # copy headers
   mkdir header
-  cp -r _skia/skia/include _skia/skia/modules header
+  cp -r \
+      _skia/skia/include \
+      _skia/skia/modules \
+      header
+  mkdir -p \
+      header/src/base \
+      header/src/core
+  cp -r \
+      _skia/skia/src/base/SkTLazy.h \
+      header/src/base
+  cp -r \
+      _skia/skia/src/core/SkTHash.h \
+      _skia/skia/src/core/SkChecksum.h \
+      header/src/core
 fi
 if [ ! -e lib ]; then
   # copy libs

@@ -493,6 +493,27 @@
     },
 
     {
+      "name": "SkSVGDOM",
+      "methods": [
+        { "name": "getRoot" },
+        { "name": "setContainerSize" },
+        //  { "name": "containerSize" }
+        { "name": "render" }
+      ]
+    },
+
+    { "name": "SkSVGSVG", "methods": [{ "name": "intrinsicSize" }] },
+
+    {
+      "name": "SkSVGLengthContext",
+      "constructors": [{}],
+      "methods": [
+        // { "name": "viewPort" },
+        { "name": "setViewPort" }
+      ]
+    },
+
+    {
       "name": "SkTextBlob",
       "methods": [
         { "name": "MakeFromString" },

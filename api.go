@@ -4911,6 +4911,86 @@ const (
 	SurfacePropsFlagsAlwaysDither_Flag              SurfacePropsFlags = 4
 )
 
+type SVGDOM struct {
+	sk *C.sk_SkSVGDOM
+}
+
+// IsNil returns true if the raw skia object pointer is nil.
+// If it is nil is may indicate that the SVGDOM has not been created.
+func (o SVGDOM) IsNil() bool {
+	return o.sk == nil
+}
+
+/*
+Returns the root (outermost) SVG element.
+*/
+func (o SVGDOM) GetRoot() SVGSVG {
+	c_obj := o.sk
+	retC := C.misk_SVGDOM_getRoot(c_obj)
+	return SVGSVG{sk: retC}
+}
+
+/*
+Specify a "container size" for the SVG dom.
+
+This is used to resolve the initial viewport when the root SVG width/height are specified
+in relative units.
+
+If the root dimensions are in absolute units, then the container size has no effect since
+the initial viewport is fixed.
+*/
+func (o SVGDOM) SetContainerSize(p0 Size) {
+	c_obj := o.sk
+	c_p0 := *(*C.sk_SkSize)(unsafe.Pointer(&p0))
+	C.misk_SVGDOM_setContainerSize(c_obj, c_p0)
+}
+
+func (o SVGDOM) Render(p0 Canvas) {
+	c_obj := o.sk
+	c_p0 := p0.sk
+	C.misk_SVGDOM_render(c_obj, c_p0)
+}
+
+type SVGSVG struct {
+	sk *C.sk_SkSVGSVG
+}
+
+// IsNil returns true if the raw skia object pointer is nil.
+// If it is nil is may indicate that the SVGSVG has not been created.
+func (o SVGSVG) IsNil() bool {
+	return o.sk == nil
+}
+
+func (o SVGSVG) IntrinsicSize(p0 SVGLengthContext) Size {
+	c_obj := o.sk
+	c_p0 := p0.sk
+	retC := C.misk_SVGSVG_intrinsicSize(c_obj, c_p0)
+	return Size(retC)
+}
+
+type SVGLengthContext struct {
+	sk *C.sk_SkSVGLengthContext
+}
+
+// IsNil returns true if the raw skia object pointer is nil.
+// If it is nil is may indicate that the SVGLengthContext has not been created.
+func (o SVGLengthContext) IsNil() bool {
+	return o.sk == nil
+}
+
+func NewSVGLengthContext(viewport Size, dpi float32) SVGLengthContext {
+	c_viewport := *(*C.sk_SkSize)(unsafe.Pointer(&viewport))
+	c_dpi := C.float(dpi)
+	retC := C.misk_new_SVGLengthContext(c_viewport, c_dpi)
+	return SVGLengthContext{sk: retC}
+}
+
+func (o SVGLengthContext) SetViewPort(viewport Size) {
+	c_obj := o.sk
+	c_viewport := *(*C.sk_SkSize)(unsafe.Pointer(&viewport))
+	C.misk_SVGLengthContext_setViewPort(c_obj, c_viewport)
+}
+
 /*
 SkTextBlob combines multiple text runs into an immutable container. Each text
 run consists of glyphs, SkPaint, and position. Only parts of SkPaint related to

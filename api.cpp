@@ -43,6 +43,9 @@
 #include <include/gpu/gl/GrGLInterface.h>
 #include <include/gpu/gl/GrGLTypes.h>
 #include <include/private/base/SkPoint_impl.h>
+#include <modules/svg/include/SkSVGDOM.h>
+#include <modules/svg/include/SkSVGRenderContext.h>
+#include <modules/svg/include/SkSVGSVG.h>
 
 #if defined(SKIA_MAC)
 #include "include/ports/SkFontMgr_mac_ct.h"
@@ -1827,6 +1830,50 @@ extern "C"
   {
     return reinterpret_cast<sk_SkSurfaceProps *> (
         new SkSurfaceProps (*reinterpret_cast<SkSurfaceProps *> (c_p0)));
+  }
+
+  sk_SkSVGSVG *
+  misk_SVGDOM_getRoot (sk_SkSVGDOM *c_obj)
+  {
+    auto ret = reinterpret_cast<SkSVGDOM *> (c_obj)->getRoot ();
+    return reinterpret_cast<sk_SkSVGSVG *> (ret);
+  }
+
+  void
+  misk_SVGDOM_setContainerSize (sk_SkSVGDOM *c_obj, sk_SkSize c_p0)
+  {
+    reinterpret_cast<SkSVGDOM *> (c_obj)->setContainerSize (
+        *reinterpret_cast<SkSize *> (&c_p0));
+  }
+
+  void
+  misk_SVGDOM_render (sk_SkSVGDOM *c_obj, sk_SkCanvas *c_p0)
+  {
+    reinterpret_cast<SkSVGDOM *> (c_obj)->render (
+        reinterpret_cast<SkCanvas *> (c_p0));
+  }
+
+  sk_SkSize
+  misk_SVGSVG_intrinsicSize (sk_SkSVGSVG *c_obj, sk_SkSVGLengthContext *c_p0)
+  {
+    auto ret = reinterpret_cast<SkSVGSVG *> (c_obj)->intrinsicSize (
+        *reinterpret_cast<SkSVGLengthContext *> (c_p0));
+    return *(reinterpret_cast<sk_SkSize *> (&ret));
+  }
+
+  sk_SkSVGLengthContext *
+  misk_new_SVGLengthContext (sk_SkSize c_viewport, float c_dpi)
+  {
+    return reinterpret_cast<sk_SkSVGLengthContext *> (new SkSVGLengthContext (
+        *reinterpret_cast<SkSize *> (&c_viewport), c_dpi));
+  }
+
+  void
+  misk_SVGLengthContext_setViewPort (sk_SkSVGLengthContext *c_obj,
+                                     sk_SkSize c_viewport)
+  {
+    reinterpret_cast<SkSVGLengthContext *> (c_obj)->setViewPort (
+        *reinterpret_cast<SkSize *> (&c_viewport));
   }
 
   sk_SkTextBlob *

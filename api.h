@@ -378,6 +378,35 @@ extern "C"
 
   typedef struct
   {
+    uchar pad_0[16];
+    uchar fRoot[8];
+    uchar fFontMgr[8];
+    uchar fTextShapingFactory[8];
+    uchar fResourceProvider[8];
+    uchar fIDMapper[16];
+    uchar fContainerSize[8];
+  } sk_SkSVGDOM;
+
+  typedef struct
+  {
+    uchar pad_0[776];
+    uchar fX[8];
+    uchar fY[8];
+    uchar fWidth[8];
+    uchar fHeight[8];
+    uchar fPreserveAspectRatio[8];
+    uchar fViewBox[20];
+    uchar fType[4];
+  } sk_SkSVGSVG;
+
+  typedef struct
+  {
+    uchar fViewport[8];
+    float fDPI;
+  } sk_SkSVGLengthContext;
+
+  typedef struct
+  {
     uchar pad_0[4];
     uchar fBounds[16];
     uint fUniqueID;
@@ -757,6 +786,18 @@ extern "C"
   sk_SkSurfaceProps *misk_new_SurfacePropsPixelGeometry (uint c_flags,
                                                          uint c_p1);
   sk_SkSurfaceProps *misk_new_SurfacePropsCopy (sk_SkSurfaceProps *c_p0);
+
+  sk_SkSVGSVG *misk_SVGDOM_getRoot (sk_SkSVGDOM *c_obj);
+  void misk_SVGDOM_setContainerSize (sk_SkSVGDOM *c_obj, sk_SkSize c_p0);
+  void misk_SVGDOM_render (sk_SkSVGDOM *c_obj, sk_SkCanvas *c_p0);
+
+  sk_SkSize misk_SVGSVG_intrinsicSize (sk_SkSVGSVG *c_obj,
+                                       sk_SkSVGLengthContext *c_p0);
+
+  sk_SkSVGLengthContext *misk_new_SVGLengthContext (sk_SkSize c_viewport,
+                                                    float c_dpi);
+  void misk_SVGLengthContext_setViewPort (sk_SkSVGLengthContext *c_obj,
+                                          sk_SkSize c_viewport);
 
   sk_SkTextBlob *misk_TextBlob_MakeFromString (char *c_string,
                                                sk_SkFont *c_font,
