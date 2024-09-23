@@ -36,6 +36,16 @@ func TestFontMgr(t *testing.T) {
 	assert.NotNil(t, typeface.sk)
 }
 
+func TestPointerArgument(t *testing.T) {
+	typeface := FontMgrRefDefault().MatchFamilyStyle("sans-serif", FontStyleNormal())
+	font := NewFontTypefaceSize(typeface, 22)
+	var metrics FontMetrics
+	lineSpacing := font.GetMetrics(&metrics)
+	assert.NotZero(t, lineSpacing)
+	assert.NotZero(t, metrics.fAscent)
+
+}
+
 func TestString(t *testing.T) {
 	s := "qwerty"
 	sk := NewString(s)

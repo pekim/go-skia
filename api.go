@@ -2643,6 +2643,175 @@ func NewFontTypefaceSizeScaleSkew(typeface Typeface, size float32, scaleX float3
 	return Font{sk: retC}
 }
 
+/*
+Returns SkFontMetrics associated with SkTypeface.
+The return value is the recommended spacing between lines: the sum of metrics
+descent, ascent, and leading.
+If metrics is not nullptr, SkFontMetrics is copied to metrics.
+Results are scaled by text size but does not take into account
+dimensions required by text scale, text skew, fake bold,
+style stroke, and SkPathEffect.
+
+@param metrics  storage for SkFontMetrics; may be nullptr
+@return         recommended spacing between lines
+*/
+func (o Font) GetMetrics(metrics *FontMetrics) float32 {
+	c_obj := o.sk
+	c_metrics := (*C.sk_SkFontMetrics)(unsafe.Pointer(metrics))
+	retC := C.misk_Font_getMetrics(c_obj, c_metrics)
+	return float32(retC)
+}
+
+/*
+The metrics of an SkFont.
+The metric values are consistent with the Skia y-down coordinate system.
+*/
+type FontMetrics C.sk_SkFontMetrics
+
+// !< FontMetricsFlags indicating which metrics are valid
+func (o FontMetrics) Flags() uint {
+	return uint(o.fFlags)
+}
+
+func (o *FontMetrics) SetFlags(value uint) {
+	o.fFlags = C.uint(value)
+}
+
+// !< greatest extent above origin of any glyph bounding box, typically negative; deprecated with variable fonts
+func (o FontMetrics) Top() float32 {
+	return float32(o.fTop)
+}
+
+func (o *FontMetrics) SetTop(value float32) {
+	o.fTop = C.float(value)
+}
+
+// !< distance to reserve above baseline, typically negative
+func (o FontMetrics) Ascent() float32 {
+	return float32(o.fAscent)
+}
+
+func (o *FontMetrics) SetAscent(value float32) {
+	o.fAscent = C.float(value)
+}
+
+// !< distance to reserve below baseline, typically positive
+func (o FontMetrics) Descent() float32 {
+	return float32(o.fDescent)
+}
+
+func (o *FontMetrics) SetDescent(value float32) {
+	o.fDescent = C.float(value)
+}
+
+// !< greatest extent below origin of any glyph bounding box, typically positive; deprecated with variable fonts
+func (o FontMetrics) Bottom() float32 {
+	return float32(o.fBottom)
+}
+
+func (o *FontMetrics) SetBottom(value float32) {
+	o.fBottom = C.float(value)
+}
+
+// !< distance to add between lines, typically positive or zero
+func (o FontMetrics) Leading() float32 {
+	return float32(o.fLeading)
+}
+
+func (o *FontMetrics) SetLeading(value float32) {
+	o.fLeading = C.float(value)
+}
+
+// !< average character width, zero if unknown
+func (o FontMetrics) AvgCharWidth() float32 {
+	return float32(o.fAvgCharWidth)
+}
+
+func (o *FontMetrics) SetAvgCharWidth(value float32) {
+	o.fAvgCharWidth = C.float(value)
+}
+
+// !< maximum character width, zero if unknown
+func (o FontMetrics) MaxCharWidth() float32 {
+	return float32(o.fMaxCharWidth)
+}
+
+func (o *FontMetrics) SetMaxCharWidth(value float32) {
+	o.fMaxCharWidth = C.float(value)
+}
+
+// !< greatest extent to left of origin of any glyph bounding box, typically negative; deprecated with variable fonts
+func (o FontMetrics) XMin() float32 {
+	return float32(o.fXMin)
+}
+
+func (o *FontMetrics) SetXMin(value float32) {
+	o.fXMin = C.float(value)
+}
+
+// !< greatest extent to right of origin of any glyph bounding box, typically positive; deprecated with variable fonts
+func (o FontMetrics) XMax() float32 {
+	return float32(o.fXMax)
+}
+
+func (o *FontMetrics) SetXMax(value float32) {
+	o.fXMax = C.float(value)
+}
+
+// !< height of lower-case 'x', zero if unknown, typically negative
+func (o FontMetrics) XHeight() float32 {
+	return float32(o.fXHeight)
+}
+
+func (o *FontMetrics) SetXHeight(value float32) {
+	o.fXHeight = C.float(value)
+}
+
+// !< height of an upper-case letter, zero if unknown, typically negative
+func (o FontMetrics) CapHeight() float32 {
+	return float32(o.fCapHeight)
+}
+
+func (o *FontMetrics) SetCapHeight(value float32) {
+	o.fCapHeight = C.float(value)
+}
+
+// !< underline thickness
+func (o FontMetrics) UnderlineThickness() float32 {
+	return float32(o.fUnderlineThickness)
+}
+
+func (o *FontMetrics) SetUnderlineThickness(value float32) {
+	o.fUnderlineThickness = C.float(value)
+}
+
+// !< distance from baseline to top of stroke, typically positive
+func (o FontMetrics) UnderlinePosition() float32 {
+	return float32(o.fUnderlinePosition)
+}
+
+func (o *FontMetrics) SetUnderlinePosition(value float32) {
+	o.fUnderlinePosition = C.float(value)
+}
+
+// !< strikeout thickness
+func (o FontMetrics) StrikeoutThickness() float32 {
+	return float32(o.fStrikeoutThickness)
+}
+
+func (o *FontMetrics) SetStrikeoutThickness(value float32) {
+	o.fStrikeoutThickness = C.float(value)
+}
+
+// !< distance from baseline to bottom of stroke, typically negative
+func (o FontMetrics) StrikeoutPosition() float32 {
+	return float32(o.fStrikeoutPosition)
+}
+
+func (o *FontMetrics) SetStrikeoutPosition(value float32) {
+	o.fStrikeoutPosition = C.float(value)
+}
+
 type FontMgr struct {
 	sk *C.sk_SkFontMgr
 }

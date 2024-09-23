@@ -203,6 +203,26 @@ extern "C"
 
   typedef struct
   {
+    uint fFlags;
+    float fTop;
+    float fAscent;
+    float fDescent;
+    float fBottom;
+    float fLeading;
+    float fAvgCharWidth;
+    float fMaxCharWidth;
+    float fXMin;
+    float fXMax;
+    float fXHeight;
+    float fCapHeight;
+    float fUnderlineThickness;
+    float fUnderlinePosition;
+    float fStrikeoutThickness;
+    float fStrikeoutPosition;
+  } sk_SkFontMetrics;
+
+  typedef struct
+  {
     uchar pad_0[16];
   } sk_SkFontMgr;
 
@@ -621,6 +641,7 @@ extern "C"
   sk_SkFont *misk_new_FontTypefaceSizeScaleSkew (sk_SkTypeface *c_typeface,
                                                  float c_size, float c_scaleX,
                                                  float c_skewX);
+  float misk_Font_getMetrics (sk_SkFont *c_obj, sk_SkFontMetrics *c_metrics);
 
   sk_SkFontStyleSet *misk_FontMgr_matchFamily (sk_SkFontMgr *c_obj,
                                                char *c_familyName);

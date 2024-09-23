@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	_ "image/png"
 	"log"
 	"runtime"
@@ -85,8 +86,11 @@ func main() {
 
 		typeface := skia.FontMgrRefDefault().MatchFamilyStyle("sans-serif", skia.FontStyleNormal())
 		font := skia.NewFontTypefaceSize(typeface, 22)
+		var metrics skia.FontMetrics
+		lineSpacing := font.GetMetrics(&metrics)
 		paint.SetColor(skia.ColorBLACK)
 		canvas.DrawString("Some text", 100, 250, font, paint)
+		canvas.DrawString(fmt.Sprintf("Font ascent = %.1f", metrics.Ascent()), 100, 250+lineSpacing, font, paint)
 
 		context.FlushAndSubmit(skia.GrSyncCpuYes)
 

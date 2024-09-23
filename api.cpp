@@ -9,6 +9,7 @@
 #include <include/core/SkColorType.h>
 #include <include/core/SkData.h>
 #include <include/core/SkFont.h>
+#include <include/core/SkFontMetrics.h>
 #include <include/core/SkFontMgr.h>
 #include <include/core/SkFontStyle.h>
 #include <include/core/SkFontTypes.h>
@@ -978,6 +979,14 @@ extern "C"
     return reinterpret_cast<sk_SkFont *> (
         new SkFont (sk_ref_sp (reinterpret_cast<SkTypeface *> (c_typeface)),
                     c_size, c_scaleX, c_skewX));
+  }
+
+  float
+  misk_Font_getMetrics (sk_SkFont *c_obj, sk_SkFontMetrics *c_metrics)
+  {
+    auto ret = reinterpret_cast<SkFont *> (c_obj)->getMetrics (
+        reinterpret_cast<SkFontMetrics *> (c_metrics));
+    return ret;
   }
 
   sk_SkFontStyleSet *

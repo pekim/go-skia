@@ -17,9 +17,10 @@ type param struct {
 	typ       typ
 	typGoName string
 	ValueNil  bool `json:"valueNil"`
+	AsPointer bool `json:"asPointer"`
 }
 
-func newParam(paramIndex int, cursor clang.Cursor, valueNil bool) param {
+func newParam(paramIndex int, cursor clang.Cursor, valueNil bool, asPointer bool) param {
 	cName := cursor.DisplayName()
 	if cName == "" {
 		cName = fmt.Sprintf("p%d", paramIndex)
@@ -32,6 +33,7 @@ func newParam(paramIndex int, cursor clang.Cursor, valueNil bool) param {
 		goName:    validGoName(cName),
 		clangType: cursor.Type(),
 		ValueNil:  valueNil,
+		AsPointer: asPointer,
 	}
 
 	return p
@@ -44,6 +46,12 @@ func (p *param) enrich2(api api) {
 
 	p.typ = mustTypFromClangType(p.clangType, api)
 	p.typGoName = p.typ.goName
+
+	if p.typ.isPointer && p.typ.subTyp.record != nil {
+		if p.typ.subTyp.record.NoWrapper && p.AsPointer {
+			p.typGoName = "*" + p.typGoName
+		}
+	}
 
 	if p.typ.isPrimitive {
 		p.cgoVar = fmt.Sprintf("%s := C.%s(%s)", p.cName, p.typ.cName, p.goName)
@@ -97,9 +105,15 @@ func (p *param) enrich2(api api) {
 
 	} else if p.typ.isPointer && p.typ.subTyp.record != nil {
 		if p.typ.subTyp.record.NoWrapper {
-			p.cgoVar = fmt.Sprintf("%s := *(*C.%s)(unsafe.Pointer(&%s))", p.cName, p.typ.subTyp.record.cStructName, p.goName)
-			p.cParam = fmt.Sprintf("%s %s", p.typ.subTyp.cName, p.cName)
-			p.cppArg = fmt.Sprintf("reinterpret_cast<%s*>(&%s)", p.typ.subTyp.cppName, p.cName)
+			if p.AsPointer {
+				p.cgoVar = fmt.Sprintf("%s := (*C.%s)(unsafe.Pointer(%s))", p.cName, p.typ.subTyp.record.cStructName, p.goName)
+				p.cParam = fmt.Sprintf("%s *%s", p.typ.subTyp.cName, p.cName)
+				p.cppArg = fmt.Sprintf("reinterpret_cast<%s*>(%s)", p.typ.subTyp.cppName, p.cName)
+			} else {
+				p.cgoVar = fmt.Sprintf("%s := *(*C.%s)(unsafe.Pointer(&%s))", p.cName, p.typ.subTyp.record.cStructName, p.goName)
+				p.cParam = fmt.Sprintf("%s %s", p.typ.subTyp.cName, p.cName)
+				p.cppArg = fmt.Sprintf("reinterpret_cast<%s*>(&%s)", p.typ.subTyp.cppName, p.cName)
+			}
 		} else {
 			p.cgoVar = fmt.Sprintf("%s := %s.sk", p.cName, p.goName)
 			p.cParam = fmt.Sprintf("%s *%s", p.typ.subTyp.cName, p.cName)

@@ -229,7 +229,18 @@
         { "suffix": "TypefaceSize" },
         { "suffix": "Typeface" },
         { "suffix": "TypefaceSizeScaleSkew" }
+      ],
+      "methods": [
+        {
+          "name": "getMetrics",
+          "overloads": [{ "params": [{ "asPointer": true }] }]
+        }
       ]
+    },
+
+    {
+      "name": "SkFontMetrics",
+      "noWrapper": true
     },
 
     {
