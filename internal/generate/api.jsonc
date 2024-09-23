@@ -210,6 +210,19 @@
     },
 
     {
+      "name": "SkData",
+      "methods": [
+        { "name": "size" },
+        { "name": "isEmpty" },
+        { "name": "MakeWithCopy" },
+        { "name": "MakeZeroInitialized" },
+        { "name": "MakeWithCString" },
+        { "name": "MakeWithoutCopy" },
+        { "name": "MakeFromFileName" }
+      ]
+    },
+
+    {
       "name": "SkFont",
       "constructors": [
         {},

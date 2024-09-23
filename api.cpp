@@ -7,6 +7,7 @@
 #include <include/core/SkColor.h>
 #include <include/core/SkColorSpace.h>
 #include <include/core/SkColorType.h>
+#include <include/core/SkData.h>
 #include <include/core/SkFont.h>
 #include <include/core/SkFontMgr.h>
 #include <include/core/SkFontStyle.h>
@@ -891,6 +892,59 @@ extern "C"
     auto ret = SkColorSpace::Equals (reinterpret_cast<SkColorSpace *> (c_p0),
                                      reinterpret_cast<SkColorSpace *> (c_p1));
     return ret;
+  }
+
+  unsigned long
+  misk_Data_size (sk_SkData *c_obj)
+  {
+    auto ret = reinterpret_cast<SkData *> (c_obj)->size ();
+    return ret;
+  }
+
+  bool
+  misk_Data_isEmpty (sk_SkData *c_obj)
+  {
+    auto ret = reinterpret_cast<SkData *> (c_obj)->isEmpty ();
+    return ret;
+  }
+
+  sk_SkData *
+  misk_Data_MakeWithCopy (void *c_data, ulong c_length)
+  {
+    auto ret
+        = SkData::MakeWithCopy (reinterpret_cast<void *> (c_data), c_length)
+              .release ();
+    return reinterpret_cast<sk_SkData *> (ret);
+  }
+
+  sk_SkData *
+  misk_Data_MakeZeroInitialized (ulong c_length)
+  {
+    auto ret = SkData::MakeZeroInitialized (c_length).release ();
+    return reinterpret_cast<sk_SkData *> (ret);
+  }
+
+  sk_SkData *
+  misk_Data_MakeWithCString (char *c_cstr)
+  {
+    auto ret = SkData::MakeWithCString ((char *)c_cstr).release ();
+    return reinterpret_cast<sk_SkData *> (ret);
+  }
+
+  sk_SkData *
+  misk_Data_MakeWithoutCopy (void *c_data, ulong c_length)
+  {
+    auto ret
+        = SkData::MakeWithoutCopy (reinterpret_cast<void *> (c_data), c_length)
+              .release ();
+    return reinterpret_cast<sk_SkData *> (ret);
+  }
+
+  sk_SkData *
+  misk_Data_MakeFromFileName (char *c_path)
+  {
+    auto ret = SkData::MakeFromFileName ((char *)c_path).release ();
+    return reinterpret_cast<sk_SkData *> (ret);
   }
 
   sk_SkFont *

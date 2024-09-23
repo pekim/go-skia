@@ -182,6 +182,15 @@ extern "C"
 
   typedef struct
   {
+    uchar pad_0[8];
+    uchar fReleaseProc[8];
+    uchar fReleaseProcContext[8];
+    uchar fPtr[8];
+    ulong fSize;
+  } sk_SkData;
+
+  typedef struct
+  {
     uchar fTypeface[8];
     float fSize;
     float fScaleX;
@@ -555,6 +564,14 @@ extern "C"
   sk_SkColorSpace *misk_ColorSpace_MakeSRGB ();
   sk_SkColorSpace *misk_ColorSpace_MakeSRGBLinear ();
   bool misk_ColorSpace_Equals (sk_SkColorSpace *c_p0, sk_SkColorSpace *c_p1);
+
+  unsigned long misk_Data_size (sk_SkData *c_obj);
+  bool misk_Data_isEmpty (sk_SkData *c_obj);
+  sk_SkData *misk_Data_MakeWithCopy (void *c_data, ulong c_length);
+  sk_SkData *misk_Data_MakeZeroInitialized (ulong c_length);
+  sk_SkData *misk_Data_MakeWithCString (char *c_cstr);
+  sk_SkData *misk_Data_MakeWithoutCopy (void *c_data, ulong c_length);
+  sk_SkData *misk_Data_MakeFromFileName (char *c_path);
 
   sk_SkFont *misk_new_Font ();
   sk_SkFont *misk_new_FontTypefaceSize (sk_SkTypeface *c_typeface,

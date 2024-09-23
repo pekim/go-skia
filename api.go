@@ -2489,6 +2489,91 @@ func ColorSpaceEquals(p0 ColorSpace, p1 ColorSpace) bool {
 }
 
 /*
+SkData holds an immutable data buffer. Not only is the data immutable,
+but the actual ptr that is returned (by data() or bytes()) is guaranteed
+to always be the same for the life of this instance.
+*/
+type Data struct {
+	sk *C.sk_SkData
+}
+
+// IsNil returns true if the raw skia object pointer is nil.
+// If it is nil is may indicate that the Data has not been created.
+func (o Data) IsNil() bool {
+	return o.sk == nil
+}
+
+/*
+Returns the number of bytes stored.
+*/
+func (o Data) Size() uint64 {
+	c_obj := o.sk
+	retC := C.misk_Data_size(c_obj)
+	return uint64(retC)
+}
+
+func (o Data) IsEmpty() bool {
+	c_obj := o.sk
+	retC := C.misk_Data_isEmpty(c_obj)
+	return bool(retC)
+}
+
+/*
+Create a new dataref by copying the specified data
+*/
+func DataMakeWithCopy(data []byte, length uint64) Data {
+	c_data := unsafe.Pointer(&data[0])
+	c_length := C.ulong(length)
+	retC := C.misk_Data_MakeWithCopy(c_data, c_length)
+	return Data{sk: retC}
+}
+
+/*
+Create a new data with zero-initialized contents. The caller should call writable_data()
+to write into the buffer, but this must be done before another ref() is made.
+*/
+func DataMakeZeroInitialized(length uint64) Data {
+	c_length := C.ulong(length)
+	retC := C.misk_Data_MakeZeroInitialized(c_length)
+	return Data{sk: retC}
+}
+
+/*
+Create a new dataref by copying the specified c-string
+(a null-terminated array of bytes). The returned SkData will have size()
+equal to strlen(cstr) + 1. If cstr is NULL, it will be treated the same
+as "".
+*/
+func DataMakeWithCString(cstr string) Data {
+	c_cstr := C.CString(cstr)
+	defer C.free(unsafe.Pointer(c_cstr))
+	retC := C.misk_Data_MakeWithCString(c_cstr)
+	return Data{sk: retC}
+}
+
+/*
+Call this when the data parameter is already const and will outlive the lifetime of the
+SkData. Suitable for with const globals.
+*/
+func DataMakeWithoutCopy(data []byte, length uint64) Data {
+	c_data := unsafe.Pointer(&data[0])
+	c_length := C.ulong(length)
+	retC := C.misk_Data_MakeWithoutCopy(c_data, c_length)
+	return Data{sk: retC}
+}
+
+/*
+Create a new dataref the file with the specified path.
+If the file cannot be opened, this returns NULL.
+*/
+func DataMakeFromFileName(path string) Data {
+	c_path := C.CString(path)
+	defer C.free(unsafe.Pointer(c_path))
+	retC := C.misk_Data_MakeFromFileName(c_path)
+	return Data{sk: retC}
+}
+
+/*
 SkFont controls options applied when drawing and measuring text.
 */
 type Font struct {
