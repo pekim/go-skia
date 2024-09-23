@@ -46,6 +46,19 @@ func TestPointerArgument(t *testing.T) {
 
 }
 
+func TestFontGlyphIDs(t *testing.T) {
+	typeface := FontMgrRefDefault().MatchFamilyStyle("sans-serif", FontStyleNormal())
+	font := NewFontTypefaceSize(typeface, 22)
+
+	chars := []int32{'A', 'z', '?'}
+	glyphs := make([]uint16, len(chars))
+	font.UnicharsToGlyphs(chars, int32(len(chars)), glyphs)
+	for i, char := range chars {
+		assert.NotZero(t, glyphs[i])
+		assert.Equal(t, font.UnicharToGlyph(char), glyphs[i])
+	}
+}
+
 func TestString(t *testing.T) {
 	s := "qwerty"
 	sk := NewString(s)
