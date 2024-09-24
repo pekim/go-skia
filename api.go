@@ -108,6 +108,11 @@ func (o GrDirectContext) IsNil() bool {
 	return o.sk == nil
 }
 
+// AsGrRecordingContext converts the GrDirectContext to a GrRecordingContext.
+func (o GrDirectContext) AsGrRecordingContext() GrRecordingContext {
+	return GrRecordingContext{sk: (*C.sk_GrRecordingContext)(unsafe.Pointer(o.sk))}
+}
+
 func (o GrDirectContext) Delete() {
 	C.misk_delete_GrDirectContext(o.sk)
 }
@@ -5863,8 +5868,4 @@ func FontMgrRefDefault() FontMgr {
 	return FontMgr{
 		sk: C.sk_fontmgr_ref_default(),
 	}
-}
-
-func (o GrDirectContext) AsGrRecordingContext() GrRecordingContext {
-	return GrRecordingContext{sk: (*C.sk_GrRecordingContext)(unsafe.Pointer(o.sk))}
 }

@@ -44,10 +44,6 @@ func (f fileGo) finish() {
 				sk: C.sk_fontmgr_ref_default(),
 			}
 		}
-
-		func (o GrDirectContext)AsGrRecordingContext() GrRecordingContext{
-  		return GrRecordingContext{sk:(*C.sk_GrRecordingContext)(unsafe.Pointer( o.sk))}
-		}
 	`)
 
 	f.close()
