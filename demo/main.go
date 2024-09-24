@@ -37,20 +37,65 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
+	if err := gl.Init(); err != nil {
+		panic(err)
+	}
+	window.MakeContextCurrent()
+
 	window.SetKeyCallback(func(w *glfw.Window, key glfw.Key, scancode int, action glfw.Action, mods glfw.ModifierKey) {
 		if action == glfw.Press && mods == glfw.ModControl && key == glfw.KeyQ {
 			window.SetShouldClose(true)
 		}
 	})
-	window.MakeContextCurrent()
-
-	if err := gl.Init(); err != nil {
-		panic(err)
-	}
 
 	gl.Enable(gl.DEPTH_TEST)
 	gl.DepthFunc(gl.LESS)
 	gl.ClearColor(1.0, 1.0, 1.0, 1.0)
+
+	iface := skia.GrGLMakeNativeInterface()
+	context := skia.GrDirectContextsMakeGLInterface(iface)
+	var fbo int32
+	gl.GetIntegerv(gl.FRAMEBUFFER_BINDING, &fbo)
+	var fbInfo skia.GrGLFramebufferInfo
+	fbInfo.SetFBOID(uint32(fbo))
+	fbInfo.SetFormat(gl.RGBA8)
+
+	var backend skia.GrBackendRenderTarget
+	var target skia.GrBackendRenderTarget
+	var surface skia.Surface
+	framebufferSize := func(width int, height int) {
+		if !surface.IsNil() {
+			surface.Unref()
+		}
+		if !target.IsNil() {
+			target.Delete()
+		}
+		// if !backend.IsNil() {
+		// 	backend.Delete()
+		// }
+
+		backend = skia.GrBackendRenderTargetsMakeGL(int32(width), int32(height), 1, 8, fbInfo)
+		if backend.IsNil() {
+			panic("failed to create backend")
+		}
+		target = skia.NewGrBackendRenderTargetCopy(backend)
+		if target.IsNil() {
+			panic("failed to create target")
+		}
+		var colorspace skia.ColorSpace
+
+		surface = skia.SkSurfacesWrapBackendRenderTarget(context.AsGrRecordingContext(), backend, skia.GrSurfaceOriginBottomLeft,
+			skia.ColorTypeBGRA_8888, colorspace, skia.NewSurfacePropsPixelGeometry(0, skia.PixelGeometryRGB_H))
+		if surface.IsNil() {
+			panic("failed to create surface")
+		}
+
+	}
+	window.SetFramebufferSizeCallback(func(_ *glfw.Window, width, height int) {
+		framebufferSize(width, height)
+	})
+	framebufferSize(window.GetFramebufferSize())
 
 	tigerData := skia.DataMakeWithCopy(tigerSVG, uint32(len(tigerSVG)))
 	tigerStream := skia.MemoryStreamMake(tigerData)
@@ -62,31 +107,6 @@ func main() {
 	size.SetWidth(300)
 	size.SetHeight(300)
 	svgTiger.SetContainerSize(size)
-	fmt.Println(svgTiger.ContainerSize())
-
-	iface := skia.GrGLMakeNativeInterface()
-	context := skia.GrDirectContextsMakeGLInterface(iface)
-	var fbo int32
-	gl.GetIntegerv(gl.FRAMEBUFFER_BINDING, &fbo)
-	var fbInfo skia.GrGLFramebufferInfo
-	fbInfo.SetFBOID(uint32(fbo))
-	fbInfo.SetFormat(gl.RGBA8)
-
-	backend := skia.GrBackendRenderTargetsMakeGL(1000, 1000, 1, 8, fbInfo)
-	if backend.IsNil() {
-		panic("failed to create backend")
-	}
-	target := skia.NewGrBackendRenderTargetCopy(backend)
-	if target.IsNil() {
-		panic("failed to create target")
-	}
-	var colorspace skia.ColorSpace
-
-	surface := skia.SkSurfacesWrapBackendRenderTarget(context.AsGrRecordingContext(), backend, skia.GrSurfaceOriginBottomLeft,
-		skia.ColorTypeBGRA_8888, colorspace, skia.NewSurfacePropsPixelGeometry(0, skia.PixelGeometryRGB_H))
-	if surface.IsNil() {
-		panic("failed to create surface")
-	}
 
 	for !window.ShouldClose() {
 		gl.Clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
@@ -109,7 +129,10 @@ func main() {
 		canvas.DrawString(fmt.Sprintf("Font ascent = %.1f", metrics.Ascent()), 100, 250+lineSpacing, font, paint)
 
 		canvas.Save()
-		canvas.Translate(200, 200)
+		// paint.SetColor(skia.ColorTRANSPARENT)
+		// canvas.DrawPaint(paint)
+		canvas.Translate(1000, 1000)
+		canvas.Scale(2.5, 2.5)
 		svgTiger.Render(canvas)
 		canvas.Restore()
 
