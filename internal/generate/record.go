@@ -9,21 +9,22 @@ import (
 
 // record represents a class or struct.
 type record struct {
-	cursor      clang.Cursor
-	CppName     string        `json:"name"`
-	Ctors       []*recordCtor `json:"constructors"`
-	Enums       []enum        `json:"enums"`
-	Methods     []callable    `json:"methods"`
-	NoWrapper   bool          `json:"noWrapper"`
-	As          []string      `json:"as"`
-	asRecords   []*record
-	dtor        recordDtor
-	fields      []field
-	size        int
-	goName      string
-	cStructName string
-	doc         string
-	enriched    bool
+	cursor            clang.Cursor
+	CppName           string        `json:"name"`
+	Ctors             []*recordCtor `json:"constructors"`
+	Enums             []enum        `json:"enums"`
+	Methods           []callable    `json:"methods"`
+	NoWrapper         bool          `json:"noWrapper"`
+	As                []string      `json:"as"`
+	asRecords         []*record
+	dtor              recordDtor
+	fields            []field
+	size              int
+	goName            string
+	cStructName       string
+	derivedFromRefCnt bool
+	doc               string
+	enriched          bool
 }
 
 func (r *record) enrich1(cursor clang.Cursor) {
@@ -58,6 +59,11 @@ func (r *record) enrich1(cursor clang.Cursor) {
 				enum.enrich1(r, cursor)
 			}
 
+		case clang.Cursor_CXXBaseSpecifier:
+			if cursor.Spelling() == "SkRefCnt" {
+				r.derivedFromRefCnt = true
+			}
+
 		case clang.Cursor_CXXMethod:
 			if cursor.AccessSpecifier() == clang.AccessSpecifier_Public {
 				if method, ok := r.findMethod(cursor.Spelling()); ok {
@@ -67,9 +73,6 @@ func (r *record) enrich1(cursor clang.Cursor) {
 
 		case clang.Cursor_FieldDecl:
 			r.fields = append(r.fields, newField(cursor))
-
-			// case clang.Cursor_VarDecl:
-			// 	fmt.Println(r.CppName, cursor.Spelling())
 		}
 
 		return clang.ChildVisit_Continue
@@ -139,6 +142,7 @@ func (r record) generate(g generator) {
 	r.generateFieldsMethods(g)
 	r.generateNilMethod(g)
 	r.generateAsMethods(g)
+	r.generateUnref(g)
 
 	for _, ctor := range r.Ctors {
 		if ctor != nil {
@@ -155,7 +159,8 @@ func (r record) generate(g generator) {
 		enum.generate(g)
 	}
 
-	g.headerFile.writeln()
+	r.generateHeaderFile(g)
+	r.generateCppFile(g)
 }
 
 func (r record) generateGoType(g generator) {
@@ -251,6 +256,37 @@ func (r record) generateAsMethods(g generator) {
 		f.writeln("}")
 		f.writeln()
 	}
+}
+
+func (r record) generateUnref(g generator) {
+	if !r.derivedFromRefCnt {
+		return
+	}
+
+	f := g.goFile
+	f.writelnf("func (o %s) Unref() {", r.goName)
+	f.writelnf("  C.misk_unref_%s(o.sk)", r.CppName)
+	f.writeln("}")
+}
+
+func (r record) generateHeaderFile(g generator) {
+	f := g.headerFile
+	if r.derivedFromRefCnt {
+		f.writelnf("void misk_unref_%s(%s *c_obj);", r.CppName, r.cStructName)
+	}
+	f.writeln()
+}
+
+func (r record) generateCppFile(g generator) {
+	if !r.derivedFromRefCnt {
+		return
+	}
+
+	f := g.cppFile
+	f.writelnf("void misk_unref_%s(%s *c_obj) {", r.CppName, r.cStructName)
+	f.writelnf("reinterpret_cast<%s *> (c_obj)->unref();", r.CppName)
+	f.writeln("}")
+	f.writeln()
 }
 
 func (r record) generateCStruct(g generator) {

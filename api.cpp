@@ -167,6 +167,12 @@ extern "C"
     delete reinterpret_cast<GrRecordingContext *> (obj);
   }
 
+  void
+  misk_unref_GrGLInterface (sk_GrGLInterface *c_obj)
+  {
+    reinterpret_cast<GrGLInterface *> (c_obj)->unref ();
+  }
+
   sk_GrContextOptions *
   misk_new_GrContextOptions ()
   {
@@ -1045,6 +1051,12 @@ extern "C"
     return reinterpret_cast<sk_SkTypeface *> (ret);
   }
 
+  void
+  misk_unref_SkFontMgr (sk_SkFontMgr *c_obj)
+  {
+    reinterpret_cast<SkFontMgr *> (c_obj)->unref ();
+  }
+
   sk_SkFontStyle *
   misk_new_FontStyle2 (int c_weight, int c_width, uint c_slant)
   {
@@ -1121,6 +1133,12 @@ extern "C"
     return reinterpret_cast<sk_SkTypeface *> (ret);
   }
 
+  void
+  misk_unref_SkFontStyleSet (sk_SkFontStyleSet *c_obj)
+  {
+    reinterpret_cast<SkFontStyleSet *> (c_obj)->unref ();
+  }
+
   sk_SkImageInfo
   misk_Image_imageInfo (sk_SkImage *c_obj)
   {
@@ -1154,6 +1172,12 @@ extern "C"
   {
     auto ret = reinterpret_cast<SkImage *> (c_obj)->bounds ();
     return *(reinterpret_cast<sk_SkIRect *> (&ret));
+  }
+
+  void
+  misk_unref_SkImage (sk_SkImage *c_obj)
+  {
+    reinterpret_cast<SkImage *> (c_obj)->unref ();
   }
 
   sk_SkImageInfo *
@@ -1849,6 +1873,12 @@ extern "C"
     return reinterpret_cast<sk_SkCanvas *> (ret);
   }
 
+  void
+  misk_unref_SkSurface (sk_SkSurface *c_obj)
+  {
+    reinterpret_cast<SkSurface *> (c_obj)->unref ();
+  }
+
   sk_SkSurfaceProps *
   misk_new_SurfaceProps ()
   {
@@ -1903,6 +1933,12 @@ extern "C"
     auto ret = SkSVGDOM::MakeFromStream (*reinterpret_cast<SkStream *> (c_str))
                    .release ();
     return reinterpret_cast<sk_SkSVGDOM *> (ret);
+  }
+
+  void
+  misk_unref_SkSVGDOM (sk_SkSVGDOM *c_obj)
+  {
+    reinterpret_cast<SkSVGDOM *> (c_obj)->unref ();
   }
 
   sk_SkSize

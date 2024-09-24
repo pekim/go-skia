@@ -258,6 +258,10 @@ func (o GrGLInterface) IsNil() bool {
 	return o.sk == nil
 }
 
+func (o GrGLInterface) Unref() {
+	C.misk_unref_GrGLInterface(o.sk)
+}
+
 type GrContextOptions C.sk_GrContextOptions
 
 func (o GrContextOptions) SuppressPrints() bool {
@@ -2845,6 +2849,10 @@ func (o FontMgr) IsNil() bool {
 	return o.sk == nil
 }
 
+func (o FontMgr) Unref() {
+	C.misk_unref_SkFontMgr(o.sk)
+}
+
 /*
 The caller must call unref() on the returned object.
 Never returns NULL; will return an empty set if the name is not found.
@@ -2975,6 +2983,9 @@ func (o FontStyleSet) IsNil() bool {
 	return o.sk == nil
 }
 
+func (o FontStyleSet) Unref() {
+	C.misk_unref_SkFontStyleSet(o.sk)
+}
 func (o FontStyleSet) Count() int32 {
 	c_obj := o.sk
 	retC := C.misk_FontStyleSet_count(c_obj)
@@ -3032,6 +3043,10 @@ type Image struct {
 // If it is nil is may indicate that the Image has not been created.
 func (o Image) IsNil() bool {
 	return o.sk == nil
+}
+
+func (o Image) Unref() {
+	C.misk_unref_SkImage(o.sk)
 }
 
 /*
@@ -5074,6 +5089,10 @@ func (o Surface) IsNil() bool {
 	return o.sk == nil
 }
 
+func (o Surface) Unref() {
+	C.misk_unref_SkSurface(o.sk)
+}
+
 /*
 Returns SkCanvas that draws into SkSurface. Subsequent calls return the same SkCanvas.
 SkCanvas returned is managed and owned by SkSurface, and is deleted when SkSurface
@@ -5146,6 +5165,10 @@ type SVGDOM struct {
 // If it is nil is may indicate that the SVGDOM has not been created.
 func (o SVGDOM) IsNil() bool {
 	return o.sk == nil
+}
+
+func (o SVGDOM) Unref() {
+	C.misk_unref_SkSVGDOM(o.sk)
 }
 
 /*

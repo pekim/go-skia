@@ -474,6 +474,8 @@ extern "C"
 
   void misk_delete_GrRecordingContext (sk_GrRecordingContext *obj);
 
+  void misk_unref_GrGLInterface (sk_GrGLInterface *c_obj);
+
   sk_GrContextOptions *misk_new_GrContextOptions ();
 
   sk_SkArc *misk_new_Arc ();
@@ -660,6 +662,7 @@ extern "C"
                                             sk_SkData *c_p0, int c_ttcIndex);
   sk_SkTypeface *misk_FontMgr_makeFromFile (sk_SkFontMgr *c_obj, char *c_path,
                                             int c_ttcIndex);
+  void misk_unref_SkFontMgr (sk_SkFontMgr *c_obj);
 
   sk_SkFontStyle *misk_new_FontStyle2 (int c_weight, int c_width,
                                        uint c_slant);
@@ -676,12 +679,14 @@ extern "C"
                                                    int c_index);
   sk_SkTypeface *misk_FontStyleSet_matchStyle (sk_SkFontStyleSet *c_obj,
                                                sk_SkFontStyle *c_pattern);
+  void misk_unref_SkFontStyleSet (sk_SkFontStyleSet *c_obj);
 
   sk_SkImageInfo misk_Image_imageInfo (sk_SkImage *c_obj);
   int misk_Image_width (sk_SkImage *c_obj);
   int misk_Image_height (sk_SkImage *c_obj);
   sk_SkISize misk_Image_dimensions (sk_SkImage *c_obj);
   sk_SkIRect misk_Image_bounds (sk_SkImage *c_obj);
+  void misk_unref_SkImage (sk_SkImage *c_obj);
 
   sk_SkImageInfo *misk_new_ImageInfo ();
 
@@ -813,6 +818,7 @@ extern "C"
   char *misk_String_data (sk_SkString *c_obj);
 
   sk_SkCanvas *misk_Surface_getCanvas (sk_SkSurface *c_obj);
+  void misk_unref_SkSurface (sk_SkSurface *c_obj);
 
   sk_SkSurfaceProps *misk_new_SurfaceProps ();
   sk_SkSurfaceProps *misk_new_SurfacePropsPixelGeometry (uint c_flags,
@@ -824,6 +830,7 @@ extern "C"
   sk_SkSize misk_SVGDOM_containerSize (sk_SkSVGDOM *c_obj);
   void misk_SVGDOM_render (sk_SkSVGDOM *c_obj, sk_SkCanvas *c_p0);
   sk_SkSVGDOM *misk_SVGDOM_MakeFromStream (sk_SkStream *c_str);
+  void misk_unref_SkSVGDOM (sk_SkSVGDOM *c_obj);
 
   sk_SkSize misk_SVGSVG_intrinsicSize (sk_SkSVGSVG *c_obj,
                                        sk_SkSVGLengthContext *c_p0);
