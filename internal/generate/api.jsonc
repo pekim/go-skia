@@ -6,6 +6,7 @@
     { "name": "SkBlendMode" },
     { "name": "SkClipOp" },
     { "name": "SkColorType" },
+    { "name": "SkFontHinting" },
     { "name": "SkFilterMode" },
     { "name": "SkPixelGeometry" },
     { "name": "SkTextEncoding" },
@@ -236,8 +237,15 @@
           "name": "getMetrics",
           "overloads": [{ "params": [{ "asPointer": true }] }]
         },
+        { "name": "getXPos" },
+        { "name": "measureText", "overloads": [{}, { "suffix": "Paint" }] },
+        { "name": "setForceAutoHinting" },
+        { "name": "setHinting" },
+        { "name": "setSubpixel" },
+        { "name": "textToGlyphs" },
         { "name": "unicharToGlyph" },
-        { "name": "unicharsToGlyphs" }
+        { "name": "unicharsToGlyphs" },
+        { "name": "getWidths", "overloads": [{ "suffix": "Bounds" }, null, {}] }
       ]
     },
 

@@ -2680,6 +2680,142 @@ func (o Font) GetMetrics(metrics *FontMetrics) float32 {
 }
 
 /*
+Retrieves the x-positions for each glyph, beginning at the specified origin. The caller
+must allocated at least count number of elements in the xpos[] array.
+
+@param glyphs   array of glyph indices to be positioned
+@param count    number of glyphs
+@param xpos     returns glyphs x-positions
+@param origin   x-position of the first glyph. Defaults to 0.
+*/
+func (o Font) GetXPos(glyphs []uint16, count int32, xpos []float32, origin float32) {
+	c_obj := o.sk
+	c_glyphs := (*C.ushort)(unsafe.Pointer(&glyphs[0]))
+	c_count := C.int(count)
+	c_xpos := (*C.float)(unsafe.Pointer(&xpos[0]))
+	c_origin := C.float(origin)
+	C.misk_Font_getXPos(c_obj, c_glyphs, c_count, c_xpos, c_origin)
+}
+
+/*
+Returns the advance width of text.
+The advance is the normal distance to move before drawing additional text.
+Returns the bounding box of text if bounds is not nullptr.
+
+@param text        character storage encoded with SkTextEncoding
+@param byteLength  length of character storage in bytes
+@param bounds      returns bounding box relative to (0, 0) if not nullptr
+@return            the sum of the default advance widths
+*/
+func (o Font) MeasureText(text []byte, byteLength uint32, encoding TextEncoding, bounds Rect) float32 {
+	c_obj := o.sk
+	c_text := unsafe.Pointer(&text[0])
+	c_byteLength := C.ulong(byteLength)
+	c_encoding := C.int(encoding)
+	c_bounds := *(*C.sk_SkRect)(unsafe.Pointer(&bounds))
+	retC := C.misk_Font_measureText(c_obj, c_text, c_byteLength, c_encoding, c_bounds)
+	return float32(retC)
+}
+
+/*
+Returns the advance width of text.
+The advance is the normal distance to move before drawing additional text.
+Returns the bounding box of text if bounds is not nullptr. The paint
+stroke settings, mask filter, or path effect may modify the bounds.
+
+@param text        character storage encoded with SkTextEncoding
+@param byteLength  length of character storage in bytes
+@param bounds      returns bounding box relative to (0, 0) if not nullptr
+@param paint       optional; may be nullptr
+@return            the sum of the default advance widths
+*/
+func (o Font) MeasureTextPaint(text []byte, byteLength uint32, encoding TextEncoding, bounds Rect, paint Paint) float32 {
+	c_obj := o.sk
+	c_text := unsafe.Pointer(&text[0])
+	c_byteLength := C.ulong(byteLength)
+	c_encoding := C.int(encoding)
+	c_bounds := *(*C.sk_SkRect)(unsafe.Pointer(&bounds))
+	c_paint := paint.sk
+	retC := C.misk_Font_measureTextPaint(c_obj, c_text, c_byteLength, c_encoding, c_bounds, c_paint)
+	return float32(retC)
+}
+
+/*
+Sets whether to always hint glyphs.
+If forceAutoHinting is set, instructs the font manager to always hint glyphs.
+
+Only affects platforms that use FreeType as the font manager.
+
+@param forceAutoHinting  setting to always hint glyphs
+*/
+func (o Font) SetForceAutoHinting(forceAutoHinting bool) {
+	c_obj := o.sk
+	c_forceAutoHinting := C.bool(forceAutoHinting)
+	C.misk_Font_setForceAutoHinting(c_obj, c_forceAutoHinting)
+}
+
+/*
+Sets level of glyph outline adjustment.
+Does not check for valid values of hintingLevel.
+*/
+func (o Font) SetHinting(hintingLevel FontHinting) {
+	c_obj := o.sk
+	c_hintingLevel := C.int(hintingLevel)
+	C.misk_Font_setHinting(c_obj, c_hintingLevel)
+}
+
+/*
+Requests, but does not require, that glyphs respect sub-pixel positioning.
+
+@param subpixel  setting for sub-pixel positioning
+*/
+func (o Font) SetSubpixel(subpixel bool) {
+	c_obj := o.sk
+	c_subpixel := C.bool(subpixel)
+	C.misk_Font_setSubpixel(c_obj, c_subpixel)
+}
+
+/*
+Converts text into glyph indices.
+Returns the number of glyph indices represented by text.
+SkTextEncoding specifies how text represents characters or glyphs.
+glyphs may be nullptr, to compute the glyph count.
+
+Does not check text for valid character codes or valid glyph indices.
+
+If byteLength equals zero, returns zero.
+If byteLength includes a partial character, the partial character is ignored.
+
+If encoding is SkTextEncoding::kUTF8 and text contains an invalid UTF-8 sequence,
+zero is returned.
+
+When encoding is SkTextEncoding::kUTF8, SkTextEncoding::kUTF16, or
+SkTextEncoding::kUTF32; then each Unicode codepoint is mapped to a
+single glyph.  This function uses the default character-to-glyph
+mapping from the SkTypeface and maps characters not found in the
+SkTypeface to zero.
+
+If maxGlyphCount is not sufficient to store all the glyphs, no glyphs are copied.
+The total glyph count is returned for subsequent buffer reallocation.
+
+@param text          character storage encoded with SkTextEncoding
+@param byteLength    length of character storage in bytes
+@param glyphs        storage for glyph indices; may be nullptr
+@param maxGlyphCount storage capacity
+@return              number of glyphs represented by text of length byteLength
+*/
+func (o Font) TextToGlyphs(text []byte, byteLength uint32, encoding TextEncoding, glyphs []uint16, maxGlyphCount int32) int32 {
+	c_obj := o.sk
+	c_text := unsafe.Pointer(&text[0])
+	c_byteLength := C.ulong(byteLength)
+	c_encoding := C.int(encoding)
+	c_glyphs := (*C.ushort)(unsafe.Pointer(&glyphs[0]))
+	c_maxGlyphCount := C.int(maxGlyphCount)
+	retC := C.misk_Font_textToGlyphs(c_obj, c_text, c_byteLength, c_encoding, c_glyphs, c_maxGlyphCount)
+	return int32(retC)
+}
+
+/*
 Returns glyph index for Unicode character.
 
 If the character is not supported by the SkTypeface, returns 0.
@@ -2700,6 +2836,45 @@ func (o Font) UnicharsToGlyphs(uni []int32, count int32, glyphs []uint16) {
 	c_count := C.int(count)
 	c_glyphs := (*C.ushort)(unsafe.Pointer(&glyphs[0]))
 	C.misk_Font_unicharsToGlyphs(c_obj, c_uni, c_count, c_glyphs)
+}
+
+/*
+DEPRECATED
+Retrieves the advance and bounds for each glyph in glyphs.
+Both widths and bounds may be nullptr.
+If widths is not nullptr, widths must be an array of count entries.
+if bounds is not nullptr, bounds must be an array of count entries.
+
+@param glyphs      array of glyph indices to be measured
+@param count       number of glyphs
+@param widths      returns text advances for each glyph; may be nullptr
+@param bounds      returns bounds for each glyph relative to (0, 0); may be nullptr
+*/
+func (o Font) GetWidthsBounds(glyphs []uint16, count int32, widths []float32, bounds []Rect) {
+	c_obj := o.sk
+	c_glyphs := (*C.ushort)(unsafe.Pointer(&glyphs[0]))
+	c_count := C.int(count)
+	c_widths := (*C.float)(unsafe.Pointer(&widths[0]))
+	c_bounds := (*C.sk_SkRect)(unsafe.Pointer(&bounds[0]))
+	C.misk_Font_getWidthsBounds(c_obj, c_glyphs, c_count, c_widths, c_bounds)
+}
+
+/*
+Retrieves the advance and bounds for each glyph in glyphs.
+Both widths and bounds may be nullptr.
+If widths is not nullptr, widths must be an array of count entries.
+if bounds is not nullptr, bounds must be an array of count entries.
+
+@param glyphs      array of glyph indices to be measured
+@param count       number of glyphs
+@param widths      returns text advances for each glyph
+*/
+func (o Font) GetWidths(glyphs []uint16, count int32, widths []float32) {
+	c_obj := o.sk
+	c_glyphs := (*C.ushort)(unsafe.Pointer(&glyphs[0]))
+	c_count := C.int(count)
+	c_widths := (*C.float)(unsafe.Pointer(&widths[0]))
+	C.misk_Font_getWidths(c_obj, c_glyphs, c_count, c_widths)
 }
 
 /*
@@ -5522,6 +5697,19 @@ const (
 	ColorTypeLastEnum ColorType = 25
 	// native 32-bit RGBA encoding
 	ColorTypeN32 ColorType = 4
+)
+
+type FontHinting int32
+
+const (
+	// glyph outlines unchanged
+	FontHintingNone FontHinting = 0
+	// minimal modification to improve constrast
+	FontHintingSlight FontHinting = 1
+	// glyph outlines modified to improve constrast
+	FontHintingNormal FontHinting = 2
+	// modifies glyph outlines for maximum constrast
+	FontHintingFull FontHinting = 3
 )
 
 type FilterMode int32

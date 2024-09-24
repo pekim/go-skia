@@ -1007,6 +1007,68 @@ extern "C"
     return ret;
   }
 
+  void
+  misk_Font_getXPos (sk_SkFont *c_obj, ushort *c_glyphs, int c_count,
+                     float *c_xpos, float c_origin)
+  {
+    reinterpret_cast<SkFont *> (c_obj)->getXPos (
+        (unsigned short *)c_glyphs, c_count, (float *)c_xpos, c_origin);
+  }
+
+  float
+  misk_Font_measureText (sk_SkFont *c_obj, void *c_text, ulong c_byteLength,
+                         int c_encoding, sk_SkRect c_bounds)
+  {
+    auto ret = reinterpret_cast<SkFont *> (c_obj)->measureText (
+        reinterpret_cast<void *> (c_text), c_byteLength,
+        SkTextEncoding (c_encoding), reinterpret_cast<SkRect *> (&c_bounds));
+    return ret;
+  }
+
+  float
+  misk_Font_measureTextPaint (sk_SkFont *c_obj, void *c_text,
+                              ulong c_byteLength, int c_encoding,
+                              sk_SkRect c_bounds, sk_SkPaint *c_paint)
+  {
+    auto ret = reinterpret_cast<SkFont *> (c_obj)->measureText (
+        reinterpret_cast<void *> (c_text), c_byteLength,
+        SkTextEncoding (c_encoding), reinterpret_cast<SkRect *> (&c_bounds),
+        reinterpret_cast<SkPaint *> (c_paint));
+    return ret;
+  }
+
+  void
+  misk_Font_setForceAutoHinting (sk_SkFont *c_obj, bool c_forceAutoHinting)
+  {
+    reinterpret_cast<SkFont *> (c_obj)->setForceAutoHinting (
+        c_forceAutoHinting);
+  }
+
+  void
+  misk_Font_setHinting (sk_SkFont *c_obj, int c_hintingLevel)
+  {
+    reinterpret_cast<SkFont *> (c_obj)->setHinting (
+        SkFontHinting (c_hintingLevel));
+  }
+
+  void
+  misk_Font_setSubpixel (sk_SkFont *c_obj, bool c_subpixel)
+  {
+    reinterpret_cast<SkFont *> (c_obj)->setSubpixel (c_subpixel);
+  }
+
+  int
+  misk_Font_textToGlyphs (sk_SkFont *c_obj, void *c_text, ulong c_byteLength,
+                          int c_encoding, ushort *c_glyphs,
+                          int c_maxGlyphCount)
+  {
+    auto ret = reinterpret_cast<SkFont *> (c_obj)->textToGlyphs (
+        reinterpret_cast<void *> (c_text), c_byteLength,
+        SkTextEncoding (c_encoding), (unsigned short *)c_glyphs,
+        c_maxGlyphCount);
+    return ret;
+  }
+
   unsigned short
   misk_Font_unicharToGlyph (sk_SkFont *c_obj, int c_uni)
   {
@@ -1020,6 +1082,23 @@ extern "C"
   {
     reinterpret_cast<SkFont *> (c_obj)->unicharsToGlyphs (
         (int *)c_uni, c_count, (unsigned short *)c_glyphs);
+  }
+
+  void
+  misk_Font_getWidthsBounds (sk_SkFont *c_obj, ushort *c_glyphs, int c_count,
+                             float *c_widths, sk_SkRect *c_bounds)
+  {
+    reinterpret_cast<SkFont *> (c_obj)->getWidths ((unsigned short *)c_glyphs,
+                                                   c_count, (float *)c_widths,
+                                                   (SkRect *)c_bounds);
+  }
+
+  void
+  misk_Font_getWidths (sk_SkFont *c_obj, ushort *c_glyphs, int c_count,
+                       float *c_widths)
+  {
+    reinterpret_cast<SkFont *> (c_obj)->getWidths ((unsigned short *)c_glyphs,
+                                                   c_count, (float *)c_widths);
   }
 
   sk_SkFontStyleSet *

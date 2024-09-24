@@ -651,9 +651,29 @@ extern "C"
                                                  float c_size, float c_scaleX,
                                                  float c_skewX);
   float misk_Font_getMetrics (sk_SkFont *c_obj, sk_SkFontMetrics *c_metrics);
+  void misk_Font_getXPos (sk_SkFont *c_obj, ushort *c_glyphs, int c_count,
+                          float *c_xpos, float c_origin);
+  float misk_Font_measureText (sk_SkFont *c_obj, void *c_text,
+                               ulong c_byteLength, int c_encoding,
+                               sk_SkRect c_bounds);
+  float misk_Font_measureTextPaint (sk_SkFont *c_obj, void *c_text,
+                                    ulong c_byteLength, int c_encoding,
+                                    sk_SkRect c_bounds, sk_SkPaint *c_paint);
+  void misk_Font_setForceAutoHinting (sk_SkFont *c_obj,
+                                      bool c_forceAutoHinting);
+  void misk_Font_setHinting (sk_SkFont *c_obj, int c_hintingLevel);
+  void misk_Font_setSubpixel (sk_SkFont *c_obj, bool c_subpixel);
+  int misk_Font_textToGlyphs (sk_SkFont *c_obj, void *c_text,
+                              ulong c_byteLength, int c_encoding,
+                              ushort *c_glyphs, int c_maxGlyphCount);
   unsigned short misk_Font_unicharToGlyph (sk_SkFont *c_obj, int c_uni);
   void misk_Font_unicharsToGlyphs (sk_SkFont *c_obj, int *c_uni, int c_count,
                                    ushort *c_glyphs);
+  void misk_Font_getWidthsBounds (sk_SkFont *c_obj, ushort *c_glyphs,
+                                  int c_count, float *c_widths,
+                                  sk_SkRect *c_bounds);
+  void misk_Font_getWidths (sk_SkFont *c_obj, ushort *c_glyphs, int c_count,
+                            float *c_widths);
 
   sk_SkFontStyleSet *misk_FontMgr_matchFamily (sk_SkFontMgr *c_obj,
                                                char *c_familyName);
