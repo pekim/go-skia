@@ -38,10 +38,10 @@ func main() {
 		panic(err)
 	}
 
+	window.MakeContextCurrent()
 	if err := gl.Init(); err != nil {
 		panic(err)
 	}
-	window.MakeContextCurrent()
 	glfw.SwapInterval(0)
 
 	window.SetKeyCallback(func(w *glfw.Window, key glfw.Key, scancode int, action glfw.Action, mods glfw.ModifierKey) {
@@ -50,9 +50,9 @@ func main() {
 		}
 	})
 
-	gl.Enable(gl.DEPTH_TEST)
-	gl.DepthFunc(gl.LESS)
-	gl.ClearColor(1.0, 1.0, 1.0, 1.0)
+	gl.Enable(gl.BLEND)
+	gl.Enable(gl.FRAMEBUFFER_SRGB)
+	gl.BlendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA)
 
 	iface := skia.GrGLMakeNativeInterface()
 	context := skia.GrDirectContextsMakeGLInterface(iface)
@@ -66,6 +66,8 @@ func main() {
 	var target skia.GrBackendRenderTarget
 	var surface skia.Surface
 	framebufferSize := func(width int, height int) {
+		gl.Viewport(0, 0, int32(width), int32(height))
+
 		if !surface.IsNil() {
 			surface.Unref()
 		}
@@ -117,13 +119,17 @@ func main() {
 	svgTiger.SetContainerSize(size)
 
 	for !window.ShouldClose() {
-		gl.Clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT)
-
 		canvas := surface.GetCanvas()
 		paint := skia.NewPaint()
-		paint.SetColor(skia.ColorRED)
+		defer paint.Delete()
 		paint.SetStyle(skia.PaintStyleFill)
 
+		paint.SetColor(skia.ColorWHITE)
+		windowW, windowH := window.GetFramebufferSize()
+		rectWindow := skia.IRectMakeXYWH(0, 0, int32(windowW), int32(windowH))
+		canvas.DrawIRect(rectWindow, paint)
+
+		paint.SetColor(skia.ColorRED)
 		rect := skia.RectMakeXYWH(100, 100, 100, 100)
 		canvas.DrawRect(rect, paint)
 
@@ -131,11 +137,14 @@ func main() {
 		canvas.DrawString("Some text", 100, 250, font, paint)
 		canvas.DrawString(fmt.Sprintf("Font ascent = %.1f", metrics.Ascent()), 100, 250+lineSpacing, font, paint)
 
+		paint.SetColor(skia.ColorGREEN)
+		rect2 := skia.RectMakeXYWH(400, 100, 100, 100)
+		canvas.DrawRect(rect2, paint)
+
 		canvas.Save()
-		// paint.SetColor(skia.ColorTRANSPARENT)
-		// canvas.DrawPaint(paint)
-		canvas.Translate(200, 200)
-		canvas.Scale(2.5, 2.5)
+		canvas.Translate(180, 150)
+		scale := float32(2.5)
+		canvas.Scale(scale, scale)
 		svgTiger.Render(canvas)
 		canvas.Restore()
 
