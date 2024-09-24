@@ -376,6 +376,11 @@ extern "C"
 
   typedef struct
   {
+    uchar pad_0[8];
+  } sk_SkStream;
+
+  typedef struct
+  {
     uchar fRec[8];
   } sk_SkString;
 
@@ -801,6 +806,8 @@ extern "C"
   sk_SkSamplingOptions *
   misk_new_SamplingOptionsCopy (sk_SkSamplingOptions *c_p0);
 
+  void misk_delete_SkStream (sk_SkStream *obj);
+
   sk_SkString *misk_new_String (char *c_text);
   void misk_delete_SkString (sk_SkString *obj);
   char *misk_String_data (sk_SkString *c_obj);
@@ -816,6 +823,7 @@ extern "C"
   void misk_SVGDOM_setContainerSize (sk_SkSVGDOM *c_obj, sk_SkSize c_p0);
   sk_SkSize misk_SVGDOM_containerSize (sk_SkSVGDOM *c_obj);
   void misk_SVGDOM_render (sk_SkSVGDOM *c_obj, sk_SkCanvas *c_p0);
+  sk_SkSVGDOM *misk_SVGDOM_MakeFromStream (sk_SkStream *c_str);
 
   sk_SkSize misk_SVGSVG_intrinsicSize (sk_SkSVGSVG *c_obj,
                                        sk_SkSVGLengthContext *c_p0);

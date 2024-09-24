@@ -308,6 +308,7 @@
 
     {
       "name": "SkMemoryStream",
+      "as": ["SkStream"],
       "constructors": [null, null, null, null],
       "methods": [{ "name": "Make" }, { "name": "MakeDirect" }]
     },
@@ -484,6 +485,11 @@
     },
 
     {
+      "name": "SkStream",
+      "constructors": [null]
+    },
+
+    {
       "name": "SkString",
       "constructors": [null, null, {}, null, null, null, null, null],
       "methods": [{ "name": "data", "overloads": [{}, null] }]
@@ -511,11 +517,15 @@
         { "name": "getRoot" },
         { "name": "setContainerSize" },
         { "name": "containerSize" },
-        { "name": "render" }
+        { "name": "render" },
+        { "name": "MakeFromStream" }
       ]
     },
 
-    { "name": "SkSVGSVG", "methods": [{ "name": "intrinsicSize" }] },
+    {
+      "name": "SkSVGSVG",
+      "methods": [{ "name": "intrinsicSize" }]
+    },
 
     {
       "name": "SkSVGLengthContext",

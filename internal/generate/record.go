@@ -15,6 +15,8 @@ type record struct {
 	Enums       []enum        `json:"enums"`
 	Methods     []callable    `json:"methods"`
 	NoWrapper   bool          `json:"noWrapper"`
+	As          []string      `json:"as"`
+	asRecords   []*record
 	dtor        recordDtor
 	fields      []field
 	size        int
@@ -100,6 +102,14 @@ func (r *record) enrich2(api api) {
 		method := &r.Methods[i]
 		method.enrich2(api)
 	}
+
+	for _, as := range r.As {
+		asRecord, ok := api.findRecord(as)
+		if !ok {
+			fatalf("failed to find record %s for As method for %s record", as, r.CppName)
+		}
+		r.asRecords = append(r.asRecords, asRecord)
+	}
 }
 
 func (r *record) findEnum(name string) (*enum, bool) {
@@ -128,6 +138,7 @@ func (r record) generate(g generator) {
 	r.generateGoType(g)
 	r.generateFieldsMethods(g)
 	r.generateNilMethod(g)
+	r.generateAsMethods(g)
 
 	for _, ctor := range r.Ctors {
 		if ctor != nil {
@@ -227,6 +238,19 @@ func (r record) generateNilMethod(g generator) {
 	f.writeln("  return o.sk == nil")
 	f.writeln("}")
 	f.writeln()
+}
+
+func (r record) generateAsMethods(g generator) {
+	f := g.goFile
+
+	for _, asRecord := range r.asRecords {
+		methodName := fmt.Sprintf("As%s", asRecord.goName)
+		f.writelnf("// %s converts the %s to a %s.", methodName, r.goName, asRecord.goName)
+		f.writelnf("func (o %s) %s() %s {", r.goName, methodName, asRecord.goName)
+		f.writelnf("  return %s{sk: (*C.%s)(unsafe.Pointer(o.sk))}", asRecord.goName, asRecord.cStructName)
+		f.writeln("}")
+		f.writeln()
+	}
 }
 
 func (r record) generateCStruct(g generator) {

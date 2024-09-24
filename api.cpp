@@ -1817,6 +1817,12 @@ extern "C"
         new SkSamplingOptions (*reinterpret_cast<SkSamplingOptions *> (c_p0)));
   }
 
+  void
+  misk_delete_SkStream (sk_SkStream *obj)
+  {
+    delete reinterpret_cast<SkStream *> (obj);
+  }
+
   sk_SkString *
   misk_new_String (char *c_text)
   {
@@ -1889,6 +1895,14 @@ extern "C"
   {
     reinterpret_cast<SkSVGDOM *> (c_obj)->render (
         reinterpret_cast<SkCanvas *> (c_p0));
+  }
+
+  sk_SkSVGDOM *
+  misk_SVGDOM_MakeFromStream (sk_SkStream *c_str)
+  {
+    auto ret = SkSVGDOM::MakeFromStream (*reinterpret_cast<SkStream *> (c_str))
+                   .release ();
+    return reinterpret_cast<sk_SkSVGDOM *> (ret);
   }
 
   sk_SkSize

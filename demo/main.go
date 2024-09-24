@@ -1,8 +1,8 @@
 package main
 
 import (
+	_ "embed"
 	"fmt"
-	_ "image/png"
 	"log"
 	"runtime"
 
@@ -10,6 +10,9 @@ import (
 	"github.com/go-gl/glfw/v3.3/glfw"
 	"github.com/pekim/go-skia"
 )
+
+//go:embed tiger.svg
+var tigerSVG []byte
 
 const windowWidth = 800
 const windowHeight = 600
@@ -49,6 +52,18 @@ func main() {
 	gl.DepthFunc(gl.LESS)
 	gl.ClearColor(1.0, 1.0, 1.0, 1.0)
 
+	tigerData := skia.DataMakeWithCopy(tigerSVG, uint32(len(tigerSVG)))
+	tigerStream := skia.MemoryStreamMake(tigerData)
+	svgTiger := skia.SVGDOMMakeFromStream(tigerStream.AsStream())
+	if svgTiger.IsNil() {
+		panic("failed to create tiger svg")
+	}
+	var size skia.Size
+	size.SetWidth(300)
+	size.SetHeight(300)
+	svgTiger.SetContainerSize(size)
+	fmt.Println(svgTiger.ContainerSize())
+
 	iface := skia.GrGLMakeNativeInterface()
 	context := skia.GrDirectContextsMakeGLInterface(iface)
 	var fbo int32
@@ -57,7 +72,7 @@ func main() {
 	fbInfo.SetFBOID(uint32(fbo))
 	fbInfo.SetFormat(gl.RGBA8)
 
-	backend := skia.GrBackendRenderTargetsMakeGL(800, 600, 1, 8, fbInfo)
+	backend := skia.GrBackendRenderTargetsMakeGL(1000, 1000, 1, 8, fbInfo)
 	if backend.IsNil() {
 		panic("failed to create backend")
 	}
@@ -92,6 +107,11 @@ func main() {
 		paint.SetColor(skia.ColorBLACK)
 		canvas.DrawString("Some text", 100, 250, font, paint)
 		canvas.DrawString(fmt.Sprintf("Font ascent = %.1f", metrics.Ascent()), 100, 250+lineSpacing, font, paint)
+
+		canvas.Save()
+		canvas.Translate(200, 200)
+		svgTiger.Render(canvas)
+		canvas.Restore()
 
 		context.FlushAndSubmit(skia.GrSyncCpuYes)
 

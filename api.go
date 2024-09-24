@@ -3194,6 +3194,11 @@ func (o MemoryStream) IsNil() bool {
 	return o.sk == nil
 }
 
+// AsStream converts the MemoryStream to a Stream.
+func (o MemoryStream) AsStream() Stream {
+	return Stream{sk: (*C.sk_SkStream)(unsafe.Pointer(o.sk))}
+}
+
 /*
 Returns a stream with a shared reference to the input data.
 */
@@ -4999,6 +5004,24 @@ func (o *Size) SetHeight(value float32) {
 }
 
 /*
+SkStream -- abstraction for a source of bytes. Subclasses can be backed by
+memory, or a file, or something else.
+*/
+type Stream struct {
+	sk *C.sk_SkStream
+}
+
+// IsNil returns true if the raw skia object pointer is nil.
+// If it is nil is may indicate that the Stream has not been created.
+func (o Stream) IsNil() bool {
+	return o.sk == nil
+}
+
+func (o Stream) Delete() {
+	C.misk_delete_SkStream(o.sk)
+}
+
+/*
 Light weight class for managing strings. Uses reference
 counting to make string assignments and copies very fast
 with no extra RAM cost. Assumes UTF8 encoding.
@@ -5171,6 +5194,12 @@ func (o SVGDOM) Render(p0 Canvas) {
 	c_obj := o.sk
 	c_p0 := p0.sk
 	C.misk_SVGDOM_render(c_obj, c_p0)
+}
+
+func SVGDOMMakeFromStream(str Stream) SVGDOM {
+	c_str := str.sk
+	retC := C.misk_SVGDOM_MakeFromStream(c_str)
+	return SVGDOM{sk: retC}
 }
 
 type SVGSVG struct {
