@@ -632,6 +632,7 @@ extern "C"
   sk_SkColorSpace *misk_ColorSpace_MakeSRGB ();
   sk_SkColorSpace *misk_ColorSpace_MakeSRGBLinear ();
   bool misk_ColorSpace_Equals (sk_SkColorSpace *c_p0, sk_SkColorSpace *c_p1);
+  void misk_unref_SkColorSpace (sk_SkColorSpace *c_obj);
 
   unsigned long misk_Data_size (sk_SkData *c_obj);
   bool misk_Data_isEmpty (sk_SkData *c_obj);
@@ -640,6 +641,7 @@ extern "C"
   sk_SkData *misk_Data_MakeWithCString (char *c_cstr);
   sk_SkData *misk_Data_MakeWithoutCopy (void *c_data, ulong c_length);
   sk_SkData *misk_Data_MakeFromFileName (char *c_path);
+  void misk_unref_SkData (sk_SkData *c_obj);
 
   sk_SkFont *misk_new_Font ();
   sk_SkFont *misk_new_FontTypefaceSize (sk_SkTypeface *c_typeface,
@@ -854,9 +856,11 @@ extern "C"
                                                 sk_SkPoint *c_pos,
                                                 sk_SkFont *c_font,
                                                 int c_encoding);
+  void misk_unref_SkTextBlob (sk_SkTextBlob *c_obj);
 
   bool misk_Typeface_Equal (sk_SkTypeface *c_facea, sk_SkTypeface *c_faceb);
   sk_SkTypeface *misk_Typeface_MakeEmpty ();
+  void misk_unref_SkTypeface (sk_SkTypeface *c_obj);
 
   const sk_GrGLInterface *misk_GrGLMakeNativeInterface ();
   sk_GrBackendRenderTarget

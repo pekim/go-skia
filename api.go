@@ -2465,6 +2465,10 @@ func (o ColorSpace) IsNil() bool {
 	return o.sk == nil
 }
 
+func (o ColorSpace) Unref() {
+	C.misk_unref_SkColorSpace(o.sk)
+}
+
 /*
 Create the sRGB color space.
 */
@@ -2505,6 +2509,10 @@ type Data struct {
 // If it is nil is may indicate that the Data has not been created.
 func (o Data) IsNil() bool {
 	return o.sk == nil
+}
+
+func (o Data) Unref() {
+	C.misk_unref_SkData(o.sk)
 }
 
 /*
@@ -5286,6 +5294,10 @@ func (o TextBlob) IsNil() bool {
 	return o.sk == nil
 }
 
+func (o TextBlob) Unref() {
+	C.misk_unref_SkTextBlob(o.sk)
+}
+
 /*
 Creates SkTextBlob with a single run. string meaning depends on SkTextEncoding;
 by default, string is encoded as UTF-8.
@@ -5375,6 +5387,10 @@ type Typeface struct {
 // If it is nil is may indicate that the Typeface has not been created.
 func (o Typeface) IsNil() bool {
 	return o.sk == nil
+}
+
+func (o Typeface) Unref() {
+	C.misk_unref_SkTypeface(o.sk)
 }
 
 /*

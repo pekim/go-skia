@@ -905,6 +905,12 @@ extern "C"
     return ret;
   }
 
+  void
+  misk_unref_SkColorSpace (sk_SkColorSpace *c_obj)
+  {
+    reinterpret_cast<SkColorSpace *> (c_obj)->unref ();
+  }
+
   unsigned long
   misk_Data_size (sk_SkData *c_obj)
   {
@@ -956,6 +962,12 @@ extern "C"
   {
     auto ret = SkData::MakeFromFileName ((char *)c_path).release ();
     return reinterpret_cast<sk_SkData *> (ret);
+  }
+
+  void
+  misk_unref_SkData (sk_SkData *c_obj)
+  {
+    reinterpret_cast<SkData *> (c_obj)->unref ();
   }
 
   sk_SkFont *
@@ -2009,6 +2021,12 @@ extern "C"
     return reinterpret_cast<sk_SkTextBlob *> (ret);
   }
 
+  void
+  misk_unref_SkTextBlob (sk_SkTextBlob *c_obj)
+  {
+    reinterpret_cast<SkTextBlob *> (c_obj)->unref ();
+  }
+
   bool
   misk_Typeface_Equal (sk_SkTypeface *c_facea, sk_SkTypeface *c_faceb)
   {
@@ -2022,6 +2040,12 @@ extern "C"
   {
     auto ret = SkTypeface::MakeEmpty ().release ();
     return reinterpret_cast<sk_SkTypeface *> (ret);
+  }
+
+  void
+  misk_unref_SkTypeface (sk_SkTypeface *c_obj)
+  {
+    reinterpret_cast<SkTypeface *> (c_obj)->unref ();
   }
 
   const sk_GrGLInterface *

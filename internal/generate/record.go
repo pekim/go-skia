@@ -2,10 +2,17 @@ package generate
 
 import (
 	"fmt"
+	"regexp"
 	"strings"
 
 	"github.com/go-clang/clang-v15/clang"
 )
+
+var reSkRefCnt regexp.Regexp
+
+func init() {
+	reSkRefCnt = *regexp.MustCompile(`^Sk\w*RefCnt`)
+}
 
 // record represents a class or struct.
 type record struct {
@@ -60,7 +67,7 @@ func (r *record) enrich1(cursor clang.Cursor) {
 			}
 
 		case clang.Cursor_CXXBaseSpecifier:
-			if cursor.Spelling() == "SkRefCnt" {
+			if reSkRefCnt.MatchString(cursor.Spelling()) {
 				r.derivedFromRefCnt = true
 			}
 
