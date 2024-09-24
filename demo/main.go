@@ -42,6 +42,7 @@ func main() {
 		panic(err)
 	}
 	window.MakeContextCurrent()
+	glfw.SwapInterval(0)
 
 	window.SetKeyCallback(func(w *glfw.Window, key glfw.Key, scancode int, action glfw.Action, mods glfw.ModifierKey) {
 		if action == glfw.Press && mods == glfw.ModControl && key == glfw.KeyQ {
@@ -71,11 +72,11 @@ func main() {
 		if !target.IsNil() {
 			target.Delete()
 		}
-		// if !backend.IsNil() {
-		// 	backend.Delete()
-		// }
+		if !backend.IsNil() {
+			backend.Delete()
+		}
 
-		backend = skia.GrBackendRenderTargetsMakeGL(int32(width), int32(height), 1, 8, fbInfo)
+		backend = skia.NewGrBackendRenderTargetCopy(skia.GrBackendRenderTargetsMakeGL(int32(width), int32(height), 1, 8, fbInfo))
 		if backend.IsNil() {
 			panic("failed to create backend")
 		}
@@ -97,12 +98,19 @@ func main() {
 	})
 	framebufferSize(window.GetFramebufferSize())
 
+	typeface := skia.FontMgrRefDefault().MatchFamilyStyle("sans-serif", skia.FontStyleNormal())
+	font := skia.NewFontTypefaceSize(typeface, 22)
+	var metrics skia.FontMetrics
+	lineSpacing := font.GetMetrics(&metrics)
+
 	tigerData := skia.DataMakeWithCopy(tigerSVG, uint32(len(tigerSVG)))
-	tigerStream := skia.MemoryStreamMake(tigerData)
-	svgTiger := skia.SVGDOMMakeFromStream(tigerStream.AsStream())
+	tigerStream := skia.MemoryStreamMake(tigerData).AsStream()
+	svgTiger := skia.SVGDOMMakeFromStream(tigerStream)
 	if svgTiger.IsNil() {
 		panic("failed to create tiger svg")
 	}
+	tigerStream.Delete()
+	tigerData.Unref()
 	var size skia.Size
 	size.SetWidth(300)
 	size.SetHeight(300)
@@ -119,11 +127,6 @@ func main() {
 		rect := skia.RectMakeXYWH(100, 100, 100, 100)
 		canvas.DrawRect(rect, paint)
 
-		typeface := skia.FontMgrRefDefault().MatchFamilyStyle("sans-serif", skia.FontStyleNormal())
-		font := skia.NewFontTypefaceSize(typeface, 22)
-		var metrics skia.FontMetrics
-		lineSpacing := font.GetMetrics(&metrics)
-
 		paint.SetColor(skia.ColorBLACK)
 		canvas.DrawString("Some text", 100, 250, font, paint)
 		canvas.DrawString(fmt.Sprintf("Font ascent = %.1f", metrics.Ascent()), 100, 250+lineSpacing, font, paint)
@@ -131,7 +134,7 @@ func main() {
 		canvas.Save()
 		// paint.SetColor(skia.ColorTRANSPARENT)
 		// canvas.DrawPaint(paint)
-		canvas.Translate(1000, 1000)
+		canvas.Translate(200, 200)
 		canvas.Scale(2.5, 2.5)
 		svgTiger.Render(canvas)
 		canvas.Restore()
