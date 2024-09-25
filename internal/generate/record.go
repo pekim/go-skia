@@ -51,7 +51,7 @@ func (r *record) enrich1(cursor clang.Cursor) {
 			if cursor.AccessSpecifier() == clang.AccessSpecifier_Public {
 				ctor := r.Ctors[ctorsEnriched]
 				if ctor != nil {
-					r.Ctors[ctorsEnriched].enrich1(r, cursor)
+					r.Ctors[ctorsEnriched].enrich1(r, &cursor)
 				}
 				ctorsEnriched++
 			}
@@ -86,7 +86,12 @@ func (r *record) enrich1(cursor clang.Cursor) {
 	})
 
 	if len(r.Ctors) != ctorsEnriched {
-		fatalf("record %s has %d ctors, but expected %d", r.CppName, ctorsEnriched, len(r.Ctors))
+		if len(r.Ctors) == 1 && ctorsEnriched == 0 {
+			// Enrich a default constructor.
+			r.Ctors[0].enrich1(r, nil)
+		} else {
+			fatalf("record %s has %d ctors, but expected %d", r.CppName, ctorsEnriched, len(r.Ctors))
+		}
 	}
 }
 

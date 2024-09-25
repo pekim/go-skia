@@ -1589,6 +1589,28 @@ extern "C"
     return reinterpret_cast<sk_SkMatrix *> (new SkMatrix ());
   }
 
+  sk_SkOpBuilder *
+  misk_new_OpBuilder ()
+  {
+    return reinterpret_cast<sk_SkOpBuilder *> (new SkOpBuilder ());
+  }
+
+  void
+  misk_OpBuilder_add (sk_SkOpBuilder *c_obj, sk_SkPath *c_path,
+                      uint c__operator)
+  {
+    reinterpret_cast<SkOpBuilder *> (c_obj)->add (
+        *reinterpret_cast<SkPath *> (c_path), SkPathOp (c__operator));
+  }
+
+  bool
+  misk_OpBuilder_resolve (sk_SkOpBuilder *c_obj, sk_SkPath *c_result)
+  {
+    auto ret = reinterpret_cast<SkOpBuilder *> (c_obj)->resolve (
+        reinterpret_cast<SkPath *> (c_result));
+    return ret;
+  }
+
   sk_SkPaint *
   misk_new_Paint ()
   {

@@ -4146,6 +4146,53 @@ func NewMatrix() Matrix {
 }
 
 /*
+Perform a series of path operations, optimized for unioning many paths together.
+*/
+type OpBuilder struct {
+	sk *C.sk_SkOpBuilder
+}
+
+// IsNil returns true if the raw skia object pointer is nil.
+// If it is nil is may indicate that the OpBuilder has not been created.
+func (o OpBuilder) IsNil() bool {
+	return o.sk == nil
+}
+
+func NewOpBuilder() OpBuilder {
+
+	retC := C.misk_new_OpBuilder()
+	return OpBuilder{sk: retC}
+}
+
+/*
+Add one or more paths and their operand. The builder is empty before the first
+path is added, so the result of a single add is (emptyPath OP path).
+
+@param path The second operand.
+@param _operator The operator to apply to the existing and supplied paths.
+*/
+func (o OpBuilder) Add(path Path, _operator PathOp) {
+	c_obj := o.sk
+	c_path := path.sk
+	c__operator := C.uint(_operator)
+	C.misk_OpBuilder_add(c_obj, c_path, c__operator)
+}
+
+/*
+Computes the sum of all paths and operands, and resets the builder to its
+initial state.
+
+@param result The product of the operands.
+@return True if the operation succeeded.
+*/
+func (o OpBuilder) Resolve(result Path) bool {
+	c_obj := o.sk
+	c_result := result.sk
+	retC := C.misk_OpBuilder_resolve(c_obj, c_result)
+	return bool(retC)
+}
+
+/*
 SkPaint controls options applied when drawing. SkPaint collects all
 options outside of the SkCanvas clip and SkCanvas matrix.
 

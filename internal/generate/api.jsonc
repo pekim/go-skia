@@ -405,6 +405,12 @@
     },
 
     {
+      "name": "SkOpBuilder",
+      "constructors": [{}],
+      "methods": [{ "name": "add" }, { "name": "resolve" }]
+    },
+
+    {
       "name": "SkPaint",
       "constructors": [{}, null, { "suffix": "Copy" }, null],
       "methods": [

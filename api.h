@@ -290,6 +290,12 @@ extern "C"
 
   typedef struct
   {
+    uchar fPathRefs[16];
+    uchar fOps[24];
+  } sk_SkOpBuilder;
+
+  typedef struct
+  {
     uchar fPathEffect[8];
     uchar fShader[8];
     uchar fMaskFilter[8];
@@ -771,6 +777,11 @@ extern "C"
   void misk_IRect_sort (sk_SkIRect *c_obj);
 
   sk_SkMatrix *misk_new_Matrix ();
+
+  sk_SkOpBuilder *misk_new_OpBuilder ();
+  void misk_OpBuilder_add (sk_SkOpBuilder *c_obj, sk_SkPath *c_path,
+                           uint c__operator);
+  bool misk_OpBuilder_resolve (sk_SkOpBuilder *c_obj, sk_SkPath *c_result);
 
   sk_SkPaint *misk_new_Paint ();
   sk_SkPaint *misk_new_PaintCopy (sk_SkPaint *c_paint);

@@ -17,18 +17,21 @@ type recordCtor struct {
 	enriched   bool
 }
 
-func (c *recordCtor) enrich1(record *record, cursor clang.Cursor) {
+func (c *recordCtor) enrich1(record *record, cursor *clang.Cursor) {
 	c.record = record
 	c.goFuncName = fmt.Sprintf("New%s%s", c.record.goName, c.Suffix)
 	c.cFuncName = fmt.Sprintf("misk_new_%s%s", c.record.goName, c.Suffix)
-	c.doc = cursor.RawCommentText()
 
-	paramCount := int(cursor.NumArguments())
-	c.params = make([]param, paramCount)
-	for i := 0; i < paramCount; i++ {
-		arg := cursor.Argument(uint32(i))
-		param := newParam(i, arg, c.params[i].ValueNil, c.params[i].Out)
-		c.params[i] = param
+	if cursor != nil {
+		c.doc = cursor.RawCommentText()
+
+		paramCount := int(cursor.NumArguments())
+		c.params = make([]param, paramCount)
+		for i := 0; i < paramCount; i++ {
+			arg := cursor.Argument(uint32(i))
+			param := newParam(i, arg, c.params[i].ValueNil, c.params[i].Out)
+			c.params[i] = param
+		}
 	}
 
 	c.enriched = true
