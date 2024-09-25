@@ -2315,6 +2315,88 @@ extern "C"
     return *(reinterpret_cast<sk_SkPath *> (&ret));
   }
 
+  void
+  misk_Path_transform1 (sk_SkPath *c_obj, sk_SkMatrix *c_matrix,
+                        sk_SkPath *c_dst, int c_pc)
+  {
+    reinterpret_cast<SkPath *> (c_obj)->transform (
+        *reinterpret_cast<SkMatrix *> (c_matrix),
+        reinterpret_cast<SkPath *> (c_dst), SkApplyPerspectiveClip (c_pc));
+  }
+
+  sk_SkPath
+  misk_Path_transform2 (sk_SkPath *c_obj, sk_SkMatrix *c_matrix, int c_pc)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->transform (
+        *reinterpret_cast<SkMatrix *> (c_matrix),
+        SkApplyPerspectiveClip (c_pc));
+    return *(reinterpret_cast<sk_SkPath *> (&ret));
+  }
+
+  sk_SkPath
+  misk_Path_makeTransform (sk_SkPath *c_obj, sk_SkMatrix *c_m, int c_pc)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->makeTransform (
+        *reinterpret_cast<SkMatrix *> (c_m), SkApplyPerspectiveClip (c_pc));
+    return *(reinterpret_cast<sk_SkPath *> (&ret));
+  }
+
+  sk_SkPath
+  misk_Path_makeScale (sk_SkPath *c_obj, float c_sx, float c_sy)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->makeScale (c_sx, c_sy);
+    return *(reinterpret_cast<sk_SkPath *> (&ret));
+  }
+
+  bool
+  misk_Path_getLastPt (sk_SkPath *c_obj, sk_SkPoint *c_lastPt)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->getLastPt (
+        reinterpret_cast<SkPoint *> (c_lastPt));
+    return ret;
+  }
+
+  void
+  misk_Path_setLastPt1 (sk_SkPath *c_obj, float c_x, float c_y)
+  {
+    reinterpret_cast<SkPath *> (c_obj)->setLastPt (c_x, c_y);
+  }
+
+  void
+  misk_Path_setLastPt2 (sk_SkPath *c_obj, sk_SkPoint *c_p)
+  {
+    reinterpret_cast<SkPath *> (c_obj)->setLastPt (
+        *reinterpret_cast<SkPoint *> (c_p));
+  }
+
+  unsigned int
+  misk_Path_getSegmentMasks (sk_SkPath *c_obj)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->getSegmentMasks ();
+    return ret;
+  }
+
+  bool
+  misk_Path_contains (sk_SkPath *c_obj, float c_x, float c_y)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->contains (c_x, c_y);
+    return ret;
+  }
+
+  sk_SkData *
+  misk_Path_serialize (sk_SkPath *c_obj)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->serialize ().release ();
+    return reinterpret_cast<sk_SkData *> (ret);
+  }
+
+  bool
+  misk_Path_isValid (sk_SkPath *c_obj)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->isValid ();
+    return ret;
+  }
+
   sk_SkPixmap *
   misk_new_Pixmap ()
   {

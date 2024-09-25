@@ -905,6 +905,20 @@ extern "C"
   void misk_Path_offset1 (sk_SkPath *c_obj, float c_dx, float c_dy,
                           sk_SkPath *c_dst);
   sk_SkPath misk_Path_offset2 (sk_SkPath *c_obj, float c_dx, float c_dy);
+  void misk_Path_transform1 (sk_SkPath *c_obj, sk_SkMatrix *c_matrix,
+                             sk_SkPath *c_dst, int c_pc);
+  sk_SkPath misk_Path_transform2 (sk_SkPath *c_obj, sk_SkMatrix *c_matrix,
+                                  int c_pc);
+  sk_SkPath misk_Path_makeTransform (sk_SkPath *c_obj, sk_SkMatrix *c_m,
+                                     int c_pc);
+  sk_SkPath misk_Path_makeScale (sk_SkPath *c_obj, float c_sx, float c_sy);
+  bool misk_Path_getLastPt (sk_SkPath *c_obj, sk_SkPoint *c_lastPt);
+  void misk_Path_setLastPt1 (sk_SkPath *c_obj, float c_x, float c_y);
+  void misk_Path_setLastPt2 (sk_SkPath *c_obj, sk_SkPoint *c_p);
+  unsigned int misk_Path_getSegmentMasks (sk_SkPath *c_obj);
+  bool misk_Path_contains (sk_SkPath *c_obj, float c_x, float c_y);
+  sk_SkData *misk_Path_serialize (sk_SkPath *c_obj);
+  bool misk_Path_isValid (sk_SkPath *c_obj);
 
   sk_SkPixmap *misk_new_Pixmap ();
   sk_SkPixmap *misk_new_PixmapImageInfo (sk_SkImageInfo *c_info, void *c_addr,

@@ -4,6 +4,7 @@
     { "name": "GrSyncCpu" },
     { "name": "GrSemaphoresSubmitted" },
     { "name": "SkAlphaType" },
+    { "name": "SkApplyPerspectiveClip" },
     { "name": "SkBlendMode" },
     { "name": "SkClipOp" },
     { "name": "SkColorType" },
@@ -525,7 +526,22 @@
         {
           "name": "offset",
           "overloads": [{ "suffix": "1" }, { "suffix": "2" }]
-        }
+        },
+        {
+          "name": "transform",
+          "overloads": [{ "suffix": "1" }, { "suffix": "2" }]
+        },
+        { "name": "makeTransform" },
+        { "name": "makeScale" },
+        { "name": "getLastPt" },
+        {
+          "name": "setLastPt",
+          "overloads": [{ "suffix": "1" }, { "suffix": "2" }]
+        },
+        { "name": "getSegmentMasks" },
+        { "name": "contains" },
+        { "name": "serialize" },
+        { "name": "isValid" }
       ]
     },
 

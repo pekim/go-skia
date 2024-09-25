@@ -6016,6 +6016,167 @@ func (o Path) Offset2(dx float32, dy float32) Path {
 }
 
 /*
+Transforms verb array, SkPoint array, and weight by matrix.
+transform may change verbs and increase their number.
+Transformed SkPath replaces dst; if dst is nullptr, original data
+is replaced.
+
+@param matrix  SkMatrix to apply to SkPath
+@param dst     overwritten, transformed copy of SkPath; may be nullptr
+@param pc      whether to apply perspective clipping
+
+example: https://fiddle.skia.org/c/@Path_transform
+*/
+func (o Path) Transform1(matrix Matrix, dst Path, pc ApplyPerspectiveClip) {
+	c_obj := o.sk
+	c_matrix := matrix.sk
+	c_dst := dst.sk
+	c_pc := C.int(pc)
+	C.misk_Path_transform1(c_obj, c_matrix, c_dst, c_pc)
+}
+
+/*
+Transforms verb array, SkPoint array, and weight by matrix.
+transform may change verbs and increase their number.
+SkPath is replaced by transformed data.
+
+@param matrix  SkMatrix to apply to SkPath
+@param pc      whether to apply perspective clipping
+*/
+func (o Path) Transform2(matrix Matrix, pc ApplyPerspectiveClip) Path {
+	c_obj := o.sk
+	c_matrix := matrix.sk
+	c_pc := C.int(pc)
+	retC := C.misk_Path_transform2(c_obj, c_matrix, c_pc)
+	return Path{sk: &retC}
+}
+
+func (o Path) MakeTransform(m Matrix, pc ApplyPerspectiveClip) Path {
+	c_obj := o.sk
+	c_m := m.sk
+	c_pc := C.int(pc)
+	retC := C.misk_Path_makeTransform(c_obj, c_m, c_pc)
+	return Path{sk: &retC}
+}
+
+func (o Path) MakeScale(sx float32, sy float32) Path {
+	c_obj := o.sk
+	c_sx := C.float(sx)
+	c_sy := C.float(sy)
+	retC := C.misk_Path_makeScale(c_obj, c_sx, c_sy)
+	return Path{sk: &retC}
+}
+
+/*
+Returns last point on SkPath in lastPt. Returns false if SkPoint array is empty,
+storing (0, 0) if lastPt is not nullptr.
+
+@param lastPt  storage for final SkPoint in SkPoint array; may be nullptr
+@return        true if SkPoint array contains one or more SkPoint
+
+example: https://fiddle.skia.org/c/@Path_getLastPt
+*/
+func (o Path) GetLastPt(lastPt Point) bool {
+	c_obj := o.sk
+	c_lastPt := lastPt.sk
+	retC := C.misk_Path_getLastPt(c_obj, c_lastPt)
+	return bool(retC)
+}
+
+/*
+Sets last point to (x, y). If SkPoint array is empty, append kMove_Verb to
+verb array and append (x, y) to SkPoint array.
+
+@param x  set x-axis value of last point
+@param y  set y-axis value of last point
+
+example: https://fiddle.skia.org/c/@Path_setLastPt
+*/
+func (o Path) SetLastPt1(x float32, y float32) {
+	c_obj := o.sk
+	c_x := C.float(x)
+	c_y := C.float(y)
+	C.misk_Path_setLastPt1(c_obj, c_x, c_y)
+}
+
+/*
+Sets the last point on the path. If SkPoint array is empty, append kMove_Verb to
+verb array and append p to SkPoint array.
+
+@param p  set value of last point
+*/
+func (o Path) SetLastPt2(p Point) {
+	c_obj := o.sk
+	c_p := p.sk
+	C.misk_Path_setLastPt2(c_obj, c_p)
+}
+
+/*
+Returns a mask, where each set bit corresponds to a SegmentMask constant
+if SkPath contains one or more verbs of that type.
+Returns zero if SkPath contains no lines, or curves: quads, conics, or cubics.
+
+getSegmentMasks() returns a cached result; it is very fast.
+
+@return  SegmentMask bits or zero
+*/
+func (o Path) GetSegmentMasks() uint32 {
+	c_obj := o.sk
+	retC := C.misk_Path_getSegmentMasks(c_obj)
+	return uint32(retC)
+}
+
+/*
+Returns true if the point (x, y) is contained by SkPath, taking into
+account FillType.
+
+@param x  x-axis value of containment test
+@param y  y-axis value of containment test
+@return   true if SkPoint is in SkPath
+
+example: https://fiddle.skia.org/c/@Path_contains
+*/
+func (o Path) Contains(x float32, y float32) bool {
+	c_obj := o.sk
+	c_x := C.float(x)
+	c_y := C.float(y)
+	retC := C.misk_Path_contains(c_obj, c_x, c_y)
+	return bool(retC)
+}
+
+/*
+Writes SkPath to buffer, returning the buffer written to, wrapped in SkData.
+
+serialize() writes SkPath::FillType, verb array, SkPoint array, conic weight, and
+additionally writes computed information like SkPath::Convexity and bounds.
+
+serialize() should only be used in concert with readFromMemory().
+The format used for SkPath in memory is not guaranteed.
+
+@return  SkPath data wrapped in SkData buffer
+
+example: https://fiddle.skia.org/c/@Path_serialize
+*/
+func (o Path) Serialize() Data {
+	c_obj := o.sk
+	retC := C.misk_Path_serialize(c_obj)
+	return Data{sk: retC}
+}
+
+/*
+Returns if SkPath data is consistent. Corrupt SkPath data is detected if
+internal values are out of range or internal storage does not match
+array dimensions.
+
+@return  true if SkPath data is consistent
+*/
+func (o Path) IsValid() bool {
+	c_obj := o.sk
+	retC := C.misk_Path_isValid(c_obj)
+	return bool(retC)
+}
+
+/*
 AddPathMode chooses how addPath() appends. Adding one SkPath to another can extend
 the last contour or start a new contour.
 */
@@ -7285,6 +7446,21 @@ components improve performance.
 type AlphaType int32
 
 const ()
+
+/*
+When we transform points through a matrix containing perspective (the bottom row is something
+other than 0,0,1), the bruteforce math can produce confusing results (since we might divide
+by 0, or a negative w value). By default, methods that map rects and paths will apply
+perspective clipping, but this can be changed by specifying kYes to those methods.
+*/
+type ApplyPerspectiveClip int32
+
+const (
+	// Don't pre-clip the geometry before applying the (perspective) matrix
+	ApplyPerspectiveClipNo ApplyPerspectiveClip = 0
+	// Do pre-clip the geometry before applying the (perspective) matrix
+	ApplyPerspectiveClipYes ApplyPerspectiveClip = 1
+)
 
 type BlendMode int32
 
