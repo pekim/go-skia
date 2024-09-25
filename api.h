@@ -1043,6 +1043,11 @@ extern "C"
       sk_GrBackendRenderTarget *c_backendRenderTarget, int c_origin,
       int c_colorType, sk_SkColorSpace *c_colorSpace,
       sk_SkSurfaceProps *c_surfaceProps);
+  bool misk_Op (sk_SkPath *c_one, sk_SkPath *c_two, uint c_op,
+                sk_SkPath *c_result);
+  bool misk_Simplify (sk_SkPath *c_path, sk_SkPath *c_result);
+  bool misk_TightBounds (sk_SkPath *c_path, sk_SkRect c_result);
+  bool misk_AsWinding (sk_SkPath *c_path, sk_SkPath *c_result);
 
   extern uchar sk_SK_AlphaOPAQUE;
   extern uchar sk_SK_AlphaTRANSPARENT;

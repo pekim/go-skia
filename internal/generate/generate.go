@@ -46,6 +46,7 @@ var headerFiles = []string{
 	"include/gpu/GrContextOptions.h",
 	"include/gpu/GrDirectContext.h",
 	"include/gpu/GrRecordingContext.h",
+	"include/pathops/SkPathOps.h",
 	"modules/svg/include/SkSVGDOM.h",
 	"modules/svg/include/SkSVGRenderContext.h",
 	"modules/svg/include/SkSVGSVG.h",

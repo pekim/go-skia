@@ -44,6 +44,7 @@
 #include <include/gpu/ganesh/gl/GrGLDirectContext.h>
 #include <include/gpu/gl/GrGLInterface.h>
 #include <include/gpu/gl/GrGLTypes.h>
+#include <include/pathops/SkPathOps.h>
 #include <include/private/base/SkPoint_impl.h>
 #include <modules/svg/include/SkSVGDOM.h>
 #include <modules/svg/include/SkSVGRenderContext.h>
@@ -2975,6 +2976,39 @@ extern "C"
                    reinterpret_cast<SkSurfaceProps *> (c_surfaceProps))
                    .release ();
     return reinterpret_cast<sk_SkSurface *> (ret);
+  }
+
+  bool
+  misk_Op (sk_SkPath *c_one, sk_SkPath *c_two, uint c_op, sk_SkPath *c_result)
+  {
+    auto ret = Op (*reinterpret_cast<SkPath *> (c_one),
+                   *reinterpret_cast<SkPath *> (c_two), SkPathOp (c_op),
+                   reinterpret_cast<SkPath *> (c_result));
+    return ret;
+  }
+
+  bool
+  misk_Simplify (sk_SkPath *c_path, sk_SkPath *c_result)
+  {
+    auto ret = Simplify (*reinterpret_cast<SkPath *> (c_path),
+                         reinterpret_cast<SkPath *> (c_result));
+    return ret;
+  }
+
+  bool
+  misk_TightBounds (sk_SkPath *c_path, sk_SkRect c_result)
+  {
+    auto ret = TightBounds (*reinterpret_cast<SkPath *> (c_path),
+                            reinterpret_cast<SkRect *> (&c_result));
+    return ret;
+  }
+
+  bool
+  misk_AsWinding (sk_SkPath *c_path, sk_SkPath *c_result)
+  {
+    auto ret = AsWinding (*reinterpret_cast<SkPath *> (c_path),
+                          reinterpret_cast<SkPath *> (c_result));
+    return ret;
   }
 
   uchar sk_SK_AlphaOPAQUE = SK_AlphaOPAQUE;

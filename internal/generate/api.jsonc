@@ -12,6 +12,7 @@
     { "name": "SkFilterMode" },
     { "name": "SkPathDirection" },
     { "name": "SkPathFillType" },
+    { "name": "SkPathOp" },
     { "name": "SkPixelGeometry" },
     { "name": "SkTextEncoding" },
     { "name": "skgpu::Protected" }
@@ -722,7 +723,12 @@
           ]
         }
       ]
-    }
+    },
+
+    { "name": "Op" },
+    { "name": "Simplify" },
+    { "name": "TightBounds" },
+    { "name": "AsWinding" }
   ],
 
   "typedefs": [

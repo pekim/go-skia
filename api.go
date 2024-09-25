@@ -7596,6 +7596,24 @@ const (
 )
 
 /*
+The logical operations that can be performed when combining two paths.
+*/
+type PathOp uint32
+
+const (
+	// subtract the op path from the first path
+	PathOpDifference PathOp = 0
+	// intersect the two paths
+	PathOpIntersect PathOp = 1
+	// union (inclusive-or) the two paths
+	PathOpUnion PathOp = 2
+	// exclusive-or the two paths
+	PathOpXOR PathOp = 3
+	// subtract the first path from the op path
+	PathOpReverseDifference PathOp = 4
+)
+
+/*
 Description of how the LCD strips are arranged for each pixel. If this is unknown, or the
 pixels are meant to be "portable" and/or transformed before showing (e.g. rotated, scaled)
 then use kUnknown_SkPixelGeometry.
@@ -7837,6 +7855,86 @@ func SkSurfacesWrapBackendRenderTarget(context GrRecordingContext, backendRender
 	c_surfaceProps := surfaceProps.sk
 	retC := C.misk_SkSurfacesWrapBackendRenderTarget(c_context, c_backendRenderTarget, c_origin, c_colorType, c_colorSpace, c_surfaceProps)
 	return Surface{sk: retC}
+}
+
+/*
+Set this path to the result of applying the Op to this path and the
+specified path: this = (this op operand).
+The resulting path will be constructed from non-overlapping contours.
+The curve order is reduced where possible so that cubics may be turned
+into quadratics, and quadratics maybe turned into lines.
+
+Returns true if operation was able to produce a result;
+otherwise, result is unmodified.
+
+@param one The first operand (for difference, the minuend)
+@param two The second operand (for difference, the subtrahend)
+@param op The operator to apply.
+@param result The product of the operands. The result may be one of the
+inputs.
+@return True if the operation succeeded.
+*/
+func Op(one Path, two Path, op PathOp, result Path) bool {
+	c_one := one.sk
+	c_two := two.sk
+	c_op := C.uint(op)
+	c_result := result.sk
+	retC := C.misk_Op(c_one, c_two, c_op, c_result)
+	return bool(retC)
+}
+
+/*
+Set this path to a set of non-overlapping contours that describe the
+same area as the original path.
+The curve order is reduced where possible so that cubics may
+be turned into quadratics, and quadratics maybe turned into lines.
+
+Returns true if operation was able to produce a result;
+otherwise, result is unmodified.
+
+@param path The path to simplify.
+@param result The simplified path. The result may be the input.
+@return True if simplification succeeded.
+*/
+func Simplify(path Path, result Path) bool {
+	c_path := path.sk
+	c_result := result.sk
+	retC := C.misk_Simplify(c_path, c_result)
+	return bool(retC)
+}
+
+/*
+Set the resulting rectangle to the tight bounds of the path.
+
+@param path The path measured.
+@param result The tight bounds of the path.
+@return True if the bounds could be computed.
+*/
+func TightBounds(path Path, result Rect) bool {
+	c_path := path.sk
+	c_result := *(*C.sk_SkRect)(unsafe.Pointer(&result))
+	retC := C.misk_TightBounds(c_path, c_result)
+	return bool(retC)
+}
+
+/*
+Set the result with fill type winding to area equivalent to path.
+Returns true if successful. Does not detect if path contains contours which
+contain self-crossings or cross other contours; in these cases, may return
+true even though result does not fill same area as path.
+
+Returns true if operation was able to produce a result;
+otherwise, result is unmodified. The result may be the input.
+
+@param path The path typically with fill type set to even odd.
+@param result The equivalent path with fill type set to winding.
+@return True if winding path was set.
+*/
+func AsWinding(path Path, result Path) bool {
+	c_path := path.sk
+	c_result := result.sk
+	retC := C.misk_AsWinding(c_path, c_result)
+	return bool(retC)
 }
 
 /*
