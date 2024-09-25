@@ -152,15 +152,12 @@
           "name": "getLocalClipBounds",
           "overloads": [
             { "suffix": "Rect" },
-            { "suffix": "Path", "params": [{ "asPointer": true }] }
+            { "suffix": "Path", "params": [{ "out": true }] }
           ]
         },
         {
           "name": "getDeviceClipBounds",
-          "overloads": [
-            {},
-            { "suffix": "Rect", "params": [{ "asPointer": true }] }
-          ]
+          "overloads": [{}, { "suffix": "Rect", "params": [{ "out": true }] }]
         },
         {
           "name": "drawColor",
@@ -241,16 +238,16 @@
       "methods": [
         {
           "name": "getMetrics",
-          "overloads": [{ "params": [{ "asPointer": true }] }]
+          "overloads": [{ "params": [{ "out": true }] }]
         },
         { "name": "getXPos" },
         {
           "name": "measureText",
           "overloads": [
-            { "params": [null, null, null, { "asPointer": true }] },
+            { "params": [null, null, null, { "out": true }] },
             {
               "suffix": "Paint",
-              "params": [null, null, null, { "asPointer": true }, null]
+              "params": [null, null, null, { "out": true }, null]
             }
           ]
         },

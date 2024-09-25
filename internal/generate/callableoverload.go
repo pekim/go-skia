@@ -53,7 +53,7 @@ func (o *callableOverload) enrich1(callable *callable, record *record, cursor cl
 	}
 	for i := 0; i < paramCount; i++ {
 		arg := cursor.Argument(uint32(i))
-		param := newParam(i, arg, o.Params[i].ValueNil, o.Params[i].AsPointer)
+		param := newParam(i, arg, o.Params[i].ValueNil, o.Params[i].Out)
 		o.Params[i] = param
 	}
 }

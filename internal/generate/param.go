@@ -17,10 +17,10 @@ type param struct {
 	typ       typ
 	typGoName string
 	ValueNil  bool `json:"valueNil"`
-	AsPointer bool `json:"asPointer"` // for an "out" parameter
+	Out       bool `json:"out"` // for an "out" parameter, generate as pointer
 }
 
-func newParam(paramIndex int, cursor clang.Cursor, valueNil bool, asPointer bool) param {
+func newParam(paramIndex int, cursor clang.Cursor, valueNil bool, out bool) param {
 	cName := cursor.DisplayName()
 	if cName == "" {
 		cName = fmt.Sprintf("p%d", paramIndex)
@@ -33,7 +33,7 @@ func newParam(paramIndex int, cursor clang.Cursor, valueNil bool, asPointer bool
 		goName:    validGoName(cName),
 		clangType: cursor.Type(),
 		ValueNil:  valueNil,
-		AsPointer: asPointer,
+		Out:       out,
 	}
 
 	return p
@@ -48,7 +48,7 @@ func (p *param) enrich2(api api) {
 	p.typGoName = p.typ.goName
 
 	if p.typ.isPointer && p.typ.subTyp.record != nil {
-		if p.typ.subTyp.record.NoWrapper && p.AsPointer {
+		if p.typ.subTyp.record.NoWrapper && p.Out {
 			p.typGoName = "*" + p.typGoName
 		}
 	}
@@ -105,7 +105,7 @@ func (p *param) enrich2(api api) {
 
 	} else if p.typ.isPointer && p.typ.subTyp.record != nil {
 		if p.typ.subTyp.record.NoWrapper {
-			if p.AsPointer {
+			if p.Out {
 				p.cgoVar = fmt.Sprintf("%s := (*C.%s)(unsafe.Pointer(%s))", p.cName, p.typ.subTyp.record.cStructName, p.goName)
 				p.cParam = fmt.Sprintf("%s *%s", p.typ.subTyp.cName, p.cName)
 				p.cppArg = fmt.Sprintf("reinterpret_cast<%s*>(%s)", p.typ.subTyp.cppName, p.cName)

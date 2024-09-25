@@ -27,7 +27,7 @@ func (c *recordCtor) enrich1(record *record, cursor clang.Cursor) {
 	c.params = make([]param, paramCount)
 	for i := 0; i < paramCount; i++ {
 		arg := cursor.Argument(uint32(i))
-		param := newParam(i, arg, c.params[i].ValueNil, c.params[i].AsPointer)
+		param := newParam(i, arg, c.params[i].ValueNil, c.params[i].Out)
 		c.params[i] = param
 	}
 
