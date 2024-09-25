@@ -31,7 +31,7 @@ done
 if [ "$CLEAN"x == "fullx" ]; then
 	/bin/rm -rf \
     api.* \
-    _header \
+    header \
     lib \
     _skia
 	exit 0
@@ -40,7 +40,7 @@ fi
 if [ "$CLEAN"x == "restorex" ]; then
 	/bin/rm -rf \
     api.* \
-    _header \
+    header \
     lib \
     _skia/build
 	if [ -d skia/skia ]; then
@@ -211,23 +211,23 @@ ninja -C "${BUILD_DIR}"
 cd ../..
 
 # Only copy header file and libraries if their parent dirs do not exist.
-if [ ! -e _header ]; then
+if [ ! -e header ]; then
   # copy headers
-  mkdir _header
+  mkdir header
   cp -r \
       _skia/skia/include \
       _skia/skia/modules \
-      _header
+      header
   mkdir -p \
-      _header/src/base \
-      _header/src/core
+      header/src/base \
+      header/src/core
   cp -r \
       _skia/skia/src/base/SkTLazy.h \
-      _header/src/base
+      header/src/base
   cp -r \
       _skia/skia/src/core/SkTHash.h \
       _skia/skia/src/core/SkChecksum.h \
-      _header/src/core
+      header/src/core
 fi
 if [ ! -e lib ]; then
   # copy libs
