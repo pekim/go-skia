@@ -3,6 +3,7 @@
     { "name": "GrSurfaceOrigin" },
     { "name": "GrSyncCpu" },
     { "name": "GrSemaphoresSubmitted" },
+    { "name": "SkAlphaType" },
     { "name": "SkBlendMode" },
     { "name": "SkClipOp" },
     { "name": "SkColorType" },
@@ -300,12 +301,21 @@
 
     {
       "name": "SkImage",
+      "enums": [{ "name": "CachingHint" }],
       "methods": [
         { "name": "imageInfo" },
         { "name": "width" },
         { "name": "height" },
         { "name": "dimensions" },
-        { "name": "bounds" }
+        { "name": "bounds" },
+        { "name": "uniqueID" },
+        { "name": "alphaType" },
+        { "name": "colorType" },
+        { "name": "colorSpace" },
+        { "name": "isAlphaOnly" },
+        { "name": "isOpaque" },
+        { "name": "readPixels", "overloads": [{}, null, null, null] },
+        { "name": "makeSubset", "overloads": [{}, null] }
       ]
     },
 
@@ -571,8 +581,23 @@
 
   /* Non-record functions. */
   "functions": [
-    { "name": "GrGLMakeNativeInterface" },
     { "name": "GrBackendRenderTargets::MakeGL" },
+    {
+      "name": "GrDirectContexts::MakeGL",
+      "overloads": [
+        { "suffix": "InterfaceOptions" },
+        { "suffix": "Interface" },
+        { "suffix": "Options" },
+        {}
+      ]
+    },
+    { "name": "GrGLMakeNativeInterface" },
+    { "name": "SkColorSetARGB" },
+    { "name": "SkColorSetA" },
+    // { "name": "SkImages::DeferredFromEncodedData" },
+    { "name": "SkImages::RasterFromData" },
+    { "name": "SkPreMultiplyARGB" },
+    { "name": "SkPreMultiplyColor" },
     {
       "name": "SkSurfaces::WrapBackendRenderTarget",
       "overloads": [
@@ -589,20 +614,7 @@
           ]
         }
       ]
-    },
-    {
-      "name": "GrDirectContexts::MakeGL",
-      "overloads": [
-        { "suffix": "InterfaceOptions" },
-        { "suffix": "Interface" },
-        { "suffix": "Options" },
-        {}
-      ]
-    },
-    { "name": "SkColorSetARGB" },
-    { "name": "SkColorSetA" },
-    { "name": "SkPreMultiplyARGB" },
-    { "name": "SkPreMultiplyColor" }
+    }
   ],
 
   "typedefs": [

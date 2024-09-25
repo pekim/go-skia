@@ -3294,6 +3294,188 @@ func (o Image) Bounds() IRect {
 }
 
 /*
+Returns value unique to image. SkImage contents cannot change after SkImage is
+created. Any operation to create a new SkImage will receive generate a new
+unique number.
+
+@return  unique identifier
+*/
+func (o Image) UniqueID() uint32 {
+	c_obj := o.sk
+	retC := C.misk_Image_uniqueID(c_obj)
+	return uint32(retC)
+}
+
+/*
+Returns SkAlphaType.
+
+SkAlphaType returned was a parameter to an SkImage constructor,
+or was parsed from encoded data.
+
+@return  SkAlphaType in SkImage
+
+example: https://fiddle.skia.org/c/@Image_alphaType
+*/
+func (o Image) AlphaType() AlphaType {
+	c_obj := o.sk
+	retC := C.misk_Image_alphaType(c_obj)
+	return AlphaType(retC)
+}
+
+/*
+Returns SkColorType if known; otherwise, returns kUnknown_SkColorType.
+
+@return  SkColorType of SkImage
+
+example: https://fiddle.skia.org/c/@Image_colorType
+*/
+func (o Image) ColorType() ColorType {
+	c_obj := o.sk
+	retC := C.misk_Image_colorType(c_obj)
+	return ColorType(retC)
+}
+
+/*
+Returns SkColorSpace, the range of colors, associated with SkImage.  The
+reference count of SkColorSpace is unchanged. The returned SkColorSpace is
+immutable.
+
+SkColorSpace returned was passed to an SkImage constructor,
+or was parsed from encoded data. SkColorSpace returned may be ignored when SkImage
+is drawn, depending on the capabilities of the SkSurface receiving the drawing.
+
+@return  SkColorSpace in SkImage, or nullptr
+
+example: https://fiddle.skia.org/c/@Image_colorSpace
+*/
+func (o Image) ColorSpace() ColorSpace {
+	c_obj := o.sk
+	retC := C.misk_Image_colorSpace(c_obj)
+	return ColorSpace{sk: retC}
+}
+
+/*
+Returns true if SkImage pixels represent transparency only. If true, each pixel
+is packed in 8 bits as defined by kAlpha_8_SkColorType.
+
+@return  true if pixels represent a transparency mask
+
+example: https://fiddle.skia.org/c/@Image_isAlphaOnly
+*/
+func (o Image) IsAlphaOnly() bool {
+	c_obj := o.sk
+	retC := C.misk_Image_isAlphaOnly(c_obj)
+	return bool(retC)
+}
+
+/*
+Returns true if pixels ignore their alpha value and are treated as fully opaque.
+
+@return  true if SkAlphaType is kOpaque_SkAlphaType
+*/
+func (o Image) IsOpaque() bool {
+	c_obj := o.sk
+	retC := C.misk_Image_isOpaque(c_obj)
+	return bool(retC)
+}
+
+/*
+Copies SkRect of pixels from SkImage to dstPixels. Copy starts at offset (srcX, srcY),
+and does not exceed SkImage (width(), height()).
+
+dstInfo specifies width, height, SkColorType, SkAlphaType, and SkColorSpace of
+destination. dstRowBytes specifies the gap from one destination row to the next.
+Returns true if pixels are copied. Returns false if:
+- dstInfo.addr() equals nullptr
+- dstRowBytes is less than dstInfo.minRowBytes()
+- SkPixelRef is nullptr
+
+Pixels are copied only if pixel conversion is possible. If SkImage SkColorType is
+kGray_8_SkColorType, or kAlpha_8_SkColorType; dstInfo.colorType() must match.
+If SkImage SkColorType is kGray_8_SkColorType, dstInfo.colorSpace() must match.
+If SkImage SkAlphaType is kOpaque_SkAlphaType, dstInfo.alphaType() must
+match. If SkImage SkColorSpace is nullptr, dstInfo.colorSpace() must match. Returns
+false if pixel conversion is not possible.
+
+srcX and srcY may be negative to copy only top or left of source. Returns
+false if width() or height() is zero or negative.
+Returns false if abs(srcX) >= Image width(), or if abs(srcY) >= Image height().
+
+If cachingHint is kAllow_CachingHint, pixels may be retained locally.
+If cachingHint is kDisallow_CachingHint, pixels are not added to the local cache.
+
+@param context      the GrDirectContext in play, if it exists
+@param dstInfo      destination width, height, SkColorType, SkAlphaType, SkColorSpace
+@param dstPixels    destination pixel storage
+@param dstRowBytes  destination row length
+@param srcX         column index whose absolute value is less than width()
+@param srcY         row index whose absolute value is less than height()
+@param cachingHint  whether the pixels should be cached locally
+@return             true if pixels are copied to dstPixels
+*/
+func (o Image) ReadPixels(context GrDirectContext, dstInfo ImageInfo, dstPixels []byte, dstRowBytes uint32, srcX int32, srcY int32, cachingHint ImageCachingHint) bool {
+	c_obj := o.sk
+	c_context := context.sk
+	c_dstInfo := dstInfo.sk
+	c_dstPixels := unsafe.Pointer(&dstPixels[0])
+	c_dstRowBytes := C.ulong(dstRowBytes)
+	c_srcX := C.int(srcX)
+	c_srcY := C.int(srcY)
+	c_cachingHint := C.uint(cachingHint)
+	retC := C.misk_Image_readPixels(c_obj, c_context, c_dstInfo, c_dstPixels, c_dstRowBytes, c_srcX, c_srcY, c_cachingHint)
+	return bool(retC)
+}
+
+/*
+Returns subset of this image.
+
+Returns nullptr if any of the following are true:
+- Subset is empty
+- Subset is not contained inside the image's bounds
+- Pixels in the source image could not be read or copied
+- This image is texture-backed and the provided context is null or does not match
+the source image's context.
+
+If the source image was texture-backed, the resulting image will be texture-backed also.
+Otherwise, the returned image will be raster-backed.
+
+@param direct  the GrDirectContext of the source image (nullptr is ok if the source image
+is not texture-backed).
+@param subset  bounds of returned SkImage
+@return        the subsetted image, or nullptr
+
+example: https://fiddle.skia.org/c/@Image_makeSubset
+*/
+func (o Image) MakeSubset(direct GrDirectContext, subset IRect) Image {
+	c_obj := o.sk
+	c_direct := direct.sk
+	c_subset := *(*C.sk_SkIRect)(unsafe.Pointer(&subset))
+	retC := C.misk_Image_makeSubset(c_obj, c_direct, c_subset)
+	return Image{sk: retC}
+}
+
+/*
+CachingHint selects whether Skia may internally cache SkBitmap generated by
+decoding SkImage, or by copying SkImage from GPU to CPU. The default behavior
+allows caching SkBitmap.
+
+Choose kDisallow_CachingHint if SkImage pixels are to be used only once, or
+if SkImage pixels reside in a cache outside of Skia, or to reduce memory pressure.
+
+Choosing kAllow_CachingHint does not ensure that pixels will be cached.
+SkImage pixels may not be cached if memory requirements are too large or
+pixels are not accessible.
+*/
+type ImageCachingHint uint32
+
+const (
+	// allows internally caching decoded and copied pixels
+	ImageCachingHintAllow ImageCachingHint = 0
+	// disallows internally caching decoded and copied pixels
+	ImageCachingHintDisallow ImageCachingHint = 1
+)
+
+/*
 Describes pixel dimensions and encoding. SkBitmap, SkImage, PixMap, and SkSurface
 can be created from SkImageInfo. SkImageInfo can be retrieved from SkBitmap and
 SkPixmap, but not from SkImage and SkSurface. For example, SkImage and SkSurface
@@ -5621,6 +5803,26 @@ const (
 	GrSemaphoresSubmittedYes GrSemaphoresSubmitted = true
 )
 
+/*
+\enum SkAlphaType
+Describes how to interpret the alpha component of a pixel. A pixel may
+be opaque, or alpha, describing multiple levels of transparency.
+
+In simple blending, alpha weights the draw color and the destination
+color to create a new color. If alpha describes a weight from zero to one:
+
+new color = draw color * alpha + destination color * (1 - alpha)
+
+In practice alpha is encoded in two or more bits, where 1.0 equals all bits set.
+
+RGB may have alpha included in each component value; the stored
+value is the original RGB multiplied by alpha. Premultiplied color
+components improve performance.
+*/
+type AlphaType int32
+
+const ()
+
 type BlendMode int32
 
 const ()
@@ -5758,23 +5960,6 @@ const (
 	SkgpuProtectedYes SkgpuProtected = true
 )
 
-/*
-Rather than depend on platform-specific GL headers and libraries, we require
-the client to provide a struct of GL function pointers. This struct can be
-specified per-GrContext as a parameter to GrContext::MakeGL. If no interface is
-passed to MakeGL then a default GL interface is created using GrGLMakeNativeInterface().
-If this returns nullptr then GrContext::MakeGL() will fail.
-
-The implementation of GrGLMakeNativeInterface is platform-specific. Several
-implementations have been provided (for GLX, WGL, EGL, etc), along with an
-implementation that simply returns nullptr. Clients should select the most
-appropriate one to build.
-*/
-func GrGLMakeNativeInterface() GrGLInterface {
-	retC := C.misk_GrGLMakeNativeInterface()
-	return GrGLInterface{sk: retC}
-}
-
 func GrBackendRenderTargetsMakeGL(width int32, height int32, sampleCnt int32, stencilBits int32, glInfo GrGLFramebufferInfo) GrBackendRenderTarget {
 	c_width := C.int(width)
 	c_height := C.int(height)
@@ -5783,41 +5968,6 @@ func GrBackendRenderTargetsMakeGL(width int32, height int32, sampleCnt int32, st
 	c_glInfo := *(*C.sk_GrGLFramebufferInfo)(unsafe.Pointer(&glInfo))
 	retC := C.misk_GrBackendRenderTargetsMakeGL(c_width, c_height, c_sampleCnt, c_stencilBits, c_glInfo)
 	return GrBackendRenderTarget{sk: &retC}
-}
-
-/*
-Wraps a GPU-backed buffer into SkSurface. Caller must ensure backendRenderTarget
-is valid for the lifetime of returned SkSurface.
-
-SkSurface is returned if all parameters are valid. backendRenderTarget is valid if
-its pixel configuration agrees with colorSpace and context; for instance, if
-backendRenderTarget has an sRGB configuration, then context must support sRGB,
-and colorSpace must be present. Further, backendRenderTarget width and height must
-not exceed context capabilities, and the context must be able to support
-back-end render targets.
-
-Upon success releaseProc is called when it is safe to delete the render target in the
-backend API (accounting only for use of the render target by this surface). If SkSurface
-creation fails releaseProc is called before this function returns.
-
-@param context                  GPU context
-@param backendRenderTarget      GPU intermediate memory buffer
-@param colorSpace               range of colors
-@param surfaceProps             LCD striping orientation and setting for device independent
-fonts; may be nullptr
-@param releaseProc              function called when backendRenderTarget can be released
-@param releaseContext           state passed to releaseProc
-@return                         SkSurface if all parameters are valid; otherwise, nullptr
-*/
-func SkSurfacesWrapBackendRenderTarget(context GrRecordingContext, backendRenderTarget GrBackendRenderTarget, origin GrSurfaceOrigin, colorType ColorType, colorSpace ColorSpace, surfaceProps SurfaceProps) Surface {
-	c_context := context.sk
-	c_backendRenderTarget := backendRenderTarget.sk
-	c_origin := C.int(origin)
-	c_colorType := C.int(colorType)
-	c_colorSpace := colorSpace.sk
-	c_surfaceProps := surfaceProps.sk
-	retC := C.misk_SkSurfacesWrapBackendRenderTarget(c_context, c_backendRenderTarget, c_origin, c_colorType, c_colorSpace, c_surfaceProps)
-	return Surface{sk: retC}
 }
 
 /*
@@ -5845,6 +5995,23 @@ func GrDirectContextsMakeGLOptions(p0 GrContextOptions) GrDirectContext {
 func GrDirectContextsMakeGL() GrDirectContext {
 	retC := C.misk_GrDirectContextsMakeGL()
 	return GrDirectContext{sk: retC}
+}
+
+/*
+Rather than depend on platform-specific GL headers and libraries, we require
+the client to provide a struct of GL function pointers. This struct can be
+specified per-GrContext as a parameter to GrContext::MakeGL. If no interface is
+passed to MakeGL then a default GL interface is created using GrGLMakeNativeInterface().
+If this returns nullptr then GrContext::MakeGL() will fail.
+
+The implementation of GrGLMakeNativeInterface is platform-specific. Several
+implementations have been provided (for GLX, WGL, EGL, etc), along with an
+implementation that simply returns nullptr. Clients should select the most
+appropriate one to build.
+*/
+func GrGLMakeNativeInterface() GrGLInterface {
+	retC := C.misk_GrGLMakeNativeInterface()
+	return GrGLInterface{sk: retC}
 }
 
 /*
@@ -5883,6 +6050,30 @@ func SkColorSetA(c Color, a uint32) Color {
 }
 
 /*
+Creates CPU-backed SkImage from pixel data described by info.
+The pixels data will *not* be copied.
+
+SkImage is returned if SkImageInfo is valid. Valid SkImageInfo parameters include:
+dimensions are greater than zero;
+each dimension fits in 29 bits;
+SkColorType and SkAlphaType are valid, and SkColorType is not kUnknown_SkColorType;
+rowBytes are large enough to hold one row of pixels;
+pixels is not nullptr, and contains enough data for SkImage.
+
+@param info      contains width, height, SkAlphaType, SkColorType, SkColorSpace
+@param pixels    address or pixel storage
+@param rowBytes  size of pixel row or larger
+@return          SkImage sharing pixels, or nullptr
+*/
+func SkImagesRasterFromData(info ImageInfo, pixels Data, rowBytes uint32) Image {
+	c_info := info.sk
+	c_pixels := pixels.sk
+	c_rowBytes := C.ulong(rowBytes)
+	retC := C.misk_SkImagesRasterFromData(c_info, c_pixels, c_rowBytes)
+	return Image{sk: retC}
+}
+
+/*
 Returns a SkPMColor value from unpremultiplied 8-bit component values.
 
 @param a  amount of alpha, from fully transparent (0) to fully opaque (255)
@@ -5911,6 +6102,41 @@ func SkPreMultiplyColor(c Color) PMColor {
 	c_c := C.uint(c)
 	retC := C.misk_SkPreMultiplyColor(c_c)
 	return PMColor(retC)
+}
+
+/*
+Wraps a GPU-backed buffer into SkSurface. Caller must ensure backendRenderTarget
+is valid for the lifetime of returned SkSurface.
+
+SkSurface is returned if all parameters are valid. backendRenderTarget is valid if
+its pixel configuration agrees with colorSpace and context; for instance, if
+backendRenderTarget has an sRGB configuration, then context must support sRGB,
+and colorSpace must be present. Further, backendRenderTarget width and height must
+not exceed context capabilities, and the context must be able to support
+back-end render targets.
+
+Upon success releaseProc is called when it is safe to delete the render target in the
+backend API (accounting only for use of the render target by this surface). If SkSurface
+creation fails releaseProc is called before this function returns.
+
+@param context                  GPU context
+@param backendRenderTarget      GPU intermediate memory buffer
+@param colorSpace               range of colors
+@param surfaceProps             LCD striping orientation and setting for device independent
+fonts; may be nullptr
+@param releaseProc              function called when backendRenderTarget can be released
+@param releaseContext           state passed to releaseProc
+@return                         SkSurface if all parameters are valid; otherwise, nullptr
+*/
+func SkSurfacesWrapBackendRenderTarget(context GrRecordingContext, backendRenderTarget GrBackendRenderTarget, origin GrSurfaceOrigin, colorType ColorType, colorSpace ColorSpace, surfaceProps SurfaceProps) Surface {
+	c_context := context.sk
+	c_backendRenderTarget := backendRenderTarget.sk
+	c_origin := C.int(origin)
+	c_colorType := C.int(colorType)
+	c_colorSpace := colorSpace.sk
+	c_surfaceProps := surfaceProps.sk
+	retC := C.misk_SkSurfacesWrapBackendRenderTarget(c_context, c_backendRenderTarget, c_origin, c_colorType, c_colorSpace, c_surfaceProps)
+	return Surface{sk: retC}
 }
 
 /*

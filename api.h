@@ -708,6 +708,19 @@ extern "C"
   int misk_Image_height (sk_SkImage *c_obj);
   sk_SkISize misk_Image_dimensions (sk_SkImage *c_obj);
   sk_SkIRect misk_Image_bounds (sk_SkImage *c_obj);
+  unsigned int misk_Image_uniqueID (sk_SkImage *c_obj);
+  int misk_Image_alphaType (sk_SkImage *c_obj);
+  int misk_Image_colorType (sk_SkImage *c_obj);
+  sk_SkColorSpace *misk_Image_colorSpace (sk_SkImage *c_obj);
+  bool misk_Image_isAlphaOnly (sk_SkImage *c_obj);
+  bool misk_Image_isOpaque (sk_SkImage *c_obj);
+  bool misk_Image_readPixels (sk_SkImage *c_obj, sk_GrDirectContext *c_context,
+                              sk_SkImageInfo *c_dstInfo, void *c_dstPixels,
+                              ulong c_dstRowBytes, int c_srcX, int c_srcY,
+                              uint c_cachingHint);
+  sk_SkImage *misk_Image_makeSubset (sk_SkImage *c_obj,
+                                     sk_GrDirectContext *c_direct,
+                                     sk_SkIRect c_subset);
   void misk_unref_SkImage (sk_SkImage *c_obj);
 
   sk_SkImageInfo *misk_new_ImageInfo ();
@@ -882,16 +895,10 @@ extern "C"
   sk_SkTypeface *misk_Typeface_MakeEmpty ();
   void misk_unref_SkTypeface (sk_SkTypeface *c_obj);
 
-  const sk_GrGLInterface *misk_GrGLMakeNativeInterface ();
   sk_GrBackendRenderTarget
   misk_GrBackendRenderTargetsMakeGL (int c_width, int c_height,
                                      int c_sampleCnt, int c_stencilBits,
                                      sk_GrGLFramebufferInfo c_glInfo);
-  sk_SkSurface *misk_SkSurfacesWrapBackendRenderTarget (
-      sk_GrRecordingContext *c_context,
-      sk_GrBackendRenderTarget *c_backendRenderTarget, int c_origin,
-      int c_colorType, sk_SkColorSpace *c_colorSpace,
-      sk_SkSurfaceProps *c_surfaceProps);
   sk_GrDirectContext *
   misk_GrDirectContextsMakeGLInterfaceOptions (sk_GrGLInterface *c_p0,
                                                sk_GrContextOptions c_p1);
@@ -900,10 +907,19 @@ extern "C"
   sk_GrDirectContext *
   misk_GrDirectContextsMakeGLOptions (sk_GrContextOptions c_p0);
   sk_GrDirectContext *misk_GrDirectContextsMakeGL ();
+  const sk_GrGLInterface *misk_GrGLMakeNativeInterface ();
   uint misk_SkColorSetARGB (uint c_a, uint c_r, uint c_g, uint c_b);
   uint misk_SkColorSetA (uint c_c, uint c_a);
+  sk_SkImage *misk_SkImagesRasterFromData (sk_SkImageInfo *c_info,
+                                           sk_SkData *c_pixels,
+                                           ulong c_rowBytes);
   uint misk_SkPreMultiplyARGB (uint c_a, uint c_r, uint c_g, uint c_b);
   uint misk_SkPreMultiplyColor (uint c_c);
+  sk_SkSurface *misk_SkSurfacesWrapBackendRenderTarget (
+      sk_GrRecordingContext *c_context,
+      sk_GrBackendRenderTarget *c_backendRenderTarget, int c_origin,
+      int c_colorType, sk_SkColorSpace *c_colorSpace,
+      sk_SkSurfaceProps *c_surfaceProps);
 
   extern uchar sk_SK_AlphaOPAQUE;
   extern uchar sk_SK_AlphaTRANSPARENT;

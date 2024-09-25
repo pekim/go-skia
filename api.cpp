@@ -1266,6 +1266,74 @@ extern "C"
     return *(reinterpret_cast<sk_SkIRect *> (&ret));
   }
 
+  unsigned int
+  misk_Image_uniqueID (sk_SkImage *c_obj)
+  {
+    auto ret = reinterpret_cast<SkImage *> (c_obj)->uniqueID ();
+    return ret;
+  }
+
+  int
+  misk_Image_alphaType (sk_SkImage *c_obj)
+  {
+    auto ret = reinterpret_cast<SkImage *> (c_obj)->alphaType ();
+    return (int)ret;
+  }
+
+  int
+  misk_Image_colorType (sk_SkImage *c_obj)
+  {
+    auto ret = reinterpret_cast<SkImage *> (c_obj)->colorType ();
+    return (int)ret;
+  }
+
+  sk_SkColorSpace *
+  misk_Image_colorSpace (sk_SkImage *c_obj)
+  {
+    auto ret = reinterpret_cast<SkImage *> (c_obj)->colorSpace ();
+    return reinterpret_cast<sk_SkColorSpace *> (ret);
+  }
+
+  bool
+  misk_Image_isAlphaOnly (sk_SkImage *c_obj)
+  {
+    auto ret = reinterpret_cast<SkImage *> (c_obj)->isAlphaOnly ();
+    return ret;
+  }
+
+  bool
+  misk_Image_isOpaque (sk_SkImage *c_obj)
+  {
+    auto ret = reinterpret_cast<SkImage *> (c_obj)->isOpaque ();
+    return ret;
+  }
+
+  bool
+  misk_Image_readPixels (sk_SkImage *c_obj, sk_GrDirectContext *c_context,
+                         sk_SkImageInfo *c_dstInfo, void *c_dstPixels,
+                         ulong c_dstRowBytes, int c_srcX, int c_srcY,
+                         uint c_cachingHint)
+  {
+    auto ret = reinterpret_cast<SkImage *> (c_obj)->readPixels (
+        reinterpret_cast<GrDirectContext *> (c_context),
+        *reinterpret_cast<SkImageInfo *> (c_dstInfo),
+        reinterpret_cast<void *> (c_dstPixels), c_dstRowBytes, c_srcX, c_srcY,
+        SkImage::CachingHint (c_cachingHint));
+    return ret;
+  }
+
+  sk_SkImage *
+  misk_Image_makeSubset (sk_SkImage *c_obj, sk_GrDirectContext *c_direct,
+                         sk_SkIRect c_subset)
+  {
+    auto ret
+        = reinterpret_cast<SkImage *> (c_obj)
+              ->makeSubset (reinterpret_cast<GrDirectContext *> (c_direct),
+                            *reinterpret_cast<SkIRect *> (&c_subset))
+              .release ();
+    return reinterpret_cast<sk_SkImage *> (ret);
+  }
+
   void
   misk_unref_SkImage (sk_SkImage *c_obj)
   {
@@ -2128,13 +2196,6 @@ extern "C"
     reinterpret_cast<SkTypeface *> (c_obj)->unref ();
   }
 
-  const sk_GrGLInterface *
-  misk_GrGLMakeNativeInterface ()
-  {
-    auto ret = GrGLMakeNativeInterface ().release ();
-    return reinterpret_cast<const sk_GrGLInterface *> (ret);
-  }
-
   sk_GrBackendRenderTarget
   misk_GrBackendRenderTargetsMakeGL (int c_width, int c_height,
                                      int c_sampleCnt, int c_stencilBits,
@@ -2144,24 +2205,6 @@ extern "C"
         c_width, c_height, c_sampleCnt, c_stencilBits,
         *reinterpret_cast<GrGLFramebufferInfo *> (&c_glInfo));
     return *(reinterpret_cast<sk_GrBackendRenderTarget *> (&ret));
-  }
-
-  sk_SkSurface *
-  misk_SkSurfacesWrapBackendRenderTarget (
-      sk_GrRecordingContext *c_context,
-      sk_GrBackendRenderTarget *c_backendRenderTarget, int c_origin,
-      int c_colorType, sk_SkColorSpace *c_colorSpace,
-      sk_SkSurfaceProps *c_surfaceProps)
-  {
-    auto ret = SkSurfaces::WrapBackendRenderTarget (
-                   reinterpret_cast<GrRecordingContext *> (c_context),
-                   *reinterpret_cast<GrBackendRenderTarget *> (
-                       c_backendRenderTarget),
-                   GrSurfaceOrigin (c_origin), SkColorType (c_colorType),
-                   sk_ref_sp (reinterpret_cast<SkColorSpace *> (c_colorSpace)),
-                   reinterpret_cast<SkSurfaceProps *> (c_surfaceProps))
-                   .release ();
-    return reinterpret_cast<sk_SkSurface *> (ret);
   }
 
   sk_GrDirectContext *
@@ -2200,6 +2243,13 @@ extern "C"
     return reinterpret_cast<sk_GrDirectContext *> (ret);
   }
 
+  const sk_GrGLInterface *
+  misk_GrGLMakeNativeInterface ()
+  {
+    auto ret = GrGLMakeNativeInterface ().release ();
+    return reinterpret_cast<const sk_GrGLInterface *> (ret);
+  }
+
   uint
   misk_SkColorSetARGB (uint c_a, uint c_r, uint c_g, uint c_b)
   {
@@ -2214,6 +2264,18 @@ extern "C"
     return ret;
   }
 
+  sk_SkImage *
+  misk_SkImagesRasterFromData (sk_SkImageInfo *c_info, sk_SkData *c_pixels,
+                               ulong c_rowBytes)
+  {
+    auto ret
+        = SkImages::RasterFromData (
+              *reinterpret_cast<SkImageInfo *> (c_info),
+              sk_ref_sp (reinterpret_cast<SkData *> (c_pixels)), c_rowBytes)
+              .release ();
+    return reinterpret_cast<sk_SkImage *> (ret);
+  }
+
   uint
   misk_SkPreMultiplyARGB (uint c_a, uint c_r, uint c_g, uint c_b)
   {
@@ -2226,6 +2288,24 @@ extern "C"
   {
     auto ret = SkPreMultiplyColor (SkColor (c_c));
     return ret;
+  }
+
+  sk_SkSurface *
+  misk_SkSurfacesWrapBackendRenderTarget (
+      sk_GrRecordingContext *c_context,
+      sk_GrBackendRenderTarget *c_backendRenderTarget, int c_origin,
+      int c_colorType, sk_SkColorSpace *c_colorSpace,
+      sk_SkSurfaceProps *c_surfaceProps)
+  {
+    auto ret = SkSurfaces::WrapBackendRenderTarget (
+                   reinterpret_cast<GrRecordingContext *> (c_context),
+                   *reinterpret_cast<GrBackendRenderTarget *> (
+                       c_backendRenderTarget),
+                   GrSurfaceOrigin (c_origin), SkColorType (c_colorType),
+                   sk_ref_sp (reinterpret_cast<SkColorSpace *> (c_colorSpace)),
+                   reinterpret_cast<SkSurfaceProps *> (c_surfaceProps))
+                   .release ();
+    return reinterpret_cast<sk_SkSurface *> (ret);
   }
 
   uchar sk_SK_AlphaOPAQUE = SK_AlphaOPAQUE;
