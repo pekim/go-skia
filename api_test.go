@@ -31,13 +31,13 @@ func TestMethodReturningNonPointerRecord(t *testing.T) {
 }
 
 func TestFontMgr(t *testing.T) {
-	fontMgr := FontMgrRefDefault()
+	fontMgr := FontMgrDefault()
 	typeface := fontMgr.MatchFamilyStyle("monospace", FontStyleNormal())
 	assert.NotNil(t, typeface.sk)
 }
 
 func TestPointerArgument(t *testing.T) {
-	typeface := FontMgrRefDefault().MatchFamilyStyle("sans-serif", FontStyleNormal())
+	typeface := FontMgrDefault().MatchFamilyStyle("sans-serif", FontStyleNormal())
 	font := NewFontTypefaceSize(typeface, 22)
 	var metrics FontMetrics
 	lineSpacing := font.GetMetrics(&metrics)
@@ -47,7 +47,7 @@ func TestPointerArgument(t *testing.T) {
 }
 
 func TestFontGlyphIDs(t *testing.T) {
-	typeface := FontMgrRefDefault().MatchFamilyStyle("sans-serif", FontStyleNormal())
+	typeface := FontMgrDefault().MatchFamilyStyle("sans-serif", FontStyleNormal())
 	font := NewFontTypefaceSize(typeface, 22)
 
 	chars := []int32{'A', 'z', '?'}
@@ -66,7 +66,7 @@ func TestString(t *testing.T) {
 }
 
 func TestOutParams(t *testing.T) {
-	typeface := FontMgrRefDefault().MatchFamilyStyle("sans-serif", FontStyleNormal())
+	typeface := FontMgrDefault().MatchFamilyStyle("sans-serif", FontStyleNormal())
 	font := NewFontTypefaceSize(typeface, 12)
 	var bounds Rect
 	text := "Qwerty"
