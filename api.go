@@ -1746,9 +1746,9 @@ is anti-aliased.
 @param bounds  SkRect of clip in local coordinates
 @return        true if clip bounds is not empty
 */
-func (o Canvas) GetLocalClipBoundsPath(bounds Rect) bool {
+func (o Canvas) GetLocalClipBoundsPath(bounds *Rect) bool {
 	c_obj := o.sk
-	c_bounds := *(*C.sk_SkRect)(unsafe.Pointer(&bounds))
+	c_bounds := (*C.sk_SkRect)(unsafe.Pointer(bounds))
 	retC := C.misk_Canvas_getLocalClipBoundsPath(c_obj, c_bounds)
 	return bool(retC)
 }
@@ -1778,9 +1778,9 @@ Unlike getLocalClipBounds(), bounds is not outset.
 @param bounds  SkRect of clip in device coordinates
 @return        true if clip bounds is not empty
 */
-func (o Canvas) GetDeviceClipBoundsRect(bounds IRect) bool {
+func (o Canvas) GetDeviceClipBoundsRect(bounds *IRect) bool {
 	c_obj := o.sk
-	c_bounds := *(*C.sk_SkIRect)(unsafe.Pointer(&bounds))
+	c_bounds := (*C.sk_SkIRect)(unsafe.Pointer(bounds))
 	retC := C.misk_Canvas_getDeviceClipBoundsRect(c_obj, c_bounds)
 	return bool(retC)
 }
@@ -2707,12 +2707,12 @@ Returns the bounding box of text if bounds is not nullptr.
 @param bounds      returns bounding box relative to (0, 0) if not nullptr
 @return            the sum of the default advance widths
 */
-func (o Font) MeasureText(text []byte, byteLength uint32, encoding TextEncoding, bounds Rect) float32 {
+func (o Font) MeasureText(text []byte, byteLength uint32, encoding TextEncoding, bounds *Rect) float32 {
 	c_obj := o.sk
 	c_text := unsafe.Pointer(&text[0])
 	c_byteLength := C.ulong(byteLength)
 	c_encoding := C.int(encoding)
-	c_bounds := *(*C.sk_SkRect)(unsafe.Pointer(&bounds))
+	c_bounds := (*C.sk_SkRect)(unsafe.Pointer(bounds))
 	retC := C.misk_Font_measureText(c_obj, c_text, c_byteLength, c_encoding, c_bounds)
 	return float32(retC)
 }
@@ -2729,12 +2729,12 @@ stroke settings, mask filter, or path effect may modify the bounds.
 @param paint       optional; may be nullptr
 @return            the sum of the default advance widths
 */
-func (o Font) MeasureTextPaint(text []byte, byteLength uint32, encoding TextEncoding, bounds Rect, paint Paint) float32 {
+func (o Font) MeasureTextPaint(text []byte, byteLength uint32, encoding TextEncoding, bounds *Rect, paint Paint) float32 {
 	c_obj := o.sk
 	c_text := unsafe.Pointer(&text[0])
 	c_byteLength := C.ulong(byteLength)
 	c_encoding := C.int(encoding)
-	c_bounds := *(*C.sk_SkRect)(unsafe.Pointer(&bounds))
+	c_bounds := (*C.sk_SkRect)(unsafe.Pointer(bounds))
 	c_paint := paint.sk
 	retC := C.misk_Font_measureTextPaint(c_obj, c_text, c_byteLength, c_encoding, c_bounds, c_paint)
 	return float32(retC)

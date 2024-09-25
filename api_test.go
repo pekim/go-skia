@@ -64,3 +64,15 @@ func TestString(t *testing.T) {
 	sk := NewString(s)
 	assert.Equal(t, s, sk.Data())
 }
+
+func TestOutParams(t *testing.T) {
+	typeface := FontMgrRefDefault().MatchFamilyStyle("sans-serif", FontStyleNormal())
+	font := NewFontTypefaceSize(typeface, 12)
+	var bounds Rect
+	text := "Qwerty"
+
+	advance := font.MeasureText([]byte(text), uint32(len(text)), TextEncodingUTF8, &bounds)
+	assert.NotZero(t, advance)
+	assert.NotZero(t, bounds.Width())
+	assert.NotZero(t, bounds.Height())
+}

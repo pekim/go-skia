@@ -150,11 +150,17 @@
         },
         {
           "name": "getLocalClipBounds",
-          "overloads": [{ "suffix": "Rect" }, { "suffix": "Path" }]
+          "overloads": [
+            { "suffix": "Rect" },
+            { "suffix": "Path", "params": [{ "asPointer": true }] }
+          ]
         },
         {
           "name": "getDeviceClipBounds",
-          "overloads": [{}, { "suffix": "Rect" }]
+          "overloads": [
+            {},
+            { "suffix": "Rect", "params": [{ "asPointer": true }] }
+          ]
         },
         {
           "name": "drawColor",
@@ -238,7 +244,16 @@
           "overloads": [{ "params": [{ "asPointer": true }] }]
         },
         { "name": "getXPos" },
-        { "name": "measureText", "overloads": [{}, { "suffix": "Paint" }] },
+        {
+          "name": "measureText",
+          "overloads": [
+            { "params": [null, null, null, { "asPointer": true }] },
+            {
+              "suffix": "Paint",
+              "params": [null, null, null, { "asPointer": true }, null]
+            }
+          ]
+        },
         { "name": "setForceAutoHinting" },
         { "name": "setHinting" },
         { "name": "setSubpixel" },

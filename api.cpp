@@ -596,10 +596,10 @@ extern "C"
   }
 
   bool
-  misk_Canvas_getLocalClipBoundsPath (sk_SkCanvas *c_obj, sk_SkRect c_bounds)
+  misk_Canvas_getLocalClipBoundsPath (sk_SkCanvas *c_obj, sk_SkRect *c_bounds)
   {
     auto ret = reinterpret_cast<SkCanvas *> (c_obj)->getLocalClipBounds (
-        reinterpret_cast<SkRect *> (&c_bounds));
+        reinterpret_cast<SkRect *> (c_bounds));
     return ret;
   }
 
@@ -611,10 +611,11 @@ extern "C"
   }
 
   bool
-  misk_Canvas_getDeviceClipBoundsRect (sk_SkCanvas *c_obj, sk_SkIRect c_bounds)
+  misk_Canvas_getDeviceClipBoundsRect (sk_SkCanvas *c_obj,
+                                       sk_SkIRect *c_bounds)
   {
     auto ret = reinterpret_cast<SkCanvas *> (c_obj)->getDeviceClipBounds (
-        reinterpret_cast<SkIRect *> (&c_bounds));
+        reinterpret_cast<SkIRect *> (c_bounds));
     return ret;
   }
 
@@ -1017,22 +1018,22 @@ extern "C"
 
   float
   misk_Font_measureText (sk_SkFont *c_obj, void *c_text, ulong c_byteLength,
-                         int c_encoding, sk_SkRect c_bounds)
+                         int c_encoding, sk_SkRect *c_bounds)
   {
     auto ret = reinterpret_cast<SkFont *> (c_obj)->measureText (
         reinterpret_cast<void *> (c_text), c_byteLength,
-        SkTextEncoding (c_encoding), reinterpret_cast<SkRect *> (&c_bounds));
+        SkTextEncoding (c_encoding), reinterpret_cast<SkRect *> (c_bounds));
     return ret;
   }
 
   float
   misk_Font_measureTextPaint (sk_SkFont *c_obj, void *c_text,
                               ulong c_byteLength, int c_encoding,
-                              sk_SkRect c_bounds, sk_SkPaint *c_paint)
+                              sk_SkRect *c_bounds, sk_SkPaint *c_paint)
   {
     auto ret = reinterpret_cast<SkFont *> (c_obj)->measureText (
         reinterpret_cast<void *> (c_text), c_byteLength,
-        SkTextEncoding (c_encoding), reinterpret_cast<SkRect *> (&c_bounds),
+        SkTextEncoding (c_encoding), reinterpret_cast<SkRect *> (c_bounds),
         reinterpret_cast<SkPaint *> (c_paint));
     return ret;
   }

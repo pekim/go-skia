@@ -558,10 +558,10 @@ extern "C"
   bool misk_Canvas_quickRejectPath (sk_SkCanvas *c_obj, sk_SkPath *c_path);
   sk_SkRect misk_Canvas_getLocalClipBoundsRect (sk_SkCanvas *c_obj);
   bool misk_Canvas_getLocalClipBoundsPath (sk_SkCanvas *c_obj,
-                                           sk_SkRect c_bounds);
+                                           sk_SkRect *c_bounds);
   sk_SkIRect misk_Canvas_getDeviceClipBounds (sk_SkCanvas *c_obj);
   bool misk_Canvas_getDeviceClipBoundsRect (sk_SkCanvas *c_obj,
-                                            sk_SkIRect c_bounds);
+                                            sk_SkIRect *c_bounds);
   void misk_Canvas_drawColor (sk_SkCanvas *c_obj, uint c_color, int c_mode);
   void misk_Canvas_drawColor4f (sk_SkCanvas *c_obj, sk_SkRGBA4f c_color,
                                 int c_mode);
@@ -655,10 +655,10 @@ extern "C"
                           float *c_xpos, float c_origin);
   float misk_Font_measureText (sk_SkFont *c_obj, void *c_text,
                                ulong c_byteLength, int c_encoding,
-                               sk_SkRect c_bounds);
+                               sk_SkRect *c_bounds);
   float misk_Font_measureTextPaint (sk_SkFont *c_obj, void *c_text,
                                     ulong c_byteLength, int c_encoding,
-                                    sk_SkRect c_bounds, sk_SkPaint *c_paint);
+                                    sk_SkRect *c_bounds, sk_SkPaint *c_paint);
   void misk_Font_setForceAutoHinting (sk_SkFont *c_obj,
                                       bool c_forceAutoHinting);
   void misk_Font_setHinting (sk_SkFont *c_obj, int c_hintingLevel);

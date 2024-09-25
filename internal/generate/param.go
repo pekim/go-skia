@@ -17,7 +17,7 @@ type param struct {
 	typ       typ
 	typGoName string
 	ValueNil  bool `json:"valueNil"`
-	AsPointer bool `json:"asPointer"`
+	AsPointer bool `json:"asPointer"` // for an "out" parameter
 }
 
 func newParam(paramIndex int, cursor clang.Cursor, valueNil bool, asPointer bool) param {
