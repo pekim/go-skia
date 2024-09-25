@@ -682,6 +682,8 @@
     {
       "name": "SkTextBlob",
       "methods": [
+        { "name": "bounds" },
+        { "name": "uniqueID" },
         { "name": "MakeFromString" },
         { "name": "MakeFromPosTextH" },
         { "name": "MakeFromPosText" }

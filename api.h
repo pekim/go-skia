@@ -1008,6 +1008,8 @@ extern "C"
   void misk_SVGLengthContext_setViewPort (sk_SkSVGLengthContext *c_obj,
                                           sk_SkSize c_viewport);
 
+  sk_SkRect misk_TextBlob_bounds (sk_SkTextBlob *c_obj);
+  unsigned int misk_TextBlob_uniqueID (sk_SkTextBlob *c_obj);
   sk_SkTextBlob *misk_TextBlob_MakeFromString (char *c_string,
                                                sk_SkFont *c_font,
                                                int c_encoding);

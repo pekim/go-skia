@@ -7332,6 +7332,30 @@ func (o TextBlob) Unref() {
 }
 
 /*
+Returns conservative bounding box. Uses SkPaint associated with each glyph to
+determine glyph bounds, and unions all bounds. Returned bounds may be
+larger than the bounds of all glyphs in runs.
+
+@return  conservative bounding box
+*/
+func (o TextBlob) Bounds() Rect {
+	c_obj := o.sk
+	retC := C.misk_TextBlob_bounds(c_obj)
+	return Rect(retC)
+}
+
+/*
+Returns a non-zero value unique among all text blobs.
+
+@return  identifier for SkTextBlob
+*/
+func (o TextBlob) UniqueID() uint32 {
+	c_obj := o.sk
+	retC := C.misk_TextBlob_uniqueID(c_obj)
+	return uint32(retC)
+}
+
+/*
 Creates SkTextBlob with a single run. string meaning depends on SkTextEncoding;
 by default, string is encoded as UTF-8.
 

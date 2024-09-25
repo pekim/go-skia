@@ -2810,6 +2810,20 @@ extern "C"
         *reinterpret_cast<SkSize *> (&c_viewport));
   }
 
+  sk_SkRect
+  misk_TextBlob_bounds (sk_SkTextBlob *c_obj)
+  {
+    auto ret = reinterpret_cast<SkTextBlob *> (c_obj)->bounds ();
+    return *(reinterpret_cast<sk_SkRect *> (&ret));
+  }
+
+  unsigned int
+  misk_TextBlob_uniqueID (sk_SkTextBlob *c_obj)
+  {
+    auto ret = reinterpret_cast<SkTextBlob *> (c_obj)->uniqueID ();
+    return ret;
+  }
+
   sk_SkTextBlob *
   misk_TextBlob_MakeFromString (char *c_string, sk_SkFont *c_font,
                                 int c_encoding)
