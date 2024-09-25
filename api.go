@@ -4553,6 +4553,1469 @@ func (o Path) Delete() {
 }
 
 /*
+Returns true if SkPath contain equal verbs and equal weights.
+If SkPath contain one or more conics, the weights must match.
+
+conicTo() may add different verbs depending on conic weight, so it is not
+trivial to interpolate a pair of SkPath containing conics with different
+conic weight values.
+
+@param compare  SkPath to compare
+@return         true if SkPath verb array and weights are equivalent
+
+example: https://fiddle.skia.org/c/@Path_isInterpolatable
+*/
+func (o Path) IsInterpolatable(compare Path) bool {
+	c_obj := o.sk
+	c_compare := compare.sk
+	retC := C.misk_Path_isInterpolatable(c_obj, c_compare)
+	return bool(retC)
+}
+
+/*
+Interpolates between SkPath with SkPoint array of equal size.
+Copy verb array and weights to out, and set out SkPoint array to a weighted
+average of this SkPoint array and ending SkPoint array, using the formula:
+(Path Point * weight) + ending Point * (1 - weight).
+
+weight is most useful when between zero (ending SkPoint array) and
+one (this Point_Array); will work with values outside of this
+range.
+
+interpolate() returns false and leaves out unchanged if SkPoint array is not
+the same size as ending SkPoint array. Call isInterpolatable() to check SkPath
+compatibility prior to calling interpolate().
+
+@param ending  SkPoint array averaged with this SkPoint array
+@param weight  contribution of this SkPoint array, and
+one minus contribution of ending SkPoint array
+@param out     SkPath replaced by interpolated averages
+@return        true if SkPath contain same number of SkPoint
+
+example: https://fiddle.skia.org/c/@Path_interpolate
+*/
+func (o Path) Interpolate(ending Path, weight float32, out Path) bool {
+	c_obj := o.sk
+	c_ending := ending.sk
+	c_weight := C.float(weight)
+	c_out := out.sk
+	retC := C.misk_Path_interpolate(c_obj, c_ending, c_weight, c_out)
+	return bool(retC)
+}
+
+/*
+Returns SkPathFillType, the rule used to fill SkPath.
+
+@return  current SkPathFillType setting
+*/
+func (o Path) GetFillType() PathFillType {
+	c_obj := o.sk
+	retC := C.misk_Path_getFillType(c_obj)
+	return PathFillType(retC)
+}
+
+/*
+Sets FillType, the rule used to fill SkPath. While there is no check
+that ft is legal, values outside of FillType are not supported.
+*/
+func (o Path) SetFillType(ft PathFillType) {
+	c_obj := o.sk
+	c_ft := C.int(ft)
+	C.misk_Path_setFillType(c_obj, c_ft)
+}
+
+/*
+Returns if FillType describes area outside SkPath geometry. The inverse fill area
+extends indefinitely.
+
+@return  true if FillType is kInverseWinding or kInverseEvenOdd
+*/
+func (o Path) IsInverseFillType() bool {
+	c_obj := o.sk
+	retC := C.misk_Path_isInverseFillType(c_obj)
+	return bool(retC)
+}
+
+/*
+Replaces FillType with its inverse. The inverse of FillType describes the area
+unmodified by the original FillType.
+*/
+func (o Path) ToggleInverseFillType() {
+	c_obj := o.sk
+	C.misk_Path_toggleInverseFillType(c_obj)
+}
+
+/*
+Returns true if the path is convex. If necessary, it will first compute the convexity.
+*/
+func (o Path) IsConvex() bool {
+	c_obj := o.sk
+	retC := C.misk_Path_isConvex(c_obj)
+	return bool(retC)
+}
+
+/*
+Returns true if this path is recognized as an oval or circle.
+
+bounds receives bounds of oval.
+
+bounds is unmodified if oval is not found.
+
+@param bounds  storage for bounding SkRect of oval; may be nullptr
+@return        true if SkPath is recognized as an oval or circle
+
+example: https://fiddle.skia.org/c/@Path_isOval
+*/
+func (o Path) IsOval(bounds Rect) bool {
+	c_obj := o.sk
+	c_bounds := *(*C.sk_SkRect)(unsafe.Pointer(&bounds))
+	retC := C.misk_Path_isOval(c_obj, c_bounds)
+	return bool(retC)
+}
+
+/*
+Returns true if path is representable as SkRRect.
+Returns false if path is representable as oval, circle, or SkRect.
+
+rrect receives bounds of SkRRect.
+
+rrect is unmodified if SkRRect is not found.
+
+@param rrect  storage for bounding SkRect of SkRRect; may be nullptr
+@return       true if SkPath contains only SkRRect
+
+example: https://fiddle.skia.org/c/@Path_isRRect
+*/
+func (o Path) IsRRect(rrect RRect) bool {
+	c_obj := o.sk
+	c_rrect := *(*C.sk_SkRRect)(unsafe.Pointer(&rrect))
+	retC := C.misk_Path_isRRect(c_obj, c_rrect)
+	return bool(retC)
+}
+
+/*
+Sets SkPath to its initial state.
+Removes verb array, SkPoint array, and weights, and sets FillType to kWinding.
+Internal storage associated with SkPath is released.
+
+@return  reference to SkPath
+
+example: https://fiddle.skia.org/c/@Path_reset
+*/
+func (o Path) Reset() Path {
+	c_obj := o.sk
+	retC := C.misk_Path_reset(c_obj)
+	return Path{sk: &retC}
+}
+
+/*
+Sets SkPath to its initial state, preserving internal storage.
+Removes verb array, SkPoint array, and weights, and sets FillType to kWinding.
+Internal storage associated with SkPath is retained.
+
+Use rewind() instead of reset() if SkPath storage will be reused and performance
+is critical.
+
+@return  reference to SkPath
+
+example: https://fiddle.skia.org/c/@Path_rewind
+*/
+func (o Path) Rewind() Path {
+	c_obj := o.sk
+	retC := C.misk_Path_rewind(c_obj)
+	return Path{sk: &retC}
+}
+
+/*
+Returns if SkPath is empty.
+Empty SkPath may have FillType but has no SkPoint, SkPath::Verb, or conic weight.
+SkPath() constructs empty SkPath; reset() and rewind() make SkPath empty.
+
+@return  true if the path contains no SkPath::Verb array
+*/
+func (o Path) IsEmpty() bool {
+	c_obj := o.sk
+	retC := C.misk_Path_isEmpty(c_obj)
+	return bool(retC)
+}
+
+/*
+Returns if contour is closed.
+Contour is closed if SkPath SkPath::Verb array was last modified by close(). When stroked,
+closed contour draws SkPaint::Join instead of SkPaint::Cap at first and last SkPoint.
+
+@return  true if the last contour ends with a kClose_Verb
+
+example: https://fiddle.skia.org/c/@Path_isLastContourClosed
+*/
+func (o Path) IsLastContourClosed() bool {
+	c_obj := o.sk
+	retC := C.misk_Path_isLastContourClosed(c_obj)
+	return bool(retC)
+}
+
+/*
+Returns true for finite SkPoint array values between negative SK_ScalarMax and
+positive SK_ScalarMax. Returns false for any SkPoint array value of
+SK_ScalarInfinity, SK_ScalarNegativeInfinity, or SK_ScalarNaN.
+
+@return  true if all SkPoint values are finite
+*/
+func (o Path) IsFinite() bool {
+	c_obj := o.sk
+	retC := C.misk_Path_isFinite(c_obj)
+	return bool(retC)
+}
+
+/*
+Returns true if the path is volatile; it will not be altered or discarded
+by the caller after it is drawn. SkPath by default have volatile set false, allowing
+SkSurface to attach a cache of data which speeds repeated drawing. If true, SkSurface
+may not speed repeated drawing.
+
+@return  true if caller will alter SkPath after drawing
+*/
+func (o Path) IsVolatile() bool {
+	c_obj := o.sk
+	retC := C.misk_Path_isVolatile(c_obj)
+	return bool(retC)
+}
+
+/*
+Specifies whether SkPath is volatile; whether it will be altered or discarded
+by the caller after it is drawn. SkPath by default have volatile set false, allowing
+Skia to attach a cache of data which speeds repeated drawing.
+
+Mark temporary paths, discarded or modified after use, as volatile
+to inform Skia that the path need not be cached.
+
+Mark animating SkPath volatile to improve performance.
+Mark unchanging SkPath non-volatile to improve repeated rendering.
+
+raster surface SkPath draws are affected by volatile for some shadows.
+GPU surface SkPath draws are affected by volatile for some shadows and concave geometries.
+
+@param isVolatile  true if caller will alter SkPath after drawing
+@return            reference to SkPath
+*/
+func (o Path) SetIsVolatile(isVolatile bool) Path {
+	c_obj := o.sk
+	c_isVolatile := C.bool(isVolatile)
+	retC := C.misk_Path_setIsVolatile(c_obj, c_isVolatile)
+	return Path{sk: &retC}
+}
+
+/*
+Returns the number of points in SkPath.
+SkPoint count is initially zero.
+
+@return  SkPath SkPoint array length
+
+example: https://fiddle.skia.org/c/@Path_countPoints
+*/
+func (o Path) CountPoints() int32 {
+	c_obj := o.sk
+	retC := C.misk_Path_countPoints(c_obj)
+	return int32(retC)
+}
+
+/*
+Returns SkPoint at index in SkPoint array. Valid range for index is
+0 to countPoints() - 1.
+Returns (0, 0) if index is out of range.
+
+@param index  SkPoint array element selector
+@return       SkPoint array value or (0, 0)
+
+example: https://fiddle.skia.org/c/@Path_getPoint
+*/
+func (o Path) GetPoint(index int32) Point {
+	c_obj := o.sk
+	c_index := C.int(index)
+	retC := C.misk_Path_getPoint(c_obj, c_index)
+	return Point{sk: &retC}
+}
+
+/*
+Returns number of points in SkPath. Up to max points are copied.
+points may be nullptr; then, max must be zero.
+If max is greater than number of points, excess points storage is unaltered.
+
+@param points  storage for SkPath SkPoint array. May be nullptr
+@param max     maximum to copy; must be greater than or equal to zero
+@return        SkPath SkPoint array length
+
+example: https://fiddle.skia.org/c/@Path_getPoints
+*/
+func (o Path) GetPoints(points []Point, max int32) int32 {
+	c_obj := o.sk
+	c_points := (*C.sk_SkPoint)(unsafe.Pointer(&points[0]))
+	c_max := C.int(max)
+	retC := C.misk_Path_getPoints(c_obj, c_points, c_max)
+	return int32(retC)
+}
+
+/*
+Returns the number of verbs: kMove_Verb, kLine_Verb, kQuad_Verb, kConic_Verb,
+kCubic_Verb, and kClose_Verb; added to SkPath.
+
+@return  length of verb array
+
+example: https://fiddle.skia.org/c/@Path_countVerbs
+*/
+func (o Path) CountVerbs() int32 {
+	c_obj := o.sk
+	retC := C.misk_Path_countVerbs(c_obj)
+	return int32(retC)
+}
+
+/*
+Returns the number of verbs in the path. Up to max verbs are copied. The
+verbs are copied as one byte per verb.
+
+@param verbs  storage for verbs, may be nullptr
+@param max    maximum number to copy into verbs
+@return       the actual number of verbs in the path
+
+example: https://fiddle.skia.org/c/@Path_getVerbs
+*/
+func (o Path) GetVerbs(verbs string, max int32) int32 {
+	c_obj := o.sk
+	c_verbs := (*C.uchar)(unsafe.Pointer(C.CString(verbs)))
+	defer C.free(unsafe.Pointer(c_verbs))
+	c_max := C.int(max)
+	retC := C.misk_Path_getVerbs(c_obj, c_verbs, c_max)
+	return int32(retC)
+}
+
+/*
+Returns the approximate byte size of the SkPath in memory.
+
+@return  approximate size
+*/
+func (o Path) ApproximateBytesUsed() uint32 {
+	c_obj := o.sk
+	retC := C.misk_Path_approximateBytesUsed(c_obj)
+	return uint32(retC)
+}
+
+/*
+Exchanges the verb array, SkPoint array, weights, and SkPath::FillType with other.
+Cached state is also exchanged. swap() internally exchanges pointers, so
+it is lightweight and does not allocate memory.
+
+swap() usage has largely been replaced by operator=(const SkPath& path).
+SkPath do not copy their content on assignment until they are written to,
+making assignment as efficient as swap().
+
+@param other  SkPath exchanged by value
+
+example: https://fiddle.skia.org/c/@Path_swap
+*/
+func (o Path) Swap(other Path) {
+	c_obj := o.sk
+	c_other := other.sk
+	C.misk_Path_swap(c_obj, c_other)
+}
+
+/*
+Returns minimum and maximum axes values of SkPoint array.
+Returns (0, 0, 0, 0) if SkPath contains no points. Returned bounds width and height may
+be larger or smaller than area affected when SkPath is drawn.
+
+SkRect returned includes all SkPoint added to SkPath, including SkPoint associated with
+kMove_Verb that define empty contours.
+
+@return  bounds of all SkPoint in SkPoint array
+*/
+func (o Path) GetBounds() Rect {
+	c_obj := o.sk
+	retC := C.misk_Path_getBounds(c_obj)
+	return Rect(retC)
+}
+
+/*
+Updates internal bounds so that subsequent calls to getBounds() are instantaneous.
+Unaltered copies of SkPath may also access cached bounds through getBounds().
+
+For now, identical to calling getBounds() and ignoring the returned value.
+
+Call to prepare SkPath subsequently drawn from multiple threads,
+to avoid a race condition where each draw separately computes the bounds.
+*/
+func (o Path) UpdateBoundsCache() {
+	c_obj := o.sk
+	C.misk_Path_updateBoundsCache(c_obj)
+}
+
+/*
+Returns minimum and maximum axes values of the lines and curves in SkPath.
+Returns (0, 0, 0, 0) if SkPath contains no points.
+Returned bounds width and height may be larger or smaller than area affected
+when SkPath is drawn.
+
+Includes SkPoint associated with kMove_Verb that define empty
+contours.
+
+Behaves identically to getBounds() when SkPath contains
+only lines. If SkPath contains curves, computed bounds includes
+the maximum extent of the quad, conic, or cubic; is slower than getBounds();
+and unlike getBounds(), does not cache the result.
+
+@return  tight bounds of curves in SkPath
+
+example: https://fiddle.skia.org/c/@Path_computeTightBounds
+*/
+func (o Path) ComputeTightBounds() Rect {
+	c_obj := o.sk
+	retC := C.misk_Path_computeTightBounds(c_obj)
+	return Rect(retC)
+}
+
+/*
+Returns true if rect is contained by SkPath.
+May return false when rect is contained by SkPath.
+
+For now, only returns true if SkPath has one contour and is convex.
+rect may share points and edges with SkPath and be contained.
+Returns true if rect is empty, that is, it has zero width or height; and
+the SkPoint or line described by rect is contained by SkPath.
+
+@param rect  SkRect, line, or SkPoint checked for containment
+@return      true if rect is contained
+
+example: https://fiddle.skia.org/c/@Path_conservativelyContainsRect
+*/
+func (o Path) ConservativelyContainsRect(rect Rect) bool {
+	c_obj := o.sk
+	c_rect := *(*C.sk_SkRect)(unsafe.Pointer(&rect))
+	retC := C.misk_Path_conservativelyContainsRect(c_obj, c_rect)
+	return bool(retC)
+}
+
+/*
+Grows SkPath verb array, SkPoint array, and conics to contain additional space.
+May improve performance and use less memory by
+reducing the number and size of allocations when creating SkPath.
+
+@param extraPtCount  number of additional SkPoint to allocate
+@param extraVerbCount  number of additional verbs
+@param extraConicCount  number of additional conics
+
+example: https://fiddle.skia.org/c/@Path_incReserve
+*/
+func (o Path) IncReserve(extraPtCount int32, extraVerbCount int32, extraConicCount int32) {
+	c_obj := o.sk
+	c_extraPtCount := C.int(extraPtCount)
+	c_extraVerbCount := C.int(extraVerbCount)
+	c_extraConicCount := C.int(extraConicCount)
+	C.misk_Path_incReserve(c_obj, c_extraPtCount, c_extraVerbCount, c_extraConicCount)
+}
+
+/*
+Adds beginning of contour at SkPoint (x, y).
+
+@param x  x-axis value of contour start
+@param y  y-axis value of contour start
+@return   reference to SkPath
+
+example: https://fiddle.skia.org/c/@Path_moveTo
+*/
+func (o Path) MoveToPoint(x float32, y float32) Path {
+	c_obj := o.sk
+	c_x := C.float(x)
+	c_y := C.float(y)
+	retC := C.misk_Path_moveToPoint(c_obj, c_x, c_y)
+	return Path{sk: &retC}
+}
+
+/*
+Adds beginning of contour at SkPoint p.
+
+@param p  contour start
+@return   reference to SkPath
+*/
+func (o Path) MoveTo(p Point) Path {
+	c_obj := o.sk
+	c_p := p.sk
+	retC := C.misk_Path_moveTo(c_obj, c_p)
+	return Path{sk: &retC}
+}
+
+/*
+Adds beginning of contour relative to last point.
+If SkPath is empty, starts contour at (dx, dy).
+Otherwise, start contour at last point offset by (dx, dy).
+Function name stands for "relative move to".
+
+@param dx  offset from last point to contour start on x-axis
+@param dy  offset from last point to contour start on y-axis
+@return    reference to SkPath
+
+example: https://fiddle.skia.org/c/@Path_rMoveTo
+*/
+func (o Path) RMoveTo(dx float32, dy float32) Path {
+	c_obj := o.sk
+	c_dx := C.float(dx)
+	c_dy := C.float(dy)
+	retC := C.misk_Path_rMoveTo(c_obj, c_dx, c_dy)
+	return Path{sk: &retC}
+}
+
+/*
+Adds line from last point to (x, y). If SkPath is empty, or last SkPath::Verb is
+kClose_Verb, last point is set to (0, 0) before adding line.
+
+lineTo() appends kMove_Verb to verb array and (0, 0) to SkPoint array, if needed.
+lineTo() then appends kLine_Verb to verb array and (x, y) to SkPoint array.
+
+@param x  end of added line on x-axis
+@param y  end of added line on y-axis
+@return   reference to SkPath
+
+example: https://fiddle.skia.org/c/@Path_lineTo
+*/
+func (o Path) LineTo(x float32, y float32) Path {
+	c_obj := o.sk
+	c_x := C.float(x)
+	c_y := C.float(y)
+	retC := C.misk_Path_lineTo(c_obj, c_x, c_y)
+	return Path{sk: &retC}
+}
+
+/*
+Adds line from last point to SkPoint p. If SkPath is empty, or last SkPath::Verb is
+kClose_Verb, last point is set to (0, 0) before adding line.
+
+lineTo() first appends kMove_Verb to verb array and (0, 0) to SkPoint array, if needed.
+lineTo() then appends kLine_Verb to verb array and SkPoint p to SkPoint array.
+
+@param p  end SkPoint of added line
+@return   reference to SkPath
+*/
+func (o Path) LineToPoint(p Point) Path {
+	c_obj := o.sk
+	c_p := p.sk
+	retC := C.misk_Path_lineToPoint(c_obj, c_p)
+	return Path{sk: &retC}
+}
+
+/*
+Adds line from last point to vector (dx, dy). If SkPath is empty, or last SkPath::Verb is
+kClose_Verb, last point is set to (0, 0) before adding line.
+
+Appends kMove_Verb to verb array and (0, 0) to SkPoint array, if needed;
+then appends kLine_Verb to verb array and line end to SkPoint array.
+Line end is last point plus vector (dx, dy).
+Function name stands for "relative line to".
+
+@param dx  offset from last point to line end on x-axis
+@param dy  offset from last point to line end on y-axis
+@return    reference to SkPath
+
+example: https://fiddle.skia.org/c/@Path_rLineTo
+example: https://fiddle.skia.org/c/@Quad_a
+example: https://fiddle.skia.org/c/@Quad_b
+*/
+func (o Path) RLineTo(dx float32, dy float32) Path {
+	c_obj := o.sk
+	c_dx := C.float(dx)
+	c_dy := C.float(dy)
+	retC := C.misk_Path_rLineTo(c_obj, c_dx, c_dy)
+	return Path{sk: &retC}
+}
+
+/*
+Adds quad from last point towards (x1, y1), to (x2, y2).
+If SkPath is empty, or last SkPath::Verb is kClose_Verb, last point is set to (0, 0)
+before adding quad.
+
+Appends kMove_Verb to verb array and (0, 0) to SkPoint array, if needed;
+then appends kQuad_Verb to verb array; and (x1, y1), (x2, y2)
+to SkPoint array.
+
+@param x1  control SkPoint of quad on x-axis
+@param y1  control SkPoint of quad on y-axis
+@param x2  end SkPoint of quad on x-axis
+@param y2  end SkPoint of quad on y-axis
+@return    reference to SkPath
+
+example: https://fiddle.skia.org/c/@Path_quadTo
+*/
+func (o Path) QuadTo(x1 float32, y1 float32, x2 float32, y2 float32) Path {
+	c_obj := o.sk
+	c_x1 := C.float(x1)
+	c_y1 := C.float(y1)
+	c_x2 := C.float(x2)
+	c_y2 := C.float(y2)
+	retC := C.misk_Path_quadTo(c_obj, c_x1, c_y1, c_x2, c_y2)
+	return Path{sk: &retC}
+}
+
+/*
+Adds quad from last point towards SkPoint p1, to SkPoint p2.
+If SkPath is empty, or last SkPath::Verb is kClose_Verb, last point is set to (0, 0)
+before adding quad.
+
+Appends kMove_Verb to verb array and (0, 0) to SkPoint array, if needed;
+then appends kQuad_Verb to verb array; and SkPoint p1, p2
+to SkPoint array.
+
+@param p1  control SkPoint of added quad
+@param p2  end SkPoint of added quad
+@return    reference to SkPath
+*/
+func (o Path) QuadToPoint(p1 Point, p2 Point) Path {
+	c_obj := o.sk
+	c_p1 := p1.sk
+	c_p2 := p2.sk
+	retC := C.misk_Path_quadToPoint(c_obj, c_p1, c_p2)
+	return Path{sk: &retC}
+}
+
+/*
+Adds quad from last point towards vector (dx1, dy1), to vector (dx2, dy2).
+If SkPath is empty, or last SkPath::Verb
+is kClose_Verb, last point is set to (0, 0) before adding quad.
+
+Appends kMove_Verb to verb array and (0, 0) to SkPoint array,
+if needed; then appends kQuad_Verb to verb array; and appends quad
+control and quad end to SkPoint array.
+Quad control is last point plus vector (dx1, dy1).
+Quad end is last point plus vector (dx2, dy2).
+Function name stands for "relative quad to".
+
+@param dx1  offset from last point to quad control on x-axis
+@param dy1  offset from last point to quad control on y-axis
+@param dx2  offset from last point to quad end on x-axis
+@param dy2  offset from last point to quad end on y-axis
+@return     reference to SkPath
+
+example: https://fiddle.skia.org/c/@Conic_Weight_a
+example: https://fiddle.skia.org/c/@Conic_Weight_b
+example: https://fiddle.skia.org/c/@Conic_Weight_c
+example: https://fiddle.skia.org/c/@Path_rQuadTo
+*/
+func (o Path) RQuadTo(dx1 float32, dy1 float32, dx2 float32, dy2 float32) Path {
+	c_obj := o.sk
+	c_dx1 := C.float(dx1)
+	c_dy1 := C.float(dy1)
+	c_dx2 := C.float(dx2)
+	c_dy2 := C.float(dy2)
+	retC := C.misk_Path_rQuadTo(c_obj, c_dx1, c_dy1, c_dx2, c_dy2)
+	return Path{sk: &retC}
+}
+
+/*
+Adds conic from last point towards (x1, y1), to (x2, y2), weighted by w.
+If SkPath is empty, or last SkPath::Verb is kClose_Verb, last point is set to (0, 0)
+before adding conic.
+
+Appends kMove_Verb to verb array and (0, 0) to SkPoint array, if needed.
+
+If w is finite and not one, appends kConic_Verb to verb array;
+and (x1, y1), (x2, y2) to SkPoint array; and w to conic weights.
+
+If w is one, appends kQuad_Verb to verb array, and
+(x1, y1), (x2, y2) to SkPoint array.
+
+If w is not finite, appends kLine_Verb twice to verb array, and
+(x1, y1), (x2, y2) to SkPoint array.
+
+@param x1  control SkPoint of conic on x-axis
+@param y1  control SkPoint of conic on y-axis
+@param x2  end SkPoint of conic on x-axis
+@param y2  end SkPoint of conic on y-axis
+@param w   weight of added conic
+@return    reference to SkPath
+*/
+func (o Path) ConicTo(x1 float32, y1 float32, x2 float32, y2 float32, w float32) Path {
+	c_obj := o.sk
+	c_x1 := C.float(x1)
+	c_y1 := C.float(y1)
+	c_x2 := C.float(x2)
+	c_y2 := C.float(y2)
+	c_w := C.float(w)
+	retC := C.misk_Path_conicTo(c_obj, c_x1, c_y1, c_x2, c_y2, c_w)
+	return Path{sk: &retC}
+}
+
+/*
+Adds conic from last point towards SkPoint p1, to SkPoint p2, weighted by w.
+If SkPath is empty, or last SkPath::Verb is kClose_Verb, last point is set to (0, 0)
+before adding conic.
+
+Appends kMove_Verb to verb array and (0, 0) to SkPoint array, if needed.
+
+If w is finite and not one, appends kConic_Verb to verb array;
+and SkPoint p1, p2 to SkPoint array; and w to conic weights.
+
+If w is one, appends kQuad_Verb to verb array, and SkPoint p1, p2
+to SkPoint array.
+
+If w is not finite, appends kLine_Verb twice to verb array, and
+SkPoint p1, p2 to SkPoint array.
+
+@param p1  control SkPoint of added conic
+@param p2  end SkPoint of added conic
+@param w   weight of added conic
+@return    reference to SkPath
+*/
+func (o Path) ConicToPoints(p1 Point, p2 Point, w float32) Path {
+	c_obj := o.sk
+	c_p1 := p1.sk
+	c_p2 := p2.sk
+	c_w := C.float(w)
+	retC := C.misk_Path_conicToPoints(c_obj, c_p1, c_p2, c_w)
+	return Path{sk: &retC}
+}
+
+/*
+Adds conic from last point towards vector (dx1, dy1), to vector (dx2, dy2),
+weighted by w. If SkPath is empty, or last SkPath::Verb
+is kClose_Verb, last point is set to (0, 0) before adding conic.
+
+Appends kMove_Verb to verb array and (0, 0) to SkPoint array,
+if needed.
+
+If w is finite and not one, next appends kConic_Verb to verb array,
+and w is recorded as conic weight; otherwise, if w is one, appends
+kQuad_Verb to verb array; or if w is not finite, appends kLine_Verb
+twice to verb array.
+
+In all cases appends SkPoint control and end to SkPoint array.
+control is last point plus vector (dx1, dy1).
+end is last point plus vector (dx2, dy2).
+
+Function name stands for "relative conic to".
+
+@param dx1  offset from last point to conic control on x-axis
+@param dy1  offset from last point to conic control on y-axis
+@param dx2  offset from last point to conic end on x-axis
+@param dy2  offset from last point to conic end on y-axis
+@param w    weight of added conic
+@return     reference to SkPath
+*/
+func (o Path) RConicTo(dx1 float32, dy1 float32, dx2 float32, dy2 float32, w float32) Path {
+	c_obj := o.sk
+	c_dx1 := C.float(dx1)
+	c_dy1 := C.float(dy1)
+	c_dx2 := C.float(dx2)
+	c_dy2 := C.float(dy2)
+	c_w := C.float(w)
+	retC := C.misk_Path_rConicTo(c_obj, c_dx1, c_dy1, c_dx2, c_dy2, c_w)
+	return Path{sk: &retC}
+}
+
+/*
+Adds cubic from last point towards (x1, y1), then towards (x2, y2), ending at
+(x3, y3). If SkPath is empty, or last SkPath::Verb is kClose_Verb, last point is set to
+(0, 0) before adding cubic.
+
+Appends kMove_Verb to verb array and (0, 0) to SkPoint array, if needed;
+then appends kCubic_Verb to verb array; and (x1, y1), (x2, y2), (x3, y3)
+to SkPoint array.
+
+@param x1  first control SkPoint of cubic on x-axis
+@param y1  first control SkPoint of cubic on y-axis
+@param x2  second control SkPoint of cubic on x-axis
+@param y2  second control SkPoint of cubic on y-axis
+@param x3  end SkPoint of cubic on x-axis
+@param y3  end SkPoint of cubic on y-axis
+@return    reference to SkPath
+*/
+func (o Path) CubicTo(x1 float32, y1 float32, x2 float32, y2 float32, x3 float32, y3 float32) Path {
+	c_obj := o.sk
+	c_x1 := C.float(x1)
+	c_y1 := C.float(y1)
+	c_x2 := C.float(x2)
+	c_y2 := C.float(y2)
+	c_x3 := C.float(x3)
+	c_y3 := C.float(y3)
+	retC := C.misk_Path_cubicTo(c_obj, c_x1, c_y1, c_x2, c_y2, c_x3, c_y3)
+	return Path{sk: &retC}
+}
+
+/*
+Adds cubic from last point towards SkPoint p1, then towards SkPoint p2, ending at
+SkPoint p3. If SkPath is empty, or last SkPath::Verb is kClose_Verb, last point is set to
+(0, 0) before adding cubic.
+
+Appends kMove_Verb to verb array and (0, 0) to SkPoint array, if needed;
+then appends kCubic_Verb to verb array; and SkPoint p1, p2, p3
+to SkPoint array.
+
+@param p1  first control SkPoint of cubic
+@param p2  second control SkPoint of cubic
+@param p3  end SkPoint of cubic
+@return    reference to SkPath
+*/
+func (o Path) CubicToPoints(p1 Point, p2 Point, p3 Point) Path {
+	c_obj := o.sk
+	c_p1 := p1.sk
+	c_p2 := p2.sk
+	c_p3 := p3.sk
+	retC := C.misk_Path_cubicToPoints(c_obj, c_p1, c_p2, c_p3)
+	return Path{sk: &retC}
+}
+
+/*
+Adds cubic from last point towards vector (dx1, dy1), then towards
+vector (dx2, dy2), to vector (dx3, dy3).
+If SkPath is empty, or last SkPath::Verb
+is kClose_Verb, last point is set to (0, 0) before adding cubic.
+
+Appends kMove_Verb to verb array and (0, 0) to SkPoint array,
+if needed; then appends kCubic_Verb to verb array; and appends cubic
+control and cubic end to SkPoint array.
+Cubic control is last point plus vector (dx1, dy1).
+Cubic end is last point plus vector (dx2, dy2).
+Function name stands for "relative cubic to".
+
+@param dx1  offset from last point to first cubic control on x-axis
+@param dy1  offset from last point to first cubic control on y-axis
+@param dx2  offset from last point to second cubic control on x-axis
+@param dy2  offset from last point to second cubic control on y-axis
+@param dx3  offset from last point to cubic end on x-axis
+@param dy3  offset from last point to cubic end on y-axis
+@return    reference to SkPath
+*/
+func (o Path) RCubicTo(dx1 float32, dy1 float32, dx2 float32, dy2 float32, dx3 float32, dy3 float32) Path {
+	c_obj := o.sk
+	c_dx1 := C.float(dx1)
+	c_dy1 := C.float(dy1)
+	c_dx2 := C.float(dx2)
+	c_dy2 := C.float(dy2)
+	c_dx3 := C.float(dx3)
+	c_dy3 := C.float(dy3)
+	retC := C.misk_Path_rCubicTo(c_obj, c_dx1, c_dy1, c_dx2, c_dy2, c_dx3, c_dy3)
+	return Path{sk: &retC}
+}
+
+/*
+Appends arc to SkPath. Arc added is part of ellipse
+bounded by oval, from startAngle through sweepAngle. Both startAngle and
+sweepAngle are measured in degrees, where zero degrees is aligned with the
+positive x-axis, and positive sweeps extends arc clockwise.
+
+arcTo() adds line connecting SkPath last SkPoint to initial arc SkPoint if forceMoveTo
+is false and SkPath is not empty. Otherwise, added contour begins with first point
+of arc. Angles greater than -360 and less than 360 are treated modulo 360.
+
+@param oval         bounds of ellipse containing arc
+@param startAngle   starting angle of arc in degrees
+@param sweepAngle   sweep, in degrees. Positive is clockwise; treated modulo 360
+@param forceMoveTo  true to start a new contour with arc
+@return             reference to SkPath
+
+example: https://fiddle.skia.org/c/@Path_arcTo
+*/
+func (o Path) ArcTo1(oval Rect, startAngle float32, sweepAngle float32, forceMoveTo bool) Path {
+	c_obj := o.sk
+	c_oval := *(*C.sk_SkRect)(unsafe.Pointer(&oval))
+	c_startAngle := C.float(startAngle)
+	c_sweepAngle := C.float(sweepAngle)
+	c_forceMoveTo := C.bool(forceMoveTo)
+	retC := C.misk_Path_arcTo1(c_obj, c_oval, c_startAngle, c_sweepAngle, c_forceMoveTo)
+	return Path{sk: &retC}
+}
+
+/*
+Appends arc to SkPath, after appending line if needed. Arc is implemented by conic
+weighted to describe part of circle. Arc is contained by tangent from
+last SkPath point to (x1, y1), and tangent from (x1, y1) to (x2, y2). Arc
+is part of circle sized to radius, positioned so it touches both tangent lines.
+
+If last Path Point does not start Arc, arcTo appends connecting Line to Path.
+The length of Vector from (x1, y1) to (x2, y2) does not affect Arc.
+
+Arc sweep is always less than 180 degrees. If radius is zero, or if
+tangents are nearly parallel, arcTo appends Line from last Path Point to (x1, y1).
+
+arcTo appends at most one Line and one conic.
+arcTo implements the functionality of PostScript arct and HTML Canvas arcTo.
+
+@param x1      x-axis value common to pair of tangents
+@param y1      y-axis value common to pair of tangents
+@param x2      x-axis value end of second tangent
+@param y2      y-axis value end of second tangent
+@param radius  distance from arc to circle center
+@return        reference to SkPath
+
+example: https://fiddle.skia.org/c/@Path_arcTo_2_a
+example: https://fiddle.skia.org/c/@Path_arcTo_2_b
+example: https://fiddle.skia.org/c/@Path_arcTo_2_c
+*/
+func (o Path) ArcTo2(x1 float32, y1 float32, x2 float32, y2 float32, radius float32) Path {
+	c_obj := o.sk
+	c_x1 := C.float(x1)
+	c_y1 := C.float(y1)
+	c_x2 := C.float(x2)
+	c_y2 := C.float(y2)
+	c_radius := C.float(radius)
+	retC := C.misk_Path_arcTo2(c_obj, c_x1, c_y1, c_x2, c_y2, c_radius)
+	return Path{sk: &retC}
+}
+
+/*
+Appends arc to SkPath, after appending line if needed. Arc is implemented by conic
+weighted to describe part of circle. Arc is contained by tangent from
+last SkPath point to p1, and tangent from p1 to p2. Arc
+is part of circle sized to radius, positioned so it touches both tangent lines.
+
+If last SkPath SkPoint does not start arc, arcTo() appends connecting line to SkPath.
+The length of vector from p1 to p2 does not affect arc.
+
+Arc sweep is always less than 180 degrees. If radius is zero, or if
+tangents are nearly parallel, arcTo() appends line from last SkPath SkPoint to p1.
+
+arcTo() appends at most one line and one conic.
+arcTo() implements the functionality of PostScript arct and HTML Canvas arcTo.
+
+@param p1      SkPoint common to pair of tangents
+@param p2      end of second tangent
+@param radius  distance from arc to circle center
+@return        reference to SkPath
+*/
+func (o Path) ArcTo3(p1 Point, p2 Point, radius float32) Path {
+	c_obj := o.sk
+	c_p1 := *(*C.sk_SkPoint)(unsafe.Pointer(&p1))
+	c_p2 := *(*C.sk_SkPoint)(unsafe.Pointer(&p2))
+	c_radius := C.float(radius)
+	retC := C.misk_Path_arcTo3(c_obj, c_p1, c_p2, c_radius)
+	return Path{sk: &retC}
+}
+
+/*
+Appends arc to SkPath. Arc is implemented by one or more conics weighted to
+describe part of oval with radii (rx, ry) rotated by xAxisRotate degrees. Arc
+curves from last SkPath SkPoint to (x, y), choosing one of four possible routes:
+clockwise or counterclockwise, and smaller or larger.
+
+Arc sweep is always less than 360 degrees. arcTo() appends line to (x, y) if
+either radii are zero, or if last SkPath SkPoint equals (x, y). arcTo() scales radii
+(rx, ry) to fit last SkPath SkPoint and (x, y) if both are greater than zero but
+too small.
+
+arcTo() appends up to four conic curves.
+arcTo() implements the functionality of SVG arc, although SVG sweep-flag value
+is opposite the integer value of sweep; SVG sweep-flag uses 1 for clockwise,
+while kCW_Direction cast to int is zero.
+
+@param rx           radius on x-axis before x-axis rotation
+@param ry           radius on y-axis before x-axis rotation
+@param xAxisRotate  x-axis rotation in degrees; positive values are clockwise
+@param largeArc     chooses smaller or larger arc
+@param sweep        chooses clockwise or counterclockwise arc
+@param x            end of arc
+@param y            end of arc
+@return             reference to SkPath
+*/
+func (o Path) ArcTo4(rx float32, ry float32, xAxisRotate float32, largeArc PathArcSize, sweep PathDirection, x float32, y float32) Path {
+	c_obj := o.sk
+	c_rx := C.float(rx)
+	c_ry := C.float(ry)
+	c_xAxisRotate := C.float(xAxisRotate)
+	c_largeArc := C.uint(largeArc)
+	c_sweep := C.int(sweep)
+	c_x := C.float(x)
+	c_y := C.float(y)
+	retC := C.misk_Path_arcTo4(c_obj, c_rx, c_ry, c_xAxisRotate, c_largeArc, c_sweep, c_x, c_y)
+	return Path{sk: &retC}
+}
+
+/*
+Appends arc to SkPath. Arc is implemented by one or more conic weighted to describe
+part of oval with radii (r.fX, r.fY) rotated by xAxisRotate degrees. Arc curves
+from last SkPath SkPoint to (xy.fX, xy.fY), choosing one of four possible routes:
+clockwise or counterclockwise,
+and smaller or larger.
+
+Arc sweep is always less than 360 degrees. arcTo() appends line to xy if either
+radii are zero, or if last SkPath SkPoint equals (xy.fX, xy.fY). arcTo() scales radii r to
+fit last SkPath SkPoint and xy if both are greater than zero but too small to describe
+an arc.
+
+arcTo() appends up to four conic curves.
+arcTo() implements the functionality of SVG arc, although SVG sweep-flag value is
+opposite the integer value of sweep; SVG sweep-flag uses 1 for clockwise, while
+kCW_Direction cast to int is zero.
+
+@param r            radii on axes before x-axis rotation
+@param xAxisRotate  x-axis rotation in degrees; positive values are clockwise
+@param largeArc     chooses smaller or larger arc
+@param sweep        chooses clockwise or counterclockwise arc
+@param xy           end of arc
+@return             reference to SkPath
+*/
+func (o Path) ArcTo5(r Point, xAxisRotate float32, largeArc PathArcSize, sweep PathDirection, xy Point) Path {
+	c_obj := o.sk
+	c_r := *(*C.sk_SkPoint)(unsafe.Pointer(&r))
+	c_xAxisRotate := C.float(xAxisRotate)
+	c_largeArc := C.uint(largeArc)
+	c_sweep := C.int(sweep)
+	c_xy := *(*C.sk_SkPoint)(unsafe.Pointer(&xy))
+	retC := C.misk_Path_arcTo5(c_obj, c_r, c_xAxisRotate, c_largeArc, c_sweep, c_xy)
+	return Path{sk: &retC}
+}
+
+/*
+Appends arc to SkPath, relative to last SkPath SkPoint. Arc is implemented by one or
+more conic, weighted to describe part of oval with radii (rx, ry) rotated by
+xAxisRotate degrees. Arc curves from last SkPath SkPoint to relative end SkPoint:
+(dx, dy), choosing one of four possible routes: clockwise or
+counterclockwise, and smaller or larger. If SkPath is empty, the start arc SkPoint
+is (0, 0).
+
+Arc sweep is always less than 360 degrees. arcTo() appends line to end SkPoint
+if either radii are zero, or if last SkPath SkPoint equals end SkPoint.
+arcTo() scales radii (rx, ry) to fit last SkPath SkPoint and end SkPoint if both are
+greater than zero but too small to describe an arc.
+
+arcTo() appends up to four conic curves.
+arcTo() implements the functionality of svg arc, although SVG "sweep-flag" value is
+opposite the integer value of sweep; SVG "sweep-flag" uses 1 for clockwise, while
+kCW_Direction cast to int is zero.
+
+@param rx           radius before x-axis rotation
+@param ry           radius before x-axis rotation
+@param xAxisRotate  x-axis rotation in degrees; positive values are clockwise
+@param largeArc     chooses smaller or larger arc
+@param sweep        chooses clockwise or counterclockwise arc
+@param dx           x-axis offset end of arc from last SkPath SkPoint
+@param dy           y-axis offset end of arc from last SkPath SkPoint
+@return             reference to SkPath
+*/
+func (o Path) RArcTo(rx float32, ry float32, xAxisRotate float32, largeArc PathArcSize, sweep PathDirection, dx float32, dy float32) Path {
+	c_obj := o.sk
+	c_rx := C.float(rx)
+	c_ry := C.float(ry)
+	c_xAxisRotate := C.float(xAxisRotate)
+	c_largeArc := C.uint(largeArc)
+	c_sweep := C.int(sweep)
+	c_dx := C.float(dx)
+	c_dy := C.float(dy)
+	retC := C.misk_Path_rArcTo(c_obj, c_rx, c_ry, c_xAxisRotate, c_largeArc, c_sweep, c_dx, c_dy)
+	return Path{sk: &retC}
+}
+
+/*
+Appends kClose_Verb to SkPath. A closed contour connects the first and last SkPoint
+with line, forming a continuous loop. Open and closed contour draw the same
+with SkPaint::kFill_Style. With SkPaint::kStroke_Style, open contour draws
+SkPaint::Cap at contour start and end; closed contour draws
+SkPaint::Join at contour start and end.
+
+close() has no effect if SkPath is empty or last SkPath SkPath::Verb is kClose_Verb.
+
+@return  reference to SkPath
+
+example: https://fiddle.skia.org/c/@Path_close
+*/
+func (o Path) Close() Path {
+	c_obj := o.sk
+	retC := C.misk_Path_close(c_obj)
+	return Path{sk: &retC}
+}
+
+/*
+Returns true if SkPath is equivalent to SkRect when filled.
+If false: rect, isClosed, and direction are unchanged.
+If true: rect, isClosed, and direction are written to if not nullptr.
+
+rect may be smaller than the SkPath bounds. SkPath bounds may include kMove_Verb points
+that do not alter the area drawn by the returned rect.
+
+@param rect       storage for bounds of SkRect; may be nullptr
+@param isClosed   storage set to true if SkPath is closed; may be nullptr
+@param direction  storage set to SkRect direction; may be nullptr
+@return           true if SkPath contains SkRect
+
+example: https://fiddle.skia.org/c/@Path_isRect
+*/
+func (o Path) IsRect(rect *Rect, isClosed *bool, direction *PathDirection) bool {
+	c_obj := o.sk
+	c_rect := (*C.sk_SkRect)(unsafe.Pointer(rect))
+	c_isClosed := (*C.bool)(isClosed)
+	c_direction := (*C.int)(direction)
+	retC := C.misk_Path_isRect(c_obj, c_rect, c_isClosed, c_direction)
+	return bool(retC)
+}
+
+/*
+Adds a new contour to the path, defined by the rect, and wound in the
+specified direction. The verbs added to the path will be:
+
+kMove, kLine, kLine, kLine, kClose
+
+start specifies which corner to begin the contour:
+0: upper-left  corner
+1: upper-right corner
+2: lower-right corner
+3: lower-left  corner
+
+This start point also acts as the implied beginning of the subsequent,
+contour, if it does not have an explicit moveTo(). e.g.
+
+path.addRect(...)
+// if we don't say moveTo() here, we will use the rect's start point
+path.lineTo(...)
+
+@param rect   SkRect to add as a closed contour
+@param dir    SkPath::Direction to orient the new contour
+@param start  initial corner of SkRect to add
+@return       reference to SkPath
+
+example: https://fiddle.skia.org/c/@Path_addRect_2
+*/
+func (o Path) AddRect1(rect Rect, dir PathDirection, start uint32) Path {
+	c_obj := o.sk
+	c_rect := *(*C.sk_SkRect)(unsafe.Pointer(&rect))
+	c_dir := C.int(dir)
+	c_start := C.uint(start)
+	retC := C.misk_Path_addRect1(c_obj, c_rect, c_dir, c_start)
+	return Path{sk: &retC}
+}
+
+func (o Path) AddRect2(rect Rect, dir PathDirection) Path {
+	c_obj := o.sk
+	c_rect := *(*C.sk_SkRect)(unsafe.Pointer(&rect))
+	c_dir := C.int(dir)
+	retC := C.misk_Path_addRect2(c_obj, c_rect, c_dir)
+	return Path{sk: &retC}
+}
+
+func (o Path) AddRect3(left float32, top float32, right float32, bottom float32, dir PathDirection) Path {
+	c_obj := o.sk
+	c_left := C.float(left)
+	c_top := C.float(top)
+	c_right := C.float(right)
+	c_bottom := C.float(bottom)
+	c_dir := C.int(dir)
+	retC := C.misk_Path_addRect3(c_obj, c_left, c_top, c_right, c_bottom, c_dir)
+	return Path{sk: &retC}
+}
+
+/*
+Adds oval to path, appending kMove_Verb, four kConic_Verb, and kClose_Verb.
+Oval is upright ellipse bounded by SkRect oval with radii equal to half oval width
+and half oval height. Oval begins at (oval.fRight, oval.centerY()) and continues
+clockwise if dir is kCW_Direction, counterclockwise if dir is kCCW_Direction.
+
+@param oval  bounds of ellipse added
+@param dir   SkPath::Direction to wind ellipse
+@return      reference to SkPath
+
+example: https://fiddle.skia.org/c/@Path_addOval
+*/
+func (o Path) AddOval1(oval Rect, dir PathDirection) Path {
+	c_obj := o.sk
+	c_oval := *(*C.sk_SkRect)(unsafe.Pointer(&oval))
+	c_dir := C.int(dir)
+	retC := C.misk_Path_addOval1(c_obj, c_oval, c_dir)
+	return Path{sk: &retC}
+}
+
+/*
+Adds oval to SkPath, appending kMove_Verb, four kConic_Verb, and kClose_Verb.
+Oval is upright ellipse bounded by SkRect oval with radii equal to half oval width
+and half oval height. Oval begins at start and continues
+clockwise if dir is kCW_Direction, counterclockwise if dir is kCCW_Direction.
+
+@param oval   bounds of ellipse added
+@param dir    SkPath::Direction to wind ellipse
+@param start  index of initial point of ellipse
+@return       reference to SkPath
+
+example: https://fiddle.skia.org/c/@Path_addOval_2
+*/
+func (o Path) AddOval2(oval Rect, dir PathDirection, start uint32) Path {
+	c_obj := o.sk
+	c_oval := *(*C.sk_SkRect)(unsafe.Pointer(&oval))
+	c_dir := C.int(dir)
+	c_start := C.uint(start)
+	retC := C.misk_Path_addOval2(c_obj, c_oval, c_dir, c_start)
+	return Path{sk: &retC}
+}
+
+/*
+Adds circle centered at (x, y) of size radius to SkPath, appending kMove_Verb,
+four kConic_Verb, and kClose_Verb. Circle begins at: (x + radius, y), continuing
+clockwise if dir is kCW_Direction, and counterclockwise if dir is kCCW_Direction.
+
+Has no effect if radius is zero or negative.
+
+@param x       center of circle
+@param y       center of circle
+@param radius  distance from center to edge
+@param dir     SkPath::Direction to wind circle
+@return        reference to SkPath
+*/
+func (o Path) AddCircle(x float32, y float32, radius float32, dir PathDirection) Path {
+	c_obj := o.sk
+	c_x := C.float(x)
+	c_y := C.float(y)
+	c_radius := C.float(radius)
+	c_dir := C.int(dir)
+	retC := C.misk_Path_addCircle(c_obj, c_x, c_y, c_radius, c_dir)
+	return Path{sk: &retC}
+}
+
+/*
+Appends arc to SkPath, as the start of new contour. Arc added is part of ellipse
+bounded by oval, from startAngle through sweepAngle. Both startAngle and
+sweepAngle are measured in degrees, where zero degrees is aligned with the
+positive x-axis, and positive sweeps extends arc clockwise.
+
+If sweepAngle <= -360, or sweepAngle >= 360; and startAngle modulo 90 is nearly
+zero, append oval instead of arc. Otherwise, sweepAngle values are treated
+modulo 360, and arc may or may not draw depending on numeric rounding.
+
+@param oval        bounds of ellipse containing arc
+@param startAngle  starting angle of arc in degrees
+@param sweepAngle  sweep, in degrees. Positive is clockwise; treated modulo 360
+@return            reference to SkPath
+
+example: https://fiddle.skia.org/c/@Path_addArc
+*/
+func (o Path) AddArc(oval Rect, startAngle float32, sweepAngle float32) Path {
+	c_obj := o.sk
+	c_oval := *(*C.sk_SkRect)(unsafe.Pointer(&oval))
+	c_startAngle := C.float(startAngle)
+	c_sweepAngle := C.float(sweepAngle)
+	retC := C.misk_Path_addArc(c_obj, c_oval, c_startAngle, c_sweepAngle)
+	return Path{sk: &retC}
+}
+
+/*
+Appends SkRRect to SkPath, creating a new closed contour. SkRRect has bounds
+equal to rect; each corner is 90 degrees of an ellipse with radii (rx, ry). If
+dir is kCW_Direction, SkRRect starts at top-left of the lower-left corner and
+winds clockwise. If dir is kCCW_Direction, SkRRect starts at the bottom-left
+of the upper-left corner and winds counterclockwise.
+
+If either rx or ry is too large, rx and ry are scaled uniformly until the
+corners fit. If rx or ry is less than or equal to zero, addRoundRect() appends
+SkRect rect to SkPath.
+
+After appending, SkPath may be empty, or may contain: SkRect, oval, or SkRRect.
+
+@param rect  bounds of SkRRect
+@param rx    x-axis radius of rounded corners on the SkRRect
+@param ry    y-axis radius of rounded corners on the SkRRect
+@param dir   SkPath::Direction to wind SkRRect
+@return      reference to SkPath
+*/
+func (o Path) AddRoundRect1(rect Rect, rx float32, ry float32, dir PathDirection) Path {
+	c_obj := o.sk
+	c_rect := *(*C.sk_SkRect)(unsafe.Pointer(&rect))
+	c_rx := C.float(rx)
+	c_ry := C.float(ry)
+	c_dir := C.int(dir)
+	retC := C.misk_Path_addRoundRect1(c_obj, c_rect, c_rx, c_ry, c_dir)
+	return Path{sk: &retC}
+}
+
+/*
+Appends SkRRect to SkPath, creating a new closed contour. SkRRect has bounds
+equal to rect; each corner is 90 degrees of an ellipse with radii from the
+array.
+
+@param rect   bounds of SkRRect
+@param radii  array of 8 SkScalar values, a radius pair for each corner
+@param dir    SkPath::Direction to wind SkRRect
+@return       reference to SkPath
+*/
+func (o Path) AddRoundRect2(rect Rect, radii []float32, dir PathDirection) Path {
+	c_obj := o.sk
+	c_rect := *(*C.sk_SkRect)(unsafe.Pointer(&rect))
+	c_radii := (*C.float)(unsafe.Pointer(&radii[0]))
+	c_dir := C.int(dir)
+	retC := C.misk_Path_addRoundRect2(c_obj, c_rect, c_radii, c_dir)
+	return Path{sk: &retC}
+}
+
+/*
+Adds rrect to SkPath, creating a new closed contour. If
+dir is kCW_Direction, rrect starts at top-left of the lower-left corner and
+winds clockwise. If dir is kCCW_Direction, rrect starts at the bottom-left
+of the upper-left corner and winds counterclockwise.
+
+After appending, SkPath may be empty, or may contain: SkRect, oval, or SkRRect.
+
+@param rrect  bounds and radii of rounded rectangle
+@param dir    SkPath::Direction to wind SkRRect
+@return       reference to SkPath
+
+example: https://fiddle.skia.org/c/@Path_addRRect
+*/
+func (o Path) AddRRect1(rrect RRect, dir PathDirection) Path {
+	c_obj := o.sk
+	c_rrect := *(*C.sk_SkRRect)(unsafe.Pointer(&rrect))
+	c_dir := C.int(dir)
+	retC := C.misk_Path_addRRect1(c_obj, c_rrect, c_dir)
+	return Path{sk: &retC}
+}
+
+/*
+Adds rrect to SkPath, creating a new closed contour. If dir is kCW_Direction, rrect
+winds clockwise; if dir is kCCW_Direction, rrect winds counterclockwise.
+start determines the first point of rrect to add.
+
+@param rrect  bounds and radii of rounded rectangle
+@param dir    SkPath::Direction to wind SkRRect
+@param start  index of initial point of SkRRect
+@return       reference to SkPath
+
+example: https://fiddle.skia.org/c/@Path_addRRect_2
+*/
+func (o Path) AddRRect2(rrect RRect, dir PathDirection, start uint32) Path {
+	c_obj := o.sk
+	c_rrect := *(*C.sk_SkRRect)(unsafe.Pointer(&rrect))
+	c_dir := C.int(dir)
+	c_start := C.uint(start)
+	retC := C.misk_Path_addRRect2(c_obj, c_rrect, c_dir, c_start)
+	return Path{sk: &retC}
+}
+
+/*
+Adds contour created from line array, adding (count - 1) line segments.
+Contour added starts at pts[0], then adds a line for every additional SkPoint
+in pts array. If close is true, appends kClose_Verb to SkPath, connecting
+pts[count - 1] and pts[0].
+
+If count is zero, append kMove_Verb to path.
+Has no effect if count is less than one.
+
+@param pts    array of line sharing end and start SkPoint
+@param count  length of SkPoint array
+@param close  true to add line connecting contour end and start
+@return       reference to SkPath
+
+example: https://fiddle.skia.org/c/@Path_addPoly
+*/
+func (o Path) AddPoly(pts []Point, count int32, close bool) Path {
+	c_obj := o.sk
+	c_pts := (*C.sk_SkPoint)(unsafe.Pointer(&pts[0]))
+	c_count := C.int(count)
+	c_close := C.bool(close)
+	retC := C.misk_Path_addPoly(c_obj, c_pts, c_count, c_close)
+	return Path{sk: &retC}
+}
+
+/*
+Appends src to SkPath, offset by (dx, dy).
+
+If mode is kAppend_AddPathMode, src verb array, SkPoint array, and conic weights are
+added unaltered. If mode is kExtend_AddPathMode, add line before appending
+verbs, SkPoint, and conic weights.
+
+@param src   SkPath verbs, SkPoint, and conic weights to add
+@param dx    offset added to src SkPoint array x-axis coordinates
+@param dy    offset added to src SkPoint array y-axis coordinates
+@param mode  kAppend_AddPathMode or kExtend_AddPathMode
+@return      reference to SkPath
+*/
+func (o Path) AddPath1(src Path, dx float32, dy float32, mode PathAddPathMode) Path {
+	c_obj := o.sk
+	c_src := src.sk
+	c_dx := C.float(dx)
+	c_dy := C.float(dy)
+	c_mode := C.uint(mode)
+	retC := C.misk_Path_addPath1(c_obj, c_src, c_dx, c_dy, c_mode)
+	return Path{sk: &retC}
+}
+
+/*
+Appends src to SkPath.
+
+If mode is kAppend_AddPathMode, src verb array, SkPoint array, and conic weights are
+added unaltered. If mode is kExtend_AddPathMode, add line before appending
+verbs, SkPoint, and conic weights.
+
+@param src   SkPath verbs, SkPoint, and conic weights to add
+@param mode  kAppend_AddPathMode or kExtend_AddPathMode
+@return      reference to SkPath
+*/
+func (o Path) AddPath2(src Path, mode PathAddPathMode) Path {
+	c_obj := o.sk
+	c_src := src.sk
+	c_mode := C.uint(mode)
+	retC := C.misk_Path_addPath2(c_obj, c_src, c_mode)
+	return Path{sk: &retC}
+}
+
+/*
+Appends src to SkPath, transformed by matrix. Transformed curves may have different
+verbs, SkPoint, and conic weights.
+
+If mode is kAppend_AddPathMode, src verb array, SkPoint array, and conic weights are
+added unaltered. If mode is kExtend_AddPathMode, add line before appending
+verbs, SkPoint, and conic weights.
+
+@param src     SkPath verbs, SkPoint, and conic weights to add
+@param matrix  transform applied to src
+@param mode    kAppend_AddPathMode or kExtend_AddPathMode
+@return        reference to SkPath
+*/
+func (o Path) AddPath3(src Path, matrix Matrix, mode PathAddPathMode) Path {
+	c_obj := o.sk
+	c_src := src.sk
+	c_matrix := matrix.sk
+	c_mode := C.uint(mode)
+	retC := C.misk_Path_addPath3(c_obj, c_src, c_matrix, c_mode)
+	return Path{sk: &retC}
+}
+
+/*
+Appends src to SkPath, from back to front.
+Reversed src always appends a new contour to SkPath.
+
+@param src  SkPath verbs, SkPoint, and conic weights to add
+@return     reference to SkPath
+
+example: https://fiddle.skia.org/c/@Path_reverseAddPath
+*/
+func (o Path) ReverseAddPath(src Path) Path {
+	c_obj := o.sk
+	c_src := src.sk
+	retC := C.misk_Path_reverseAddPath(c_obj, c_src)
+	return Path{sk: &retC}
+}
+
+/*
+Offsets SkPoint array by (dx, dy). Offset SkPath replaces dst.
+If dst is nullptr, SkPath is replaced by offset data.
+
+@param dx   offset added to SkPoint array x-axis coordinates
+@param dy   offset added to SkPoint array y-axis coordinates
+@param dst  overwritten, translated copy of SkPath; may be nullptr
+
+example: https://fiddle.skia.org/c/@Path_offset
+*/
+func (o Path) Offset1(dx float32, dy float32, dst Path) {
+	c_obj := o.sk
+	c_dx := C.float(dx)
+	c_dy := C.float(dy)
+	c_dst := dst.sk
+	C.misk_Path_offset1(c_obj, c_dx, c_dy, c_dst)
+}
+
+/*
+Offsets SkPoint array by (dx, dy). SkPath is replaced by offset data.
+
+@param dx  offset added to SkPoint array x-axis coordinates
+@param dy  offset added to SkPoint array y-axis coordinates
+*/
+func (o Path) Offset2(dx float32, dy float32) Path {
+	c_obj := o.sk
+	c_dx := C.float(dx)
+	c_dy := C.float(dy)
+	retC := C.misk_Path_offset2(c_obj, c_dx, c_dy)
+	return Path{sk: &retC}
+}
+
+/*
 AddPathMode chooses how addPath() appends. Adding one SkPath to another can extend
 the last contour or start a new contour.
 */
@@ -5920,6 +7383,40 @@ const (
 	FilterModeNearest FilterMode = 0
 	FilterModeLinear  FilterMode = 1
 	FilterModeLast    FilterMode = 1
+)
+
+type PathDirection int32
+
+const (
+	/*
+	   clockwise direction for adding closed contours
+	*/
+	PathDirectionCW PathDirection = 0
+	/*
+	   counter-clockwise direction for adding closed contours
+	*/
+	PathDirectionCCW PathDirection = 1
+)
+
+type PathFillType int32
+
+const (
+	/*
+	   Specifies that "inside" is computed by a non-zero sum of signed edge crossings
+	*/
+	PathFillTypeWinding PathFillType = 0
+	/*
+	   Specifies that "inside" is computed by an odd number of edge crossings
+	*/
+	PathFillTypeEvenOdd PathFillType = 1
+	/*
+	   Same as Winding, but draws outside of the path, rather than inside
+	*/
+	PathFillTypeInverseWinding PathFillType = 2
+	/*
+	   Same as EvenOdd, but draws outside of the path, rather than inside
+	*/
+	PathFillTypeInverseEvenOdd PathFillType = 3
 )
 
 /*

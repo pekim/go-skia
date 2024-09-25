@@ -798,6 +798,113 @@ extern "C"
   sk_SkPath *misk_new_Path ();
   sk_SkPath *misk_new_PathCopy (sk_SkPath *c_path);
   void misk_delete_SkPath (sk_SkPath *obj);
+  bool misk_Path_isInterpolatable (sk_SkPath *c_obj, sk_SkPath *c_compare);
+  bool misk_Path_interpolate (sk_SkPath *c_obj, sk_SkPath *c_ending,
+                              float c_weight, sk_SkPath *c_out);
+  int misk_Path_getFillType (sk_SkPath *c_obj);
+  void misk_Path_setFillType (sk_SkPath *c_obj, int c_ft);
+  bool misk_Path_isInverseFillType (sk_SkPath *c_obj);
+  void misk_Path_toggleInverseFillType (sk_SkPath *c_obj);
+  bool misk_Path_isConvex (sk_SkPath *c_obj);
+  bool misk_Path_isOval (sk_SkPath *c_obj, sk_SkRect c_bounds);
+  bool misk_Path_isRRect (sk_SkPath *c_obj, sk_SkRRect c_rrect);
+  sk_SkPath misk_Path_reset (sk_SkPath *c_obj);
+  sk_SkPath misk_Path_rewind (sk_SkPath *c_obj);
+  bool misk_Path_isEmpty (sk_SkPath *c_obj);
+  bool misk_Path_isLastContourClosed (sk_SkPath *c_obj);
+  bool misk_Path_isFinite (sk_SkPath *c_obj);
+  bool misk_Path_isVolatile (sk_SkPath *c_obj);
+  sk_SkPath misk_Path_setIsVolatile (sk_SkPath *c_obj, bool c_isVolatile);
+  int misk_Path_countPoints (sk_SkPath *c_obj);
+  sk_SkPoint misk_Path_getPoint (sk_SkPath *c_obj, int c_index);
+  int misk_Path_getPoints (sk_SkPath *c_obj, sk_SkPoint *c_points, int c_max);
+  int misk_Path_countVerbs (sk_SkPath *c_obj);
+  int misk_Path_getVerbs (sk_SkPath *c_obj, uchar *c_verbs, int c_max);
+  unsigned long misk_Path_approximateBytesUsed (sk_SkPath *c_obj);
+  void misk_Path_swap (sk_SkPath *c_obj, sk_SkPath *c_other);
+  sk_SkRect misk_Path_getBounds (sk_SkPath *c_obj);
+  void misk_Path_updateBoundsCache (sk_SkPath *c_obj);
+  sk_SkRect misk_Path_computeTightBounds (sk_SkPath *c_obj);
+  bool misk_Path_conservativelyContainsRect (sk_SkPath *c_obj,
+                                             sk_SkRect c_rect);
+  void misk_Path_incReserve (sk_SkPath *c_obj, int c_extraPtCount,
+                             int c_extraVerbCount, int c_extraConicCount);
+  sk_SkPath misk_Path_moveToPoint (sk_SkPath *c_obj, float c_x, float c_y);
+  sk_SkPath misk_Path_moveTo (sk_SkPath *c_obj, sk_SkPoint *c_p);
+  sk_SkPath misk_Path_rMoveTo (sk_SkPath *c_obj, float c_dx, float c_dy);
+  sk_SkPath misk_Path_lineTo (sk_SkPath *c_obj, float c_x, float c_y);
+  sk_SkPath misk_Path_lineToPoint (sk_SkPath *c_obj, sk_SkPoint *c_p);
+  sk_SkPath misk_Path_rLineTo (sk_SkPath *c_obj, float c_dx, float c_dy);
+  sk_SkPath misk_Path_quadTo (sk_SkPath *c_obj, float c_x1, float c_y1,
+                              float c_x2, float c_y2);
+  sk_SkPath misk_Path_quadToPoint (sk_SkPath *c_obj, sk_SkPoint *c_p1,
+                                   sk_SkPoint *c_p2);
+  sk_SkPath misk_Path_rQuadTo (sk_SkPath *c_obj, float c_dx1, float c_dy1,
+                               float c_dx2, float c_dy2);
+  sk_SkPath misk_Path_conicTo (sk_SkPath *c_obj, float c_x1, float c_y1,
+                               float c_x2, float c_y2, float c_w);
+  sk_SkPath misk_Path_conicToPoints (sk_SkPath *c_obj, sk_SkPoint *c_p1,
+                                     sk_SkPoint *c_p2, float c_w);
+  sk_SkPath misk_Path_rConicTo (sk_SkPath *c_obj, float c_dx1, float c_dy1,
+                                float c_dx2, float c_dy2, float c_w);
+  sk_SkPath misk_Path_cubicTo (sk_SkPath *c_obj, float c_x1, float c_y1,
+                               float c_x2, float c_y2, float c_x3, float c_y3);
+  sk_SkPath misk_Path_cubicToPoints (sk_SkPath *c_obj, sk_SkPoint *c_p1,
+                                     sk_SkPoint *c_p2, sk_SkPoint *c_p3);
+  sk_SkPath misk_Path_rCubicTo (sk_SkPath *c_obj, float c_dx1, float c_dy1,
+                                float c_dx2, float c_dy2, float c_dx3,
+                                float c_dy3);
+  sk_SkPath misk_Path_arcTo1 (sk_SkPath *c_obj, sk_SkRect c_oval,
+                              float c_startAngle, float c_sweepAngle,
+                              bool c_forceMoveTo);
+  sk_SkPath misk_Path_arcTo2 (sk_SkPath *c_obj, float c_x1, float c_y1,
+                              float c_x2, float c_y2, float c_radius);
+  sk_SkPath misk_Path_arcTo3 (sk_SkPath *c_obj, sk_SkPoint c_p1,
+                              sk_SkPoint c_p2, float c_radius);
+  sk_SkPath misk_Path_arcTo4 (sk_SkPath *c_obj, float c_rx, float c_ry,
+                              float c_xAxisRotate, uint c_largeArc,
+                              int c_sweep, float c_x, float c_y);
+  sk_SkPath misk_Path_arcTo5 (sk_SkPath *c_obj, sk_SkPoint c_r,
+                              float c_xAxisRotate, uint c_largeArc,
+                              int c_sweep, sk_SkPoint c_xy);
+  sk_SkPath misk_Path_rArcTo (sk_SkPath *c_obj, float c_rx, float c_ry,
+                              float c_xAxisRotate, uint c_largeArc,
+                              int c_sweep, float c_dx, float c_dy);
+  sk_SkPath misk_Path_close (sk_SkPath *c_obj);
+  bool misk_Path_isRect (sk_SkPath *c_obj, sk_SkRect *c_rect, bool *c_isClosed,
+                         int *c_direction);
+  sk_SkPath misk_Path_addRect1 (sk_SkPath *c_obj, sk_SkRect c_rect, int c_dir,
+                                uint c_start);
+  sk_SkPath misk_Path_addRect2 (sk_SkPath *c_obj, sk_SkRect c_rect, int c_dir);
+  sk_SkPath misk_Path_addRect3 (sk_SkPath *c_obj, float c_left, float c_top,
+                                float c_right, float c_bottom, int c_dir);
+  sk_SkPath misk_Path_addOval1 (sk_SkPath *c_obj, sk_SkRect c_oval, int c_dir);
+  sk_SkPath misk_Path_addOval2 (sk_SkPath *c_obj, sk_SkRect c_oval, int c_dir,
+                                uint c_start);
+  sk_SkPath misk_Path_addCircle (sk_SkPath *c_obj, float c_x, float c_y,
+                                 float c_radius, int c_dir);
+  sk_SkPath misk_Path_addArc (sk_SkPath *c_obj, sk_SkRect c_oval,
+                              float c_startAngle, float c_sweepAngle);
+  sk_SkPath misk_Path_addRoundRect1 (sk_SkPath *c_obj, sk_SkRect c_rect,
+                                     float c_rx, float c_ry, int c_dir);
+  sk_SkPath misk_Path_addRoundRect2 (sk_SkPath *c_obj, sk_SkRect c_rect,
+                                     float *c_radii, int c_dir);
+  sk_SkPath misk_Path_addRRect1 (sk_SkPath *c_obj, sk_SkRRect c_rrect,
+                                 int c_dir);
+  sk_SkPath misk_Path_addRRect2 (sk_SkPath *c_obj, sk_SkRRect c_rrect,
+                                 int c_dir, uint c_start);
+  sk_SkPath misk_Path_addPoly (sk_SkPath *c_obj, sk_SkPoint *c_pts,
+                               int c_count, bool c_close);
+  sk_SkPath misk_Path_addPath1 (sk_SkPath *c_obj, sk_SkPath *c_src, float c_dx,
+                                float c_dy, uint c_mode);
+  sk_SkPath misk_Path_addPath2 (sk_SkPath *c_obj, sk_SkPath *c_src,
+                                uint c_mode);
+  sk_SkPath misk_Path_addPath3 (sk_SkPath *c_obj, sk_SkPath *c_src,
+                                sk_SkMatrix *c_matrix, uint c_mode);
+  sk_SkPath misk_Path_reverseAddPath (sk_SkPath *c_obj, sk_SkPath *c_src);
+  void misk_Path_offset1 (sk_SkPath *c_obj, float c_dx, float c_dy,
+                          sk_SkPath *c_dst);
+  sk_SkPath misk_Path_offset2 (sk_SkPath *c_obj, float c_dx, float c_dy);
 
   sk_SkPixmap *misk_new_Pixmap ();
   sk_SkPixmap *misk_new_PixmapImageInfo (sk_SkImageInfo *c_info, void *c_addr,

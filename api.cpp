@@ -19,6 +19,7 @@
 #include <include/core/SkMatrix.h>
 #include <include/core/SkPaint.h>
 #include <include/core/SkPath.h>
+#include <include/core/SkPathTypes.h>
 #include <include/core/SkPixmap.h>
 #include <include/core/SkRRect.h>
 #include <include/core/SkRect.h>
@@ -1739,6 +1740,579 @@ extern "C"
   misk_delete_SkPath (sk_SkPath *obj)
   {
     delete reinterpret_cast<SkPath *> (obj);
+  }
+
+  bool
+  misk_Path_isInterpolatable (sk_SkPath *c_obj, sk_SkPath *c_compare)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->isInterpolatable (
+        *reinterpret_cast<SkPath *> (c_compare));
+    return ret;
+  }
+
+  bool
+  misk_Path_interpolate (sk_SkPath *c_obj, sk_SkPath *c_ending, float c_weight,
+                         sk_SkPath *c_out)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->interpolate (
+        *reinterpret_cast<SkPath *> (c_ending), c_weight,
+        reinterpret_cast<SkPath *> (c_out));
+    return ret;
+  }
+
+  int
+  misk_Path_getFillType (sk_SkPath *c_obj)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->getFillType ();
+    return (int)ret;
+  }
+
+  void
+  misk_Path_setFillType (sk_SkPath *c_obj, int c_ft)
+  {
+    reinterpret_cast<SkPath *> (c_obj)->setFillType (SkPathFillType (c_ft));
+  }
+
+  bool
+  misk_Path_isInverseFillType (sk_SkPath *c_obj)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->isInverseFillType ();
+    return ret;
+  }
+
+  void
+  misk_Path_toggleInverseFillType (sk_SkPath *c_obj)
+  {
+    reinterpret_cast<SkPath *> (c_obj)->toggleInverseFillType ();
+  }
+
+  bool
+  misk_Path_isConvex (sk_SkPath *c_obj)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->isConvex ();
+    return ret;
+  }
+
+  bool
+  misk_Path_isOval (sk_SkPath *c_obj, sk_SkRect c_bounds)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->isOval (
+        reinterpret_cast<SkRect *> (&c_bounds));
+    return ret;
+  }
+
+  bool
+  misk_Path_isRRect (sk_SkPath *c_obj, sk_SkRRect c_rrect)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->isRRect (
+        reinterpret_cast<SkRRect *> (&c_rrect));
+    return ret;
+  }
+
+  sk_SkPath
+  misk_Path_reset (sk_SkPath *c_obj)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->reset ();
+    return *(reinterpret_cast<sk_SkPath *> (&ret));
+  }
+
+  sk_SkPath
+  misk_Path_rewind (sk_SkPath *c_obj)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->rewind ();
+    return *(reinterpret_cast<sk_SkPath *> (&ret));
+  }
+
+  bool
+  misk_Path_isEmpty (sk_SkPath *c_obj)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->isEmpty ();
+    return ret;
+  }
+
+  bool
+  misk_Path_isLastContourClosed (sk_SkPath *c_obj)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->isLastContourClosed ();
+    return ret;
+  }
+
+  bool
+  misk_Path_isFinite (sk_SkPath *c_obj)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->isFinite ();
+    return ret;
+  }
+
+  bool
+  misk_Path_isVolatile (sk_SkPath *c_obj)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->isVolatile ();
+    return ret;
+  }
+
+  sk_SkPath
+  misk_Path_setIsVolatile (sk_SkPath *c_obj, bool c_isVolatile)
+  {
+    auto ret
+        = reinterpret_cast<SkPath *> (c_obj)->setIsVolatile (c_isVolatile);
+    return *(reinterpret_cast<sk_SkPath *> (&ret));
+  }
+
+  int
+  misk_Path_countPoints (sk_SkPath *c_obj)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->countPoints ();
+    return ret;
+  }
+
+  sk_SkPoint
+  misk_Path_getPoint (sk_SkPath *c_obj, int c_index)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->getPoint (c_index);
+    return *(reinterpret_cast<sk_SkPoint *> (&ret));
+  }
+
+  int
+  misk_Path_getPoints (sk_SkPath *c_obj, sk_SkPoint *c_points, int c_max)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->getPoints (
+        (SkPoint *)c_points, c_max);
+    return ret;
+  }
+
+  int
+  misk_Path_countVerbs (sk_SkPath *c_obj)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->countVerbs ();
+    return ret;
+  }
+
+  int
+  misk_Path_getVerbs (sk_SkPath *c_obj, uchar *c_verbs, int c_max)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->getVerbs (
+        (unsigned char *)c_verbs, c_max);
+    return ret;
+  }
+
+  unsigned long
+  misk_Path_approximateBytesUsed (sk_SkPath *c_obj)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->approximateBytesUsed ();
+    return ret;
+  }
+
+  void
+  misk_Path_swap (sk_SkPath *c_obj, sk_SkPath *c_other)
+  {
+    reinterpret_cast<SkPath *> (c_obj)->swap (
+        *reinterpret_cast<SkPath *> (c_other));
+  }
+
+  sk_SkRect
+  misk_Path_getBounds (sk_SkPath *c_obj)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->getBounds ();
+    return *(reinterpret_cast<sk_SkRect *> (&ret));
+  }
+
+  void
+  misk_Path_updateBoundsCache (sk_SkPath *c_obj)
+  {
+    reinterpret_cast<SkPath *> (c_obj)->updateBoundsCache ();
+  }
+
+  sk_SkRect
+  misk_Path_computeTightBounds (sk_SkPath *c_obj)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->computeTightBounds ();
+    return *(reinterpret_cast<sk_SkRect *> (&ret));
+  }
+
+  bool
+  misk_Path_conservativelyContainsRect (sk_SkPath *c_obj, sk_SkRect c_rect)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->conservativelyContainsRect (
+        *reinterpret_cast<SkRect *> (&c_rect));
+    return ret;
+  }
+
+  void
+  misk_Path_incReserve (sk_SkPath *c_obj, int c_extraPtCount,
+                        int c_extraVerbCount, int c_extraConicCount)
+  {
+    reinterpret_cast<SkPath *> (c_obj)->incReserve (
+        c_extraPtCount, c_extraVerbCount, c_extraConicCount);
+  }
+
+  sk_SkPath
+  misk_Path_moveToPoint (sk_SkPath *c_obj, float c_x, float c_y)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->moveTo (c_x, c_y);
+    return *(reinterpret_cast<sk_SkPath *> (&ret));
+  }
+
+  sk_SkPath
+  misk_Path_moveTo (sk_SkPath *c_obj, sk_SkPoint *c_p)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->moveTo (
+        *reinterpret_cast<SkPoint *> (c_p));
+    return *(reinterpret_cast<sk_SkPath *> (&ret));
+  }
+
+  sk_SkPath
+  misk_Path_rMoveTo (sk_SkPath *c_obj, float c_dx, float c_dy)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->rMoveTo (c_dx, c_dy);
+    return *(reinterpret_cast<sk_SkPath *> (&ret));
+  }
+
+  sk_SkPath
+  misk_Path_lineTo (sk_SkPath *c_obj, float c_x, float c_y)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->lineTo (c_x, c_y);
+    return *(reinterpret_cast<sk_SkPath *> (&ret));
+  }
+
+  sk_SkPath
+  misk_Path_lineToPoint (sk_SkPath *c_obj, sk_SkPoint *c_p)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->lineTo (
+        *reinterpret_cast<SkPoint *> (c_p));
+    return *(reinterpret_cast<sk_SkPath *> (&ret));
+  }
+
+  sk_SkPath
+  misk_Path_rLineTo (sk_SkPath *c_obj, float c_dx, float c_dy)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->rLineTo (c_dx, c_dy);
+    return *(reinterpret_cast<sk_SkPath *> (&ret));
+  }
+
+  sk_SkPath
+  misk_Path_quadTo (sk_SkPath *c_obj, float c_x1, float c_y1, float c_x2,
+                    float c_y2)
+  {
+    auto ret
+        = reinterpret_cast<SkPath *> (c_obj)->quadTo (c_x1, c_y1, c_x2, c_y2);
+    return *(reinterpret_cast<sk_SkPath *> (&ret));
+  }
+
+  sk_SkPath
+  misk_Path_quadToPoint (sk_SkPath *c_obj, sk_SkPoint *c_p1, sk_SkPoint *c_p2)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->quadTo (
+        *reinterpret_cast<SkPoint *> (c_p1),
+        *reinterpret_cast<SkPoint *> (c_p2));
+    return *(reinterpret_cast<sk_SkPath *> (&ret));
+  }
+
+  sk_SkPath
+  misk_Path_rQuadTo (sk_SkPath *c_obj, float c_dx1, float c_dy1, float c_dx2,
+                     float c_dy2)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->rQuadTo (c_dx1, c_dy1,
+                                                            c_dx2, c_dy2);
+    return *(reinterpret_cast<sk_SkPath *> (&ret));
+  }
+
+  sk_SkPath
+  misk_Path_conicTo (sk_SkPath *c_obj, float c_x1, float c_y1, float c_x2,
+                     float c_y2, float c_w)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->conicTo (c_x1, c_y1, c_x2,
+                                                            c_y2, c_w);
+    return *(reinterpret_cast<sk_SkPath *> (&ret));
+  }
+
+  sk_SkPath
+  misk_Path_conicToPoints (sk_SkPath *c_obj, sk_SkPoint *c_p1,
+                           sk_SkPoint *c_p2, float c_w)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->conicTo (
+        *reinterpret_cast<SkPoint *> (c_p1),
+        *reinterpret_cast<SkPoint *> (c_p2), c_w);
+    return *(reinterpret_cast<sk_SkPath *> (&ret));
+  }
+
+  sk_SkPath
+  misk_Path_rConicTo (sk_SkPath *c_obj, float c_dx1, float c_dy1, float c_dx2,
+                      float c_dy2, float c_w)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->rConicTo (
+        c_dx1, c_dy1, c_dx2, c_dy2, c_w);
+    return *(reinterpret_cast<sk_SkPath *> (&ret));
+  }
+
+  sk_SkPath
+  misk_Path_cubicTo (sk_SkPath *c_obj, float c_x1, float c_y1, float c_x2,
+                     float c_y2, float c_x3, float c_y3)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->cubicTo (c_x1, c_y1, c_x2,
+                                                            c_y2, c_x3, c_y3);
+    return *(reinterpret_cast<sk_SkPath *> (&ret));
+  }
+
+  sk_SkPath
+  misk_Path_cubicToPoints (sk_SkPath *c_obj, sk_SkPoint *c_p1,
+                           sk_SkPoint *c_p2, sk_SkPoint *c_p3)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->cubicTo (
+        *reinterpret_cast<SkPoint *> (c_p1),
+        *reinterpret_cast<SkPoint *> (c_p2),
+        *reinterpret_cast<SkPoint *> (c_p3));
+    return *(reinterpret_cast<sk_SkPath *> (&ret));
+  }
+
+  sk_SkPath
+  misk_Path_rCubicTo (sk_SkPath *c_obj, float c_dx1, float c_dy1, float c_dx2,
+                      float c_dy2, float c_dx3, float c_dy3)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->rCubicTo (
+        c_dx1, c_dy1, c_dx2, c_dy2, c_dx3, c_dy3);
+    return *(reinterpret_cast<sk_SkPath *> (&ret));
+  }
+
+  sk_SkPath
+  misk_Path_arcTo1 (sk_SkPath *c_obj, sk_SkRect c_oval, float c_startAngle,
+                    float c_sweepAngle, bool c_forceMoveTo)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->arcTo (
+        *reinterpret_cast<SkRect *> (&c_oval), c_startAngle, c_sweepAngle,
+        c_forceMoveTo);
+    return *(reinterpret_cast<sk_SkPath *> (&ret));
+  }
+
+  sk_SkPath
+  misk_Path_arcTo2 (sk_SkPath *c_obj, float c_x1, float c_y1, float c_x2,
+                    float c_y2, float c_radius)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->arcTo (c_x1, c_y1, c_x2,
+                                                          c_y2, c_radius);
+    return *(reinterpret_cast<sk_SkPath *> (&ret));
+  }
+
+  sk_SkPath
+  misk_Path_arcTo3 (sk_SkPath *c_obj, sk_SkPoint c_p1, sk_SkPoint c_p2,
+                    float c_radius)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->arcTo (
+        *reinterpret_cast<SkPoint *> (&c_p1),
+        *reinterpret_cast<SkPoint *> (&c_p2), c_radius);
+    return *(reinterpret_cast<sk_SkPath *> (&ret));
+  }
+
+  sk_SkPath
+  misk_Path_arcTo4 (sk_SkPath *c_obj, float c_rx, float c_ry,
+                    float c_xAxisRotate, uint c_largeArc, int c_sweep,
+                    float c_x, float c_y)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->arcTo (
+        c_rx, c_ry, c_xAxisRotate, SkPath::ArcSize (c_largeArc),
+        SkPathDirection (c_sweep), c_x, c_y);
+    return *(reinterpret_cast<sk_SkPath *> (&ret));
+  }
+
+  sk_SkPath
+  misk_Path_arcTo5 (sk_SkPath *c_obj, sk_SkPoint c_r, float c_xAxisRotate,
+                    uint c_largeArc, int c_sweep, sk_SkPoint c_xy)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->arcTo (
+        *reinterpret_cast<SkPoint *> (&c_r), c_xAxisRotate,
+        SkPath::ArcSize (c_largeArc), SkPathDirection (c_sweep),
+        *reinterpret_cast<SkPoint *> (&c_xy));
+    return *(reinterpret_cast<sk_SkPath *> (&ret));
+  }
+
+  sk_SkPath
+  misk_Path_rArcTo (sk_SkPath *c_obj, float c_rx, float c_ry,
+                    float c_xAxisRotate, uint c_largeArc, int c_sweep,
+                    float c_dx, float c_dy)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->rArcTo (
+        c_rx, c_ry, c_xAxisRotate, SkPath::ArcSize (c_largeArc),
+        SkPathDirection (c_sweep), c_dx, c_dy);
+    return *(reinterpret_cast<sk_SkPath *> (&ret));
+  }
+
+  sk_SkPath
+  misk_Path_close (sk_SkPath *c_obj)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->close ();
+    return *(reinterpret_cast<sk_SkPath *> (&ret));
+  }
+
+  bool
+  misk_Path_isRect (sk_SkPath *c_obj, sk_SkRect *c_rect, bool *c_isClosed,
+                    int *c_direction)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->isRect (
+        reinterpret_cast<SkRect *> (c_rect), c_isClosed,
+        (SkPathDirection *)c_direction);
+    return ret;
+  }
+
+  sk_SkPath
+  misk_Path_addRect1 (sk_SkPath *c_obj, sk_SkRect c_rect, int c_dir,
+                      uint c_start)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->addRect (
+        *reinterpret_cast<SkRect *> (&c_rect), SkPathDirection (c_dir),
+        c_start);
+    return *(reinterpret_cast<sk_SkPath *> (&ret));
+  }
+
+  sk_SkPath
+  misk_Path_addRect2 (sk_SkPath *c_obj, sk_SkRect c_rect, int c_dir)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->addRect (
+        *reinterpret_cast<SkRect *> (&c_rect), SkPathDirection (c_dir));
+    return *(reinterpret_cast<sk_SkPath *> (&ret));
+  }
+
+  sk_SkPath
+  misk_Path_addRect3 (sk_SkPath *c_obj, float c_left, float c_top,
+                      float c_right, float c_bottom, int c_dir)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->addRect (
+        c_left, c_top, c_right, c_bottom, SkPathDirection (c_dir));
+    return *(reinterpret_cast<sk_SkPath *> (&ret));
+  }
+
+  sk_SkPath
+  misk_Path_addOval1 (sk_SkPath *c_obj, sk_SkRect c_oval, int c_dir)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->addOval (
+        *reinterpret_cast<SkRect *> (&c_oval), SkPathDirection (c_dir));
+    return *(reinterpret_cast<sk_SkPath *> (&ret));
+  }
+
+  sk_SkPath
+  misk_Path_addOval2 (sk_SkPath *c_obj, sk_SkRect c_oval, int c_dir,
+                      uint c_start)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->addOval (
+        *reinterpret_cast<SkRect *> (&c_oval), SkPathDirection (c_dir),
+        c_start);
+    return *(reinterpret_cast<sk_SkPath *> (&ret));
+  }
+
+  sk_SkPath
+  misk_Path_addCircle (sk_SkPath *c_obj, float c_x, float c_y, float c_radius,
+                       int c_dir)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->addCircle (
+        c_x, c_y, c_radius, SkPathDirection (c_dir));
+    return *(reinterpret_cast<sk_SkPath *> (&ret));
+  }
+
+  sk_SkPath
+  misk_Path_addArc (sk_SkPath *c_obj, sk_SkRect c_oval, float c_startAngle,
+                    float c_sweepAngle)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->addArc (
+        *reinterpret_cast<SkRect *> (&c_oval), c_startAngle, c_sweepAngle);
+    return *(reinterpret_cast<sk_SkPath *> (&ret));
+  }
+
+  sk_SkPath
+  misk_Path_addRoundRect1 (sk_SkPath *c_obj, sk_SkRect c_rect, float c_rx,
+                           float c_ry, int c_dir)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->addRoundRect (
+        *reinterpret_cast<SkRect *> (&c_rect), c_rx, c_ry,
+        SkPathDirection (c_dir));
+    return *(reinterpret_cast<sk_SkPath *> (&ret));
+  }
+
+  sk_SkPath
+  misk_Path_addRoundRect2 (sk_SkPath *c_obj, sk_SkRect c_rect, float *c_radii,
+                           int c_dir)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->addRoundRect (
+        *reinterpret_cast<SkRect *> (&c_rect), (float *)c_radii,
+        SkPathDirection (c_dir));
+    return *(reinterpret_cast<sk_SkPath *> (&ret));
+  }
+
+  sk_SkPath
+  misk_Path_addRRect1 (sk_SkPath *c_obj, sk_SkRRect c_rrect, int c_dir)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->addRRect (
+        *reinterpret_cast<SkRRect *> (&c_rrect), SkPathDirection (c_dir));
+    return *(reinterpret_cast<sk_SkPath *> (&ret));
+  }
+
+  sk_SkPath
+  misk_Path_addRRect2 (sk_SkPath *c_obj, sk_SkRRect c_rrect, int c_dir,
+                       uint c_start)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->addRRect (
+        *reinterpret_cast<SkRRect *> (&c_rrect), SkPathDirection (c_dir),
+        c_start);
+    return *(reinterpret_cast<sk_SkPath *> (&ret));
+  }
+
+  sk_SkPath
+  misk_Path_addPoly (sk_SkPath *c_obj, sk_SkPoint *c_pts, int c_count,
+                     bool c_close)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->addPoly ((SkPoint *)c_pts,
+                                                            c_count, c_close);
+    return *(reinterpret_cast<sk_SkPath *> (&ret));
+  }
+
+  sk_SkPath
+  misk_Path_addPath1 (sk_SkPath *c_obj, sk_SkPath *c_src, float c_dx,
+                      float c_dy, uint c_mode)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->addPath (
+        *reinterpret_cast<SkPath *> (c_src), c_dx, c_dy,
+        SkPath::AddPathMode (c_mode));
+    return *(reinterpret_cast<sk_SkPath *> (&ret));
+  }
+
+  sk_SkPath
+  misk_Path_addPath2 (sk_SkPath *c_obj, sk_SkPath *c_src, uint c_mode)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->addPath (
+        *reinterpret_cast<SkPath *> (c_src), SkPath::AddPathMode (c_mode));
+    return *(reinterpret_cast<sk_SkPath *> (&ret));
+  }
+
+  sk_SkPath
+  misk_Path_addPath3 (sk_SkPath *c_obj, sk_SkPath *c_src,
+                      sk_SkMatrix *c_matrix, uint c_mode)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->addPath (
+        *reinterpret_cast<SkPath *> (c_src),
+        *reinterpret_cast<SkMatrix *> (c_matrix),
+        SkPath::AddPathMode (c_mode));
+    return *(reinterpret_cast<sk_SkPath *> (&ret));
+  }
+
+  sk_SkPath
+  misk_Path_reverseAddPath (sk_SkPath *c_obj, sk_SkPath *c_src)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->reverseAddPath (
+        *reinterpret_cast<SkPath *> (c_src));
+    return *(reinterpret_cast<sk_SkPath *> (&ret));
+  }
+
+  void
+  misk_Path_offset1 (sk_SkPath *c_obj, float c_dx, float c_dy,
+                     sk_SkPath *c_dst)
+  {
+    reinterpret_cast<SkPath *> (c_obj)->offset (
+        c_dx, c_dy, reinterpret_cast<SkPath *> (c_dst));
+  }
+
+  sk_SkPath
+  misk_Path_offset2 (sk_SkPath *c_obj, float c_dx, float c_dy)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->offset (c_dx, c_dy);
+    return *(reinterpret_cast<sk_SkPath *> (&ret));
   }
 
   sk_SkPixmap *

@@ -9,6 +9,8 @@
     { "name": "SkColorType" },
     { "name": "SkFontHinting" },
     { "name": "SkFilterMode" },
+    { "name": "SkPathDirection" },
+    { "name": "SkPathFillType" },
     { "name": "SkPixelGeometry" },
     { "name": "SkTextEncoding" },
     { "name": "skgpu::Protected" }
@@ -434,6 +436,96 @@
         { "name": "ArcSize" },
         { "name": "SegmentMask" },
         { "name": "Verb" }
+      ],
+      "methods": [
+        { "name": "isInterpolatable" },
+        { "name": "interpolate" },
+        { "name": "getFillType" },
+        { "name": "setFillType" },
+        { "name": "isInverseFillType" },
+        { "name": "toggleInverseFillType" },
+        { "name": "isConvex" },
+        { "name": "isOval" },
+        { "name": "isRRect" },
+        { "name": "reset" },
+        { "name": "rewind" },
+        { "name": "isEmpty" },
+        { "name": "isLastContourClosed" },
+        { "name": "isFinite" },
+        { "name": "isVolatile" },
+        { "name": "setIsVolatile" },
+        // { "name": "isLine" },
+        { "name": "countPoints" },
+        { "name": "getPoint" },
+        { "name": "getPoints" },
+        { "name": "countVerbs" },
+        { "name": "getVerbs" },
+        { "name": "approximateBytesUsed" },
+        { "name": "swap" },
+        { "name": "getBounds" },
+        { "name": "updateBoundsCache" },
+        { "name": "computeTightBounds" },
+        { "name": "conservativelyContainsRect" },
+        { "name": "incReserve" },
+        { "name": "moveTo", "overloads": [{ "suffix": "Point" }, {}] },
+        { "name": "rMoveTo" },
+        { "name": "lineTo", "overloads": [{}, { "suffix": "Point" }] },
+        { "name": "rLineTo" },
+        { "name": "quadTo", "overloads": [{}, { "suffix": "Point" }] },
+        { "name": "rQuadTo" },
+        { "name": "conicTo", "overloads": [{}, { "suffix": "Points" }] },
+        { "name": "rConicTo" },
+        { "name": "cubicTo", "overloads": [{}, { "suffix": "Points" }] },
+        { "name": "rCubicTo" },
+        {
+          "name": "arcTo",
+          "overloads": [
+            { "suffix": "1" },
+            { "suffix": "2" },
+            { "suffix": "3" },
+            { "suffix": "4" },
+            { "suffix": "5" }
+          ]
+        },
+        { "name": "rArcTo" },
+        { "name": "close" },
+        {
+          "name": "isRect",
+          "overloads": [
+            { "params": [{ "out": true }, { "out": true }, { "out": true }] }
+          ]
+        },
+        {
+          "name": "addRect",
+          "overloads": [{ "suffix": "1" }, { "suffix": "2" }, { "suffix": "3" }]
+        },
+        {
+          "name": "addOval",
+          "overloads": [{ "suffix": "1" }, { "suffix": "2" }]
+        },
+        { "name": "addCircle" },
+        { "name": "addArc" },
+        {
+          "name": "addRoundRect",
+          "overloads": [{ "suffix": "1" }, { "suffix": "2" }]
+        },
+        {
+          "name": "addRRect",
+          "overloads": [{ "suffix": "1" }, { "suffix": "2" }]
+        },
+        {
+          "name": "addPoly",
+          "overloads": [{}, null]
+        },
+        {
+          "name": "addPath",
+          "overloads": [{ "suffix": "1" }, { "suffix": "2" }, { "suffix": "3" }]
+        },
+        { "name": "reverseAddPath" },
+        {
+          "name": "offset",
+          "overloads": [{ "suffix": "1" }, { "suffix": "2" }]
+        }
       ]
     },
 

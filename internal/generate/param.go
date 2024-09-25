@@ -55,8 +55,8 @@ func (p *param) enrich2(api api) {
 	p.typ = mustTypFromClangType(p.clangType, api, p.templateRef)
 	p.typGoName = p.typ.goName
 
-	if p.typ.isPointer && p.typ.subTyp.record != nil {
-		if p.typ.subTyp.record.NoWrapper && p.Out {
+	if p.typ.isPointer && (p.typ.subTyp.record != nil || p.typ.subTyp.enum != nil || p.typ.subTyp.isPrimitive) {
+		if p.Out {
 			p.typGoName = "*" + p.typGoName
 		}
 	}
@@ -68,6 +68,17 @@ func (p *param) enrich2(api api) {
 		p.cgoVar = fmt.Sprintf("%s := C.%s(%s)", p.cName, p.typ.cName, p.goName)
 		p.cParam = fmt.Sprintf("%s %s", p.typ.cName, p.cName)
 		p.cppArg = p.cName
+
+	} else if p.typ.isPointer && p.typ.subTyp.isPrimitive && p.typ.goName != "string" {
+		p.cgoVar = fmt.Sprintf("%s := (*C.%s)(%s)", p.cName, p.typ.subTyp.cName, p.goName)
+		p.cParam = fmt.Sprintf("%s %s", p.typ.cName, p.cName)
+		p.cppArg = p.cName
+
+	} else if p.typ.isPointer && p.typ.subTyp.enum != nil {
+		cType := p.typ.subTyp.enum.cType.cName
+		p.cgoVar = fmt.Sprintf("%s := (*C.%s)(%s)", p.cName, cType, p.goName)
+		p.cParam = fmt.Sprintf("%s *%s", cType, p.cName)
+		p.cppArg = fmt.Sprintf("(%s)%s", p.typ.cppName, p.cName)
 
 	} else if p.typ.enum != nil {
 		cType := p.typ.enum.cType.cName
@@ -90,9 +101,12 @@ func (p *param) enrich2(api api) {
 	} else if p.typ.isArray {
 		p.cgoVar = fmt.Sprintf("%s := (*C.%s)(unsafe.Pointer(&%s[0]))", p.cName, p.typ.subTyp.cName, p.goName)
 		if p.typ.goName == "string" {
-			p.cgoVar = fmt.Sprintf(`%s := C.CString(%s)
-			defer C.free(unsafe.Pointer(%s))`,
-				p.cName, p.goName, p.cName)
+			if p.typ.cppName == "uint8_t[]" {
+				p.cgoVar = fmt.Sprintf("%s := (*C.uchar)(unsafe.Pointer(C.CString(%s)))", p.cName, p.goName)
+			} else {
+				p.cgoVar = fmt.Sprintf("%s := C.CString(%s)", p.cName, p.goName)
+			}
+			p.cgoVar += fmt.Sprintf("\ndefer C.free(unsafe.Pointer(%s))", p.cName)
 		}
 		p.cParam = fmt.Sprintf("%s *%s", p.typ.subTyp.cName, p.cName)
 		p.cppArg = fmt.Sprintf("(%s*)%s", p.typ.subTyp.cppName, p.cName)

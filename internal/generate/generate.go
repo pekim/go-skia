@@ -20,6 +20,7 @@ var headerFiles = []string{
 	"include/core/SkMatrix.h",
 	"include/core/SkPaint.h",
 	"include/core/SkPath.h",
+	"include/core/SkPathTypes.h",
 	"include/core/SkPixmap.h",
 	"include/private/base/SkPoint_impl.h",
 	"include/core/SkRect.h",
