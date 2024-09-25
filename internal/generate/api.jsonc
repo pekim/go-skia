@@ -594,7 +594,7 @@
     { "name": "GrGLMakeNativeInterface" },
     { "name": "SkColorSetARGB" },
     { "name": "SkColorSetA" },
-    // { "name": "SkImages::DeferredFromEncodedData" },
+    { "name": "SkImages::DeferredFromEncodedData" },
     { "name": "SkImages::RasterFromData" },
     { "name": "SkPreMultiplyARGB" },
     { "name": "SkPreMultiplyColor" },

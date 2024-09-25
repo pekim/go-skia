@@ -2265,6 +2265,19 @@ extern "C"
   }
 
   sk_SkImage *
+  misk_SkImagesDeferredFromEncodedData (sk_SkData *c_encoded, int *c_alphaType)
+  {
+    auto ret
+        = SkImages::DeferredFromEncodedData (
+              sk_ref_sp (reinterpret_cast<SkData *> (c_encoded)),
+              c_alphaType == nullptr
+                  ? std::nullopt
+                  : std::optional<SkAlphaType> ((SkAlphaType)*c_alphaType))
+              .release ();
+    return reinterpret_cast<sk_SkImage *> (ret);
+  }
+
+  sk_SkImage *
   misk_SkImagesRasterFromData (sk_SkImageInfo *c_info, sk_SkData *c_pixels,
                                ulong c_rowBytes)
   {

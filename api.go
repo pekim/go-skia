@@ -6050,6 +6050,33 @@ func SkColorSetA(c Color, a uint32) Color {
 }
 
 /*
+	Return a SkImage using the encoded data, but attempts to defer decoding until the
+	image is actually used/drawn. This deferral allows the system to cache the result, either on the
+	CPU or on the GPU, depending on where the image is drawn. If memory is low, the cache may
+	be purged, causing the next draw of the image to have to re-decode.
+
+	If alphaType is nullopt, the image's alpha type will be chosen automatically based on the
+	image format. Transparent images will default to kPremul_SkAlphaType. If alphaType contains
+	kPremul_SkAlphaType or kUnpremul_SkAlphaType, that alpha type will be used. Forcing opaque
+	(passing kOpaque_SkAlphaType) is not allowed, and will return nullptr.
+
+	If the encoded format is not supported, nullptr is returned.
+
+	If possible, clients should use SkCodecs::DeferredImage instead.
+
+	@param encoded  the encoded data
+	@return         created SkImage, or nullptr
+
+example: https://fiddle.skia.org/c/@Image_DeferredFromEncodedData
+*/
+func SkImagesDeferredFromEncodedData(encoded Data, alphaType *AlphaType) Image {
+	c_encoded := encoded.sk
+	c_alphaType := (*C.int)(alphaType)
+	retC := C.misk_SkImagesDeferredFromEncodedData(c_encoded, c_alphaType)
+	return Image{sk: retC}
+}
+
+/*
 Creates CPU-backed SkImage from pixel data described by info.
 The pixels data will *not* be copied.
 

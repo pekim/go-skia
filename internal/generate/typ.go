@@ -18,6 +18,7 @@ type typ struct {
 	isPointer         bool
 	isVoid            bool
 	isSmartPointer    bool
+	isOptional        bool
 	record            *record
 	enum              *enum
 	typedef           *typedef
@@ -117,6 +118,14 @@ func typFromClangType(cType clang.Type, api api) (typ, error) {
 		}
 		typ = typ_
 		typ.isSmartPointer = true
+
+	} else if strings.HasPrefix(typ.cppName, "std::optional<") {
+		typ_, err := typFromClangType(cType.TemplateArgumentAsType(0), api)
+		if err != nil {
+			return typ, err
+		}
+		typ = typ_
+		typ.isOptional = true
 
 	} else {
 		switch cType.Kind() {

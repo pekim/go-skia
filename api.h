@@ -910,6 +910,8 @@ extern "C"
   const sk_GrGLInterface *misk_GrGLMakeNativeInterface ();
   uint misk_SkColorSetARGB (uint c_a, uint c_r, uint c_g, uint c_b);
   uint misk_SkColorSetA (uint c_c, uint c_a);
+  sk_SkImage *misk_SkImagesDeferredFromEncodedData (sk_SkData *c_encoded,
+                                                    int *c_alphaType);
   sk_SkImage *misk_SkImagesRasterFromData (sk_SkImageInfo *c_info,
                                            sk_SkData *c_pixels,
                                            ulong c_rowBytes);

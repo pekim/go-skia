@@ -52,6 +52,9 @@ func (p *param) enrich2(api api) {
 			p.typGoName = "*" + p.typGoName
 		}
 	}
+	if p.typ.isOptional {
+		p.typGoName = "*" + p.typGoName
+	}
 
 	if p.typ.isPrimitive {
 		p.cgoVar = fmt.Sprintf("%s := C.%s(%s)", p.cName, p.typ.cName, p.goName)
@@ -60,9 +63,16 @@ func (p *param) enrich2(api api) {
 
 	} else if p.typ.enum != nil {
 		cType := p.typ.enum.cType.cName
-		p.cgoVar = fmt.Sprintf("%s := C.%s(%s)", p.cName, cType, p.goName)
-		p.cParam = fmt.Sprintf("%s %s", cType, p.cName)
-		p.cppArg = fmt.Sprintf("%s(%s)", p.typ.cppName, p.cName)
+		if p.typ.isOptional {
+			p.cgoVar = fmt.Sprintf("%s := (*C.%s)(%s)", p.cName, cType, p.goName)
+			p.cParam = fmt.Sprintf("%s *%s", cType, p.cName)
+			p.cppArg = fmt.Sprintf("%s == nullptr ? std::nullopt : std::optional<%s> ((%s)*%s)",
+				p.cName, p.typ.cppName, p.typ.cppName, p.cName)
+		} else {
+			p.cgoVar = fmt.Sprintf("%s := C.%s(%s)", p.cName, cType, p.goName)
+			p.cParam = fmt.Sprintf("%s %s", cType, p.cName)
+			p.cppArg = fmt.Sprintf("%s(%s)", p.typ.cppName, p.cName)
+		}
 
 	} else if p.typ.typedef != nil {
 		p.cgoVar = fmt.Sprintf("%s := C.%s(%s)", p.cName, p.typ.typedef.cName, p.goName)
