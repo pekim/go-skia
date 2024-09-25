@@ -21,7 +21,7 @@ func (t *typedef) enrich1(cursor clang.Cursor) {
 }
 
 func (t *typedef) enrich2(api api) {
-	t.cType = mustTypFromClangType(t.clangType, api)
+	t.cType = mustTypFromClangType(t.clangType, api, "")
 	t.cName = t.cType.cName
 	t.enriched = true
 }

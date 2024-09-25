@@ -20,10 +20,18 @@ type callableOverload struct {
 	cParamsDecl       string
 	cppArgs           string
 	resultType        clang.Type
+	templateRef       string
 	retrn             typ
 }
 
 func (o *callableOverload) enrich1(callable *callable, record *record, cursor clang.Cursor) {
+	cursor.Visit(func(cursor, parent clang.Cursor) (status clang.ChildVisitResult) {
+		if cursor.Kind() == clang.Cursor_TemplateRef {
+			o.templateRef = cursor.Spelling()
+		}
+		return clang.ChildVisit_Continue
+	})
+
 	o.cppName = callable.CppName
 	o.record = record
 	o.isStatic = cursor.CXXMethod_IsStatic()
@@ -64,7 +72,7 @@ func (o *callableOverload) enrich2(api api) {
 		param.enrich2(api)
 	}
 	o.setCParamsDecl()
-	o.retrn = mustTypFromClangType(o.resultType, api)
+	o.retrn = mustTypFromClangType(o.resultType, api, o.templateRef)
 }
 
 func (o *callableOverload) setCParamsDecl() {

@@ -30,7 +30,7 @@ func newField(cursor clang.Cursor) field {
 }
 
 func (f *field) enrich2(api api) {
-	typ, err := typFromClangType(f.clangType, api)
+	typ, err := typFromClangType(f.clangType, api, "")
 	if err == nil && typ.isPrimitive {
 		f.cType = typ.cName
 		f.goType = typ.goName

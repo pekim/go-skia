@@ -25,7 +25,7 @@ type typ struct {
 	subTyp            *typ
 }
 
-func typFromClangType(cType clang.Type, api api) (typ, error) {
+func typFromClangType(cType clang.Type, api api, templateRef string) (typ, error) {
 	cName := strings.TrimPrefix(cType.Spelling(), "const ")
 	typ := typ{
 		cppName: cName,
@@ -39,7 +39,7 @@ func typFromClangType(cType clang.Type, api api) (typ, error) {
 
 	switch cType.Kind() {
 	case clang.Type_Pointer:
-		subTyp, err := typFromClangType(cType.PointeeType(), api)
+		subTyp, err := typFromClangType(cType.PointeeType(), api, "")
 		if err != nil {
 			return typ, err
 		}
@@ -52,7 +52,7 @@ func typFromClangType(cType clang.Type, api api) (typ, error) {
 		return typ, nil
 
 	case clang.Type_LValueReference:
-		subTyp, err := typFromClangType(cType.PointeeType(), api)
+		subTyp, err := typFromClangType(cType.PointeeType(), api, "")
 		if err != nil {
 			return typ, err
 		}
@@ -62,7 +62,7 @@ func typFromClangType(cType clang.Type, api api) (typ, error) {
 		return typ, nil
 
 	case clang.Type_IncompleteArray:
-		subTyp, err := typFromClangType(cType.ArrayElementType(), api)
+		subTyp, err := typFromClangType(cType.ArrayElementType(), api, "")
 		if err != nil {
 			return typ, err
 		}
@@ -105,22 +105,16 @@ func typFromClangType(cType clang.Type, api api) (typ, error) {
 		typ.typedef = typedef
 		typ.goName = typ.typedef.goName
 
-	} else if strings.HasPrefix(typ.cppName, "sk_sp<") || strings.HasPrefix(typ.cppName, "std::unique_ptr<") {
-		// A type like "sk_sp<SkSomeClass>" is of kind clang.Type_Elaborated.
-		// Its CanonicalType's kind is clang.Type_Record.
-		// The template argument 'SkSomeClass' can be got, but it is not clear how to get the 'sk_sp'
-		// So determine it's a smart pointer from the C name starting with "sk_sp<".
-		//
-		// Treat types like std::unique_ptr<SkSomeClass> similarly.
-		typ_, err := typFromClangType(cType.TemplateArgumentAsType(0), api)
+	} else if templateRef == "sk_sp" || templateRef == "unique_ptr" {
+		typ_, err := typFromClangType(cType.TemplateArgumentAsType(0), api, "")
 		if err != nil {
 			return typ, err
 		}
 		typ = typ_
 		typ.isSmartPointer = true
 
-	} else if strings.HasPrefix(typ.cppName, "std::optional<") {
-		typ_, err := typFromClangType(cType.TemplateArgumentAsType(0), api)
+	} else if templateRef == "optional" {
+		typ_, err := typFromClangType(cType.TemplateArgumentAsType(0), api, "")
 		if err != nil {
 			return typ, err
 		}
@@ -173,7 +167,7 @@ func typFromClangType(cType clang.Type, api api) (typ, error) {
 			typ.isPrimitive = true
 
 		case clang.Type_Elaborated:
-			typ_, err := typFromClangType(cType.CanonicalType(), api)
+			typ_, err := typFromClangType(cType.CanonicalType(), api, "")
 			if err != nil {
 				return typ, err
 			}
@@ -187,8 +181,8 @@ func typFromClangType(cType clang.Type, api api) (typ, error) {
 	return typ, nil
 }
 
-func mustTypFromClangType(cType clang.Type, api api) typ {
-	typ, err := typFromClangType(cType, api)
+func mustTypFromClangType(cType clang.Type, api api, templateRef string) typ {
+	typ, err := typFromClangType(cType, api, templateRef)
 	fatalOnError(err)
 	return typ
 }

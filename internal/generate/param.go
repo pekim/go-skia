@@ -7,17 +7,18 @@ import (
 )
 
 type param struct {
-	cppName   string
-	cName     string
-	cgoVar    string
-	cParam    string
-	cppArg    string
-	goName    string
-	clangType clang.Type
-	typ       typ
-	typGoName string
-	ValueNil  bool `json:"valueNil"`
-	Out       bool `json:"out"` // for an "out" parameter, generate as pointer
+	cppName     string
+	cName       string
+	cgoVar      string
+	cParam      string
+	cppArg      string
+	goName      string
+	templateRef string
+	clangType   clang.Type
+	typ         typ
+	typGoName   string
+	ValueNil    bool `json:"valueNil"`
+	Out         bool `json:"out"` // for an "out" parameter, generate as pointer
 }
 
 func newParam(paramIndex int, cursor clang.Cursor, valueNil bool, out bool) param {
@@ -36,6 +37,13 @@ func newParam(paramIndex int, cursor clang.Cursor, valueNil bool, out bool) para
 		Out:       out,
 	}
 
+	cursor.Visit(func(cursor, parent clang.Cursor) (status clang.ChildVisitResult) {
+		if cursor.Kind() == clang.Cursor_TemplateRef {
+			p.templateRef = cursor.Spelling()
+		}
+		return clang.ChildVisit_Continue
+	})
+
 	return p
 }
 
@@ -44,7 +52,7 @@ func (p *param) enrich2(api api) {
 		return
 	}
 
-	p.typ = mustTypFromClangType(p.clangType, api)
+	p.typ = mustTypFromClangType(p.clangType, api, p.templateRef)
 	p.typGoName = p.typ.goName
 
 	if p.typ.isPointer && p.typ.subTyp.record != nil {

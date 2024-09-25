@@ -65,7 +65,7 @@ func (e *enum) enrich1(record *record, cursor clang.Cursor) {
 }
 
 func (e *enum) enrich2(api api) {
-	e.cType = mustTypFromClangType(e.clangType, api)
+	e.cType = mustTypFromClangType(e.clangType, api, "")
 	e.goType = e.cType.goName
 	e.enriched = true
 }

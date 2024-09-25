@@ -28,7 +28,7 @@ func newVariable(cursor clang.Cursor) variable {
 }
 
 func (v *variable) enrich2(api api) {
-	typ, err := typFromClangType(v.cursor.Type(), api)
+	typ, err := typFromClangType(v.cursor.Type(), api, "")
 	if err == nil {
 		if typ.isPrimitive {
 			v.typeCName = typ.cName
