@@ -7269,6 +7269,19 @@ func (o Surface) GetCanvas() Canvas {
 }
 
 /*
+Calls makeSurface(ImageInfo) with the same ImageInfo as this surface, but with the
+
+	specified width and height.
+*/
+func (o Surface) MakeSurface(width int32, height int32) Surface {
+	c_obj := o.sk
+	c_width := C.int(width)
+	c_height := C.int(height)
+	retC := C.misk_Surface_makeSurface(c_obj, c_width, c_height)
+	return Surface{sk: retC}
+}
+
+/*
 Describes properties and constraints of a given SkSurface. The rendering engine can parse these
 during drawing, and can sometimes optimize its performance (e.g. disabling an expensive
 feature).

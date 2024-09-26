@@ -2753,6 +2753,15 @@ extern "C"
     return reinterpret_cast<sk_SkCanvas *> (ret);
   }
 
+  sk_SkSurface *
+  misk_Surface_makeSurface (sk_SkSurface *c_obj, int c_width, int c_height)
+  {
+    auto ret = reinterpret_cast<SkSurface *> (c_obj)
+                   ->makeSurface (c_width, c_height)
+                   .release ();
+    return reinterpret_cast<sk_SkSurface *> (ret);
+  }
+
   void
   misk_unref_SkSurface (sk_SkSurface *c_obj)
   {

@@ -1040,6 +1040,8 @@ extern "C"
   char *misk_String_data (sk_SkString *c_obj);
 
   sk_SkCanvas *misk_Surface_getCanvas (sk_SkSurface *c_obj);
+  sk_SkSurface *misk_Surface_makeSurface (sk_SkSurface *c_obj, int c_width,
+                                          int c_height);
   void misk_unref_SkSurface (sk_SkSurface *c_obj);
 
   sk_SkSurfaceProps *misk_new_SurfaceProps ();
