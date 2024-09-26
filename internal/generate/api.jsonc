@@ -695,10 +695,23 @@
       "constructors": [{}],
       "methods": [
         { "name": "make" },
-        { "name": "allocRun" }
-        // { "name": "" },
-        // { "name": "" },
-        // { "name": "" }
+        { "name": "allocRun" },
+        { "name": "allocRunPosH" },
+        { "name": "allocRunPos" },
+        {
+          "name": "allocRunText",
+          "overloads": [
+            { "params": [null, null, null, null, null, { "out": true }] }
+          ]
+        },
+        {
+          "name": "allocRunTextPosH",
+          "overloads": [{ "params": [null, null, null, null, { "out": true }] }]
+        },
+        {
+          "name": "allocRunTextPos",
+          "overloads": [{ "params": [null, null, null, { "out": true }] }]
+        }
       ],
       "records": [{ "name": "RunBuffer", "methods": [{ "name": "points" }] }]
     },

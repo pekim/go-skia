@@ -1053,6 +1053,23 @@ extern "C"
   misk_TextBlobBuilder_allocRun (sk_SkTextBlobBuilder *c_obj,
                                  sk_SkFont *c_font, int c_count, float c_x,
                                  float c_y, sk_SkRect c_bounds);
+  sk_SkTextBlobBuilderRunBuffer
+  misk_TextBlobBuilder_allocRunPosH (sk_SkTextBlobBuilder *c_obj,
+                                     sk_SkFont *c_font, int c_count, float c_y,
+                                     sk_SkRect c_bounds);
+  sk_SkTextBlobBuilderRunBuffer
+  misk_TextBlobBuilder_allocRunPos (sk_SkTextBlobBuilder *c_obj,
+                                    sk_SkFont *c_font, int c_count,
+                                    sk_SkRect c_bounds);
+  sk_SkTextBlobBuilderRunBuffer misk_TextBlobBuilder_allocRunText (
+      sk_SkTextBlobBuilder *c_obj, sk_SkFont *c_font, int c_count, float c_x,
+      float c_y, int c_textByteCount, sk_SkRect *c_bounds);
+  sk_SkTextBlobBuilderRunBuffer misk_TextBlobBuilder_allocRunTextPosH (
+      sk_SkTextBlobBuilder *c_obj, sk_SkFont *c_font, int c_count, float c_y,
+      int c_textByteCount, sk_SkRect *c_bounds);
+  sk_SkTextBlobBuilderRunBuffer misk_TextBlobBuilder_allocRunTextPos (
+      sk_SkTextBlobBuilder *c_obj, sk_SkFont *c_font, int c_count,
+      int c_textByteCount, sk_SkRect *c_bounds);
   sk_SkPoint *
   misk_TextBlobBuilderRunBuffer_points (sk_SkTextBlobBuilderRunBuffer *c_obj);
 

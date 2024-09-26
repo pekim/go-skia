@@ -7513,6 +7513,171 @@ func (o TextBlobBuilder) AllocRun(font Font, count int32, x float32, y float32, 
 }
 
 /*
+Returns run with storage for glyphs and positions along baseline. Caller must
+write count glyphs to RunBuffer::glyphs and count scalars to RunBuffer::pos
+before next call to SkTextBlobBuilder.
+
+RunBuffer::utf8text and RunBuffer::clusters should be ignored.
+
+Glyphs share metrics in font.
+
+Glyphs are positioned on a baseline at y, using x-axis positions written by
+caller to RunBuffer::pos.
+
+bounds defines an optional bounding box, used to suppress drawing when SkTextBlob
+bounds does not intersect SkSurface bounds. If bounds is nullptr, SkTextBlob bounds
+is computed from y, RunBuffer::pos, and RunBuffer::glyphs metrics.
+
+@param font    SkFont used for this run
+@param count   number of glyphs
+@param y       vertical offset within the blob
+@param bounds  optional run bounding box
+@return writable glyph buffer and x-axis position buffer
+*/
+func (o TextBlobBuilder) AllocRunPosH(font Font, count int32, y float32, bounds Rect) TextBlobBuilderRunBuffer {
+	c_obj := o.sk
+	c_font := font.sk
+	c_count := C.int(count)
+	c_y := C.float(y)
+	c_bounds := *(*C.sk_SkRect)(unsafe.Pointer(&bounds))
+	retC := C.misk_TextBlobBuilder_allocRunPosH(c_obj, c_font, c_count, c_y, c_bounds)
+	return TextBlobBuilderRunBuffer{sk: &retC}
+}
+
+/*
+Returns run with storage for glyphs and SkPoint positions. Caller must
+write count glyphs to RunBuffer::glyphs and count SkPoint to RunBuffer::pos
+before next call to SkTextBlobBuilder.
+
+RunBuffer::utf8text and RunBuffer::clusters should be ignored.
+
+Glyphs share metrics in font.
+
+Glyphs are positioned using SkPoint written by caller to RunBuffer::pos, using
+two scalar values for each SkPoint.
+
+bounds defines an optional bounding box, used to suppress drawing when SkTextBlob
+bounds does not intersect SkSurface bounds. If bounds is nullptr, SkTextBlob bounds
+is computed from RunBuffer::pos, and RunBuffer::glyphs metrics.
+
+@param font    SkFont used for this run
+@param count   number of glyphs
+@param bounds  optional run bounding box
+@return writable glyph buffer and SkPoint buffer
+*/
+func (o TextBlobBuilder) AllocRunPos(font Font, count int32, bounds Rect) TextBlobBuilderRunBuffer {
+	c_obj := o.sk
+	c_font := font.sk
+	c_count := C.int(count)
+	c_bounds := *(*C.sk_SkRect)(unsafe.Pointer(&bounds))
+	retC := C.misk_TextBlobBuilder_allocRunPos(c_obj, c_font, c_count, c_bounds)
+	return TextBlobBuilderRunBuffer{sk: &retC}
+}
+
+/*
+Returns run with storage for glyphs, text, and clusters. Caller must
+write count glyphs to RunBuffer::glyphs, textByteCount UTF-8 code units
+into RunBuffer::utf8text, and count monotonic indexes into utf8text
+into RunBuffer::clusters before next call to SkTextBlobBuilder.
+
+RunBuffer::pos should be ignored.
+
+Glyphs share metrics in font.
+
+Glyphs are positioned on a baseline at (x, y), using font metrics to
+determine their relative placement.
+
+bounds defines an optional bounding box, used to suppress drawing when SkTextBlob
+bounds does not intersect SkSurface bounds. If bounds is nullptr, SkTextBlob bounds
+is computed from (x, y) and RunBuffer::glyphs metrics.
+
+@param font          SkFont used for this run
+@param count         number of glyphs
+@param x             horizontal offset within the blob
+@param y             vertical offset within the blob
+@param textByteCount number of UTF-8 code units
+@param bounds        optional run bounding box
+@return writable glyph buffer, text buffer, and cluster buffer
+*/
+func (o TextBlobBuilder) AllocRunText(font Font, count int32, x float32, y float32, textByteCount int32, bounds *Rect) TextBlobBuilderRunBuffer {
+	c_obj := o.sk
+	c_font := font.sk
+	c_count := C.int(count)
+	c_x := C.float(x)
+	c_y := C.float(y)
+	c_textByteCount := C.int(textByteCount)
+	c_bounds := (*C.sk_SkRect)(unsafe.Pointer(bounds))
+	retC := C.misk_TextBlobBuilder_allocRunText(c_obj, c_font, c_count, c_x, c_y, c_textByteCount, c_bounds)
+	return TextBlobBuilderRunBuffer{sk: &retC}
+}
+
+/*
+Returns run with storage for glyphs, positions along baseline, text,
+and clusters. Caller must write count glyphs to RunBuffer::glyphs,
+count scalars to RunBuffer::pos, textByteCount UTF-8 code units into
+RunBuffer::utf8text, and count monotonic indexes into utf8text into
+RunBuffer::clusters before next call to SkTextBlobBuilder.
+
+Glyphs share metrics in font.
+
+Glyphs are positioned on a baseline at y, using x-axis positions written by
+caller to RunBuffer::pos.
+
+bounds defines an optional bounding box, used to suppress drawing when SkTextBlob
+bounds does not intersect SkSurface bounds. If bounds is nullptr, SkTextBlob bounds
+is computed from y, RunBuffer::pos, and RunBuffer::glyphs metrics.
+
+@param font          SkFont used for this run
+@param count         number of glyphs
+@param y             vertical offset within the blob
+@param textByteCount number of UTF-8 code units
+@param bounds        optional run bounding box
+@return writable glyph buffer, x-axis position buffer, text buffer, and cluster buffer
+*/
+func (o TextBlobBuilder) AllocRunTextPosH(font Font, count int32, y float32, textByteCount int32, bounds *Rect) TextBlobBuilderRunBuffer {
+	c_obj := o.sk
+	c_font := font.sk
+	c_count := C.int(count)
+	c_y := C.float(y)
+	c_textByteCount := C.int(textByteCount)
+	c_bounds := (*C.sk_SkRect)(unsafe.Pointer(bounds))
+	retC := C.misk_TextBlobBuilder_allocRunTextPosH(c_obj, c_font, c_count, c_y, c_textByteCount, c_bounds)
+	return TextBlobBuilderRunBuffer{sk: &retC}
+}
+
+/*
+Returns run with storage for glyphs, SkPoint positions, text, and
+clusters. Caller must write count glyphs to RunBuffer::glyphs, count
+SkPoint to RunBuffer::pos, textByteCount UTF-8 code units into
+RunBuffer::utf8text, and count monotonic indexes into utf8text into
+RunBuffer::clusters before next call to SkTextBlobBuilder.
+
+Glyphs share metrics in font.
+
+Glyphs are positioned using SkPoint written by caller to RunBuffer::pos, using
+two scalar values for each SkPoint.
+
+bounds defines an optional bounding box, used to suppress drawing when SkTextBlob
+bounds does not intersect SkSurface bounds. If bounds is nullptr, SkTextBlob bounds
+is computed from RunBuffer::pos, and RunBuffer::glyphs metrics.
+
+@param font          SkFont used for this run
+@param count         number of glyphs
+@param textByteCount number of UTF-8 code units
+@param bounds        optional run bounding box
+@return writable glyph buffer, SkPoint buffer, text buffer, and cluster buffer
+*/
+func (o TextBlobBuilder) AllocRunTextPos(font Font, count int32, textByteCount int32, bounds *Rect) TextBlobBuilderRunBuffer {
+	c_obj := o.sk
+	c_font := font.sk
+	c_count := C.int(count)
+	c_textByteCount := C.int(textByteCount)
+	c_bounds := (*C.sk_SkRect)(unsafe.Pointer(bounds))
+	retC := C.misk_TextBlobBuilder_allocRunTextPos(c_obj, c_font, c_count, c_textByteCount, c_bounds)
+	return TextBlobBuilderRunBuffer{sk: &retC}
+}
+
+/*
 RunBuffer supplies storage for glyphs and positions within a run.
 
 A run is a sequence of glyphs sharing font metrics and positioning.
