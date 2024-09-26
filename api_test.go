@@ -13,8 +13,14 @@ func TestEnumValue(t *testing.T) {
 func TestCtorDtor(t *testing.T) {
 	paint := NewPaint()
 	paint2 := NewPaintCopy(paint)
+
+	assert.False(t, paint.IsNil())
 	paint.Delete()
+	assert.True(t, paint.IsNil())
+
+	assert.False(t, paint2.IsNil())
 	paint2.Delete()
+	assert.True(t, paint2.IsNil())
 }
 
 func TestClassStaticMethod(t *testing.T) {

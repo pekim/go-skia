@@ -58,8 +58,9 @@ func NewGrBackendRenderTargetCopy(that GrBackendRenderTarget) GrBackendRenderTar
 	return GrBackendRenderTarget{sk: retC}
 }
 
-func (o GrBackendRenderTarget) Delete() {
+func (o *GrBackendRenderTarget) Delete() {
 	C.misk_delete_GrBackendRenderTarget(o.sk)
+	o.sk = nil
 }
 
 func (o GrBackendRenderTarget) Dimensions() ISize {
@@ -113,8 +114,9 @@ func (o GrDirectContext) AsGrRecordingContext() GrRecordingContext {
 	return GrRecordingContext{sk: (*C.sk_GrRecordingContext)(unsafe.Pointer(o.sk))}
 }
 
-func (o GrDirectContext) Delete() {
+func (o *GrDirectContext) Delete() {
 	C.misk_delete_GrDirectContext(o.sk)
+	o.sk = nil
 }
 
 /*
@@ -238,8 +240,9 @@ func (o GrRecordingContext) IsNil() bool {
 	return o.sk == nil
 }
 
-func (o GrRecordingContext) Delete() {
+func (o *GrRecordingContext) Delete() {
 	C.misk_delete_GrRecordingContext(o.sk)
+	o.sk = nil
 }
 
 /*
@@ -263,8 +266,9 @@ func (o GrGLInterface) IsNil() bool {
 	return o.sk == nil
 }
 
-func (o GrGLInterface) Unref() {
+func (o *GrGLInterface) Unref() {
 	C.misk_unref_GrGLInterface(o.sk)
+	o.sk = nil
 }
 
 type GrContextOptions C.sk_GrContextOptions
@@ -711,8 +715,9 @@ func NewBitmapCopy(src Bitmap) Bitmap {
 /*
 Decrements SkPixelRef reference count, if SkPixelRef is not nullptr.
 */
-func (o Bitmap) Delete() {
+func (o *Bitmap) Delete() {
 	C.misk_delete_SkBitmap(o.sk)
+	o.sk = nil
 }
 
 /*
@@ -974,8 +979,9 @@ Frees up resources used by SkCanvas.
 
 example: https://fiddle.skia.org/c/@Canvas_destructor
 */
-func (o Canvas) Delete() {
+func (o *Canvas) Delete() {
 	C.misk_delete_SkCanvas(o.sk)
+	o.sk = nil
 }
 
 /*
@@ -2470,8 +2476,9 @@ func (o ColorSpace) IsNil() bool {
 	return o.sk == nil
 }
 
-func (o ColorSpace) Unref() {
+func (o *ColorSpace) Unref() {
 	C.misk_unref_SkColorSpace(o.sk)
+	o.sk = nil
 }
 
 /*
@@ -2516,8 +2523,9 @@ func (o Data) IsNil() bool {
 	return o.sk == nil
 }
 
-func (o Data) Unref() {
+func (o *Data) Unref() {
 	C.misk_unref_SkData(o.sk)
+	o.sk = nil
 }
 
 /*
@@ -3139,8 +3147,9 @@ func (o FontMgr) IsNil() bool {
 	return o.sk == nil
 }
 
-func (o FontMgr) Unref() {
+func (o *FontMgr) Unref() {
 	C.misk_unref_SkFontMgr(o.sk)
+	o.sk = nil
 }
 
 /*
@@ -3273,8 +3282,9 @@ func (o FontStyleSet) IsNil() bool {
 	return o.sk == nil
 }
 
-func (o FontStyleSet) Unref() {
+func (o *FontStyleSet) Unref() {
 	C.misk_unref_SkFontStyleSet(o.sk)
+	o.sk = nil
 }
 func (o FontStyleSet) Count() int32 {
 	c_obj := o.sk
@@ -3335,8 +3345,9 @@ func (o Image) IsNil() bool {
 	return o.sk == nil
 }
 
-func (o Image) Unref() {
+func (o *Image) Unref() {
 	C.misk_unref_SkImage(o.sk)
+	o.sk = nil
 }
 
 /*
@@ -4353,8 +4364,9 @@ Decreases SkPaint SkRefCnt of owned objects: SkPathEffect, SkShader,
 SkMaskFilter, SkColorFilter, and SkImageFilter. If the
 objects containing SkRefCnt go to zero, they are deleted.
 */
-func (o Paint) Delete() {
+func (o *Paint) Delete() {
 	C.misk_delete_SkPaint(o.sk)
+	o.sk = nil
 }
 
 /*
@@ -4697,8 +4709,9 @@ Releases ownership of any shared data and deletes data if SkPath is sole owner.
 
 example: https://fiddle.skia.org/c/@Path_destructor
 */
-func (o Path) Delete() {
+func (o *Path) Delete() {
 	C.misk_delete_SkPath(o.sk)
+	o.sk = nil
 }
 
 /*
@@ -7053,8 +7066,9 @@ Releases ownership of any shared data and deletes data if SkRegion is sole owner
 
 example: https://fiddle.skia.org/c/@Region_destructor
 */
-func (o Region) Delete() {
+func (o *Region) Delete() {
 	C.misk_delete_SkRegion(o.sk)
+	o.sk = nil
 }
 
 /*
@@ -7175,8 +7189,9 @@ func (o Stream) IsNil() bool {
 	return o.sk == nil
 }
 
-func (o Stream) Delete() {
+func (o *Stream) Delete() {
 	C.misk_delete_SkStream(o.sk)
+	o.sk = nil
 }
 
 /*
@@ -7201,8 +7216,9 @@ func NewString(text string) String {
 	return String{sk: retC}
 }
 
-func (o String) Delete() {
+func (o *String) Delete() {
 	C.misk_delete_SkString(o.sk)
+	o.sk = nil
 }
 
 func (o String) Data() string {
@@ -7232,8 +7248,9 @@ func (o Surface) IsNil() bool {
 	return o.sk == nil
 }
 
-func (o Surface) Unref() {
+func (o *Surface) Unref() {
 	C.misk_unref_SkSurface(o.sk)
+	o.sk = nil
 }
 
 /*
@@ -7310,8 +7327,9 @@ func (o SVGDOM) IsNil() bool {
 	return o.sk == nil
 }
 
-func (o SVGDOM) Unref() {
+func (o *SVGDOM) Unref() {
 	C.misk_unref_SkSVGDOM(o.sk)
+	o.sk = nil
 }
 
 /*
@@ -7429,8 +7447,9 @@ func (o TextBlob) IsNil() bool {
 	return o.sk == nil
 }
 
-func (o TextBlob) Unref() {
+func (o *TextBlob) Unref() {
 	C.misk_unref_SkTextBlob(o.sk)
+	o.sk = nil
 }
 
 /*
@@ -7559,8 +7578,9 @@ func NewTextBlobBuilder() TextBlobBuilder {
 /*
 Deletes data allocated internally by SkTextBlobBuilder.
 */
-func (o TextBlobBuilder) Delete() {
+func (o *TextBlobBuilder) Delete() {
 	C.misk_delete_SkTextBlobBuilder(o.sk)
+	o.sk = nil
 }
 
 /*
@@ -7823,8 +7843,9 @@ func (o Typeface) IsNil() bool {
 	return o.sk == nil
 }
 
-func (o Typeface) Unref() {
+func (o *Typeface) Unref() {
 	C.misk_unref_SkTypeface(o.sk)
+	o.sk = nil
 }
 
 /*

@@ -309,8 +309,9 @@ func (r record) generateUnref(g generator) {
 	}
 
 	f := g.goFile
-	f.writelnf("func (o %s) Unref() {", r.goName)
+	f.writelnf("func (o *%s) Unref() {", r.goName)
 	f.writelnf("  C.misk_unref_%s(o.sk)", r.CppName)
+	f.writeln("  o.sk = nil")
 	f.writeln("}")
 }
 

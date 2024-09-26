@@ -35,8 +35,9 @@ func (d *recordDtor) generateGo(g generator) {
 
 	f := g.goFile
 	f.writeDocComment(d.doc)
-	f.writelnf("func (o %s) Delete() {", d.record.goName)
+	f.writelnf("func (o *%s) Delete() {", d.record.goName)
 	f.writelnf("   C.%s(o.sk)", d.cFuncName)
+	f.writeln("  o.sk = nil")
 	f.writeln("}")
 	f.writeln()
 }
