@@ -10,6 +10,7 @@ var headerFiles = []string{
 	"include/core/SkColorSpace.h",
 	"include/core/SkData.h",
 	"include/core/SkFont.h",
+	"include/core/SkFontArguments.h",
 	"include/core/SkFontMetrics.h",
 	"include/core/SkFontMgr.h",
 	"include/core/SkFontStyle.h",

@@ -2878,6 +2878,108 @@ func (o Font) GetWidths(glyphs []uint16, count int32, widths []float32) {
 }
 
 /*
+Represents a set of actual arguments for a font.
+*/
+type FontArguments struct {
+	sk *C.sk_SkFontArguments
+}
+
+// IsNil returns true if the raw skia object pointer is nil.
+// If it is nil is may indicate that the FontArguments has not been created.
+func (o FontArguments) IsNil() bool {
+	return o.sk == nil
+}
+
+func NewFontArguments() FontArguments {
+
+	retC := C.misk_new_FontArguments()
+	return FontArguments{sk: retC}
+}
+
+/*
+Specify the index of the desired font.
+
+	Font formats like ttc, dfont, cff, cid, pfr, t42, t1, and fon may actually be indexed
+	collections of fonts.
+*/
+func (o FontArguments) SetCollectionIndex(collectionIndex int32) FontArguments {
+	c_obj := o.sk
+	c_collectionIndex := C.int(collectionIndex)
+	retC := C.misk_FontArguments_setCollectionIndex(c_obj, c_collectionIndex)
+	return FontArguments{sk: &retC}
+}
+
+func (o FontArguments) GetCollectionIndex() int32 {
+	c_obj := o.sk
+	retC := C.misk_FontArguments_getCollectionIndex(c_obj)
+	return int32(retC)
+}
+
+func (o FontArguments) GetVariationDesignPosition() FontArgumentsVariationPosition {
+	c_obj := o.sk
+	retC := C.misk_FontArguments_getVariationDesignPosition(c_obj)
+	return FontArgumentsVariationPosition{sk: &retC}
+}
+
+func (o FontArguments) GetPalette() FontArgumentsPalette {
+	c_obj := o.sk
+	retC := C.misk_FontArguments_getPalette(c_obj)
+	return FontArgumentsPalette{sk: &retC}
+}
+
+type FontArgumentsVariationPosition struct {
+	sk *C.sk_SkFontArgumentsVariationPosition
+}
+
+func (o FontArgumentsVariationPosition) CoordinateCount() int32 {
+	return int32(o.sk.coordinateCount)
+}
+
+func (o *FontArgumentsVariationPosition) SetcoordinateCount(value int32) {
+	o.sk.coordinateCount = C.int(value)
+}
+
+// IsNil returns true if the raw skia object pointer is nil.
+// If it is nil is may indicate that the FontArgumentsVariationPosition has not been created.
+func (o FontArgumentsVariationPosition) IsNil() bool {
+	return o.sk == nil
+}
+
+/*
+Specify a palette to use and overrides for palette entries.
+
+	`overrides` is a list of pairs of palette entry index and color.
+	The overriden palette entries will use the associated color.
+	Override pairs with palette entry indices out of range will not be applied.
+	Later override entries override earlier ones.
+*/
+type FontArgumentsPalette struct {
+	sk *C.sk_SkFontArgumentsPalette
+}
+
+func (o FontArgumentsPalette) Index() int32 {
+	return int32(o.sk.index)
+}
+
+func (o *FontArgumentsPalette) Setindex(value int32) {
+	o.sk.index = C.int(value)
+}
+
+func (o FontArgumentsPalette) OverrideCount() int32 {
+	return int32(o.sk.overrideCount)
+}
+
+func (o *FontArgumentsPalette) SetoverrideCount(value int32) {
+	o.sk.overrideCount = C.int(value)
+}
+
+// IsNil returns true if the raw skia object pointer is nil.
+// If it is nil is may indicate that the FontArgumentsPalette has not been created.
+func (o FontArgumentsPalette) IsNil() bool {
+	return o.sk == nil
+}
+
+/*
 The metrics of an SkFont.
 The metric values are consistent with the Skia y-down coordinate system.
 */
@@ -7723,6 +7825,146 @@ func (o Typeface) IsNil() bool {
 
 func (o Typeface) Unref() {
 	C.misk_unref_SkTypeface(o.sk)
+}
+
+/*
+Returns the typeface's intrinsic style attributes.
+*/
+func (o Typeface) FontStyle() FontStyle {
+	c_obj := o.sk
+	retC := C.misk_Typeface_fontStyle(c_obj)
+	return FontStyle{sk: &retC}
+}
+
+/*
+Returns true if style() has the kBold bit set.
+*/
+func (o Typeface) IsBold() bool {
+	c_obj := o.sk
+	retC := C.misk_Typeface_isBold(c_obj)
+	return bool(retC)
+}
+
+/*
+Returns true if style() has the kItalic bit set.
+*/
+func (o Typeface) IsItalic() bool {
+	c_obj := o.sk
+	retC := C.misk_Typeface_isItalic(c_obj)
+	return bool(retC)
+}
+
+/*
+Returns true if the typeface claims to be fixed-pitch.
+
+	This is a style bit, advance widths may vary even if this returns true.
+*/
+func (o Typeface) IsFixedPitch() bool {
+	c_obj := o.sk
+	retC := C.misk_Typeface_isFixedPitch(c_obj)
+	return bool(retC)
+}
+
+/*
+Return a 32bit value for this typeface, unique for the underlying font
+data. Will never return 0.
+*/
+func (o Typeface) UniqueID() uint32 {
+	c_obj := o.sk
+	retC := C.misk_Typeface_uniqueID(c_obj)
+	return uint32(retC)
+}
+
+/*
+Return a new typeface based on this typeface but parameterized as specified in the
+SkFontArguments. If the SkFontArguments does not supply an argument for a parameter
+in the font then the value from this typeface will be used as the value for that
+argument. If the cloned typeface would be exaclty the same as this typeface then
+this typeface may be ref'ed and returned. May return nullptr on failure.
+*/
+func (o Typeface) MakeClone(p0 FontArguments) Typeface {
+	c_obj := o.sk
+	c_p0 := p0.sk
+	retC := C.misk_Typeface_makeClone(c_obj, c_p0)
+	return Typeface{sk: retC}
+}
+
+/*
+Given an array of UTF32 character codes, return their corresponding glyph IDs.
+
+@param chars pointer to the array of UTF32 chars
+@param number of chars and glyphs
+@param glyphs returns the corresponding glyph IDs for each character.
+*/
+func (o Typeface) UnicharsToGlyphs(uni []int32, count int32, glyphs []uint16) {
+	c_obj := o.sk
+	c_uni := (*C.int)(unsafe.Pointer(&uni[0]))
+	c_count := C.int(count)
+	c_glyphs := (*C.ushort)(unsafe.Pointer(&glyphs[0]))
+	C.misk_Typeface_unicharsToGlyphs(c_obj, c_uni, c_count, c_glyphs)
+}
+
+func (o Typeface) TextToGlyphs(text []byte, byteLength uint32, encoding TextEncoding, glyphs []uint16, maxGlyphCount int32) int32 {
+	c_obj := o.sk
+	c_text := unsafe.Pointer(&text[0])
+	c_byteLength := C.ulong(byteLength)
+	c_encoding := C.int(encoding)
+	c_glyphs := (*C.ushort)(unsafe.Pointer(&glyphs[0]))
+	c_maxGlyphCount := C.int(maxGlyphCount)
+	retC := C.misk_Typeface_textToGlyphs(c_obj, c_text, c_byteLength, c_encoding, c_glyphs, c_maxGlyphCount)
+	return int32(retC)
+}
+
+/*
+Return the glyphID that corresponds to the specified unicode code-point
+(in UTF32 encoding). If the unichar is not supported, returns 0.
+
+This is a short-cut for calling unicharsToGlyphs().
+*/
+func (o Typeface) UnicharToGlyph(unichar int32) uint16 {
+	c_obj := o.sk
+	c_unichar := C.int(unichar)
+	retC := C.misk_Typeface_unicharToGlyph(c_obj, c_unichar)
+	return uint16(retC)
+}
+
+/*
+Return the number of glyphs in the typeface.
+*/
+func (o Typeface) CountGlyphs() int32 {
+	c_obj := o.sk
+	retC := C.misk_Typeface_countGlyphs(c_obj)
+	return int32(retC)
+}
+
+/*
+Return the number of tables in the font.
+*/
+func (o Typeface) CountTables() int32 {
+	c_obj := o.sk
+	retC := C.misk_Typeface_countTables(c_obj)
+	return int32(retC)
+}
+
+/*
+Return the units-per-em value for this typeface, or zero if there is an
+error.
+*/
+func (o Typeface) GetUnitsPerEm() int32 {
+	c_obj := o.sk
+	retC := C.misk_Typeface_getUnitsPerEm(c_obj)
+	return int32(retC)
+}
+
+/*
+Return the family name for this typeface. It will always be returned
+encoded as UTF8, but the language of the name is whatever the host
+platform chooses.
+*/
+func (o Typeface) GetFamilyName(name String) {
+	c_obj := o.sk
+	c_name := name.sk
+	C.misk_Typeface_getFamilyName(c_obj, c_name)
 }
 
 /*

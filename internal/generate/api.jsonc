@@ -267,6 +267,20 @@
     },
 
     {
+      "name": "SkFontArguments",
+      "constructors": [{}],
+      "methods": [
+        { "name": "setCollectionIndex" },
+        // { "name": "setVariationDesignPosition" }
+        { "name": "getCollectionIndex" },
+        { "name": "getVariationDesignPosition" },
+        // { "name": "setPalette" },
+        { "name": "getPalette" }
+      ],
+      "records": [{ "name": "VariationPosition" }, { "name": "Palette" }]
+    },
+
+    {
       "name": "SkFontMetrics",
       "noWrapper": true
     },
@@ -727,7 +741,23 @@
 
     {
       "name": "SkTypeface",
-      "methods": [{ "name": "Equal" }, { "name": "MakeEmpty" }]
+      "methods": [
+        { "name": "fontStyle" },
+        { "name": "isBold" },
+        { "name": "isItalic" },
+        { "name": "isFixedPitch" },
+        { "name": "uniqueID" },
+        { "name": "makeClone" },
+        { "name": "unicharsToGlyphs" },
+        { "name": "textToGlyphs" },
+        { "name": "unicharToGlyph" },
+        { "name": "countGlyphs" },
+        { "name": "countTables" },
+        { "name": "getUnitsPerEm" },
+        { "name": "getFamilyName" },
+        { "name": "Equal" },
+        { "name": "MakeEmpty" }
+      ]
     }
   ],
 

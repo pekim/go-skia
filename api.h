@@ -203,6 +203,30 @@ extern "C"
 
   typedef struct
   {
+    int fCollectionIndex;
+    uchar pad_1[4];
+    uchar fVariationDesignPosition[16];
+    uchar fPalette[24];
+  } sk_SkFontArguments;
+
+  typedef struct
+  {
+    uchar coordinates[8];
+    int coordinateCount;
+    uchar pad_2[4];
+  } sk_SkFontArgumentsVariationPosition;
+
+  typedef struct
+  {
+    int index;
+    uchar pad_1[4];
+    uchar overrides[8];
+    int overrideCount;
+    uchar pad_3[4];
+  } sk_SkFontArgumentsPalette;
+
+  typedef struct
+  {
     uint fFlags;
     float fTop;
     float fAscent;
@@ -702,6 +726,16 @@ extern "C"
   void misk_Font_getWidths (sk_SkFont *c_obj, ushort *c_glyphs, int c_count,
                             float *c_widths);
 
+  sk_SkFontArguments *misk_new_FontArguments ();
+  sk_SkFontArguments
+  misk_FontArguments_setCollectionIndex (sk_SkFontArguments *c_obj,
+                                         int c_collectionIndex);
+  int misk_FontArguments_getCollectionIndex (sk_SkFontArguments *c_obj);
+  sk_SkFontArgumentsVariationPosition
+  misk_FontArguments_getVariationDesignPosition (sk_SkFontArguments *c_obj);
+  sk_SkFontArgumentsPalette
+  misk_FontArguments_getPalette (sk_SkFontArguments *c_obj);
+
   sk_SkFontStyleSet *misk_FontMgr_matchFamily (sk_SkFontMgr *c_obj,
                                                char *c_familyName);
   sk_SkTypeface *misk_FontMgr_matchFamilyStyle (sk_SkFontMgr *c_obj,
@@ -1073,6 +1107,24 @@ extern "C"
   sk_SkPoint *
   misk_TextBlobBuilderRunBuffer_points (sk_SkTextBlobBuilderRunBuffer *c_obj);
 
+  sk_SkFontStyle misk_Typeface_fontStyle (sk_SkTypeface *c_obj);
+  bool misk_Typeface_isBold (sk_SkTypeface *c_obj);
+  bool misk_Typeface_isItalic (sk_SkTypeface *c_obj);
+  bool misk_Typeface_isFixedPitch (sk_SkTypeface *c_obj);
+  unsigned int misk_Typeface_uniqueID (sk_SkTypeface *c_obj);
+  sk_SkTypeface *misk_Typeface_makeClone (sk_SkTypeface *c_obj,
+                                          sk_SkFontArguments *c_p0);
+  void misk_Typeface_unicharsToGlyphs (sk_SkTypeface *c_obj, int *c_uni,
+                                       int c_count, ushort *c_glyphs);
+  int misk_Typeface_textToGlyphs (sk_SkTypeface *c_obj, void *c_text,
+                                  ulong c_byteLength, int c_encoding,
+                                  ushort *c_glyphs, int c_maxGlyphCount);
+  unsigned short misk_Typeface_unicharToGlyph (sk_SkTypeface *c_obj,
+                                               int c_unichar);
+  int misk_Typeface_countGlyphs (sk_SkTypeface *c_obj);
+  int misk_Typeface_countTables (sk_SkTypeface *c_obj);
+  int misk_Typeface_getUnitsPerEm (sk_SkTypeface *c_obj);
+  void misk_Typeface_getFamilyName (sk_SkTypeface *c_obj, sk_SkString *c_name);
   bool misk_Typeface_Equal (sk_SkTypeface *c_facea, sk_SkTypeface *c_faceb);
   sk_SkTypeface *misk_Typeface_MakeEmpty ();
   void misk_unref_SkTypeface (sk_SkTypeface *c_obj);

@@ -9,6 +9,7 @@
 #include <include/core/SkColorType.h>
 #include <include/core/SkData.h>
 #include <include/core/SkFont.h>
+#include <include/core/SkFontArguments.h>
 #include <include/core/SkFontMetrics.h>
 #include <include/core/SkFontMgr.h>
 #include <include/core/SkFontStyle.h>
@@ -1102,6 +1103,45 @@ extern "C"
   {
     reinterpret_cast<SkFont *> (c_obj)->getWidths ((unsigned short *)c_glyphs,
                                                    c_count, (float *)c_widths);
+  }
+
+  sk_SkFontArguments *
+  misk_new_FontArguments ()
+  {
+    return reinterpret_cast<sk_SkFontArguments *> (new SkFontArguments ());
+  }
+
+  sk_SkFontArguments
+  misk_FontArguments_setCollectionIndex (sk_SkFontArguments *c_obj,
+                                         int c_collectionIndex)
+  {
+    auto ret
+        = reinterpret_cast<SkFontArguments *> (c_obj)->setCollectionIndex (
+            c_collectionIndex);
+    return *(reinterpret_cast<sk_SkFontArguments *> (&ret));
+  }
+
+  int
+  misk_FontArguments_getCollectionIndex (sk_SkFontArguments *c_obj)
+  {
+    auto ret
+        = reinterpret_cast<SkFontArguments *> (c_obj)->getCollectionIndex ();
+    return ret;
+  }
+
+  sk_SkFontArgumentsVariationPosition
+  misk_FontArguments_getVariationDesignPosition (sk_SkFontArguments *c_obj)
+  {
+    auto ret = reinterpret_cast<SkFontArguments *> (c_obj)
+                   ->getVariationDesignPosition ();
+    return *(reinterpret_cast<sk_SkFontArgumentsVariationPosition *> (&ret));
+  }
+
+  sk_SkFontArgumentsPalette
+  misk_FontArguments_getPalette (sk_SkFontArguments *c_obj)
+  {
+    auto ret = reinterpret_cast<SkFontArguments *> (c_obj)->getPalette ();
+    return *(reinterpret_cast<sk_SkFontArgumentsPalette *> (&ret));
   }
 
   sk_SkFontStyleSet *
@@ -2964,6 +3004,106 @@ extern "C"
     auto ret
         = reinterpret_cast<SkTextBlobBuilder::RunBuffer *> (c_obj)->points ();
     return reinterpret_cast<sk_SkPoint *> (ret);
+  }
+
+  sk_SkFontStyle
+  misk_Typeface_fontStyle (sk_SkTypeface *c_obj)
+  {
+    auto ret = reinterpret_cast<SkTypeface *> (c_obj)->fontStyle ();
+    return *(reinterpret_cast<sk_SkFontStyle *> (&ret));
+  }
+
+  bool
+  misk_Typeface_isBold (sk_SkTypeface *c_obj)
+  {
+    auto ret = reinterpret_cast<SkTypeface *> (c_obj)->isBold ();
+    return ret;
+  }
+
+  bool
+  misk_Typeface_isItalic (sk_SkTypeface *c_obj)
+  {
+    auto ret = reinterpret_cast<SkTypeface *> (c_obj)->isItalic ();
+    return ret;
+  }
+
+  bool
+  misk_Typeface_isFixedPitch (sk_SkTypeface *c_obj)
+  {
+    auto ret = reinterpret_cast<SkTypeface *> (c_obj)->isFixedPitch ();
+    return ret;
+  }
+
+  unsigned int
+  misk_Typeface_uniqueID (sk_SkTypeface *c_obj)
+  {
+    auto ret = reinterpret_cast<SkTypeface *> (c_obj)->uniqueID ();
+    return ret;
+  }
+
+  sk_SkTypeface *
+  misk_Typeface_makeClone (sk_SkTypeface *c_obj, sk_SkFontArguments *c_p0)
+  {
+    auto ret = reinterpret_cast<SkTypeface *> (c_obj)
+                   ->makeClone (*reinterpret_cast<SkFontArguments *> (c_p0))
+                   .release ();
+    return reinterpret_cast<sk_SkTypeface *> (ret);
+  }
+
+  void
+  misk_Typeface_unicharsToGlyphs (sk_SkTypeface *c_obj, int *c_uni,
+                                  int c_count, ushort *c_glyphs)
+  {
+    reinterpret_cast<SkTypeface *> (c_obj)->unicharsToGlyphs (
+        (int *)c_uni, c_count, (unsigned short *)c_glyphs);
+  }
+
+  int
+  misk_Typeface_textToGlyphs (sk_SkTypeface *c_obj, void *c_text,
+                              ulong c_byteLength, int c_encoding,
+                              ushort *c_glyphs, int c_maxGlyphCount)
+  {
+    auto ret = reinterpret_cast<SkTypeface *> (c_obj)->textToGlyphs (
+        reinterpret_cast<void *> (c_text), c_byteLength,
+        SkTextEncoding (c_encoding), (unsigned short *)c_glyphs,
+        c_maxGlyphCount);
+    return ret;
+  }
+
+  unsigned short
+  misk_Typeface_unicharToGlyph (sk_SkTypeface *c_obj, int c_unichar)
+  {
+    auto ret
+        = reinterpret_cast<SkTypeface *> (c_obj)->unicharToGlyph (c_unichar);
+    return ret;
+  }
+
+  int
+  misk_Typeface_countGlyphs (sk_SkTypeface *c_obj)
+  {
+    auto ret = reinterpret_cast<SkTypeface *> (c_obj)->countGlyphs ();
+    return ret;
+  }
+
+  int
+  misk_Typeface_countTables (sk_SkTypeface *c_obj)
+  {
+    auto ret = reinterpret_cast<SkTypeface *> (c_obj)->countTables ();
+    return ret;
+  }
+
+  int
+  misk_Typeface_getUnitsPerEm (sk_SkTypeface *c_obj)
+  {
+    auto ret = reinterpret_cast<SkTypeface *> (c_obj)->getUnitsPerEm ();
+    return ret;
+  }
+
+  void
+  misk_Typeface_getFamilyName (sk_SkTypeface *c_obj, sk_SkString *c_name)
+  {
+    reinterpret_cast<SkTypeface *> (c_obj)->getFamilyName (
+        reinterpret_cast<SkString *> (c_name));
   }
 
   bool
