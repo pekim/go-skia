@@ -14,6 +14,9 @@ import (
 //go:embed tiger.svg
 var tigerSVG []byte
 
+//go:embed test.png
+var testPng []byte
+
 const windowWidth = 800
 const windowHeight = 600
 
@@ -118,6 +121,9 @@ func main() {
 	size.SetHeight(300)
 	svgTiger.SetContainerSize(size)
 
+	imageData := skia.DataMakeWithCopy(testPng, uint32(len(testPng)))
+	image := skia.SkImagesDeferredFromEncodedData(imageData, nil)
+
 	for !window.ShouldClose() {
 		canvas := surface.GetCanvas()
 		paint := skia.NewPaint()
@@ -147,6 +153,8 @@ func main() {
 		canvas.Scale(scale, scale)
 		svgTiger.Render(canvas)
 		canvas.Restore()
+
+		canvas.DrawImage(image, 1000, 200)
 
 		context.FlushAndSubmit(skia.GrSyncCpuYes)
 

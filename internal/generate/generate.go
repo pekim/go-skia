@@ -1,6 +1,7 @@
 package generate
 
 var headerFiles = []string{
+	"include/core/SkAlphaType.h",
 	"include/core/SkArc.h",
 	"include/core/SkBitmap.h",
 	"include/core/SkCanvas.h",

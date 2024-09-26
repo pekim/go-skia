@@ -8033,7 +8033,18 @@ components improve performance.
 */
 type AlphaType int32
 
-const ()
+const (
+	// uninitialized
+	AlphaTypeUnknown AlphaType = 0
+	// pixel is opaque
+	AlphaTypeOpaque AlphaType = 1
+	// pixel components are premultiplied by alpha
+	AlphaTypePremul AlphaType = 2
+	// pixel components are independent of alpha
+	AlphaTypeUnpremul AlphaType = 3
+	// last valid value
+	AlphaTypeLastEnum AlphaType = 3
+)
 
 /*
 When we transform points through a matrix containing perspective (the bottom row is something

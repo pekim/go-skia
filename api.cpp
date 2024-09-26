@@ -1,5 +1,6 @@
 // This is a generated file. DO NOT EDIT.
 
+#include <include/core/SkAlphaType.h>
 #include <include/core/SkArc.h>
 #include <include/core/SkBitmap.h>
 #include <include/core/SkCanvas.h>
