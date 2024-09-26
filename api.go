@@ -7429,6 +7429,84 @@ func TextBlobMakeFromPosText(text []byte, byteLength uint32, pos []Point, font F
 }
 
 /*
+Helper class for constructing SkTextBlob.
+*/
+type TextBlobBuilder struct {
+	sk *C.sk_SkTextBlobBuilder
+}
+
+// IsNil returns true if the raw skia object pointer is nil.
+// If it is nil is may indicate that the TextBlobBuilder has not been created.
+func (o TextBlobBuilder) IsNil() bool {
+	return o.sk == nil
+}
+
+/*
+Constructs empty SkTextBlobBuilder. By default, SkTextBlobBuilder has no runs.
+
+@return  empty SkTextBlobBuilder
+
+example: https://fiddle.skia.org/c/@TextBlobBuilder_empty_constructor
+*/
+func NewTextBlobBuilder() TextBlobBuilder {
+
+	retC := C.misk_new_TextBlobBuilder()
+	return TextBlobBuilder{sk: retC}
+}
+
+/*
+Deletes data allocated internally by SkTextBlobBuilder.
+*/
+func (o TextBlobBuilder) Delete() {
+	C.misk_delete_SkTextBlobBuilder(o.sk)
+}
+
+/*
+Returns SkTextBlob built from runs of glyphs added by builder. Returned
+SkTextBlob is immutable; it may be copied, but its contents may not be altered.
+Returns nullptr if no runs of glyphs were added by builder.
+
+Resets SkTextBlobBuilder to its initial empty state, allowing it to be
+reused to build a new set of runs.
+
+@return  SkTextBlob or nullptr
+
+example: https://fiddle.skia.org/c/@TextBlobBuilder_make
+*/
+func (o TextBlobBuilder) Make() TextBlob {
+	c_obj := o.sk
+	retC := C.misk_TextBlobBuilder_make(c_obj)
+	return TextBlob{sk: retC}
+}
+
+/*
+\struct SkTextBlobBuilder::RunBuffer
+RunBuffer supplies storage for glyphs and positions within a run.
+
+A run is a sequence of glyphs sharing font metrics and positioning.
+Each run may position its glyphs in one of three ways:
+by specifying where the first glyph is drawn, and allowing font metrics to
+determine the advance to subsequent glyphs; by specifying a baseline, and
+the position on that baseline for each glyph in run; or by providing SkPoint
+array, one per glyph.
+*/
+type TextBlobBuilderRunBuffer struct {
+	sk *C.sk_SkTextBlobBuilderRunBuffer
+}
+
+// IsNil returns true if the raw skia object pointer is nil.
+// If it is nil is may indicate that the TextBlobBuilderRunBuffer has not been created.
+func (o TextBlobBuilderRunBuffer) IsNil() bool {
+	return o.sk == nil
+}
+
+func (o TextBlobBuilderRunBuffer) Points() Point {
+	c_obj := o.sk
+	retC := C.misk_TextBlobBuilderRunBuffer_points(c_obj)
+	return Point{sk: retC}
+}
+
+/*
 The SkTypeface class specifies the typeface and intrinsic style of a font.
 This is used in the paint, along with optionally algorithmic settings like
 textSize, textSkewX, textScaleX, kFakeBoldText_Mask, to specify

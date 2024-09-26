@@ -112,6 +112,9 @@ func (a api) generate(g generator) {
 
 	for _, record := range a.Records {
 		record.generateCStruct(g)
+		for _, record := range record.Records {
+			record.generateCStruct(g)
+		}
 	}
 
 	for _, record := range a.Records {

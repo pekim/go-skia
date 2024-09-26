@@ -449,6 +449,27 @@ extern "C"
 
   typedef struct
   {
+    uchar fStorage[8];
+    ulong fStorageSize;
+    ulong fStorageUsed;
+    uchar fBounds[16];
+    int fRunCount;
+    bool fDeferredBounds;
+    uchar pad_6[3];
+    ulong fLastRun;
+    uchar fCurrentRunBuffer[32];
+  } sk_SkTextBlobBuilder;
+
+  typedef struct
+  {
+    uchar glyphs[8];
+    uchar pos[8];
+    uchar utf8text[8];
+    uchar clusters[8];
+  } sk_SkTextBlobBuilderRunBuffer;
+
+  typedef struct
+  {
     uchar pad_0[16];
     uint fUniqueID;
     uchar fStyle[4];
@@ -1024,6 +1045,12 @@ extern "C"
                                                 sk_SkFont *c_font,
                                                 int c_encoding);
   void misk_unref_SkTextBlob (sk_SkTextBlob *c_obj);
+
+  sk_SkTextBlobBuilder *misk_new_TextBlobBuilder ();
+  void misk_delete_SkTextBlobBuilder (sk_SkTextBlobBuilder *obj);
+  sk_SkTextBlob *misk_TextBlobBuilder_make (sk_SkTextBlobBuilder *c_obj);
+  sk_SkPoint *
+  misk_TextBlobBuilderRunBuffer_points (sk_SkTextBlobBuilderRunBuffer *c_obj);
 
   bool misk_Typeface_Equal (sk_SkTypeface *c_facea, sk_SkTypeface *c_faceb);
   sk_SkTypeface *misk_Typeface_MakeEmpty ();

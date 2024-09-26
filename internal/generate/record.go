@@ -21,6 +21,7 @@ type record struct {
 	Ctors             []*recordCtor `json:"constructors"`
 	Enums             []enum        `json:"enums"`
 	Methods           []callable    `json:"methods"`
+	Records           []record      `json:"records"`
 	NoWrapper         bool          `json:"noWrapper"`
 	As                []string      `json:"as"`
 	asRecords         []*record
@@ -31,17 +32,23 @@ type record struct {
 	cStructName       string
 	derivedFromRefCnt bool
 	doc               string
+	parent            *record
 	enriched          bool
 }
 
-func (r *record) enrich1(cursor clang.Cursor) {
+func (r *record) enrich1(cursor clang.Cursor, parent *record) {
+	parentCppName := ""
+	if parent != nil {
+		parentCppName = parent.CppName
+	}
 	r.cursor = cursor
-	r.goName = stripSkPrefix(r.CppName)
-	r.cStructName = fmt.Sprintf("sk_%s", r.CppName)
+	r.goName = stripSkPrefix(parentCppName) + stripSkPrefix(r.CppName)
+	r.cStructName = fmt.Sprintf("sk_%s%s", parentCppName, r.CppName)
 	r.doc = cursor.RawCommentText()
 	r.doc = strings.Replace(r.doc, fmt.Sprintf("\\class %s", r.CppName), "", 1)
 	r.doc = strings.Replace(r.doc, fmt.Sprintf("\\struct %s", r.CppName), "", 1)
 	r.size = int(cursor.Type().SizeOf())
+	r.parent = parent
 	r.enriched = true
 
 	var ctorsEnriched int
@@ -80,6 +87,11 @@ func (r *record) enrich1(cursor clang.Cursor) {
 
 		case clang.Cursor_FieldDecl:
 			r.fields = append(r.fields, newField(cursor))
+
+		case clang.Cursor_StructDecl:
+			if record, ok := r.findRecord(cursor.Spelling()); ok {
+				record.enrich1(cursor, r)
+			}
 		}
 
 		return clang.ChildVisit_Continue
@@ -99,6 +111,11 @@ func (r *record) enrich2(api api) {
 	for i := range r.Enums {
 		enum := &r.Enums[i]
 		enum.enrich2(api)
+	}
+
+	for i := range r.Records {
+		record := &r.Records[i]
+		record.enrich2(api)
 	}
 
 	for i := range r.fields {
@@ -145,6 +162,15 @@ func (r *record) findMethod(name string) (*callable, bool) {
 	return nil, false
 }
 
+func (r record) findRecord(name string) (*record, bool) {
+	for i, record := range r.Records {
+		if record.CppName == name {
+			return &r.Records[i], true
+		}
+	}
+	return nil, false
+}
+
 func (r record) generate(g generator) {
 	if !r.enriched {
 		fatalf("record %s has not been enriched", r.CppName)
@@ -169,6 +195,10 @@ func (r record) generate(g generator) {
 
 	for _, enum := range r.Enums {
 		enum.generate(g)
+	}
+
+	for _, record := range r.Records {
+		record.generate(g)
 	}
 
 	r.generateHeaderFile(g)

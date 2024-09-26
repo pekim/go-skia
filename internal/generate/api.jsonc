@@ -691,6 +691,16 @@
     },
 
     {
+      "name": "SkTextBlobBuilder",
+      "constructors": [{}],
+      "methods": [
+        { "name": "make" }
+        // { "name": "allocRun" }
+      ],
+      "records": [{ "name": "RunBuffer", "methods": [{ "name": "points" }] }]
+    },
+
+    {
       "name": "SkTypeface",
       "methods": [{ "name": "Equal" }, { "name": "MakeEmpty" }]
     }

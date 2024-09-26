@@ -94,12 +94,12 @@ func (tu translationUnit) enrichApi(api *api) {
 				break
 			}
 			if record, ok := api.findRecord(cursor.Spelling()); ok {
-				record.enrich1(cursor)
+				record.enrich1(cursor, nil)
 			}
 
 		case clang.Cursor_ClassTemplate:
 			if record, ok := api.findRecord(cursor.Spelling()); ok {
-				record.enrich1(cursor)
+				record.enrich1(cursor, nil)
 			}
 
 		case clang.Cursor_EnumDecl:
@@ -118,8 +118,8 @@ func (tu translationUnit) enrichApi(api *api) {
 				// Skip forward declarations.
 				break
 			}
-			if struct_, ok := api.findRecord(cursor.Spelling()); ok {
-				struct_.enrich1(cursor)
+			if record, ok := api.findRecord(cursor.Spelling()); ok {
+				record.enrich1(cursor, nil)
 			}
 
 		case clang.Cursor_FunctionDecl:

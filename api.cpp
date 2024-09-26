@@ -2868,6 +2868,34 @@ extern "C"
     reinterpret_cast<SkTextBlob *> (c_obj)->unref ();
   }
 
+  sk_SkTextBlobBuilder *
+  misk_new_TextBlobBuilder ()
+  {
+    return reinterpret_cast<sk_SkTextBlobBuilder *> (new SkTextBlobBuilder ());
+  }
+
+  void
+  misk_delete_SkTextBlobBuilder (sk_SkTextBlobBuilder *obj)
+  {
+    delete reinterpret_cast<SkTextBlobBuilder *> (obj);
+  }
+
+  sk_SkTextBlob *
+  misk_TextBlobBuilder_make (sk_SkTextBlobBuilder *c_obj)
+  {
+    auto ret
+        = reinterpret_cast<SkTextBlobBuilder *> (c_obj)->make ().release ();
+    return reinterpret_cast<sk_SkTextBlob *> (ret);
+  }
+
+  sk_SkPoint *
+  misk_TextBlobBuilderRunBuffer_points (sk_SkTextBlobBuilderRunBuffer *c_obj)
+  {
+    auto ret
+        = reinterpret_cast<SkTextBlobBuilder::RunBuffer *> (c_obj)->points ();
+    return reinterpret_cast<sk_SkPoint *> (ret);
+  }
+
   bool
   misk_Typeface_Equal (sk_SkTypeface *c_facea, sk_SkTypeface *c_faceb)
   {
