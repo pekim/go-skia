@@ -694,8 +694,11 @@
       "name": "SkTextBlobBuilder",
       "constructors": [{}],
       "methods": [
-        { "name": "make" }
-        // { "name": "allocRun" }
+        { "name": "make" },
+        { "name": "allocRun" }
+        // { "name": "" },
+        // { "name": "" },
+        // { "name": "" }
       ],
       "records": [{ "name": "RunBuffer", "methods": [{ "name": "points" }] }]
     },

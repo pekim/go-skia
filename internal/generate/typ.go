@@ -76,25 +76,26 @@ func typFromClangType(cType clang.Type, api api, templateRef string) (typ, error
 	}
 
 	var recordName string
-	var recordEnumName string
+	var recordChildName string
 	nameParts := strings.Split(typ.cName, "::")
 	if len(nameParts) > 0 {
 		recordName = nameParts[0]
 	}
 	if len(nameParts) > 1 {
-		recordEnumName = nameParts[1]
+		recordChildName = nameParts[1]
 	}
 
 	if record, ok := api.findRecord(recordName); ok {
-		if recordEnumName == "" {
+		if recordChildName == "" {
 			typ.record = record
 			typ.goName = typ.record.goName
 			typ.cName = typ.record.cStructName
-		} else {
-			if enum, ok := record.findEnum(recordEnumName); ok {
-				typ.enum = enum
-				typ.goName = typ.enum.goName
-			}
+		} else if enum, ok := record.findEnum(recordChildName); ok {
+			typ.enum = enum
+			typ.goName = typ.enum.goName
+		} else if recordChild, ok := record.findRecord(recordChildName); ok {
+			typ.record = recordChild
+			typ.goName = typ.record.goName
 		}
 
 	} else if enum, ok := api.findEnum(typ.cppName); ok {

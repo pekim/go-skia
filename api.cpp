@@ -2888,6 +2888,17 @@ extern "C"
     return reinterpret_cast<sk_SkTextBlob *> (ret);
   }
 
+  sk_SkTextBlobBuilderRunBuffer
+  misk_TextBlobBuilder_allocRun (sk_SkTextBlobBuilder *c_obj,
+                                 sk_SkFont *c_font, int c_count, float c_x,
+                                 float c_y, sk_SkRect c_bounds)
+  {
+    auto ret = reinterpret_cast<SkTextBlobBuilder *> (c_obj)->allocRun (
+        *reinterpret_cast<SkFont *> (c_font), c_count, c_x, c_y,
+        reinterpret_cast<SkRect *> (&c_bounds));
+    return *(reinterpret_cast<sk_SkTextBlobBuilderRunBuffer *> (&ret));
+  }
+
   sk_SkPoint *
   misk_TextBlobBuilderRunBuffer_points (sk_SkTextBlobBuilderRunBuffer *c_obj)
   {

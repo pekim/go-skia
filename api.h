@@ -1049,6 +1049,10 @@ extern "C"
   sk_SkTextBlobBuilder *misk_new_TextBlobBuilder ();
   void misk_delete_SkTextBlobBuilder (sk_SkTextBlobBuilder *obj);
   sk_SkTextBlob *misk_TextBlobBuilder_make (sk_SkTextBlobBuilder *c_obj);
+  sk_SkTextBlobBuilderRunBuffer
+  misk_TextBlobBuilder_allocRun (sk_SkTextBlobBuilder *c_obj,
+                                 sk_SkFont *c_font, int c_count, float c_x,
+                                 float c_y, sk_SkRect c_bounds);
   sk_SkPoint *
   misk_TextBlobBuilderRunBuffer_points (sk_SkTextBlobBuilderRunBuffer *c_obj);
 
