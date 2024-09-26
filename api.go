@@ -7501,13 +7501,13 @@ is computed from (x, y) and RunBuffer::glyphs metrics.
 @param bounds  optional run bounding box
 @return writable glyph buffer
 */
-func (o TextBlobBuilder) AllocRun(font Font, count int32, x float32, y float32, bounds Rect) TextBlobBuilderRunBuffer {
+func (o TextBlobBuilder) AllocRun(font Font, count int32, x float32, y float32, bounds *Rect) TextBlobBuilderRunBuffer {
 	c_obj := o.sk
 	c_font := font.sk
 	c_count := C.int(count)
 	c_x := C.float(x)
 	c_y := C.float(y)
-	c_bounds := *(*C.sk_SkRect)(unsafe.Pointer(&bounds))
+	c_bounds := (*C.sk_SkRect)(unsafe.Pointer(bounds))
 	retC := C.misk_TextBlobBuilder_allocRun(c_obj, c_font, c_count, c_x, c_y, c_bounds)
 	return TextBlobBuilderRunBuffer{sk: &retC}
 }
@@ -7534,12 +7534,12 @@ is computed from y, RunBuffer::pos, and RunBuffer::glyphs metrics.
 @param bounds  optional run bounding box
 @return writable glyph buffer and x-axis position buffer
 */
-func (o TextBlobBuilder) AllocRunPosH(font Font, count int32, y float32, bounds Rect) TextBlobBuilderRunBuffer {
+func (o TextBlobBuilder) AllocRunPosH(font Font, count int32, y float32, bounds *Rect) TextBlobBuilderRunBuffer {
 	c_obj := o.sk
 	c_font := font.sk
 	c_count := C.int(count)
 	c_y := C.float(y)
-	c_bounds := *(*C.sk_SkRect)(unsafe.Pointer(&bounds))
+	c_bounds := (*C.sk_SkRect)(unsafe.Pointer(bounds))
 	retC := C.misk_TextBlobBuilder_allocRunPosH(c_obj, c_font, c_count, c_y, c_bounds)
 	return TextBlobBuilderRunBuffer{sk: &retC}
 }
@@ -7565,11 +7565,11 @@ is computed from RunBuffer::pos, and RunBuffer::glyphs metrics.
 @param bounds  optional run bounding box
 @return writable glyph buffer and SkPoint buffer
 */
-func (o TextBlobBuilder) AllocRunPos(font Font, count int32, bounds Rect) TextBlobBuilderRunBuffer {
+func (o TextBlobBuilder) AllocRunPos(font Font, count int32, bounds *Rect) TextBlobBuilderRunBuffer {
 	c_obj := o.sk
 	c_font := font.sk
 	c_count := C.int(count)
-	c_bounds := *(*C.sk_SkRect)(unsafe.Pointer(&bounds))
+	c_bounds := (*C.sk_SkRect)(unsafe.Pointer(bounds))
 	retC := C.misk_TextBlobBuilder_allocRunPos(c_obj, c_font, c_count, c_bounds)
 	return TextBlobBuilderRunBuffer{sk: &retC}
 }

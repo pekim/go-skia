@@ -2891,33 +2891,33 @@ extern "C"
   sk_SkTextBlobBuilderRunBuffer
   misk_TextBlobBuilder_allocRun (sk_SkTextBlobBuilder *c_obj,
                                  sk_SkFont *c_font, int c_count, float c_x,
-                                 float c_y, sk_SkRect c_bounds)
+                                 float c_y, sk_SkRect *c_bounds)
   {
     auto ret = reinterpret_cast<SkTextBlobBuilder *> (c_obj)->allocRun (
         *reinterpret_cast<SkFont *> (c_font), c_count, c_x, c_y,
-        reinterpret_cast<SkRect *> (&c_bounds));
+        reinterpret_cast<SkRect *> (c_bounds));
     return *(reinterpret_cast<sk_SkTextBlobBuilderRunBuffer *> (&ret));
   }
 
   sk_SkTextBlobBuilderRunBuffer
   misk_TextBlobBuilder_allocRunPosH (sk_SkTextBlobBuilder *c_obj,
                                      sk_SkFont *c_font, int c_count, float c_y,
-                                     sk_SkRect c_bounds)
+                                     sk_SkRect *c_bounds)
   {
     auto ret = reinterpret_cast<SkTextBlobBuilder *> (c_obj)->allocRunPosH (
         *reinterpret_cast<SkFont *> (c_font), c_count, c_y,
-        reinterpret_cast<SkRect *> (&c_bounds));
+        reinterpret_cast<SkRect *> (c_bounds));
     return *(reinterpret_cast<sk_SkTextBlobBuilderRunBuffer *> (&ret));
   }
 
   sk_SkTextBlobBuilderRunBuffer
   misk_TextBlobBuilder_allocRunPos (sk_SkTextBlobBuilder *c_obj,
                                     sk_SkFont *c_font, int c_count,
-                                    sk_SkRect c_bounds)
+                                    sk_SkRect *c_bounds)
   {
     auto ret = reinterpret_cast<SkTextBlobBuilder *> (c_obj)->allocRunPos (
         *reinterpret_cast<SkFont *> (c_font), c_count,
-        reinterpret_cast<SkRect *> (&c_bounds));
+        reinterpret_cast<SkRect *> (c_bounds));
     return *(reinterpret_cast<sk_SkTextBlobBuilderRunBuffer *> (&ret));
   }
 
