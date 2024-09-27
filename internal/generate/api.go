@@ -31,7 +31,7 @@ func (api *api) parseTranslationUnits() {
 	err := json.Unmarshal(jsonc.ToJSON(apiJson), &api)
 	fatalOnError(err)
 
-	fmt.Print("load api ")
+	fmt.Print("parse header files ")
 	start := time.Now()
 	api.tus = make([]translationUnit, len(headerFiles))
 	var group errgroup.Group
