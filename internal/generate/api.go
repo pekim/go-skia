@@ -156,3 +156,35 @@ func (api api) generate(g generator) {
 
 	fmt.Printf(" %dms\n", time.Since(start).Milliseconds())
 }
+
+func (api api) printStats() {
+	classCount := 0
+	structCount := 0
+	classEnumCount := 0
+	classMethodCount := 0
+	classRecordCount := 0
+	structEnumCount := 0
+	structMethodCount := 0
+	structRecordCount := 0
+	for _, record := range api.Records {
+		if record.isClass {
+			classCount++
+			classEnumCount += len(record.Enums)
+			classMethodCount += len(record.Methods)
+			classRecordCount += len(record.Records)
+		} else {
+			structCount++
+			structEnumCount += len(record.Enums)
+			structMethodCount += len(record.Methods)
+			structRecordCount += len(record.Records)
+		}
+	}
+
+	fmt.Printf("%4d classes (with %d enums, %d methods, %d records)\n",
+		classCount, classEnumCount, classMethodCount, classRecordCount)
+	fmt.Printf("%4d enums\n", len(api.Enums))
+	fmt.Printf("%4d functions\n", len(api.Functions))
+	fmt.Printf("%4d structs (with %d enums, %d methods, %d records)\n",
+		structCount, structEnumCount, structMethodCount, structRecordCount)
+	fmt.Printf("%4d typedefs\n", len(api.Typedefs))
+}

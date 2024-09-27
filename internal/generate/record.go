@@ -28,6 +28,7 @@ type record struct {
 	dtor              recordDtor
 	fields            []field
 	size              int
+	isClass           bool // false for struct, true for class
 	goName            string
 	cStructName       string
 	derivedFromRefCnt bool
@@ -53,6 +54,7 @@ func (r *record) enrich1(cursor clang.Cursor, parent *record) {
 	r.size = int(cursor.Type().SizeOf())
 	r.parent = parent
 	r.enriched = true
+	r.isClass = cursor.Kind() == clang.Cursor_ClassDecl
 
 	var ctorsEnriched int
 	r.cursor.Visit(func(cursor, parent clang.Cursor) (status clang.ChildVisitResult) {

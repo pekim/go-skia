@@ -81,4 +81,5 @@ func Generate() {
 	api.enrich1()
 	api.enrich2()
 	api.generate(g)
+	api.printStats()
 }
