@@ -525,12 +525,14 @@ extern "C"
 
   void misk_delete_GrRecordingContext (sk_GrRecordingContext *obj);
 
+  void misk_delete_GrGLInterface (sk_GrGLInterface *obj);
   void misk_unref_GrGLInterface (sk_GrGLInterface *c_obj);
 
   sk_GrContextOptions *misk_new_GrContextOptions ();
 
   sk_SkArc *misk_new_Arc ();
   sk_SkArc *misk_new_ArcCopy (sk_SkArc *c_arc);
+  void misk_delete_SkArc (sk_SkArc *obj);
 
   sk_SkBitmap *misk_new_Bitmap ();
   sk_SkBitmap *misk_new_BitmapCopy (sk_SkBitmap *c_src);
@@ -734,6 +736,7 @@ extern "C"
                             float *c_widths);
 
   sk_SkFontArguments *misk_new_FontArguments ();
+  void misk_delete_SkFontArguments (sk_SkFontArguments *obj);
   sk_SkFontArguments
   misk_FontArguments_setCollectionIndex (sk_SkFontArguments *c_obj,
                                          int c_collectionIndex);
@@ -757,6 +760,7 @@ extern "C"
   sk_SkFontStyle *misk_new_FontStyle2 (int c_weight, int c_width,
                                        uint c_slant);
   sk_SkFontStyle *misk_new_FontStyle ();
+  void misk_delete_SkFontStyle (sk_SkFontStyle *obj);
   sk_SkFontStyle misk_FontStyle_Normal ();
   sk_SkFontStyle misk_FontStyle_Bold ();
   sk_SkFontStyle misk_FontStyle_Italic ();
@@ -792,6 +796,7 @@ extern "C"
   void misk_unref_SkImage (sk_SkImage *c_obj);
 
   sk_SkImageInfo *misk_new_ImageInfo ();
+  void misk_delete_SkImageInfo (sk_SkImageInfo *obj);
 
   sk_SkM44 *misk_new_M44Copy (sk_SkM44 *c_src);
   sk_SkM44 *misk_new_M44 ();
@@ -802,6 +807,7 @@ extern "C"
                                  float c_m6, float c_m10, float c_m14,
                                  float c_m3, float c_m7, float c_m11,
                                  float c_m15);
+  void misk_delete_SkM44 (sk_SkM44 *obj);
 
   void misk_delete_SkMemoryStream (sk_SkMemoryStream *obj);
   sk_SkMemoryStream *misk_MemoryStream_Make (sk_SkData *c_data);
@@ -840,8 +846,10 @@ extern "C"
   void misk_IRect_sort (sk_SkIRect *c_obj);
 
   sk_SkMatrix *misk_new_Matrix ();
+  void misk_delete_SkMatrix (sk_SkMatrix *obj);
 
   sk_SkOpBuilder *misk_new_OpBuilder ();
+  void misk_delete_SkOpBuilder (sk_SkOpBuilder *obj);
   void misk_OpBuilder_add (sk_SkOpBuilder *c_obj, sk_SkPath *c_path,
                            uint c__operator);
   bool misk_OpBuilder_resolve (sk_SkOpBuilder *c_obj, sk_SkPath *c_result);
@@ -998,6 +1006,7 @@ extern "C"
   sk_SkPixmap *misk_new_Pixmap ();
   sk_SkPixmap *misk_new_PixmapImageInfo (sk_SkImageInfo *c_info, void *c_addr,
                                          ulong c_rowBytes);
+  void misk_delete_SkPixmap (sk_SkPixmap *obj);
 
   sk_SkRect misk_Rect_MakeEmpty ();
   sk_SkRect misk_Rect_MakeWH (float c_w, float c_h);
@@ -1061,6 +1070,7 @@ extern "C"
   sk_SkSurfaceProps *misk_new_SurfacePropsPixelGeometry (uint c_flags,
                                                          uint c_p1);
   sk_SkSurfaceProps *misk_new_SurfacePropsCopy (sk_SkSurfaceProps *c_p0);
+  void misk_delete_SkSurfaceProps (sk_SkSurfaceProps *obj);
 
   void misk_delete_SkSVGDOM (sk_SkSVGDOM *obj);
   sk_SkSVGSVG *misk_SVGDOM_getRoot (sk_SkSVGDOM *c_obj);
@@ -1075,6 +1085,7 @@ extern "C"
 
   sk_SkSVGLengthContext *misk_new_SVGLengthContext (sk_SkSize c_viewport,
                                                     float c_dpi);
+  void misk_delete_SkSVGLengthContext (sk_SkSVGLengthContext *obj);
   sk_SkSize misk_SVGLengthContext_viewPort (sk_SkSVGLengthContext *c_obj);
   void misk_SVGLengthContext_setViewPort (sk_SkSVGLengthContext *c_obj,
                                           sk_SkSize c_viewport);

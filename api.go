@@ -270,6 +270,10 @@ func (o *GrGLInterface) Unref() {
 	C.misk_unref_GrGLInterface(o.sk)
 	o.sk = nil
 }
+func (o *GrGLInterface) Delete() {
+	C.misk_delete_GrGLInterface(o.sk)
+	o.sk = nil
+}
 
 type GrContextOptions C.sk_GrContextOptions
 
@@ -646,6 +650,11 @@ func NewArcCopy(arc Arc) Arc {
 	c_arc := arc.sk
 	retC := C.misk_new_ArcCopy(c_arc)
 	return Arc{sk: retC}
+}
+
+func (o *Arc) Delete() {
+	C.misk_delete_SkArc(o.sk)
+	o.sk = nil
 }
 
 /*
@@ -2940,6 +2949,11 @@ func NewFontArguments() FontArguments {
 	return FontArguments{sk: retC}
 }
 
+func (o *FontArguments) Delete() {
+	C.misk_delete_SkFontArguments(o.sk)
+	o.sk = nil
+}
+
 /*
 Specify the index of the desired font.
 
@@ -3278,6 +3292,11 @@ func NewFontStyle() FontStyle {
 
 	retC := C.misk_new_FontStyle()
 	return FontStyle{sk: retC}
+}
+
+func (o *FontStyle) Delete() {
+	C.misk_delete_SkFontStyle(o.sk)
+	o.sk = nil
 }
 
 func FontStyleNormal() FontStyle {
@@ -3686,6 +3705,11 @@ func NewImageInfo() ImageInfo {
 	return ImageInfo{sk: retC}
 }
 
+func (o *ImageInfo) Delete() {
+	C.misk_delete_SkImageInfo(o.sk)
+	o.sk = nil
+}
+
 /*
 4x4 matrix used by SkCanvas and other parts of Skia.
 
@@ -3746,6 +3770,11 @@ func NewM44Scalars(m0 float32, m4 float32, m8 float32, m12 float32, m1 float32, 
 	c_m15 := C.float(m15)
 	retC := C.misk_new_M44Scalars(c_m0, c_m4, c_m8, c_m12, c_m1, c_m5, c_m9, c_m13, c_m2, c_m6, c_m10, c_m14, c_m3, c_m7, c_m11, c_m15)
 	return M44{sk: retC}
+}
+
+func (o *M44) Delete() {
+	C.misk_delete_SkM44(o.sk)
+	o.sk = nil
 }
 
 type MemoryStream struct {
@@ -4329,6 +4358,11 @@ func NewMatrix() Matrix {
 	return Matrix{sk: retC}
 }
 
+func (o *Matrix) Delete() {
+	C.misk_delete_SkMatrix(o.sk)
+	o.sk = nil
+}
+
 /*
 Perform a series of path operations, optimized for unioning many paths together.
 */
@@ -4346,6 +4380,11 @@ func NewOpBuilder() OpBuilder {
 
 	retC := C.misk_new_OpBuilder()
 	return OpBuilder{sk: retC}
+}
+
+func (o *OpBuilder) Delete() {
+	C.misk_delete_SkOpBuilder(o.sk)
+	o.sk = nil
 }
 
 /*
@@ -6579,6 +6618,11 @@ func NewPixmapImageInfo(info ImageInfo, addr []byte, rowBytes uint32) Pixmap {
 	return Pixmap{sk: retC}
 }
 
+func (o *Pixmap) Delete() {
+	C.misk_delete_SkPixmap(o.sk)
+	o.sk = nil
+}
+
 /*
 SkRect holds four float coordinates describing the upper and
 lower bounds of a rectangle. SkRect may be created from outer bounds or
@@ -7443,6 +7487,11 @@ func NewSurfacePropsCopy(p0 SurfaceProps) SurfaceProps {
 	return SurfaceProps{sk: retC}
 }
 
+func (o *SurfaceProps) Delete() {
+	C.misk_delete_SkSurfaceProps(o.sk)
+	o.sk = nil
+}
+
 type SurfacePropsFlags uint32
 
 const (
@@ -7557,6 +7606,11 @@ func NewSVGLengthContext(viewport Size, dpi float32) SVGLengthContext {
 	c_dpi := C.float(dpi)
 	retC := C.misk_new_SVGLengthContext(c_viewport, c_dpi)
 	return SVGLengthContext{sk: retC}
+}
+
+func (o *SVGLengthContext) Delete() {
+	C.misk_delete_SkSVGLengthContext(o.sk)
+	o.sk = nil
 }
 
 func (o SVGLengthContext) ViewPort() Size {

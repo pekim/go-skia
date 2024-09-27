@@ -240,7 +240,6 @@
         { "suffix": "Typeface" },
         { "suffix": "TypefaceSizeScaleSkew" }
       ],
-      "dtorCreate": true,
       "methods": [
         {
           "name": "getMetrics",
@@ -362,7 +361,6 @@
       "name": "SkMemoryStream",
       "as": ["SkStream"],
       "constructors": [null, null, null, null],
-      "dtorCreate": true,
       "methods": [{ "name": "Make" }, { "name": "MakeDirect" }]
     },
 
@@ -641,8 +639,7 @@
 
     {
       "name": "SkSamplingOptions",
-      "constructors": [{}, { "suffix": "Copy" }, null, null, null],
-      "dtorCreate": true
+      "constructors": [{}, { "suffix": "Copy" }, null, null, null]
     },
 
     {

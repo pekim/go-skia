@@ -59,6 +59,7 @@ func (r *record) enrich1(cursor clang.Cursor, parent *record) {
 
 	var ctorsEnriched int
 	dtorCreated := false
+	dtorNotPublic := false
 	r.cursor.Visit(func(cursor, parent clang.Cursor) (status clang.ChildVisitResult) {
 		switch cursor.Kind() {
 		case clang.Cursor_Constructor:
@@ -74,6 +75,9 @@ func (r *record) enrich1(cursor clang.Cursor, parent *record) {
 			if cursor.AccessSpecifier() == clang.AccessSpecifier_Public {
 				r.dtor = newRecordDtor(r, &cursor)
 				dtorCreated = true
+			} else {
+				dtorNotPublic = true
+				fmt.Println(r.CppName)
 			}
 
 		case clang.Cursor_EnumDecl:
@@ -114,7 +118,8 @@ func (r *record) enrich1(cursor clang.Cursor, parent *record) {
 		}
 	}
 
-	if !dtorCreated && r.DtorCreate {
+	// Create dtors that were not explicitly present in the AST.
+	if r.DtorCreate || (!dtorCreated && !dtorNotPublic) && len(r.Ctors) > 0 && !r.NoWrapper {
 		r.dtor = newRecordDtor(r, nil)
 	}
 }

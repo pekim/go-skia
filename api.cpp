@@ -172,6 +172,12 @@ extern "C"
   }
 
   void
+  misk_delete_GrGLInterface (sk_GrGLInterface *obj)
+  {
+    delete reinterpret_cast<GrGLInterface *> (obj);
+  }
+
+  void
   misk_unref_GrGLInterface (sk_GrGLInterface *c_obj)
   {
     reinterpret_cast<GrGLInterface *> (c_obj)->unref ();
@@ -194,6 +200,12 @@ extern "C"
   {
     return reinterpret_cast<sk_SkArc *> (
         new SkArc (*reinterpret_cast<SkArc *> (c_arc)));
+  }
+
+  void
+  misk_delete_SkArc (sk_SkArc *obj)
+  {
+    delete reinterpret_cast<SkArc *> (obj);
   }
 
   sk_SkBitmap *
@@ -1144,6 +1156,12 @@ extern "C"
     return reinterpret_cast<sk_SkFontArguments *> (new SkFontArguments ());
   }
 
+  void
+  misk_delete_SkFontArguments (sk_SkFontArguments *obj)
+  {
+    delete reinterpret_cast<SkFontArguments *> (obj);
+  }
+
   sk_SkFontArguments
   misk_FontArguments_setCollectionIndex (sk_SkFontArguments *c_obj,
                                          int c_collectionIndex)
@@ -1235,6 +1253,12 @@ extern "C"
   misk_new_FontStyle ()
   {
     return reinterpret_cast<sk_SkFontStyle *> (new SkFontStyle ());
+  }
+
+  void
+  misk_delete_SkFontStyle (sk_SkFontStyle *obj)
+  {
+    delete reinterpret_cast<SkFontStyle *> (obj);
   }
 
   sk_SkFontStyle
@@ -1421,6 +1445,12 @@ extern "C"
     return reinterpret_cast<sk_SkImageInfo *> (new SkImageInfo ());
   }
 
+  void
+  misk_delete_SkImageInfo (sk_SkImageInfo *obj)
+  {
+    delete reinterpret_cast<SkImageInfo *> (obj);
+  }
+
   sk_SkM44 *
   misk_new_M44Copy (sk_SkM44 *c_src)
   {
@@ -1450,6 +1480,12 @@ extern "C"
     return reinterpret_cast<sk_SkM44 *> (
         new SkM44 (c_m0, c_m4, c_m8, c_m12, c_m1, c_m5, c_m9, c_m13, c_m2,
                    c_m6, c_m10, c_m14, c_m3, c_m7, c_m11, c_m15));
+  }
+
+  void
+  misk_delete_SkM44 (sk_SkM44 *obj)
+  {
+    delete reinterpret_cast<SkM44 *> (obj);
   }
 
   void
@@ -1668,10 +1704,22 @@ extern "C"
     return reinterpret_cast<sk_SkMatrix *> (new SkMatrix ());
   }
 
+  void
+  misk_delete_SkMatrix (sk_SkMatrix *obj)
+  {
+    delete reinterpret_cast<SkMatrix *> (obj);
+  }
+
   sk_SkOpBuilder *
   misk_new_OpBuilder ()
   {
     return reinterpret_cast<sk_SkOpBuilder *> (new SkOpBuilder ());
+  }
+
+  void
+  misk_delete_SkOpBuilder (sk_SkOpBuilder *obj)
+  {
+    delete reinterpret_cast<SkOpBuilder *> (obj);
   }
 
   void
@@ -2521,6 +2569,12 @@ extern "C"
                       reinterpret_cast<void *> (c_addr), c_rowBytes));
   }
 
+  void
+  misk_delete_SkPixmap (sk_SkPixmap *obj)
+  {
+    delete reinterpret_cast<SkPixmap *> (obj);
+  }
+
   sk_SkRect
   misk_Rect_MakeEmpty ()
   {
@@ -2860,6 +2914,12 @@ extern "C"
   }
 
   void
+  misk_delete_SkSurfaceProps (sk_SkSurfaceProps *obj)
+  {
+    delete reinterpret_cast<SkSurfaceProps *> (obj);
+  }
+
+  void
   misk_delete_SkSVGDOM (sk_SkSVGDOM *obj)
   {
     delete reinterpret_cast<SkSVGDOM *> (obj);
@@ -2920,6 +2980,12 @@ extern "C"
   {
     return reinterpret_cast<sk_SkSVGLengthContext *> (new SkSVGLengthContext (
         *reinterpret_cast<SkSize *> (&c_viewport), c_dpi));
+  }
+
+  void
+  misk_delete_SkSVGLengthContext (sk_SkSVGLengthContext *obj)
+  {
+    delete reinterpret_cast<SkSVGLengthContext *> (obj);
   }
 
   sk_SkSize
