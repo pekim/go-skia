@@ -8,6 +8,7 @@ import (
 	"slices"
 	"strings"
 	"sync"
+	"time"
 
 	"golang.org/x/sync/errgroup"
 	"muzzammil.xyz/jsonc"
@@ -31,22 +32,32 @@ func loadApi() api {
 	fatalOnError(err)
 
 	fmt.Print("load api ")
+	start := time.Now()
 	api.variablesLock = new(sync.Mutex)
+	tus := make([]translationUnit, len(headerFiles))
 	var group errgroup.Group
 	group.SetLimit(runtime.NumCPU())
-	for _, headerFile := range headerFiles {
+	for i, headerFile := range headerFiles {
 		group.Go(func() error {
-			tu := newTranslationUnit("_skia/skia/" + headerFile)
-			tu.enrichApi(&api)
+			tus[i] = newTranslationUnit("_skia/skia/" + headerFile)
 			fmt.Print(".")
 			return nil
 		})
 	}
 	err = group.Wait()
 	fatalOnError(err)
-	fmt.Println()
+	fmt.Printf(" %dms\n", time.Since(start).Milliseconds())
+
+	fmt.Print("enrich 1")
+	start = time.Now()
+	for _, tu := range tus {
+		tu.enrichApi(&api)
+	}
+	fmt.Printf(" %dms\n", time.Since(start).Milliseconds())
 
 	// 2nd enrichment phase
+	fmt.Print("enrich 2")
+	start = time.Now()
 	for i := range api.Enums {
 		enum := &api.Enums[i]
 		enum.enrich2(api)
@@ -67,6 +78,7 @@ func loadApi() api {
 		variable := &api.Variables[i]
 		variable.enrich2(api)
 	}
+	fmt.Printf(" %dms\n", time.Since(start).Milliseconds())
 
 	return api
 }
@@ -108,7 +120,8 @@ func (a api) findTypedef(name string) (*typedef, bool) {
 }
 
 func (a api) generate(g generator) {
-	fmt.Println("generate")
+	fmt.Print("generate")
+	start := time.Now()
 
 	for _, record := range a.Records {
 		record.generateCStruct(g)
@@ -140,4 +153,6 @@ func (a api) generate(g generator) {
 	for _, variable := range a.Variables {
 		variable.generate(g)
 	}
+
+	fmt.Printf(" %dms\n", time.Since(start).Milliseconds())
 }
