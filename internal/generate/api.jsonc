@@ -362,6 +362,7 @@
       "name": "SkMemoryStream",
       "as": ["SkStream"],
       "constructors": [null, null, null, null],
+      "dtorCreate": true,
       "methods": [{ "name": "Make" }, { "name": "MakeDirect" }]
     },
 
@@ -680,6 +681,7 @@
 
     {
       "name": "SkSVGDOM",
+      "dtorCreate": true,
       "methods": [
         { "name": "getRoot" },
         { "name": "setContainerSize" },

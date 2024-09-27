@@ -1440,6 +1440,12 @@ extern "C"
                    c_m6, c_m10, c_m14, c_m3, c_m7, c_m11, c_m15));
   }
 
+  void
+  misk_delete_SkMemoryStream (sk_SkMemoryStream *obj)
+  {
+    delete reinterpret_cast<SkMemoryStream *> (obj);
+  }
+
   sk_SkMemoryStream *
   misk_MemoryStream_Make (sk_SkData *c_data)
   {
@@ -2813,6 +2819,12 @@ extern "C"
   {
     return reinterpret_cast<sk_SkSurfaceProps *> (
         new SkSurfaceProps (*reinterpret_cast<SkSurfaceProps *> (c_p0)));
+  }
+
+  void
+  misk_delete_SkSVGDOM (sk_SkSVGDOM *obj)
+  {
+    delete reinterpret_cast<SkSVGDOM *> (obj);
   }
 
   sk_SkSVGSVG *

@@ -3754,6 +3754,11 @@ func (o MemoryStream) AsStream() Stream {
 	return Stream{sk: (*C.sk_SkStream)(unsafe.Pointer(o.sk))}
 }
 
+func (o *MemoryStream) Delete() {
+	C.misk_delete_SkMemoryStream(o.sk)
+	o.sk = nil
+}
+
 /*
 Returns a stream with a shared reference to the input data.
 */
@@ -7412,6 +7417,10 @@ func (o SVGDOM) IsNil() bool {
 
 func (o *SVGDOM) Unref() {
 	C.misk_unref_SkSVGDOM(o.sk)
+	o.sk = nil
+}
+func (o *SVGDOM) Delete() {
+	C.misk_delete_SkSVGDOM(o.sk)
 	o.sk = nil
 }
 

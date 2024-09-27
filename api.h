@@ -799,6 +799,7 @@ extern "C"
                                  float c_m3, float c_m7, float c_m11,
                                  float c_m15);
 
+  void misk_delete_SkMemoryStream (sk_SkMemoryStream *obj);
   sk_SkMemoryStream *misk_MemoryStream_Make (sk_SkData *c_data);
   sk_SkMemoryStream *misk_MemoryStream_MakeDirect (void *c_data,
                                                    ulong c_length);
@@ -1053,6 +1054,7 @@ extern "C"
                                                          uint c_p1);
   sk_SkSurfaceProps *misk_new_SurfacePropsCopy (sk_SkSurfaceProps *c_p0);
 
+  void misk_delete_SkSVGDOM (sk_SkSVGDOM *obj);
   sk_SkSVGSVG *misk_SVGDOM_getRoot (sk_SkSVGDOM *c_obj);
   void misk_SVGDOM_setContainerSize (sk_SkSVGDOM *c_obj, sk_SkSize c_p0);
   sk_SkSize misk_SVGDOM_containerSize (sk_SkSVGDOM *c_obj);
