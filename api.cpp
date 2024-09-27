@@ -1004,6 +1004,12 @@ extern "C"
                     c_size, c_scaleX, c_skewX));
   }
 
+  void
+  misk_delete_SkFont (sk_SkFont *obj)
+  {
+    delete reinterpret_cast<SkFont *> (obj);
+  }
+
   float
   misk_Font_getMetrics (sk_SkFont *c_obj, sk_SkFontMetrics *c_metrics)
   {

@@ -701,6 +701,7 @@ extern "C"
   sk_SkFont *misk_new_FontTypefaceSizeScaleSkew (sk_SkTypeface *c_typeface,
                                                  float c_size, float c_scaleX,
                                                  float c_skewX);
+  void misk_delete_SkFont (sk_SkFont *obj);
   float misk_Font_getMetrics (sk_SkFont *c_obj, sk_SkFontMetrics *c_metrics);
   void misk_Font_getXPos (sk_SkFont *c_obj, ushort *c_glyphs, int c_count,
                           float *c_xpos, float c_origin);

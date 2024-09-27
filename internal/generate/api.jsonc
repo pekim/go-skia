@@ -240,6 +240,7 @@
         { "suffix": "Typeface" },
         { "suffix": "TypefaceSizeScaleSkew" }
       ],
+      "dtorCreate": true,
       "methods": [
         {
           "name": "getMetrics",

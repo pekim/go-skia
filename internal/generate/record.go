@@ -19,6 +19,7 @@ type record struct {
 	cursor            clang.Cursor
 	CppName           string        `json:"name"`
 	Ctors             []*recordCtor `json:"constructors"`
+	DtorCreate        bool          `json:"dtorCreate"` // create a destructor, even if there isn't one in the AST
 	Enums             []enum        `json:"enums"`
 	Methods           []callable    `json:"methods"`
 	Records           []record      `json:"records"`
@@ -57,6 +58,7 @@ func (r *record) enrich1(cursor clang.Cursor, parent *record) {
 	r.isClass = cursor.Kind() == clang.Cursor_ClassDecl
 
 	var ctorsEnriched int
+	dtorCreated := false
 	r.cursor.Visit(func(cursor, parent clang.Cursor) (status clang.ChildVisitResult) {
 		switch cursor.Kind() {
 		case clang.Cursor_Constructor:
@@ -70,7 +72,8 @@ func (r *record) enrich1(cursor clang.Cursor, parent *record) {
 
 		case clang.Cursor_Destructor:
 			if cursor.AccessSpecifier() == clang.AccessSpecifier_Public {
-				r.dtor = newRecordDtor(r, cursor)
+				r.dtor = newRecordDtor(r, &cursor)
+				dtorCreated = true
 			}
 
 		case clang.Cursor_EnumDecl:
@@ -109,6 +112,10 @@ func (r *record) enrich1(cursor clang.Cursor, parent *record) {
 		} else {
 			fatalf("record %s has %d ctors, but expected %d", r.CppName, ctorsEnriched, len(r.Ctors))
 		}
+	}
+
+	if !dtorCreated && r.DtorCreate {
+		r.dtor = newRecordDtor(r, nil)
 	}
 }
 

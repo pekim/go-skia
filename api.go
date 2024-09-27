@@ -2668,6 +2668,11 @@ func NewFontTypefaceSizeScaleSkew(typeface Typeface, size float32, scaleX float3
 	return Font{sk: retC}
 }
 
+func (o *Font) Delete() {
+	C.misk_delete_SkFont(o.sk)
+	o.sk = nil
+}
+
 /*
 Returns SkFontMetrics associated with SkTypeface.
 The return value is the recommended spacing between lines: the sum of metrics

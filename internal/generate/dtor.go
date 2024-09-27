@@ -12,11 +12,12 @@ type recordDtor struct {
 	doc       string
 }
 
-func newRecordDtor(record *record, cursor clang.Cursor) recordDtor {
-	return recordDtor{
-		record: record,
-		doc:    cursor.RawCommentText(),
+func newRecordDtor(record *record, cursor *clang.Cursor) recordDtor {
+	d := recordDtor{record: record}
+	if cursor != nil {
+		d.doc = cursor.RawCommentText()
 	}
+	return d
 }
 
 func (d *recordDtor) generate(g generator) {
