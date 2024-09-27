@@ -1,6 +1,9 @@
 package generate
 
-import "sync"
+import (
+	"fmt"
+	"sync"
+)
 
 var headerFiles = []string{
 	"include/core/SkAlphaType.h",
@@ -77,9 +80,12 @@ func Generate() {
 	api := &api{
 		variablesLock: new(sync.Mutex),
 	}
+	fmt.Println()
 	api.parseTranslationUnits()
 	api.enrich1()
 	api.enrich2()
 	api.generate(g)
+	fmt.Println()
 	api.printStats()
+	fmt.Println()
 }
