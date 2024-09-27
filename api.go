@@ -2253,6 +2253,15 @@ func (o Canvas) DrawImageRect(p0 Image, src Rect, dst Rect, p3 SamplingOptions, 
 	C.misk_Canvas_drawImageRect(c_obj, c_p0, c_src, c_dst, c_p3, c_p4, c_p5)
 }
 
+func (o Canvas) DrawImageRectNoSrc(p0 Image, dst Rect, p2 SamplingOptions, p3 Paint) {
+	c_obj := o.sk
+	c_p0 := p0.sk
+	c_dst := *(*C.sk_SkRect)(unsafe.Pointer(&dst))
+	c_p2 := p2.sk
+	c_p3 := p3.sk
+	C.misk_Canvas_drawImageRectNoSrc(c_obj, c_p0, c_dst, c_p2, c_p3)
+}
+
 /*
 Draws SkImage image stretched proportionally to fit into SkRect dst.
 SkIRect center divides the image into nine sections: four sides, four corners, and

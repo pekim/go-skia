@@ -666,6 +666,10 @@ extern "C"
                                   sk_SkRect c_src, sk_SkRect c_dst,
                                   sk_SkSamplingOptions *c_p3, sk_SkPaint *c_p4,
                                   uint c_p5);
+  void misk_Canvas_drawImageRectNoSrc (sk_SkCanvas *c_obj, sk_SkImage *c_p0,
+                                       sk_SkRect c_dst,
+                                       sk_SkSamplingOptions *c_p2,
+                                       sk_SkPaint *c_p3);
   void misk_Canvas_drawImageNine (sk_SkCanvas *c_obj, sk_SkImage *c_image,
                                   sk_SkIRect c_center, sk_SkRect c_dst,
                                   int c_filter, sk_SkPaint *c_paint);

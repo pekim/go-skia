@@ -844,6 +844,18 @@ extern "C"
   }
 
   void
+  misk_Canvas_drawImageRectNoSrc (sk_SkCanvas *c_obj, sk_SkImage *c_p0,
+                                  sk_SkRect c_dst, sk_SkSamplingOptions *c_p2,
+                                  sk_SkPaint *c_p3)
+  {
+    reinterpret_cast<SkCanvas *> (c_obj)->drawImageRect (
+        reinterpret_cast<SkImage *> (c_p0),
+        *reinterpret_cast<SkRect *> (&c_dst),
+        *reinterpret_cast<SkSamplingOptions *> (c_p2),
+        reinterpret_cast<SkPaint *> (c_p3));
+  }
+
+  void
   misk_Canvas_drawImageNine (sk_SkCanvas *c_obj, sk_SkImage *c_image,
                              sk_SkIRect c_center, sk_SkRect c_dst,
                              int c_filter, sk_SkPaint *c_paint)

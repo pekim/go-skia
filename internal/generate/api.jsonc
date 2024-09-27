@@ -201,7 +201,7 @@
         },
         {
           "name": "drawImageRect",
-          "overloads": [{}, null, null, null]
+          "overloads": [{}, { "suffix": "NoSrc" }, null, null]
         },
         { "name": "drawImageNine" },
         { "name": "drawString", "overloads": [{}, null] },
