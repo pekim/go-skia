@@ -298,7 +298,7 @@
     {
       "name": "SkFontStyle",
       "constructors": [{ "suffix": "2" }, {}],
-      "enums": [{ "name": "Slant" }],
+      "enums": [{ "name": "Slant" }, { "name": "Weight" }, { "name": "Width" }],
       "methods": [
         { "name": "Normal" },
         { "name": "Bold" },

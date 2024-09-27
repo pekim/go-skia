@@ -3272,6 +3272,36 @@ const (
 	FontStyleSlantOblique FontStyleSlant = 2
 )
 
+type FontStyleWeight uint32
+
+const (
+	FontStyleWeightInvisible  FontStyleWeight = 0
+	FontStyleWeightThin       FontStyleWeight = 100
+	FontStyleWeightExtraLight FontStyleWeight = 200
+	FontStyleWeightLight      FontStyleWeight = 300
+	FontStyleWeightNormal     FontStyleWeight = 400
+	FontStyleWeightMedium     FontStyleWeight = 500
+	FontStyleWeightSemiBold   FontStyleWeight = 600
+	FontStyleWeightBold       FontStyleWeight = 700
+	FontStyleWeightExtraBold  FontStyleWeight = 800
+	FontStyleWeightBlack      FontStyleWeight = 900
+	FontStyleWeightExtraBlack FontStyleWeight = 1000
+)
+
+type FontStyleWidth uint32
+
+const (
+	FontStyleWidthUltraCondensed FontStyleWidth = 1
+	FontStyleWidthExtraCondensed FontStyleWidth = 2
+	FontStyleWidthCondensed      FontStyleWidth = 3
+	FontStyleWidthSemiCondensed  FontStyleWidth = 4
+	FontStyleWidthNormal         FontStyleWidth = 5
+	FontStyleWidthSemiExpanded   FontStyleWidth = 6
+	FontStyleWidthExpanded       FontStyleWidth = 7
+	FontStyleWidthExtraExpanded  FontStyleWidth = 8
+	FontStyleWidthUltraExpanded  FontStyleWidth = 9
+)
+
 type FontStyleSet struct {
 	sk *C.sk_SkFontStyleSet
 }
