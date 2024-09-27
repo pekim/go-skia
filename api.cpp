@@ -2795,6 +2795,26 @@ extern "C"
     return reinterpret_cast<sk_SkSurface *> (ret);
   }
 
+  sk_SkImage *
+  misk_Surface_makeImageSnapshot (sk_SkSurface *c_obj)
+  {
+    auto ret = reinterpret_cast<SkSurface *> (c_obj)
+                   ->makeImageSnapshot ()
+                   .release ();
+    return reinterpret_cast<sk_SkImage *> (ret);
+  }
+
+  sk_SkImage *
+  misk_Surface_makeImageSnapshotBounds (sk_SkSurface *c_obj,
+                                        sk_SkIRect c_bounds)
+  {
+    auto ret
+        = reinterpret_cast<SkSurface *> (c_obj)
+              ->makeImageSnapshot (*reinterpret_cast<SkIRect *> (&c_bounds))
+              .release ();
+    return reinterpret_cast<sk_SkImage *> (ret);
+  }
+
   void
   misk_unref_SkSurface (sk_SkSurface *c_obj)
   {

@@ -664,7 +664,11 @@
       "name": "SkSurface",
       "methods": [
         { "name": "getCanvas" },
-        { "name": "makeSurface", "overloads": [null, {}] }
+        { "name": "makeSurface", "overloads": [null, {}] },
+        {
+          "name": "makeImageSnapshot",
+          "overloads": [{}, { "suffix": "Bounds" }]
+        }
       ]
     },
 

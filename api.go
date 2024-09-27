@@ -7357,6 +7357,39 @@ func (o Surface) MakeSurface(width int32, height int32) Surface {
 }
 
 /*
+Returns SkImage capturing SkSurface contents. Subsequent drawing to SkSurface contents
+are not captured. SkImage allocation is accounted for if SkSurface was created with
+skgpu::Budgeted::kYes.
+
+@return  SkImage initialized with SkSurface contents
+
+example: https://fiddle.skia.org/c/@Surface_makeImageSnapshot
+*/
+func (o Surface) MakeImageSnapshot() Image {
+	c_obj := o.sk
+	retC := C.misk_Surface_makeImageSnapshot(c_obj)
+	return Image{sk: retC}
+}
+
+/*
+	Like the no-parameter version, this returns an image of the current surface contents.
+	This variant takes a rectangle specifying the subset of the surface that is of interest.
+	These bounds will be sanitized before being used.
+	- If bounds extends beyond the surface, it will be trimmed to just the intersection of
+	  it and the surface.
+	- If bounds does not intersect the surface, then this returns nullptr.
+	- If bounds == the surface, then this is the same as calling the no-parameter variant.
+
+example: https://fiddle.skia.org/c/@Surface_makeImageSnapshot_2
+*/
+func (o Surface) MakeImageSnapshotBounds(bounds IRect) Image {
+	c_obj := o.sk
+	c_bounds := *(*C.sk_SkIRect)(unsafe.Pointer(&bounds))
+	retC := C.misk_Surface_makeImageSnapshotBounds(c_obj, c_bounds)
+	return Image{sk: retC}
+}
+
+/*
 Describes properties and constraints of a given SkSurface. The rendering engine can parse these
 during drawing, and can sometimes optimize its performance (e.g. disabling an expensive
 feature).

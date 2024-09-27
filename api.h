@@ -1047,6 +1047,9 @@ extern "C"
   sk_SkCanvas *misk_Surface_getCanvas (sk_SkSurface *c_obj);
   sk_SkSurface *misk_Surface_makeSurface (sk_SkSurface *c_obj, int c_width,
                                           int c_height);
+  sk_SkImage *misk_Surface_makeImageSnapshot (sk_SkSurface *c_obj);
+  sk_SkImage *misk_Surface_makeImageSnapshotBounds (sk_SkSurface *c_obj,
+                                                    sk_SkIRect c_bounds);
   void misk_unref_SkSurface (sk_SkSurface *c_obj);
 
   sk_SkSurfaceProps *misk_new_SurfaceProps ();
