@@ -1709,6 +1709,13 @@ extern "C"
     reinterpret_cast<SkPaint *> (c_obj)->setBlendMode (SkBlendMode (c_mode));
   }
 
+  uint
+  misk_Paint_getColor (sk_SkPaint *c_obj)
+  {
+    auto ret = reinterpret_cast<SkPaint *> (c_obj)->getColor ();
+    return ret;
+  }
+
   void
   misk_Paint_setColor (sk_SkPaint *c_obj, uint c_color)
   {

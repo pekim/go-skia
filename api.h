@@ -848,6 +848,7 @@ extern "C"
                            uint c_b);
   void misk_Paint_setAntiAlias (sk_SkPaint *c_obj, bool c_aa);
   void misk_Paint_setBlendMode (sk_SkPaint *c_obj, int c_mode);
+  uint misk_Paint_getColor (sk_SkPaint *c_obj);
   void misk_Paint_setColor (sk_SkPaint *c_obj, uint c_color);
   void misk_Paint_setDither (sk_SkPaint *c_obj, bool c_dither);
   uint misk_Paint_getStrokeCap (sk_SkPaint *c_obj);

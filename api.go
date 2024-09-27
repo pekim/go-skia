@@ -4435,6 +4435,19 @@ func (o Paint) SetBlendMode(mode BlendMode) {
 }
 
 /*
+Retrieves alpha and RGB, unpremultiplied, packed into 32 bits.
+Use helpers SkColorGetA(), SkColorGetR(), SkColorGetG(), and SkColorGetB() to extract
+a color component.
+
+@return  unpremultiplied ARGB
+*/
+func (o Paint) GetColor() Color {
+	c_obj := o.sk
+	retC := C.misk_Paint_getColor(c_obj)
+	return Color(retC)
+}
+
+/*
 Sets alpha and RGB used when stroking and filling. The color is a 32-bit value,
 unpremultiplied, packing 8-bit components for alpha, red, blue, and green.
 
