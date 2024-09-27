@@ -263,6 +263,8 @@
         { "name": "textToGlyphs" },
         { "name": "unicharToGlyph" },
         { "name": "unicharsToGlyphs" },
+        { "name": "getSize" },
+        { "name": "getTypeface" },
         { "name": "getWidths", "overloads": [{ "suffix": "Bounds" }, null, {}] }
       ]
     },

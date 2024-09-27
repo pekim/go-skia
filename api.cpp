@@ -1095,6 +1095,20 @@ extern "C"
         (int *)c_uni, c_count, (unsigned short *)c_glyphs);
   }
 
+  float
+  misk_Font_getSize (sk_SkFont *c_obj)
+  {
+    auto ret = reinterpret_cast<SkFont *> (c_obj)->getSize ();
+    return ret;
+  }
+
+  sk_SkTypeface *
+  misk_Font_getTypeface (sk_SkFont *c_obj)
+  {
+    auto ret = reinterpret_cast<SkFont *> (c_obj)->getTypeface ();
+    return reinterpret_cast<sk_SkTypeface *> (ret);
+  }
+
   void
   misk_Font_getWidthsBounds (sk_SkFont *c_obj, ushort *c_glyphs, int c_count,
                              float *c_widths, sk_SkRect *c_bounds)

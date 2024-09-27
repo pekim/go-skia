@@ -2852,6 +2852,28 @@ func (o Font) UnicharsToGlyphs(uni []int32, count int32, glyphs []uint16) {
 }
 
 /*
+Returns text size in points.
+
+@return  typographic height of text
+*/
+func (o Font) GetSize() float32 {
+	c_obj := o.sk
+	retC := C.misk_Font_getSize(c_obj)
+	return float32(retC)
+}
+
+/*
+Does not alter SkTypeface SkRefCnt.
+
+@return  non-null SkTypeface
+*/
+func (o Font) GetTypeface() Typeface {
+	c_obj := o.sk
+	retC := C.misk_Font_getTypeface(c_obj)
+	return Typeface{sk: retC}
+}
+
+/*
 DEPRECATED
 Retrieves the advance and bounds for each glyph in glyphs.
 Both widths and bounds may be nullptr.

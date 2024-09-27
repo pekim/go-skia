@@ -721,6 +721,8 @@ extern "C"
   unsigned short misk_Font_unicharToGlyph (sk_SkFont *c_obj, int c_uni);
   void misk_Font_unicharsToGlyphs (sk_SkFont *c_obj, int *c_uni, int c_count,
                                    ushort *c_glyphs);
+  float misk_Font_getSize (sk_SkFont *c_obj);
+  sk_SkTypeface *misk_Font_getTypeface (sk_SkFont *c_obj);
   void misk_Font_getWidthsBounds (sk_SkFont *c_obj, ushort *c_glyphs,
                                   int c_count, float *c_widths,
                                   sk_SkRect *c_bounds);
