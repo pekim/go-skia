@@ -7240,6 +7240,11 @@ func NewSamplingOptionsCopy(p0 SamplingOptions) SamplingOptions {
 	return SamplingOptions{sk: retC}
 }
 
+func (o *SamplingOptions) Delete() {
+	C.misk_delete_SkSamplingOptions(o.sk)
+	o.sk = nil
+}
+
 // /////////////////////////////////////////////////////////////////////////////
 type Size C.sk_SkSize
 

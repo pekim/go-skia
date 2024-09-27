@@ -641,7 +641,8 @@
 
     {
       "name": "SkSamplingOptions",
-      "constructors": [{}, { "suffix": "Copy" }, null, null, null]
+      "constructors": [{}, { "suffix": "Copy" }, null, null, null],
+      "dtorCreate": true
     },
 
     {

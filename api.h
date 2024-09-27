@@ -1041,6 +1041,7 @@ extern "C"
   sk_SkSamplingOptions *misk_new_SamplingOptions ();
   sk_SkSamplingOptions *
   misk_new_SamplingOptionsCopy (sk_SkSamplingOptions *c_p0);
+  void misk_delete_SkSamplingOptions (sk_SkSamplingOptions *obj);
 
   void misk_delete_SkStream (sk_SkStream *obj);
 

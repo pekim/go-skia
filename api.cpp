@@ -2767,6 +2767,12 @@ extern "C"
   }
 
   void
+  misk_delete_SkSamplingOptions (sk_SkSamplingOptions *obj)
+  {
+    delete reinterpret_cast<SkSamplingOptions *> (obj);
+  }
+
+  void
   misk_delete_SkStream (sk_SkStream *obj)
   {
     delete reinterpret_cast<SkStream *> (obj);
