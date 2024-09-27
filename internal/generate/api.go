@@ -23,23 +23,22 @@ type api struct {
 	Functions     []callable `json:"functions"`
 	Typedefs      []typedef  `json:"typedefs"`
 	Variables     []variable
+	tus           []translationUnit
 	variablesLock *sync.Mutex
 }
 
-func loadApi() api {
-	var api api
+func (api *api) parseTranslationUnits() {
 	err := json.Unmarshal(jsonc.ToJSON(apiJson), &api)
 	fatalOnError(err)
 
 	fmt.Print("load api ")
 	start := time.Now()
-	api.variablesLock = new(sync.Mutex)
-	tus := make([]translationUnit, len(headerFiles))
+	api.tus = make([]translationUnit, len(headerFiles))
 	var group errgroup.Group
 	group.SetLimit(runtime.NumCPU())
 	for i, headerFile := range headerFiles {
 		group.Go(func() error {
-			tus[i] = newTranslationUnit("_skia/skia/" + headerFile)
+			api.tus[i] = newTranslationUnit("_skia/skia/" + headerFile)
 			fmt.Print(".")
 			return nil
 		})
@@ -47,17 +46,20 @@ func loadApi() api {
 	err = group.Wait()
 	fatalOnError(err)
 	fmt.Printf(" %dms\n", time.Since(start).Milliseconds())
+}
 
+func (api *api) enrich1() {
 	fmt.Print("enrich 1")
-	start = time.Now()
-	for _, tu := range tus {
-		tu.enrichApi(&api)
+	start := time.Now()
+	for _, tu := range api.tus {
+		tu.enrichApi(api)
 	}
 	fmt.Printf(" %dms\n", time.Since(start).Milliseconds())
+}
 
-	// 2nd enrichment phase
+func (api api) enrich2() {
 	fmt.Print("enrich 2")
-	start = time.Now()
+	start := time.Now()
 	for i := range api.Enums {
 		enum := &api.Enums[i]
 		enum.enrich2(api)
@@ -79,78 +81,76 @@ func loadApi() api {
 		variable.enrich2(api)
 	}
 	fmt.Printf(" %dms\n", time.Since(start).Milliseconds())
-
-	return api
 }
 
-func (a api) findRecord(name string) (*record, bool) {
-	for i, record := range a.Records {
+func (api api) findRecord(name string) (*record, bool) {
+	for i, record := range api.Records {
 		if record.CppName == name {
-			return &a.Records[i], true
+			return &api.Records[i], true
 		}
 	}
 	return nil, false
 }
 
-func (a api) findEnum(name string) (*enum, bool) {
-	for i, enum := range a.Enums {
+func (api api) findEnum(name string) (*enum, bool) {
+	for i, enum := range api.Enums {
 		if enum.CppName == name {
-			return &a.Enums[i], true
+			return &api.Enums[i], true
 		}
 	}
 	return nil, false
 }
 
-func (a api) findFunction(name string) (*callable, bool) {
-	for i, function := range a.Functions {
+func (api api) findFunction(name string) (*callable, bool) {
+	for i, function := range api.Functions {
 		if function.CppName == name {
-			return &a.Functions[i], true
+			return &api.Functions[i], true
 		}
 	}
 	return nil, false
 }
 
-func (a api) findTypedef(name string) (*typedef, bool) {
-	for i, typedef := range a.Typedefs {
+func (api api) findTypedef(name string) (*typedef, bool) {
+	for i, typedef := range api.Typedefs {
 		if typedef.CppName == name {
-			return &a.Typedefs[i], true
+			return &api.Typedefs[i], true
 		}
 	}
 	return nil, false
 }
 
-func (a api) generate(g generator) {
+func (api api) generate(g generator) {
 	fmt.Print("generate")
 	start := time.Now()
 
-	for _, record := range a.Records {
+	for _, record := range api.Records {
 		record.generateCStruct(g)
 		for _, record := range record.Records {
 			record.generateCStruct(g)
 		}
 	}
 
-	for _, record := range a.Records {
+	for _, record := range api.Records {
 		record.generate(g)
 	}
 
-	for _, enum := range a.Enums {
+	for _, enum := range api.Enums {
 		enum.generate(g)
 	}
 
-	for _, function := range a.Functions {
+	for _, function := range api.Functions {
 		function.generate(g)
 	}
 
-	for _, typedef := range a.Typedefs {
+	for _, typedef := range api.Typedefs {
 		typedef.generate(g)
 	}
 
 	g.headerFile.writeln()
-	slices.SortFunc(a.Variables, func(a, b variable) int {
+	slices.SortFunc(api.Variables, func(a, b variable) int {
 		return strings.Compare(a.cppName, b.cppName)
 	})
-	for _, variable := range a.Variables {
+	for _, variable := range api.Variables {
 		variable.generate(g)
 	}
 

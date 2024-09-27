@@ -1,5 +1,7 @@
 package generate
 
+import "sync"
+
 var headerFiles = []string{
 	"include/core/SkAlphaType.h",
 	"include/core/SkArc.h",
@@ -72,6 +74,11 @@ func Generate() {
 	g.cppFile = newFileCpp()
 	defer g.cppFile.finish()
 
-	api := loadApi()
+	api := &api{
+		variablesLock: new(sync.Mutex),
+	}
+	api.parseTranslationUnits()
+	api.enrich1()
+	api.enrich2()
 	api.generate(g)
 }
