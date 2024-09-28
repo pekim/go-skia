@@ -39,11 +39,16 @@ func newFileGo() *fileGo {
 
 func (f fileGo) finish() {
 	f.writeln(`
+		var fontMgr FontMgr
+
 		// FontMgrDefault returns a FontMgr, that can be used to get Typefaces.
 		func FontMgrDefault() FontMgr {
-			return FontMgr {
-				sk: C.sk_fontmgr_ref_default(),
+			if fontMgr.IsNil(){
+				fontMgr=FontMgr{
+					sk: C.sk_fontmgr_ref_default(),
+				}
 			}
+			return fontMgr
 		}
 	`)
 
