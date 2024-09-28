@@ -3992,8 +3992,8 @@ and sort() to reverse fLeft and fRight if needed.
 
 @return  fLeft
 */
-func (o IRect) X() int32 {
-	c_obj := (*C.sk_SkIRect)(&o)
+func (o *IRect) X() int32 {
+	c_obj := (*C.sk_SkIRect)(o)
 	retC := C.misk_IRect_x(c_obj)
 	return int32(retC)
 }
@@ -4004,8 +4004,8 @@ and sort() to reverse fTop and fBottom if needed.
 
 @return  fTop
 */
-func (o IRect) Y() int32 {
-	c_obj := (*C.sk_SkIRect)(&o)
+func (o *IRect) Y() int32 {
+	c_obj := (*C.sk_SkIRect)(o)
 	retC := C.misk_IRect_y(c_obj)
 	return int32(retC)
 }
@@ -4016,8 +4016,8 @@ result fits in 32-bit signed integer; result may be negative.
 
 @return  fRight minus fLeft
 */
-func (o IRect) Width() int32 {
-	c_obj := (*C.sk_SkIRect)(&o)
+func (o *IRect) Width() int32 {
+	c_obj := (*C.sk_SkIRect)(o)
 	retC := C.misk_IRect_width(c_obj)
 	return int32(retC)
 }
@@ -4028,8 +4028,8 @@ result fits in 32-bit signed integer; result may be negative.
 
 @return  fBottom minus fTop
 */
-func (o IRect) Height() int32 {
-	c_obj := (*C.sk_SkIRect)(&o)
+func (o *IRect) Height() int32 {
+	c_obj := (*C.sk_SkIRect)(o)
 	retC := C.misk_IRect_height(c_obj)
 	return int32(retC)
 }
@@ -4039,8 +4039,8 @@ Returns true if width() or height() are zero or negative.
 
 @return  true if width() or height() are zero or negative
 */
-func (o IRect) IsEmpty() bool {
-	c_obj := (*C.sk_SkIRect)(&o)
+func (o *IRect) IsEmpty() bool {
+	c_obj := (*C.sk_SkIRect)(o)
 	retC := C.misk_IRect_isEmpty(c_obj)
 	return bool(retC)
 }
@@ -4052,8 +4052,8 @@ Many other rectangles are empty; if left is equal to or greater than right,
 or if top is equal to or greater than bottom. Setting all members to zero
 is a convenience, but does not designate a special empty rectangle.
 */
-func (o IRect) SetEmpty() {
-	c_obj := (*C.sk_SkIRect)(&o)
+func (o *IRect) SetEmpty() {
+	c_obj := (*C.sk_SkIRect)(o)
 	C.misk_IRect_setEmpty(c_obj)
 }
 
@@ -4067,8 +4067,8 @@ top and bottom are not sorted; top is not necessarily less than bottom.
 @param right   stored in fRight
 @param bottom  stored in fBottom
 */
-func (o IRect) SetLTRB(left int32, top int32, right int32, bottom int32) {
-	c_obj := (*C.sk_SkIRect)(&o)
+func (o *IRect) SetLTRB(left int32, top int32, right int32, bottom int32) {
+	c_obj := (*C.sk_SkIRect)(o)
 	c_left := C.int(left)
 	c_top := C.int(top)
 	c_right := C.int(right)
@@ -4085,8 +4085,8 @@ Does not validate input; width or height may be negative.
 @param width   added to x and stored in fRight
 @param height  added to y and stored in fBottom
 */
-func (o IRect) SetXYWH(x int32, y int32, width int32, height int32) {
-	c_obj := (*C.sk_SkIRect)(&o)
+func (o *IRect) SetXYWH(x int32, y int32, width int32, height int32) {
+	c_obj := (*C.sk_SkIRect)(o)
 	c_x := C.int(x)
 	c_y := C.int(y)
 	c_width := C.int(width)
@@ -4094,8 +4094,8 @@ func (o IRect) SetXYWH(x int32, y int32, width int32, height int32) {
 	C.misk_IRect_setXYWH(c_obj, c_x, c_y, c_width, c_height)
 }
 
-func (o IRect) SetWH(width int32, height int32) {
-	c_obj := (*C.sk_SkIRect)(&o)
+func (o *IRect) SetWH(width int32, height int32) {
+	c_obj := (*C.sk_SkIRect)(o)
 	c_width := C.int(width)
 	c_height := C.int(height)
 	C.misk_IRect_setWH(c_obj, c_width, c_height)
@@ -4112,8 +4112,8 @@ If dy is positive, moves SkIRect returned downward.
 @param dx  offset added to fLeft and fRight
 @param dy  offset added to fTop and fBottom
 */
-func (o IRect) Offset(dx int32, dy int32) {
-	c_obj := (*C.sk_SkIRect)(&o)
+func (o *IRect) Offset(dx int32, dy int32) {
+	c_obj := (*C.sk_SkIRect)(o)
 	c_dx := C.int(dx)
 	c_dy := C.int(dy)
 	C.misk_IRect_offset(c_obj, c_dx, c_dy)
@@ -4130,8 +4130,8 @@ If delta.fY is positive, moves SkIRect returned downward.
 
 @param delta  offset added to SkIRect
 */
-func (o IRect) OffsetPoint(delta IPoint) {
-	c_obj := (*C.sk_SkIRect)(&o)
+func (o *IRect) OffsetPoint(delta IPoint) {
+	c_obj := (*C.sk_SkIRect)(o)
 	c_delta := delta.sk
 	C.misk_IRect_offsetPoint(c_obj, c_delta)
 }
@@ -4143,8 +4143,8 @@ are unchanged.
 @param newX  stored in fLeft, preserving width()
 @param newY  stored in fTop, preserving height()
 */
-func (o IRect) OffsetTo(newX int32, newY int32) {
-	c_obj := (*C.sk_SkIRect)(&o)
+func (o *IRect) OffsetTo(newX int32, newY int32) {
+	c_obj := (*C.sk_SkIRect)(o)
 	c_newX := C.int(newX)
 	c_newY := C.int(newY)
 	C.misk_IRect_offsetTo(c_obj, c_newX, c_newY)
@@ -4161,8 +4161,8 @@ If dy is negative, makes SkIRect taller.
 @param dx  offset added to fLeft and subtracted from fRight
 @param dy  offset added to fTop and subtracted from fBottom
 */
-func (o IRect) Inset(dx int32, dy int32) {
-	c_obj := (*C.sk_SkIRect)(&o)
+func (o *IRect) Inset(dx int32, dy int32) {
+	c_obj := (*C.sk_SkIRect)(o)
 	c_dx := C.int(dx)
 	c_dy := C.int(dy)
 	C.misk_IRect_inset(c_obj, c_dx, c_dy)
@@ -4179,8 +4179,8 @@ If dy is negative, makes SkIRect shorter.
 @param dx  subtracted to fLeft and added from fRight
 @param dy  subtracted to fTop and added from fBottom
 */
-func (o IRect) Outset(dx int32, dy int32) {
-	c_obj := (*C.sk_SkIRect)(&o)
+func (o *IRect) Outset(dx int32, dy int32) {
+	c_obj := (*C.sk_SkIRect)(o)
 	c_dx := C.int(dx)
 	c_dy := C.int(dy)
 	C.misk_IRect_outset(c_obj, c_dx, c_dy)
@@ -4203,8 +4203,8 @@ if that is not the desired behavior.
 @param dR  offset added to fRight
 @param dB  offset added to fBottom
 */
-func (o IRect) Adjust(dL int32, dT int32, dR int32, dB int32) {
-	c_obj := (*C.sk_SkIRect)(&o)
+func (o *IRect) Adjust(dL int32, dT int32, dR int32, dB int32) {
+	c_obj := (*C.sk_SkIRect)(o)
 	c_dL := C.int(dL)
 	c_dT := C.int(dT)
 	c_dR := C.int(dR)
@@ -4223,8 +4223,8 @@ returns true if constructed area is completely enclosed by SkIRect area.
 @param y  test SkIPoint y-coordinate
 @return   true if (x, y) is inside SkIRect
 */
-func (o IRect) Contains(x int32, y int32) bool {
-	c_obj := (*C.sk_SkIRect)(&o)
+func (o *IRect) Contains(x int32, y int32) bool {
+	c_obj := (*C.sk_SkIRect)(o)
 	c_x := C.int(x)
 	c_y := C.int(y)
 	retC := C.misk_IRect_contains(c_obj, c_x, c_y)
@@ -4240,8 +4240,8 @@ SkIRect contains r when SkIRect area completely includes r area.
 @param r  SkIRect contained
 @return   true if all sides of SkIRect are outside r
 */
-func (o IRect) ContainsRect(r IRect) bool {
-	c_obj := (*C.sk_SkIRect)(&o)
+func (o *IRect) ContainsRect(r IRect) bool {
+	c_obj := (*C.sk_SkIRect)(o)
 	c_r := *(*C.sk_SkIRect)(unsafe.Pointer(&r))
 	retC := C.misk_IRect_containsRect(c_obj, c_r)
 	return bool(retC)
@@ -4256,8 +4256,8 @@ Return is undefined if SkIRect is empty or construction is empty.
 @param r  SkIRect contained
 @return   true if all sides of SkIRect are outside r
 */
-func (o IRect) ContainsNoEmptyCheck(r IRect) bool {
-	c_obj := (*C.sk_SkIRect)(&o)
+func (o *IRect) ContainsNoEmptyCheck(r IRect) bool {
+	c_obj := (*C.sk_SkIRect)(o)
 	c_r := *(*C.sk_SkIRect)(unsafe.Pointer(&r))
 	retC := C.misk_IRect_containsNoEmptyCheck(c_obj, c_r)
 	return bool(retC)
@@ -4272,8 +4272,8 @@ Returns false if either r or SkIRect is empty, leaving SkIRect unchanged.
 @param r  limit of result
 @return   true if r and SkIRect have area in common
 */
-func (o IRect) Intersect(r IRect) bool {
-	c_obj := (*C.sk_SkIRect)(&o)
+func (o *IRect) Intersect(r IRect) bool {
+	c_obj := (*C.sk_SkIRect)(o)
 	c_r := *(*C.sk_SkIRect)(unsafe.Pointer(&r))
 	retC := C.misk_IRect_intersect(c_obj, c_r)
 	return bool(retC)
@@ -4288,8 +4288,8 @@ Has no effect if r is empty. Otherwise, if SkIRect is empty, sets SkIRect to r.
 
 example: https://fiddle.skia.org/c/@IRect_join_2
 */
-func (o IRect) Join(r IRect) {
-	c_obj := (*C.sk_SkIRect)(&o)
+func (o *IRect) Join(r IRect) {
+	c_obj := (*C.sk_SkIRect)(o)
 	c_r := *(*C.sk_SkIRect)(unsafe.Pointer(&r))
 	C.misk_IRect_join(c_obj, c_r)
 }
@@ -4299,8 +4299,8 @@ Swaps fLeft and fRight if fLeft is greater than fRight; and swaps
 fTop and fBottom if fTop is greater than fBottom. Result may be empty,
 and width() and height() will be zero or positive.
 */
-func (o IRect) Sort() {
-	c_obj := (*C.sk_SkIRect)(&o)
+func (o *IRect) Sort() {
+	c_obj := (*C.sk_SkIRect)(o)
 	C.misk_IRect_sort(c_obj)
 }
 
@@ -6798,8 +6798,8 @@ Call sort() to reverse fLeft and fRight if needed.
 
 @return  fLeft
 */
-func (o Rect) X() float32 {
-	c_obj := (*C.sk_SkRect)(&o)
+func (o *Rect) X() float32 {
+	c_obj := (*C.sk_SkRect)(o)
 	retC := C.misk_Rect_x(c_obj)
 	return float32(retC)
 }
@@ -6810,8 +6810,8 @@ and sort() to reverse fTop and fBottom if needed.
 
 @return  fTop
 */
-func (o Rect) Y() float32 {
-	c_obj := (*C.sk_SkRect)(&o)
+func (o *Rect) Y() float32 {
+	c_obj := (*C.sk_SkRect)(o)
 	retC := C.misk_Rect_y(c_obj)
 	return float32(retC)
 }
@@ -6822,8 +6822,8 @@ result fits in 32-bit float; result may be negative or infinity.
 
 @return  fRight minus fLeft
 */
-func (o Rect) Width() float32 {
-	c_obj := (*C.sk_SkRect)(&o)
+func (o *Rect) Width() float32 {
+	c_obj := (*C.sk_SkRect)(o)
 	retC := C.misk_Rect_width(c_obj)
 	return float32(retC)
 }
@@ -6834,8 +6834,8 @@ result fits in 32-bit float; result may be negative or infinity.
 
 @return  fBottom minus fTop
 */
-func (o Rect) Height() float32 {
-	c_obj := (*C.sk_SkRect)(&o)
+func (o *Rect) Height() float32 {
+	c_obj := (*C.sk_SkRect)(o)
 	retC := C.misk_Rect_height(c_obj)
 	return float32(retC)
 }
@@ -6846,8 +6846,8 @@ is sorted. Result may overflow to infinity if SkRect is far from the origin.
 
 @return  midpoint on x-axis
 */
-func (o Rect) CenterX() float32 {
-	c_obj := (*C.sk_SkRect)(&o)
+func (o *Rect) CenterX() float32 {
+	c_obj := (*C.sk_SkRect)(o)
 	retC := C.misk_Rect_centerX(c_obj)
 	return float32(retC)
 }
@@ -6858,8 +6858,8 @@ is sorted.
 
 @return  midpoint on y-axis
 */
-func (o Rect) CenterY() float32 {
-	c_obj := (*C.sk_SkRect)(&o)
+func (o *Rect) CenterY() float32 {
+	c_obj := (*C.sk_SkRect)(o)
 	retC := C.misk_Rect_centerY(c_obj)
 	return float32(retC)
 }
@@ -6871,8 +6871,8 @@ width() or height().
 
 @return  true if width() or height() are zero or negative
 */
-func (o Rect) IsEmpty() bool {
-	c_obj := (*C.sk_SkRect)(&o)
+func (o *Rect) IsEmpty() bool {
+	c_obj := (*C.sk_SkRect)(o)
 	retC := C.misk_Rect_isEmpty(c_obj)
 	return bool(retC)
 }
@@ -6884,8 +6884,8 @@ Many other rectangles are empty; if left is equal to or greater than right,
 or if top is equal to or greater than bottom. Setting all members to zero
 is a convenience, but does not designate a special empty rectangle.
 */
-func (o Rect) SetEmpty() {
-	c_obj := (*C.sk_SkRect)(&o)
+func (o *Rect) SetEmpty() {
+	c_obj := (*C.sk_SkRect)(o)
 	C.misk_Rect_setEmpty(c_obj)
 }
 
@@ -6899,8 +6899,8 @@ top and bottom are not sorted; top is not necessarily less than bottom.
 @param right   stored in fRight
 @param bottom  stored in fBottom
 */
-func (o Rect) SetLTRB(left float32, top float32, right float32, bottom float32) {
-	c_obj := (*C.sk_SkRect)(&o)
+func (o *Rect) SetLTRB(left float32, top float32, right float32, bottom float32) {
+	c_obj := (*C.sk_SkRect)(o)
 	c_left := C.float(left)
 	c_top := C.float(top)
 	c_right := C.float(right)
@@ -6917,8 +6917,8 @@ Does not validate input; width or height may be negative.
 @param width   added to x and stored in fRight
 @param height  added to y and stored in fBottom
 */
-func (o Rect) SetXYWH(x float32, y float32, width float32, height float32) {
-	c_obj := (*C.sk_SkRect)(&o)
+func (o *Rect) SetXYWH(x float32, y float32, width float32, height float32) {
+	c_obj := (*C.sk_SkRect)(o)
 	c_x := C.float(x)
 	c_y := C.float(y)
 	c_width := C.float(width)
@@ -6933,8 +6933,8 @@ width or height may be negative.
 @param width   stored in fRight
 @param height  stored in fBottom
 */
-func (o Rect) SetWH(width float32, height float32) {
-	c_obj := (*C.sk_SkRect)(&o)
+func (o *Rect) SetWH(width float32, height float32) {
+	c_obj := (*C.sk_SkRect)(o)
 	c_width := C.float(width)
 	c_height := C.float(height)
 	C.misk_Rect_setWH(c_obj, c_width, c_height)
@@ -6951,8 +6951,8 @@ If dy is positive, moves SkRect downward.
 @param dx  offset added to fLeft and fRight
 @param dy  offset added to fTop and fBottom
 */
-func (o Rect) Offset(dx float32, dy float32) {
-	c_obj := (*C.sk_SkRect)(&o)
+func (o *Rect) Offset(dx float32, dy float32) {
+	c_obj := (*C.sk_SkRect)(o)
 	c_dx := C.float(dx)
 	c_dy := C.float(dy)
 	C.misk_Rect_offset(c_obj, c_dx, c_dy)
@@ -6965,8 +6965,8 @@ are unchanged.
 @param newX  stored in fLeft, preserving width()
 @param newY  stored in fTop, preserving height()
 */
-func (o Rect) OffsetTo(newX float32, newY float32) {
-	c_obj := (*C.sk_SkRect)(&o)
+func (o *Rect) OffsetTo(newX float32, newY float32) {
+	c_obj := (*C.sk_SkRect)(o)
 	c_newX := C.float(newX)
 	c_newY := C.float(newY)
 	C.misk_Rect_offsetTo(c_obj, c_newX, c_newY)
@@ -6983,8 +6983,8 @@ If dy is negative, makes SkRect taller.
 @param dx  added to fLeft and subtracted from fRight
 @param dy  added to fTop and subtracted from fBottom
 */
-func (o Rect) Inset(dx float32, dy float32) {
-	c_obj := (*C.sk_SkRect)(&o)
+func (o *Rect) Inset(dx float32, dy float32) {
+	c_obj := (*C.sk_SkRect)(o)
 	c_dx := C.float(dx)
 	c_dy := C.float(dy)
 	C.misk_Rect_inset(c_obj, c_dx, c_dy)
@@ -7001,8 +7001,8 @@ If dy is negative, makes SkRect shorter.
 @param dx  subtracted to fLeft and added from fRight
 @param dy  subtracted to fTop and added from fBottom
 */
-func (o Rect) Outset(dx float32, dy float32) {
-	c_obj := (*C.sk_SkRect)(&o)
+func (o *Rect) Outset(dx float32, dy float32) {
+	c_obj := (*C.sk_SkRect)(o)
 	c_dx := C.float(dx)
 	c_dy := C.float(dy)
 	C.misk_Rect_outset(c_obj, c_dx, c_dy)
@@ -7016,8 +7016,8 @@ Returns false if SkRect is empty.
 @param y  test SkPoint y-coordinate
 @return   true if (x, y) is inside SkRect
 */
-func (o Rect) Contains(x float32, y float32) bool {
-	c_obj := (*C.sk_SkRect)(&o)
+func (o *Rect) Contains(x float32, y float32) bool {
+	c_obj := (*C.sk_SkRect)(o)
 	c_x := C.float(x)
 	c_y := C.float(y)
 	retC := C.misk_Rect_contains(c_obj, c_x, c_y)
@@ -7033,8 +7033,8 @@ SkRect contains r when SkRect area completely includes r area.
 @param r  SkRect contained
 @return   true if all sides of SkRect are outside r
 */
-func (o Rect) ContainsRect(r Rect) bool {
-	c_obj := (*C.sk_SkRect)(&o)
+func (o *Rect) ContainsRect(r Rect) bool {
+	c_obj := (*C.sk_SkRect)(o)
 	c_r := *(*C.sk_SkRect)(unsafe.Pointer(&r))
 	retC := C.misk_Rect_containsRect(c_obj, c_r)
 	return bool(retC)
@@ -7051,8 +7051,8 @@ Returns false if either r or SkRect is empty, leaving SkRect unchanged.
 
 example: https://fiddle.skia.org/c/@Rect_intersect
 */
-func (o Rect) Intersect(r Rect) bool {
-	c_obj := (*C.sk_SkRect)(&o)
+func (o *Rect) Intersect(r Rect) bool {
+	c_obj := (*C.sk_SkRect)(o)
 	c_r := *(*C.sk_SkRect)(unsafe.Pointer(&r))
 	retC := C.misk_Rect_intersect(c_obj, c_r)
 	return bool(retC)
@@ -7068,8 +7068,8 @@ SkRect to r.
 
 example: https://fiddle.skia.org/c/@Rect_join_2
 */
-func (o Rect) Join(r Rect) {
-	c_obj := (*C.sk_SkRect)(&o)
+func (o *Rect) Join(r Rect) {
+	c_obj := (*C.sk_SkRect)(o)
 	c_r := *(*C.sk_SkRect)(unsafe.Pointer(&r))
 	C.misk_Rect_join(c_obj, c_r)
 }
@@ -7079,8 +7079,8 @@ Swaps fLeft and fRight if fLeft is greater than fRight; and swaps
 fTop and fBottom if fTop is greater than fBottom. Result may be empty;
 and width() and height() will be zero or positive.
 */
-func (o Rect) Sort() {
-	c_obj := (*C.sk_SkRect)(&o)
+func (o *Rect) Sort() {
+	c_obj := (*C.sk_SkRect)(o)
 	C.misk_Rect_sort(c_obj)
 }
 

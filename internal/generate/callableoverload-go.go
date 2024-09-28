@@ -26,7 +26,11 @@ func (o callableOverload) generateGo(g generator) {
 	// make receiver if a non-static class method
 	var receiver string
 	if o.isNonStaticMethod {
-		receiver = fmt.Sprintf("(o %s)", o.record.goName)
+		if o.record.NoWrapper {
+			receiver = fmt.Sprintf("(o *%s)", o.record.goName)
+		} else {
+			receiver = fmt.Sprintf("(o %s)", o.record.goName)
+		}
 	}
 
 	f.writeDocComment(o.doc)
@@ -106,7 +110,7 @@ func (o callableOverload) firstGoCArg() (string, string, bool) {
 
 	cVar := "c_obj := o.sk"
 	if o.record.NoWrapper {
-		cVar = fmt.Sprintf("c_obj := (*C.%s)(&o)", o.record.cStructName)
+		cVar = fmt.Sprintf("c_obj := (*C.%s)(o)", o.record.cStructName)
 	}
 	cArg := "c_obj"
 	return cVar, cArg, true
