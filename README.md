@@ -1,7 +1,9 @@
 # github.com/pekim/go-skia
 
+[![PkgGoDev](https://pkg.go.dev/badge/github.com/pekim/go-skia)](https://pkg.go.dev/github.com/pekim/go-skia)
+
 `github.com/pekim/go-skia` is a package that provides generated Go bindings
-to some of skia's C++ api.
+for some of [skia](https://skia.org/)'s C++ api.
 
 To add it to a Go module, `go get github.com/pekim/go-skia`.
 
