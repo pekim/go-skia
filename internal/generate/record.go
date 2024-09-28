@@ -296,7 +296,8 @@ func (r record) generateNilMethod(g generator) {
 
 	f := g.goFile
 	f.writeln("// IsNil returns true if the raw skia object pointer is nil.")
-	f.writelnf("// If it is nil is may indicate that the %s has not been created.", r.goName)
+	f.writelnf("// If it is nil is may indicate that the %s has not been created, or has been deleted with [%s.Delete].",
+		r.goName, r.goName)
 	f.writelnf("func (o %s) IsNil() bool {", r.goName)
 	f.writeln("  return o.sk == nil")
 	f.writeln("}")

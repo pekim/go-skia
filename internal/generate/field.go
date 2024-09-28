@@ -1,6 +1,8 @@
 package generate
 
 import (
+	"strings"
+
 	"github.com/go-clang/clang-v15/clang"
 )
 
@@ -24,7 +26,7 @@ func newField(cursor clang.Cursor) field {
 		offset:    int(cursor.OffsetOfField()),
 		public:    cursor.AccessSpecifier() == clang.AccessSpecifier_Public,
 		clangType: cursor.Type(),
-		doc:       cursor.RawCommentText(),
+		doc:       strings.Replace(cursor.RawCommentText(), "//!< ", "// ", 1),
 	}
 	return f
 }

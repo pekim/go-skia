@@ -42,7 +42,7 @@ type GrBackendRenderTarget struct {
 }
 
 // IsNil returns true if the raw skia object pointer is nil.
-// If it is nil is may indicate that the GrBackendRenderTarget has not been created.
+// If it is nil is may indicate that the GrBackendRenderTarget has not been created, or has been deleted with [GrBackendRenderTarget.Delete].
 func (o GrBackendRenderTarget) IsNil() bool {
 	return o.sk == nil
 }
@@ -105,7 +105,7 @@ type GrDirectContext struct {
 }
 
 // IsNil returns true if the raw skia object pointer is nil.
-// If it is nil is may indicate that the GrDirectContext has not been created.
+// If it is nil is may indicate that the GrDirectContext has not been created, or has been deleted with [GrDirectContext.Delete].
 func (o GrDirectContext) IsNil() bool {
 	return o.sk == nil
 }
@@ -226,7 +226,7 @@ func (o *GrFlushInfo) SetNumSemaphores(value uint32) {
 }
 
 // IsNil returns true if the raw skia object pointer is nil.
-// If it is nil is may indicate that the GrFlushInfo has not been created.
+// If it is nil is may indicate that the GrFlushInfo has not been created, or has been deleted with [GrFlushInfo.Delete].
 func (o GrFlushInfo) IsNil() bool {
 	return o.sk == nil
 }
@@ -236,7 +236,7 @@ type GrRecordingContext struct {
 }
 
 // IsNil returns true if the raw skia object pointer is nil.
-// If it is nil is may indicate that the GrRecordingContext has not been created.
+// If it is nil is may indicate that the GrRecordingContext has not been created, or has been deleted with [GrRecordingContext.Delete].
 func (o GrRecordingContext) IsNil() bool {
 	return o.sk == nil
 }
@@ -262,7 +262,7 @@ type GrGLInterface struct {
 }
 
 // IsNil returns true if the raw skia object pointer is nil.
-// If it is nil is may indicate that the GrGLInterface has not been created.
+// If it is nil is may indicate that the GrGLInterface has not been created, or has been deleted with [GrGLInterface.Delete].
 func (o GrGLInterface) IsNil() bool {
 	return o.sk == nil
 }
@@ -636,7 +636,7 @@ func (o *Arc) SetSweepAngle(value float32) {
 }
 
 // IsNil returns true if the raw skia object pointer is nil.
-// If it is nil is may indicate that the Arc has not been created.
+// If it is nil is may indicate that the Arc has not been created, or has been deleted with [Arc.Delete].
 func (o Arc) IsNil() bool {
 	return o.sk == nil
 }
@@ -684,7 +684,7 @@ type Bitmap struct {
 }
 
 // IsNil returns true if the raw skia object pointer is nil.
-// If it is nil is may indicate that the Bitmap has not been created.
+// If it is nil is may indicate that the Bitmap has not been created, or has been deleted with [Bitmap.Delete].
 func (o Bitmap) IsNil() bool {
 	return o.sk == nil
 }
@@ -895,7 +895,7 @@ type Canvas struct {
 }
 
 // IsNil returns true if the raw skia object pointer is nil.
-// If it is nil is may indicate that the Canvas has not been created.
+// If it is nil is may indicate that the Canvas has not been created, or has been deleted with [Canvas.Delete].
 func (o Canvas) IsNil() bool {
 	return o.sk == nil
 }
@@ -2490,7 +2490,7 @@ type ColorSpace struct {
 }
 
 // IsNil returns true if the raw skia object pointer is nil.
-// If it is nil is may indicate that the ColorSpace has not been created.
+// If it is nil is may indicate that the ColorSpace has not been created, or has been deleted with [ColorSpace.Delete].
 func (o ColorSpace) IsNil() bool {
 	return o.sk == nil
 }
@@ -2537,7 +2537,7 @@ type Data struct {
 }
 
 // IsNil returns true if the raw skia object pointer is nil.
-// If it is nil is may indicate that the Data has not been created.
+// If it is nil is may indicate that the Data has not been created, or has been deleted with [Data.Delete].
 func (o Data) IsNil() bool {
 	return o.sk == nil
 }
@@ -2625,7 +2625,7 @@ type Font struct {
 }
 
 // IsNil returns true if the raw skia object pointer is nil.
-// If it is nil is may indicate that the Font has not been created.
+// If it is nil is may indicate that the Font has not been created, or has been deleted with [Font.Delete].
 func (o Font) IsNil() bool {
 	return o.sk == nil
 }
@@ -2939,7 +2939,7 @@ type FontArguments struct {
 }
 
 // IsNil returns true if the raw skia object pointer is nil.
-// If it is nil is may indicate that the FontArguments has not been created.
+// If it is nil is may indicate that the FontArguments has not been created, or has been deleted with [FontArguments.Delete].
 func (o FontArguments) IsNil() bool {
 	return o.sk == nil
 }
@@ -2999,7 +2999,7 @@ func (o *FontArgumentsVariationPosition) SetcoordinateCount(value int32) {
 }
 
 // IsNil returns true if the raw skia object pointer is nil.
-// If it is nil is may indicate that the FontArgumentsVariationPosition has not been created.
+// If it is nil is may indicate that the FontArgumentsVariationPosition has not been created, or has been deleted with [FontArgumentsVariationPosition.Delete].
 func (o FontArgumentsVariationPosition) IsNil() bool {
 	return o.sk == nil
 }
@@ -3033,7 +3033,7 @@ func (o *FontArgumentsPalette) SetoverrideCount(value int32) {
 }
 
 // IsNil returns true if the raw skia object pointer is nil.
-// If it is nil is may indicate that the FontArgumentsPalette has not been created.
+// If it is nil is may indicate that the FontArgumentsPalette has not been created, or has been deleted with [FontArgumentsPalette.Delete].
 func (o FontArgumentsPalette) IsNil() bool {
 	return o.sk == nil
 }
@@ -3044,7 +3044,7 @@ The metric values are consistent with the Skia y-down coordinate system.
 */
 type FontMetrics C.sk_SkFontMetrics
 
-// !< FontMetricsFlags indicating which metrics are valid
+// FontMetricsFlags indicating which metrics are valid
 func (o *FontMetrics) Flags() uint32 {
 	return uint32(o.fFlags)
 }
@@ -3053,7 +3053,7 @@ func (o *FontMetrics) SetFlags(value uint32) {
 	o.fFlags = C.uint(value)
 }
 
-// !< greatest extent above origin of any glyph bounding box, typically negative; deprecated with variable fonts
+// greatest extent above origin of any glyph bounding box, typically negative; deprecated with variable fonts
 func (o *FontMetrics) Top() float32 {
 	return float32(o.fTop)
 }
@@ -3062,7 +3062,7 @@ func (o *FontMetrics) SetTop(value float32) {
 	o.fTop = C.float(value)
 }
 
-// !< distance to reserve above baseline, typically negative
+// distance to reserve above baseline, typically negative
 func (o *FontMetrics) Ascent() float32 {
 	return float32(o.fAscent)
 }
@@ -3071,7 +3071,7 @@ func (o *FontMetrics) SetAscent(value float32) {
 	o.fAscent = C.float(value)
 }
 
-// !< distance to reserve below baseline, typically positive
+// distance to reserve below baseline, typically positive
 func (o *FontMetrics) Descent() float32 {
 	return float32(o.fDescent)
 }
@@ -3080,7 +3080,7 @@ func (o *FontMetrics) SetDescent(value float32) {
 	o.fDescent = C.float(value)
 }
 
-// !< greatest extent below origin of any glyph bounding box, typically positive; deprecated with variable fonts
+// greatest extent below origin of any glyph bounding box, typically positive; deprecated with variable fonts
 func (o *FontMetrics) Bottom() float32 {
 	return float32(o.fBottom)
 }
@@ -3089,7 +3089,7 @@ func (o *FontMetrics) SetBottom(value float32) {
 	o.fBottom = C.float(value)
 }
 
-// !< distance to add between lines, typically positive or zero
+// distance to add between lines, typically positive or zero
 func (o *FontMetrics) Leading() float32 {
 	return float32(o.fLeading)
 }
@@ -3098,7 +3098,7 @@ func (o *FontMetrics) SetLeading(value float32) {
 	o.fLeading = C.float(value)
 }
 
-// !< average character width, zero if unknown
+// average character width, zero if unknown
 func (o *FontMetrics) AvgCharWidth() float32 {
 	return float32(o.fAvgCharWidth)
 }
@@ -3107,7 +3107,7 @@ func (o *FontMetrics) SetAvgCharWidth(value float32) {
 	o.fAvgCharWidth = C.float(value)
 }
 
-// !< maximum character width, zero if unknown
+// maximum character width, zero if unknown
 func (o *FontMetrics) MaxCharWidth() float32 {
 	return float32(o.fMaxCharWidth)
 }
@@ -3116,7 +3116,7 @@ func (o *FontMetrics) SetMaxCharWidth(value float32) {
 	o.fMaxCharWidth = C.float(value)
 }
 
-// !< greatest extent to left of origin of any glyph bounding box, typically negative; deprecated with variable fonts
+// greatest extent to left of origin of any glyph bounding box, typically negative; deprecated with variable fonts
 func (o *FontMetrics) XMin() float32 {
 	return float32(o.fXMin)
 }
@@ -3125,7 +3125,7 @@ func (o *FontMetrics) SetXMin(value float32) {
 	o.fXMin = C.float(value)
 }
 
-// !< greatest extent to right of origin of any glyph bounding box, typically positive; deprecated with variable fonts
+// greatest extent to right of origin of any glyph bounding box, typically positive; deprecated with variable fonts
 func (o *FontMetrics) XMax() float32 {
 	return float32(o.fXMax)
 }
@@ -3134,7 +3134,7 @@ func (o *FontMetrics) SetXMax(value float32) {
 	o.fXMax = C.float(value)
 }
 
-// !< height of lower-case 'x', zero if unknown, typically negative
+// height of lower-case 'x', zero if unknown, typically negative
 func (o *FontMetrics) XHeight() float32 {
 	return float32(o.fXHeight)
 }
@@ -3143,7 +3143,7 @@ func (o *FontMetrics) SetXHeight(value float32) {
 	o.fXHeight = C.float(value)
 }
 
-// !< height of an upper-case letter, zero if unknown, typically negative
+// height of an upper-case letter, zero if unknown, typically negative
 func (o *FontMetrics) CapHeight() float32 {
 	return float32(o.fCapHeight)
 }
@@ -3152,7 +3152,7 @@ func (o *FontMetrics) SetCapHeight(value float32) {
 	o.fCapHeight = C.float(value)
 }
 
-// !< underline thickness
+// underline thickness
 func (o *FontMetrics) UnderlineThickness() float32 {
 	return float32(o.fUnderlineThickness)
 }
@@ -3161,7 +3161,7 @@ func (o *FontMetrics) SetUnderlineThickness(value float32) {
 	o.fUnderlineThickness = C.float(value)
 }
 
-// !< distance from baseline to top of stroke, typically positive
+// distance from baseline to top of stroke, typically positive
 func (o *FontMetrics) UnderlinePosition() float32 {
 	return float32(o.fUnderlinePosition)
 }
@@ -3170,7 +3170,7 @@ func (o *FontMetrics) SetUnderlinePosition(value float32) {
 	o.fUnderlinePosition = C.float(value)
 }
 
-// !< strikeout thickness
+// strikeout thickness
 func (o *FontMetrics) StrikeoutThickness() float32 {
 	return float32(o.fStrikeoutThickness)
 }
@@ -3179,7 +3179,7 @@ func (o *FontMetrics) SetStrikeoutThickness(value float32) {
 	o.fStrikeoutThickness = C.float(value)
 }
 
-// !< distance from baseline to bottom of stroke, typically negative
+// distance from baseline to bottom of stroke, typically negative
 func (o *FontMetrics) StrikeoutPosition() float32 {
 	return float32(o.fStrikeoutPosition)
 }
@@ -3193,7 +3193,7 @@ type FontMgr struct {
 }
 
 // IsNil returns true if the raw skia object pointer is nil.
-// If it is nil is may indicate that the FontMgr has not been created.
+// If it is nil is may indicate that the FontMgr has not been created, or has been deleted with [FontMgr.Delete].
 func (o FontMgr) IsNil() bool {
 	return o.sk == nil
 }
@@ -3276,7 +3276,7 @@ type FontStyle struct {
 }
 
 // IsNil returns true if the raw skia object pointer is nil.
-// If it is nil is may indicate that the FontStyle has not been created.
+// If it is nil is may indicate that the FontStyle has not been created, or has been deleted with [FontStyle.Delete].
 func (o FontStyle) IsNil() bool {
 	return o.sk == nil
 }
@@ -3363,7 +3363,7 @@ type FontStyleSet struct {
 }
 
 // IsNil returns true if the raw skia object pointer is nil.
-// If it is nil is may indicate that the FontStyleSet has not been created.
+// If it is nil is may indicate that the FontStyleSet has not been created, or has been deleted with [FontStyleSet.Delete].
 func (o FontStyleSet) IsNil() bool {
 	return o.sk == nil
 }
@@ -3426,7 +3426,7 @@ type Image struct {
 }
 
 // IsNil returns true if the raw skia object pointer is nil.
-// If it is nil is may indicate that the Image has not been created.
+// If it is nil is may indicate that the Image has not been created, or has been deleted with [Image.Delete].
 func (o Image) IsNil() bool {
 	return o.sk == nil
 }
@@ -3689,7 +3689,7 @@ type ImageInfo struct {
 }
 
 // IsNil returns true if the raw skia object pointer is nil.
-// If it is nil is may indicate that the ImageInfo has not been created.
+// If it is nil is may indicate that the ImageInfo has not been created, or has been deleted with [ImageInfo.Delete].
 func (o ImageInfo) IsNil() bool {
 	return o.sk == nil
 }
@@ -3725,7 +3725,7 @@ type M44 struct {
 }
 
 // IsNil returns true if the raw skia object pointer is nil.
-// If it is nil is may indicate that the M44 has not been created.
+// If it is nil is may indicate that the M44 has not been created, or has been deleted with [M44.Delete].
 func (o M44) IsNil() bool {
 	return o.sk == nil
 }
@@ -3783,7 +3783,7 @@ type MemoryStream struct {
 }
 
 // IsNil returns true if the raw skia object pointer is nil.
-// If it is nil is may indicate that the MemoryStream has not been created.
+// If it is nil is may indicate that the MemoryStream has not been created, or has been deleted with [MemoryStream.Delete].
 func (o MemoryStream) IsNil() bool {
 	return o.sk == nil
 }
@@ -3824,7 +3824,7 @@ type IPoint struct {
 	sk *C.sk_SkIPoint
 }
 
-// !< x-axis value
+// x-axis value
 func (o *IPoint) X() int32 {
 	return int32(o.sk.fX)
 }
@@ -3833,7 +3833,7 @@ func (o *IPoint) SetX(value int32) {
 	o.sk.fX = C.int(value)
 }
 
-// !< y-axis value
+// y-axis value
 func (o *IPoint) Y() int32 {
 	return int32(o.sk.fY)
 }
@@ -3843,7 +3843,7 @@ func (o *IPoint) SetY(value int32) {
 }
 
 // IsNil returns true if the raw skia object pointer is nil.
-// If it is nil is may indicate that the IPoint has not been created.
+// If it is nil is may indicate that the IPoint has not been created, or has been deleted with [IPoint.Delete].
 func (o IPoint) IsNil() bool {
 	return o.sk == nil
 }
@@ -3857,7 +3857,7 @@ its top, it is considered empty.
 */
 type IRect C.sk_SkIRect
 
-// !< smaller x-axis bounds
+// smaller x-axis bounds
 func (o *IRect) Left() int32 {
 	return int32(o.fLeft)
 }
@@ -3866,7 +3866,7 @@ func (o *IRect) SetLeft(value int32) {
 	o.fLeft = C.int(value)
 }
 
-// !< smaller y-axis bounds
+// smaller y-axis bounds
 func (o *IRect) Top() int32 {
 	return int32(o.fTop)
 }
@@ -3875,7 +3875,7 @@ func (o *IRect) SetTop(value int32) {
 	o.fTop = C.int(value)
 }
 
-// !< larger x-axis bounds
+// larger x-axis bounds
 func (o *IRect) Right() int32 {
 	return int32(o.fRight)
 }
@@ -3884,7 +3884,7 @@ func (o *IRect) SetRight(value int32) {
 	o.fRight = C.int(value)
 }
 
-// !< larger y-axis bounds
+// larger y-axis bounds
 func (o *IRect) Bottom() int32 {
 	return int32(o.fBottom)
 }
@@ -4341,7 +4341,7 @@ type Matrix struct {
 }
 
 // IsNil returns true if the raw skia object pointer is nil.
-// If it is nil is may indicate that the Matrix has not been created.
+// If it is nil is may indicate that the Matrix has not been created, or has been deleted with [Matrix.Delete].
 func (o Matrix) IsNil() bool {
 	return o.sk == nil
 }
@@ -4372,7 +4372,7 @@ type OpBuilder struct {
 }
 
 // IsNil returns true if the raw skia object pointer is nil.
-// If it is nil is may indicate that the OpBuilder has not been created.
+// If it is nil is may indicate that the OpBuilder has not been created, or has been deleted with [OpBuilder.Delete].
 func (o OpBuilder) IsNil() bool {
 	return o.sk == nil
 }
@@ -4431,7 +4431,7 @@ type Paint struct {
 }
 
 // IsNil returns true if the raw skia object pointer is nil.
-// If it is nil is may indicate that the Paint has not been created.
+// If it is nil is may indicate that the Paint has not been created, or has been deleted with [Paint.Delete].
 func (o Paint) IsNil() bool {
 	return o.sk == nil
 }
@@ -4788,7 +4788,7 @@ type Path struct {
 }
 
 // IsNil returns true if the raw skia object pointer is nil.
-// If it is nil is may indicate that the Path has not been created.
+// If it is nil is may indicate that the Path has not been created, or has been deleted with [Path.Delete].
 func (o Path) IsNil() bool {
 	return o.sk == nil
 }
@@ -6532,7 +6532,7 @@ type Point struct {
 	sk *C.sk_SkPoint
 }
 
-// !< x-axis value
+// x-axis value
 func (o *Point) X() float32 {
 	return float32(o.sk.fX)
 }
@@ -6541,7 +6541,7 @@ func (o *Point) SetX(value float32) {
 	o.sk.fX = C.float(value)
 }
 
-// !< y-axis value
+// y-axis value
 func (o *Point) Y() float32 {
 	return float32(o.sk.fY)
 }
@@ -6551,7 +6551,7 @@ func (o *Point) SetY(value float32) {
 }
 
 // IsNil returns true if the raw skia object pointer is nil.
-// If it is nil is may indicate that the Point has not been created.
+// If it is nil is may indicate that the Point has not been created, or has been deleted with [Point.Delete].
 func (o Point) IsNil() bool {
 	return o.sk == nil
 }
@@ -6573,7 +6573,7 @@ type Pixmap struct {
 }
 
 // IsNil returns true if the raw skia object pointer is nil.
-// If it is nil is may indicate that the Pixmap has not been created.
+// If it is nil is may indicate that the Pixmap has not been created, or has been deleted with [Pixmap.Delete].
 func (o Pixmap) IsNil() bool {
 	return o.sk == nil
 }
@@ -6633,7 +6633,7 @@ its top, it is considered empty.
 */
 type Rect C.sk_SkRect
 
-// !< smaller x-axis bounds
+// smaller x-axis bounds
 func (o *Rect) Left() float32 {
 	return float32(o.fLeft)
 }
@@ -6642,7 +6642,7 @@ func (o *Rect) SetLeft(value float32) {
 	o.fLeft = C.float(value)
 }
 
-// !< smaller y-axis bounds
+// smaller y-axis bounds
 func (o *Rect) Top() float32 {
 	return float32(o.fTop)
 }
@@ -6651,7 +6651,7 @@ func (o *Rect) SetTop(value float32) {
 	o.fTop = C.float(value)
 }
 
-// !< larger x-axis bounds
+// larger x-axis bounds
 func (o *Rect) Right() float32 {
 	return float32(o.fRight)
 }
@@ -6660,7 +6660,7 @@ func (o *Rect) SetRight(value float32) {
 	o.fRight = C.float(value)
 }
 
-// !< larger y-axis bounds
+// larger y-axis bounds
 func (o *Rect) Bottom() float32 {
 	return float32(o.fBottom)
 }
@@ -7136,7 +7136,7 @@ type Region struct {
 }
 
 // IsNil returns true if the raw skia object pointer is nil.
-// If it is nil is may indicate that the Region has not been created.
+// If it is nil is may indicate that the Region has not been created, or has been deleted with [Region.Delete].
 func (o Region) IsNil() bool {
 	return o.sk == nil
 }
@@ -7211,7 +7211,7 @@ as SkColor4f.
 */
 type RGBA4f C.sk_SkRGBA4f
 
-// !< red component
+// red component
 func (o *RGBA4f) R() float32 {
 	return float32(o.fR)
 }
@@ -7220,7 +7220,7 @@ func (o *RGBA4f) SetR(value float32) {
 	o.fR = C.float(value)
 }
 
-// !< green component
+// green component
 func (o *RGBA4f) G() float32 {
 	return float32(o.fG)
 }
@@ -7229,7 +7229,7 @@ func (o *RGBA4f) SetG(value float32) {
 	o.fG = C.float(value)
 }
 
-// !< blue component
+// blue component
 func (o *RGBA4f) B() float32 {
 	return float32(o.fB)
 }
@@ -7238,7 +7238,7 @@ func (o *RGBA4f) SetB(value float32) {
 	o.fB = C.float(value)
 }
 
-// !< alpha component
+// alpha component
 func (o *RGBA4f) A() float32 {
 	return float32(o.fA)
 }
@@ -7268,7 +7268,7 @@ func (o *SamplingOptions) SetuseCubic(value bool) {
 }
 
 // IsNil returns true if the raw skia object pointer is nil.
-// If it is nil is may indicate that the SamplingOptions has not been created.
+// If it is nil is may indicate that the SamplingOptions has not been created, or has been deleted with [SamplingOptions.Delete].
 func (o SamplingOptions) IsNil() bool {
 	return o.sk == nil
 }
@@ -7318,7 +7318,7 @@ type Stream struct {
 }
 
 // IsNil returns true if the raw skia object pointer is nil.
-// If it is nil is may indicate that the Stream has not been created.
+// If it is nil is may indicate that the Stream has not been created, or has been deleted with [Stream.Delete].
 func (o Stream) IsNil() bool {
 	return o.sk == nil
 }
@@ -7338,7 +7338,7 @@ type String struct {
 }
 
 // IsNil returns true if the raw skia object pointer is nil.
-// If it is nil is may indicate that the String has not been created.
+// If it is nil is may indicate that the String has not been created, or has been deleted with [String.Delete].
 func (o String) IsNil() bool {
 	return o.sk == nil
 }
@@ -7377,7 +7377,7 @@ type Surface struct {
 }
 
 // IsNil returns true if the raw skia object pointer is nil.
-// If it is nil is may indicate that the Surface has not been created.
+// If it is nil is may indicate that the Surface has not been created, or has been deleted with [Surface.Delete].
 func (o Surface) IsNil() bool {
 	return o.sk == nil
 }
@@ -7458,7 +7458,7 @@ type SurfaceProps struct {
 }
 
 // IsNil returns true if the raw skia object pointer is nil.
-// If it is nil is may indicate that the SurfaceProps has not been created.
+// If it is nil is may indicate that the SurfaceProps has not been created, or has been deleted with [SurfaceProps.Delete].
 func (o SurfaceProps) IsNil() bool {
 	return o.sk == nil
 }
@@ -7507,7 +7507,7 @@ type SVGDOM struct {
 }
 
 // IsNil returns true if the raw skia object pointer is nil.
-// If it is nil is may indicate that the SVGDOM has not been created.
+// If it is nil is may indicate that the SVGDOM has not been created, or has been deleted with [SVGDOM.Delete].
 func (o SVGDOM) IsNil() bool {
 	return o.sk == nil
 }
@@ -7580,7 +7580,7 @@ type SVGSVG struct {
 }
 
 // IsNil returns true if the raw skia object pointer is nil.
-// If it is nil is may indicate that the SVGSVG has not been created.
+// If it is nil is may indicate that the SVGSVG has not been created, or has been deleted with [SVGSVG.Delete].
 func (o SVGSVG) IsNil() bool {
 	return o.sk == nil
 }
@@ -7597,7 +7597,7 @@ type SVGLengthContext struct {
 }
 
 // IsNil returns true if the raw skia object pointer is nil.
-// If it is nil is may indicate that the SVGLengthContext has not been created.
+// If it is nil is may indicate that the SVGLengthContext has not been created, or has been deleted with [SVGLengthContext.Delete].
 func (o SVGLengthContext) IsNil() bool {
 	return o.sk == nil
 }
@@ -7636,7 +7636,7 @@ type TextBlob struct {
 }
 
 // IsNil returns true if the raw skia object pointer is nil.
-// If it is nil is may indicate that the TextBlob has not been created.
+// If it is nil is may indicate that the TextBlob has not been created, or has been deleted with [TextBlob.Delete].
 func (o TextBlob) IsNil() bool {
 	return o.sk == nil
 }
@@ -7751,7 +7751,7 @@ type TextBlobBuilder struct {
 }
 
 // IsNil returns true if the raw skia object pointer is nil.
-// If it is nil is may indicate that the TextBlobBuilder has not been created.
+// If it is nil is may indicate that the TextBlobBuilder has not been created, or has been deleted with [TextBlobBuilder.Delete].
 func (o TextBlobBuilder) IsNil() bool {
 	return o.sk == nil
 }
@@ -8008,7 +8008,7 @@ type TextBlobBuilderRunBuffer struct {
 }
 
 // IsNil returns true if the raw skia object pointer is nil.
-// If it is nil is may indicate that the TextBlobBuilderRunBuffer has not been created.
+// If it is nil is may indicate that the TextBlobBuilderRunBuffer has not been created, or has been deleted with [TextBlobBuilderRunBuffer.Delete].
 func (o TextBlobBuilderRunBuffer) IsNil() bool {
 	return o.sk == nil
 }
@@ -8032,7 +8032,7 @@ type Typeface struct {
 }
 
 // IsNil returns true if the raw skia object pointer is nil.
-// If it is nil is may indicate that the Typeface has not been created.
+// If it is nil is may indicate that the Typeface has not been created, or has been deleted with [Typeface.Delete].
 func (o Typeface) IsNil() bool {
 	return o.sk == nil
 }
