@@ -239,4 +239,4 @@ fi
 PATH=$ORIGINAL_PATH
 go run internal/generate/cmd/main.go
 echo test
-go test .
+go test ./...
