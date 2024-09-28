@@ -258,7 +258,7 @@ func (r record) generateFieldGetter(g generator, field field) {
 
 	f := g.goFile
 	f.writeDocComment(field.doc)
-	f.writelnf(`func (o %s) %s() %s {
+	f.writelnf(`func (o *%s) %s() %s {
 			return %s(%s.%s)
 		}`,
 		r.goName, methodName, field.goType,
