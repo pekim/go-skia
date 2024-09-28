@@ -2485,6 +2485,164 @@ const (
 	CanvasSrcRectConstraintFast CanvasSrcRectConstraint = 1
 )
 
+/*
+Describes pixel and encoding. SkImageInfo can be created from SkColorInfo by
+providing dimensions.
+
+It encodes how pixel bits describe alpha, transparency; color components red, blue,
+and green; and SkColorSpace, the range and linearity of colors.
+*/
+type ColorInfo struct {
+	sk *C.sk_SkColorInfo
+}
+
+// IsNil returns true if the raw skia object pointer is nil.
+// If it is nil is may indicate that the ColorInfo has not been created, or has been deleted with [ColorInfo.Delete].
+func (o ColorInfo) IsNil() bool {
+	return o.sk == nil
+}
+
+/*
+Creates an SkColorInfo with kUnknown_SkColorType, kUnknown_SkAlphaType,
+and no SkColorSpace.
+
+@return  empty SkImageInfo
+*/
+func NewColorInfo() ColorInfo {
+
+	retC := C.misk_new_ColorInfo()
+	return ColorInfo{sk: retC}
+}
+
+/*
+Creates SkColorInfo from SkColorType ct, SkAlphaType at, and optionally SkColorSpace cs.
+
+If SkColorSpace cs is nullptr and SkColorInfo is part of drawing source: SkColorSpace
+defaults to sRGB, mapping into SkSurface SkColorSpace.
+
+Parameters are not validated to see if their values are legal, or that the
+combination is supported.
+@return        created SkColorInfo
+*/
+func NewColorInfo2(ct ColorType, at AlphaType, cs ColorSpace) ColorInfo {
+	c_ct := C.int(ct)
+	c_at := C.int(at)
+	c_cs := cs.sk
+	retC := C.misk_new_ColorInfo2(c_ct, c_at, c_cs)
+	return ColorInfo{sk: retC}
+}
+
+func NewColorInfoCopy(p0 ColorInfo) ColorInfo {
+	c_p0 := p0.sk
+	retC := C.misk_new_ColorInfoCopy(c_p0)
+	return ColorInfo{sk: retC}
+}
+
+func (o *ColorInfo) Delete() {
+	C.misk_delete_SkColorInfo(o.sk)
+	o.sk = nil
+}
+
+func (o ColorInfo) ColorSpace() ColorSpace {
+	c_obj := o.sk
+	retC := C.misk_ColorInfo_colorSpace(c_obj)
+	return ColorSpace{sk: retC}
+}
+
+func (o ColorInfo) RefColorSpace() ColorSpace {
+	c_obj := o.sk
+	retC := C.misk_ColorInfo_refColorSpace(c_obj)
+	return ColorSpace{sk: retC}
+}
+
+func (o ColorInfo) ColorType() ColorType {
+	c_obj := o.sk
+	retC := C.misk_ColorInfo_colorType(c_obj)
+	return ColorType(retC)
+}
+
+func (o ColorInfo) AlphaType() AlphaType {
+	c_obj := o.sk
+	retC := C.misk_ColorInfo_alphaType(c_obj)
+	return AlphaType(retC)
+}
+
+func (o ColorInfo) IsOpaque() bool {
+	c_obj := o.sk
+	retC := C.misk_ColorInfo_isOpaque(c_obj)
+	return bool(retC)
+}
+
+func (o ColorInfo) GammaCloseToSRGB() bool {
+	c_obj := o.sk
+	retC := C.misk_ColorInfo_gammaCloseToSRGB(c_obj)
+	return bool(retC)
+}
+
+/*
+Creates SkColorInfo with same SkColorType, SkColorSpace, with SkAlphaType set
+to newAlphaType.
+
+Created SkColorInfo contains newAlphaType even if it is incompatible with
+SkColorType, in which case SkAlphaType in SkColorInfo is ignored.
+*/
+func (o ColorInfo) MakeAlphaType(newAlphaType AlphaType) ColorInfo {
+	c_obj := o.sk
+	c_newAlphaType := C.int(newAlphaType)
+	retC := C.misk_ColorInfo_makeAlphaType(c_obj, c_newAlphaType)
+	return ColorInfo{sk: &retC}
+}
+
+/*
+Creates new SkColorInfo with same SkAlphaType, SkColorSpace, with SkColorType
+set to newColorType.
+*/
+func (o ColorInfo) MakeColorType(newColorType ColorType) ColorInfo {
+	c_obj := o.sk
+	c_newColorType := C.int(newColorType)
+	retC := C.misk_ColorInfo_makeColorType(c_obj, c_newColorType)
+	return ColorInfo{sk: &retC}
+}
+
+/*
+Creates SkColorInfo with same SkAlphaType, SkColorType, with SkColorSpace
+set to cs. cs may be nullptr.
+*/
+func (o ColorInfo) MakeColorSpace(cs ColorSpace) ColorInfo {
+	c_obj := o.sk
+	c_cs := cs.sk
+	retC := C.misk_ColorInfo_makeColorSpace(c_obj, c_cs)
+	return ColorInfo{sk: &retC}
+}
+
+/*
+Returns number of bytes per pixel required by SkColorType.
+Returns zero if colorType() is kUnknown_SkColorType.
+
+@return  bytes in pixel
+
+example: https://fiddle.skia.org/c/@ImageInfo_bytesPerPixel
+*/
+func (o ColorInfo) BytesPerPixel() int32 {
+	c_obj := o.sk
+	retC := C.misk_ColorInfo_bytesPerPixel(c_obj)
+	return int32(retC)
+}
+
+/*
+Returns bit shift converting row bytes to row pixels.
+Returns zero for kUnknown_SkColorType.
+
+@return  one of: 0, 1, 2, 3, 4; left shift to convert pixels to bytes
+
+example: https://fiddle.skia.org/c/@ImageInfo_shiftPerPixel
+*/
+func (o ColorInfo) ShiftPerPixel() int32 {
+	c_obj := o.sk
+	retC := C.misk_ColorInfo_shiftPerPixel(c_obj)
+	return int32(retC)
+}
+
 type ColorSpace struct {
 	sk *C.sk_SkColorSpace
 }
@@ -3709,6 +3867,340 @@ func NewImageInfo() ImageInfo {
 func (o *ImageInfo) Delete() {
 	C.misk_delete_SkImageInfo(o.sk)
 	o.sk = nil
+}
+
+/*
+Returns pixel count in each row.
+
+@return  pixel width
+*/
+func (o ImageInfo) Width() int32 {
+	c_obj := o.sk
+	retC := C.misk_ImageInfo_width(c_obj)
+	return int32(retC)
+}
+
+/*
+Returns pixel row count.
+
+@return  pixel height
+*/
+func (o ImageInfo) Height() int32 {
+	c_obj := o.sk
+	retC := C.misk_ImageInfo_height(c_obj)
+	return int32(retC)
+}
+
+func (o ImageInfo) ColorType() ColorType {
+	c_obj := o.sk
+	retC := C.misk_ImageInfo_colorType(c_obj)
+	return ColorType(retC)
+}
+
+func (o ImageInfo) AlphaType() AlphaType {
+	c_obj := o.sk
+	retC := C.misk_ImageInfo_alphaType(c_obj)
+	return AlphaType(retC)
+}
+
+/*
+Returns SkColorSpace, the range of colors. The reference count of
+SkColorSpace is unchanged. The returned SkColorSpace is immutable.
+
+@return  SkColorSpace, or nullptr
+*/
+func (o ImageInfo) ColorSpace() ColorSpace {
+	c_obj := o.sk
+	retC := C.misk_ImageInfo_colorSpace(c_obj)
+	return ColorSpace{sk: retC}
+}
+
+/*
+Returns smart pointer to SkColorSpace, the range of colors. The smart pointer
+tracks the number of objects sharing this SkColorSpace reference so the memory
+is released when the owners destruct.
+
+The returned SkColorSpace is immutable.
+
+@return  SkColorSpace wrapped in a smart pointer
+*/
+func (o ImageInfo) RefColorSpace() ColorSpace {
+	c_obj := o.sk
+	retC := C.misk_ImageInfo_refColorSpace(c_obj)
+	return ColorSpace{sk: retC}
+}
+
+/*
+Returns if SkImageInfo describes an empty area of pixels by checking if either
+width or height is zero or smaller.
+
+@return  true if either dimension is zero or smaller
+*/
+func (o ImageInfo) IsEmpty() bool {
+	c_obj := o.sk
+	retC := C.misk_ImageInfo_isEmpty(c_obj)
+	return bool(retC)
+}
+
+/*
+Returns the dimensionless SkColorInfo that represents the same color type,
+alpha type, and color space as this SkImageInfo.
+*/
+func (o ImageInfo) ColorInfo() ColorInfo {
+	c_obj := o.sk
+	retC := C.misk_ImageInfo_colorInfo(c_obj)
+	return ColorInfo{sk: &retC}
+}
+
+/*
+Returns true if SkAlphaType is set to hint that all pixels are opaque; their
+alpha value is implicitly or explicitly 1.0. If true, and all pixels are
+not opaque, Skia may draw incorrectly.
+
+Does not check if SkColorType allows alpha, or if any pixel value has
+transparency.
+
+@return  true if SkAlphaType is kOpaque_SkAlphaType
+*/
+func (o ImageInfo) IsOpaque() bool {
+	c_obj := o.sk
+	retC := C.misk_ImageInfo_isOpaque(c_obj)
+	return bool(retC)
+}
+
+/*
+Returns SkISize { width(), height() }.
+
+@return  integral size of width() and height()
+*/
+func (o ImageInfo) Dimensions() ISize {
+	c_obj := o.sk
+	retC := C.misk_ImageInfo_dimensions(c_obj)
+	return ISize(retC)
+}
+
+/*
+Returns SkIRect { 0, 0, width(), height() }.
+
+@return  integral rectangle from origin to width() and height()
+*/
+func (o ImageInfo) Bounds() IRect {
+	c_obj := o.sk
+	retC := C.misk_ImageInfo_bounds(c_obj)
+	return IRect(retC)
+}
+
+/*
+Returns true if associated SkColorSpace is not nullptr, and SkColorSpace gamma
+is approximately the same as sRGB.
+This includes the
+
+@return  true if SkColorSpace gamma is approximately the same as sRGB
+*/
+func (o ImageInfo) GammaCloseToSRGB() bool {
+	c_obj := o.sk
+	retC := C.misk_ImageInfo_gammaCloseToSRGB(c_obj)
+	return bool(retC)
+}
+
+/*
+Creates SkImageInfo with the same SkColorType, SkColorSpace, and SkAlphaType,
+with dimensions set to width and height.
+
+@param newWidth   pixel column count; must be zero or greater
+@param newHeight  pixel row count; must be zero or greater
+@return           created SkImageInfo
+*/
+func (o ImageInfo) MakeWH(newWidth int32, newHeight int32) ImageInfo {
+	c_obj := o.sk
+	c_newWidth := C.int(newWidth)
+	c_newHeight := C.int(newHeight)
+	retC := C.misk_ImageInfo_makeWH(c_obj, c_newWidth, c_newHeight)
+	return ImageInfo{sk: &retC}
+}
+
+/*
+Creates SkImageInfo with the same SkColorType, SkColorSpace, and SkAlphaType,
+with dimensions set to newDimensions.
+
+@param newSize   pixel column and row count; must be zero or greater
+@return          created SkImageInfo
+*/
+func (o ImageInfo) MakeDimensions(newSize ISize) ImageInfo {
+	c_obj := o.sk
+	c_newSize := *(*C.sk_SkISize)(unsafe.Pointer(&newSize))
+	retC := C.misk_ImageInfo_makeDimensions(c_obj, c_newSize)
+	return ImageInfo{sk: &retC}
+}
+
+/*
+Creates SkImageInfo with same SkColorType, SkColorSpace, width, and height,
+with SkAlphaType set to newAlphaType.
+
+Created SkImageInfo contains newAlphaType even if it is incompatible with
+SkColorType, in which case SkAlphaType in SkImageInfo is ignored.
+
+@return              created SkImageInfo
+*/
+func (o ImageInfo) MakeAlphaType(newAlphaType AlphaType) ImageInfo {
+	c_obj := o.sk
+	c_newAlphaType := C.int(newAlphaType)
+	retC := C.misk_ImageInfo_makeAlphaType(c_obj, c_newAlphaType)
+	return ImageInfo{sk: &retC}
+}
+
+/*
+Creates SkImageInfo with same SkAlphaType, SkColorSpace, width, and height,
+with SkColorType set to newColorType.
+
+@return              created SkImageInfo
+*/
+func (o ImageInfo) MakeColorType(newColorType ColorType) ImageInfo {
+	c_obj := o.sk
+	c_newColorType := C.int(newColorType)
+	retC := C.misk_ImageInfo_makeColorType(c_obj, c_newColorType)
+	return ImageInfo{sk: &retC}
+}
+
+/*
+Creates SkImageInfo with same SkAlphaType, SkColorType, width, and height,
+with SkColorSpace set to cs.
+
+@param cs  range of colors; may be nullptr
+@return    created SkImageInfo
+*/
+func (o ImageInfo) MakeColorSpace(cs ColorSpace) ImageInfo {
+	c_obj := o.sk
+	c_cs := cs.sk
+	retC := C.misk_ImageInfo_makeColorSpace(c_obj, c_cs)
+	return ImageInfo{sk: &retC}
+}
+
+/*
+Returns number of bytes per pixel required by SkColorType.
+Returns zero if colorType( is kUnknown_SkColorType.
+
+@return  bytes in pixel
+*/
+func (o ImageInfo) BytesPerPixel() int32 {
+	c_obj := o.sk
+	retC := C.misk_ImageInfo_bytesPerPixel(c_obj)
+	return int32(retC)
+}
+
+/*
+Returns bit shift converting row bytes to row pixels.
+Returns zero for kUnknown_SkColorType.
+
+@return  one of: 0, 1, 2, 3; left shift to convert pixels to bytes
+*/
+func (o ImageInfo) ShiftPerPixel() int32 {
+	c_obj := o.sk
+	retC := C.misk_ImageInfo_shiftPerPixel(c_obj)
+	return int32(retC)
+}
+
+/*
+Returns minimum bytes per row, computed from pixel width() and SkColorType, which
+specifies bytesPerPixel(). SkBitmap maximum value for row bytes must fit
+in 31 bits.
+
+@return  width() times bytesPerPixel() as unsigned 64-bit integer
+*/
+func (o ImageInfo) MinRowBytes64() uint32 {
+	c_obj := o.sk
+	retC := C.misk_ImageInfo_minRowBytes64(c_obj)
+	return uint32(retC)
+}
+
+/*
+Returns minimum bytes per row, computed from pixel width() and SkColorType, which
+specifies bytesPerPixel(). SkBitmap maximum value for row bytes must fit
+in 31 bits.
+
+@return  width() times bytesPerPixel() as size_t
+*/
+func (o ImageInfo) MinRowBytes() uint32 {
+	c_obj := o.sk
+	retC := C.misk_ImageInfo_minRowBytes(c_obj)
+	return uint32(retC)
+}
+
+/*
+Returns byte offset of pixel from pixel base address.
+
+Asserts in debug build if x or y is outside of bounds. Does not assert if
+rowBytes is smaller than minRowBytes(), even though result may be incorrect.
+
+@param x         column index, zero or greater, and less than width()
+@param y         row index, zero or greater, and less than height()
+@param rowBytes  size of pixel row or larger
+@return          offset within pixel array
+
+example: https://fiddle.skia.org/c/@ImageInfo_computeOffset
+*/
+func (o ImageInfo) ComputeOffset(x int32, y int32, rowBytes uint32) uint32 {
+	c_obj := o.sk
+	c_x := C.int(x)
+	c_y := C.int(y)
+	c_rowBytes := C.ulong(rowBytes)
+	retC := C.misk_ImageInfo_computeOffset(c_obj, c_x, c_y, c_rowBytes)
+	return uint32(retC)
+}
+
+/*
+Returns storage required by pixel array, given SkImageInfo dimensions, SkColorType,
+and rowBytes. rowBytes is assumed to be at least as large as minRowBytes().
+
+Returns zero if height is zero.
+Returns SIZE_MAX if answer exceeds the range of size_t.
+
+@param rowBytes  size of pixel row or larger
+@return          memory required by pixel buffer
+*/
+func (o ImageInfo) ComputeByteSize(rowBytes uint32) uint32 {
+	c_obj := o.sk
+	c_rowBytes := C.ulong(rowBytes)
+	retC := C.misk_ImageInfo_computeByteSize(c_obj, c_rowBytes)
+	return uint32(retC)
+}
+
+/*
+Returns storage required by pixel array, given SkImageInfo dimensions, and
+SkColorType. Uses minRowBytes() to compute bytes for pixel row.
+
+Returns zero if height is zero.
+Returns SIZE_MAX if answer exceeds the range of size_t.
+
+@return  least memory required by pixel buffer
+*/
+func (o ImageInfo) ComputeMinByteSize() uint32 {
+	c_obj := o.sk
+	retC := C.misk_ImageInfo_computeMinByteSize(c_obj)
+	return uint32(retC)
+}
+
+/*
+Returns true if rowBytes is valid for this SkImageInfo.
+
+@param rowBytes  size of pixel row including padding
+@return          true if rowBytes is large enough to contain pixel row and is properly
+aligned
+*/
+func (o ImageInfo) ValidRowBytes(rowBytes uint32) bool {
+	c_obj := o.sk
+	c_rowBytes := C.ulong(rowBytes)
+	retC := C.misk_ImageInfo_validRowBytes(c_obj, c_rowBytes)
+	return bool(retC)
+}
+
+/*
+Creates an empty SkImageInfo with kUnknown_SkColorType, kUnknown_SkAlphaType,
+a width and height of zero, and no SkColorSpace.
+*/
+func (o ImageInfo) Reset() {
+	c_obj := o.sk
+	C.misk_ImageInfo_reset(c_obj)
 }
 
 /*

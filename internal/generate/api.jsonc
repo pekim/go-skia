@@ -211,6 +211,24 @@
     },
 
     {
+      "name": "SkColorInfo",
+      "constructors": [{}, { "suffix": "2" }, { "suffix": "Copy" }, null],
+      "methods": [
+        { "name": "colorSpace" },
+        { "name": "refColorSpace" },
+        { "name": "colorType" },
+        { "name": "alphaType" },
+        { "name": "isOpaque" },
+        { "name": "gammaCloseToSRGB" },
+        { "name": "makeAlphaType" },
+        { "name": "makeColorType" },
+        { "name": "makeColorSpace" },
+        { "name": "bytesPerPixel" },
+        { "name": "shiftPerPixel" }
+      ]
+    },
+
+    {
       "name": "SkColorSpace",
       "methods": [
         { "name": "MakeSRGB" },
@@ -341,7 +359,35 @@
 
     {
       "name": "SkImageInfo",
-      "constructors": [{}]
+      "constructors": [{}],
+      "methods": [
+        { "name": "width" },
+        { "name": "height" },
+        { "name": "colorType" },
+        { "name": "alphaType" },
+        { "name": "colorSpace" },
+        { "name": "refColorSpace" },
+        { "name": "isEmpty" },
+        { "name": "colorInfo" },
+        { "name": "isOpaque" },
+        { "name": "dimensions" },
+        { "name": "bounds" },
+        { "name": "gammaCloseToSRGB" },
+        { "name": "makeWH" },
+        { "name": "makeDimensions" },
+        { "name": "makeAlphaType" },
+        { "name": "makeColorType" },
+        { "name": "makeColorSpace" },
+        { "name": "bytesPerPixel" },
+        { "name": "shiftPerPixel" },
+        { "name": "minRowBytes64" },
+        { "name": "minRowBytes" },
+        { "name": "computeOffset" },
+        { "name": "computeByteSize" },
+        { "name": "computeMinByteSize" },
+        { "name": "validRowBytes" },
+        { "name": "reset" }
+      ]
     },
 
     {

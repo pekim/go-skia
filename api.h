@@ -169,6 +169,13 @@ extern "C"
 
   typedef struct
   {
+    uchar fColorSpace[8];
+    uchar fColorType[4];
+    uchar fAlphaType[4];
+  } sk_SkColorInfo;
+
+  typedef struct
+  {
     uchar pad_0[4];
     uint fTransferFnHash;
     uint fToXYZD50Hash;
@@ -686,6 +693,26 @@ extern "C"
   void misk_Canvas_drawTextBlob (sk_SkCanvas *c_obj, sk_SkTextBlob *c_blob,
                                  float c_x, float c_y, sk_SkPaint *c_paint);
 
+  sk_SkColorInfo *misk_new_ColorInfo ();
+  sk_SkColorInfo *misk_new_ColorInfo2 (int c_ct, int c_at,
+                                       sk_SkColorSpace *c_cs);
+  sk_SkColorInfo *misk_new_ColorInfoCopy (sk_SkColorInfo *c_p0);
+  void misk_delete_SkColorInfo (sk_SkColorInfo *obj);
+  sk_SkColorSpace *misk_ColorInfo_colorSpace (sk_SkColorInfo *c_obj);
+  sk_SkColorSpace *misk_ColorInfo_refColorSpace (sk_SkColorInfo *c_obj);
+  int misk_ColorInfo_colorType (sk_SkColorInfo *c_obj);
+  int misk_ColorInfo_alphaType (sk_SkColorInfo *c_obj);
+  bool misk_ColorInfo_isOpaque (sk_SkColorInfo *c_obj);
+  bool misk_ColorInfo_gammaCloseToSRGB (sk_SkColorInfo *c_obj);
+  sk_SkColorInfo misk_ColorInfo_makeAlphaType (sk_SkColorInfo *c_obj,
+                                               int c_newAlphaType);
+  sk_SkColorInfo misk_ColorInfo_makeColorType (sk_SkColorInfo *c_obj,
+                                               int c_newColorType);
+  sk_SkColorInfo misk_ColorInfo_makeColorSpace (sk_SkColorInfo *c_obj,
+                                                sk_SkColorSpace *c_cs);
+  int misk_ColorInfo_bytesPerPixel (sk_SkColorInfo *c_obj);
+  int misk_ColorInfo_shiftPerPixel (sk_SkColorInfo *c_obj);
+
   sk_SkColorSpace *misk_ColorSpace_MakeSRGB ();
   sk_SkColorSpace *misk_ColorSpace_MakeSRGBLinear ();
   bool misk_ColorSpace_Equals (sk_SkColorSpace *c_p0, sk_SkColorSpace *c_p1);
@@ -797,6 +824,39 @@ extern "C"
 
   sk_SkImageInfo *misk_new_ImageInfo ();
   void misk_delete_SkImageInfo (sk_SkImageInfo *obj);
+  int misk_ImageInfo_width (sk_SkImageInfo *c_obj);
+  int misk_ImageInfo_height (sk_SkImageInfo *c_obj);
+  int misk_ImageInfo_colorType (sk_SkImageInfo *c_obj);
+  int misk_ImageInfo_alphaType (sk_SkImageInfo *c_obj);
+  sk_SkColorSpace *misk_ImageInfo_colorSpace (sk_SkImageInfo *c_obj);
+  sk_SkColorSpace *misk_ImageInfo_refColorSpace (sk_SkImageInfo *c_obj);
+  bool misk_ImageInfo_isEmpty (sk_SkImageInfo *c_obj);
+  sk_SkColorInfo misk_ImageInfo_colorInfo (sk_SkImageInfo *c_obj);
+  bool misk_ImageInfo_isOpaque (sk_SkImageInfo *c_obj);
+  sk_SkISize misk_ImageInfo_dimensions (sk_SkImageInfo *c_obj);
+  sk_SkIRect misk_ImageInfo_bounds (sk_SkImageInfo *c_obj);
+  bool misk_ImageInfo_gammaCloseToSRGB (sk_SkImageInfo *c_obj);
+  sk_SkImageInfo misk_ImageInfo_makeWH (sk_SkImageInfo *c_obj, int c_newWidth,
+                                        int c_newHeight);
+  sk_SkImageInfo misk_ImageInfo_makeDimensions (sk_SkImageInfo *c_obj,
+                                                sk_SkISize c_newSize);
+  sk_SkImageInfo misk_ImageInfo_makeAlphaType (sk_SkImageInfo *c_obj,
+                                               int c_newAlphaType);
+  sk_SkImageInfo misk_ImageInfo_makeColorType (sk_SkImageInfo *c_obj,
+                                               int c_newColorType);
+  sk_SkImageInfo misk_ImageInfo_makeColorSpace (sk_SkImageInfo *c_obj,
+                                                sk_SkColorSpace *c_cs);
+  int misk_ImageInfo_bytesPerPixel (sk_SkImageInfo *c_obj);
+  int misk_ImageInfo_shiftPerPixel (sk_SkImageInfo *c_obj);
+  unsigned long misk_ImageInfo_minRowBytes64 (sk_SkImageInfo *c_obj);
+  unsigned long misk_ImageInfo_minRowBytes (sk_SkImageInfo *c_obj);
+  unsigned long misk_ImageInfo_computeOffset (sk_SkImageInfo *c_obj, int c_x,
+                                              int c_y, ulong c_rowBytes);
+  unsigned long misk_ImageInfo_computeByteSize (sk_SkImageInfo *c_obj,
+                                                ulong c_rowBytes);
+  unsigned long misk_ImageInfo_computeMinByteSize (sk_SkImageInfo *c_obj);
+  bool misk_ImageInfo_validRowBytes (sk_SkImageInfo *c_obj, ulong c_rowBytes);
+  void misk_ImageInfo_reset (sk_SkImageInfo *c_obj);
 
   sk_SkM44 *misk_new_M44Copy (sk_SkM44 *c_src);
   sk_SkM44 *misk_new_M44 ();

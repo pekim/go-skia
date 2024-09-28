@@ -912,6 +912,114 @@ extern "C"
         *reinterpret_cast<SkPaint *> (c_paint));
   }
 
+  sk_SkColorInfo *
+  misk_new_ColorInfo ()
+  {
+    return reinterpret_cast<sk_SkColorInfo *> (new SkColorInfo ());
+  }
+
+  sk_SkColorInfo *
+  misk_new_ColorInfo2 (int c_ct, int c_at, sk_SkColorSpace *c_cs)
+  {
+    return reinterpret_cast<sk_SkColorInfo *> (
+        new SkColorInfo (SkColorType (c_ct), SkAlphaType (c_at),
+                         sk_ref_sp (reinterpret_cast<SkColorSpace *> (c_cs))));
+  }
+
+  sk_SkColorInfo *
+  misk_new_ColorInfoCopy (sk_SkColorInfo *c_p0)
+  {
+    return reinterpret_cast<sk_SkColorInfo *> (
+        new SkColorInfo (*reinterpret_cast<SkColorInfo *> (c_p0)));
+  }
+
+  void
+  misk_delete_SkColorInfo (sk_SkColorInfo *obj)
+  {
+    delete reinterpret_cast<SkColorInfo *> (obj);
+  }
+
+  sk_SkColorSpace *
+  misk_ColorInfo_colorSpace (sk_SkColorInfo *c_obj)
+  {
+    auto ret = reinterpret_cast<SkColorInfo *> (c_obj)->colorSpace ();
+    return reinterpret_cast<sk_SkColorSpace *> (ret);
+  }
+
+  sk_SkColorSpace *
+  misk_ColorInfo_refColorSpace (sk_SkColorInfo *c_obj)
+  {
+    auto ret
+        = reinterpret_cast<SkColorInfo *> (c_obj)->refColorSpace ().release ();
+    return reinterpret_cast<sk_SkColorSpace *> (ret);
+  }
+
+  int
+  misk_ColorInfo_colorType (sk_SkColorInfo *c_obj)
+  {
+    auto ret = reinterpret_cast<SkColorInfo *> (c_obj)->colorType ();
+    return (int)ret;
+  }
+
+  int
+  misk_ColorInfo_alphaType (sk_SkColorInfo *c_obj)
+  {
+    auto ret = reinterpret_cast<SkColorInfo *> (c_obj)->alphaType ();
+    return (int)ret;
+  }
+
+  bool
+  misk_ColorInfo_isOpaque (sk_SkColorInfo *c_obj)
+  {
+    auto ret = reinterpret_cast<SkColorInfo *> (c_obj)->isOpaque ();
+    return ret;
+  }
+
+  bool
+  misk_ColorInfo_gammaCloseToSRGB (sk_SkColorInfo *c_obj)
+  {
+    auto ret = reinterpret_cast<SkColorInfo *> (c_obj)->gammaCloseToSRGB ();
+    return ret;
+  }
+
+  sk_SkColorInfo
+  misk_ColorInfo_makeAlphaType (sk_SkColorInfo *c_obj, int c_newAlphaType)
+  {
+    auto ret = reinterpret_cast<SkColorInfo *> (c_obj)->makeAlphaType (
+        SkAlphaType (c_newAlphaType));
+    return *(reinterpret_cast<sk_SkColorInfo *> (&ret));
+  }
+
+  sk_SkColorInfo
+  misk_ColorInfo_makeColorType (sk_SkColorInfo *c_obj, int c_newColorType)
+  {
+    auto ret = reinterpret_cast<SkColorInfo *> (c_obj)->makeColorType (
+        SkColorType (c_newColorType));
+    return *(reinterpret_cast<sk_SkColorInfo *> (&ret));
+  }
+
+  sk_SkColorInfo
+  misk_ColorInfo_makeColorSpace (sk_SkColorInfo *c_obj, sk_SkColorSpace *c_cs)
+  {
+    auto ret = reinterpret_cast<SkColorInfo *> (c_obj)->makeColorSpace (
+        sk_ref_sp (reinterpret_cast<SkColorSpace *> (c_cs)));
+    return *(reinterpret_cast<sk_SkColorInfo *> (&ret));
+  }
+
+  int
+  misk_ColorInfo_bytesPerPixel (sk_SkColorInfo *c_obj)
+  {
+    auto ret = reinterpret_cast<SkColorInfo *> (c_obj)->bytesPerPixel ();
+    return ret;
+  }
+
+  int
+  misk_ColorInfo_shiftPerPixel (sk_SkColorInfo *c_obj)
+  {
+    auto ret = reinterpret_cast<SkColorInfo *> (c_obj)->shiftPerPixel ();
+    return ret;
+  }
+
   sk_SkColorSpace *
   misk_ColorSpace_MakeSRGB ()
   {
@@ -1449,6 +1557,198 @@ extern "C"
   misk_delete_SkImageInfo (sk_SkImageInfo *obj)
   {
     delete reinterpret_cast<SkImageInfo *> (obj);
+  }
+
+  int
+  misk_ImageInfo_width (sk_SkImageInfo *c_obj)
+  {
+    auto ret = reinterpret_cast<SkImageInfo *> (c_obj)->width ();
+    return ret;
+  }
+
+  int
+  misk_ImageInfo_height (sk_SkImageInfo *c_obj)
+  {
+    auto ret = reinterpret_cast<SkImageInfo *> (c_obj)->height ();
+    return ret;
+  }
+
+  int
+  misk_ImageInfo_colorType (sk_SkImageInfo *c_obj)
+  {
+    auto ret = reinterpret_cast<SkImageInfo *> (c_obj)->colorType ();
+    return (int)ret;
+  }
+
+  int
+  misk_ImageInfo_alphaType (sk_SkImageInfo *c_obj)
+  {
+    auto ret = reinterpret_cast<SkImageInfo *> (c_obj)->alphaType ();
+    return (int)ret;
+  }
+
+  sk_SkColorSpace *
+  misk_ImageInfo_colorSpace (sk_SkImageInfo *c_obj)
+  {
+    auto ret = reinterpret_cast<SkImageInfo *> (c_obj)->colorSpace ();
+    return reinterpret_cast<sk_SkColorSpace *> (ret);
+  }
+
+  sk_SkColorSpace *
+  misk_ImageInfo_refColorSpace (sk_SkImageInfo *c_obj)
+  {
+    auto ret
+        = reinterpret_cast<SkImageInfo *> (c_obj)->refColorSpace ().release ();
+    return reinterpret_cast<sk_SkColorSpace *> (ret);
+  }
+
+  bool
+  misk_ImageInfo_isEmpty (sk_SkImageInfo *c_obj)
+  {
+    auto ret = reinterpret_cast<SkImageInfo *> (c_obj)->isEmpty ();
+    return ret;
+  }
+
+  sk_SkColorInfo
+  misk_ImageInfo_colorInfo (sk_SkImageInfo *c_obj)
+  {
+    auto ret = reinterpret_cast<SkImageInfo *> (c_obj)->colorInfo ();
+    return *(reinterpret_cast<sk_SkColorInfo *> (&ret));
+  }
+
+  bool
+  misk_ImageInfo_isOpaque (sk_SkImageInfo *c_obj)
+  {
+    auto ret = reinterpret_cast<SkImageInfo *> (c_obj)->isOpaque ();
+    return ret;
+  }
+
+  sk_SkISize
+  misk_ImageInfo_dimensions (sk_SkImageInfo *c_obj)
+  {
+    auto ret = reinterpret_cast<SkImageInfo *> (c_obj)->dimensions ();
+    return *(reinterpret_cast<sk_SkISize *> (&ret));
+  }
+
+  sk_SkIRect
+  misk_ImageInfo_bounds (sk_SkImageInfo *c_obj)
+  {
+    auto ret = reinterpret_cast<SkImageInfo *> (c_obj)->bounds ();
+    return *(reinterpret_cast<sk_SkIRect *> (&ret));
+  }
+
+  bool
+  misk_ImageInfo_gammaCloseToSRGB (sk_SkImageInfo *c_obj)
+  {
+    auto ret = reinterpret_cast<SkImageInfo *> (c_obj)->gammaCloseToSRGB ();
+    return ret;
+  }
+
+  sk_SkImageInfo
+  misk_ImageInfo_makeWH (sk_SkImageInfo *c_obj, int c_newWidth,
+                         int c_newHeight)
+  {
+    auto ret = reinterpret_cast<SkImageInfo *> (c_obj)->makeWH (c_newWidth,
+                                                                c_newHeight);
+    return *(reinterpret_cast<sk_SkImageInfo *> (&ret));
+  }
+
+  sk_SkImageInfo
+  misk_ImageInfo_makeDimensions (sk_SkImageInfo *c_obj, sk_SkISize c_newSize)
+  {
+    auto ret = reinterpret_cast<SkImageInfo *> (c_obj)->makeDimensions (
+        *reinterpret_cast<SkISize *> (&c_newSize));
+    return *(reinterpret_cast<sk_SkImageInfo *> (&ret));
+  }
+
+  sk_SkImageInfo
+  misk_ImageInfo_makeAlphaType (sk_SkImageInfo *c_obj, int c_newAlphaType)
+  {
+    auto ret = reinterpret_cast<SkImageInfo *> (c_obj)->makeAlphaType (
+        SkAlphaType (c_newAlphaType));
+    return *(reinterpret_cast<sk_SkImageInfo *> (&ret));
+  }
+
+  sk_SkImageInfo
+  misk_ImageInfo_makeColorType (sk_SkImageInfo *c_obj, int c_newColorType)
+  {
+    auto ret = reinterpret_cast<SkImageInfo *> (c_obj)->makeColorType (
+        SkColorType (c_newColorType));
+    return *(reinterpret_cast<sk_SkImageInfo *> (&ret));
+  }
+
+  sk_SkImageInfo
+  misk_ImageInfo_makeColorSpace (sk_SkImageInfo *c_obj, sk_SkColorSpace *c_cs)
+  {
+    auto ret = reinterpret_cast<SkImageInfo *> (c_obj)->makeColorSpace (
+        sk_ref_sp (reinterpret_cast<SkColorSpace *> (c_cs)));
+    return *(reinterpret_cast<sk_SkImageInfo *> (&ret));
+  }
+
+  int
+  misk_ImageInfo_bytesPerPixel (sk_SkImageInfo *c_obj)
+  {
+    auto ret = reinterpret_cast<SkImageInfo *> (c_obj)->bytesPerPixel ();
+    return ret;
+  }
+
+  int
+  misk_ImageInfo_shiftPerPixel (sk_SkImageInfo *c_obj)
+  {
+    auto ret = reinterpret_cast<SkImageInfo *> (c_obj)->shiftPerPixel ();
+    return ret;
+  }
+
+  unsigned long
+  misk_ImageInfo_minRowBytes64 (sk_SkImageInfo *c_obj)
+  {
+    auto ret = reinterpret_cast<SkImageInfo *> (c_obj)->minRowBytes64 ();
+    return ret;
+  }
+
+  unsigned long
+  misk_ImageInfo_minRowBytes (sk_SkImageInfo *c_obj)
+  {
+    auto ret = reinterpret_cast<SkImageInfo *> (c_obj)->minRowBytes ();
+    return ret;
+  }
+
+  unsigned long
+  misk_ImageInfo_computeOffset (sk_SkImageInfo *c_obj, int c_x, int c_y,
+                                ulong c_rowBytes)
+  {
+    auto ret = reinterpret_cast<SkImageInfo *> (c_obj)->computeOffset (
+        c_x, c_y, c_rowBytes);
+    return ret;
+  }
+
+  unsigned long
+  misk_ImageInfo_computeByteSize (sk_SkImageInfo *c_obj, ulong c_rowBytes)
+  {
+    auto ret = reinterpret_cast<SkImageInfo *> (c_obj)->computeByteSize (
+        c_rowBytes);
+    return ret;
+  }
+
+  unsigned long
+  misk_ImageInfo_computeMinByteSize (sk_SkImageInfo *c_obj)
+  {
+    auto ret = reinterpret_cast<SkImageInfo *> (c_obj)->computeMinByteSize ();
+    return ret;
+  }
+
+  bool
+  misk_ImageInfo_validRowBytes (sk_SkImageInfo *c_obj, ulong c_rowBytes)
+  {
+    auto ret
+        = reinterpret_cast<SkImageInfo *> (c_obj)->validRowBytes (c_rowBytes);
+    return ret;
+  }
+
+  void
+  misk_ImageInfo_reset (sk_SkImageInfo *c_obj)
+  {
+    reinterpret_cast<SkImageInfo *> (c_obj)->reset ();
   }
 
   sk_SkM44 *
