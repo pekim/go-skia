@@ -30,6 +30,7 @@ func newFileGo() *fileGo {
 	import "C"
 
 	import (
+	  "sync"
 		"unsafe"
 	)
 	`)
@@ -39,16 +40,15 @@ func newFileGo() *fileGo {
 
 func (f fileGo) finish() {
 	f.writeln(`
-		var fontMgr FontMgr
+		var fontMgr = sync.OnceValue(func() FontMgr {
+			return FontMgr{
+				sk: C.sk_fontmgr_ref_default(),
+			}
+		})
 
 		// FontMgrDefault returns a FontMgr, that can be used to get Typefaces.
 		func FontMgrDefault() FontMgr {
-			if fontMgr.IsNil(){
-				fontMgr=FontMgr{
-					sk: C.sk_fontmgr_ref_default(),
-				}
-			}
-			return fontMgr
+			return fontMgr()
 		}
 	`)
 

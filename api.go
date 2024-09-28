@@ -15,6 +15,7 @@ package skia
 import "C"
 
 import (
+	"sync"
 	"unsafe"
 )
 
@@ -8889,14 +8890,13 @@ var StrAppendScalar_MaxSize = (int32)(C.sk_kSkStrAppendScalar_MaxSize)
 var StrAppendU32_MaxSize = (int32)(C.sk_kSkStrAppendU32_MaxSize)
 var StrAppendU64_MaxSize = (int32)(C.sk_kSkStrAppendU64_MaxSize)
 
-var fontMgr FontMgr
+var fontMgr = sync.OnceValue(func() FontMgr {
+	return FontMgr{
+		sk: C.sk_fontmgr_ref_default(),
+	}
+})
 
 // FontMgrDefault returns a FontMgr, that can be used to get Typefaces.
 func FontMgrDefault() FontMgr {
-	if fontMgr.IsNil() {
-		fontMgr = FontMgr{
-			sk: C.sk_fontmgr_ref_default(),
-		}
-	}
-	return fontMgr
+	return fontMgr()
 }
