@@ -29,6 +29,11 @@ In other words there is no use of [runtime.SetFinalizer] to call a destructor.
 An application using this package is responsible for calling Delete and Unref
 methods when appropriate.
 
+# documentation
+
+Most of the documentation comes directly from documentation comments in skia C++ header files.
+So some of it may not be entirely correct for the generated Go code.
+
 [skia]: https://skia.org/
 [demo]: https://github.com/pekim/go-skia/blob/main/demo/main.go
 [SkPaint]: https://api.skia.org/classSkPaint.html
