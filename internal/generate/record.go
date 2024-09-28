@@ -77,7 +77,6 @@ func (r *record) enrich1(cursor clang.Cursor, parent *record) {
 				dtorCreated = true
 			} else {
 				dtorNotPublic = true
-				fmt.Println(r.CppName)
 			}
 
 		case clang.Cursor_EnumDecl:
