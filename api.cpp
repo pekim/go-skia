@@ -3,6 +3,7 @@
 #include <include/core/SkAlphaType.h>
 #include <include/core/SkArc.h>
 #include <include/core/SkBitmap.h>
+#include <include/core/SkBlendMode.h>
 #include <include/core/SkCanvas.h>
 #include <include/core/SkClipOp.h>
 #include <include/core/SkColor.h>
@@ -3757,6 +3758,7 @@ extern "C"
   uint sk_SK_MSecMax = SK_MSecMax;
   uint sk_kAll_GrBackendState = kAll_GrBackendState;
   int sk_kGrGLStandardCnt = kGrGLStandardCnt;
+  int sk_kSkBlendModeCount = kSkBlendModeCount;
   int sk_kSkColorTypeCnt = kSkColorTypeCnt;
   int sk_kSkFilterModeCount = kSkFilterModeCount;
   int sk_kSkMipmapModeCount = kSkMipmapModeCount;

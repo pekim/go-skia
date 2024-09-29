@@ -9,6 +9,7 @@ var headerFiles = []string{
 	"include/core/SkAlphaType.h",
 	"include/core/SkArc.h",
 	"include/core/SkBitmap.h",
+	"include/core/SkBlendMode.h",
 	"include/core/SkCanvas.h",
 	"include/core/SkClipOp.h",
 	"include/core/SkColor.h",

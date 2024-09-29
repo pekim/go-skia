@@ -1268,6 +1268,7 @@ extern "C"
   extern uint sk_SK_MSecMax;
   extern uint sk_kAll_GrBackendState;
   extern int sk_kGrGLStandardCnt;
+  extern int sk_kSkBlendModeCount;
   extern int sk_kSkColorTypeCnt;
   extern int sk_kSkFilterModeCount;
   extern int sk_kSkMipmapModeCount;

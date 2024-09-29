@@ -71,6 +71,9 @@ func (e *enum) enrich2(api api) {
 }
 
 func (e enum) generate(g generator) {
+	if len(e.constants) == 0 {
+		fmt.Printf("warning: enum %s has no constants\n", e.CppName)
+	}
 	if !e.enriched {
 		fatalf("enum %s has not been enriched", e.CppName)
 	}

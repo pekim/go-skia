@@ -8768,9 +8768,100 @@ const (
 	ApplyPerspectiveClipYes ApplyPerspectiveClip = 1
 )
 
+/*
+Blends are operators that take in two colors (source, destination) and return a new color.
+Many of these operate the same on all 4 components: red, green, blue, alpha. For these,
+we just document what happens to one component, rather than naming each one separately.
+
+Different SkColorTypes have different representations for color components:
+
+	 8-bit: 0..255
+	 6-bit: 0..63
+	 5-bit: 0..31
+	 4-bit: 0..15
+	floats: 0...1
+
+The documentation is expressed as if the component values are always 0..1 (floats).
+
+For brevity, the documentation uses the following abbreviations
+s  : source
+d  : destination
+sa : source alpha
+da : destination alpha
+
+Results are abbreviated
+r  : if all 4 components are computed in the same manner
+ra : result alpha component
+rc : result "color": red, green, blue components
+*/
 type BlendMode int32
 
-const ()
+const (
+	// r = 0
+	BlendModeClear BlendMode = 0
+	// r = s
+	BlendModeSrc BlendMode = 1
+	// r = d
+	BlendModeDst BlendMode = 2
+	// r = s + (1-sa)*d
+	BlendModeSrcOver BlendMode = 3
+	// r = d + (1-da)*s
+	BlendModeDstOver BlendMode = 4
+	// r = s * da
+	BlendModeSrcIn BlendMode = 5
+	// r = d * sa
+	BlendModeDstIn BlendMode = 6
+	// r = s * (1-da)
+	BlendModeSrcOut BlendMode = 7
+	// r = d * (1-sa)
+	BlendModeDstOut BlendMode = 8
+	// r = s*da + d*(1-sa)
+	BlendModeSrcATop BlendMode = 9
+	// r = d*sa + s*(1-da)
+	BlendModeDstATop BlendMode = 10
+	// r = s*(1-da) + d*(1-sa)
+	BlendModeXor BlendMode = 11
+	// r = min(s + d, 1)
+	BlendModePlus BlendMode = 12
+	// r = s*d
+	BlendModeModulate BlendMode = 13
+	// r = s + d - s*d
+	BlendModeScreen BlendMode = 14
+	// multiply or screen, depending on destination
+	BlendModeOverlay BlendMode = 15
+	// rc = s + d - max(s*da, d*sa), ra = kSrcOver
+	BlendModeDarken BlendMode = 16
+	// rc = s + d - min(s*da, d*sa), ra = kSrcOver
+	BlendModeLighten BlendMode = 17
+	// brighten destination to reflect source
+	BlendModeColorDodge BlendMode = 18
+	// darken destination to reflect source
+	BlendModeColorBurn BlendMode = 19
+	// multiply or screen, depending on source
+	BlendModeHardLight BlendMode = 20
+	// lighten or darken, depending on source
+	BlendModeSoftLight BlendMode = 21
+	// rc = s + d - 2*(min(s*da, d*sa)), ra = kSrcOver
+	BlendModeDifference BlendMode = 22
+	// rc = s + d - two(s*d), ra = kSrcOver
+	BlendModeExclusion BlendMode = 23
+	// r = s*(1-da) + d*(1-sa) + s*d
+	BlendModeMultiply BlendMode = 24
+	// hue of source with saturation and luminosity of destination
+	BlendModeHue BlendMode = 25
+	// saturation of source with hue and luminosity of destination
+	BlendModeSaturation BlendMode = 26
+	// hue and saturation of source with luminosity of destination
+	BlendModeColor BlendMode = 27
+	// luminosity of source with hue and saturation of destination
+	BlendModeLuminosity BlendMode = 28
+	// last porter duff blend mode
+	BlendModeLastCoeffMode BlendMode = 14
+	// last blend mode operating separately on components
+	BlendModeLastSeparableMode BlendMode = 24
+	// last valid value
+	BlendModeLastMode BlendMode = 28
+)
 
 type ClipOp int32
 
@@ -9365,6 +9456,7 @@ This value translates to reseting all the context state for any backend.
 */
 var All_GrBackendState = (uint32)(C.sk_kAll_GrBackendState)
 var GrGLStandardCnt = (int32)(C.sk_kGrGLStandardCnt)
+var BlendModeCount = (int32)(C.sk_kSkBlendModeCount)
 var ColorTypeCnt = (int32)(C.sk_kSkColorTypeCnt)
 var FilterModeCount = (int32)(C.sk_kSkFilterModeCount)
 var MipmapModeCount = (int32)(C.sk_kSkMipmapModeCount)
