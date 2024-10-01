@@ -41,6 +41,7 @@ func (o *callableOverload) enrich1(callable *callable, record *record, cursor cl
 	} else {
 		o.goFuncName = fmt.Sprintf("%s%s", goExportedName(o.cppName), o.Suffix)
 	}
+	o.goFuncName = stripSkPrefix(o.goFuncName)
 	if o.record != nil {
 		o.cFuncName = fmt.Sprintf("misk_%s_%s%s", o.record.goName, o.cppName, o.Suffix)
 	} else {

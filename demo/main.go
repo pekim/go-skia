@@ -91,7 +91,7 @@ func main() {
 		}
 		var colorspace skia.ColorSpace
 
-		surface = skia.SkSurfacesWrapBackendRenderTarget(context.AsGrRecordingContext(), backend, skia.GrSurfaceOriginBottomLeft,
+		surface = skia.SurfacesWrapBackendRenderTarget(context.AsGrRecordingContext(), backend, skia.GrSurfaceOriginBottomLeft,
 			skia.ColorTypeBGRA_8888, colorspace, skia.NewSurfacePropsPixelGeometry(0, skia.PixelGeometryRGB_H))
 		if surface.IsNil() {
 			panic("failed to create surface")
@@ -122,7 +122,7 @@ func main() {
 	svgTiger.SetContainerSize(size)
 
 	imageData := skia.DataMakeWithCopy(testPng, uint32(len(testPng)))
-	image := skia.SkImagesDeferredFromEncodedData(imageData, nil)
+	image := skia.ImagesDeferredFromEncodedData(imageData, nil)
 
 	for !window.ShouldClose() {
 		canvas := surface.GetCanvas()

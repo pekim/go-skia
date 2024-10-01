@@ -9113,7 +9113,7 @@ than the largest of r, g, and b.
 @param b  amount of blue, from no blue (0) to full blue (255)
 @return   color and alpha, unpremultiplied
 */
-func SkColorSetARGB(a uint32, r uint32, g uint32, b uint32) Color {
+func ColorSetARGB(a uint32, r uint32, g uint32, b uint32) Color {
 	c_a := C.uint(a)
 	c_r := C.uint(r)
 	c_g := C.uint(g)
@@ -9130,7 +9130,7 @@ from a. Alpha component of c is ignored and is replaced by a in result.
 @param a  alpha: transparent at zero, fully opaque at 255
 @return   color with transparency
 */
-func SkColorSetA(c Color, a uint32) Color {
+func ColorSetA(c Color, a uint32) Color {
 	c_c := C.uint(c)
 	c_a := C.uint(a)
 	retC := C.misk_SkColorSetA(c_c, c_a)
@@ -9157,7 +9157,7 @@ func SkColorSetA(c Color, a uint32) Color {
 
 example: https://fiddle.skia.org/c/@Image_DeferredFromEncodedData
 */
-func SkImagesDeferredFromEncodedData(encoded Data, alphaType *AlphaType) Image {
+func ImagesDeferredFromEncodedData(encoded Data, alphaType *AlphaType) Image {
 	c_encoded := encoded.sk
 	c_alphaType := (*C.int)(alphaType)
 	retC := C.misk_SkImagesDeferredFromEncodedData(c_encoded, c_alphaType)
@@ -9180,7 +9180,7 @@ pixels is not nullptr, and contains enough data for SkImage.
 @param rowBytes  size of pixel row or larger
 @return          SkImage sharing pixels, or nullptr
 */
-func SkImagesRasterFromData(info ImageInfo, pixels Data, rowBytes uint32) Image {
+func ImagesRasterFromData(info ImageInfo, pixels Data, rowBytes uint32) Image {
 	c_info := info.sk
 	c_pixels := pixels.sk
 	c_rowBytes := C.ulong(rowBytes)
@@ -9197,7 +9197,7 @@ Returns a SkPMColor value from unpremultiplied 8-bit component values.
 @param b  amount of blue, from no blue (0) to full blue (255)
 @return   premultiplied color
 */
-func SkPreMultiplyARGB(a uint32, r uint32, g uint32, b uint32) PMColor {
+func PreMultiplyARGB(a uint32, r uint32, g uint32, b uint32) PMColor {
 	c_a := C.uint(a)
 	c_r := C.uint(r)
 	c_g := C.uint(g)
@@ -9213,7 +9213,7 @@ and arranges the bytes to match the format of kN32_SkColorType.
 @param c  unpremultiplied ARGB color
 @return   premultiplied color
 */
-func SkPreMultiplyColor(c Color) PMColor {
+func PreMultiplyColor(c Color) PMColor {
 	c_c := C.uint(c)
 	retC := C.misk_SkPreMultiplyColor(c_c)
 	return PMColor(retC)
@@ -9243,7 +9243,7 @@ fonts; may be nullptr
 @param releaseContext           state passed to releaseProc
 @return                         SkSurface if all parameters are valid; otherwise, nullptr
 */
-func SkSurfacesWrapBackendRenderTarget(context GrRecordingContext, backendRenderTarget GrBackendRenderTarget, origin GrSurfaceOrigin, colorType ColorType, colorSpace ColorSpace, surfaceProps SurfaceProps) Surface {
+func SurfacesWrapBackendRenderTarget(context GrRecordingContext, backendRenderTarget GrBackendRenderTarget, origin GrSurfaceOrigin, colorType ColorType, colorSpace ColorSpace, surfaceProps SurfaceProps) Surface {
 	c_context := context.sk
 	c_backendRenderTarget := backendRenderTarget.sk
 	c_origin := C.int(origin)
