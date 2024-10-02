@@ -15,7 +15,7 @@ type recordDtor struct {
 func newRecordDtor(record *record, cursor *clang.Cursor) recordDtor {
 	d := recordDtor{record: record}
 	if cursor != nil {
-		d.doc = makeDocComment(cursor.RawCommentText())
+		d.doc = docComment(cursor.ParsedComment())
 
 	}
 	return d

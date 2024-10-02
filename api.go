@@ -100,6 +100,9 @@ func (o GrBackendRenderTarget) IsFramebufferOnly() bool {
 	return bool(retC)
 }
 
+/*
+SkRefCntBase is the base class for objects that may be shared by multiple    objects. When an existing owner wants to share a reference, it calls ref().    When an owner wants to release its reference, it calls unref(). When the    shared object's reference count goes to zero as the result of an unref()    call, its (virtual) destructor is called. It is an error for the    destructor to be called explicitly (or via the object going out of scope on    the stack or calling delete) if getRefCnt() > 1.
+*/
 type GrDirectContext struct {
 	sk *C.sk_GrDirectContext
 }
@@ -115,15 +118,16 @@ func (o GrDirectContext) AsGrRecordingContext() GrRecordingContext {
 	return GrRecordingContext{sk: (*C.sk_GrRecordingContext)(unsafe.Pointer(o.sk))}
 }
 
+/*
+Destruct, asserting that the reference count is 1.
+*/
 func (o *GrDirectContext) Delete() {
 	C.misk_delete_GrDirectContext(o.sk)
 	o.sk = nil
 }
 
 /*
-Call to ensure all drawing to the context has been flushed and submitted to the underlying 3D
-API. This is equivalent to calling GrContext::flush with a default GrFlushInfo followed by
-GrContext::submit(sync).
+Call to ensure all drawing to the context has been flushed and submitted to the underlying 3D API. This is equivalent to calling GrContext::flush with a default GrFlushInfo followed by GrContext::submit(sync).
 */
 func (o GrDirectContext) FlushAndSubmit(sync GrSyncCpu) {
 	c_obj := o.sk
@@ -132,28 +136,11 @@ func (o GrDirectContext) FlushAndSubmit(sync GrSyncCpu) {
 }
 
 /*
-Call to ensure all drawing to the context has been flushed to underlying 3D API specific
-objects. A call to `submit` is always required to ensure work is actually sent to
-the gpu. Some specific API details:
-GL: Commands are actually sent to the driver, but glFlush is never called. Thus some
-sync objects from the flush will not be valid until a submission occurs.
+Call to ensure all drawing to the context has been flushed to underlying 3D API specific objects. A call to `submit` is always required to ensure work is actually sent to the gpu. Some specific API details:     GL: Commands are actually sent to the driver, but glFlush is never called. Thus some         sync objects from the flush will not be valid until a submission occurs.
 
-Vulkan/Metal/D3D/Dawn: Commands are recorded to the backend APIs corresponding command
-buffer or encoder objects. However, these objects are not sent to the gpu until a
-submission occurs.
+Vulkan/Metal/D3D/Dawn: Commands are recorded to the backend APIs corresponding command         buffer or encoder objects. However, these objects are not sent to the gpu until a         submission occurs.
 
-If the return is GrSemaphoresSubmitted::kYes, only initialized GrBackendSemaphores will be
-submitted to the gpu during the next submit call (it is possible Skia failed to create a
-subset of the semaphores). The client should not wait on these semaphores until after submit
-has been called, and must keep them alive until then. If this call returns
-GrSemaphoresSubmitted::kNo, the GPU backend will not submit any semaphores to be signaled on
-the GPU. Thus the client should not have the GPU wait on any of the semaphores passed in with
-the GrFlushInfo. Regardless of whether semaphores were submitted to the GPU or not, the
-client is still responsible for deleting any initialized semaphores.
-Regardless of semaphore submission the context will still be flushed. It should be
-emphasized that a return value of GrSemaphoresSubmitted::kNo does not mean the flush did not
-happen. It simply means there were no semaphores submitted to the GPU. A caller should only
-take this as a failure if they passed in semaphores to be submitted.
+If the return is GrSemaphoresSubmitted::kYes, only initialized GrBackendSemaphores will be submitted to the gpu during the next submit call (it is possible Skia failed to create a subset of the semaphores). The client should not wait on these semaphores until after submit has been called, and must keep them alive until then. If this call returns GrSemaphoresSubmitted::kNo, the GPU backend will not submit any semaphores to be signaled on the GPU. Thus the client should not have the GPU wait on any of the semaphores passed in with the GrFlushInfo. Regardless of whether semaphores were submitted to the GPU or not, the client is still responsible for deleting any initialized semaphores. Regardless of semaphore submission the context will still be flushed. It should be emphasized that a return value of GrSemaphoresSubmitted::kNo does not mean the flush did not happen. It simply means there were no semaphores submitted to the GPU. A caller should only take this as a failure if they passed in semaphores to be submitted.
 */
 func (o GrDirectContext) Flush(info GrFlushInfo) GrSemaphoresSubmitted {
 	c_obj := o.sk
@@ -163,18 +150,13 @@ func (o GrDirectContext) Flush(info GrFlushInfo) GrSemaphoresSubmitted {
 }
 
 /*
-Submit outstanding work to the gpu from all previously un-submitted flushes. The return
-value of the submit will indicate whether or not the submission to the GPU was successful.
+Submit outstanding work to the gpu from all previously un-submitted flushes. The return value of the submit will indicate whether or not the submission to the GPU was successful.
 
-If the call returns true, all previously passed in semaphores in flush calls will have been
-submitted to the GPU and they can safely be waited on. The caller should wait on those
-semaphores or perform some other global synchronization before deleting the semaphores.
+If the call returns true, all previously passed in semaphores in flush calls will have been submitted to the GPU and they can safely be waited on. The caller should wait on those semaphores or perform some other global synchronization before deleting the semaphores.
 
-If it returns false, then those same semaphores will not have been submitted and we will not
-try to submit them again. The caller is free to delete the semaphores at any time.
+If it returns false, then those same semaphores will not have been submitted and we will not try to submit them again. The caller is free to delete the semaphores at any time.
 
-If sync flag is GrSyncCpu::kYes, this function will return once the gpu has finished with all
-submitted work.
+If sync flag is GrSyncCpu::kYes, this function will return once the gpu has finished with all submitted work.
 */
 func (o GrDirectContext) Submit(sync GrSyncCpu) bool {
 	c_obj := o.sk
@@ -186,31 +168,13 @@ func (o GrDirectContext) Submit(sync GrSyncCpu) bool {
 /*
 Struct to supply options to flush calls.
 
-After issuing all commands, fNumSemaphore semaphores will be signaled by the gpu. The client
-passes in an array of fNumSemaphores GrBackendSemaphores. In general these GrBackendSemaphore's
-can be either initialized or not. If they are initialized, the backend uses the passed in
-semaphore. If it is not initialized, a new semaphore is created and the GrBackendSemaphore
-object is initialized with that semaphore. The semaphores are not sent to the GPU until the next
-GrContext::submit call is made. See the GrContext::submit for more information.
+After issuing all commands, fNumSemaphore semaphores will be signaled by the gpu. The client passes in an array of fNumSemaphores GrBackendSemaphores. In general these GrBackendSemaphore's can be either initialized or not. If they are initialized, the backend uses the passed in semaphore. If it is not initialized, a new semaphore is created and the GrBackendSemaphore object is initialized with that semaphore. The semaphores are not sent to the GPU until the next GrContext::submit call is made. See the GrContext::submit for more information.
 
-The client will own and be responsible for deleting the underlying semaphores that are stored
-and returned in initialized GrBackendSemaphore objects. The GrBackendSemaphore objects
-themselves can be deleted as soon as this function returns.
+The client will own and be responsible for deleting the underlying semaphores that are stored and returned in initialized GrBackendSemaphore objects. The GrBackendSemaphore objects themselves can be deleted as soon as this function returns.
 
-If a finishedProc is provided, the finishedProc will be called when all work submitted to the gpu
-from this flush call and all previous flush calls has finished on the GPU. If the flush call
-fails due to an error and nothing ends up getting sent to the GPU, the finished proc is called
-immediately.
+If a finishedProc is provided, the finishedProc will be called when all work submitted to the gpu from this flush call and all previous flush calls has finished on the GPU. If the flush call fails due to an error and nothing ends up getting sent to the GPU, the finished proc is called immediately.
 
-If a submittedProc is provided, the submittedProc will be called when all work from this flush
-call is submitted to the GPU. If the flush call fails due to an error and nothing will get sent
-to the GPU, the submitted proc is called immediately. It is possibly that when work is finally
-submitted, that the submission actual fails. In this case we will not reattempt to do the
-submission. Skia notifies the client of these via the success bool passed into the submittedProc.
-The submittedProc is useful to the client to know when semaphores that were sent with the flush
-have actually been submitted to the GPU so that they can be waited on (or deleted if the submit
-fails).
-GrBackendSemaphores are not supported for the GL backend and will be ignored if set.
+If a submittedProc is provided, the submittedProc will be called when all work from this flush call is submitted to the GPU. If the flush call fails due to an error and nothing will get sent to the GPU, the submitted proc is called immediately. It is possibly that when work is finally submitted, that the submission actual fails. In this case we will not reattempt to do the submission. Skia notifies the client of these via the success bool passed into the submittedProc. The submittedProc is useful to the client to know when semaphores that were sent with the flush have actually been submitted to the GPU so that they can be waited on (or deleted if the submit fails). GrBackendSemaphores are not supported for the GL backend and will be ignored if set.
 */
 type GrFlushInfo struct {
 	sk *C.sk_GrFlushInfo
@@ -230,6 +194,9 @@ func (o GrFlushInfo) IsNil() bool {
 	return o.sk == nil
 }
 
+/*
+SkRefCntBase is the base class for objects that may be shared by multiple    objects. When an existing owner wants to share a reference, it calls ref().    When an owner wants to release its reference, it calls unref(). When the    shared object's reference count goes to zero as the result of an unref()    call, its (virtual) destructor is called. It is an error for the    destructor to be called explicitly (or via the object going out of scope on    the stack or calling delete) if getRefCnt() > 1.
+*/
 type GrRecordingContext struct {
 	sk *C.sk_GrRecordingContext
 }
@@ -240,21 +207,16 @@ func (o GrRecordingContext) IsNil() bool {
 	return o.sk == nil
 }
 
+/*
+Destruct, asserting that the reference count is 1.
+*/
 func (o *GrRecordingContext) Delete() {
 	C.misk_delete_GrRecordingContext(o.sk)
 	o.sk = nil
 }
 
 /*
-GrContext uses the following interface to make all calls into OpenGL. When a
-GrContext is created it is given a GrGLInterface. The interface's function
-pointers must be valid for the OpenGL context associated with the GrContext.
-On some platforms, such as Windows, function pointers for OpenGL extensions
-may vary between OpenGL contexts. So the caller must be careful to use a
-GrGLInterface initialized for the correct context. All functions that should
-be available based on the OpenGL's version and extension string must be
-non-NULL or GrContext creation will fail. This can be tested with the
-validate() method when the OpenGL context has been made current.
+GrContext uses the following interface to make all calls into OpenGL. When a GrContext is created it is given a GrGLInterface. The interface's function pointers must be valid for the OpenGL context associated with the GrContext. On some platforms, such as Windows, function pointers for OpenGL extensions may vary between OpenGL contexts. So the caller must be careful to use a GrGLInterface initialized for the correct context. All functions that should be available based on the OpenGL's version and extension string must be non-NULL or GrContext creation will fail. This can be tested with the validate() method when the OpenGL context has been made current.
 */
 type GrGLInterface struct {
 	sk *C.sk_GrGLInterface
@@ -286,9 +248,7 @@ func (o *GrContextOptions) SetSuppressPrints(value bool) {
 }
 
 /*
-Overrides: These options override feature detection using backend API queries. These
-overrides can only reduce the feature set or limits, never increase them beyond the
-detected values.
+Overrides: These options override feature detection using backend API queries. These        overrides can only reduce the feature set or limits, never increase them beyond the        detected values.
 */
 func (o GrContextOptions) MaxTextureSizeOverride() int32 {
 	return int32(o.fMaxTextureSizeOverride)
@@ -299,9 +259,7 @@ func (o *GrContextOptions) SetMaxTextureSizeOverride(value int32) {
 }
 
 /*
-the threshold in bytes above which we will use a buffer mapping API to map vertex and index
-buffers to CPU memory in order to update them.  A value of -1 means the GrContext should
-deduce the optimal value for this platform.
+the threshold in bytes above which we will use a buffer mapping API to map vertex and index        buffers to CPU memory in order to update them.  A value of -1 means the GrContext should        deduce the optimal value for this platform.
 */
 func (o GrContextOptions) BufferMapThreshold() int32 {
 	return int32(o.fBufferMapThreshold)
@@ -312,10 +270,7 @@ func (o *GrContextOptions) SetBufferMapThreshold(value int32) {
 }
 
 /*
-Default minimum size to use when allocating buffers for uploading data to textures. The
-larger the value the more uploads can be packed into one buffer, but at the cost of
-more gpu memory allocated that may not be used. Uploads larger than the minimum will still
-work by allocating a dedicated buffer.
+Default minimum size to use when allocating buffers for uploading data to textures. The        larger the value the more uploads can be packed into one buffer, but at the cost of        more gpu memory allocated that may not be used. Uploads larger than the minimum will still        work by allocating a dedicated buffer.
 */
 func (o GrContextOptions) MinimumStagingBufferSize() uint32 {
 	return uint32(o.fMinimumStagingBufferSize)
@@ -326,9 +281,7 @@ func (o *GrContextOptions) SetMinimumStagingBufferSize(value uint32) {
 }
 
 /*
-Construct mipmaps manually, via repeated downsampling draw-calls. This is used when
-the driver's implementation (glGenerateMipmap) contains bugs. This requires mipmap
-level control (ie desktop or ES3).
+Construct mipmaps manually, via repeated downsampling draw-calls. This is used when        the driver's implementation (glGenerateMipmap) contains bugs. This requires mipmap        level control (ie desktop or ES3).
 */
 func (o GrContextOptions) DoManualMipmapping() bool {
 	return bool(o.fDoManualMipmapping)
@@ -339,9 +292,7 @@ func (o *GrContextOptions) SetDoManualMipmapping(value bool) {
 }
 
 /*
-Disables the use of coverage counting shortcuts to render paths. Coverage counting can cause
-artifacts along shared edges if care isn't taken to ensure both contours wind in the same
-direction.
+Disables the use of coverage counting shortcuts to render paths. Coverage counting can cause artifacts along shared edges if care isn't taken to ensure both contours wind in the same direction.
 */
 func (o GrContextOptions) DisableCoverageCountingPaths() bool {
 	return bool(o.fDisableCoverageCountingPaths)
@@ -352,8 +303,7 @@ func (o *GrContextOptions) SetDisableCoverageCountingPaths(value bool) {
 }
 
 /*
-Disables distance field rendering for paths. Distance field computation can be expensive,
-and yields no benefit if a path is not rendered multiple times with different transforms.
+Disables distance field rendering for paths. Distance field computation can be expensive, and yields no benefit if a path is not rendered multiple times with different transforms.
 */
 func (o GrContextOptions) DisableDistanceFieldPaths() bool {
 	return bool(o.fDisableDistanceFieldPaths)
@@ -364,8 +314,7 @@ func (o *GrContextOptions) SetDisableDistanceFieldPaths(value bool) {
 }
 
 /*
-If true this allows path mask textures to be cached. This is only really useful if paths
-are commonly rendered at the same scale and fractional translation.
+If true this allows path mask textures to be cached. This is only really useful if paths are commonly rendered at the same scale and fractional translation.
 */
 func (o GrContextOptions) AllowPathMaskCaching() bool {
 	return bool(o.fAllowPathMaskCaching)
@@ -376,8 +325,7 @@ func (o *GrContextOptions) SetAllowPathMaskCaching(value bool) {
 }
 
 /*
-If true, the GPU will not be used to perform YUV -> RGB conversion when generating
-textures from codec-backed images.
+If true, the GPU will not be used to perform YUV -> RGB conversion when generating textures from codec-backed images.
 */
 func (o GrContextOptions) DisableGpuYUVConversion() bool {
 	return bool(o.fDisableGpuYUVConversion)
@@ -399,8 +347,7 @@ func (o *GrContextOptions) SetGlyphCacheTextureMaximumBytes(value uint32) {
 }
 
 /*
-Below this threshold size in device space distance field fonts won't be used. Distance field
-fonts don't support hinting which is more important at smaller sizes.
+Below this threshold size in device space distance field fonts won't be used. Distance field fonts don't support hinting which is more important at smaller sizes.
 */
 func (o GrContextOptions) MinDistanceFieldFontSize() float32 {
 	return float32(o.fMinDistanceFieldFontSize)
@@ -419,8 +366,7 @@ func (o *GrContextOptions) SetGlyphsAsPathsFontSize(value float32) {
 }
 
 /*
-Bugs on certain drivers cause stencil buffers to leak. This flag causes Skia to avoid
-allocating stencil buffers and use alternate rasterization paths, avoiding the leak.
+Bugs on certain drivers cause stencil buffers to leak. This flag causes Skia to avoid allocating stencil buffers and use alternate rasterization paths, avoiding the leak.
 */
 func (o GrContextOptions) AvoidStencilBuffers() bool {
 	return bool(o.fAvoidStencilBuffers)
@@ -431,9 +377,7 @@ func (o *GrContextOptions) SetAvoidStencilBuffers(value bool) {
 }
 
 /*
-Some ES3 contexts report the ES2 external image extension, but not the ES3 version.
-If support for external images is critical, enabling this option will cause Ganesh to limit
-shaders to the ES2 shading language in that situation.
+Some ES3 contexts report the ES2 external image extension, but not the ES3 version. If support for external images is critical, enabling this option will cause Ganesh to limit shaders to the ES2 shading language in that situation.
 */
 func (o GrContextOptions) PreferExternalImagesOverES3() bool {
 	return bool(o.fPreferExternalImagesOverES3)
@@ -444,9 +388,7 @@ func (o *GrContextOptions) SetPreferExternalImagesOverES3(value bool) {
 }
 
 /*
-Disables correctness workarounds that are enabled for particular GPUs, OSes, or drivers.
-This does not affect code path choices that are made for perfomance reasons nor does it
-override other GrContextOption settings.
+Disables correctness workarounds that are enabled for particular GPUs, OSes, or drivers. This does not affect code path choices that are made for perfomance reasons nor does it override other GrContextOption settings.
 */
 func (o GrContextOptions) DisableDriverCorrectnessWorkarounds() bool {
 	return bool(o.fDisableDriverCorrectnessWorkarounds)
@@ -468,8 +410,7 @@ func (o *GrContextOptions) SetRuntimeProgramCacheSize(value int32) {
 }
 
 /*
-Specifies the number of samples Ganesh should use when performing internal draws with MSAA
-(hardware capabilities permitting).
+Specifies the number of samples Ganesh should use when performing internal draws with MSAA (hardware capabilities permitting).
 
 If 0, Ganesh will disable internal code paths that use multisampling.
 */
@@ -482,11 +423,7 @@ func (o *GrContextOptions) SetInternalMultisampleCount(value int32) {
 }
 
 /*
-In Skia's vulkan backend a single GrContext submit equates to the submission of a single
-primary command buffer to the VkQueue. This value specifies how many vulkan secondary command
-buffers we will cache for reuse on a given primary command buffer. A single submit may use
-more than this many secondary command buffers, but after the primary command buffer is
-finished on the GPU it will only hold on to this many secondary command buffers for reuse.
+In Skia's vulkan backend a single GrContext submit equates to the submission of a single primary command buffer to the VkQueue. This value specifies how many vulkan secondary command buffers we will cache for reuse on a given primary command buffer. A single submit may use more than this many secondary command buffers, but after the primary command buffer is finished on the GPU it will only hold on to this many secondary command buffers for reuse.
 
 A value of -1 means we will pick a limit value internally.
 */
@@ -510,8 +447,7 @@ func (o *GrContextOptions) SetSuppressMipmapSupport(value bool) {
 }
 
 /*
-If true, the TessellationPathRenderer will not be used for path rendering.
-If false, will fallback to any driver workarounds, if set.
+If true, the TessellationPathRenderer will not be used for path rendering. If false, will fallback to any driver workarounds, if set.
 */
 func (o GrContextOptions) DisableTessellationPathRenderer() bool {
 	return bool(o.fDisableTessellationPathRenderer)
@@ -522,8 +458,7 @@ func (o *GrContextOptions) SetDisableTessellationPathRenderer(value bool) {
 }
 
 /*
-If true, and if supported, enables hardware tessellation in the caps.
-DEPRECATED: This value is ignored; experimental hardware tessellation is always disabled.
+If true, and if supported, enables hardware tessellation in the caps. DEPRECATED: This value is ignored; experimental hardware tessellation is always disabled.
 */
 func (o GrContextOptions) EnableExperimentalHardwareTessellation() bool {
 	return bool(o.fEnableExperimentalHardwareTessellation)
@@ -534,8 +469,7 @@ func (o *GrContextOptions) SetEnableExperimentalHardwareTessellation(value bool)
 }
 
 /*
-If true, then add 1 pixel padding to all glyph masks in the atlas to support bi-lerp
-rendering of all glyphs. This must be set to true to use Slugs.
+If true, then add 1 pixel padding to all glyph masks in the atlas to support bi-lerp rendering of all glyphs. This must be set to true to use Slugs.
 */
 func (o GrContextOptions) SupportBilerpFromGlyphAtlas() bool {
 	return bool(o.fSupportBilerpFromGlyphAtlas)
@@ -546,8 +480,7 @@ func (o *GrContextOptions) SetSupportBilerpFromGlyphAtlas(value bool) {
 }
 
 /*
-Uses a reduced variety of shaders. May perform less optimally in steady state but can reduce
-jank due to shader compilations.
+Uses a reduced variety of shaders. May perform less optimally in steady state but can reduce jank due to shader compilations.
 */
 func (o GrContextOptions) ReducedShaderVariations() bool {
 	return bool(o.fReducedShaderVariations)
@@ -569,9 +502,7 @@ func (o *GrContextOptions) SetAllowMSAAOnNewIntel(value bool) {
 }
 
 /*
-Currently on ARM Android we disable the use of GL TexStorage because of memory regressions.
-However, some clients may still want to use TexStorage. For example, TexStorage support is
-required for creating protected textures.
+Currently on ARM Android we disable the use of GL TexStorage because of memory regressions. However, some clients may still want to use TexStorage. For example, TexStorage support is required for creating protected textures.
 
 This flag has no impact on non GL backends.
 */
@@ -592,9 +523,13 @@ func NewGrContextOptions() GrContextOptions {
 type GrContextOptionsEnable int32
 
 const (
-	// Forces an option to be disabled.
+	/*
+	   Forces an option to be disabled.
+	*/
 	GrContextOptionsEnableNo GrContextOptionsEnable = 0
-	// Forces an option to be enabled.
+	/*
+	   Forces an option to be enabled.
+	*/
 	GrContextOptionsEnableYes GrContextOptionsEnable = 1
 	/*
 	   Uses Skia's default behavior, which may use runtime properties (e.g. driver version).
@@ -654,25 +589,15 @@ func (o *Arc) Delete() {
 }
 
 /*
-SkBitmap describes a two-dimensional raster pixel array. SkBitmap is built on
-SkImageInfo, containing integer width and height, SkColorType and SkAlphaType
-describing the pixel format, and SkColorSpace describing the range of colors.
-SkBitmap points to SkPixelRef, which describes the physical array of pixels.
-SkImageInfo bounds may be located anywhere fully inside SkPixelRef bounds.
+SkBitmap describes a two-dimensional raster pixel array. SkBitmap is built on    SkImageInfo, containing integer width and height, SkColorType and SkAlphaType    describing the pixel format, and SkColorSpace describing the range of colors.    SkBitmap points to SkPixelRef, which describes the physical array of pixels.    SkImageInfo bounds may be located anywhere fully inside SkPixelRef bounds.
 
-SkBitmap can be drawn using SkCanvas. SkBitmap can be a drawing destination for SkCanvas
-draw member functions. SkBitmap flexibility as a pixel container limits some
-optimizations available to the target platform.
+SkBitmap can be drawn using SkCanvas. SkBitmap can be a drawing destination for SkCanvas    draw member functions. SkBitmap flexibility as a pixel container limits some    optimizations available to the target platform.
 
-If pixel array is primarily read-only, use SkImage for better performance.
-If pixel array is primarily written to, use SkSurface for better performance.
+If pixel array is primarily read-only, use SkImage for better performance.    If pixel array is primarily written to, use SkSurface for better performance.
 
-Declaring SkBitmap const prevents altering SkImageInfo: the SkBitmap height, width,
-and so on cannot change. It does not affect SkPixelRef: a caller may write its
-pixels. Declaring SkBitmap const affects SkBitmap configuration, not its contents.
+Declaring SkBitmap const prevents altering SkImageInfo: the SkBitmap height, width,    and so on cannot change. It does not affect SkPixelRef: a caller may write its    pixels. Declaring SkBitmap const affects SkBitmap configuration, not its contents.
 
-SkBitmap is not thread safe. Each thread must have its own copy of SkBitmap fields,
-although threads may share the underlying pixel array.
+SkBitmap is not thread safe. Each thread must have its own copy of SkBitmap fields,    although threads may share the underlying pixel array.
 */
 type Bitmap struct {
 	sk *C.sk_SkBitmap
@@ -685,18 +610,15 @@ func (o Bitmap) IsNil() bool {
 }
 
 /*
-Creates an empty SkBitmap without pixels, with kUnknown_SkColorType,
-kUnknown_SkAlphaType, and with a width and height of zero. SkPixelRef origin is
-set to (0, 0).
+Creates an empty SkBitmap without pixels, with kUnknown_SkColorType,        kUnknown_SkAlphaType, and with a width and height of zero. SkPixelRef origin is        set to (0, 0).
 
-Use setInfo() to associate SkColorType, SkAlphaType, width, and height
-after SkBitmap has been created.
+Use setInfo() to associate SkColorType, SkAlphaType, width, and height        after SkBitmap has been created.
+
+example: https://fiddle.skia.org/c/_empty_constructor
 
 # return
 
   - empty SkBitmap
-
-example: https://fiddle.skia.org/c/@Bitmap_empty_constructor
 */
 func NewBitmap() Bitmap {
 
@@ -705,18 +627,17 @@ func NewBitmap() Bitmap {
 }
 
 /*
-Copies settings from src to returned SkBitmap. Shares pixels if src has pixels
-allocated, so both bitmaps reference the same pixels.
+Copies settings from src to returned SkBitmap. Shares pixels if src has pixels        allocated, so both bitmaps reference the same pixels.
 
-# params
+example: https://fiddle.skia.org/c/_copy_const_SkBitmap
 
-  - src =>  SkBitmap to copy SkImageInfo, and share SkPixelRef
+# parameters
+
+  - src -   SkBitmap to copy SkImageInfo, and share SkPixelRef
 
 # return
 
   - copy of src
-
-example: https://fiddle.skia.org/c/@Bitmap_copy_const_SkBitmap
 */
 func NewBitmapCopy(src Bitmap) Bitmap {
 	c_src := src.sk
@@ -733,23 +654,15 @@ func (o *Bitmap) Delete() {
 }
 
 /*
-Returns true if all pixels are opaque. SkColorType determines how pixels
-are encoded, and whether pixel describes alpha. Returns true for SkColorType
-without alpha in each pixel; for other SkColorType, returns true if all
-pixels have alpha values equivalent to 1.0 or greater.
+Returns true if all pixels are opaque. SkColorType determines how pixels        are encoded, and whether pixel describes alpha. Returns true for SkColorType        without alpha in each pixel; for other SkColorType, returns true if all        pixels have alpha values equivalent to 1.0 or greater.
 
-For SkColorType kRGB_565_SkColorType or kGray_8_SkColorType: always
-returns true. For SkColorType kAlpha_8_SkColorType, kBGRA_8888_SkColorType,
-kRGBA_8888_SkColorType: returns true if all pixel alpha values are 255.
-For SkColorType kARGB_4444_SkColorType: returns true if all pixel alpha values are 15.
-For kRGBA_F16_SkColorType: returns true if all pixel alpha values are 1.0 or
-greater.
+For SkColorType kRGB_565_SkColorType or kGray_8_SkColorType: always        returns true. For SkColorType kAlpha_8_SkColorType, kBGRA_8888_SkColorType,        kRGBA_8888_SkColorType: returns true if all pixel alpha values are 255.        For SkColorType kARGB_4444_SkColorType: returns true if all pixel alpha values are 15.        For kRGBA_F16_SkColorType: returns true if all pixel alpha values are 1.0 or        greater.
 
 Returns false for kUnknown_SkColorType.
 
-# params
+# parameters
 
-  - bm =>  SkBitmap to check
+  - bm -   SkBitmap to check
 
 # return
 
@@ -762,8 +675,7 @@ func BitmapComputeIsOpaque(bm Bitmap) bool {
 }
 
 /*
-Returns number of bytes per pixel required by SkColorType.
-Returns zero if colorType( is kUnknown_SkColorType.
+Returns number of bytes per pixel required by SkColorType.        Returns zero if colorType( is kUnknown_SkColorType.
 
 # return
 
@@ -776,8 +688,7 @@ func (o Bitmap) BytesPerPixel() int32 {
 }
 
 /*
-Returns number of pixels that fit on row. Should be greater than or equal to
-width().
+Returns number of pixels that fit on row. Should be greater than or equal to        width().
 
 # return
 
@@ -790,8 +701,7 @@ func (o Bitmap) RowBytesAsPixels() int32 {
 }
 
 /*
-Returns bit shift converting row bytes to row pixels.
-Returns zero for kUnknown_SkColorType.
+Returns bit shift converting row bytes to row pixels.        Returns zero for kUnknown_SkColorType.
 
 # return
 
@@ -804,8 +714,7 @@ func (o Bitmap) ShiftPerPixel() int32 {
 }
 
 /*
-Returns true if width() or height() are zero, or if SkPixelRef is nullptr.
-If true, SkBitmap has no effect when drawn or drawn into.
+Returns true if width() or height() are zero, or if SkPixelRef is nullptr.        If true, SkBitmap has no effect when drawn or drawn into.
 
 # return
 
@@ -818,11 +727,9 @@ func (o Bitmap) DrawsNothing() bool {
 }
 
 /*
-Returns row bytes, the interval from one pixel row to the next. Row bytes
-is at least as large as: width() * info().bytesPerPixel().
+Returns row bytes, the interval from one pixel row to the next. Row bytes        is at least as large as: width() * info().bytesPerPixel().
 
-Returns zero if colorType() is kUnknown_SkColorType, or if row bytes supplied to
-setInfo() is not large enough to hold a row of pixels.
+Returns zero if colorType() is kUnknown_SkColorType, or if row bytes supplied to        setInfo() is not large enough to hold a row of pixels.
 
 # return
 
@@ -839,11 +746,11 @@ Returns true if pixels can not change.
 
 Most immutable SkBitmap checks trigger an assert only on debug builds.
 
+example: https://fiddle.skia.org/c/_isImmutable
+
 # return
 
   - true if pixels are immutable
-
-example: https://fiddle.skia.org/c/@Bitmap_isImmutable
 */
 func (o Bitmap) IsImmutable() bool {
 	c_obj := o.sk
@@ -852,13 +759,11 @@ func (o Bitmap) IsImmutable() bool {
 }
 
 /*
-Sets internal flag to mark SkBitmap as immutable. Once set, pixels can not change.
-Any other bitmap sharing the same SkPixelRef are also marked as immutable.
-Once SkPixelRef is marked immutable, the setting cannot be cleared.
+Sets internal flag to mark SkBitmap as immutable. Once set, pixels can not change.        Any other bitmap sharing the same SkPixelRef are also marked as immutable.        Once SkPixelRef is marked immutable, the setting cannot be cleared.
 
 Writing to immutable SkBitmap pixels triggers an assert on debug builds.
 
-example: https://fiddle.skia.org/c/@Bitmap_setImmutable
+example: https://fiddle.skia.org/c/_setImmutable
 */
 func (o Bitmap) SetImmutable() {
 	c_obj := o.sk
@@ -892,26 +797,15 @@ func (o Bitmap) Dimensions() ISize {
 }
 
 /*
-SkCanvas provides an interface for drawing, and how the drawing is clipped and transformed.
-SkCanvas contains a stack of SkMatrix and clip values.
+SkCanvas provides an interface for drawing, and how the drawing is clipped and transformed.    SkCanvas contains a stack of SkMatrix and clip values.
 
-SkCanvas and SkPaint together provide the state to draw into SkSurface or SkDevice.
-Each SkCanvas draw call transforms the geometry of the object by the concatenation of all
-SkMatrix values in the stack. The transformed geometry is clipped by the intersection
-of all of clip values in the stack. The SkCanvas draw calls use SkPaint to supply drawing
-state such as color, SkTypeface, text size, stroke width, SkShader and so on.
+SkCanvas and SkPaint together provide the state to draw into SkSurface or SkDevice.    Each SkCanvas draw call transforms the geometry of the object by the concatenation of all    SkMatrix values in the stack. The transformed geometry is clipped by the intersection    of all of clip values in the stack. The SkCanvas draw calls use SkPaint to supply drawing    state such as color, SkTypeface, text size, stroke width, SkShader and so on.
 
-To draw to a pixel-based destination, create raster surface or GPU surface.
-Request SkCanvas from SkSurface to obtain the interface to draw.
-SkCanvas generated by raster surface draws to memory visible to the CPU.
-SkCanvas generated by GPU surface uses Vulkan or OpenGL to draw to the GPU.
+To draw to a pixel-based destination, create raster surface or GPU surface.    Request SkCanvas from SkSurface to obtain the interface to draw.    SkCanvas generated by raster surface draws to memory visible to the CPU.    SkCanvas generated by GPU surface uses Vulkan or OpenGL to draw to the GPU.
 
-To draw to a document, obtain SkCanvas from SVG canvas, document PDF, or SkPictureRecorder.
-SkDocument based SkCanvas and other SkCanvas subclasses reference SkDevice describing the
-destination.
+To draw to a document, obtain SkCanvas from SVG canvas, document PDF, or SkPictureRecorder.    SkDocument based SkCanvas and other SkCanvas subclasses reference SkDevice describing the    destination.
 
-SkCanvas can be constructed to draw to SkBitmap without first creating raster surface.
-This approach may be deprecated in the future.
+SkCanvas can be constructed to draw to SkBitmap without first creating raster surface.    This approach may be deprecated in the future.
 */
 type Canvas struct {
 	sk *C.sk_SkCanvas
@@ -924,14 +818,13 @@ func (o Canvas) IsNil() bool {
 }
 
 /*
-Creates an empty SkCanvas with no backing device or pixels, with
-a width and height of zero.
+Creates an empty SkCanvas with no backing device or pixels, with        a width and height of zero.
+
+example: https://fiddle.skia.org/c/_empty_constructor
 
 # return
 
   - empty SkCanvas
-
-example: https://fiddle.skia.org/c/@Canvas_empty_constructor
 */
 func NewCanvas() Canvas {
 
@@ -940,27 +833,21 @@ func NewCanvas() Canvas {
 }
 
 /*
-Creates SkCanvas of the specified dimensions without a SkSurface.
-Used by subclasses with custom implementations for draw member functions.
+Creates SkCanvas of the specified dimensions without a SkSurface.        Used by subclasses with custom implementations for draw member functions.
 
-If props equals nullptr, SkSurfaceProps are created with
-SkSurfaceProps::InitType settings, which choose the pixel striping
-direction and order. Since a platform may dynamically change its direction when
-the device is rotated, and since a platform may have multiple monitors with
-different characteristics, it is best not to rely on this legacy behavior.
+If props equals nullptr, SkSurfaceProps are created with        SkSurfaceProps::InitType settings, which choose the pixel striping        direction and order. Since a platform may dynamically change its direction when        the device is rotated, and since a platform may have multiple monitors with        different characteristics, it is best not to rely on this legacy behavior.
 
-# params
+example: https://fiddle.skia.org/c/_int_int_const_SkSurfaceProps_star
 
-  - width =>   zero or greater
-  - height =>  zero or greater
-  - props =>   LCD striping orientation and setting for device independent fonts;
-    may be nullptr
+# parameters
+
+  - width -    zero or greater
+  - height -   zero or greater
+  - props -    LCD striping orientation and setting for device independent fonts;                       may be nullptr
 
 # return
 
   - SkCanvas placeholder with dimensions
-
-example: https://fiddle.skia.org/c/@Canvas_int_int_const_SkSurfaceProps_star
 */
 func NewCanvasWithDimensions(width int32, height int32, props SurfaceProps) Canvas {
 	c_width := C.int(width)
@@ -971,24 +858,21 @@ func NewCanvasWithDimensions(width int32, height int32, props SurfaceProps) Canv
 }
 
 /*
-Constructs a canvas that draws into bitmap.
-Sets kUnknown_SkPixelGeometry in constructed SkSurface.
+Constructs a canvas that draws into bitmap.        Sets kUnknown_SkPixelGeometry in constructed SkSurface.
 
-SkBitmap is copied so that subsequently editing bitmap will not affect
-constructed SkCanvas.
+SkBitmap is copied so that subsequently editing bitmap will not affect        constructed SkCanvas.
 
 May be deprecated in the future.
 
-# params
+example: https://fiddle.skia.org/c/_copy_const_SkBitmap
 
-  - bitmap =>  width, height, SkColorType, SkAlphaType, and pixel
-    storage of raster surface
+# parameters
+
+  - bitmap -   width, height, SkColorType, SkAlphaType, and pixel                       storage of raster surface
 
 # return
 
   - SkCanvas that can be used to draw into bitmap
-
-example: https://fiddle.skia.org/c/@Canvas_copy_const_SkBitmap
 */
 func NewCanvasFromBitmap(bitmap Bitmap) Canvas {
 	c_bitmap := bitmap.sk
@@ -997,24 +881,20 @@ func NewCanvasFromBitmap(bitmap Bitmap) Canvas {
 }
 
 /*
-Constructs a canvas that draws into bitmap.
-Use props to match the device characteristics, like LCD striping.
+Constructs a canvas that draws into bitmap.        Use props to match the device characteristics, like LCD striping.
 
-bitmap is copied so that subsequently editing bitmap will not affect
-constructed SkCanvas.
+bitmap is copied so that subsequently editing bitmap will not affect        constructed SkCanvas.
 
-# params
+example: https://fiddle.skia.org/c/_const_SkBitmap_const_SkSurfaceProps
 
-  - bitmap =>  width, height, SkColorType, SkAlphaType,
-    and pixel storage of raster surface
-  - props =>   order and orientation of RGB striping; and whether to use
-    device independent fonts
+# parameters
+
+  - bitmap -   width, height, SkColorType, SkAlphaType,                       and pixel storage of raster surface
+  - props -    order and orientation of RGB striping; and whether to use                       device independent fonts
 
 # return
 
   - SkCanvas that can be used to draw into bitmap
-
-example: https://fiddle.skia.org/c/@Canvas_const_SkBitmap_const_SkSurfaceProps
 */
 func NewCanvasFromBitmapSurfaceProps(bitmap Bitmap, props SurfaceProps) Canvas {
 	c_bitmap := bitmap.sk
@@ -1024,10 +904,9 @@ func NewCanvasFromBitmapSurfaceProps(bitmap Bitmap, props SurfaceProps) Canvas {
 }
 
 /*
-Draws saved layers, if any.
-Frees up resources used by SkCanvas.
+Draws saved layers, if any.        Frees up resources used by SkCanvas.
 
-example: https://fiddle.skia.org/c/@Canvas_destructor
+example: https://fiddle.skia.org/c/_destructor
 */
 func (o *Canvas) Delete() {
 	C.misk_delete_SkCanvas(o.sk)
@@ -1035,20 +914,19 @@ func (o *Canvas) Delete() {
 }
 
 /*
-Copies SkSurfaceProps, if SkCanvas is associated with raster surface or
-GPU surface, and returns true. Otherwise, returns false and leave props unchanged.
+Copies SkSurfaceProps, if SkCanvas is associated with raster surface or        GPU surface, and returns true. Otherwise, returns false and leave props unchanged.
 
-# params
+DEPRECATED: Replace usage with getBaseProps() or getTopProps()
 
-  - props =>  storage for writable SkSurfaceProps
+example: https://fiddle.skia.org/c/_getProps
+
+# parameters
+
+  - props -   storage for writable SkSurfaceProps
 
 # return
 
   - true if SkSurfaceProps was copied
-
-DEPRECATED: Replace usage with getBaseProps() or getTopProps()
-
-example: https://fiddle.skia.org/c/@Canvas_getProps
 */
 func (o Canvas) GetProps(props SurfaceProps) bool {
 	c_obj := o.sk
@@ -1058,8 +936,7 @@ func (o Canvas) GetProps(props SurfaceProps) bool {
 }
 
 /*
-Returns the SkSurfaceProps associated with the canvas (i.e., at the base of the layer
-stack).
+Returns the SkSurfaceProps associated with the canvas (i.e., at the base of the layer        stack).
 
 # return
 
@@ -1072,9 +949,7 @@ func (o Canvas) GetBaseProps() SurfaceProps {
 }
 
 /*
-Returns the SkSurfaceProps associated with the canvas that are currently active (i.e., at
-the top of the layer stack). This can differ from getBaseProps depending on the flags
-passed to saveLayer (see SaveLayerFlagsSet).
+Returns the SkSurfaceProps associated with the canvas that are currently active (i.e., at        the top of the layer stack). This can differ from getBaseProps depending on the flags        passed to saveLayer (see SaveLayerFlagsSet).
 
 # return
 
@@ -1087,15 +962,13 @@ func (o Canvas) GetTopProps() SurfaceProps {
 }
 
 /*
-Gets the size of the base or root layer in global canvas coordinates. The
-origin of the base layer is always (0,0). The area available for drawing may be
-smaller (due to clipping or saveLayer).
+Gets the size of the base or root layer in global canvas coordinates. The        origin of the base layer is always (0,0). The area available for drawing may be        smaller (due to clipping or saveLayer).
+
+example: https://fiddle.skia.org/c/_getBaseLayerSize
 
 # return
 
   - integral width and height of base layer
-
-example: https://fiddle.skia.org/c/@Canvas_getBaseLayerSize
 */
 func (o Canvas) GetBaseLayerSize() ISize {
 	c_obj := o.sk
@@ -1104,22 +977,20 @@ func (o Canvas) GetBaseLayerSize() ISize {
 }
 
 /*
-Creates SkSurface matching info and props, and associates it with SkCanvas.
-Returns nullptr if no match found.
+Creates SkSurface matching info and props, and associates it with SkCanvas.        Returns nullptr if no match found.
 
-If props is nullptr, matches SkSurfaceProps in SkCanvas. If props is nullptr and SkCanvas
-does not have SkSurfaceProps, creates SkSurface with default SkSurfaceProps.
+If props is nullptr, matches SkSurfaceProps in SkCanvas. If props is nullptr and SkCanvas        does not have SkSurfaceProps, creates SkSurface with default SkSurfaceProps.
 
-# params
+example: https://fiddle.skia.org/c/_makeSurface
 
-  - info =>   width, height, SkColorType, SkAlphaType, and SkColorSpace
-  - props =>  SkSurfaceProps to match; may be nullptr to match SkCanvas
+# parameters
+
+  - info -    width, height, SkColorType, SkAlphaType, and SkColorSpace
+  - props -   SkSurfaceProps to match; may be nullptr to match SkCanvas
 
 # return
 
   - SkSurface matching info and props, or nullptr if no match is available
-
-example: https://fiddle.skia.org/c/@Canvas_makeSurface
 */
 func (o Canvas) MakeSurface(info ImageInfo, props SurfaceProps) Surface {
 	c_obj := o.sk
@@ -1130,8 +1001,7 @@ func (o Canvas) MakeSurface(info ImageInfo, props SurfaceProps) Surface {
 }
 
 /*
-Sometimes a canvas is owned by a surface. If it is, getSurface() will return a bare
-pointer to that surface, else this will return nullptr.
+Sometimes a canvas is owned by a surface. If it is, getSurface() will return a bare  pointer to that surface, else this will return nullptr.
 */
 func (o Canvas) GetSurface() Surface {
 	c_obj := o.sk
@@ -1142,11 +1012,11 @@ func (o Canvas) GetSurface() Surface {
 /*
 Returns Ganesh context of the GPU surface associated with SkCanvas.
 
+example: https://fiddle.skia.org/c/_recordingContext
+
 # return
 
   - GPU context, if available; nullptr otherwise
-
-example: https://fiddle.skia.org/c/@Canvas_recordingContext
 */
 func (o Canvas) RecordingContext() GrRecordingContext {
 	c_obj := o.sk
@@ -1157,23 +1027,19 @@ func (o Canvas) RecordingContext() GrRecordingContext {
 /*
 Returns true if SkCanvas has direct access to its pixels.
 
-Pixels are readable when SkDevice is raster. Pixels are not readable when SkCanvas
-is returned from GPU surface, returned by SkDocument::beginPage, returned by
-SkPictureRecorder::beginRecording, or SkCanvas is the base of a utility class
-like DebugCanvas.
+Pixels are readable when SkDevice is raster. Pixels are not readable when SkCanvas        is returned from GPU surface, returned by SkDocument::beginPage, returned by        SkPictureRecorder::beginRecording, or SkCanvas is the base of a utility class        like DebugCanvas.
 
-pixmap is valid only while SkCanvas is in scope and unchanged. Any
-SkCanvas or SkSurface call may invalidate the pixmap values.
+pixmap is valid only while SkCanvas is in scope and unchanged. Any        SkCanvas or SkSurface call may invalidate the pixmap values.
 
-# params
+example: https://fiddle.skia.org/c/_peekPixels
 
-  - pixmap =>  storage for pixel state if pixels are readable; otherwise, ignored
+# parameters
+
+  - pixmap -   storage for pixel state if pixels are readable; otherwise, ignored
 
 # return
 
   - true if SkCanvas has direct access to pixels
-
-example: https://fiddle.skia.org/c/@Canvas_peekPixels
 */
 func (o Canvas) PeekPixels(pixmap Pixmap) bool {
 	c_obj := o.sk
@@ -1183,40 +1049,27 @@ func (o Canvas) PeekPixels(pixmap Pixmap) bool {
 }
 
 /*
-Copies SkRect of pixels from SkCanvas into dstPixels. SkMatrix and clip are
-ignored.
+Copies SkRect of pixels from SkCanvas into dstPixels. SkMatrix and clip are        ignored.
 
-Source SkRect corners are (srcX, srcY) and (imageInfo().width(), imageInfo().height()).
-Destination SkRect corners are (0, 0) and (dstInfo.width(), dstInfo.height()).
-Copies each readable pixel intersecting both rectangles, without scaling,
-converting to dstInfo.colorType() and dstInfo.alphaType() if required.
+Source SkRect corners are (srcX, srcY) and (imageInfo().width(), imageInfo().height()).        Destination SkRect corners are (0, 0) and (dstInfo.width(), dstInfo.height()).        Copies each readable pixel intersecting both rectangles, without scaling,        converting to dstInfo.colorType() and dstInfo.alphaType() if required.
 
-Pixels are readable when SkDevice is raster, or backed by a GPU.
-Pixels are not readable when SkCanvas is returned by SkDocument::beginPage,
-returned by SkPictureRecorder::beginRecording, or SkCanvas is the base of a utility
-class like DebugCanvas.
+Pixels are readable when SkDevice is raster, or backed by a GPU.        Pixels are not readable when SkCanvas is returned by SkDocument::beginPage,        returned by SkPictureRecorder::beginRecording, or SkCanvas is the base of a utility        class like DebugCanvas.
 
 The destination pixel storage must be allocated by the caller.
 
-Pixel values are converted only if SkColorType and SkAlphaType
-do not match. Only pixels within both source and destination rectangles
-are copied. dstPixels contents outside SkRect intersection are unchanged.
+Pixel values are converted only if SkColorType and SkAlphaType        do not match. Only pixels within both source and destination rectangles        are copied. dstPixels contents outside SkRect intersection are unchanged.
 
 Pass negative values for srcX or srcY to offset pixels across or down destination.
 
-Does not copy, and returns false if:
-  - Source and destination rectangles do not intersect.
-  - SkCanvas pixels could not be converted to dstInfo.colorType() or dstInfo.alphaType().
-  - SkCanvas pixels are not readable; for instance, SkCanvas is document-based.
-  - dstRowBytes is too small to contain one row of pixels.
+Does not copy, and returns false if:        - Source and destination rectangles do not intersect.        - SkCanvas pixels could not be converted to dstInfo.colorType() or dstInfo.alphaType().        - SkCanvas pixels are not readable; for instance, SkCanvas is document-based.        - dstRowBytes is too small to contain one row of pixels.
 
-# params
+# parameters
 
-  - dstInfo =>      width, height, SkColorType, and SkAlphaType of dstPixels
-  - dstPixels =>    storage for pixels; dstInfo.height() times dstRowBytes, or larger
-  - dstRowBytes =>  size of one destination row; dstInfo.width() times pixel size, or larger
-  - srcX =>         offset into readable pixels on x-axis; may be negative
-  - srcY =>         offset into readable pixels on y-axis; may be negative
+  - dstInfo -       width, height, SkColorType, and SkAlphaType of dstPixels
+  - dstPixels -     storage for pixels; dstInfo.height() times dstRowBytes, or larger
+  - dstRowBytes -   size of one destination row; dstInfo.width() times pixel size, or larger
+  - srcX -          offset into readable pixels on x-axis; may be negative
+  - srcY -          offset into readable pixels on y-axis; may be negative
 
 # return
 
@@ -1234,45 +1087,31 @@ func (o Canvas) ReadPixelsImageInfo(dstInfo ImageInfo, dstPixels []byte, dstRowB
 }
 
 /*
-Copies SkRect of pixels from SkCanvas into pixmap. SkMatrix and clip are
-ignored.
+Copies SkRect of pixels from SkCanvas into pixmap. SkMatrix and clip are        ignored.
 
-Source SkRect corners are (srcX, srcY) and (imageInfo().width(), imageInfo().height()).
-Destination SkRect corners are (0, 0) and (pixmap.width(), pixmap.height()).
-Copies each readable pixel intersecting both rectangles, without scaling,
-converting to pixmap.colorType() and pixmap.alphaType() if required.
+Source SkRect corners are (srcX, srcY) and (imageInfo().width(), imageInfo().height()).        Destination SkRect corners are (0, 0) and (pixmap.width(), pixmap.height()).        Copies each readable pixel intersecting both rectangles, without scaling,        converting to pixmap.colorType() and pixmap.alphaType() if required.
 
-Pixels are readable when SkDevice is raster, or backed by a GPU.
-Pixels are not readable when SkCanvas is returned by SkDocument::beginPage,
-returned by SkPictureRecorder::beginRecording, or SkCanvas is the base of a utility
-class like DebugCanvas.
+Pixels are readable when SkDevice is raster, or backed by a GPU.        Pixels are not readable when SkCanvas is returned by SkDocument::beginPage,        returned by SkPictureRecorder::beginRecording, or SkCanvas is the base of a utility        class like DebugCanvas.
 
 Caller must allocate pixel storage in pixmap if needed.
 
-Pixel values are converted only if SkColorType and SkAlphaType
-do not match. Only pixels within both source and destination SkRect
-are copied. pixmap pixels contents outside SkRect intersection are unchanged.
+Pixel values are converted only if SkColorType and SkAlphaType        do not match. Only pixels within both source and destination SkRect        are copied. pixmap pixels contents outside SkRect intersection are unchanged.
 
 Pass negative values for srcX or srcY to offset pixels across or down pixmap.
 
-Does not copy, and returns false if:
-  - Source and destination rectangles do not intersect.
-  - SkCanvas pixels could not be converted to pixmap.colorType() or pixmap.alphaType().
-  - SkCanvas pixels are not readable; for instance, SkCanvas is document-based.
-  - SkPixmap pixels could not be allocated.
-  - pixmap.rowBytes() is too small to contain one row of pixels.
+Does not copy, and returns false if:        - Source and destination rectangles do not intersect.        - SkCanvas pixels could not be converted to pixmap.colorType() or pixmap.alphaType().        - SkCanvas pixels are not readable; for instance, SkCanvas is document-based.        - SkPixmap pixels could not be allocated.        - pixmap.rowBytes() is too small to contain one row of pixels.
 
-# params
+example: https://fiddle.skia.org/c/_readPixels_2
 
-  - pixmap =>  storage for pixels copied from SkCanvas
-  - srcX =>    offset into readable pixels on x-axis; may be negative
-  - srcY =>    offset into readable pixels on y-axis; may be negative
+# parameters
+
+  - pixmap -   storage for pixels copied from SkCanvas
+  - srcX -     offset into readable pixels on x-axis; may be negative
+  - srcY -     offset into readable pixels on y-axis; may be negative
 
 # return
 
   - true if pixels were copied
-
-example: https://fiddle.skia.org/c/@Canvas_readPixels_2
 */
 func (o Canvas) ReadPixelsPixmap(pixmap Pixmap, srcX int32, srcY int32) bool {
 	c_obj := o.sk
@@ -1284,45 +1123,31 @@ func (o Canvas) ReadPixelsPixmap(pixmap Pixmap, srcX int32, srcY int32) bool {
 }
 
 /*
-Copies SkRect of pixels from SkCanvas into bitmap. SkMatrix and clip are
-ignored.
+Copies SkRect of pixels from SkCanvas into bitmap. SkMatrix and clip are        ignored.
 
-Source SkRect corners are (srcX, srcY) and (imageInfo().width(), imageInfo().height()).
-Destination SkRect corners are (0, 0) and (bitmap.width(), bitmap.height()).
-Copies each readable pixel intersecting both rectangles, without scaling,
-converting to bitmap.colorType() and bitmap.alphaType() if required.
+Source SkRect corners are (srcX, srcY) and (imageInfo().width(), imageInfo().height()).        Destination SkRect corners are (0, 0) and (bitmap.width(), bitmap.height()).        Copies each readable pixel intersecting both rectangles, without scaling,        converting to bitmap.colorType() and bitmap.alphaType() if required.
 
-Pixels are readable when SkDevice is raster, or backed by a GPU.
-Pixels are not readable when SkCanvas is returned by SkDocument::beginPage,
-returned by SkPictureRecorder::beginRecording, or SkCanvas is the base of a utility
-class like DebugCanvas.
+Pixels are readable when SkDevice is raster, or backed by a GPU.        Pixels are not readable when SkCanvas is returned by SkDocument::beginPage,        returned by SkPictureRecorder::beginRecording, or SkCanvas is the base of a utility        class like DebugCanvas.
 
 Caller must allocate pixel storage in bitmap if needed.
 
-SkBitmap values are converted only if SkColorType and SkAlphaType
-do not match. Only pixels within both source and destination rectangles
-are copied. SkBitmap pixels outside SkRect intersection are unchanged.
+SkBitmap values are converted only if SkColorType and SkAlphaType        do not match. Only pixels within both source and destination rectangles        are copied. SkBitmap pixels outside SkRect intersection are unchanged.
 
 Pass negative values for srcX or srcY to offset pixels across or down bitmap.
 
-Does not copy, and returns false if:
-  - Source and destination rectangles do not intersect.
-  - SkCanvas pixels could not be converted to bitmap.colorType() or bitmap.alphaType().
-  - SkCanvas pixels are not readable; for instance, SkCanvas is document-based.
-  - bitmap pixels could not be allocated.
-  - bitmap.rowBytes() is too small to contain one row of pixels.
+Does not copy, and returns false if:        - Source and destination rectangles do not intersect.        - SkCanvas pixels could not be converted to bitmap.colorType() or bitmap.alphaType().        - SkCanvas pixels are not readable; for instance, SkCanvas is document-based.        - bitmap pixels could not be allocated.        - bitmap.rowBytes() is too small to contain one row of pixels.
 
-# params
+example: https://fiddle.skia.org/c/_readPixels_3
 
-  - bitmap =>  storage for pixels copied from SkCanvas
-  - srcX =>    offset into readable pixels on x-axis; may be negative
-  - srcY =>    offset into readable pixels on y-axis; may be negative
+# parameters
+
+  - bitmap -   storage for pixels copied from SkCanvas
+  - srcX -     offset into readable pixels on x-axis; may be negative
+  - srcY -     offset into readable pixels on y-axis; may be negative
 
 # return
 
   - true if pixels were copied
-
-example: https://fiddle.skia.org/c/@Canvas_readPixels_3
 */
 func (o Canvas) ReadPixelsBitmap(bitmap Bitmap, srcX int32, srcY int32) bool {
 	c_obj := o.sk
@@ -1334,47 +1159,31 @@ func (o Canvas) ReadPixelsBitmap(bitmap Bitmap, srcX int32, srcY int32) bool {
 }
 
 /*
-Copies SkRect from pixels to SkCanvas. SkMatrix and clip are ignored.
-Source SkRect corners are (0, 0) and (info.width(), info.height()).
-Destination SkRect corners are (x, y) and
-(imageInfo().width(), imageInfo().height()).
+Copies SkRect from pixels to SkCanvas. SkMatrix and clip are ignored.        Source SkRect corners are (0, 0) and (info.width(), info.height()).        Destination SkRect corners are (x, y) and        (imageInfo().width(), imageInfo().height()).
 
-Copies each readable pixel intersecting both rectangles, without scaling,
-converting to imageInfo().colorType() and imageInfo().alphaType() if required.
+Copies each readable pixel intersecting both rectangles, without scaling,        converting to imageInfo().colorType() and imageInfo().alphaType() if required.
 
-Pixels are writable when SkDevice is raster, or backed by a GPU.
-Pixels are not writable when SkCanvas is returned by SkDocument::beginPage,
-returned by SkPictureRecorder::beginRecording, or SkCanvas is the base of a utility
-class like DebugCanvas.
+Pixels are writable when SkDevice is raster, or backed by a GPU.        Pixels are not writable when SkCanvas is returned by SkDocument::beginPage,        returned by SkPictureRecorder::beginRecording, or SkCanvas is the base of a utility        class like DebugCanvas.
 
-Pixel values are converted only if SkColorType and SkAlphaType
-do not match. Only pixels within both source and destination rectangles
-are copied. SkCanvas pixels outside SkRect intersection are unchanged.
+Pixel values are converted only if SkColorType and SkAlphaType        do not match. Only pixels within both source and destination rectangles        are copied. SkCanvas pixels outside SkRect intersection are unchanged.
 
-Pass negative values for x or y to offset pixels to the left or
-above SkCanvas pixels.
+Pass negative values for x or y to offset pixels to the left or        above SkCanvas pixels.
 
-Does not copy, and returns false if:
-  - Source and destination rectangles do not intersect.
-  - pixels could not be converted to SkCanvas imageInfo().colorType() or
+Does not copy, and returns false if:        - Source and destination rectangles do not intersect.        - pixels could not be converted to SkCanvas imageInfo().colorType() or        imageInfo().alphaType().        - SkCanvas pixels are not writable; for instance, SkCanvas is document-based.        - rowBytes is too small to contain one row of pixels.
 
-imageInfo().alphaType().
-  - SkCanvas pixels are not writable; for instance, SkCanvas is document-based.
-  - rowBytes is too small to contain one row of pixels.
+example: https://fiddle.skia.org/c/_writePixels
 
-# params
+# parameters
 
-  - info =>      width, height, SkColorType, and SkAlphaType of pixels
-  - pixels =>    pixels to copy, of size info.height() times rowBytes, or larger
-  - rowBytes =>  size of one row of pixels; info.width() times pixel size, or larger
-  - x =>         offset into SkCanvas writable pixels on x-axis; may be negative
-  - y =>         offset into SkCanvas writable pixels on y-axis; may be negative
+  - info -       width, height, SkColorType, and SkAlphaType of pixels
+  - pixels -     pixels to copy, of size info.height() times rowBytes, or larger
+  - rowBytes -   size of one row of pixels; info.width() times pixel size, or larger
+  - x -          offset into SkCanvas writable pixels on x-axis; may be negative
+  - y -          offset into SkCanvas writable pixels on y-axis; may be negative
 
 # return
 
   - true if pixels were written to SkCanvas
-
-example: https://fiddle.skia.org/c/@Canvas_writePixels
 */
 func (o Canvas) WritePixelsImageInfo(info ImageInfo, pixels []byte, rowBytes uint32, x int32, y int32) bool {
 	c_obj := o.sk
@@ -1388,49 +1197,31 @@ func (o Canvas) WritePixelsImageInfo(info ImageInfo, pixels []byte, rowBytes uin
 }
 
 /*
-Copies SkRect from pixels to SkCanvas. SkMatrix and clip are ignored.
-Source SkRect corners are (0, 0) and (bitmap.width(), bitmap.height()).
+Copies SkRect from pixels to SkCanvas. SkMatrix and clip are ignored.        Source SkRect corners are (0, 0) and (bitmap.width(), bitmap.height()).
 
-Destination SkRect corners are (x, y) and
-(imageInfo().width(), imageInfo().height()).
+Destination SkRect corners are (x, y) and        (imageInfo().width(), imageInfo().height()).
 
-Copies each readable pixel intersecting both rectangles, without scaling,
-converting to imageInfo().colorType() and imageInfo().alphaType() if required.
+Copies each readable pixel intersecting both rectangles, without scaling,        converting to imageInfo().colorType() and imageInfo().alphaType() if required.
 
-Pixels are writable when SkDevice is raster, or backed by a GPU.
-Pixels are not writable when SkCanvas is returned by SkDocument::beginPage,
-returned by SkPictureRecorder::beginRecording, or SkCanvas is the base of a utility
-class like DebugCanvas.
+Pixels are writable when SkDevice is raster, or backed by a GPU.        Pixels are not writable when SkCanvas is returned by SkDocument::beginPage,        returned by SkPictureRecorder::beginRecording, or SkCanvas is the base of a utility        class like DebugCanvas.
 
-Pixel values are converted only if SkColorType and SkAlphaType
-do not match. Only pixels within both source and destination rectangles
-are copied. SkCanvas pixels outside SkRect intersection are unchanged.
+Pixel values are converted only if SkColorType and SkAlphaType        do not match. Only pixels within both source and destination rectangles        are copied. SkCanvas pixels outside SkRect intersection are unchanged.
 
-Pass negative values for x or y to offset pixels to the left or
-above SkCanvas pixels.
+Pass negative values for x or y to offset pixels to the left or        above SkCanvas pixels.
 
-Does not copy, and returns false if:
-  - Source and destination rectangles do not intersect.
-  - bitmap does not have allocated pixels.
-  - bitmap pixels could not be converted to SkCanvas imageInfo().colorType() or
+Does not copy, and returns false if:        - Source and destination rectangles do not intersect.        - bitmap does not have allocated pixels.        - bitmap pixels could not be converted to SkCanvas imageInfo().colorType() or        imageInfo().alphaType().        - SkCanvas pixels are not writable; for instance, SkCanvas is document based.        - bitmap pixels are inaccessible; for instance, bitmap wraps a texture.
 
-imageInfo().alphaType().
-  - SkCanvas pixels are not writable; for instance, SkCanvas is document based.
-  - bitmap pixels are inaccessible; for instance, bitmap wraps a texture.
+example: https://fiddle.skia.org/c/_writePixels_2        example: https://fiddle.skia.org/c/_Stack_a        example: https://fiddle.skia.org/c/_Stack_b
 
-# params
+# parameters
 
-  - bitmap =>  contains pixels copied to SkCanvas
-  - x =>       offset into SkCanvas writable pixels on x-axis; may be negative
-  - y =>       offset into SkCanvas writable pixels on y-axis; may be negative
+  - bitmap -   contains pixels copied to SkCanvas
+  - x -        offset into SkCanvas writable pixels on x-axis; may be negative
+  - y -        offset into SkCanvas writable pixels on y-axis; may be negative
 
 # return
 
   - true if pixels were written to SkCanvas
-
-example: https://fiddle.skia.org/c/@Canvas_writePixels_2
-example: https://fiddle.skia.org/c/@State_Stack_a
-example: https://fiddle.skia.org/c/@State_Stack_b
 */
 func (o Canvas) WritePixelsBitmap(bitmap Bitmap, x int32, y int32) bool {
 	c_obj := o.sk
@@ -1442,23 +1233,19 @@ func (o Canvas) WritePixelsBitmap(bitmap Bitmap, x int32, y int32) bool {
 }
 
 /*
-Saves SkMatrix and clip.
-Calling restore() discards changes to SkMatrix and clip,
-restoring the SkMatrix and clip to their state when save() was called.
+Saves SkMatrix and clip.        Calling restore() discards changes to SkMatrix and clip,        restoring the SkMatrix and clip to their state when save() was called.
 
-SkMatrix may be changed by translate(), scale(), rotate(), skew(), concat(), setMatrix(),
-and resetMatrix(). Clip may be changed by clipRect(), clipRRect(), clipPath(), clipRegion().
+SkMatrix may be changed by translate(), scale(), rotate(), skew(), concat(), setMatrix(),        and resetMatrix(). Clip may be changed by clipRect(), clipRRect(), clipPath(), clipRegion().
 
-Saved SkCanvas state is put on a stack; multiple calls to save() should be balance
-by an equal number of calls to restore().
+Saved SkCanvas state is put on a stack; multiple calls to save() should be balance        by an equal number of calls to restore().
 
 Call restoreToCount() with result to restore this and subsequent saves.
+
+example: https://fiddle.skia.org/c/_save
 
 # return
 
   - depth of saved stack
-
-example: https://fiddle.skia.org/c/@Canvas_save
 */
 func (o Canvas) Save() int32 {
 	c_obj := o.sk
@@ -1467,32 +1254,26 @@ func (o Canvas) Save() int32 {
 }
 
 /*
-Saves SkMatrix and clip, and allocates a SkSurface for subsequent drawing.
-Calling restore() discards changes to SkMatrix and clip, and draws the SkSurface.
+Saves SkMatrix and clip, and allocates a SkSurface for subsequent drawing.        Calling restore() discards changes to SkMatrix and clip, and draws the SkSurface.
 
-SkMatrix may be changed by translate(), scale(), rotate(), skew(), concat(),
-setMatrix(), and resetMatrix(). Clip may be changed by clipRect(), clipRRect(),
-clipPath(), clipRegion().
+SkMatrix may be changed by translate(), scale(), rotate(), skew(), concat(),        setMatrix(), and resetMatrix(). Clip may be changed by clipRect(), clipRRect(),        clipPath(), clipRegion().
 
-SkRect bounds suggests but does not define the SkSurface size. To clip drawing to
-a specific rectangle, use clipRect().
+SkRect bounds suggests but does not define the SkSurface size. To clip drawing to        a specific rectangle, use clipRect().
 
-Optional SkPaint paint applies alpha, SkColorFilter, SkImageFilter, and
-SkBlendMode when restore() is called.
+Optional SkPaint paint applies alpha, SkColorFilter, SkImageFilter, and        SkBlendMode when restore() is called.
 
 Call restoreToCount() with returned value to restore this and subsequent saves.
 
-# params
+example: https://fiddle.skia.org/c/_saveLayer        example: https://fiddle.skia.org/c/_saveLayer_4
 
-  - bounds =>  hint to limit the size of the layer; may be nullptr
-  - paint =>   graphics state for layer; may be nullptr
+# parameters
+
+  - bounds -   hint to limit the size of the layer; may be nullptr
+  - paint -    graphics state for layer; may be nullptr
 
 # return
 
   - depth of saved stack
-
-example: https://fiddle.skia.org/c/@Canvas_saveLayer
-example: https://fiddle.skia.org/c/@Canvas_saveLayer_4
 */
 func (o Canvas) SaveLayer(bounds Rect, paint Paint) int32 {
 	c_obj := o.sk
@@ -1511,14 +1292,13 @@ func (o Canvas) SaveLayerAlpha(bounds Rect, alpha uint32) int32 {
 }
 
 /*
-Removes changes to SkMatrix and clip since SkCanvas state was
-last saved. The state is removed from the stack.
+Removes changes to SkMatrix and clip since SkCanvas state was        last saved. The state is removed from the stack.
 
 Does nothing if the stack is empty.
 
-example: https://fiddle.skia.org/c/@AutoCanvasRestore_restore
+example: https://fiddle.skia.org/c/_restore
 
-example: https://fiddle.skia.org/c/@Canvas_restore
+example: https://fiddle.skia.org/c/_restore
 */
 func (o Canvas) Restore() {
 	c_obj := o.sk
@@ -1526,15 +1306,13 @@ func (o Canvas) Restore() {
 }
 
 /*
-Returns the number of saved states, each containing: SkMatrix and clip.
-Equals the number of save() calls less the number of restore() calls plus one.
-The save count of a new canvas is one.
+Returns the number of saved states, each containing: SkMatrix and clip.        Equals the number of save() calls less the number of restore() calls plus one.        The save count of a new canvas is one.
+
+example: https://fiddle.skia.org/c/_getSaveCount
 
 # return
 
   - depth of save state stack
-
-example: https://fiddle.skia.org/c/@Canvas_getSaveCount
 */
 func (o Canvas) GetSaveCount() int32 {
 	c_obj := o.sk
@@ -1543,17 +1321,15 @@ func (o Canvas) GetSaveCount() int32 {
 }
 
 /*
-Restores state to SkMatrix and clip values when save(), saveLayer(),
-saveLayerPreserveLCDTextRequests(), or saveLayerAlpha() returned saveCount.
+Restores state to SkMatrix and clip values when save(), saveLayer(),        saveLayerPreserveLCDTextRequests(), or saveLayerAlpha() returned saveCount.
 
-Does nothing if saveCount is greater than state stack count.
-Restores state to initial values if saveCount is less than or equal to one.
+Does nothing if saveCount is greater than state stack count.        Restores state to initial values if saveCount is less than or equal to one.
 
-# params
+example: https://fiddle.skia.org/c/_restoreToCount
 
-  - saveCount =>  depth of state stack to restore
+# parameters
 
-example: https://fiddle.skia.org/c/@Canvas_restoreToCount
+  - saveCount -   depth of state stack to restore
 */
 func (o Canvas) RestoreToCount(saveCount int32) {
 	c_obj := o.sk
@@ -1564,18 +1340,16 @@ func (o Canvas) RestoreToCount(saveCount int32) {
 /*
 Translates SkMatrix by dx along the x-axis and dy along the y-axis.
 
-Mathematically, replaces SkMatrix with a translation matrix
-premultiplied with SkMatrix.
+Mathematically, replaces SkMatrix with a translation matrix        premultiplied with SkMatrix.
 
-This has the effect of moving the drawing by (dx, dy) before transforming
-the result with SkMatrix.
+This has the effect of moving the drawing by (dx, dy) before transforming        the result with SkMatrix.
 
-# params
+example: https://fiddle.skia.org/c/_translate
 
-  - dx =>  distance to translate on x-axis
-  - dy =>  distance to translate on y-axis
+# parameters
 
-example: https://fiddle.skia.org/c/@Canvas_translate
+  - dx -   distance to translate on x-axis
+  - dy -   distance to translate on y-axis
 */
 func (o Canvas) Translate(dx float32, dy float32) {
 	c_obj := o.sk
@@ -1587,18 +1361,16 @@ func (o Canvas) Translate(dx float32, dy float32) {
 /*
 Scales SkMatrix by sx on the x-axis and sy on the y-axis.
 
-Mathematically, replaces SkMatrix with a scale matrix
-premultiplied with SkMatrix.
+Mathematically, replaces SkMatrix with a scale matrix        premultiplied with SkMatrix.
 
-This has the effect of scaling the drawing by (sx, sy) before transforming
-the result with SkMatrix.
+This has the effect of scaling the drawing by (sx, sy) before transforming        the result with SkMatrix.
 
-# params
+example: https://fiddle.skia.org/c/_scale
 
-  - sx =>  amount to scale on x-axis
-  - sy =>  amount to scale on y-axis
+# parameters
 
-example: https://fiddle.skia.org/c/@Canvas_scale
+  - sx -   amount to scale on x-axis
+  - sy -   amount to scale on y-axis
 */
 func (o Canvas) Scale(sx float32, sy float32) {
 	c_obj := o.sk
@@ -1610,17 +1382,15 @@ func (o Canvas) Scale(sx float32, sy float32) {
 /*
 Rotates SkMatrix by degrees. Positive degrees rotates clockwise.
 
-Mathematically, replaces SkMatrix with a rotation matrix
-premultiplied with SkMatrix.
+Mathematically, replaces SkMatrix with a rotation matrix        premultiplied with SkMatrix.
 
-This has the effect of rotating the drawing by degrees before transforming
-the result with SkMatrix.
+This has the effect of rotating the drawing by degrees before transforming        the result with SkMatrix.
 
-# params
+example: https://fiddle.skia.org/c/_rotate
 
-  - degrees =>  amount to rotate, in degrees
+# parameters
 
-example: https://fiddle.skia.org/c/@Canvas_rotate
+  - degrees -   amount to rotate, in degrees
 */
 func (o Canvas) Rotate(degrees float32) {
 	c_obj := o.sk
@@ -1629,23 +1399,19 @@ func (o Canvas) Rotate(degrees float32) {
 }
 
 /*
-Rotates SkMatrix by degrees about a point at (px, py). Positive degrees rotates
-clockwise.
+Rotates SkMatrix by degrees about a point at (px, py). Positive degrees rotates        clockwise.
 
-Mathematically, constructs a rotation matrix; premultiplies the rotation matrix by
-a translation matrix; then replaces SkMatrix with the resulting matrix
-premultiplied with SkMatrix.
+Mathematically, constructs a rotation matrix; premultiplies the rotation matrix by        a translation matrix; then replaces SkMatrix with the resulting matrix        premultiplied with SkMatrix.
 
-This has the effect of rotating the drawing about a given point before
-transforming the result with SkMatrix.
+This has the effect of rotating the drawing about a given point before        transforming the result with SkMatrix.
 
-# params
+example: https://fiddle.skia.org/c/_rotate_2
 
-  - degrees =>  amount to rotate, in degrees
-  - px =>       x-axis value of the point to rotate about
-  - py =>       y-axis value of the point to rotate about
+# parameters
 
-example: https://fiddle.skia.org/c/@Canvas_rotate_2
+  - degrees -   amount to rotate, in degrees
+  - px -        x-axis value of the point to rotate about
+  - py -        y-axis value of the point to rotate about
 */
 func (o Canvas) RotateAboutPoint(degrees float32, px float32, py float32) {
 	c_obj := o.sk
@@ -1656,21 +1422,18 @@ func (o Canvas) RotateAboutPoint(degrees float32, px float32, py float32) {
 }
 
 /*
-Skews SkMatrix by sx on the x-axis and sy on the y-axis. A positive value of sx
-skews the drawing right as y-axis values increase; a positive value of sy skews
-the drawing down as x-axis values increase.
+Skews SkMatrix by sx on the x-axis and sy on the y-axis. A positive value of sx        skews the drawing right as y-axis values increase; a positive value of sy skews        the drawing down as x-axis values increase.
 
 Mathematically, replaces SkMatrix with a skew matrix premultiplied with SkMatrix.
 
-This has the effect of skewing the drawing by (sx, sy) before transforming
-the result with SkMatrix.
+This has the effect of skewing the drawing by (sx, sy) before transforming        the result with SkMatrix.
 
-# params
+example: https://fiddle.skia.org/c/_skew
 
-  - sx =>  amount to skew on x-axis
-  - sy =>  amount to skew on y-axis
+# parameters
 
-example: https://fiddle.skia.org/c/@Canvas_skew
+  - sx -   amount to skew on x-axis
+  - sy -   amount to skew on y-axis
 */
 func (o Canvas) Skew(sx float32, sy float32) {
 	c_obj := o.sk
@@ -1682,14 +1445,13 @@ func (o Canvas) Skew(sx float32, sy float32) {
 /*
 Replaces SkMatrix with matrix premultiplied with existing SkMatrix.
 
-This has the effect of transforming the drawn geometry by matrix, before
-transforming the result with existing SkMatrix.
+This has the effect of transforming the drawn geometry by matrix, before        transforming the result with existing SkMatrix.
 
-# params
+example: https://fiddle.skia.org/c/_concat
 
-  - matrix =>  matrix to premultiply with existing SkMatrix
+# parameters
 
-example: https://fiddle.skia.org/c/@Canvas_concat
+  - matrix -   matrix to premultiply with existing SkMatrix
 */
 func (o Canvas) ConcatMatrix(matrix Matrix) {
 	c_obj := o.sk
@@ -1704,14 +1466,13 @@ func (o Canvas) ConcatM44(p0 M44) {
 }
 
 /*
-Replaces SkMatrix with matrix.
-Unlike concat(), any prior matrix state is overwritten.
+Replaces SkMatrix with matrix.        Unlike concat(), any prior matrix state is overwritten.
 
-# params
+example: https://fiddle.skia.org/c/_setMatrix
 
-  - matrix =>  matrix to copy, replacing existing SkMatrix
+# parameters
 
-example: https://fiddle.skia.org/c/@Canvas_setMatrix
+  - matrix -   matrix to copy, replacing existing SkMatrix
 */
 func (o Canvas) SetMatrixM44(matrix M44) {
 	c_obj := o.sk
@@ -1726,10 +1487,9 @@ func (o Canvas) SetMatrix(matrix Matrix) {
 }
 
 /*
-Sets SkMatrix to the identity matrix.
-Any prior matrix state is overwritten.
+Sets SkMatrix to the identity matrix.        Any prior matrix state is overwritten.
 
-example: https://fiddle.skia.org/c/@Canvas_resetMatrix
+example: https://fiddle.skia.org/c/_resetMatrix
 */
 func (o Canvas) ResetMatrix() {
 	c_obj := o.sk
@@ -1737,17 +1497,15 @@ func (o Canvas) ResetMatrix() {
 }
 
 /*
-Replaces clip with the intersection or difference of clip and rect,
-with an aliased or anti-aliased clip edge. rect is transformed by SkMatrix
-before it is combined with clip.
+Replaces clip with the intersection or difference of clip and rect,        with an aliased or anti-aliased clip edge. rect is transformed by SkMatrix        before it is combined with clip.
 
-# params
+example: https://fiddle.skia.org/c/_clipRect
 
-  - rect =>         SkRect to combine with clip
-  - op =>           SkClipOp to apply to clip
-  - doAntiAlias =>  true if clip is to be anti-aliased
+# parameters
 
-example: https://fiddle.skia.org/c/@Canvas_clipRect
+  - rect -          SkRect to combine with clip
+  - op -            SkClipOp to apply to clip
+  - doAntiAlias -   true if clip is to be anti-aliased
 */
 func (o Canvas) ClipRect(rect Rect, op ClipOp, doAntiAlias bool) {
 	c_obj := o.sk
@@ -1758,18 +1516,15 @@ func (o Canvas) ClipRect(rect Rect, op ClipOp, doAntiAlias bool) {
 }
 
 /*
-Replaces clip with the intersection or difference of clip and rrect,
-with an aliased or anti-aliased clip edge.
-rrect is transformed by SkMatrix
-before it is combined with clip.
+Replaces clip with the intersection or difference of clip and rrect,        with an aliased or anti-aliased clip edge.        rrect is transformed by SkMatrix        before it is combined with clip.
 
-# params
+example: https://fiddle.skia.org/c/_clipRRect
 
-  - rrect =>        SkRRect to combine with clip
-  - op =>           SkClipOp to apply to clip
-  - doAntiAlias =>  true if clip is to be anti-aliased
+# parameters
 
-example: https://fiddle.skia.org/c/@Canvas_clipRRect
+  - rrect -         SkRRect to combine with clip
+  - op -            SkClipOp to apply to clip
+  - doAntiAlias -   true if clip is to be anti-aliased
 */
 func (o Canvas) ClipRRect(rrect RRect, op ClipOp, doAntiAlias bool) {
 	c_obj := o.sk
@@ -1780,19 +1535,15 @@ func (o Canvas) ClipRRect(rrect RRect, op ClipOp, doAntiAlias bool) {
 }
 
 /*
-Replaces clip with the intersection or difference of clip and path,
-with an aliased or anti-aliased clip edge. SkPath::FillType determines if path
-describes the area inside or outside its contours; and if path contour overlaps
-itself or another path contour, whether the overlaps form part of the area.
-path is transformed by SkMatrix before it is combined with clip.
+Replaces clip with the intersection or difference of clip and path,        with an aliased or anti-aliased clip edge. SkPath::FillType determines if path        describes the area inside or outside its contours; and if path contour overlaps        itself or another path contour, whether the overlaps form part of the area.        path is transformed by SkMatrix before it is combined with clip.
 
-# params
+example: https://fiddle.skia.org/c/_clipPath
 
-  - path =>         SkPath to combine with clip
-  - op =>           SkClipOp to apply to clip
-  - doAntiAlias =>  true if clip is to be anti-aliased
+# parameters
 
-example: https://fiddle.skia.org/c/@Canvas_clipPath
+  - path -          SkPath to combine with clip
+  - op -            SkClipOp to apply to clip
+  - doAntiAlias -   true if clip is to be anti-aliased
 */
 func (o Canvas) ClipPath(path Path, op ClipOp, doAntiAlias bool) {
 	c_obj := o.sk
@@ -1803,16 +1554,14 @@ func (o Canvas) ClipPath(path Path, op ClipOp, doAntiAlias bool) {
 }
 
 /*
-Replaces clip with the intersection or difference of clip and SkRegion deviceRgn.
-Resulting clip is aliased; pixels are fully contained by the clip.
-deviceRgn is unaffected by SkMatrix.
+Replaces clip with the intersection or difference of clip and SkRegion deviceRgn.        Resulting clip is aliased; pixels are fully contained by the clip.        deviceRgn is unaffected by SkMatrix.
 
-# params
+example: https://fiddle.skia.org/c/_clipRegion
 
-  - deviceRgn =>  SkRegion to combine with clip
-  - op =>         SkClipOp to apply to clip
+# parameters
 
-example: https://fiddle.skia.org/c/@Canvas_clipRegion
+  - deviceRgn -   SkRegion to combine with clip
+  - op -          SkClipOp to apply to clip
 */
 func (o Canvas) ClipRegion(deviceRgn Region, op ClipOp) {
 	c_obj := o.sk
@@ -1822,20 +1571,19 @@ func (o Canvas) ClipRegion(deviceRgn Region, op ClipOp) {
 }
 
 /*
-Returns true if SkRect rect, transformed by SkMatrix, can be quickly determined to be
-outside of clip. May return false even though rect is outside of clip.
+Returns true if SkRect rect, transformed by SkMatrix, can be quickly determined to be        outside of clip. May return false even though rect is outside of clip.
 
 Use to check if an area to be drawn is clipped out, to skip subsequent draw calls.
 
-# params
+example: https://fiddle.skia.org/c/_quickReject
 
-  - rect =>  SkRect to compare with clip
+# parameters
+
+  - rect -   SkRect to compare with clip
 
 # return
 
   - true if rect, transformed by SkMatrix, does not intersect clip
-
-example: https://fiddle.skia.org/c/@Canvas_quickReject
 */
 func (o Canvas) QuickRejectRect(rect Rect) bool {
 	c_obj := o.sk
@@ -1845,20 +1593,19 @@ func (o Canvas) QuickRejectRect(rect Rect) bool {
 }
 
 /*
-Returns true if path, transformed by SkMatrix, can be quickly determined to be
-outside of clip. May return false even though path is outside of clip.
+Returns true if path, transformed by SkMatrix, can be quickly determined to be        outside of clip. May return false even though path is outside of clip.
 
 Use to check if an area to be drawn is clipped out, to skip subsequent draw calls.
 
-# params
+example: https://fiddle.skia.org/c/_quickReject_2
 
-  - path =>  SkPath to compare with clip
+# parameters
+
+  - path -   SkPath to compare with clip
 
 # return
 
   - true if path, transformed by SkMatrix, does not intersect clip
-
-example: https://fiddle.skia.org/c/@Canvas_quickReject_2
 */
 func (o Canvas) QuickRejectPath(path Path) bool {
 	c_obj := o.sk
@@ -1868,17 +1615,15 @@ func (o Canvas) QuickRejectPath(path Path) bool {
 }
 
 /*
-Returns bounds of clip, transformed by inverse of SkMatrix. If clip is empty,
-return SkRect::MakeEmpty, where all SkRect sides equal zero.
+Returns bounds of clip, transformed by inverse of SkMatrix. If clip is empty,        return SkRect::MakeEmpty, where all SkRect sides equal zero.
 
-SkRect returned is outset by one to account for partial pixel coverage if clip
-is anti-aliased.
+SkRect returned is outset by one to account for partial pixel coverage if clip        is anti-aliased.
+
+example: https://fiddle.skia.org/c/_getLocalClipBounds
 
 # return
 
   - bounds of clip in local coordinates
-
-example: https://fiddle.skia.org/c/@Canvas_getLocalClipBounds
 */
 func (o Canvas) GetLocalClipBoundsRect() Rect {
 	c_obj := o.sk
@@ -1887,15 +1632,13 @@ func (o Canvas) GetLocalClipBoundsRect() Rect {
 }
 
 /*
-Returns bounds of clip, transformed by inverse of SkMatrix. If clip is empty,
-return false, and set bounds to SkRect::MakeEmpty, where all SkRect sides equal zero.
+Returns bounds of clip, transformed by inverse of SkMatrix. If clip is empty,        return false, and set bounds to SkRect::MakeEmpty, where all SkRect sides equal zero.
 
-bounds is outset by one to account for partial pixel coverage if clip
-is anti-aliased.
+bounds is outset by one to account for partial pixel coverage if clip        is anti-aliased.
 
-# params
+# parameters
 
-  - bounds =>  SkRect of clip in local coordinates
+  - bounds -   SkRect of clip in local coordinates
 
 # return
 
@@ -1909,16 +1652,15 @@ func (o Canvas) GetLocalClipBoundsPath(bounds *Rect) bool {
 }
 
 /*
-Returns SkIRect bounds of clip, unaffected by SkMatrix. If clip is empty,
-return SkRect::MakeEmpty, where all SkRect sides equal zero.
+Returns SkIRect bounds of clip, unaffected by SkMatrix. If clip is empty,        return SkRect::MakeEmpty, where all SkRect sides equal zero.
 
 Unlike getLocalClipBounds(), returned SkIRect is not outset.
+
+example: https://fiddle.skia.org/c/_getDeviceClipBounds
 
 # return
 
   - bounds of clip in base device coordinates
-
-example: https://fiddle.skia.org/c/@Canvas_getDeviceClipBounds
 */
 func (o Canvas) GetDeviceClipBounds() IRect {
 	c_obj := o.sk
@@ -1927,14 +1669,13 @@ func (o Canvas) GetDeviceClipBounds() IRect {
 }
 
 /*
-Returns SkIRect bounds of clip, unaffected by SkMatrix. If clip is empty,
-return false, and set bounds to SkRect::MakeEmpty, where all SkRect sides equal zero.
+Returns SkIRect bounds of clip, unaffected by SkMatrix. If clip is empty,        return false, and set bounds to SkRect::MakeEmpty, where all SkRect sides equal zero.
 
 Unlike getLocalClipBounds(), bounds is not outset.
 
-# params
+# parameters
 
-  - bounds =>  SkRect of clip in device coordinates
+  - bounds -   SkRect of clip in device coordinates
 
 # return
 
@@ -1948,15 +1689,14 @@ func (o Canvas) GetDeviceClipBoundsRect(bounds *IRect) bool {
 }
 
 /*
-Fills clip with color color.
-mode determines how ARGB is combined with destination.
+Fills clip with color color.        mode determines how ARGB is combined with destination.
 
-# params
+example: https://fiddle.skia.org/c/_drawColor
 
-  - color =>  unpremultiplied ARGB
-  - mode =>   SkBlendMode used to combine source color and destination
+# parameters
 
-example: https://fiddle.skia.org/c/@Canvas_drawColor
+  - color -   unpremultiplied ARGB
+  - mode -    SkBlendMode used to combine source color and destination
 */
 func (o Canvas) DrawColor(color Color, mode BlendMode) {
 	c_obj := o.sk
@@ -1966,13 +1706,12 @@ func (o Canvas) DrawColor(color Color, mode BlendMode) {
 }
 
 /*
-Fills clip with color color.
-mode determines how ARGB is combined with destination.
+Fills clip with color color.        mode determines how ARGB is combined with destination.
 
-# params
+# parameters
 
-  - color =>  SkColor4f representing unpremultiplied color.
-  - mode =>   SkBlendMode used to combine source color and destination
+  - color -   SkColor4f representing unpremultiplied color.
+  - mode -    SkBlendMode used to combine source color and destination
 */
 func (o Canvas) DrawColor4f(color RGBA4f, mode BlendMode) {
 	c_obj := o.sk
@@ -1982,12 +1721,11 @@ func (o Canvas) DrawColor4f(color RGBA4f, mode BlendMode) {
 }
 
 /*
-Fills clip with color color using SkBlendMode::kSrc.
-This has the effect of replacing all pixels contained by clip with color.
+Fills clip with color color using SkBlendMode::kSrc.        This has the effect of replacing all pixels contained by clip with color.
 
-# params
+# parameters
 
-  - color =>  unpremultiplied ARGB
+  - color -   unpremultiplied ARGB
 */
 func (o Canvas) Clear(color Color) {
 	c_obj := o.sk
@@ -1996,12 +1734,11 @@ func (o Canvas) Clear(color Color) {
 }
 
 /*
-Fills clip with color color using SkBlendMode::kSrc.
-This has the effect of replacing all pixels contained by clip with color.
+Fills clip with color color using SkBlendMode::kSrc.        This has the effect of replacing all pixels contained by clip with color.
 
-# params
+# parameters
 
-  - color =>  SkColor4f representing unpremultiplied color.
+  - color -   SkColor4f representing unpremultiplied color.
 */
 func (o Canvas) Clear4f(color RGBA4f) {
 	c_obj := o.sk
@@ -2010,17 +1747,11 @@ func (o Canvas) Clear4f(color RGBA4f) {
 }
 
 /*
-Makes SkCanvas contents undefined. Subsequent calls that read SkCanvas pixels,
-such as drawing with SkBlendMode, return undefined results. discard() does
-not change clip or SkMatrix.
+Makes SkCanvas contents undefined. Subsequent calls that read SkCanvas pixels,        such as drawing with SkBlendMode, return undefined results. discard() does        not change clip or SkMatrix.
 
-discard() may do nothing, depending on the implementation of SkSurface or SkDevice
-that created SkCanvas.
+discard() may do nothing, depending on the implementation of SkSurface or SkDevice        that created SkCanvas.
 
-discard() allows optimized performance on subsequent draws by removing
-cached data associated with SkSurface or SkDevice.
-It is not necessary to call discard() once done with SkCanvas;
-any cached data is deleted when owning SkSurface or SkDevice is deleted.
+discard() allows optimized performance on subsequent draws by removing        cached data associated with SkSurface or SkDevice.        It is not necessary to call discard() once done with SkCanvas;        any cached data is deleted when owning SkSurface or SkDevice is deleted.
 */
 func (o Canvas) Discard() {
 	c_obj := o.sk
@@ -2028,15 +1759,13 @@ func (o Canvas) Discard() {
 }
 
 /*
-Fills clip with SkPaint paint. SkPaint components, SkShader,
-SkColorFilter, SkImageFilter, and SkBlendMode affect drawing;
-SkMaskFilter and SkPathEffect in paint are ignored.
+Fills clip with SkPaint paint. SkPaint components, SkShader,        SkColorFilter, SkImageFilter, and SkBlendMode affect drawing;        SkMaskFilter and SkPathEffect in paint are ignored.
 
-# params
+example: https://fiddle.skia.org/c/_drawPaint
 
-  - paint =>  graphics state used to fill SkCanvas
+# parameters
 
-example: https://fiddle.skia.org/c/@Canvas_drawPaint
+  - paint -   graphics state used to fill SkCanvas
 */
 func (o Canvas) DrawPaint(paint Paint) {
 	c_obj := o.sk
@@ -2047,19 +1776,15 @@ func (o Canvas) DrawPaint(paint Paint) {
 /*
 Draws point at (x, y) using clip, SkMatrix and SkPaint paint.
 
-The shape of point drawn depends on paint SkPaint::Cap.
-If paint is set to SkPaint::kRound_Cap, draw a circle of diameter
-SkPaint stroke width. If paint is set to SkPaint::kSquare_Cap or SkPaint::kButt_Cap,
-draw a square of width and height SkPaint stroke width.
-SkPaint::Style is ignored, as if were set to SkPaint::kStroke_Style.
+The shape of point drawn depends on paint SkPaint::Cap.        If paint is set to SkPaint::kRound_Cap, draw a circle of diameter        SkPaint stroke width. If paint is set to SkPaint::kSquare_Cap or SkPaint::kButt_Cap,        draw a square of width and height SkPaint stroke width.        SkPaint::Style is ignored, as if were set to SkPaint::kStroke_Style.
 
-# params
+example: https://fiddle.skia.org/c/_drawPoint
 
-  - x =>      left edge of circle or square
-  - y =>      top edge of circle or square
-  - paint =>  stroke, blend, color, and so on, used to draw
+# parameters
 
-example: https://fiddle.skia.org/c/@Canvas_drawPoint
+  - x -       left edge of circle or square
+  - y -       top edge of circle or square
+  - paint -   stroke, blend, color, and so on, used to draw
 */
 func (o Canvas) DrawPointScalars(x float32, y float32, paint Paint) {
 	c_obj := o.sk
@@ -2072,16 +1797,12 @@ func (o Canvas) DrawPointScalars(x float32, y float32, paint Paint) {
 /*
 Draws point p using clip, SkMatrix and SkPaint paint.
 
-The shape of point drawn depends on paint SkPaint::Cap.
-If paint is set to SkPaint::kRound_Cap, draw a circle of diameter
-SkPaint stroke width. If paint is set to SkPaint::kSquare_Cap or SkPaint::kButt_Cap,
-draw a square of width and height SkPaint stroke width.
-SkPaint::Style is ignored, as if were set to SkPaint::kStroke_Style.
+The shape of point drawn depends on paint SkPaint::Cap.        If paint is set to SkPaint::kRound_Cap, draw a circle of diameter        SkPaint stroke width. If paint is set to SkPaint::kSquare_Cap or SkPaint::kButt_Cap,        draw a square of width and height SkPaint stroke width.        SkPaint::Style is ignored, as if were set to SkPaint::kStroke_Style.
 
-# params
+# parameters
 
-  - p =>      top-left edge of circle or square
-  - paint =>  stroke, blend, color, and so on, used to draw
+  - p -       top-left edge of circle or square
+  - paint -   stroke, blend, color, and so on, used to draw
 */
 func (o Canvas) DrawPoint(p Point, paint Paint) {
 	c_obj := o.sk
@@ -2091,20 +1812,17 @@ func (o Canvas) DrawPoint(p Point, paint Paint) {
 }
 
 /*
-Draws line segment from (x0, y0) to (x1, y1) using clip, SkMatrix, and SkPaint paint.
-In paint: SkPaint stroke width describes the line thickness;
-SkPaint::Cap draws the end rounded or square;
-SkPaint::Style is ignored, as if were set to SkPaint::kStroke_Style.
+Draws line segment from (x0, y0) to (x1, y1) using clip, SkMatrix, and SkPaint paint.        In paint: SkPaint stroke width describes the line thickness;        SkPaint::Cap draws the end rounded or square;        SkPaint::Style is ignored, as if were set to SkPaint::kStroke_Style.
 
-# params
+example: https://fiddle.skia.org/c/_drawLine
 
-  - x0 =>     start of line segment on x-axis
-  - y0 =>     start of line segment on y-axis
-  - x1 =>     end of line segment on x-axis
-  - y1 =>     end of line segment on y-axis
-  - paint =>  stroke, blend, color, and so on, used to draw
+# parameters
 
-example: https://fiddle.skia.org/c/@Canvas_drawLine
+  - x0 -      start of line segment on x-axis
+  - y0 -      start of line segment on y-axis
+  - x1 -      end of line segment on x-axis
+  - y1 -      end of line segment on y-axis
+  - paint -   stroke, blend, color, and so on, used to draw
 */
 func (o Canvas) DrawLineScalars(x0 float32, y0 float32, x1 float32, y1 float32, paint Paint) {
 	c_obj := o.sk
@@ -2117,16 +1835,13 @@ func (o Canvas) DrawLineScalars(x0 float32, y0 float32, x1 float32, y1 float32, 
 }
 
 /*
-Draws line segment from p0 to p1 using clip, SkMatrix, and SkPaint paint.
-In paint: SkPaint stroke width describes the line thickness;
-SkPaint::Cap draws the end rounded or square;
-SkPaint::Style is ignored, as if were set to SkPaint::kStroke_Style.
+Draws line segment from p0 to p1 using clip, SkMatrix, and SkPaint paint.        In paint: SkPaint stroke width describes the line thickness;        SkPaint::Cap draws the end rounded or square;        SkPaint::Style is ignored, as if were set to SkPaint::kStroke_Style.
 
-# params
+# parameters
 
-  - p0 =>     start of line segment
-  - p1 =>     end of line segment
-  - paint =>  stroke, blend, color, and so on, used to draw
+  - p0 -      start of line segment
+  - p1 -      end of line segment
+  - paint -   stroke, blend, color, and so on, used to draw
 */
 func (o Canvas) DrawLinePoints(p0 Point, p1 Point, paint Paint) {
 	c_obj := o.sk
@@ -2137,17 +1852,14 @@ func (o Canvas) DrawLinePoints(p0 Point, p1 Point, paint Paint) {
 }
 
 /*
-Draws SkRect rect using clip, SkMatrix, and SkPaint paint.
-In paint: SkPaint::Style determines if rectangle is stroked or filled;
-if stroked, SkPaint stroke width describes the line thickness, and
-SkPaint::Join draws the corners rounded or square.
+Draws SkRect rect using clip, SkMatrix, and SkPaint paint.        In paint: SkPaint::Style determines if rectangle is stroked or filled;        if stroked, SkPaint stroke width describes the line thickness, and        SkPaint::Join draws the corners rounded or square.
 
-# params
+example: https://fiddle.skia.org/c/_drawRect
 
-  - rect =>   rectangle to draw
-  - paint =>  stroke or fill, blend, color, and so on, used to draw
+# parameters
 
-example: https://fiddle.skia.org/c/@Canvas_drawRect
+  - rect -    rectangle to draw
+  - paint -   stroke or fill, blend, color, and so on, used to draw
 */
 func (o Canvas) DrawRect(rect Rect, paint Paint) {
 	c_obj := o.sk
@@ -2157,15 +1869,12 @@ func (o Canvas) DrawRect(rect Rect, paint Paint) {
 }
 
 /*
-Draws SkIRect rect using clip, SkMatrix, and SkPaint paint.
-In paint: SkPaint::Style determines if rectangle is stroked or filled;
-if stroked, SkPaint stroke width describes the line thickness, and
-SkPaint::Join draws the corners rounded or square.
+Draws SkIRect rect using clip, SkMatrix, and SkPaint paint.        In paint: SkPaint::Style determines if rectangle is stroked or filled;        if stroked, SkPaint stroke width describes the line thickness, and        SkPaint::Join draws the corners rounded or square.
 
-# params
+# parameters
 
-  - rect =>   rectangle to draw
-  - paint =>  stroke or fill, blend, color, and so on, used to draw
+  - rect -    rectangle to draw
+  - paint -   stroke or fill, blend, color, and so on, used to draw
 */
 func (o Canvas) DrawIRect(rect IRect, paint Paint) {
 	c_obj := o.sk
@@ -2175,17 +1884,14 @@ func (o Canvas) DrawIRect(rect IRect, paint Paint) {
 }
 
 /*
-Draws SkRegion region using clip, SkMatrix, and SkPaint paint.
-In paint: SkPaint::Style determines if rectangle is stroked or filled;
-if stroked, SkPaint stroke width describes the line thickness, and
-SkPaint::Join draws the corners rounded or square.
+Draws SkRegion region using clip, SkMatrix, and SkPaint paint.        In paint: SkPaint::Style determines if rectangle is stroked or filled;        if stroked, SkPaint stroke width describes the line thickness, and        SkPaint::Join draws the corners rounded or square.
 
-# params
+example: https://fiddle.skia.org/c/_drawRegion
 
-  - region =>  region to draw
-  - paint =>   SkPaint stroke or fill, blend, color, and so on, used to draw
+# parameters
 
-example: https://fiddle.skia.org/c/@Canvas_drawRegion
+  - region -   region to draw
+  - paint -    SkPaint stroke or fill, blend, color, and so on, used to draw
 */
 func (o Canvas) DrawRegion(region Region, paint Paint) {
 	c_obj := o.sk
@@ -2195,16 +1901,14 @@ func (o Canvas) DrawRegion(region Region, paint Paint) {
 }
 
 /*
-Draws oval oval using clip, SkMatrix, and SkPaint.
-In paint: SkPaint::Style determines if oval is stroked or filled;
-if stroked, SkPaint stroke width describes the line thickness.
+Draws oval oval using clip, SkMatrix, and SkPaint.        In paint: SkPaint::Style determines if oval is stroked or filled;        if stroked, SkPaint stroke width describes the line thickness.
 
-# params
+example: https://fiddle.skia.org/c/_drawOval
 
-  - oval =>   SkRect bounds of oval
-  - paint =>  SkPaint stroke or fill, blend, color, and so on, used to draw
+# parameters
 
-example: https://fiddle.skia.org/c/@Canvas_drawOval
+  - oval -    SkRect bounds of oval
+  - paint -   SkPaint stroke or fill, blend, color, and so on, used to draw
 */
 func (o Canvas) DrawOval(oval Rect, paint Paint) {
 	c_obj := o.sk
@@ -2214,19 +1918,16 @@ func (o Canvas) DrawOval(oval Rect, paint Paint) {
 }
 
 /*
-Draws SkRRect rrect using clip, SkMatrix, and SkPaint paint.
-In paint: SkPaint::Style determines if rrect is stroked or filled;
-if stroked, SkPaint stroke width describes the line thickness.
+Draws SkRRect rrect using clip, SkMatrix, and SkPaint paint.        In paint: SkPaint::Style determines if rrect is stroked or filled;        if stroked, SkPaint stroke width describes the line thickness.
 
-rrect may represent a rectangle, circle, oval, uniformly rounded rectangle, or
-may have any combination of positive non-square radii for the four corners.
+rrect may represent a rectangle, circle, oval, uniformly rounded rectangle, or        may have any combination of positive non-square radii for the four corners.
 
-# params
+example: https://fiddle.skia.org/c/_drawRRect
 
-  - rrect =>  SkRRect with up to eight corner radii to draw
-  - paint =>  SkPaint stroke or fill, blend, color, and so on, used to draw
+# parameters
 
-example: https://fiddle.skia.org/c/@Canvas_drawRRect
+  - rrect -   SkRRect with up to eight corner radii to draw
+  - paint -   SkPaint stroke or fill, blend, color, and so on, used to draw
 */
 func (o Canvas) DrawRRect(rrect RRect, paint Paint) {
 	c_obj := o.sk
@@ -2236,26 +1937,17 @@ func (o Canvas) DrawRRect(rrect RRect, paint Paint) {
 }
 
 /*
-Draws SkRRect outer and inner
-using clip, SkMatrix, and SkPaint paint.
-outer must contain inner or the drawing is undefined.
-In paint: SkPaint::Style determines if SkRRect is stroked or filled;
-if stroked, SkPaint stroke width describes the line thickness.
-If stroked and SkRRect corner has zero length radii, SkPaint::Join can
-draw corners rounded or square.
+Draws SkRRect outer and inner        using clip, SkMatrix, and SkPaint paint.        outer must contain inner or the drawing is undefined.        In paint: SkPaint::Style determines if SkRRect is stroked or filled;        if stroked, SkPaint stroke width describes the line thickness.        If stroked and SkRRect corner has zero length radii, SkPaint::Join can        draw corners rounded or square.
 
-GPU-backed platforms optimize drawing when both outer and inner are
-concave and outer contains inner. These platforms may not be able to draw
-SkPath built with identical data as fast.
+GPU-backed platforms optimize drawing when both outer and inner are        concave and outer contains inner. These platforms may not be able to draw        SkPath built with identical data as fast.
 
-# params
+example: https://fiddle.skia.org/c/_drawDRRect_a        example: https://fiddle.skia.org/c/_drawDRRect_b
 
-  - outer =>  SkRRect outer bounds to draw
-  - inner =>  SkRRect inner bounds to draw
-  - paint =>  SkPaint stroke or fill, blend, color, and so on, used to draw
+# parameters
 
-example: https://fiddle.skia.org/c/@Canvas_drawDRRect_a
-example: https://fiddle.skia.org/c/@Canvas_drawDRRect_b
+  - outer -   SkRRect outer bounds to draw
+  - inner -   SkRRect inner bounds to draw
+  - paint -   SkPaint stroke or fill, blend, color, and so on, used to draw
 */
 func (o Canvas) DrawDRRect(outer RRect, inner RRect, paint Paint) {
 	c_obj := o.sk
@@ -2266,19 +1958,16 @@ func (o Canvas) DrawDRRect(outer RRect, inner RRect, paint Paint) {
 }
 
 /*
-Draws circle at (cx, cy) with radius using clip, SkMatrix, and SkPaint paint.
-If radius is zero or less, nothing is drawn.
-In paint: SkPaint::Style determines if circle is stroked or filled;
-if stroked, SkPaint stroke width describes the line thickness.
+Draws circle at (cx, cy) with radius using clip, SkMatrix, and SkPaint paint.        If radius is zero or less, nothing is drawn.        In paint: SkPaint::Style determines if circle is stroked or filled;        if stroked, SkPaint stroke width describes the line thickness.
 
-# params
+example: https://fiddle.skia.org/c/_drawCircle
 
-  - cx =>      circle center on the x-axis
-  - cy =>      circle center on the y-axis
-  - radius =>  half the diameter of circle
-  - paint =>   SkPaint stroke or fill, blend, color, and so on, used to draw
+# parameters
 
-example: https://fiddle.skia.org/c/@Canvas_drawCircle
+  - cx -       circle center on the x-axis
+  - cy -       circle center on the y-axis
+  - radius -   half the diameter of circle
+  - paint -    SkPaint stroke or fill, blend, color, and so on, used to draw
 */
 func (o Canvas) DrawCircleScalars(cx float32, cy float32, radius float32, paint Paint) {
 	c_obj := o.sk
@@ -2290,16 +1979,13 @@ func (o Canvas) DrawCircleScalars(cx float32, cy float32, radius float32, paint 
 }
 
 /*
-Draws circle at center with radius using clip, SkMatrix, and SkPaint paint.
-If radius is zero or less, nothing is drawn.
-In paint: SkPaint::Style determines if circle is stroked or filled;
-if stroked, SkPaint stroke width describes the line thickness.
+Draws circle at center with radius using clip, SkMatrix, and SkPaint paint.        If radius is zero or less, nothing is drawn.        In paint: SkPaint::Style determines if circle is stroked or filled;        if stroked, SkPaint stroke width describes the line thickness.
 
-# params
+# parameters
 
-  - center =>  circle center
-  - radius =>  half the diameter of circle
-  - paint =>   SkPaint stroke or fill, blend, color, and so on, used to draw
+  - center -   circle center
+  - radius -   half the diameter of circle
+  - paint -    SkPaint stroke or fill, blend, color, and so on, used to draw
 */
 func (o Canvas) DrawCirclePoint(center Point, radius float32, paint Paint) {
 	c_obj := o.sk
@@ -2312,25 +1998,19 @@ func (o Canvas) DrawCirclePoint(center Point, radius float32, paint Paint) {
 /*
 Draws arc using clip, SkMatrix, and SkPaint paint.
 
-Arc is part of oval bounded by oval, sweeping from startAngle to startAngle plus
-sweepAngle. startAngle and sweepAngle are in degrees.
+Arc is part of oval bounded by oval, sweeping from startAngle to startAngle plus        sweepAngle. startAngle and sweepAngle are in degrees.
 
-startAngle of zero places start point at the right middle edge of oval.
-A positive sweepAngle places arc end point clockwise from start point;
-a negative sweepAngle places arc end point counterclockwise from start point.
-sweepAngle may exceed 360 degrees, a full circle.
-If useCenter is true, draw a wedge that includes lines from oval
-center to arc end points. If useCenter is false, draw arc between end points.
+startAngle of zero places start point at the right middle edge of oval.        A positive sweepAngle places arc end point clockwise from start point;        a negative sweepAngle places arc end point counterclockwise from start point.        sweepAngle may exceed 360 degrees, a full circle.        If useCenter is true, draw a wedge that includes lines from oval        center to arc end points. If useCenter is false, draw arc between end points.
 
 If SkRect oval is empty or sweepAngle is zero, nothing is drawn.
 
-# params
+# parameters
 
-  - oval =>        SkRect bounds of oval containing arc to draw
-  - startAngle =>  angle in degrees where arc begins
-  - sweepAngle =>  sweep angle in degrees; positive is clockwise
-  - useCenter =>   if true, include the center of the oval
-  - paint =>       SkPaint stroke or fill, blend, color, and so on, used to draw
+  - oval -         SkRect bounds of oval containing arc to draw
+  - startAngle -   angle in degrees where arc begins
+  - sweepAngle -   sweep angle in degrees; positive is clockwise
+  - useCenter -    if true, include the center of the oval
+  - paint -        SkPaint stroke or fill, blend, color, and so on, used to draw
 */
 func (o Canvas) DrawArc(oval Rect, startAngle float32, sweepAngle float32, useCenter bool, paint Paint) {
 	c_obj := o.sk
@@ -2345,22 +2025,16 @@ func (o Canvas) DrawArc(oval Rect, startAngle float32, sweepAngle float32, useCe
 /*
 Draws arc using clip, SkMatrix, and SkPaint paint.
 
-Arc is part of oval bounded by oval, sweeping from startAngle to startAngle plus
-sweepAngle. startAngle and sweepAngle are in degrees.
+Arc is part of oval bounded by oval, sweeping from startAngle to startAngle plus        sweepAngle. startAngle and sweepAngle are in degrees.
 
-startAngle of zero places start point at the right middle edge of oval.
-A positive sweepAngle places arc end point clockwise from start point;
-a negative sweepAngle places arc end point counterclockwise from start point.
-sweepAngle may exceed 360 degrees, a full circle.
-If useCenter is true, draw a wedge that includes lines from oval
-center to arc end points. If useCenter is false, draw arc between end points.
+startAngle of zero places start point at the right middle edge of oval.        A positive sweepAngle places arc end point clockwise from start point;        a negative sweepAngle places arc end point counterclockwise from start point.        sweepAngle may exceed 360 degrees, a full circle.        If useCenter is true, draw a wedge that includes lines from oval        center to arc end points. If useCenter is false, draw arc between end points.
 
 If SkRect oval is empty or sweepAngle is zero, nothing is drawn.
 
-# params
+# parameters
 
-  - arc =>    SkArc specifying oval, startAngle, sweepAngle, and arc-vs-wedge
-  - paint =>  SkPaint stroke or fill, blend, color, and so on, used to draw
+  - arc -     SkArc specifying oval, startAngle, sweepAngle, and arc-vs-wedge
+  - paint -   SkPaint stroke or fill, blend, color, and so on, used to draw
 */
 func (o Canvas) DrawArcArc(arc Arc, paint Paint) {
 	c_obj := o.sk
@@ -2370,24 +2044,18 @@ func (o Canvas) DrawArcArc(arc Arc, paint Paint) {
 }
 
 /*
-Draws SkRRect bounded by SkRect rect, with corner radii (rx, ry) using clip,
-SkMatrix, and SkPaint paint.
+Draws SkRRect bounded by SkRect rect, with corner radii (rx, ry) using clip,        SkMatrix, and SkPaint paint.
 
-In paint: SkPaint::Style determines if SkRRect is stroked or filled;
-if stroked, SkPaint stroke width describes the line thickness.
-If rx or ry are less than zero, they are treated as if they are zero.
-If rx plus ry exceeds rect width or rect height, radii are scaled down to fit.
-If rx and ry are zero, SkRRect is drawn as SkRect and if stroked is affected by
-SkPaint::Join.
+In paint: SkPaint::Style determines if SkRRect is stroked or filled;        if stroked, SkPaint stroke width describes the line thickness.        If rx or ry are less than zero, they are treated as if they are zero.        If rx plus ry exceeds rect width or rect height, radii are scaled down to fit.        If rx and ry are zero, SkRRect is drawn as SkRect and if stroked is affected by        SkPaint::Join.
 
-# params
+example: https://fiddle.skia.org/c/_drawRoundRect
 
-  - rect =>   SkRect bounds of SkRRect to draw
-  - rx =>     axis length on x-axis of oval describing rounded corners
-  - ry =>     axis length on y-axis of oval describing rounded corners
-  - paint =>  stroke, blend, color, and so on, used to draw
+# parameters
 
-example: https://fiddle.skia.org/c/@Canvas_drawRoundRect
+  - rect -    SkRect bounds of SkRRect to draw
+  - rx -      axis length on x-axis of oval describing rounded corners
+  - ry -      axis length on y-axis of oval describing rounded corners
+  - paint -   stroke, blend, color, and so on, used to draw
 */
 func (o Canvas) DrawRoundRect(rect Rect, rx float32, ry float32, paint Paint) {
 	c_obj := o.sk
@@ -2399,21 +2067,16 @@ func (o Canvas) DrawRoundRect(rect Rect, rx float32, ry float32, paint Paint) {
 }
 
 /*
-Draws SkPath path using clip, SkMatrix, and SkPaint paint.
-SkPath contains an array of path contour, each of which may be open or closed.
+Draws SkPath path using clip, SkMatrix, and SkPaint paint.        SkPath contains an array of path contour, each of which may be open or closed.
 
-In paint: SkPaint::Style determines if SkRRect is stroked or filled:
-if filled, SkPath::FillType determines whether path contour describes inside or
-outside of fill; if stroked, SkPaint stroke width describes the line thickness,
-SkPaint::Cap describes line ends, and SkPaint::Join describes how
-corners are drawn.
+In paint: SkPaint::Style determines if SkRRect is stroked or filled:        if filled, SkPath::FillType determines whether path contour describes inside or        outside of fill; if stroked, SkPaint stroke width describes the line thickness,        SkPaint::Cap describes line ends, and SkPaint::Join describes how        corners are drawn.
 
-# params
+example: https://fiddle.skia.org/c/_drawPath
 
-  - path =>   SkPath to draw
-  - paint =>  stroke, blend, color, and so on, used to draw
+# parameters
 
-example: https://fiddle.skia.org/c/@Canvas_drawPath
+  - path -    SkPath to draw
+  - paint -   stroke, blend, color, and so on, used to draw
 */
 func (o Canvas) DrawPath(path Path, paint Paint) {
 	c_obj := o.sk
@@ -2461,30 +2124,21 @@ func (o Canvas) DrawImageRectNoSrc(p0 Image, dst Rect, p2 SamplingOptions, p3 Pa
 }
 
 /*
-Draws SkImage image stretched proportionally to fit into SkRect dst.
-SkIRect center divides the image into nine sections: four sides, four corners, and
-the center. Corners are unmodified or scaled down proportionately if their sides
-are larger than dst; center and four sides are scaled to fit remaining space, if any.
+Draws SkImage image stretched proportionally to fit into SkRect dst.        SkIRect center divides the image into nine sections: four sides, four corners, and        the center. Corners are unmodified or scaled down proportionately if their sides        are larger than dst; center and four sides are scaled to fit remaining space, if any.
 
 Additionally transform draw using clip, SkMatrix, and optional SkPaint paint.
 
-If SkPaint paint is supplied, apply SkColorFilter, alpha, SkImageFilter, and
-SkBlendMode. If image is kAlpha_8_SkColorType, apply SkShader.
-If paint contains SkMaskFilter, generate mask from image bounds.
-Any SkMaskFilter on paint is ignored as is paint anti-aliasing state.
+If SkPaint paint is supplied, apply SkColorFilter, alpha, SkImageFilter, and        SkBlendMode. If image is kAlpha_8_SkColorType, apply SkShader.        If paint contains SkMaskFilter, generate mask from image bounds.        Any SkMaskFilter on paint is ignored as is paint anti-aliasing state.
 
-If generated mask extends beyond image bounds, replicate image edge colors, just
-as SkShader made from SkImage::makeShader with SkShader::kClamp_TileMode set
-replicates the image edge color when it samples outside of its bounds.
+If generated mask extends beyond image bounds, replicate image edge colors, just        as SkShader made from SkImage::makeShader with SkShader::kClamp_TileMode set        replicates the image edge color when it samples outside of its bounds.
 
-# params
+# parameters
 
-  - image =>   SkImage containing pixels, dimensions, and format
-  - center =>  SkIRect edge of image corners and sides
-  - dst =>     destination SkRect of image to draw to
-  - filter =>  what technique to use when sampling the image
-  - paint =>   SkPaint containing SkBlendMode, SkColorFilter, SkImageFilter,
-    and so on; or nullptr
+  - image -    SkImage containing pixels, dimensions, and format
+  - center -   SkIRect edge of image corners and sides
+  - dst -      destination SkRect of image to draw to
+  - filter -   what technique to use when sampling the image
+  - paint -    SkPaint containing SkBlendMode, SkColorFilter, SkImageFilter,                       and so on; or nullptr
 */
 func (o Canvas) DrawImageNine(image Image, center IRect, dst Rect, filter FilterMode, paint Paint) {
 	c_obj := o.sk
@@ -2497,31 +2151,23 @@ func (o Canvas) DrawImageNine(image Image, center IRect, dst Rect, filter Filter
 }
 
 /*
-Draws null terminated string, with origin at (x, y), using clip, SkMatrix,
-SkFont font, and SkPaint paint.
+Draws null terminated string, with origin at (x, y), using clip, SkMatrix,        SkFont font, and SkPaint paint.
 
-This function uses the default character-to-glyph mapping from the
-SkTypeface in font.  It does not perform typeface fallback for
-characters not found in the SkTypeface.  It does not perform kerning;
-glyphs are positioned based on their default advances.
+This function uses the default character-to-glyph mapping from the        SkTypeface in font.  It does not perform typeface fallback for        characters not found in the SkTypeface.  It does not perform kerning;        glyphs are positioned based on their default advances.
 
 String str is encoded as UTF-8.
 
-Text size is affected by SkMatrix and font text size. Default text
-size is 12 point.
+Text size is affected by SkMatrix and font text size. Default text        size is 12 point.
 
-All elements of paint: SkPathEffect, SkMaskFilter, SkShader,
-SkColorFilter, and SkImageFilter; apply to text. By
-default, draws filled black glyphs.
+All elements of paint: SkPathEffect, SkMaskFilter, SkShader,        SkColorFilter, and SkImageFilter; apply to text. By        default, draws filled black glyphs.
 
-# params
+# parameters
 
-  - str =>     character code points drawn,
-    ending with a char value of zero
-  - x =>       start of string on x-axis
-  - y =>       start of string on y-axis
-  - font =>    typeface, text size and so, used to describe the text
-  - paint =>   blend, color, and so on, used to draw
+  - str -      character code points drawn,                       ending with a char value of zero
+  - x -        start of string on x-axis
+  - y -        start of string on y-axis
+  - font -     typeface, text size and so, used to describe the text
+  - paint -    blend, color, and so on, used to draw
 */
 func (o Canvas) DrawString(str string, x float32, y float32, font Font, paint Paint) {
 	c_obj := o.sk
@@ -2535,29 +2181,25 @@ func (o Canvas) DrawString(str string, x float32, y float32, font Font, paint Pa
 }
 
 /*
-Draws count glyphs, at positions relative to origin styled with font and paint with
-supporting utf8 and cluster information.
+Draws count glyphs, at positions relative to origin styled with font and paint with        supporting utf8 and cluster information.
 
-This function draw glyphs at the given positions relative to the given origin.
-It does not perform typeface fallback for glyphs not found in the SkTypeface in font.
+This function draw glyphs at the given positions relative to the given origin.       It does not perform typeface fallback for glyphs not found in the SkTypeface in font.
 
 The drawing obeys the current transform matrix and clipping.
 
-All elements of paint: SkPathEffect, SkMaskFilter, SkShader,
-SkColorFilter, and SkImageFilter; apply to text. By
-default, draws filled black glyphs.
+All elements of paint: SkPathEffect, SkMaskFilter, SkShader,       SkColorFilter, and SkImageFilter; apply to text. By       default, draws filled black glyphs.
 
-# params
+# parameters
 
-  - count =>           number of glyphs to draw
-  - glyphs =>          the array of glyphIDs to draw
-  - positions =>       where to draw each glyph relative to origin
-  - clusters =>        array of size count of cluster information
-  - textByteCount =>   size of the utf8text
-  - utf8text =>        utf8text supporting information for the glyphs
-  - origin =>          the origin of all the positions
-  - font =>            typeface, text size and so, used to describe the text
-  - paint =>           blend, color, and so on, used to draw
+  - count -            number of glyphs to draw
+  - glyphs -           the array of glyphIDs to draw
+  - positions -        where to draw each glyph relative to origin
+  - clusters -         array of size count of cluster information
+  - textByteCount -    size of the utf8text
+  - utf8text -         utf8text supporting information for the glyphs
+  - origin -           the origin of all the positions
+  - font -             typeface, text size and so, used to describe the text
+  - paint -            blend, color, and so on, used to draw
 */
 func (o Canvas) DrawGlyphs(count int32, glyphs []uint16, positions []Point, clusters []uint32, textByteCount int32, utf8text string, origin Point, font Font, paint Paint) {
 	c_obj := o.sk
@@ -2577,28 +2219,20 @@ func (o Canvas) DrawGlyphs(count int32, glyphs []uint16, positions []Point, clus
 /*
 Draws SkTextBlob blob at (x, y), using clip, SkMatrix, and SkPaint paint.
 
-blob contains glyphs, their positions, and paint attributes specific to text:
-SkTypeface, SkPaint text size, SkPaint text scale x,
-SkPaint text skew x, SkPaint::Align, SkPaint::Hinting, anti-alias, SkPaint fake bold,
-SkPaint font embedded bitmaps, SkPaint full hinting spacing, LCD text, SkPaint linear text,
-and SkPaint subpixel text.
+blob contains glyphs, their positions, and paint attributes specific to text:        SkTypeface, SkPaint text size, SkPaint text scale x,        SkPaint text skew x, SkPaint::Align, SkPaint::Hinting, anti-alias, SkPaint fake bold,        SkPaint font embedded bitmaps, SkPaint full hinting spacing, LCD text, SkPaint linear text,        and SkPaint subpixel text.
 
 SkTextEncoding must be set to SkTextEncoding::kGlyphID.
 
-Elements of paint: anti-alias, SkBlendMode, color including alpha,
-SkColorFilter, SkPaint dither, SkMaskFilter, SkPathEffect, SkShader, and
-SkPaint::Style; apply to blob. If SkPaint contains SkPaint::kStroke_Style:
-SkPaint miter limit, SkPaint::Cap, SkPaint::Join, and SkPaint stroke width;
-apply to SkPath created from blob.
+Elements of paint: anti-alias, SkBlendMode, color including alpha,        SkColorFilter, SkPaint dither, SkMaskFilter, SkPathEffect, SkShader, and        SkPaint::Style; apply to blob. If SkPaint contains SkPaint::kStroke_Style:        SkPaint miter limit, SkPaint::Cap, SkPaint::Join, and SkPaint stroke width;        apply to SkPath created from blob.
 
-# params
+example: https://fiddle.skia.org/c/_drawTextBlob
 
-  - blob =>   glyphs, positions, and their paints' text size, typeface, and so on
-  - x =>      horizontal offset applied to blob
-  - y =>      vertical offset applied to blob
-  - paint =>  blend, color, stroking, and so on, used to draw
+# parameters
 
-example: https://fiddle.skia.org/c/@Canvas_drawTextBlob
+  - blob -    glyphs, positions, and their paints' text size, typeface, and so on
+  - x -       horizontal offset applied to blob
+  - y -       vertical offset applied to blob
+  - paint -   blend, color, stroking, and so on, used to draw
 */
 func (o Canvas) DrawTextBlob(blob TextBlob, x float32, y float32, paint Paint) {
 	c_obj := o.sk
@@ -2617,17 +2251,22 @@ const (
 )
 
 /*
-Selects if an array of points are drawn as discrete points, as lines, or as
-an open polygon.
+Selects if an array of points are drawn as discrete points, as lines, or as        an open polygon.
 */
 type CanvasPointMode uint32
 
 const (
-	// draw each point separately
+	/*
+	   draw each point separately
+	*/
 	CanvasPointModePoints CanvasPointMode = 0
-	// draw each pair of points as a line segment
+	/*
+	   draw each pair of points as a line segment
+	*/
 	CanvasPointModeLines CanvasPointMode = 1
-	// draw the array of points as a open polygon
+	/*
+	   draw the array of points as a open polygon
+	*/
 	CanvasPointModePolygon CanvasPointMode = 2
 )
 
@@ -2646,15 +2285,15 @@ const (
 )
 
 /*
-SaveLayerFlags provides options that may be used in any combination in SaveLayerRec,
-defining how layer allocated by saveLayer() operates. It may be set to zero,
-kPreserveLCDText_SaveLayerFlag, kInitWithPrevious_SaveLayerFlag, or both flags.
+SaveLayerFlags provides options that may be used in any combination in SaveLayerRec,        defining how layer allocated by saveLayer() operates. It may be set to zero,        kPreserveLCDText_SaveLayerFlag, kInitWithPrevious_SaveLayerFlag, or both flags.
 */
 type CanvasSaveLayerFlagsSet uint32
 
 const (
 	CanvasSaveLayerFlagsSetPreserveLCDText_SaveLayerFlag CanvasSaveLayerFlagsSet = 2
-	// initializes with previous contents
+	/*
+	   initializes with previous contents
+	*/
 	CanvasSaveLayerFlagsSetInitWithPrevious_SaveLayerFlag CanvasSaveLayerFlagsSet = 4
 	CanvasSaveLayerFlagsSetF16ColorType                   CanvasSaveLayerFlagsSet = 16
 )
@@ -2667,26 +2306,25 @@ const (
 )
 
 /*
-SrcRectConstraint controls the behavior at the edge of source SkRect,
-provided to drawImageRect() when there is any filtering. If kStrict is set,
-then extra code is used to ensure it never samples outside of the src-rect.
-kStrict_SrcRectConstraint disables the use of mipmaps and anisotropic filtering.
+SrcRectConstraint controls the behavior at the edge of source SkRect,        provided to drawImageRect() when there is any filtering. If kStrict is set,        then extra code is used to ensure it never samples outside of the src-rect.        kStrict_SrcRectConstraint disables the use of mipmaps and anisotropic filtering.
 */
 type CanvasSrcRectConstraint uint32
 
 const (
-	// sample only inside bounds; slower
+	/*
+	   sample only inside bounds; slower
+	*/
 	CanvasSrcRectConstraintStrict CanvasSrcRectConstraint = 0
-	// sample outside bounds; faster
+	/*
+	   sample outside bounds; faster
+	*/
 	CanvasSrcRectConstraintFast CanvasSrcRectConstraint = 1
 )
 
 /*
-Describes pixel and encoding. SkImageInfo can be created from SkColorInfo by
-providing dimensions.
+Describes pixel and encoding. SkImageInfo can be created from SkColorInfo by    providing dimensions.
 
-It encodes how pixel bits describe alpha, transparency; color components red, blue,
-and green; and SkColorSpace, the range and linearity of colors.
+It encodes how pixel bits describe alpha, transparency; color components red, blue,    and green; and SkColorSpace, the range and linearity of colors.
 */
 type ColorInfo struct {
 	sk *C.sk_SkColorInfo
@@ -2699,8 +2337,7 @@ func (o ColorInfo) IsNil() bool {
 }
 
 /*
-Creates an SkColorInfo with kUnknown_SkColorType, kUnknown_SkAlphaType,
-and no SkColorSpace.
+Creates an SkColorInfo with kUnknown_SkColorType, kUnknown_SkAlphaType,        and no SkColorSpace.
 
 # return
 
@@ -2715,11 +2352,10 @@ func NewColorInfo() ColorInfo {
 /*
 Creates SkColorInfo from SkColorType ct, SkAlphaType at, and optionally SkColorSpace cs.
 
-If SkColorSpace cs is nullptr and SkColorInfo is part of drawing source: SkColorSpace
-defaults to sRGB, mapping into SkSurface SkColorSpace.
+If SkColorSpace cs is nullptr and SkColorInfo is part of drawing source: SkColorSpace        defaults to sRGB, mapping into SkSurface SkColorSpace.
 
-Parameters are not validated to see if their values are legal, or that the
-combination is supported.
+Parameters are not validated to see if their values are legal, or that the        combination is supported.
+
 # return
 
   - created SkColorInfo
@@ -2780,11 +2416,9 @@ func (o ColorInfo) GammaCloseToSRGB() bool {
 }
 
 /*
-Creates SkColorInfo with same SkColorType, SkColorSpace, with SkAlphaType set
-to newAlphaType.
+Creates SkColorInfo with same SkColorType, SkColorSpace, with SkAlphaType set        to newAlphaType.
 
-Created SkColorInfo contains newAlphaType even if it is incompatible with
-SkColorType, in which case SkAlphaType in SkColorInfo is ignored.
+Created SkColorInfo contains newAlphaType even if it is incompatible with        SkColorType, in which case SkAlphaType in SkColorInfo is ignored.
 */
 func (o ColorInfo) MakeAlphaType(newAlphaType AlphaType) ColorInfo {
 	c_obj := o.sk
@@ -2794,8 +2428,7 @@ func (o ColorInfo) MakeAlphaType(newAlphaType AlphaType) ColorInfo {
 }
 
 /*
-Creates new SkColorInfo with same SkAlphaType, SkColorSpace, with SkColorType
-set to newColorType.
+Creates new SkColorInfo with same SkAlphaType, SkColorSpace, with SkColorType        set to newColorType.
 */
 func (o ColorInfo) MakeColorType(newColorType ColorType) ColorInfo {
 	c_obj := o.sk
@@ -2805,8 +2438,7 @@ func (o ColorInfo) MakeColorType(newColorType ColorType) ColorInfo {
 }
 
 /*
-Creates SkColorInfo with same SkAlphaType, SkColorType, with SkColorSpace
-set to cs. cs may be nullptr.
+Creates SkColorInfo with same SkAlphaType, SkColorType, with SkColorSpace        set to cs. cs may be nullptr.
 */
 func (o ColorInfo) MakeColorSpace(cs ColorSpace) ColorInfo {
 	c_obj := o.sk
@@ -2816,14 +2448,13 @@ func (o ColorInfo) MakeColorSpace(cs ColorSpace) ColorInfo {
 }
 
 /*
-Returns number of bytes per pixel required by SkColorType.
-Returns zero if colorType() is kUnknown_SkColorType.
+Returns number of bytes per pixel required by SkColorType.        Returns zero if colorType() is kUnknown_SkColorType.
+
+example: https://fiddle.skia.org/c/_bytesPerPixel
 
 # return
 
   - bytes in pixel
-
-example: https://fiddle.skia.org/c/@ImageInfo_bytesPerPixel
 */
 func (o ColorInfo) BytesPerPixel() int32 {
 	c_obj := o.sk
@@ -2832,14 +2463,13 @@ func (o ColorInfo) BytesPerPixel() int32 {
 }
 
 /*
-Returns bit shift converting row bytes to row pixels.
-Returns zero for kUnknown_SkColorType.
+Returns bit shift converting row bytes to row pixels.        Returns zero for kUnknown_SkColorType.
+
+example: https://fiddle.skia.org/c/_shiftPerPixel
 
 # return
 
   - one of: 0, 1, 2, 3, 4; left shift to convert pixels to bytes
-
-example: https://fiddle.skia.org/c/@ImageInfo_shiftPerPixel
 */
 func (o ColorInfo) ShiftPerPixel() int32 {
 	c_obj := o.sk
@@ -2847,6 +2477,9 @@ func (o ColorInfo) ShiftPerPixel() int32 {
 	return int32(retC)
 }
 
+/*
+////////////////////////////////////////////////////////////////////////////
+*/
 type ColorSpace struct {
 	sk *C.sk_SkColorSpace
 }
@@ -2879,8 +2512,7 @@ func ColorSpaceMakeSRGBLinear() ColorSpace {
 }
 
 /*
-If both are null, we return true. If one is null and the other is not, we return false.
-If both are non-null, we do a deeper compare.
+If both are null, we return true. If one is null and the other is not, we return false.  If both are non-null, we do a deeper compare.
 */
 func ColorSpaceEquals(p0 ColorSpace, p1 ColorSpace) bool {
 	c_p0 := p0.sk
@@ -2890,9 +2522,7 @@ func ColorSpaceEquals(p0 ColorSpace, p1 ColorSpace) bool {
 }
 
 /*
-SkData holds an immutable data buffer. Not only is the data immutable,
-but the actual ptr that is returned (by data() or bytes()) is guaranteed
-to always be the same for the life of this instance.
+SkData holds an immutable data buffer. Not only is the data immutable,  but the actual ptr that is returned (by data() or bytes()) is guaranteed  to always be the same for the life of this instance.
 */
 type Data struct {
 	sk *C.sk_SkData
@@ -2935,8 +2565,7 @@ func DataMakeWithCopy(data []byte, length uint32) Data {
 }
 
 /*
-Create a new data with zero-initialized contents. The caller should call writable_data()
-to write into the buffer, but this must be done before another ref() is made.
+Create a new data with zero-initialized contents. The caller should call writable_data()  to write into the buffer, but this must be done before another ref() is made.
 */
 func DataMakeZeroInitialized(length uint32) Data {
 	c_length := C.ulong(length)
@@ -2945,10 +2574,7 @@ func DataMakeZeroInitialized(length uint32) Data {
 }
 
 /*
-Create a new dataref by copying the specified c-string
-(a null-terminated array of bytes). The returned SkData will have size()
-equal to strlen(cstr) + 1. If cstr is NULL, it will be treated the same
-as "".
+Create a new dataref by copying the specified c-string  (a null-terminated array of bytes). The returned SkData will have size()  equal to strlen(cstr) + 1. If cstr is NULL, it will be treated the same  as "".
 */
 func DataMakeWithCString(cstr string) Data {
 	c_cstr := C.CString(cstr)
@@ -2958,8 +2584,7 @@ func DataMakeWithCString(cstr string) Data {
 }
 
 /*
-Call this when the data parameter is already const and will outlive the lifetime of the
-SkData. Suitable for with const globals.
+Call this when the data parameter is already const and will outlive the lifetime of the  SkData. Suitable for with const globals.
 */
 func DataMakeWithoutCopy(data []byte, length uint32) Data {
 	c_data := unsafe.Pointer(&data[0])
@@ -2969,8 +2594,7 @@ func DataMakeWithoutCopy(data []byte, length uint32) Data {
 }
 
 /*
-Create a new dataref the file with the specified path.
-If the file cannot be opened, this returns NULL.
+Create a new dataref the file with the specified path.  If the file cannot be opened, this returns NULL.
 */
 func DataMakeFromFileName(path string) Data {
 	c_path := C.CString(path)
@@ -3008,10 +2632,10 @@ func NewFont() Font {
 /*
 Constructs SkFont with default values with SkTypeface and size in points.
 
-# params
+# parameters
 
-  - typeface =>  font and style used to draw and measure text
-  - size =>      typographic height of text
+  - typeface -   font and style used to draw and measure text
+  - size -       typographic height of text
 
 # return
 
@@ -3027,9 +2651,9 @@ func NewFontTypefaceSize(typeface Typeface, size float32) Font {
 /*
 Constructs SkFont with default values with SkTypeface.
 
-# params
+# parameters
 
-  - typeface =>  font and style used to draw and measure text
+  - typeface -   font and style used to draw and measure text
 
 # return
 
@@ -3042,16 +2666,14 @@ func NewFontTypeface(typeface Typeface) Font {
 }
 
 /*
-Constructs SkFont with default values with SkTypeface and size in points,
-horizontal scale, and horizontal skew. Horizontal scale emulates condensed
-and expanded fonts. Horizontal skew emulates oblique fonts.
+Constructs SkFont with default values with SkTypeface and size in points,        horizontal scale, and horizontal skew. Horizontal scale emulates condensed        and expanded fonts. Horizontal skew emulates oblique fonts.
 
-# params
+# parameters
 
-  - typeface =>  font and style used to draw and measure text
-  - size =>      typographic height of text
-  - scaleX =>    text horizontal scale
-  - skewX =>     additional shear on x-axis relative to y-axis
+  - typeface -   font and style used to draw and measure text
+  - size -       typographic height of text
+  - scaleX -     text horizontal scale
+  - skewX -      additional shear on x-axis relative to y-axis
 
 # return
 
@@ -3072,17 +2694,11 @@ func (o *Font) Delete() {
 }
 
 /*
-Returns SkFontMetrics associated with SkTypeface.
-The return value is the recommended spacing between lines: the sum of metrics
-descent, ascent, and leading.
-If metrics is not nullptr, SkFontMetrics is copied to metrics.
-Results are scaled by text size but does not take into account
-dimensions required by text scale, text skew, fake bold,
-style stroke, and SkPathEffect.
+Returns SkFontMetrics associated with SkTypeface.        The return value is the recommended spacing between lines: the sum of metrics        descent, ascent, and leading.        If metrics is not nullptr, SkFontMetrics is copied to metrics.        Results are scaled by text size but does not take into account        dimensions required by text scale, text skew, fake bold,        style stroke, and SkPathEffect.
 
-# params
+# parameters
 
-  - metrics =>  storage for SkFontMetrics; may be nullptr
+  - metrics -   storage for SkFontMetrics; may be nullptr
 
 # return
 
@@ -3096,15 +2712,14 @@ func (o Font) GetMetrics(metrics *FontMetrics) float32 {
 }
 
 /*
-Retrieves the x-positions for each glyph, beginning at the specified origin. The caller
-must allocated at least count number of elements in the xpos[] array.
+Retrieves the x-positions for each glyph, beginning at the specified origin. The caller        must allocated at least count number of elements in the xpos[] array.
 
-# params
+# parameters
 
-  - glyphs =>   array of glyph indices to be positioned
-  - count =>    number of glyphs
-  - xpos =>     returns glyphs x-positions
-  - origin =>   x-position of the first glyph. Defaults to 0.
+  - glyphs -    array of glyph indices to be positioned
+  - count -     number of glyphs
+  - xpos -      returns glyphs x-positions
+  - origin -    x-position of the first glyph. Defaults to 0.
 */
 func (o Font) GetXPos(glyphs []uint16, count int32, xpos []float32, origin float32) {
 	c_obj := o.sk
@@ -3116,15 +2731,13 @@ func (o Font) GetXPos(glyphs []uint16, count int32, xpos []float32, origin float
 }
 
 /*
-Returns the advance width of text.
-The advance is the normal distance to move before drawing additional text.
-Returns the bounding box of text if bounds is not nullptr.
+Returns the advance width of text.        The advance is the normal distance to move before drawing additional text.        Returns the bounding box of text if bounds is not nullptr.
 
-# params
+# parameters
 
-  - text =>        character storage encoded with SkTextEncoding
-  - byteLength =>  length of character storage in bytes
-  - bounds =>      returns bounding box relative to (0, 0) if not nullptr
+  - text -         character storage encoded with SkTextEncoding
+  - byteLength -   length of character storage in bytes
+  - bounds -       returns bounding box relative to (0, 0) if not nullptr
 
 # return
 
@@ -3141,17 +2754,14 @@ func (o Font) MeasureText(text []byte, byteLength uint32, encoding TextEncoding,
 }
 
 /*
-Returns the advance width of text.
-The advance is the normal distance to move before drawing additional text.
-Returns the bounding box of text if bounds is not nullptr. The paint
-stroke settings, mask filter, or path effect may modify the bounds.
+Returns the advance width of text.        The advance is the normal distance to move before drawing additional text.        Returns the bounding box of text if bounds is not nullptr. The paint        stroke settings, mask filter, or path effect may modify the bounds.
 
-# params
+# parameters
 
-  - text =>        character storage encoded with SkTextEncoding
-  - byteLength =>  length of character storage in bytes
-  - bounds =>      returns bounding box relative to (0, 0) if not nullptr
-  - paint =>       optional; may be nullptr
+  - text -         character storage encoded with SkTextEncoding
+  - byteLength -   length of character storage in bytes
+  - bounds -       returns bounding box relative to (0, 0) if not nullptr
+  - paint -        optional; may be nullptr
 
 # return
 
@@ -3169,14 +2779,13 @@ func (o Font) MeasureTextPaint(text []byte, byteLength uint32, encoding TextEnco
 }
 
 /*
-Sets whether to always hint glyphs.
-If forceAutoHinting is set, instructs the font manager to always hint glyphs.
+Sets whether to always hint glyphs.        If forceAutoHinting is set, instructs the font manager to always hint glyphs.
 
 Only affects platforms that use FreeType as the font manager.
 
-# params
+# parameters
 
-  - forceAutoHinting =>  setting to always hint glyphs
+  - forceAutoHinting -   setting to always hint glyphs
 */
 func (o Font) SetForceAutoHinting(forceAutoHinting bool) {
 	c_obj := o.sk
@@ -3185,8 +2794,7 @@ func (o Font) SetForceAutoHinting(forceAutoHinting bool) {
 }
 
 /*
-Sets level of glyph outline adjustment.
-Does not check for valid values of hintingLevel.
+Sets level of glyph outline adjustment.        Does not check for valid values of hintingLevel.
 */
 func (o Font) SetHinting(hintingLevel FontHinting) {
 	c_obj := o.sk
@@ -3197,9 +2805,9 @@ func (o Font) SetHinting(hintingLevel FontHinting) {
 /*
 Requests, but does not require, that glyphs respect sub-pixel positioning.
 
-# params
+# parameters
 
-  - subpixel =>  setting for sub-pixel positioning
+  - subpixel -   setting for sub-pixel positioning
 */
 func (o Font) SetSubpixel(subpixel bool) {
 	c_obj := o.sk
@@ -3208,34 +2816,24 @@ func (o Font) SetSubpixel(subpixel bool) {
 }
 
 /*
-Converts text into glyph indices.
-Returns the number of glyph indices represented by text.
-SkTextEncoding specifies how text represents characters or glyphs.
-glyphs may be nullptr, to compute the glyph count.
+Converts text into glyph indices.        Returns the number of glyph indices represented by text.        SkTextEncoding specifies how text represents characters or glyphs.        glyphs may be nullptr, to compute the glyph count.
 
 Does not check text for valid character codes or valid glyph indices.
 
-If byteLength equals zero, returns zero.
-If byteLength includes a partial character, the partial character is ignored.
+If byteLength equals zero, returns zero.        If byteLength includes a partial character, the partial character is ignored.
 
-If encoding is SkTextEncoding::kUTF8 and text contains an invalid UTF-8 sequence,
-zero is returned.
+If encoding is SkTextEncoding::kUTF8 and text contains an invalid UTF-8 sequence,        zero is returned.
 
-When encoding is SkTextEncoding::kUTF8, SkTextEncoding::kUTF16, or
-SkTextEncoding::kUTF32; then each Unicode codepoint is mapped to a
-single glyph.  This function uses the default character-to-glyph
-mapping from the SkTypeface and maps characters not found in the
-SkTypeface to zero.
+When encoding is SkTextEncoding::kUTF8, SkTextEncoding::kUTF16, or        SkTextEncoding::kUTF32; then each Unicode codepoint is mapped to a        single glyph.  This function uses the default character-to-glyph        mapping from the SkTypeface and maps characters not found in the        SkTypeface to zero.
 
-If maxGlyphCount is not sufficient to store all the glyphs, no glyphs are copied.
-The total glyph count is returned for subsequent buffer reallocation.
+If maxGlyphCount is not sufficient to store all the glyphs, no glyphs are copied.        The total glyph count is returned for subsequent buffer reallocation.
 
-# params
+# parameters
 
-  - text =>          character storage encoded with SkTextEncoding
-  - byteLength =>    length of character storage in bytes
-  - glyphs =>        storage for glyph indices; may be nullptr
-  - maxGlyphCount => storage capacity
+  - text -           character storage encoded with SkTextEncoding
+  - byteLength -     length of character storage in bytes
+  - glyphs -         storage for glyph indices; may be nullptr
+  - maxGlyphCount -  storage capacity
 
 # return
 
@@ -3257,9 +2855,9 @@ Returns glyph index for Unicode character.
 
 If the character is not supported by the SkTypeface, returns 0.
 
-# params
+# parameters
 
-  - uni =>  Unicode character
+  - uni -   Unicode character
 
 # return
 
@@ -3307,18 +2905,14 @@ func (o Font) GetTypeface() Typeface {
 }
 
 /*
-DEPRECATED
-Retrieves the advance and bounds for each glyph in glyphs.
-Both widths and bounds may be nullptr.
-If widths is not nullptr, widths must be an array of count entries.
-if bounds is not nullptr, bounds must be an array of count entries.
+DEPRECATED        Retrieves the advance and bounds for each glyph in glyphs.        Both widths and bounds may be nullptr.        If widths is not nullptr, widths must be an array of count entries.        if bounds is not nullptr, bounds must be an array of count entries.
 
-# params
+# parameters
 
-  - glyphs =>      array of glyph indices to be measured
-  - count =>       number of glyphs
-  - widths =>      returns text advances for each glyph; may be nullptr
-  - bounds =>      returns bounds for each glyph relative to (0, 0); may be nullptr
+  - glyphs -       array of glyph indices to be measured
+  - count -        number of glyphs
+  - widths -       returns text advances for each glyph; may be nullptr
+  - bounds -       returns bounds for each glyph relative to (0, 0); may be nullptr
 */
 func (o Font) GetWidthsBounds(glyphs []uint16, count int32, widths []float32, bounds []Rect) {
 	c_obj := o.sk
@@ -3330,16 +2924,13 @@ func (o Font) GetWidthsBounds(glyphs []uint16, count int32, widths []float32, bo
 }
 
 /*
-Retrieves the advance and bounds for each glyph in glyphs.
-Both widths and bounds may be nullptr.
-If widths is not nullptr, widths must be an array of count entries.
-if bounds is not nullptr, bounds must be an array of count entries.
+Retrieves the advance and bounds for each glyph in glyphs.        Both widths and bounds may be nullptr.        If widths is not nullptr, widths must be an array of count entries.        if bounds is not nullptr, bounds must be an array of count entries.
 
-# params
+# parameters
 
-  - glyphs =>      array of glyph indices to be measured
-  - count =>       number of glyphs
-  - widths =>      returns text advances for each glyph
+  - glyphs -       array of glyph indices to be measured
+  - count -        number of glyphs
+  - widths -       returns text advances for each glyph
 */
 func (o Font) GetWidths(glyphs []uint16, count int32, widths []float32) {
 	c_obj := o.sk
@@ -3349,7 +2940,9 @@ func (o Font) GetWidths(glyphs []uint16, count int32, widths []float32) {
 	C.misk_Font_getWidths(c_obj, c_glyphs, c_count, c_widths)
 }
 
-// Represents a set of actual arguments for a font.
+/*
+Represents a set of actual arguments for a font.
+*/
 type FontArguments struct {
 	sk *C.sk_SkFontArguments
 }
@@ -3374,8 +2967,7 @@ func (o *FontArguments) Delete() {
 /*
 Specify the index of the desired font.
 
-Font formats like ttc, dfont, cff, cid, pfr, t42, t1, and fon may actually be indexed
-collections of fonts.
+Font formats like ttc, dfont, cff, cid, pfr, t42, t1, and fon may actually be indexed  collections of fonts.
 */
 func (o FontArguments) SetCollectionIndex(collectionIndex int32) FontArguments {
 	c_obj := o.sk
@@ -3423,10 +3015,7 @@ func (o FontArgumentsVariationPosition) IsNil() bool {
 /*
 Specify a palette to use and overrides for palette entries.
 
-`overrides` is a list of pairs of palette entry index and color.
-The overriden palette entries will use the associated color.
-Override pairs with palette entry indices out of range will not be applied.
-Later override entries override earlier ones.
+`overrides` is a list of pairs of palette entry index and color.  The overriden palette entries will use the associated color.  Override pairs with palette entry indices out of range will not be applied.  Later override entries override earlier ones.
 */
 type FontArgumentsPalette struct {
 	sk *C.sk_SkFontArgumentsPalette
@@ -3455,12 +3044,13 @@ func (o FontArgumentsPalette) IsNil() bool {
 }
 
 /*
-The metrics of an SkFont.
-The metric values are consistent with the Skia y-down coordinate system.
+The metrics of an SkFont.    The metric values are consistent with the Skia y-down coordinate system.
 */
 type FontMetrics C.sk_SkFontMetrics
 
-// FontMetricsFlags indicating which metrics are valid
+/*
+FontMetricsFlags indicating which metrics are valid
+*/
 func (o FontMetrics) Flags() uint32 {
 	return uint32(o.fFlags)
 }
@@ -3469,7 +3059,9 @@ func (o *FontMetrics) SetFlags(value uint32) {
 	o.fFlags = C.uint(value)
 }
 
-// greatest extent above origin of any glyph bounding box, typically negative; deprecated with variable fonts
+/*
+greatest extent above origin of any glyph bounding box, typically negative; deprecated with variable fonts
+*/
 func (o FontMetrics) Top() float32 {
 	return float32(o.fTop)
 }
@@ -3478,7 +3070,9 @@ func (o *FontMetrics) SetTop(value float32) {
 	o.fTop = C.float(value)
 }
 
-// distance to reserve above baseline, typically negative
+/*
+distance to reserve above baseline, typically negative
+*/
 func (o FontMetrics) Ascent() float32 {
 	return float32(o.fAscent)
 }
@@ -3487,7 +3081,9 @@ func (o *FontMetrics) SetAscent(value float32) {
 	o.fAscent = C.float(value)
 }
 
-// distance to reserve below baseline, typically positive
+/*
+distance to reserve below baseline, typically positive
+*/
 func (o FontMetrics) Descent() float32 {
 	return float32(o.fDescent)
 }
@@ -3496,7 +3092,9 @@ func (o *FontMetrics) SetDescent(value float32) {
 	o.fDescent = C.float(value)
 }
 
-// greatest extent below origin of any glyph bounding box, typically positive; deprecated with variable fonts
+/*
+greatest extent below origin of any glyph bounding box, typically positive; deprecated with variable fonts
+*/
 func (o FontMetrics) Bottom() float32 {
 	return float32(o.fBottom)
 }
@@ -3505,7 +3103,9 @@ func (o *FontMetrics) SetBottom(value float32) {
 	o.fBottom = C.float(value)
 }
 
-// distance to add between lines, typically positive or zero
+/*
+distance to add between lines, typically positive or zero
+*/
 func (o FontMetrics) Leading() float32 {
 	return float32(o.fLeading)
 }
@@ -3514,7 +3114,9 @@ func (o *FontMetrics) SetLeading(value float32) {
 	o.fLeading = C.float(value)
 }
 
-// average character width, zero if unknown
+/*
+average character width, zero if unknown
+*/
 func (o FontMetrics) AvgCharWidth() float32 {
 	return float32(o.fAvgCharWidth)
 }
@@ -3523,7 +3125,9 @@ func (o *FontMetrics) SetAvgCharWidth(value float32) {
 	o.fAvgCharWidth = C.float(value)
 }
 
-// maximum character width, zero if unknown
+/*
+maximum character width, zero if unknown
+*/
 func (o FontMetrics) MaxCharWidth() float32 {
 	return float32(o.fMaxCharWidth)
 }
@@ -3532,7 +3136,9 @@ func (o *FontMetrics) SetMaxCharWidth(value float32) {
 	o.fMaxCharWidth = C.float(value)
 }
 
-// greatest extent to left of origin of any glyph bounding box, typically negative; deprecated with variable fonts
+/*
+greatest extent to left of origin of any glyph bounding box, typically negative; deprecated with variable fonts
+*/
 func (o FontMetrics) XMin() float32 {
 	return float32(o.fXMin)
 }
@@ -3541,7 +3147,9 @@ func (o *FontMetrics) SetXMin(value float32) {
 	o.fXMin = C.float(value)
 }
 
-// greatest extent to right of origin of any glyph bounding box, typically positive; deprecated with variable fonts
+/*
+greatest extent to right of origin of any glyph bounding box, typically positive; deprecated with variable fonts
+*/
 func (o FontMetrics) XMax() float32 {
 	return float32(o.fXMax)
 }
@@ -3550,7 +3158,9 @@ func (o *FontMetrics) SetXMax(value float32) {
 	o.fXMax = C.float(value)
 }
 
-// height of lower-case 'x', zero if unknown, typically negative
+/*
+height of lower-case 'x', zero if unknown, typically negative
+*/
 func (o FontMetrics) XHeight() float32 {
 	return float32(o.fXHeight)
 }
@@ -3559,7 +3169,9 @@ func (o *FontMetrics) SetXHeight(value float32) {
 	o.fXHeight = C.float(value)
 }
 
-// height of an upper-case letter, zero if unknown, typically negative
+/*
+height of an upper-case letter, zero if unknown, typically negative
+*/
 func (o FontMetrics) CapHeight() float32 {
 	return float32(o.fCapHeight)
 }
@@ -3568,7 +3180,9 @@ func (o *FontMetrics) SetCapHeight(value float32) {
 	o.fCapHeight = C.float(value)
 }
 
-// underline thickness
+/*
+underline thickness
+*/
 func (o FontMetrics) UnderlineThickness() float32 {
 	return float32(o.fUnderlineThickness)
 }
@@ -3577,7 +3191,9 @@ func (o *FontMetrics) SetUnderlineThickness(value float32) {
 	o.fUnderlineThickness = C.float(value)
 }
 
-// distance from baseline to top of stroke, typically positive
+/*
+distance from baseline to top of stroke, typically positive
+*/
 func (o FontMetrics) UnderlinePosition() float32 {
 	return float32(o.fUnderlinePosition)
 }
@@ -3586,7 +3202,9 @@ func (o *FontMetrics) SetUnderlinePosition(value float32) {
 	o.fUnderlinePosition = C.float(value)
 }
 
-// strikeout thickness
+/*
+strikeout thickness
+*/
 func (o FontMetrics) StrikeoutThickness() float32 {
 	return float32(o.fStrikeoutThickness)
 }
@@ -3595,7 +3213,9 @@ func (o *FontMetrics) SetStrikeoutThickness(value float32) {
 	o.fStrikeoutThickness = C.float(value)
 }
 
-// distance from baseline to bottom of stroke, typically negative
+/*
+distance from baseline to bottom of stroke, typically negative
+*/
 func (o FontMetrics) StrikeoutPosition() float32 {
 	return float32(o.fStrikeoutPosition)
 }
@@ -3604,6 +3224,9 @@ func (o *FontMetrics) SetStrikeoutPosition(value float32) {
 	o.fStrikeoutPosition = C.float(value)
 }
 
+/*
+SkRefCntBase is the base class for objects that may be shared by multiple    objects. When an existing owner wants to share a reference, it calls ref().    When an owner wants to release its reference, it calls unref(). When the    shared object's reference count goes to zero as the result of an unref()    call, its (virtual) destructor is called. It is an error for the    destructor to be called explicitly (or via the object going out of scope on    the stack or calling delete) if getRefCnt() > 1.
+*/
 type FontMgr struct {
 	sk *C.sk_SkFontMgr
 }
@@ -3620,15 +3243,11 @@ func (o *FontMgr) Unref() {
 }
 
 /*
-The caller must call unref() on the returned object.
-Never returns NULL; will return an empty set if the name is not found.
+The caller must call unref() on the returned object.  Never returns NULL; will return an empty set if the name is not found.
 
-Passing nullptr as the parameter will return the default system family.
-Note that most systems don't have a default system family, so passing nullptr will often
-result in the empty set.
+Passing nullptr as the parameter will return the default system family.  Note that most systems don't have a default system family, so passing nullptr will often  result in the empty set.
 
-It is possible that this will return a style set not accessible from
-createStyleSet(int) due to hidden or auto-activated fonts.
+It is possible that this will return a style set not accessible from  createStyleSet(int) due to hidden or auto-activated fonts.
 */
 func (o FontMgr) MatchFamily(familyName string) FontStyleSet {
 	c_obj := o.sk
@@ -3639,16 +3258,11 @@ func (o FontMgr) MatchFamily(familyName string) FontStyleSet {
 }
 
 /*
-Find the closest matching typeface to the specified familyName and style
-and return a ref to it. The caller must call unref() on the returned
-object. Will return nullptr if no 'good' match is found.
+Find the closest matching typeface to the specified familyName and style  and return a ref to it. The caller must call unref() on the returned  object. Will return nullptr if no 'good' match is found.
 
-Passing |nullptr| as the parameter for |familyName| will return the
-default system font.
+Passing |nullptr| as the parameter for |familyName| will return the  default system font.
 
-It is possible that this will return a style set not accessible from
-createStyleSet(int) or matchFamily(const char[]) due to hidden or
-auto-activated fonts.
+It is possible that this will return a style set not accessible from  createStyleSet(int) or matchFamily(const char[]) due to hidden or  auto-activated fonts.
 */
 func (o FontMgr) MatchFamilyStyle(familyName string, p1 FontStyle) Typeface {
 	c_obj := o.sk
@@ -3660,9 +3274,7 @@ func (o FontMgr) MatchFamilyStyle(familyName string, p1 FontStyle) Typeface {
 }
 
 /*
-Create a typeface for the specified data and TTC index (pass 0 for none)
-or NULL if the data is not recognized. The caller must call unref() on
-the returned object if it is not null.
+Create a typeface for the specified data and TTC index (pass 0 for none)  or NULL if the data is not recognized. The caller must call unref() on  the returned object if it is not null.
 */
 func (o FontMgr) MakeFromData(p0 Data, ttcIndex int32) Typeface {
 	c_obj := o.sk
@@ -3673,10 +3285,7 @@ func (o FontMgr) MakeFromData(p0 Data, ttcIndex int32) Typeface {
 }
 
 /*
-Create a typeface for the specified fileName and TTC index
-(pass 0 for none) or NULL if the file is not found, or its contents are
-not recognized. The caller must call unref() on the returned object
-if it is not null.
+Create a typeface for the specified fileName and TTC index  (pass 0 for none) or NULL if the file is not found, or its contents are  not recognized. The caller must call unref() on the returned object  if it is not null.
 */
 func (o FontMgr) MakeFromFile(path string, ttcIndex int32) Typeface {
 	c_obj := o.sk
@@ -3774,6 +3383,9 @@ const (
 	FontStyleWidthUltraExpanded  FontStyleWidth = 9
 )
 
+/*
+SkRefCntBase is the base class for objects that may be shared by multiple    objects. When an existing owner wants to share a reference, it calls ref().    When an owner wants to release its reference, it calls unref(). When the    shared object's reference count goes to zero as the result of an unref()    call, its (virtual) destructor is called. It is an error for the    destructor to be called explicitly (or via the object going out of scope on    the stack or calling delete) if getRefCnt() > 1.
+*/
 type FontStyleSet struct {
 	sk *C.sk_SkFontStyleSet
 }
@@ -3817,25 +3429,17 @@ func (o FontStyleSet) MatchStyle(pattern FontStyle) Typeface {
 }
 
 /*
-SkImage describes a two dimensional array of pixels to draw. The pixels may be
-decoded in a raster bitmap, encoded in a SkPicture or compressed data stream,
-or located in GPU memory as a GPU texture.
+SkImage describes a two dimensional array of pixels to draw. The pixels may be    decoded in a raster bitmap, encoded in a SkPicture or compressed data stream,    or located in GPU memory as a GPU texture.
 
-SkImage cannot be modified after it is created. SkImage may allocate additional
-storage as needed; for instance, an encoded SkImage may decode when drawn.
+SkImage cannot be modified after it is created. SkImage may allocate additional    storage as needed; for instance, an encoded SkImage may decode when drawn.
 
-SkImage width and height are greater than zero. Creating an SkImage with zero width
-or height returns SkImage equal to nullptr.
+SkImage width and height are greater than zero. Creating an SkImage with zero width    or height returns SkImage equal to nullptr.
 
-SkImage may be created from SkBitmap, SkPixmap, SkSurface, SkPicture, encoded streams,
-GPU texture, YUV_ColorSpace data, or hardware buffer. Encoded streams supported
-include BMP, GIF, HEIF, ICO, JPEG, PNG, WBMP, WebP. Supported encoding details
-vary with platform.
+SkImage may be created from SkBitmap, SkPixmap, SkSurface, SkPicture, encoded streams,    GPU texture, YUV_ColorSpace data, or hardware buffer. Encoded streams supported    include BMP, GIF, HEIF, ICO, JPEG, PNG, WBMP, WebP. Supported encoding details    vary with platform.
 
 See SkImages namespace for the static factory methods to make SkImages.
 
-Clients should *not* subclass SkImage as there is a lot of internal machinery that is
-not publicly accessible.
+Clients should *not* subclass SkImage as there is a lot of internal machinery that is    not publicly accessible.
 */
 type Image struct {
 	sk *C.sk_SkImage
@@ -3853,8 +3457,7 @@ func (o *Image) Unref() {
 }
 
 /*
-Returns a SkImageInfo describing the width, height, color type, alpha type, and color space
-of the SkImage.
+Returns a SkImageInfo describing the width, height, color type, alpha type, and color space        of the SkImage.
 
 # return
 
@@ -3919,9 +3522,7 @@ func (o Image) Bounds() IRect {
 }
 
 /*
-Returns value unique to image. SkImage contents cannot change after SkImage is
-created. Any operation to create a new SkImage will receive generate a new
-unique number.
+Returns value unique to image. SkImage contents cannot change after SkImage is        created. Any operation to create a new SkImage will receive generate a new        unique number.
 
 # return
 
@@ -3936,14 +3537,13 @@ func (o Image) UniqueID() uint32 {
 /*
 Returns SkAlphaType.
 
-SkAlphaType returned was a parameter to an SkImage constructor,
-or was parsed from encoded data.
+SkAlphaType returned was a parameter to an SkImage constructor,        or was parsed from encoded data.
+
+example: https://fiddle.skia.org/c/
 
 # return
 
   - SkAlphaType in SkImage
-
-example: https://fiddle.skia.org/c/@Image_alphaType
 */
 func (o Image) AlphaType() AlphaType {
 	c_obj := o.sk
@@ -3954,11 +3554,11 @@ func (o Image) AlphaType() AlphaType {
 /*
 Returns SkColorType if known; otherwise, returns kUnknown_SkColorType.
 
+example: https://fiddle.skia.org/c/
+
 # return
 
   - SkColorType of SkImage
-
-example: https://fiddle.skia.org/c/@Image_colorType
 */
 func (o Image) ColorType() ColorType {
 	c_obj := o.sk
@@ -3967,19 +3567,15 @@ func (o Image) ColorType() ColorType {
 }
 
 /*
-Returns SkColorSpace, the range of colors, associated with SkImage.  The
-reference count of SkColorSpace is unchanged. The returned SkColorSpace is
-immutable.
+Returns SkColorSpace, the range of colors, associated with SkImage.  The        reference count of SkColorSpace is unchanged. The returned SkColorSpace is        immutable.
 
-SkColorSpace returned was passed to an SkImage constructor,
-or was parsed from encoded data. SkColorSpace returned may be ignored when SkImage
-is drawn, depending on the capabilities of the SkSurface receiving the drawing.
+SkColorSpace returned was passed to an SkImage constructor,        or was parsed from encoded data. SkColorSpace returned may be ignored when SkImage        is drawn, depending on the capabilities of the SkSurface receiving the drawing.
+
+example: https://fiddle.skia.org/c/
 
 # return
 
   - SkColorSpace in SkImage, or nullptr
-
-example: https://fiddle.skia.org/c/@Image_colorSpace
 */
 func (o Image) ColorSpace() ColorSpace {
 	c_obj := o.sk
@@ -3988,14 +3584,13 @@ func (o Image) ColorSpace() ColorSpace {
 }
 
 /*
-Returns true if SkImage pixels represent transparency only. If true, each pixel
-is packed in 8 bits as defined by kAlpha_8_SkColorType.
+Returns true if SkImage pixels represent transparency only. If true, each pixel        is packed in 8 bits as defined by kAlpha_8_SkColorType.
+
+example: https://fiddle.skia.org/c/
 
 # return
 
   - true if pixels represent a transparency mask
-
-example: https://fiddle.skia.org/c/@Image_isAlphaOnly
 */
 func (o Image) IsAlphaOnly() bool {
 	c_obj := o.sk
@@ -4017,39 +3612,25 @@ func (o Image) IsOpaque() bool {
 }
 
 /*
-Copies SkRect of pixels from SkImage to dstPixels. Copy starts at offset (srcX, srcY),
-and does not exceed SkImage (width(), height()).
+Copies SkRect of pixels from SkImage to dstPixels. Copy starts at offset (srcX, srcY),        and does not exceed SkImage (width(), height()).
 
-dstInfo specifies width, height, SkColorType, SkAlphaType, and SkColorSpace of
-destination. dstRowBytes specifies the gap from one destination row to the next.
-Returns true if pixels are copied. Returns false if:
-  - dstInfo.addr() equals nullptr
-  - dstRowBytes is less than dstInfo.minRowBytes()
-  - SkPixelRef is nullptr
+dstInfo specifies width, height, SkColorType, SkAlphaType, and SkColorSpace of        destination. dstRowBytes specifies the gap from one destination row to the next.        Returns true if pixels are copied. Returns false if:        - dstInfo.addr() equals nullptr        - dstRowBytes is less than dstInfo.minRowBytes()        - SkPixelRef is nullptr
 
-Pixels are copied only if pixel conversion is possible. If SkImage SkColorType is
-kGray_8_SkColorType, or kAlpha_8_SkColorType; dstInfo.colorType() must match.
-If SkImage SkColorType is kGray_8_SkColorType, dstInfo.colorSpace() must match.
-If SkImage SkAlphaType is kOpaque_SkAlphaType, dstInfo.alphaType() must
-match. If SkImage SkColorSpace is nullptr, dstInfo.colorSpace() must match. Returns
-false if pixel conversion is not possible.
+Pixels are copied only if pixel conversion is possible. If SkImage SkColorType is        kGray_8_SkColorType, or kAlpha_8_SkColorType; dstInfo.colorType() must match.        If SkImage SkColorType is kGray_8_SkColorType, dstInfo.colorSpace() must match.        If SkImage SkAlphaType is kOpaque_SkAlphaType, dstInfo.alphaType() must        match. If SkImage SkColorSpace is nullptr, dstInfo.colorSpace() must match. Returns        false if pixel conversion is not possible.
 
-srcX and srcY may be negative to copy only top or left of source. Returns
-false if width() or height() is zero or negative.
-Returns false if abs(srcX) >= Image width(), or if abs(srcY) >= Image height().
+srcX and srcY may be negative to copy only top or left of source. Returns        false if width() or height() is zero or negative.        Returns false if abs(srcX) >= Image width(), or if abs(srcY) >= Image height().
 
-If cachingHint is kAllow_CachingHint, pixels may be retained locally.
-If cachingHint is kDisallow_CachingHint, pixels are not added to the local cache.
+If cachingHint is kAllow_CachingHint, pixels may be retained locally.        If cachingHint is kDisallow_CachingHint, pixels are not added to the local cache.
 
-# params
+# parameters
 
-  - context =>      the GrDirectContext in play, if it exists
-  - dstInfo =>      destination width, height, SkColorType, SkAlphaType, SkColorSpace
-  - dstPixels =>    destination pixel storage
-  - dstRowBytes =>  destination row length
-  - srcX =>         column index whose absolute value is less than width()
-  - srcY =>         row index whose absolute value is less than height()
-  - cachingHint =>  whether the pixels should be cached locally
+  - context -       the GrDirectContext in play, if it exists
+  - dstInfo -       destination width, height, SkColorType, SkAlphaType, SkColorSpace
+  - dstPixels -     destination pixel storage
+  - dstRowBytes -   destination row length
+  - srcX -          column index whose absolute value is less than width()
+  - srcY -          row index whose absolute value is less than height()
+  - cachingHint -   whether the pixels should be cached locally
 
 # return
 
@@ -4071,28 +3652,20 @@ func (o Image) ReadPixels(context GrDirectContext, dstInfo ImageInfo, dstPixels 
 /*
 Returns subset of this image.
 
-Returns nullptr if any of the following are true:
-  - Subset is empty
-  - Subset is not contained inside the image's bounds
-  - Pixels in the source image could not be read or copied
-  - This image is texture-backed and the provided context is null or does not match
+Returns nullptr if any of the following are true:          - Subset is empty          - Subset is not contained inside the image's bounds          - Pixels in the source image could not be read or copied          - This image is texture-backed and the provided context is null or does not match            the source image's context.
 
-the source image's context.
+If the source image was texture-backed, the resulting image will be texture-backed also.        Otherwise, the returned image will be raster-backed.
 
-If the source image was texture-backed, the resulting image will be texture-backed also.
-Otherwise, the returned image will be raster-backed.
+example: https://fiddle.skia.org/c/
 
-# params
+# parameters
 
-  - direct =>  the GrDirectContext of the source image (nullptr is ok if the source image
-    is not texture-backed).
-  - subset =>  bounds of returned SkImage
+  - direct -   the GrDirectContext of the source image (nullptr is ok if the source image                       is not texture-backed).
+  - subset -   bounds of returned SkImage
 
 # return
 
   - the subsetted image, or nullptr
-
-example: https://fiddle.skia.org/c/@Image_makeSubset
 */
 func (o Image) MakeSubset(direct GrDirectContext, subset IRect) Image {
 	c_obj := o.sk
@@ -4103,35 +3676,29 @@ func (o Image) MakeSubset(direct GrDirectContext, subset IRect) Image {
 }
 
 /*
-CachingHint selects whether Skia may internally cache SkBitmap generated by
-decoding SkImage, or by copying SkImage from GPU to CPU. The default behavior
-allows caching SkBitmap.
+CachingHint selects whether Skia may internally cache SkBitmap generated by        decoding SkImage, or by copying SkImage from GPU to CPU. The default behavior        allows caching SkBitmap.
 
-Choose kDisallow_CachingHint if SkImage pixels are to be used only once, or
-if SkImage pixels reside in a cache outside of Skia, or to reduce memory pressure.
+Choose kDisallow_CachingHint if SkImage pixels are to be used only once, or        if SkImage pixels reside in a cache outside of Skia, or to reduce memory pressure.
 
-Choosing kAllow_CachingHint does not ensure that pixels will be cached.
-SkImage pixels may not be cached if memory requirements are too large or
-pixels are not accessible.
+Choosing kAllow_CachingHint does not ensure that pixels will be cached.        SkImage pixels may not be cached if memory requirements are too large or        pixels are not accessible.
 */
 type ImageCachingHint uint32
 
 const (
-	// allows internally caching decoded and copied pixels
+	/*
+	   allows internally caching decoded and copied pixels
+	*/
 	ImageCachingHintAllow ImageCachingHint = 0
-	// disallows internally caching decoded and copied pixels
+	/*
+	   disallows internally caching decoded and copied pixels
+	*/
 	ImageCachingHintDisallow ImageCachingHint = 1
 )
 
 /*
-Describes pixel dimensions and encoding. SkBitmap, SkImage, PixMap, and SkSurface
-can be created from SkImageInfo. SkImageInfo can be retrieved from SkBitmap and
-SkPixmap, but not from SkImage and SkSurface. For example, SkImage and SkSurface
-implementations may defer pixel depth, so may not completely specify SkImageInfo.
+Describes pixel dimensions and encoding. SkBitmap, SkImage, PixMap, and SkSurface    can be created from SkImageInfo. SkImageInfo can be retrieved from SkBitmap and    SkPixmap, but not from SkImage and SkSurface. For example, SkImage and SkSurface    implementations may defer pixel depth, so may not completely specify SkImageInfo.
 
-SkImageInfo contains dimensions, the pixel integral width and height. It encodes
-how pixel bits describe alpha, transparency; color components red, blue,
-and green; and SkColorSpace, the range and linearity of colors.
+SkImageInfo contains dimensions, the pixel integral width and height. It encodes    how pixel bits describe alpha, transparency; color components red, blue,    and green; and SkColorSpace, the range and linearity of colors.
 */
 type ImageInfo struct {
 	sk *C.sk_SkImageInfo
@@ -4144,8 +3711,7 @@ func (o ImageInfo) IsNil() bool {
 }
 
 /*
-Creates an empty SkImageInfo with kUnknown_SkColorType, kUnknown_SkAlphaType,
-a width and height of zero, and no SkColorSpace.
+Creates an empty SkImageInfo with kUnknown_SkColorType, kUnknown_SkAlphaType,        a width and height of zero, and no SkColorSpace.
 
 # return
 
@@ -4201,8 +3767,7 @@ func (o ImageInfo) AlphaType() AlphaType {
 }
 
 /*
-Returns SkColorSpace, the range of colors. The reference count of
-SkColorSpace is unchanged. The returned SkColorSpace is immutable.
+Returns SkColorSpace, the range of colors. The reference count of        SkColorSpace is unchanged. The returned SkColorSpace is immutable.
 
 # return
 
@@ -4215,9 +3780,7 @@ func (o ImageInfo) ColorSpace() ColorSpace {
 }
 
 /*
-Returns smart pointer to SkColorSpace, the range of colors. The smart pointer
-tracks the number of objects sharing this SkColorSpace reference so the memory
-is released when the owners destruct.
+Returns smart pointer to SkColorSpace, the range of colors. The smart pointer        tracks the number of objects sharing this SkColorSpace reference so the memory        is released when the owners destruct.
 
 The returned SkColorSpace is immutable.
 
@@ -4232,8 +3795,7 @@ func (o ImageInfo) RefColorSpace() ColorSpace {
 }
 
 /*
-Returns if SkImageInfo describes an empty area of pixels by checking if either
-width or height is zero or smaller.
+Returns if SkImageInfo describes an empty area of pixels by checking if either        width or height is zero or smaller.
 
 # return
 
@@ -4246,8 +3808,7 @@ func (o ImageInfo) IsEmpty() bool {
 }
 
 /*
-Returns the dimensionless SkColorInfo that represents the same color type,
-alpha type, and color space as this SkImageInfo.
+Returns the dimensionless SkColorInfo that represents the same color type,        alpha type, and color space as this SkImageInfo.
 */
 func (o ImageInfo) ColorInfo() ColorInfo {
 	c_obj := o.sk
@@ -4256,12 +3817,9 @@ func (o ImageInfo) ColorInfo() ColorInfo {
 }
 
 /*
-Returns true if SkAlphaType is set to hint that all pixels are opaque; their
-alpha value is implicitly or explicitly 1.0. If true, and all pixels are
-not opaque, Skia may draw incorrectly.
+Returns true if SkAlphaType is set to hint that all pixels are opaque; their        alpha value is implicitly or explicitly 1.0. If true, and all pixels are        not opaque, Skia may draw incorrectly.
 
-Does not check if SkColorType allows alpha, or if any pixel value has
-transparency.
+Does not check if SkColorType allows alpha, or if any pixel value has        transparency.
 
 # return
 
@@ -4300,9 +3858,7 @@ func (o ImageInfo) Bounds() IRect {
 }
 
 /*
-Returns true if associated SkColorSpace is not nullptr, and SkColorSpace gamma
-is approximately the same as sRGB.
-This includes the
+Returns true if associated SkColorSpace is not nullptr, and SkColorSpace gamma        is approximately the same as sRGB.        This includes the
 
 # return
 
@@ -4315,13 +3871,12 @@ func (o ImageInfo) GammaCloseToSRGB() bool {
 }
 
 /*
-Creates SkImageInfo with the same SkColorType, SkColorSpace, and SkAlphaType,
-with dimensions set to width and height.
+Creates SkImageInfo with the same SkColorType, SkColorSpace, and SkAlphaType,        with dimensions set to width and height.
 
-# params
+# parameters
 
-  - newWidth =>   pixel column count; must be zero or greater
-  - newHeight =>  pixel row count; must be zero or greater
+  - newWidth -    pixel column count; must be zero or greater
+  - newHeight -   pixel row count; must be zero or greater
 
 # return
 
@@ -4336,12 +3891,11 @@ func (o ImageInfo) MakeWH(newWidth int32, newHeight int32) ImageInfo {
 }
 
 /*
-Creates SkImageInfo with the same SkColorType, SkColorSpace, and SkAlphaType,
-with dimensions set to newDimensions.
+Creates SkImageInfo with the same SkColorType, SkColorSpace, and SkAlphaType,        with dimensions set to newDimensions.
 
-# params
+# parameters
 
-  - newSize =>   pixel column and row count; must be zero or greater
+  - newSize -    pixel column and row count; must be zero or greater
 
 # return
 
@@ -4355,11 +3909,9 @@ func (o ImageInfo) MakeDimensions(newSize ISize) ImageInfo {
 }
 
 /*
-Creates SkImageInfo with same SkColorType, SkColorSpace, width, and height,
-with SkAlphaType set to newAlphaType.
+Creates SkImageInfo with same SkColorType, SkColorSpace, width, and height,        with SkAlphaType set to newAlphaType.
 
-Created SkImageInfo contains newAlphaType even if it is incompatible with
-SkColorType, in which case SkAlphaType in SkImageInfo is ignored.
+Created SkImageInfo contains newAlphaType even if it is incompatible with        SkColorType, in which case SkAlphaType in SkImageInfo is ignored.
 
 # return
 
@@ -4373,8 +3925,7 @@ func (o ImageInfo) MakeAlphaType(newAlphaType AlphaType) ImageInfo {
 }
 
 /*
-Creates SkImageInfo with same SkAlphaType, SkColorSpace, width, and height,
-with SkColorType set to newColorType.
+Creates SkImageInfo with same SkAlphaType, SkColorSpace, width, and height,        with SkColorType set to newColorType.
 
 # return
 
@@ -4388,12 +3939,11 @@ func (o ImageInfo) MakeColorType(newColorType ColorType) ImageInfo {
 }
 
 /*
-Creates SkImageInfo with same SkAlphaType, SkColorType, width, and height,
-with SkColorSpace set to cs.
+Creates SkImageInfo with same SkAlphaType, SkColorType, width, and height,        with SkColorSpace set to cs.
 
-# params
+# parameters
 
-  - cs =>  range of colors; may be nullptr
+  - cs -   range of colors; may be nullptr
 
 # return
 
@@ -4407,8 +3957,7 @@ func (o ImageInfo) MakeColorSpace(cs ColorSpace) ImageInfo {
 }
 
 /*
-Returns number of bytes per pixel required by SkColorType.
-Returns zero if colorType( is kUnknown_SkColorType.
+Returns number of bytes per pixel required by SkColorType.        Returns zero if colorType( is kUnknown_SkColorType.
 
 # return
 
@@ -4421,8 +3970,7 @@ func (o ImageInfo) BytesPerPixel() int32 {
 }
 
 /*
-Returns bit shift converting row bytes to row pixels.
-Returns zero for kUnknown_SkColorType.
+Returns bit shift converting row bytes to row pixels.        Returns zero for kUnknown_SkColorType.
 
 # return
 
@@ -4435,9 +3983,7 @@ func (o ImageInfo) ShiftPerPixel() int32 {
 }
 
 /*
-Returns minimum bytes per row, computed from pixel width() and SkColorType, which
-specifies bytesPerPixel(). SkBitmap maximum value for row bytes must fit
-in 31 bits.
+Returns minimum bytes per row, computed from pixel width() and SkColorType, which        specifies bytesPerPixel(). SkBitmap maximum value for row bytes must fit        in 31 bits.
 
 # return
 
@@ -4450,9 +3996,7 @@ func (o ImageInfo) MinRowBytes64() uint32 {
 }
 
 /*
-Returns minimum bytes per row, computed from pixel width() and SkColorType, which
-specifies bytesPerPixel(). SkBitmap maximum value for row bytes must fit
-in 31 bits.
+Returns minimum bytes per row, computed from pixel width() and SkColorType, which        specifies bytesPerPixel(). SkBitmap maximum value for row bytes must fit        in 31 bits.
 
 # return
 
@@ -4467,20 +4011,19 @@ func (o ImageInfo) MinRowBytes() uint32 {
 /*
 Returns byte offset of pixel from pixel base address.
 
-Asserts in debug build if x or y is outside of bounds. Does not assert if
-rowBytes is smaller than minRowBytes(), even though result may be incorrect.
+Asserts in debug build if x or y is outside of bounds. Does not assert if        rowBytes is smaller than minRowBytes(), even though result may be incorrect.
 
-# params
+example: https://fiddle.skia.org/c/_computeOffset
 
-  - x =>         column index, zero or greater, and less than width()
-  - y =>         row index, zero or greater, and less than height()
-  - rowBytes =>  size of pixel row or larger
+# parameters
+
+  - x -          column index, zero or greater, and less than width()
+  - y -          row index, zero or greater, and less than height()
+  - rowBytes -   size of pixel row or larger
 
 # return
 
   - offset within pixel array
-
-example: https://fiddle.skia.org/c/@ImageInfo_computeOffset
 */
 func (o ImageInfo) ComputeOffset(x int32, y int32, rowBytes uint32) uint32 {
 	c_obj := o.sk
@@ -4492,15 +4035,13 @@ func (o ImageInfo) ComputeOffset(x int32, y int32, rowBytes uint32) uint32 {
 }
 
 /*
-Returns storage required by pixel array, given SkImageInfo dimensions, SkColorType,
-and rowBytes. rowBytes is assumed to be at least as large as minRowBytes().
+Returns storage required by pixel array, given SkImageInfo dimensions, SkColorType,        and rowBytes. rowBytes is assumed to be at least as large as minRowBytes().
 
-Returns zero if height is zero.
-Returns SIZE_MAX if answer exceeds the range of size_t.
+Returns zero if height is zero.        Returns SIZE_MAX if answer exceeds the range of size_t.
 
-# params
+# parameters
 
-  - rowBytes =>  size of pixel row or larger
+  - rowBytes -   size of pixel row or larger
 
 # return
 
@@ -4514,11 +4055,9 @@ func (o ImageInfo) ComputeByteSize(rowBytes uint32) uint32 {
 }
 
 /*
-Returns storage required by pixel array, given SkImageInfo dimensions, and
-SkColorType. Uses minRowBytes() to compute bytes for pixel row.
+Returns storage required by pixel array, given SkImageInfo dimensions, and        SkColorType. Uses minRowBytes() to compute bytes for pixel row.
 
-Returns zero if height is zero.
-Returns SIZE_MAX if answer exceeds the range of size_t.
+Returns zero if height is zero.        Returns SIZE_MAX if answer exceeds the range of size_t.
 
 # return
 
@@ -4533,15 +4072,13 @@ func (o ImageInfo) ComputeMinByteSize() uint32 {
 /*
 Returns true if rowBytes is valid for this SkImageInfo.
 
-# params
+# parameters
 
-  - rowBytes =>  size of pixel row including padding
+  - rowBytes -   size of pixel row including padding
 
 # return
 
-  - true if rowBytes is large enough to contain pixel row and is properly
-
-aligned
+  - true if rowBytes is large enough to contain pixel row and is properly                         aligned
 */
 func (o ImageInfo) ValidRowBytes(rowBytes uint32) bool {
 	c_obj := o.sk
@@ -4551,8 +4088,7 @@ func (o ImageInfo) ValidRowBytes(rowBytes uint32) bool {
 }
 
 /*
-Creates an empty SkImageInfo with kUnknown_SkColorType, kUnknown_SkAlphaType,
-a width and height of zero, and no SkColorSpace.
+Creates an empty SkImageInfo with kUnknown_SkColorType, kUnknown_SkAlphaType,        a width and height of zero, and no SkColorSpace.
 */
 func (o ImageInfo) Reset() {
 	c_obj := o.sk
@@ -4562,10 +4098,7 @@ func (o ImageInfo) Reset() {
 /*
 4x4 matrix used by SkCanvas and other parts of Skia.
 
-Skia assumes a right-handed coordinate system:
-+X goes to the right
-+Y goes down
-+Z goes into the screen (away from the viewer)
+Skia assumes a right-handed coordinate system:      +X goes to the right      +Y goes down      +Z goes into the screen (away from the viewer)
 */
 type M44 struct {
 	sk *C.sk_SkM44
@@ -4625,6 +4158,9 @@ func (o *M44) Delete() {
 	o.sk = nil
 }
 
+/*
+SkStreamMemory is a SkStreamAsset for which getMemoryBase is required.
+*/
 type MemoryStream struct {
 	sk *C.sk_SkMemoryStream
 }
@@ -4645,14 +4181,18 @@ func (o *MemoryStream) Delete() {
 	o.sk = nil
 }
 
-// Returns a stream with a shared reference to the input data.
+/*
+Returns a stream with a shared reference to the input data.
+*/
 func MemoryStreamMake(data Data) MemoryStream {
 	c_data := data.sk
 	retC := C.misk_MemoryStream_Make(c_data)
 	return MemoryStream{sk: retC}
 }
 
-// Returns a stream with a bare pointer reference to the input data.
+/*
+Returns a stream with a bare pointer reference to the input data.
+*/
 func MemoryStreamMakeDirect(data []byte, length uint32) MemoryStream {
 	c_data := unsafe.Pointer(&data[0])
 	c_length := C.ulong(length)
@@ -4667,7 +4207,9 @@ type IPoint struct {
 	sk *C.sk_SkIPoint
 }
 
-// x-axis value
+/*
+x-axis value
+*/
 func (o IPoint) X() int32 {
 	return int32(o.sk.fX)
 }
@@ -4676,7 +4218,9 @@ func (o *IPoint) SetX(value int32) {
 	o.sk.fX = C.int(value)
 }
 
-// y-axis value
+/*
+y-axis value
+*/
 func (o IPoint) Y() int32 {
 	return int32(o.sk.fY)
 }
@@ -4692,15 +4236,13 @@ func (o IPoint) IsNil() bool {
 }
 
 /*
-SkIRect holds four 32-bit integer coordinates describing the upper and
-lower bounds of a rectangle. SkIRect may be created from outer bounds or
-from position, width, and height. SkIRect describes an area; if its right
-is less than or equal to its left, or if its bottom is less than or equal to
-its top, it is considered empty.
+SkIRect holds four 32-bit integer coordinates describing the upper and    lower bounds of a rectangle. SkIRect may be created from outer bounds or    from position, width, and height. SkIRect describes an area; if its right    is less than or equal to its left, or if its bottom is less than or equal to    its top, it is considered empty.
 */
 type IRect C.sk_SkIRect
 
-// smaller x-axis bounds
+/*
+smaller x-axis bounds
+*/
 func (o IRect) Left() int32 {
 	return int32(o.fLeft)
 }
@@ -4709,7 +4251,9 @@ func (o *IRect) SetLeft(value int32) {
 	o.fLeft = C.int(value)
 }
 
-// smaller y-axis bounds
+/*
+smaller y-axis bounds
+*/
 func (o IRect) Top() int32 {
 	return int32(o.fTop)
 }
@@ -4718,7 +4262,9 @@ func (o *IRect) SetTop(value int32) {
 	o.fTop = C.int(value)
 }
 
-// larger x-axis bounds
+/*
+larger x-axis bounds
+*/
 func (o IRect) Right() int32 {
 	return int32(o.fRight)
 }
@@ -4727,7 +4273,9 @@ func (o *IRect) SetRight(value int32) {
 	o.fRight = C.int(value)
 }
 
-// larger y-axis bounds
+/*
+larger y-axis bounds
+*/
 func (o IRect) Bottom() int32 {
 	return int32(o.fBottom)
 }
@@ -4737,10 +4285,7 @@ func (o *IRect) SetBottom(value int32) {
 }
 
 /*
-Returns constructed SkIRect set to (0, 0, 0, 0).
-Many other rectangles are empty; if left is equal to or greater than right,
-or if top is equal to or greater than bottom. Setting all members to zero
-is a convenience, but does not designate a special empty rectangle.
+Returns constructed SkIRect set to (0, 0, 0, 0).        Many other rectangles are empty; if left is equal to or greater than right,        or if top is equal to or greater than bottom. Setting all members to zero        is a convenience, but does not designate a special empty rectangle.
 
 # return
 
@@ -4752,13 +4297,12 @@ func IRectMakeEmpty() IRect {
 }
 
 /*
-Returns constructed SkIRect set to (0, 0, w, h). Does not validate input; w or h
-may be negative.
+Returns constructed SkIRect set to (0, 0, w, h). Does not validate input; w or h        may be negative.
 
-# params
+# parameters
 
-  - w =>  width of constructed SkIRect
-  - h =>  height of constructed SkIRect
+  - w -   width of constructed SkIRect
+  - h -   height of constructed SkIRect
 
 # return
 
@@ -4772,15 +4316,14 @@ func IRectMakeWH(w int32, h int32) IRect {
 }
 
 /*
-Returns constructed SkIRect set to (l, t, r, b). Does not sort input; SkIRect may
-result in fLeft greater than fRight, or fTop greater than fBottom.
+Returns constructed SkIRect set to (l, t, r, b). Does not sort input; SkIRect may        result in fLeft greater than fRight, or fTop greater than fBottom.
 
-# params
+# parameters
 
-  - l =>  integer stored in fLeft
-  - t =>  integer stored in fTop
-  - r =>  integer stored in fRight
-  - b =>  integer stored in fBottom
+  - l -   integer stored in fLeft
+  - t -   integer stored in fTop
+  - r -   integer stored in fRight
+  - b -   integer stored in fBottom
 
 # return
 
@@ -4796,15 +4339,14 @@ func IRectMakeLTRB(l int32, t int32, r int32, b int32) IRect {
 }
 
 /*
-Returns constructed SkIRect set to: (x, y, x + w, y + h).
-Does not validate input; w or h may be negative.
+Returns constructed SkIRect set to: (x, y, x + w, y + h).        Does not validate input; w or h may be negative.
 
-# params
+# parameters
 
-  - x =>  stored in fLeft
-  - y =>  stored in fTop
-  - w =>  added to x and stored in fRight
-  - h =>  added to y and stored in fBottom
+  - x -   stored in fLeft
+  - y -   stored in fTop
+  - w -   added to x and stored in fRight
+  - h -   added to y and stored in fBottom
 
 # return
 
@@ -4820,12 +4362,11 @@ func IRectMakeXYWH(x int32, y int32, w int32, h int32) IRect {
 }
 
 /*
-Returns constructed SkIRect set to (0, 0, size.width(), size.height()).
-Does not validate input; size.width() or size.height() may be negative.
+Returns constructed SkIRect set to (0, 0, size.width(), size.height()).        Does not validate input; size.width() or size.height() may be negative.
 
-# params
+# parameters
 
-  - size =>  values for SkIRect width and height
+  - size -   values for SkIRect width and height
 
 # return
 
@@ -4838,13 +4379,12 @@ func IRectMakeSize(size ISize) IRect {
 }
 
 /*
-Returns true if a intersects b.
-Returns false if either a or b is empty, or do not intersect.
+Returns true if a intersects b.        Returns false if either a or b is empty, or do not intersect.
 
-# params
+# parameters
 
-  - a =>  SkIRect to intersect
-  - b =>  SkIRect to intersect
+  - a -   SkIRect to intersect
+  - b -   SkIRect to intersect
 
 # return
 
@@ -4858,8 +4398,7 @@ func IRectIntersects(a IRect, b IRect) bool {
 }
 
 /*
-Returns left edge of SkIRect, if sorted. Call isEmpty() to see if SkIRect may be invalid,
-and sort() to reverse fLeft and fRight if needed.
+Returns left edge of SkIRect, if sorted. Call isEmpty() to see if SkIRect may be invalid,        and sort() to reverse fLeft and fRight if needed.
 
 # return
 
@@ -4872,8 +4411,7 @@ func (o *IRect) X() int32 {
 }
 
 /*
-Returns top edge of SkIRect, if sorted. Call isEmpty() to see if SkIRect may be invalid,
-and sort() to reverse fTop and fBottom if needed.
+Returns top edge of SkIRect, if sorted. Call isEmpty() to see if SkIRect may be invalid,        and sort() to reverse fTop and fBottom if needed.
 
 # return
 
@@ -4886,8 +4424,7 @@ func (o *IRect) Y() int32 {
 }
 
 /*
-Returns span on the x-axis. This does not check if SkIRect is sorted, or if
-result fits in 32-bit signed integer; result may be negative.
+Returns span on the x-axis. This does not check if SkIRect is sorted, or if        result fits in 32-bit signed integer; result may be negative.
 
 # return
 
@@ -4900,8 +4437,7 @@ func (o *IRect) Width() int32 {
 }
 
 /*
-Returns span on the y-axis. This does not check if SkIRect is sorted, or if
-result fits in 32-bit signed integer; result may be negative.
+Returns span on the y-axis. This does not check if SkIRect is sorted, or if        result fits in 32-bit signed integer; result may be negative.
 
 # return
 
@@ -4929,9 +4465,7 @@ func (o *IRect) IsEmpty() bool {
 /*
 Sets SkIRect to (0, 0, 0, 0).
 
-Many other rectangles are empty; if left is equal to or greater than right,
-or if top is equal to or greater than bottom. Setting all members to zero
-is a convenience, but does not designate a special empty rectangle.
+Many other rectangles are empty; if left is equal to or greater than right,        or if top is equal to or greater than bottom. Setting all members to zero        is a convenience, but does not designate a special empty rectangle.
 */
 func (o *IRect) SetEmpty() {
 	c_obj := (*C.sk_SkIRect)(o)
@@ -4939,16 +4473,14 @@ func (o *IRect) SetEmpty() {
 }
 
 /*
-Sets SkIRect to (left, top, right, bottom).
-left and right are not sorted; left is not necessarily less than right.
-top and bottom are not sorted; top is not necessarily less than bottom.
+Sets SkIRect to (left, top, right, bottom).        left and right are not sorted; left is not necessarily less than right.        top and bottom are not sorted; top is not necessarily less than bottom.
 
-# params
+# parameters
 
-  - left =>    stored in fLeft
-  - top =>     stored in fTop
-  - right =>   stored in fRight
-  - bottom =>  stored in fBottom
+  - left -     stored in fLeft
+  - top -      stored in fTop
+  - right -    stored in fRight
+  - bottom -   stored in fBottom
 */
 func (o *IRect) SetLTRB(left int32, top int32, right int32, bottom int32) {
 	c_obj := (*C.sk_SkIRect)(o)
@@ -4960,15 +4492,14 @@ func (o *IRect) SetLTRB(left int32, top int32, right int32, bottom int32) {
 }
 
 /*
-Sets SkIRect to: (x, y, x + width, y + height).
-Does not validate input; width or height may be negative.
+Sets SkIRect to: (x, y, x + width, y + height).        Does not validate input; width or height may be negative.
 
-# params
+# parameters
 
-  - x =>       stored in fLeft
-  - y =>       stored in fTop
-  - width =>   added to x and stored in fRight
-  - height =>  added to y and stored in fBottom
+  - x -        stored in fLeft
+  - y -        stored in fTop
+  - width -    added to x and stored in fRight
+  - height -   added to y and stored in fBottom
 */
 func (o *IRect) SetXYWH(x int32, y int32, width int32, height int32) {
 	c_obj := (*C.sk_SkIRect)(o)
@@ -4989,15 +4520,12 @@ func (o *IRect) SetWH(width int32, height int32) {
 /*
 Offsets SkIRect by adding dx to fLeft, fRight; and by adding dy to fTop, fBottom.
 
-If dx is negative, moves SkIRect returned to the left.
-If dx is positive, moves SkIRect returned to the right.
-If dy is negative, moves SkIRect returned upward.
-If dy is positive, moves SkIRect returned downward.
+If dx is negative, moves SkIRect returned to the left.        If dx is positive, moves SkIRect returned to the right.        If dy is negative, moves SkIRect returned upward.        If dy is positive, moves SkIRect returned downward.
 
-# params
+# parameters
 
-  - dx =>  offset added to fLeft and fRight
-  - dy =>  offset added to fTop and fBottom
+  - dx -   offset added to fLeft and fRight
+  - dy -   offset added to fTop and fBottom
 */
 func (o *IRect) Offset(dx int32, dy int32) {
 	c_obj := (*C.sk_SkIRect)(o)
@@ -5007,17 +4535,13 @@ func (o *IRect) Offset(dx int32, dy int32) {
 }
 
 /*
-Offsets SkIRect by adding delta.fX to fLeft, fRight; and by adding delta.fY to
-fTop, fBottom.
+Offsets SkIRect by adding delta.fX to fLeft, fRight; and by adding delta.fY to        fTop, fBottom.
 
-If delta.fX is negative, moves SkIRect returned to the left.
-If delta.fX is positive, moves SkIRect returned to the right.
-If delta.fY is negative, moves SkIRect returned upward.
-If delta.fY is positive, moves SkIRect returned downward.
+If delta.fX is negative, moves SkIRect returned to the left.        If delta.fX is positive, moves SkIRect returned to the right.        If delta.fY is negative, moves SkIRect returned upward.        If delta.fY is positive, moves SkIRect returned downward.
 
-# params
+# parameters
 
-  - delta =>  offset added to SkIRect
+  - delta -   offset added to SkIRect
 */
 func (o *IRect) OffsetPoint(delta IPoint) {
 	c_obj := (*C.sk_SkIRect)(o)
@@ -5026,13 +4550,12 @@ func (o *IRect) OffsetPoint(delta IPoint) {
 }
 
 /*
-Offsets SkIRect so that fLeft equals newX, and fTop equals newY. width and height
-are unchanged.
+Offsets SkIRect so that fLeft equals newX, and fTop equals newY. width and height        are unchanged.
 
-# params
+# parameters
 
-  - newX =>  stored in fLeft, preserving width()
-  - newY =>  stored in fTop, preserving height()
+  - newX -   stored in fLeft, preserving width()
+  - newY -   stored in fTop, preserving height()
 */
 func (o *IRect) OffsetTo(newX int32, newY int32) {
 	c_obj := (*C.sk_SkIRect)(o)
@@ -5044,15 +4567,12 @@ func (o *IRect) OffsetTo(newX int32, newY int32) {
 /*
 Insets SkIRect by (dx,dy).
 
-If dx is positive, makes SkIRect narrower.
-If dx is negative, makes SkIRect wider.
-If dy is positive, makes SkIRect shorter.
-If dy is negative, makes SkIRect taller.
+If dx is positive, makes SkIRect narrower.        If dx is negative, makes SkIRect wider.        If dy is positive, makes SkIRect shorter.        If dy is negative, makes SkIRect taller.
 
-# params
+# parameters
 
-  - dx =>  offset added to fLeft and subtracted from fRight
-  - dy =>  offset added to fTop and subtracted from fBottom
+  - dx -   offset added to fLeft and subtracted from fRight
+  - dy -   offset added to fTop and subtracted from fBottom
 */
 func (o *IRect) Inset(dx int32, dy int32) {
 	c_obj := (*C.sk_SkIRect)(o)
@@ -5064,15 +4584,12 @@ func (o *IRect) Inset(dx int32, dy int32) {
 /*
 Outsets SkIRect by (dx, dy).
 
-If dx is positive, makes SkIRect wider.
-If dx is negative, makes SkIRect narrower.
-If dy is positive, makes SkIRect taller.
-If dy is negative, makes SkIRect shorter.
+If dx is positive, makes SkIRect wider.        If dx is negative, makes SkIRect narrower.        If dy is positive, makes SkIRect taller.        If dy is negative, makes SkIRect shorter.
 
-# params
+# parameters
 
-  - dx =>  subtracted to fLeft and added from fRight
-  - dy =>  subtracted to fTop and added from fBottom
+  - dx -   subtracted to fLeft and added from fRight
+  - dy -   subtracted to fTop and added from fBottom
 */
 func (o *IRect) Outset(dx int32, dy int32) {
 	c_obj := (*C.sk_SkIRect)(o)
@@ -5084,21 +4601,16 @@ func (o *IRect) Outset(dx int32, dy int32) {
 /*
 Adjusts SkIRect by adding dL to fLeft, dT to fTop, dR to fRight, and dB to fBottom.
 
-If dL is positive, narrows SkIRect on the left. If negative, widens it on the left.
-If dT is positive, shrinks SkIRect on the top. If negative, lengthens it on the top.
-If dR is positive, narrows SkIRect on the right. If negative, widens it on the right.
-If dB is positive, shrinks SkIRect on the bottom. If negative, lengthens it on the bottom.
+If dL is positive, narrows SkIRect on the left. If negative, widens it on the left.        If dT is positive, shrinks SkIRect on the top. If negative, lengthens it on the top.        If dR is positive, narrows SkIRect on the right. If negative, widens it on the right.        If dB is positive, shrinks SkIRect on the bottom. If negative, lengthens it on the bottom.
 
-The resulting SkIRect is not checked for validity. Thus, if the resulting SkIRect left is
-greater than right, the SkIRect will be considered empty. Call sort() after this call
-if that is not the desired behavior.
+The resulting SkIRect is not checked for validity. Thus, if the resulting SkIRect left is        greater than right, the SkIRect will be considered empty. Call sort() after this call        if that is not the desired behavior.
 
-# params
+# parameters
 
-  - dL =>  offset added to fLeft
-  - dT =>  offset added to fTop
-  - dR =>  offset added to fRight
-  - dB =>  offset added to fBottom
+  - dL -   offset added to fLeft
+  - dT -   offset added to fTop
+  - dR -   offset added to fRight
+  - dB -   offset added to fBottom
 */
 func (o *IRect) Adjust(dL int32, dT int32, dR int32, dB int32) {
 	c_obj := (*C.sk_SkIRect)(o)
@@ -5110,16 +4622,14 @@ func (o *IRect) Adjust(dL int32, dT int32, dR int32, dB int32) {
 }
 
 /*
-Returns true if: fLeft <= x < fRight && fTop <= y < fBottom.
-Returns false if SkIRect is empty.
+Returns true if: fLeft <= x < fRight && fTop <= y < fBottom.        Returns false if SkIRect is empty.
 
-Considers input to describe constructed SkIRect: (x, y, x + 1, y + 1) and
-returns true if constructed area is completely enclosed by SkIRect area.
+Considers input to describe constructed SkIRect: (x, y, x + 1, y + 1) and        returns true if constructed area is completely enclosed by SkIRect area.
 
-# params
+# parameters
 
-  - x =>  test SkIPoint x-coordinate
-  - y =>  test SkIPoint y-coordinate
+  - x -   test SkIPoint x-coordinate
+  - y -   test SkIPoint y-coordinate
 
 # return
 
@@ -5134,14 +4644,13 @@ func (o *IRect) Contains(x int32, y int32) bool {
 }
 
 /*
-Returns true if SkIRect contains r.
-Returns false if SkIRect is empty or r is empty.
+Returns true if SkIRect contains r.     Returns false if SkIRect is empty or r is empty.
 
 SkIRect contains r when SkIRect area completely includes r area.
 
-# params
+# parameters
 
-  - r =>  SkIRect contained
+  - r -   SkIRect contained
 
 # return
 
@@ -5155,14 +4664,13 @@ func (o *IRect) ContainsRect(r IRect) bool {
 }
 
 /*
-Returns true if SkIRect contains construction.
-Asserts if SkIRect is empty or construction is empty, and if SK_DEBUG is defined.
+Returns true if SkIRect contains construction.        Asserts if SkIRect is empty or construction is empty, and if SK_DEBUG is defined.
 
 Return is undefined if SkIRect is empty or construction is empty.
 
-# params
+# parameters
 
-  - r =>  SkIRect contained
+  - r -   SkIRect contained
 
 # return
 
@@ -5176,14 +4684,13 @@ func (o *IRect) ContainsNoEmptyCheck(r IRect) bool {
 }
 
 /*
-Returns true if SkIRect intersects r, and sets SkIRect to intersection.
-Returns false if SkIRect does not intersect r, and leaves SkIRect unchanged.
+Returns true if SkIRect intersects r, and sets SkIRect to intersection.        Returns false if SkIRect does not intersect r, and leaves SkIRect unchanged.
 
 Returns false if either r or SkIRect is empty, leaving SkIRect unchanged.
 
-# params
+# parameters
 
-  - r =>  limit of result
+  - r -   limit of result
 
 # return
 
@@ -5201,11 +4708,11 @@ Sets SkIRect to the union of itself and r.
 
 Has no effect if r is empty. Otherwise, if SkIRect is empty, sets SkIRect to r.
 
-# params
+example: https://fiddle.skia.org/c/_join_2
 
-  - r =>  expansion SkIRect
+# parameters
 
-example: https://fiddle.skia.org/c/@IRect_join_2
+  - r -   expansion SkIRect
 */
 func (o *IRect) Join(r IRect) {
 	c_obj := (*C.sk_SkIRect)(o)
@@ -5214,9 +4721,7 @@ func (o *IRect) Join(r IRect) {
 }
 
 /*
-Swaps fLeft and fRight if fLeft is greater than fRight; and swaps
-fTop and fBottom if fTop is greater than fBottom. Result may be empty,
-and width() and height() will be zero or positive.
+Swaps fLeft and fRight if fLeft is greater than fRight; and swaps        fTop and fBottom if fTop is greater than fBottom. Result may be empty,        and width() and height() will be zero or positive.
 */
 func (o *IRect) Sort() {
 	c_obj := (*C.sk_SkIRect)(o)
@@ -5242,17 +4747,13 @@ func (o *ISize) SetHeight(value int32) {
 }
 
 /*
-SkMatrix holds a 3x3 matrix for transforming coordinates. This allows mapping
-SkPoint and vectors with translation, scaling, skewing, rotation, and
-perspective.
+SkMatrix holds a 3x3 matrix for transforming coordinates. This allows mapping    SkPoint and vectors with translation, scaling, skewing, rotation, and    perspective.
 
-SkMatrix elements are in row major order.
-SkMatrix constexpr default constructs to identity.
+SkMatrix elements are in row major order.    SkMatrix constexpr default constructs to identity.
 
-SkMatrix includes a hidden variable that classifies the type of matrix to
-improve performance. SkMatrix is not thread safe unless getType() is called first.
+SkMatrix includes a hidden variable that classifies the type of matrix to    improve performance. SkMatrix is not thread safe unless getType() is called first.
 
-example: https://fiddle.skia.org/c/@Matrix_063
+example: https://fiddle.skia.org/c/_063
 */
 type Matrix struct {
 	sk *C.sk_SkMatrix
@@ -5267,9 +4768,7 @@ func (o Matrix) IsNil() bool {
 /*
 Creates an identity SkMatrix:
 
-| 1 0 0 |
-| 0 1 0 |
-| 0 0 1 |
+| 1 0 0 |            | 0 1 0 |            | 0 0 1 |
 */
 func NewMatrix() Matrix {
 
@@ -5307,13 +4806,12 @@ func (o *OpBuilder) Delete() {
 }
 
 /*
-Add one or more paths and their operand. The builder is empty before the first
-path is added, so the result of a single add is (emptyPath OP path).
+Add one or more paths and their operand. The builder is empty before the first        path is added, so the result of a single add is (emptyPath OP path).
 
-# params
+# parameters
 
-  - path => The second operand.
-  - _operator => The operator to apply to the existing and supplied paths.
+  - path -  The second operand.
+  - _operator -  The operator to apply to the existing and supplied paths.
 */
 func (o OpBuilder) Add(path Path, _operator PathOp) {
 	c_obj := o.sk
@@ -5323,12 +4821,11 @@ func (o OpBuilder) Add(path Path, _operator PathOp) {
 }
 
 /*
-Computes the sum of all paths and operands, and resets the builder to its
-initial state.
+Computes the sum of all paths and operands, and resets the builder to its        initial state.
 
-# params
+# parameters
 
-  - result => The product of the operands.
+  - result -  The product of the operands.
 
 # return
 
@@ -5342,14 +4839,11 @@ func (o OpBuilder) Resolve(result Path) bool {
 }
 
 /*
-SkPaint controls options applied when drawing. SkPaint collects all
-options outside of the SkCanvas clip and SkCanvas matrix.
+SkPaint controls options applied when drawing. SkPaint collects all    options outside of the SkCanvas clip and SkCanvas matrix.
 
 Various options apply to strokes and fills, and images.
 
-SkPaint collects effects and filters that describe single-pass and multiple-pass
-algorithms that alter the drawing geometry, color, and transparency. For instance,
-SkPaint does not directly implement dashing or blur, but contains the objects that do so.
+SkPaint collects effects and filters that describe single-pass and multiple-pass    algorithms that alter the drawing geometry, color, and transparency. For instance,    SkPaint does not directly implement dashing or blur, but contains the objects that do so.
 */
 type Paint struct {
 	sk *C.sk_SkPaint
@@ -5364,11 +4858,11 @@ func (o Paint) IsNil() bool {
 /*
 Constructs SkPaint with default values.
 
+example: https://fiddle.skia.org/c/_empty_constructor
+
 # return
 
   - default initialized SkPaint
-
-example: https://fiddle.skia.org/c/@Paint_empty_constructor
 */
 func NewPaint() Paint {
 
@@ -5377,24 +4871,19 @@ func NewPaint() Paint {
 }
 
 /*
-Makes a shallow copy of SkPaint. SkPathEffect, SkShader,
-SkMaskFilter, SkColorFilter, and SkImageFilter are shared
-between the original paint and the copy. Objects containing SkRefCnt increment
-their references by one.
+Makes a shallow copy of SkPaint. SkPathEffect, SkShader,        SkMaskFilter, SkColorFilter, and SkImageFilter are shared        between the original paint and the copy. Objects containing SkRefCnt increment        their references by one.
 
-The referenced objects SkPathEffect, SkShader, SkMaskFilter, SkColorFilter,
-and SkImageFilter cannot be modified after they are created.
-This prevents objects with SkRefCnt from being modified once SkPaint refers to them.
+The referenced objects SkPathEffect, SkShader, SkMaskFilter, SkColorFilter,        and SkImageFilter cannot be modified after they are created.        This prevents objects with SkRefCnt from being modified once SkPaint refers to them.
 
-# params
+example: https://fiddle.skia.org/c/_copy_const_SkPaint
 
-  - paint =>  original to copy
+# parameters
+
+  - paint -   original to copy
 
 # return
 
   - shallow copy of paint
-
-example: https://fiddle.skia.org/c/@Paint_copy_const_SkPaint
 */
 func NewPaintCopy(paint Paint) Paint {
 	c_paint := paint.sk
@@ -5403,9 +4892,7 @@ func NewPaintCopy(paint Paint) Paint {
 }
 
 /*
-Decreases SkPaint SkRefCnt of owned objects: SkPathEffect, SkShader,
-SkMaskFilter, SkColorFilter, and SkImageFilter. If the
-objects containing SkRefCnt go to zero, they are deleted.
+Decreases SkPaint SkRefCnt of owned objects: SkPathEffect, SkShader,        SkMaskFilter, SkColorFilter, and SkImageFilter. If the        objects containing SkRefCnt go to zero, they are deleted.
 */
 func (o *Paint) Delete() {
 	C.misk_delete_SkPaint(o.sk)
@@ -5413,10 +4900,9 @@ func (o *Paint) Delete() {
 }
 
 /*
-Sets all SkPaint contents to their initial values. This is equivalent to replacing
-SkPaint with the result of SkPaint().
+Sets all SkPaint contents to their initial values. This is equivalent to replacing        SkPaint with the result of SkPaint().
 
-example: https://fiddle.skia.org/c/@Paint_reset
+example: https://fiddle.skia.org/c/_reset
 */
 func (o Paint) Reset() {
 	c_obj := o.sk
@@ -5436,17 +4922,16 @@ func (o Paint) SetAlpha(a uint32) {
 }
 
 /*
-Sets color used when drawing solid fills. The color components range from 0 to 255.
-The color is unpremultiplied; alpha sets the transparency independent of RGB.
+Sets color used when drawing solid fills. The color components range from 0 to 255.        The color is unpremultiplied; alpha sets the transparency independent of RGB.
 
-# params
+example: https://fiddle.skia.org/c/_setARGB
 
-  - a =>  amount of alpha, from fully transparent (0) to fully opaque (255)
-  - r =>  amount of red, from no red (0) to full red (255)
-  - g =>  amount of green, from no green (0) to full green (255)
-  - b =>  amount of blue, from no blue (0) to full blue (255)
+# parameters
 
-example: https://fiddle.skia.org/c/@Paint_setARGB
+  - a -   amount of alpha, from fully transparent (0) to fully opaque (255)
+  - r -   amount of red, from no red (0) to full red (255)
+  - g -   amount of green, from no green (0) to full green (255)
+  - b -   amount of blue, from no blue (0) to full blue (255)
 */
 func (o Paint) SetARGB(a uint32, r uint32, g uint32, b uint32) {
 	c_obj := o.sk
@@ -5458,11 +4943,11 @@ func (o Paint) SetARGB(a uint32, r uint32, g uint32, b uint32) {
 }
 
 /*
-Requests, but does not require, that edge pixels draw opaque or with
-partial transparency.
-# params
+Requests, but does not require, that edge pixels draw opaque or with        partial transparency.
 
-  - aa =>  setting for antialiasing
+# parameters
+
+  - aa -   setting for antialiasing
 */
 func (o Paint) SetAntiAlias(aa bool) {
 	c_obj := o.sk
@@ -5482,9 +4967,7 @@ func (o Paint) SetBlendMode(mode BlendMode) {
 }
 
 /*
-Retrieves alpha and RGB, unpremultiplied, packed into 32 bits.
-Use helpers SkColorGetA(), SkColorGetR(), SkColorGetG(), and SkColorGetB() to extract
-a color component.
+Retrieves alpha and RGB, unpremultiplied, packed into 32 bits.        Use helpers SkColorGetA(), SkColorGetR(), SkColorGetG(), and SkColorGetB() to extract        a color component.
 
 # return
 
@@ -5497,14 +4980,13 @@ func (o Paint) GetColor() Color {
 }
 
 /*
-Sets alpha and RGB used when stroking and filling. The color is a 32-bit value,
-unpremultiplied, packing 8-bit components for alpha, red, blue, and green.
+Sets alpha and RGB used when stroking and filling. The color is a 32-bit value,        unpremultiplied, packing 8-bit components for alpha, red, blue, and green.
 
-# params
+example: https://fiddle.skia.org/c/_setColor
 
-  - color =>  unpremultiplied ARGB
+# parameters
 
-example: https://fiddle.skia.org/c/@Paint_setColor
+  - color -   unpremultiplied ARGB
 */
 func (o Paint) SetColor(color Color) {
 	c_obj := o.sk
@@ -5514,9 +4996,10 @@ func (o Paint) SetColor(color Color) {
 
 /*
 Requests, but does not require, to distribute color error.
-# params
 
-  - dither =>  setting for ditering
+# parameters
+
+  - dither -   setting for ditering
 */
 func (o Paint) SetDither(dither bool) {
 	c_obj := o.sk
@@ -5536,8 +5019,7 @@ func (o Paint) GetStrokeCap() PaintCap {
 /*
 Sets the geometry drawn at the beginning and end of strokes.
 
-example: https://fiddle.skia.org/c/@Paint_setStrokeCap_a
-example: https://fiddle.skia.org/c/@Paint_setStrokeCap_b
+example: https://fiddle.skia.org/c/_setStrokeCap_a        example: https://fiddle.skia.org/c/_setStrokeCap_b
 */
 func (o Paint) SetStrokeCap(cap PaintCap) {
 	c_obj := o.sk
@@ -5557,7 +5039,7 @@ func (o Paint) GetStrokeJoin() PaintJoin {
 /*
 Sets the geometry drawn at the corners of strokes.
 
-example: https://fiddle.skia.org/c/@Paint_setStrokeJoin
+example: https://fiddle.skia.org/c/_setStrokeJoin
 */
 func (o Paint) SetStrokeJoin(join PaintJoin) {
 	c_obj := o.sk
@@ -5579,15 +5061,13 @@ func (o Paint) GetStrokeMiter() float32 {
 }
 
 /*
-Sets the limit at which a sharp corner is drawn beveled.
-Valid values are zero and greater.
-Has no effect if miter is less than zero.
+Sets the limit at which a sharp corner is drawn beveled.        Valid values are zero and greater.        Has no effect if miter is less than zero.
 
-# params
+example: https://fiddle.skia.org/c/_setStrokeMiter
 
-  - miter =>  zero and greater miter limit
+# parameters
 
-example: https://fiddle.skia.org/c/@Paint_setStrokeMiter
+  - miter -   zero and greater miter limit
 */
 func (o Paint) SetStrokeMiter(miter float32) {
 	c_obj := o.sk
@@ -5596,8 +5076,7 @@ func (o Paint) SetStrokeMiter(miter float32) {
 }
 
 /*
-Returns the thickness of the pen used by SkPaint to
-outline the shape.
+Returns the thickness of the pen used by SkPaint to        outline the shape.
 
 # return
 
@@ -5610,17 +5089,13 @@ func (o Paint) GetStrokeWidth() float32 {
 }
 
 /*
-Sets the thickness of the pen used by the paint to outline the shape.
-A stroke-width of zero is treated as "hairline" width. Hairlines are always exactly one
-pixel wide in device space (their thickness does not change as the canvas is scaled).
-Negative stroke-widths are invalid; setting a negative width will have no effect.
+Sets the thickness of the pen used by the paint to outline the shape.        A stroke-width of zero is treated as "hairline" width. Hairlines are always exactly one        pixel wide in device space (their thickness does not change as the canvas is scaled).        Negative stroke-widths are invalid; setting a negative width will have no effect.
 
-# params
+example: https://fiddle.skia.org/c/_Limit        example: https://fiddle.skia.org/c/_setStrokeWidth
 
-  - width =>  zero thickness for hairline; greater than zero for pen thickness
+# parameters
 
-example: https://fiddle.skia.org/c/@Miter_Limit
-example: https://fiddle.skia.org/c/@Paint_setStrokeWidth
+  - width -   zero thickness for hairline; greater than zero for pen thickness
 */
 func (o Paint) SetStrokeWidth(width float32) {
 	c_obj := o.sk
@@ -5638,11 +5113,9 @@ func (o Paint) GetStyle() PaintStyle {
 }
 
 /*
-Sets whether the geometry is filled, stroked, or filled and stroked.
-Has no effect if style is not a legal SkPaint::Style value.
+Sets whether the geometry is filled, stroked, or filled and stroked.        Has no effect if style is not a legal SkPaint::Style value.
 
-example: https://fiddle.skia.org/c/@Paint_setStyle
-example: https://fiddle.skia.org/c/@Stroke_Width
+example: https://fiddle.skia.org/c/_setStyle        example: https://fiddle.skia.org/c/_Width
 */
 func (o Paint) SetStyle(style PaintStyle) {
 	c_obj := o.sk
@@ -5656,82 +5129,90 @@ Cap draws at the beginning and end of an open path contour.
 type PaintCap uint32
 
 const (
-	// no stroke extension
+	/*
+	   no stroke extension
+	*/
 	PaintCapButt PaintCap = 0
-	// adds circle
+	/*
+	   adds circle
+	*/
 	PaintCapRound PaintCap = 1
-	// adds square
+	/*
+	   adds square
+	*/
 	PaintCapSquare PaintCap = 2
-	// largest Cap value
+	/*
+	   largest Cap value
+	*/
 	PaintCapLast PaintCap = 2
-	// equivalent to kButt_Cap
+	/*
+	   equivalent to kButt_Cap
+	*/
 	PaintCapDefault PaintCap = 0
 )
 
 /*
-Join specifies how corners are drawn when a shape is stroked. Join
-affects the four corners of a stroked rectangle, and the connected segments in a
-stroked path.
+Join specifies how corners are drawn when a shape is stroked. Join        affects the four corners of a stroked rectangle, and the connected segments in a        stroked path.
 
-Choose miter join to draw sharp corners. Choose round join to draw a circle with a
-radius equal to the stroke width on top of the corner. Choose bevel join to minimally
-connect the thick strokes.
+Choose miter join to draw sharp corners. Choose round join to draw a circle with a        radius equal to the stroke width on top of the corner. Choose bevel join to minimally        connect the thick strokes.
 
-The fill path constructed to describe the stroked path respects the join setting but may
-not contain the actual join. For instance, a fill path constructed with round joins does
-not necessarily include circles at each connected segment.
+The fill path constructed to describe the stroked path respects the join setting but may        not contain the actual join. For instance, a fill path constructed with round joins does        not necessarily include circles at each connected segment.
 */
 type PaintJoin byte
 
 const (
-	// extends to miter limit
+	/*
+	   extends to miter limit
+	*/
 	PaintJoinMiter PaintJoin = 0
-	// adds circle
+	/*
+	   adds circle
+	*/
 	PaintJoinRound PaintJoin = 1
-	// connects outside edges
+	/*
+	   connects outside edges
+	*/
 	PaintJoinBevel PaintJoin = 2
-	// equivalent to the largest value for Join
+	/*
+	   equivalent to the largest value for Join
+	*/
 	PaintJoinLast PaintJoin = 2
-	// equivalent to kMiter_Join
+	/*
+	   equivalent to kMiter_Join
+	*/
 	PaintJoinDefault PaintJoin = 0
 )
 
 /*
-Set Style to fill, stroke, or both fill and stroke geometry.
-The stroke and fill
-share all paint attributes; for instance, they are drawn with the same color.
+Set Style to fill, stroke, or both fill and stroke geometry.        The stroke and fill        share all paint attributes; for instance, they are drawn with the same color.
 
-Use kStrokeAndFill_Style to avoid hitting the same pixels twice with a stroke draw and
-a fill draw.
+Use kStrokeAndFill_Style to avoid hitting the same pixels twice with a stroke draw and        a fill draw.
 */
 type PaintStyle byte
 
 const (
-	// set to fill geometry
+	/*
+	   set to fill geometry
+	*/
 	PaintStyleFill PaintStyle = 0
-	// set to stroke geometry
+	/*
+	   set to stroke geometry
+	*/
 	PaintStyleStroke PaintStyle = 1
-	// sets to stroke and fill geometry
+	/*
+	   sets to stroke and fill geometry
+	*/
 	PaintStyleStrokeAndFill PaintStyle = 2
 )
 
 /*
-SkPath contain geometry. SkPath may be empty, or contain one or more verbs that
-outline a figure. SkPath always starts with a move verb to a Cartesian coordinate,
-and may be followed by additional verbs that add lines or curves.
-Adding a close verb makes the geometry into a continuous loop, a closed contour.
-SkPath may contain any number of contours, each beginning with a move verb.
+SkPath contain geometry. SkPath may be empty, or contain one or more verbs that    outline a figure. SkPath always starts with a move verb to a Cartesian coordinate,    and may be followed by additional verbs that add lines or curves.    Adding a close verb makes the geometry into a continuous loop, a closed contour.    SkPath may contain any number of contours, each beginning with a move verb.
 
-SkPath contours may contain only a move verb, or may also contain lines,
-quadratic beziers, conics, and cubic beziers. SkPath contours may be open or
-closed.
+SkPath contours may contain only a move verb, or may also contain lines,    quadratic beziers, conics, and cubic beziers. SkPath contours may be open or    closed.
 
-When used to draw a filled area, SkPath describes whether the fill is inside or
-outside the geometry. SkPath also describes the winding rule used to fill
-overlapping contours.
+When used to draw a filled area, SkPath describes whether the fill is inside or    outside the geometry. SkPath also describes the winding rule used to fill    overlapping contours.
 
-Internally, SkPath lazily computes metrics likes bounds and convexity. Call
-SkPath::updateBoundsCache to make SkPath thread safe.
+Internally, SkPath lazily computes metrics likes bounds and convexity. Call    SkPath::updateBoundsCache to make SkPath thread safe.
 */
 type Path struct {
 	sk *C.sk_SkPath
@@ -5744,14 +5225,13 @@ func (o Path) IsNil() bool {
 }
 
 /*
-Constructs an empty SkPath. By default, SkPath has no verbs, no SkPoint, and no weights.
-FillType is set to kWinding.
+Constructs an empty SkPath. By default, SkPath has no verbs, no SkPoint, and no weights.        FillType is set to kWinding.
+
+example: https://fiddle.skia.org/c/_empty_constructor
 
 # return
 
   - empty SkPath
-
-example: https://fiddle.skia.org/c/@Path_empty_constructor
 */
 func NewPath() Path {
 
@@ -5760,24 +5240,19 @@ func NewPath() Path {
 }
 
 /*
-Constructs a copy of an existing path.
-Copy constructor makes two paths identical by value. Internally, path and
-the returned result share pointer values. The underlying verb array, SkPoint array
-and weights are copied when modified.
+Constructs a copy of an existing path.        Copy constructor makes two paths identical by value. Internally, path and        the returned result share pointer values. The underlying verb array, SkPoint array        and weights are copied when modified.
 
-Creating a SkPath copy is very efficient and never allocates memory.
-SkPath are always copied by value from the interface; the underlying shared
-pointers are not exposed.
+Creating a SkPath copy is very efficient and never allocates memory.        SkPath are always copied by value from the interface; the underlying shared        pointers are not exposed.
 
-# params
+example: https://fiddle.skia.org/c/_copy_const_SkPath
 
-  - path =>  SkPath to copy by value
+# parameters
+
+  - path -   SkPath to copy by value
 
 # return
 
   - copy of SkPath
-
-example: https://fiddle.skia.org/c/@Path_copy_const_SkPath
 */
 func NewPathCopy(path Path) Path {
 	c_path := path.sk
@@ -5788,7 +5263,7 @@ func NewPathCopy(path Path) Path {
 /*
 Releases ownership of any shared data and deletes data if SkPath is sole owner.
 
-example: https://fiddle.skia.org/c/@Path_destructor
+example: https://fiddle.skia.org/c/_destructor
 */
 func (o *Path) Delete() {
 	C.misk_delete_SkPath(o.sk)
@@ -5796,22 +5271,19 @@ func (o *Path) Delete() {
 }
 
 /*
-Returns true if SkPath contain equal verbs and equal weights.
-If SkPath contain one or more conics, the weights must match.
+Returns true if SkPath contain equal verbs and equal weights.        If SkPath contain one or more conics, the weights must match.
 
-conicTo() may add different verbs depending on conic weight, so it is not
-trivial to interpolate a pair of SkPath containing conics with different
-conic weight values.
+conicTo() may add different verbs depending on conic weight, so it is not        trivial to interpolate a pair of SkPath containing conics with different        conic weight values.
 
-# params
+example: https://fiddle.skia.org/c/_isInterpolatable
 
-  - compare =>  SkPath to compare
+# parameters
+
+  - compare -   SkPath to compare
 
 # return
 
   - true if SkPath verb array and weights are equivalent
-
-example: https://fiddle.skia.org/c/@Path_isInterpolatable
 */
 func (o Path) IsInterpolatable(compare Path) bool {
 	c_obj := o.sk
@@ -5821,31 +5293,23 @@ func (o Path) IsInterpolatable(compare Path) bool {
 }
 
 /*
-Interpolates between SkPath with SkPoint array of equal size.
-Copy verb array and weights to out, and set out SkPoint array to a weighted
-average of this SkPoint array and ending SkPoint array, using the formula:
-(Path Point * weight) + ending Point * (1 - weight).
+Interpolates between SkPath with SkPoint array of equal size.        Copy verb array and weights to out, and set out SkPoint array to a weighted        average of this SkPoint array and ending SkPoint array, using the formula:        (Path Point * weight) + ending Point * (1 - weight).
 
-weight is most useful when between zero (ending SkPoint array) and
-one (this Point_Array); will work with values outside of this
-range.
+weight is most useful when between zero (ending SkPoint array) and        one (this Point_Array); will work with values outside of this        range.
 
-interpolate() returns false and leaves out unchanged if SkPoint array is not
-the same size as ending SkPoint array. Call isInterpolatable() to check SkPath
-compatibility prior to calling interpolate().
+interpolate() returns false and leaves out unchanged if SkPoint array is not        the same size as ending SkPoint array. Call isInterpolatable() to check SkPath        compatibility prior to calling interpolate().
 
-# params
+example: https://fiddle.skia.org/c/_interpolate
 
-  - ending =>  SkPoint array averaged with this SkPoint array
-  - weight =>  contribution of this SkPoint array, and
-    one minus contribution of ending SkPoint array
-  - out =>     SkPath replaced by interpolated averages
+# parameters
+
+  - ending -   SkPoint array averaged with this SkPoint array
+  - weight -   contribution of this SkPoint array, and                       one minus contribution of ending SkPoint array
+  - out -      SkPath replaced by interpolated averages
 
 # return
 
   - true if SkPath contain same number of SkPoint
-
-example: https://fiddle.skia.org/c/@Path_interpolate
 */
 func (o Path) Interpolate(ending Path, weight float32, out Path) bool {
 	c_obj := o.sk
@@ -5870,8 +5334,7 @@ func (o Path) GetFillType() PathFillType {
 }
 
 /*
-Sets FillType, the rule used to fill SkPath. While there is no check
-that ft is legal, values outside of FillType are not supported.
+Sets FillType, the rule used to fill SkPath. While there is no check        that ft is legal, values outside of FillType are not supported.
 */
 func (o Path) SetFillType(ft PathFillType) {
 	c_obj := o.sk
@@ -5880,8 +5343,7 @@ func (o Path) SetFillType(ft PathFillType) {
 }
 
 /*
-Returns if FillType describes area outside SkPath geometry. The inverse fill area
-extends indefinitely.
+Returns if FillType describes area outside SkPath geometry. The inverse fill area        extends indefinitely.
 
 # return
 
@@ -5894,8 +5356,7 @@ func (o Path) IsInverseFillType() bool {
 }
 
 /*
-Replaces FillType with its inverse. The inverse of FillType describes the area
-unmodified by the original FillType.
+Replaces FillType with its inverse. The inverse of FillType describes the area        unmodified by the original FillType.
 */
 func (o Path) ToggleInverseFillType() {
 	c_obj := o.sk
@@ -5918,15 +5379,15 @@ bounds receives bounds of oval.
 
 bounds is unmodified if oval is not found.
 
-# params
+example: https://fiddle.skia.org/c/_isOval
 
-  - bounds =>  storage for bounding SkRect of oval; may be nullptr
+# parameters
+
+  - bounds -   storage for bounding SkRect of oval; may be nullptr
 
 # return
 
   - true if SkPath is recognized as an oval or circle
-
-example: https://fiddle.skia.org/c/@Path_isOval
 */
 func (o Path) IsOval(bounds Rect) bool {
 	c_obj := o.sk
@@ -5936,22 +5397,21 @@ func (o Path) IsOval(bounds Rect) bool {
 }
 
 /*
-Returns true if path is representable as SkRRect.
-Returns false if path is representable as oval, circle, or SkRect.
+Returns true if path is representable as SkRRect.        Returns false if path is representable as oval, circle, or SkRect.
 
 rrect receives bounds of SkRRect.
 
 rrect is unmodified if SkRRect is not found.
 
-# params
+example: https://fiddle.skia.org/c/_isRRect
 
-  - rrect =>  storage for bounding SkRect of SkRRect; may be nullptr
+# parameters
+
+  - rrect -   storage for bounding SkRect of SkRRect; may be nullptr
 
 # return
 
   - true if SkPath contains only SkRRect
-
-example: https://fiddle.skia.org/c/@Path_isRRect
 */
 func (o Path) IsRRect(rrect RRect) bool {
 	c_obj := o.sk
@@ -5961,15 +5421,13 @@ func (o Path) IsRRect(rrect RRect) bool {
 }
 
 /*
-Sets SkPath to its initial state.
-Removes verb array, SkPoint array, and weights, and sets FillType to kWinding.
-Internal storage associated with SkPath is released.
+Sets SkPath to its initial state.        Removes verb array, SkPoint array, and weights, and sets FillType to kWinding.        Internal storage associated with SkPath is released.
+
+example: https://fiddle.skia.org/c/_reset
 
 # return
 
   - reference to SkPath
-
-example: https://fiddle.skia.org/c/@Path_reset
 */
 func (o Path) Reset() Path {
 	c_obj := o.sk
@@ -5978,18 +5436,15 @@ func (o Path) Reset() Path {
 }
 
 /*
-Sets SkPath to its initial state, preserving internal storage.
-Removes verb array, SkPoint array, and weights, and sets FillType to kWinding.
-Internal storage associated with SkPath is retained.
+Sets SkPath to its initial state, preserving internal storage.        Removes verb array, SkPoint array, and weights, and sets FillType to kWinding.        Internal storage associated with SkPath is retained.
 
-Use rewind() instead of reset() if SkPath storage will be reused and performance
-is critical.
+Use rewind() instead of reset() if SkPath storage will be reused and performance        is critical.
+
+example: https://fiddle.skia.org/c/_rewind
 
 # return
 
   - reference to SkPath
-
-example: https://fiddle.skia.org/c/@Path_rewind
 */
 func (o Path) Rewind() Path {
 	c_obj := o.sk
@@ -5998,9 +5453,7 @@ func (o Path) Rewind() Path {
 }
 
 /*
-Returns if SkPath is empty.
-Empty SkPath may have FillType but has no SkPoint, SkPath::Verb, or conic weight.
-SkPath() constructs empty SkPath; reset() and rewind() make SkPath empty.
+Returns if SkPath is empty.        Empty SkPath may have FillType but has no SkPoint, SkPath::Verb, or conic weight.        SkPath() constructs empty SkPath; reset() and rewind() make SkPath empty.
 
 # return
 
@@ -6013,15 +5466,13 @@ func (o Path) IsEmpty() bool {
 }
 
 /*
-Returns if contour is closed.
-Contour is closed if SkPath SkPath::Verb array was last modified by close(). When stroked,
-closed contour draws SkPaint::Join instead of SkPaint::Cap at first and last SkPoint.
+Returns if contour is closed.        Contour is closed if SkPath SkPath::Verb array was last modified by close(). When stroked,        closed contour draws SkPaint::Join instead of SkPaint::Cap at first and last SkPoint.
+
+example: https://fiddle.skia.org/c/_isLastContourClosed
 
 # return
 
   - true if the last contour ends with a kClose_Verb
-
-example: https://fiddle.skia.org/c/@Path_isLastContourClosed
 */
 func (o Path) IsLastContourClosed() bool {
 	c_obj := o.sk
@@ -6030,9 +5481,7 @@ func (o Path) IsLastContourClosed() bool {
 }
 
 /*
-Returns true for finite SkPoint array values between negative SK_ScalarMax and
-positive SK_ScalarMax. Returns false for any SkPoint array value of
-SK_ScalarInfinity, SK_ScalarNegativeInfinity, or SK_ScalarNaN.
+Returns true for finite SkPoint array values between negative SK_ScalarMax and        positive SK_ScalarMax. Returns false for any SkPoint array value of        SK_ScalarInfinity, SK_ScalarNegativeInfinity, or SK_ScalarNaN.
 
 # return
 
@@ -6045,10 +5494,7 @@ func (o Path) IsFinite() bool {
 }
 
 /*
-Returns true if the path is volatile; it will not be altered or discarded
-by the caller after it is drawn. SkPath by default have volatile set false, allowing
-SkSurface to attach a cache of data which speeds repeated drawing. If true, SkSurface
-may not speed repeated drawing.
+Returns true if the path is volatile; it will not be altered or discarded        by the caller after it is drawn. SkPath by default have volatile set false, allowing        SkSurface to attach a cache of data which speeds repeated drawing. If true, SkSurface        may not speed repeated drawing.
 
 # return
 
@@ -6061,22 +5507,17 @@ func (o Path) IsVolatile() bool {
 }
 
 /*
-Specifies whether SkPath is volatile; whether it will be altered or discarded
-by the caller after it is drawn. SkPath by default have volatile set false, allowing
-Skia to attach a cache of data which speeds repeated drawing.
+Specifies whether SkPath is volatile; whether it will be altered or discarded        by the caller after it is drawn. SkPath by default have volatile set false, allowing        Skia to attach a cache of data which speeds repeated drawing.
 
-Mark temporary paths, discarded or modified after use, as volatile
-to inform Skia that the path need not be cached.
+Mark temporary paths, discarded or modified after use, as volatile        to inform Skia that the path need not be cached.
 
-Mark animating SkPath volatile to improve performance.
-Mark unchanging SkPath non-volatile to improve repeated rendering.
+Mark animating SkPath volatile to improve performance.        Mark unchanging SkPath non-volatile to improve repeated rendering.
 
-raster surface SkPath draws are affected by volatile for some shadows.
-GPU surface SkPath draws are affected by volatile for some shadows and concave geometries.
+raster surface SkPath draws are affected by volatile for some shadows.        GPU surface SkPath draws are affected by volatile for some shadows and concave geometries.
 
-# params
+# parameters
 
-  - isVolatile =>  true if caller will alter SkPath after drawing
+  - isVolatile -   true if caller will alter SkPath after drawing
 
 # return
 
@@ -6090,14 +5531,13 @@ func (o Path) SetIsVolatile(isVolatile bool) Path {
 }
 
 /*
-Returns the number of points in SkPath.
-SkPoint count is initially zero.
+Returns the number of points in SkPath.        SkPoint count is initially zero.
+
+example: https://fiddle.skia.org/c/_countPoints
 
 # return
 
   - SkPath SkPoint array length
-
-example: https://fiddle.skia.org/c/@Path_countPoints
 */
 func (o Path) CountPoints() int32 {
 	c_obj := o.sk
@@ -6106,19 +5546,17 @@ func (o Path) CountPoints() int32 {
 }
 
 /*
-Returns SkPoint at index in SkPoint array. Valid range for index is
-0 to countPoints() - 1.
-Returns (0, 0) if index is out of range.
+Returns SkPoint at index in SkPoint array. Valid range for index is        0 to countPoints() - 1.        Returns (0, 0) if index is out of range.
 
-# params
+example: https://fiddle.skia.org/c/_getPoint
 
-  - index =>  SkPoint array element selector
+# parameters
+
+  - index -   SkPoint array element selector
 
 # return
 
   - SkPoint array value or (0, 0)
-
-example: https://fiddle.skia.org/c/@Path_getPoint
 */
 func (o Path) GetPoint(index int32) Point {
 	c_obj := o.sk
@@ -6128,20 +5566,18 @@ func (o Path) GetPoint(index int32) Point {
 }
 
 /*
-Returns number of points in SkPath. Up to max points are copied.
-points may be nullptr; then, max must be zero.
-If max is greater than number of points, excess points storage is unaltered.
+Returns number of points in SkPath. Up to max points are copied.        points may be nullptr; then, max must be zero.        If max is greater than number of points, excess points storage is unaltered.
 
-# params
+example: https://fiddle.skia.org/c/_getPoints
 
-  - points =>  storage for SkPath SkPoint array. May be nullptr
-  - max =>     maximum to copy; must be greater than or equal to zero
+# parameters
+
+  - points -   storage for SkPath SkPoint array. May be nullptr
+  - max -      maximum to copy; must be greater than or equal to zero
 
 # return
 
   - SkPath SkPoint array length
-
-example: https://fiddle.skia.org/c/@Path_getPoints
 */
 func (o Path) GetPoints(points []Point, max int32) int32 {
 	c_obj := o.sk
@@ -6152,14 +5588,13 @@ func (o Path) GetPoints(points []Point, max int32) int32 {
 }
 
 /*
-Returns the number of verbs: kMove_Verb, kLine_Verb, kQuad_Verb, kConic_Verb,
-kCubic_Verb, and kClose_Verb; added to SkPath.
+Returns the number of verbs: kMove_Verb, kLine_Verb, kQuad_Verb, kConic_Verb,        kCubic_Verb, and kClose_Verb; added to SkPath.
+
+example: https://fiddle.skia.org/c/_countVerbs
 
 # return
 
   - length of verb array
-
-example: https://fiddle.skia.org/c/@Path_countVerbs
 */
 func (o Path) CountVerbs() int32 {
 	c_obj := o.sk
@@ -6168,19 +5603,18 @@ func (o Path) CountVerbs() int32 {
 }
 
 /*
-Returns the number of verbs in the path. Up to max verbs are copied. The
-verbs are copied as one byte per verb.
+Returns the number of verbs in the path. Up to max verbs are copied. The        verbs are copied as one byte per verb.
 
-# params
+example: https://fiddle.skia.org/c/_getVerbs
 
-  - verbs =>  storage for verbs, may be nullptr
-  - max =>    maximum number to copy into verbs
+# parameters
+
+  - verbs -   storage for verbs, may be nullptr
+  - max -     maximum number to copy into verbs
 
 # return
 
   - the actual number of verbs in the path
-
-example: https://fiddle.skia.org/c/@Path_getVerbs
 */
 func (o Path) GetVerbs(verbs string, max int32) int32 {
 	c_obj := o.sk
@@ -6205,19 +5639,15 @@ func (o Path) ApproximateBytesUsed() uint32 {
 }
 
 /*
-Exchanges the verb array, SkPoint array, weights, and SkPath::FillType with other.
-Cached state is also exchanged. swap() internally exchanges pointers, so
-it is lightweight and does not allocate memory.
+Exchanges the verb array, SkPoint array, weights, and SkPath::FillType with other.        Cached state is also exchanged. swap() internally exchanges pointers, so        it is lightweight and does not allocate memory.
 
-swap() usage has largely been replaced by operator=(const SkPath& path).
-SkPath do not copy their content on assignment until they are written to,
-making assignment as efficient as swap().
+swap() usage has largely been replaced by operator=(const SkPath& path).        SkPath do not copy their content on assignment until they are written to,        making assignment as efficient as swap().
 
-# params
+example: https://fiddle.skia.org/c/_swap
 
-  - other =>  SkPath exchanged by value
+# parameters
 
-example: https://fiddle.skia.org/c/@Path_swap
+  - other -   SkPath exchanged by value
 */
 func (o Path) Swap(other Path) {
 	c_obj := o.sk
@@ -6226,12 +5656,9 @@ func (o Path) Swap(other Path) {
 }
 
 /*
-Returns minimum and maximum axes values of SkPoint array.
-Returns (0, 0, 0, 0) if SkPath contains no points. Returned bounds width and height may
-be larger or smaller than area affected when SkPath is drawn.
+Returns minimum and maximum axes values of SkPoint array.        Returns (0, 0, 0, 0) if SkPath contains no points. Returned bounds width and height may        be larger or smaller than area affected when SkPath is drawn.
 
-SkRect returned includes all SkPoint added to SkPath, including SkPoint associated with
-kMove_Verb that define empty contours.
+SkRect returned includes all SkPoint added to SkPath, including SkPoint associated with        kMove_Verb that define empty contours.
 
 # return
 
@@ -6244,13 +5671,11 @@ func (o Path) GetBounds() Rect {
 }
 
 /*
-Updates internal bounds so that subsequent calls to getBounds() are instantaneous.
-Unaltered copies of SkPath may also access cached bounds through getBounds().
+Updates internal bounds so that subsequent calls to getBounds() are instantaneous.        Unaltered copies of SkPath may also access cached bounds through getBounds().
 
 For now, identical to calling getBounds() and ignoring the returned value.
 
-Call to prepare SkPath subsequently drawn from multiple threads,
-to avoid a race condition where each draw separately computes the bounds.
+Call to prepare SkPath subsequently drawn from multiple threads,        to avoid a race condition where each draw separately computes the bounds.
 */
 func (o Path) UpdateBoundsCache() {
 	c_obj := o.sk
@@ -6258,24 +5683,17 @@ func (o Path) UpdateBoundsCache() {
 }
 
 /*
-Returns minimum and maximum axes values of the lines and curves in SkPath.
-Returns (0, 0, 0, 0) if SkPath contains no points.
-Returned bounds width and height may be larger or smaller than area affected
-when SkPath is drawn.
+Returns minimum and maximum axes values of the lines and curves in SkPath.        Returns (0, 0, 0, 0) if SkPath contains no points.        Returned bounds width and height may be larger or smaller than area affected        when SkPath is drawn.
 
-Includes SkPoint associated with kMove_Verb that define empty
-contours.
+Includes SkPoint associated with kMove_Verb that define empty        contours.
 
-Behaves identically to getBounds() when SkPath contains
-only lines. If SkPath contains curves, computed bounds includes
-the maximum extent of the quad, conic, or cubic; is slower than getBounds();
-and unlike getBounds(), does not cache the result.
+Behaves identically to getBounds() when SkPath contains        only lines. If SkPath contains curves, computed bounds includes        the maximum extent of the quad, conic, or cubic; is slower than getBounds();        and unlike getBounds(), does not cache the result.
+
+example: https://fiddle.skia.org/c/_computeTightBounds
 
 # return
 
   - tight bounds of curves in SkPath
-
-example: https://fiddle.skia.org/c/@Path_computeTightBounds
 */
 func (o Path) ComputeTightBounds() Rect {
 	c_obj := o.sk
@@ -6284,23 +5702,19 @@ func (o Path) ComputeTightBounds() Rect {
 }
 
 /*
-Returns true if rect is contained by SkPath.
-May return false when rect is contained by SkPath.
+Returns true if rect is contained by SkPath.        May return false when rect is contained by SkPath.
 
-For now, only returns true if SkPath has one contour and is convex.
-rect may share points and edges with SkPath and be contained.
-Returns true if rect is empty, that is, it has zero width or height; and
-the SkPoint or line described by rect is contained by SkPath.
+For now, only returns true if SkPath has one contour and is convex.        rect may share points and edges with SkPath and be contained.        Returns true if rect is empty, that is, it has zero width or height; and        the SkPoint or line described by rect is contained by SkPath.
 
-# params
+example: https://fiddle.skia.org/c/_conservativelyContainsRect
 
-  - rect =>  SkRect, line, or SkPoint checked for containment
+# parameters
+
+  - rect -   SkRect, line, or SkPoint checked for containment
 
 # return
 
   - true if rect is contained
-
-example: https://fiddle.skia.org/c/@Path_conservativelyContainsRect
 */
 func (o Path) ConservativelyContainsRect(rect Rect) bool {
 	c_obj := o.sk
@@ -6310,17 +5724,15 @@ func (o Path) ConservativelyContainsRect(rect Rect) bool {
 }
 
 /*
-Grows SkPath verb array, SkPoint array, and conics to contain additional space.
-May improve performance and use less memory by
-reducing the number and size of allocations when creating SkPath.
+Grows SkPath verb array, SkPoint array, and conics to contain additional space.        May improve performance and use less memory by        reducing the number and size of allocations when creating SkPath.
 
-# params
+example: https://fiddle.skia.org/c/_incReserve
 
-  - extraPtCount =>  number of additional SkPoint to allocate
-  - extraVerbCount =>  number of additional verbs
-  - extraConicCount =>  number of additional conics
+# parameters
 
-example: https://fiddle.skia.org/c/@Path_incReserve
+  - extraPtCount -   number of additional SkPoint to allocate
+  - extraVerbCount -   number of additional verbs
+  - extraConicCount -   number of additional conics
 */
 func (o Path) IncReserve(extraPtCount int32, extraVerbCount int32, extraConicCount int32) {
 	c_obj := o.sk
@@ -6333,16 +5745,16 @@ func (o Path) IncReserve(extraPtCount int32, extraVerbCount int32, extraConicCou
 /*
 Adds beginning of contour at SkPoint (x, y).
 
-# params
+example: https://fiddle.skia.org/c/_moveTo
 
-  - x =>  x-axis value of contour start
-  - y =>  y-axis value of contour start
+# parameters
+
+  - x -   x-axis value of contour start
+  - y -   y-axis value of contour start
 
 # return
 
   - reference to SkPath
-
-example: https://fiddle.skia.org/c/@Path_moveTo
 */
 func (o Path) MoveToPoint(x float32, y float32) Path {
 	c_obj := o.sk
@@ -6355,9 +5767,9 @@ func (o Path) MoveToPoint(x float32, y float32) Path {
 /*
 Adds beginning of contour at SkPoint p.
 
-# params
+# parameters
 
-  - p =>  contour start
+  - p -   contour start
 
 # return
 
@@ -6371,21 +5783,18 @@ func (o Path) MoveTo(p Point) Path {
 }
 
 /*
-Adds beginning of contour relative to last point.
-If SkPath is empty, starts contour at (dx, dy).
-Otherwise, start contour at last point offset by (dx, dy).
-Function name stands for "relative move to".
+Adds beginning of contour relative to last point.        If SkPath is empty, starts contour at (dx, dy).        Otherwise, start contour at last point offset by (dx, dy).        Function name stands for "relative move to".
 
-# params
+example: https://fiddle.skia.org/c/_rMoveTo
 
-  - dx =>  offset from last point to contour start on x-axis
-  - dy =>  offset from last point to contour start on y-axis
+# parameters
+
+  - dx -   offset from last point to contour start on x-axis
+  - dy -   offset from last point to contour start on y-axis
 
 # return
 
   - reference to SkPath
-
-example: https://fiddle.skia.org/c/@Path_rMoveTo
 */
 func (o Path) RMoveTo(dx float32, dy float32) Path {
 	c_obj := o.sk
@@ -6396,22 +5805,20 @@ func (o Path) RMoveTo(dx float32, dy float32) Path {
 }
 
 /*
-Adds line from last point to (x, y). If SkPath is empty, or last SkPath::Verb is
-kClose_Verb, last point is set to (0, 0) before adding line.
+Adds line from last point to (x, y). If SkPath is empty, or last SkPath::Verb is        kClose_Verb, last point is set to (0, 0) before adding line.
 
-lineTo() appends kMove_Verb to verb array and (0, 0) to SkPoint array, if needed.
-lineTo() then appends kLine_Verb to verb array and (x, y) to SkPoint array.
+lineTo() appends kMove_Verb to verb array and (0, 0) to SkPoint array, if needed.        lineTo() then appends kLine_Verb to verb array and (x, y) to SkPoint array.
 
-# params
+example: https://fiddle.skia.org/c/_lineTo
 
-  - x =>  end of added line on x-axis
-  - y =>  end of added line on y-axis
+# parameters
+
+  - x -   end of added line on x-axis
+  - y -   end of added line on y-axis
 
 # return
 
   - reference to SkPath
-
-example: https://fiddle.skia.org/c/@Path_lineTo
 */
 func (o Path) LineTo(x float32, y float32) Path {
 	c_obj := o.sk
@@ -6422,15 +5829,13 @@ func (o Path) LineTo(x float32, y float32) Path {
 }
 
 /*
-Adds line from last point to SkPoint p. If SkPath is empty, or last SkPath::Verb is
-kClose_Verb, last point is set to (0, 0) before adding line.
+Adds line from last point to SkPoint p. If SkPath is empty, or last SkPath::Verb is        kClose_Verb, last point is set to (0, 0) before adding line.
 
-lineTo() first appends kMove_Verb to verb array and (0, 0) to SkPoint array, if needed.
-lineTo() then appends kLine_Verb to verb array and SkPoint p to SkPoint array.
+lineTo() first appends kMove_Verb to verb array and (0, 0) to SkPoint array, if needed.        lineTo() then appends kLine_Verb to verb array and SkPoint p to SkPoint array.
 
-# params
+# parameters
 
-  - p =>  end SkPoint of added line
+  - p -   end SkPoint of added line
 
 # return
 
@@ -6444,26 +5849,20 @@ func (o Path) LineToPoint(p Point) Path {
 }
 
 /*
-Adds line from last point to vector (dx, dy). If SkPath is empty, or last SkPath::Verb is
-kClose_Verb, last point is set to (0, 0) before adding line.
+Adds line from last point to vector (dx, dy). If SkPath is empty, or last SkPath::Verb is        kClose_Verb, last point is set to (0, 0) before adding line.
 
-Appends kMove_Verb to verb array and (0, 0) to SkPoint array, if needed;
-then appends kLine_Verb to verb array and line end to SkPoint array.
-Line end is last point plus vector (dx, dy).
-Function name stands for "relative line to".
+Appends kMove_Verb to verb array and (0, 0) to SkPoint array, if needed;        then appends kLine_Verb to verb array and line end to SkPoint array.        Line end is last point plus vector (dx, dy).        Function name stands for "relative line to".
 
-# params
+example: https://fiddle.skia.org/c/_rLineTo        example: https://fiddle.skia.org/c/_a        example: https://fiddle.skia.org/c/_b
 
-  - dx =>  offset from last point to line end on x-axis
-  - dy =>  offset from last point to line end on y-axis
+# parameters
+
+  - dx -   offset from last point to line end on x-axis
+  - dy -   offset from last point to line end on y-axis
 
 # return
 
   - reference to SkPath
-
-example: https://fiddle.skia.org/c/@Path_rLineTo
-example: https://fiddle.skia.org/c/@Quad_a
-example: https://fiddle.skia.org/c/@Quad_b
 */
 func (o Path) RLineTo(dx float32, dy float32) Path {
 	c_obj := o.sk
@@ -6474,26 +5873,22 @@ func (o Path) RLineTo(dx float32, dy float32) Path {
 }
 
 /*
-Adds quad from last point towards (x1, y1), to (x2, y2).
-If SkPath is empty, or last SkPath::Verb is kClose_Verb, last point is set to (0, 0)
-before adding quad.
+Adds quad from last point towards (x1, y1), to (x2, y2).        If SkPath is empty, or last SkPath::Verb is kClose_Verb, last point is set to (0, 0)        before adding quad.
 
-Appends kMove_Verb to verb array and (0, 0) to SkPoint array, if needed;
-then appends kQuad_Verb to verb array; and (x1, y1), (x2, y2)
-to SkPoint array.
+Appends kMove_Verb to verb array and (0, 0) to SkPoint array, if needed;        then appends kQuad_Verb to verb array; and (x1, y1), (x2, y2)        to SkPoint array.
 
-# params
+example: https://fiddle.skia.org/c/_quadTo
 
-  - x1 =>  control SkPoint of quad on x-axis
-  - y1 =>  control SkPoint of quad on y-axis
-  - x2 =>  end SkPoint of quad on x-axis
-  - y2 =>  end SkPoint of quad on y-axis
+# parameters
+
+  - x1 -   control SkPoint of quad on x-axis
+  - y1 -   control SkPoint of quad on y-axis
+  - x2 -   end SkPoint of quad on x-axis
+  - y2 -   end SkPoint of quad on y-axis
 
 # return
 
   - reference to SkPath
-
-example: https://fiddle.skia.org/c/@Path_quadTo
 */
 func (o Path) QuadTo(x1 float32, y1 float32, x2 float32, y2 float32) Path {
 	c_obj := o.sk
@@ -6506,18 +5901,14 @@ func (o Path) QuadTo(x1 float32, y1 float32, x2 float32, y2 float32) Path {
 }
 
 /*
-Adds quad from last point towards SkPoint p1, to SkPoint p2.
-If SkPath is empty, or last SkPath::Verb is kClose_Verb, last point is set to (0, 0)
-before adding quad.
+Adds quad from last point towards SkPoint p1, to SkPoint p2.        If SkPath is empty, or last SkPath::Verb is kClose_Verb, last point is set to (0, 0)        before adding quad.
 
-Appends kMove_Verb to verb array and (0, 0) to SkPoint array, if needed;
-then appends kQuad_Verb to verb array; and SkPoint p1, p2
-to SkPoint array.
+Appends kMove_Verb to verb array and (0, 0) to SkPoint array, if needed;        then appends kQuad_Verb to verb array; and SkPoint p1, p2        to SkPoint array.
 
-# params
+# parameters
 
-  - p1 =>  control SkPoint of added quad
-  - p2 =>  end SkPoint of added quad
+  - p1 -   control SkPoint of added quad
+  - p2 -   end SkPoint of added quad
 
 # return
 
@@ -6532,32 +5923,22 @@ func (o Path) QuadToPoint(p1 Point, p2 Point) Path {
 }
 
 /*
-Adds quad from last point towards vector (dx1, dy1), to vector (dx2, dy2).
-If SkPath is empty, or last SkPath::Verb
-is kClose_Verb, last point is set to (0, 0) before adding quad.
+Adds quad from last point towards vector (dx1, dy1), to vector (dx2, dy2).        If SkPath is empty, or last SkPath::Verb        is kClose_Verb, last point is set to (0, 0) before adding quad.
 
-Appends kMove_Verb to verb array and (0, 0) to SkPoint array,
-if needed; then appends kQuad_Verb to verb array; and appends quad
-control and quad end to SkPoint array.
-Quad control is last point plus vector (dx1, dy1).
-Quad end is last point plus vector (dx2, dy2).
-Function name stands for "relative quad to".
+Appends kMove_Verb to verb array and (0, 0) to SkPoint array,        if needed; then appends kQuad_Verb to verb array; and appends quad        control and quad end to SkPoint array.        Quad control is last point plus vector (dx1, dy1).        Quad end is last point plus vector (dx2, dy2).        Function name stands for "relative quad to".
 
-# params
+example: https://fiddle.skia.org/c/_Weight_a        example: https://fiddle.skia.org/c/_Weight_b        example: https://fiddle.skia.org/c/_Weight_c        example: https://fiddle.skia.org/c/_rQuadTo
 
-  - dx1 =>  offset from last point to quad control on x-axis
-  - dy1 =>  offset from last point to quad control on y-axis
-  - dx2 =>  offset from last point to quad end on x-axis
-  - dy2 =>  offset from last point to quad end on y-axis
+# parameters
+
+  - dx1 -   offset from last point to quad control on x-axis
+  - dy1 -   offset from last point to quad control on y-axis
+  - dx2 -   offset from last point to quad end on x-axis
+  - dy2 -   offset from last point to quad end on y-axis
 
 # return
 
   - reference to SkPath
-
-example: https://fiddle.skia.org/c/@Conic_Weight_a
-example: https://fiddle.skia.org/c/@Conic_Weight_b
-example: https://fiddle.skia.org/c/@Conic_Weight_c
-example: https://fiddle.skia.org/c/@Path_rQuadTo
 */
 func (o Path) RQuadTo(dx1 float32, dy1 float32, dx2 float32, dy2 float32) Path {
 	c_obj := o.sk
@@ -6570,28 +5951,23 @@ func (o Path) RQuadTo(dx1 float32, dy1 float32, dx2 float32, dy2 float32) Path {
 }
 
 /*
-Adds conic from last point towards (x1, y1), to (x2, y2), weighted by w.
-If SkPath is empty, or last SkPath::Verb is kClose_Verb, last point is set to (0, 0)
-before adding conic.
+Adds conic from last point towards (x1, y1), to (x2, y2), weighted by w.        If SkPath is empty, or last SkPath::Verb is kClose_Verb, last point is set to (0, 0)        before adding conic.
 
 Appends kMove_Verb to verb array and (0, 0) to SkPoint array, if needed.
 
-If w is finite and not one, appends kConic_Verb to verb array;
-and (x1, y1), (x2, y2) to SkPoint array; and w to conic weights.
+If w is finite and not one, appends kConic_Verb to verb array;        and (x1, y1), (x2, y2) to SkPoint array; and w to conic weights.
 
-If w is one, appends kQuad_Verb to verb array, and
-(x1, y1), (x2, y2) to SkPoint array.
+If w is one, appends kQuad_Verb to verb array, and        (x1, y1), (x2, y2) to SkPoint array.
 
-If w is not finite, appends kLine_Verb twice to verb array, and
-(x1, y1), (x2, y2) to SkPoint array.
+If w is not finite, appends kLine_Verb twice to verb array, and        (x1, y1), (x2, y2) to SkPoint array.
 
-# params
+# parameters
 
-  - x1 =>  control SkPoint of conic on x-axis
-  - y1 =>  control SkPoint of conic on y-axis
-  - x2 =>  end SkPoint of conic on x-axis
-  - y2 =>  end SkPoint of conic on y-axis
-  - w =>   weight of added conic
+  - x1 -   control SkPoint of conic on x-axis
+  - y1 -   control SkPoint of conic on y-axis
+  - x2 -   end SkPoint of conic on x-axis
+  - y2 -   end SkPoint of conic on y-axis
+  - w -    weight of added conic
 
 # return
 
@@ -6609,26 +5985,21 @@ func (o Path) ConicTo(x1 float32, y1 float32, x2 float32, y2 float32, w float32)
 }
 
 /*
-Adds conic from last point towards SkPoint p1, to SkPoint p2, weighted by w.
-If SkPath is empty, or last SkPath::Verb is kClose_Verb, last point is set to (0, 0)
-before adding conic.
+Adds conic from last point towards SkPoint p1, to SkPoint p2, weighted by w.        If SkPath is empty, or last SkPath::Verb is kClose_Verb, last point is set to (0, 0)        before adding conic.
 
 Appends kMove_Verb to verb array and (0, 0) to SkPoint array, if needed.
 
-If w is finite and not one, appends kConic_Verb to verb array;
-and SkPoint p1, p2 to SkPoint array; and w to conic weights.
+If w is finite and not one, appends kConic_Verb to verb array;        and SkPoint p1, p2 to SkPoint array; and w to conic weights.
 
-If w is one, appends kQuad_Verb to verb array, and SkPoint p1, p2
-to SkPoint array.
+If w is one, appends kQuad_Verb to verb array, and SkPoint p1, p2        to SkPoint array.
 
-If w is not finite, appends kLine_Verb twice to verb array, and
-SkPoint p1, p2 to SkPoint array.
+If w is not finite, appends kLine_Verb twice to verb array, and        SkPoint p1, p2 to SkPoint array.
 
-# params
+# parameters
 
-  - p1 =>  control SkPoint of added conic
-  - p2 =>  end SkPoint of added conic
-  - w =>   weight of added conic
+  - p1 -   control SkPoint of added conic
+  - p2 -   end SkPoint of added conic
+  - w -    weight of added conic
 
 # return
 
@@ -6644,31 +6015,23 @@ func (o Path) ConicToPoints(p1 Point, p2 Point, w float32) Path {
 }
 
 /*
-Adds conic from last point towards vector (dx1, dy1), to vector (dx2, dy2),
-weighted by w. If SkPath is empty, or last SkPath::Verb
-is kClose_Verb, last point is set to (0, 0) before adding conic.
+Adds conic from last point towards vector (dx1, dy1), to vector (dx2, dy2),        weighted by w. If SkPath is empty, or last SkPath::Verb        is kClose_Verb, last point is set to (0, 0) before adding conic.
 
-Appends kMove_Verb to verb array and (0, 0) to SkPoint array,
-if needed.
+Appends kMove_Verb to verb array and (0, 0) to SkPoint array,        if needed.
 
-If w is finite and not one, next appends kConic_Verb to verb array,
-and w is recorded as conic weight; otherwise, if w is one, appends
-kQuad_Verb to verb array; or if w is not finite, appends kLine_Verb
-twice to verb array.
+If w is finite and not one, next appends kConic_Verb to verb array,        and w is recorded as conic weight; otherwise, if w is one, appends        kQuad_Verb to verb array; or if w is not finite, appends kLine_Verb        twice to verb array.
 
-In all cases appends SkPoint control and end to SkPoint array.
-control is last point plus vector (dx1, dy1).
-end is last point plus vector (dx2, dy2).
+In all cases appends SkPoint control and end to SkPoint array.        control is last point plus vector (dx1, dy1).        end is last point plus vector (dx2, dy2).
 
 Function name stands for "relative conic to".
 
-# params
+# parameters
 
-  - dx1 =>  offset from last point to conic control on x-axis
-  - dy1 =>  offset from last point to conic control on y-axis
-  - dx2 =>  offset from last point to conic end on x-axis
-  - dy2 =>  offset from last point to conic end on y-axis
-  - w =>    weight of added conic
+  - dx1 -   offset from last point to conic control on x-axis
+  - dy1 -   offset from last point to conic control on y-axis
+  - dx2 -   offset from last point to conic end on x-axis
+  - dy2 -   offset from last point to conic end on y-axis
+  - w -     weight of added conic
 
 # return
 
@@ -6686,22 +6049,18 @@ func (o Path) RConicTo(dx1 float32, dy1 float32, dx2 float32, dy2 float32, w flo
 }
 
 /*
-Adds cubic from last point towards (x1, y1), then towards (x2, y2), ending at
-(x3, y3). If SkPath is empty, or last SkPath::Verb is kClose_Verb, last point is set to
-(0, 0) before adding cubic.
+Adds cubic from last point towards (x1, y1), then towards (x2, y2), ending at        (x3, y3). If SkPath is empty, or last SkPath::Verb is kClose_Verb, last point is set to        (0, 0) before adding cubic.
 
-Appends kMove_Verb to verb array and (0, 0) to SkPoint array, if needed;
-then appends kCubic_Verb to verb array; and (x1, y1), (x2, y2), (x3, y3)
-to SkPoint array.
+Appends kMove_Verb to verb array and (0, 0) to SkPoint array, if needed;        then appends kCubic_Verb to verb array; and (x1, y1), (x2, y2), (x3, y3)        to SkPoint array.
 
-# params
+# parameters
 
-  - x1 =>  first control SkPoint of cubic on x-axis
-  - y1 =>  first control SkPoint of cubic on y-axis
-  - x2 =>  second control SkPoint of cubic on x-axis
-  - y2 =>  second control SkPoint of cubic on y-axis
-  - x3 =>  end SkPoint of cubic on x-axis
-  - y3 =>  end SkPoint of cubic on y-axis
+  - x1 -   first control SkPoint of cubic on x-axis
+  - y1 -   first control SkPoint of cubic on y-axis
+  - x2 -   second control SkPoint of cubic on x-axis
+  - y2 -   second control SkPoint of cubic on y-axis
+  - x3 -   end SkPoint of cubic on x-axis
+  - y3 -   end SkPoint of cubic on y-axis
 
 # return
 
@@ -6720,19 +6079,15 @@ func (o Path) CubicTo(x1 float32, y1 float32, x2 float32, y2 float32, x3 float32
 }
 
 /*
-Adds cubic from last point towards SkPoint p1, then towards SkPoint p2, ending at
-SkPoint p3. If SkPath is empty, or last SkPath::Verb is kClose_Verb, last point is set to
-(0, 0) before adding cubic.
+Adds cubic from last point towards SkPoint p1, then towards SkPoint p2, ending at        SkPoint p3. If SkPath is empty, or last SkPath::Verb is kClose_Verb, last point is set to        (0, 0) before adding cubic.
 
-Appends kMove_Verb to verb array and (0, 0) to SkPoint array, if needed;
-then appends kCubic_Verb to verb array; and SkPoint p1, p2, p3
-to SkPoint array.
+Appends kMove_Verb to verb array and (0, 0) to SkPoint array, if needed;        then appends kCubic_Verb to verb array; and SkPoint p1, p2, p3        to SkPoint array.
 
-# params
+# parameters
 
-  - p1 =>  first control SkPoint of cubic
-  - p2 =>  second control SkPoint of cubic
-  - p3 =>  end SkPoint of cubic
+  - p1 -   first control SkPoint of cubic
+  - p2 -   second control SkPoint of cubic
+  - p3 -   end SkPoint of cubic
 
 # return
 
@@ -6748,26 +6103,18 @@ func (o Path) CubicToPoints(p1 Point, p2 Point, p3 Point) Path {
 }
 
 /*
-Adds cubic from last point towards vector (dx1, dy1), then towards
-vector (dx2, dy2), to vector (dx3, dy3).
-If SkPath is empty, or last SkPath::Verb
-is kClose_Verb, last point is set to (0, 0) before adding cubic.
+Adds cubic from last point towards vector (dx1, dy1), then towards        vector (dx2, dy2), to vector (dx3, dy3).        If SkPath is empty, or last SkPath::Verb        is kClose_Verb, last point is set to (0, 0) before adding cubic.
 
-Appends kMove_Verb to verb array and (0, 0) to SkPoint array,
-if needed; then appends kCubic_Verb to verb array; and appends cubic
-control and cubic end to SkPoint array.
-Cubic control is last point plus vector (dx1, dy1).
-Cubic end is last point plus vector (dx2, dy2).
-Function name stands for "relative cubic to".
+Appends kMove_Verb to verb array and (0, 0) to SkPoint array,        if needed; then appends kCubic_Verb to verb array; and appends cubic        control and cubic end to SkPoint array.        Cubic control is last point plus vector (dx1, dy1).        Cubic end is last point plus vector (dx2, dy2).        Function name stands for "relative cubic to".
 
-# params
+# parameters
 
-  - dx1 =>  offset from last point to first cubic control on x-axis
-  - dy1 =>  offset from last point to first cubic control on y-axis
-  - dx2 =>  offset from last point to second cubic control on x-axis
-  - dy2 =>  offset from last point to second cubic control on y-axis
-  - dx3 =>  offset from last point to cubic end on x-axis
-  - dy3 =>  offset from last point to cubic end on y-axis
+  - dx1 -   offset from last point to first cubic control on x-axis
+  - dy1 -   offset from last point to first cubic control on y-axis
+  - dx2 -   offset from last point to second cubic control on x-axis
+  - dy2 -   offset from last point to second cubic control on y-axis
+  - dx3 -   offset from last point to cubic end on x-axis
+  - dy3 -   offset from last point to cubic end on y-axis
 
 # return
 
@@ -6786,27 +6133,22 @@ func (o Path) RCubicTo(dx1 float32, dy1 float32, dx2 float32, dy2 float32, dx3 f
 }
 
 /*
-Appends arc to SkPath. Arc added is part of ellipse
-bounded by oval, from startAngle through sweepAngle. Both startAngle and
-sweepAngle are measured in degrees, where zero degrees is aligned with the
-positive x-axis, and positive sweeps extends arc clockwise.
+Appends arc to SkPath. Arc added is part of ellipse        bounded by oval, from startAngle through sweepAngle. Both startAngle and        sweepAngle are measured in degrees, where zero degrees is aligned with the        positive x-axis, and positive sweeps extends arc clockwise.
 
-arcTo() adds line connecting SkPath last SkPoint to initial arc SkPoint if forceMoveTo
-is false and SkPath is not empty. Otherwise, added contour begins with first point
-of arc. Angles greater than -360 and less than 360 are treated modulo 360.
+arcTo() adds line connecting SkPath last SkPoint to initial arc SkPoint if forceMoveTo        is false and SkPath is not empty. Otherwise, added contour begins with first point        of arc. Angles greater than -360 and less than 360 are treated modulo 360.
 
-# params
+example: https://fiddle.skia.org/c/_arcTo
 
-  - oval =>         bounds of ellipse containing arc
-  - startAngle =>   starting angle of arc in degrees
-  - sweepAngle =>   sweep, in degrees. Positive is clockwise; treated modulo 360
-  - forceMoveTo =>  true to start a new contour with arc
+# parameters
+
+  - oval -          bounds of ellipse containing arc
+  - startAngle -    starting angle of arc in degrees
+  - sweepAngle -    sweep, in degrees. Positive is clockwise; treated modulo 360
+  - forceMoveTo -   true to start a new contour with arc
 
 # return
 
   - reference to SkPath
-
-example: https://fiddle.skia.org/c/@Path_arcTo
 */
 func (o Path) ArcTo1(oval Rect, startAngle float32, sweepAngle float32, forceMoveTo bool) Path {
 	c_obj := o.sk
@@ -6819,35 +6161,27 @@ func (o Path) ArcTo1(oval Rect, startAngle float32, sweepAngle float32, forceMov
 }
 
 /*
-Appends arc to SkPath, after appending line if needed. Arc is implemented by conic
-weighted to describe part of circle. Arc is contained by tangent from
-last SkPath point to (x1, y1), and tangent from (x1, y1) to (x2, y2). Arc
-is part of circle sized to radius, positioned so it touches both tangent lines.
+Appends arc to SkPath, after appending line if needed. Arc is implemented by conic        weighted to describe part of circle. Arc is contained by tangent from        last SkPath point to (x1, y1), and tangent from (x1, y1) to (x2, y2). Arc        is part of circle sized to radius, positioned so it touches both tangent lines.
 
-If last Path Point does not start Arc, arcTo appends connecting Line to Path.
-The length of Vector from (x1, y1) to (x2, y2) does not affect Arc.
+If last Path Point does not start Arc, arcTo appends connecting Line to Path.        The length of Vector from (x1, y1) to (x2, y2) does not affect Arc.
 
-Arc sweep is always less than 180 degrees. If radius is zero, or if
-tangents are nearly parallel, arcTo appends Line from last Path Point to (x1, y1).
+Arc sweep is always less than 180 degrees. If radius is zero, or if        tangents are nearly parallel, arcTo appends Line from last Path Point to (x1, y1).
 
-arcTo appends at most one Line and one conic.
-arcTo implements the functionality of PostScript arct and HTML Canvas arcTo.
+arcTo appends at most one Line and one conic.        arcTo implements the functionality of PostScript arct and HTML Canvas arcTo.
 
-# params
+example: https://fiddle.skia.org/c/_arcTo_2_a        example: https://fiddle.skia.org/c/_arcTo_2_b        example: https://fiddle.skia.org/c/_arcTo_2_c
 
-  - x1 =>      x-axis value common to pair of tangents
-  - y1 =>      y-axis value common to pair of tangents
-  - x2 =>      x-axis value end of second tangent
-  - y2 =>      y-axis value end of second tangent
-  - radius =>  distance from arc to circle center
+# parameters
+
+  - x1 -       x-axis value common to pair of tangents
+  - y1 -       y-axis value common to pair of tangents
+  - x2 -       x-axis value end of second tangent
+  - y2 -       y-axis value end of second tangent
+  - radius -   distance from arc to circle center
 
 # return
 
   - reference to SkPath
-
-example: https://fiddle.skia.org/c/@Path_arcTo_2_a
-example: https://fiddle.skia.org/c/@Path_arcTo_2_b
-example: https://fiddle.skia.org/c/@Path_arcTo_2_c
 */
 func (o Path) ArcTo2(x1 float32, y1 float32, x2 float32, y2 float32, radius float32) Path {
 	c_obj := o.sk
@@ -6861,25 +6195,19 @@ func (o Path) ArcTo2(x1 float32, y1 float32, x2 float32, y2 float32, radius floa
 }
 
 /*
-Appends arc to SkPath, after appending line if needed. Arc is implemented by conic
-weighted to describe part of circle. Arc is contained by tangent from
-last SkPath point to p1, and tangent from p1 to p2. Arc
-is part of circle sized to radius, positioned so it touches both tangent lines.
+Appends arc to SkPath, after appending line if needed. Arc is implemented by conic        weighted to describe part of circle. Arc is contained by tangent from        last SkPath point to p1, and tangent from p1 to p2. Arc        is part of circle sized to radius, positioned so it touches both tangent lines.
 
-If last SkPath SkPoint does not start arc, arcTo() appends connecting line to SkPath.
-The length of vector from p1 to p2 does not affect arc.
+If last SkPath SkPoint does not start arc, arcTo() appends connecting line to SkPath.        The length of vector from p1 to p2 does not affect arc.
 
-Arc sweep is always less than 180 degrees. If radius is zero, or if
-tangents are nearly parallel, arcTo() appends line from last SkPath SkPoint to p1.
+Arc sweep is always less than 180 degrees. If radius is zero, or if        tangents are nearly parallel, arcTo() appends line from last SkPath SkPoint to p1.
 
-arcTo() appends at most one line and one conic.
-arcTo() implements the functionality of PostScript arct and HTML Canvas arcTo.
+arcTo() appends at most one line and one conic.        arcTo() implements the functionality of PostScript arct and HTML Canvas arcTo.
 
-# params
+# parameters
 
-  - p1 =>      SkPoint common to pair of tangents
-  - p2 =>      end of second tangent
-  - radius =>  distance from arc to circle center
+  - p1 -       SkPoint common to pair of tangents
+  - p2 -       end of second tangent
+  - radius -   distance from arc to circle center
 
 # return
 
@@ -6895,30 +6223,21 @@ func (o Path) ArcTo3(p1 Point, p2 Point, radius float32) Path {
 }
 
 /*
-Appends arc to SkPath. Arc is implemented by one or more conics weighted to
-describe part of oval with radii (rx, ry) rotated by xAxisRotate degrees. Arc
-curves from last SkPath SkPoint to (x, y), choosing one of four possible routes:
-clockwise or counterclockwise, and smaller or larger.
+Appends arc to SkPath. Arc is implemented by one or more conics weighted to        describe part of oval with radii (rx, ry) rotated by xAxisRotate degrees. Arc        curves from last SkPath SkPoint to (x, y), choosing one of four possible routes:        clockwise or counterclockwise, and smaller or larger.
 
-Arc sweep is always less than 360 degrees. arcTo() appends line to (x, y) if
-either radii are zero, or if last SkPath SkPoint equals (x, y). arcTo() scales radii
-(rx, ry) to fit last SkPath SkPoint and (x, y) if both are greater than zero but
-too small.
+Arc sweep is always less than 360 degrees. arcTo() appends line to (x, y) if        either radii are zero, or if last SkPath SkPoint equals (x, y). arcTo() scales radii        (rx, ry) to fit last SkPath SkPoint and (x, y) if both are greater than zero but        too small.
 
-arcTo() appends up to four conic curves.
-arcTo() implements the functionality of SVG arc, although SVG sweep-flag value
-is opposite the integer value of sweep; SVG sweep-flag uses 1 for clockwise,
-while kCW_Direction cast to int is zero.
+arcTo() appends up to four conic curves.        arcTo() implements the functionality of SVG arc, although SVG sweep-flag value        is opposite the integer value of sweep; SVG sweep-flag uses 1 for clockwise,        while kCW_Direction cast to int is zero.
 
-# params
+# parameters
 
-  - rx =>           radius on x-axis before x-axis rotation
-  - ry =>           radius on y-axis before x-axis rotation
-  - xAxisRotate =>  x-axis rotation in degrees; positive values are clockwise
-  - largeArc =>     chooses smaller or larger arc
-  - sweep =>        chooses clockwise or counterclockwise arc
-  - x =>            end of arc
-  - y =>            end of arc
+  - rx -            radius on x-axis before x-axis rotation
+  - ry -            radius on y-axis before x-axis rotation
+  - xAxisRotate -   x-axis rotation in degrees; positive values are clockwise
+  - largeArc -      chooses smaller or larger arc
+  - sweep -         chooses clockwise or counterclockwise arc
+  - x -             end of arc
+  - y -             end of arc
 
 # return
 
@@ -6938,29 +6257,19 @@ func (o Path) ArcTo4(rx float32, ry float32, xAxisRotate float32, largeArc PathA
 }
 
 /*
-Appends arc to SkPath. Arc is implemented by one or more conic weighted to describe
-part of oval with radii (r.fX, r.fY) rotated by xAxisRotate degrees. Arc curves
-from last SkPath SkPoint to (xy.fX, xy.fY), choosing one of four possible routes:
-clockwise or counterclockwise,
-and smaller or larger.
+Appends arc to SkPath. Arc is implemented by one or more conic weighted to describe        part of oval with radii (r.fX, r.fY) rotated by xAxisRotate degrees. Arc curves        from last SkPath SkPoint to (xy.fX, xy.fY), choosing one of four possible routes:        clockwise or counterclockwise,        and smaller or larger.
 
-Arc sweep is always less than 360 degrees. arcTo() appends line to xy if either
-radii are zero, or if last SkPath SkPoint equals (xy.fX, xy.fY). arcTo() scales radii r to
-fit last SkPath SkPoint and xy if both are greater than zero but too small to describe
-an arc.
+Arc sweep is always less than 360 degrees. arcTo() appends line to xy if either        radii are zero, or if last SkPath SkPoint equals (xy.fX, xy.fY). arcTo() scales radii r to        fit last SkPath SkPoint and xy if both are greater than zero but too small to describe        an arc.
 
-arcTo() appends up to four conic curves.
-arcTo() implements the functionality of SVG arc, although SVG sweep-flag value is
-opposite the integer value of sweep; SVG sweep-flag uses 1 for clockwise, while
-kCW_Direction cast to int is zero.
+arcTo() appends up to four conic curves.        arcTo() implements the functionality of SVG arc, although SVG sweep-flag value is        opposite the integer value of sweep; SVG sweep-flag uses 1 for clockwise, while        kCW_Direction cast to int is zero.
 
-# params
+# parameters
 
-  - r =>            radii on axes before x-axis rotation
-  - xAxisRotate =>  x-axis rotation in degrees; positive values are clockwise
-  - largeArc =>     chooses smaller or larger arc
-  - sweep =>        chooses clockwise or counterclockwise arc
-  - xy =>           end of arc
+  - r -             radii on axes before x-axis rotation
+  - xAxisRotate -   x-axis rotation in degrees; positive values are clockwise
+  - largeArc -      chooses smaller or larger arc
+  - sweep -         chooses clockwise or counterclockwise arc
+  - xy -            end of arc
 
 # return
 
@@ -6978,32 +6287,21 @@ func (o Path) ArcTo5(r Point, xAxisRotate float32, largeArc PathArcSize, sweep P
 }
 
 /*
-Appends arc to SkPath, relative to last SkPath SkPoint. Arc is implemented by one or
-more conic, weighted to describe part of oval with radii (rx, ry) rotated by
-xAxisRotate degrees. Arc curves from last SkPath SkPoint to relative end SkPoint:
-(dx, dy), choosing one of four possible routes: clockwise or
-counterclockwise, and smaller or larger. If SkPath is empty, the start arc SkPoint
-is (0, 0).
+Appends arc to SkPath, relative to last SkPath SkPoint. Arc is implemented by one or        more conic, weighted to describe part of oval with radii (rx, ry) rotated by        xAxisRotate degrees. Arc curves from last SkPath SkPoint to relative end SkPoint:        (dx, dy), choosing one of four possible routes: clockwise or        counterclockwise, and smaller or larger. If SkPath is empty, the start arc SkPoint        is (0, 0).
 
-Arc sweep is always less than 360 degrees. arcTo() appends line to end SkPoint
-if either radii are zero, or if last SkPath SkPoint equals end SkPoint.
-arcTo() scales radii (rx, ry) to fit last SkPath SkPoint and end SkPoint if both are
-greater than zero but too small to describe an arc.
+Arc sweep is always less than 360 degrees. arcTo() appends line to end SkPoint        if either radii are zero, or if last SkPath SkPoint equals end SkPoint.        arcTo() scales radii (rx, ry) to fit last SkPath SkPoint and end SkPoint if both are        greater than zero but too small to describe an arc.
 
-arcTo() appends up to four conic curves.
-arcTo() implements the functionality of svg arc, although SVG "sweep-flag" value is
-opposite the integer value of sweep; SVG "sweep-flag" uses 1 for clockwise, while
-kCW_Direction cast to int is zero.
+arcTo() appends up to four conic curves.        arcTo() implements the functionality of svg arc, although SVG "sweep-flag" value is        opposite the integer value of sweep; SVG "sweep-flag" uses 1 for clockwise, while        kCW_Direction cast to int is zero.
 
-# params
+# parameters
 
-  - rx =>           radius before x-axis rotation
-  - ry =>           radius before x-axis rotation
-  - xAxisRotate =>  x-axis rotation in degrees; positive values are clockwise
-  - largeArc =>     chooses smaller or larger arc
-  - sweep =>        chooses clockwise or counterclockwise arc
-  - dx =>           x-axis offset end of arc from last SkPath SkPoint
-  - dy =>           y-axis offset end of arc from last SkPath SkPoint
+  - rx -            radius before x-axis rotation
+  - ry -            radius before x-axis rotation
+  - xAxisRotate -   x-axis rotation in degrees; positive values are clockwise
+  - largeArc -      chooses smaller or larger arc
+  - sweep -         chooses clockwise or counterclockwise arc
+  - dx -            x-axis offset end of arc from last SkPath SkPoint
+  - dy -            y-axis offset end of arc from last SkPath SkPoint
 
 # return
 
@@ -7023,19 +6321,15 @@ func (o Path) RArcTo(rx float32, ry float32, xAxisRotate float32, largeArc PathA
 }
 
 /*
-Appends kClose_Verb to SkPath. A closed contour connects the first and last SkPoint
-with line, forming a continuous loop. Open and closed contour draw the same
-with SkPaint::kFill_Style. With SkPaint::kStroke_Style, open contour draws
-SkPaint::Cap at contour start and end; closed contour draws
-SkPaint::Join at contour start and end.
+Appends kClose_Verb to SkPath. A closed contour connects the first and last SkPoint        with line, forming a continuous loop. Open and closed contour draw the same        with SkPaint::kFill_Style. With SkPaint::kStroke_Style, open contour draws        SkPaint::Cap at contour start and end; closed contour draws        SkPaint::Join at contour start and end.
 
 close() has no effect if SkPath is empty or last SkPath SkPath::Verb is kClose_Verb.
+
+example: https://fiddle.skia.org/c/_close
 
 # return
 
   - reference to SkPath
-
-example: https://fiddle.skia.org/c/@Path_close
 */
 func (o Path) Close() Path {
 	c_obj := o.sk
@@ -7044,24 +6338,21 @@ func (o Path) Close() Path {
 }
 
 /*
-Returns true if SkPath is equivalent to SkRect when filled.
-If false: rect, isClosed, and direction are unchanged.
-If true: rect, isClosed, and direction are written to if not nullptr.
+Returns true if SkPath is equivalent to SkRect when filled.        If false: rect, isClosed, and direction are unchanged.        If true: rect, isClosed, and direction are written to if not nullptr.
 
-rect may be smaller than the SkPath bounds. SkPath bounds may include kMove_Verb points
-that do not alter the area drawn by the returned rect.
+rect may be smaller than the SkPath bounds. SkPath bounds may include kMove_Verb points        that do not alter the area drawn by the returned rect.
 
-# params
+example: https://fiddle.skia.org/c/_isRect
 
-  - rect =>       storage for bounds of SkRect; may be nullptr
-  - isClosed =>   storage set to true if SkPath is closed; may be nullptr
-  - direction =>  storage set to SkRect direction; may be nullptr
+# parameters
+
+  - rect -        storage for bounds of SkRect; may be nullptr
+  - isClosed -    storage set to true if SkPath is closed; may be nullptr
+  - direction -   storage set to SkRect direction; may be nullptr
 
 # return
 
   - true if SkPath contains SkRect
-
-example: https://fiddle.skia.org/c/@Path_isRect
 */
 func (o Path) IsRect(rect *Rect, isClosed *bool, direction *PathDirection) bool {
 	c_obj := o.sk
@@ -7073,35 +6364,27 @@ func (o Path) IsRect(rect *Rect, isClosed *bool, direction *PathDirection) bool 
 }
 
 /*
-Adds a new contour to the path, defined by the rect, and wound in the
-specified direction. The verbs added to the path will be:
+Adds a new contour to the path, defined by the rect, and wound in the        specified direction. The verbs added to the path will be:
 
 kMove, kLine, kLine, kLine, kClose
 
-start specifies which corner to begin the contour:
-0: upper-left  corner
-1: upper-right corner
-2: lower-right corner
-3: lower-left  corner
+start specifies which corner to begin the contour:            0: upper-left  corner            1: upper-right corner            2: lower-right corner            3: lower-left  corner
 
-This start point also acts as the implied beginning of the subsequent,
-contour, if it does not have an explicit moveTo(). e.g.
+This start point also acts as the implied beginning of the subsequent,        contour, if it does not have an explicit moveTo(). e.g.
 
-path.addRect(...)
-if we don't say moveTo() here, we will use the rect's start point
-path.lineTo(...)
+path.addRect(...)            // if we don't say moveTo() here, we will use the rect's start point            path.lineTo(...)
 
-# params
+example: https://fiddle.skia.org/c/_addRect_2
 
-  - rect =>   SkRect to add as a closed contour
-  - dir =>    SkPath::Direction to orient the new contour
-  - start =>  initial corner of SkRect to add
+# parameters
+
+  - rect -    SkRect to add as a closed contour
+  - dir -     SkPath::Direction to orient the new contour
+  - start -   initial corner of SkRect to add
 
 # return
 
   - reference to SkPath
-
-example: https://fiddle.skia.org/c/@Path_addRect_2
 */
 func (o Path) AddRect1(rect Rect, dir PathDirection, start uint32) Path {
 	c_obj := o.sk
@@ -7132,21 +6415,18 @@ func (o Path) AddRect3(left float32, top float32, right float32, bottom float32,
 }
 
 /*
-Adds oval to path, appending kMove_Verb, four kConic_Verb, and kClose_Verb.
-Oval is upright ellipse bounded by SkRect oval with radii equal to half oval width
-and half oval height. Oval begins at (oval.fRight, oval.centerY()) and continues
-clockwise if dir is kCW_Direction, counterclockwise if dir is kCCW_Direction.
+Adds oval to path, appending kMove_Verb, four kConic_Verb, and kClose_Verb.        Oval is upright ellipse bounded by SkRect oval with radii equal to half oval width        and half oval height. Oval begins at (oval.fRight, oval.centerY()) and continues        clockwise if dir is kCW_Direction, counterclockwise if dir is kCCW_Direction.
 
-# params
+example: https://fiddle.skia.org/c/_addOval
 
-  - oval =>  bounds of ellipse added
-  - dir =>   SkPath::Direction to wind ellipse
+# parameters
+
+  - oval -   bounds of ellipse added
+  - dir -    SkPath::Direction to wind ellipse
 
 # return
 
   - reference to SkPath
-
-example: https://fiddle.skia.org/c/@Path_addOval
 */
 func (o Path) AddOval1(oval Rect, dir PathDirection) Path {
 	c_obj := o.sk
@@ -7157,22 +6437,19 @@ func (o Path) AddOval1(oval Rect, dir PathDirection) Path {
 }
 
 /*
-Adds oval to SkPath, appending kMove_Verb, four kConic_Verb, and kClose_Verb.
-Oval is upright ellipse bounded by SkRect oval with radii equal to half oval width
-and half oval height. Oval begins at start and continues
-clockwise if dir is kCW_Direction, counterclockwise if dir is kCCW_Direction.
+Adds oval to SkPath, appending kMove_Verb, four kConic_Verb, and kClose_Verb.        Oval is upright ellipse bounded by SkRect oval with radii equal to half oval width        and half oval height. Oval begins at start and continues        clockwise if dir is kCW_Direction, counterclockwise if dir is kCCW_Direction.
 
-# params
+example: https://fiddle.skia.org/c/_addOval_2
 
-  - oval =>   bounds of ellipse added
-  - dir =>    SkPath::Direction to wind ellipse
-  - start =>  index of initial point of ellipse
+# parameters
+
+  - oval -    bounds of ellipse added
+  - dir -     SkPath::Direction to wind ellipse
+  - start -   index of initial point of ellipse
 
 # return
 
   - reference to SkPath
-
-example: https://fiddle.skia.org/c/@Path_addOval_2
 */
 func (o Path) AddOval2(oval Rect, dir PathDirection, start uint32) Path {
 	c_obj := o.sk
@@ -7184,18 +6461,16 @@ func (o Path) AddOval2(oval Rect, dir PathDirection, start uint32) Path {
 }
 
 /*
-Adds circle centered at (x, y) of size radius to SkPath, appending kMove_Verb,
-four kConic_Verb, and kClose_Verb. Circle begins at: (x + radius, y), continuing
-clockwise if dir is kCW_Direction, and counterclockwise if dir is kCCW_Direction.
+Adds circle centered at (x, y) of size radius to SkPath, appending kMove_Verb,        four kConic_Verb, and kClose_Verb. Circle begins at: (x + radius, y), continuing        clockwise if dir is kCW_Direction, and counterclockwise if dir is kCCW_Direction.
 
 Has no effect if radius is zero or negative.
 
-# params
+# parameters
 
-  - x =>       center of circle
-  - y =>       center of circle
-  - radius =>  distance from center to edge
-  - dir =>     SkPath::Direction to wind circle
+  - x -        center of circle
+  - y -        center of circle
+  - radius -   distance from center to edge
+  - dir -      SkPath::Direction to wind circle
 
 # return
 
@@ -7212,26 +6487,21 @@ func (o Path) AddCircle(x float32, y float32, radius float32, dir PathDirection)
 }
 
 /*
-Appends arc to SkPath, as the start of new contour. Arc added is part of ellipse
-bounded by oval, from startAngle through sweepAngle. Both startAngle and
-sweepAngle are measured in degrees, where zero degrees is aligned with the
-positive x-axis, and positive sweeps extends arc clockwise.
+Appends arc to SkPath, as the start of new contour. Arc added is part of ellipse        bounded by oval, from startAngle through sweepAngle. Both startAngle and        sweepAngle are measured in degrees, where zero degrees is aligned with the        positive x-axis, and positive sweeps extends arc clockwise.
 
-If sweepAngle <= -360, or sweepAngle >= 360; and startAngle modulo 90 is nearly
-zero, append oval instead of arc. Otherwise, sweepAngle values are treated
-modulo 360, and arc may or may not draw depending on numeric rounding.
+If sweepAngle <= -360, or sweepAngle >= 360; and startAngle modulo 90 is nearly        zero, append oval instead of arc. Otherwise, sweepAngle values are treated        modulo 360, and arc may or may not draw depending on numeric rounding.
 
-# params
+example: https://fiddle.skia.org/c/_addArc
 
-  - oval =>        bounds of ellipse containing arc
-  - startAngle =>  starting angle of arc in degrees
-  - sweepAngle =>  sweep, in degrees. Positive is clockwise; treated modulo 360
+# parameters
+
+  - oval -         bounds of ellipse containing arc
+  - startAngle -   starting angle of arc in degrees
+  - sweepAngle -   sweep, in degrees. Positive is clockwise; treated modulo 360
 
 # return
 
   - reference to SkPath
-
-example: https://fiddle.skia.org/c/@Path_addArc
 */
 func (o Path) AddArc(oval Rect, startAngle float32, sweepAngle float32) Path {
 	c_obj := o.sk
@@ -7243,24 +6513,18 @@ func (o Path) AddArc(oval Rect, startAngle float32, sweepAngle float32) Path {
 }
 
 /*
-Appends SkRRect to SkPath, creating a new closed contour. SkRRect has bounds
-equal to rect; each corner is 90 degrees of an ellipse with radii (rx, ry). If
-dir is kCW_Direction, SkRRect starts at top-left of the lower-left corner and
-winds clockwise. If dir is kCCW_Direction, SkRRect starts at the bottom-left
-of the upper-left corner and winds counterclockwise.
+Appends SkRRect to SkPath, creating a new closed contour. SkRRect has bounds        equal to rect; each corner is 90 degrees of an ellipse with radii (rx, ry). If        dir is kCW_Direction, SkRRect starts at top-left of the lower-left corner and        winds clockwise. If dir is kCCW_Direction, SkRRect starts at the bottom-left        of the upper-left corner and winds counterclockwise.
 
-If either rx or ry is too large, rx and ry are scaled uniformly until the
-corners fit. If rx or ry is less than or equal to zero, addRoundRect() appends
-SkRect rect to SkPath.
+If either rx or ry is too large, rx and ry are scaled uniformly until the        corners fit. If rx or ry is less than or equal to zero, addRoundRect() appends        SkRect rect to SkPath.
 
 After appending, SkPath may be empty, or may contain: SkRect, oval, or SkRRect.
 
-# params
+# parameters
 
-  - rect =>  bounds of SkRRect
-  - rx =>    x-axis radius of rounded corners on the SkRRect
-  - ry =>    y-axis radius of rounded corners on the SkRRect
-  - dir =>   SkPath::Direction to wind SkRRect
+  - rect -   bounds of SkRRect
+  - rx -     x-axis radius of rounded corners on the SkRRect
+  - ry -     y-axis radius of rounded corners on the SkRRect
+  - dir -    SkPath::Direction to wind SkRRect
 
 # return
 
@@ -7277,15 +6541,13 @@ func (o Path) AddRoundRect1(rect Rect, rx float32, ry float32, dir PathDirection
 }
 
 /*
-Appends SkRRect to SkPath, creating a new closed contour. SkRRect has bounds
-equal to rect; each corner is 90 degrees of an ellipse with radii from the
-array.
+Appends SkRRect to SkPath, creating a new closed contour. SkRRect has bounds        equal to rect; each corner is 90 degrees of an ellipse with radii from the        array.
 
-# params
+# parameters
 
-  - rect =>   bounds of SkRRect
-  - radii =>  array of 8 SkScalar values, a radius pair for each corner
-  - dir =>    SkPath::Direction to wind SkRRect
+  - rect -    bounds of SkRRect
+  - radii -   array of 8 SkScalar values, a radius pair for each corner
+  - dir -     SkPath::Direction to wind SkRRect
 
 # return
 
@@ -7301,23 +6563,20 @@ func (o Path) AddRoundRect2(rect Rect, radii []float32, dir PathDirection) Path 
 }
 
 /*
-Adds rrect to SkPath, creating a new closed contour. If
-dir is kCW_Direction, rrect starts at top-left of the lower-left corner and
-winds clockwise. If dir is kCCW_Direction, rrect starts at the bottom-left
-of the upper-left corner and winds counterclockwise.
+Adds rrect to SkPath, creating a new closed contour. If        dir is kCW_Direction, rrect starts at top-left of the lower-left corner and        winds clockwise. If dir is kCCW_Direction, rrect starts at the bottom-left        of the upper-left corner and winds counterclockwise.
 
 After appending, SkPath may be empty, or may contain: SkRect, oval, or SkRRect.
 
-# params
+example: https://fiddle.skia.org/c/_addRRect
 
-  - rrect =>  bounds and radii of rounded rectangle
-  - dir =>    SkPath::Direction to wind SkRRect
+# parameters
+
+  - rrect -   bounds and radii of rounded rectangle
+  - dir -     SkPath::Direction to wind SkRRect
 
 # return
 
   - reference to SkPath
-
-example: https://fiddle.skia.org/c/@Path_addRRect
 */
 func (o Path) AddRRect1(rrect RRect, dir PathDirection) Path {
 	c_obj := o.sk
@@ -7328,21 +6587,19 @@ func (o Path) AddRRect1(rrect RRect, dir PathDirection) Path {
 }
 
 /*
-Adds rrect to SkPath, creating a new closed contour. If dir is kCW_Direction, rrect
-winds clockwise; if dir is kCCW_Direction, rrect winds counterclockwise.
-start determines the first point of rrect to add.
+Adds rrect to SkPath, creating a new closed contour. If dir is kCW_Direction, rrect        winds clockwise; if dir is kCCW_Direction, rrect winds counterclockwise.        start determines the first point of rrect to add.
 
-# params
+example: https://fiddle.skia.org/c/_addRRect_2
 
-  - rrect =>  bounds and radii of rounded rectangle
-  - dir =>    SkPath::Direction to wind SkRRect
-  - start =>  index of initial point of SkRRect
+# parameters
+
+  - rrect -   bounds and radii of rounded rectangle
+  - dir -     SkPath::Direction to wind SkRRect
+  - start -   index of initial point of SkRRect
 
 # return
 
   - reference to SkPath
-
-example: https://fiddle.skia.org/c/@Path_addRRect_2
 */
 func (o Path) AddRRect2(rrect RRect, dir PathDirection, start uint32) Path {
 	c_obj := o.sk
@@ -7354,25 +6611,21 @@ func (o Path) AddRRect2(rrect RRect, dir PathDirection, start uint32) Path {
 }
 
 /*
-Adds contour created from line array, adding (count - 1) line segments.
-Contour added starts at pts[0], then adds a line for every additional SkPoint
-in pts array. If close is true, appends kClose_Verb to SkPath, connecting
-pts[count - 1] and pts[0].
+Adds contour created from line array, adding (count - 1) line segments.        Contour added starts at pts[0], then adds a line for every additional SkPoint        in pts array. If close is true, appends kClose_Verb to SkPath, connecting        pts[count - 1] and pts[0].
 
-If count is zero, append kMove_Verb to path.
-Has no effect if count is less than one.
+If count is zero, append kMove_Verb to path.        Has no effect if count is less than one.
 
-# params
+example: https://fiddle.skia.org/c/_addPoly
 
-  - pts =>    array of line sharing end and start SkPoint
-  - count =>  length of SkPoint array
-  - close =>  true to add line connecting contour end and start
+# parameters
+
+  - pts -     array of line sharing end and start SkPoint
+  - count -   length of SkPoint array
+  - close -   true to add line connecting contour end and start
 
 # return
 
   - reference to SkPath
-
-example: https://fiddle.skia.org/c/@Path_addPoly
 */
 func (o Path) AddPoly(pts []Point, count int32, close bool) Path {
 	c_obj := o.sk
@@ -7386,16 +6639,14 @@ func (o Path) AddPoly(pts []Point, count int32, close bool) Path {
 /*
 Appends src to SkPath, offset by (dx, dy).
 
-If mode is kAppend_AddPathMode, src verb array, SkPoint array, and conic weights are
-added unaltered. If mode is kExtend_AddPathMode, add line before appending
-verbs, SkPoint, and conic weights.
+If mode is kAppend_AddPathMode, src verb array, SkPoint array, and conic weights are        added unaltered. If mode is kExtend_AddPathMode, add line before appending        verbs, SkPoint, and conic weights.
 
-# params
+# parameters
 
-  - src =>   SkPath verbs, SkPoint, and conic weights to add
-  - dx =>    offset added to src SkPoint array x-axis coordinates
-  - dy =>    offset added to src SkPoint array y-axis coordinates
-  - mode =>  kAppend_AddPathMode or kExtend_AddPathMode
+  - src -    SkPath verbs, SkPoint, and conic weights to add
+  - dx -     offset added to src SkPoint array x-axis coordinates
+  - dy -     offset added to src SkPoint array y-axis coordinates
+  - mode -   kAppend_AddPathMode or kExtend_AddPathMode
 
 # return
 
@@ -7414,14 +6665,12 @@ func (o Path) AddPath1(src Path, dx float32, dy float32, mode PathAddPathMode) P
 /*
 Appends src to SkPath.
 
-If mode is kAppend_AddPathMode, src verb array, SkPoint array, and conic weights are
-added unaltered. If mode is kExtend_AddPathMode, add line before appending
-verbs, SkPoint, and conic weights.
+If mode is kAppend_AddPathMode, src verb array, SkPoint array, and conic weights are        added unaltered. If mode is kExtend_AddPathMode, add line before appending        verbs, SkPoint, and conic weights.
 
-# params
+# parameters
 
-  - src =>   SkPath verbs, SkPoint, and conic weights to add
-  - mode =>  kAppend_AddPathMode or kExtend_AddPathMode
+  - src -    SkPath verbs, SkPoint, and conic weights to add
+  - mode -   kAppend_AddPathMode or kExtend_AddPathMode
 
 # return
 
@@ -7436,18 +6685,15 @@ func (o Path) AddPath2(src Path, mode PathAddPathMode) Path {
 }
 
 /*
-Appends src to SkPath, transformed by matrix. Transformed curves may have different
-verbs, SkPoint, and conic weights.
+Appends src to SkPath, transformed by matrix. Transformed curves may have different        verbs, SkPoint, and conic weights.
 
-If mode is kAppend_AddPathMode, src verb array, SkPoint array, and conic weights are
-added unaltered. If mode is kExtend_AddPathMode, add line before appending
-verbs, SkPoint, and conic weights.
+If mode is kAppend_AddPathMode, src verb array, SkPoint array, and conic weights are        added unaltered. If mode is kExtend_AddPathMode, add line before appending        verbs, SkPoint, and conic weights.
 
-# params
+# parameters
 
-  - src =>     SkPath verbs, SkPoint, and conic weights to add
-  - matrix =>  transform applied to src
-  - mode =>    kAppend_AddPathMode or kExtend_AddPathMode
+  - src -      SkPath verbs, SkPoint, and conic weights to add
+  - matrix -   transform applied to src
+  - mode -     kAppend_AddPathMode or kExtend_AddPathMode
 
 # return
 
@@ -7463,18 +6709,17 @@ func (o Path) AddPath3(src Path, matrix Matrix, mode PathAddPathMode) Path {
 }
 
 /*
-Appends src to SkPath, from back to front.
-Reversed src always appends a new contour to SkPath.
+Appends src to SkPath, from back to front.        Reversed src always appends a new contour to SkPath.
 
-# params
+example: https://fiddle.skia.org/c/_reverseAddPath
 
-  - src =>  SkPath verbs, SkPoint, and conic weights to add
+# parameters
+
+  - src -   SkPath verbs, SkPoint, and conic weights to add
 
 # return
 
   - reference to SkPath
-
-example: https://fiddle.skia.org/c/@Path_reverseAddPath
 */
 func (o Path) ReverseAddPath(src Path) Path {
 	c_obj := o.sk
@@ -7484,16 +6729,15 @@ func (o Path) ReverseAddPath(src Path) Path {
 }
 
 /*
-Offsets SkPoint array by (dx, dy). Offset SkPath replaces dst.
-If dst is nullptr, SkPath is replaced by offset data.
+Offsets SkPoint array by (dx, dy). Offset SkPath replaces dst.        If dst is nullptr, SkPath is replaced by offset data.
 
-# params
+example: https://fiddle.skia.org/c/_offset
 
-  - dx =>   offset added to SkPoint array x-axis coordinates
-  - dy =>   offset added to SkPoint array y-axis coordinates
-  - dst =>  overwritten, translated copy of SkPath; may be nullptr
+# parameters
 
-example: https://fiddle.skia.org/c/@Path_offset
+  - dx -    offset added to SkPoint array x-axis coordinates
+  - dy -    offset added to SkPoint array y-axis coordinates
+  - dst -   overwritten, translated copy of SkPath; may be nullptr
 */
 func (o Path) Offset1(dx float32, dy float32, dst Path) {
 	c_obj := o.sk
@@ -7506,10 +6750,10 @@ func (o Path) Offset1(dx float32, dy float32, dst Path) {
 /*
 Offsets SkPoint array by (dx, dy). SkPath is replaced by offset data.
 
-# params
+# parameters
 
-  - dx =>  offset added to SkPoint array x-axis coordinates
-  - dy =>  offset added to SkPoint array y-axis coordinates
+  - dx -   offset added to SkPoint array x-axis coordinates
+  - dy -   offset added to SkPoint array y-axis coordinates
 */
 func (o Path) Offset2(dx float32, dy float32) Path {
 	c_obj := o.sk
@@ -7520,18 +6764,15 @@ func (o Path) Offset2(dx float32, dy float32) Path {
 }
 
 /*
-Transforms verb array, SkPoint array, and weight by matrix.
-transform may change verbs and increase their number.
-Transformed SkPath replaces dst; if dst is nullptr, original data
-is replaced.
+Transforms verb array, SkPoint array, and weight by matrix.        transform may change verbs and increase their number.        Transformed SkPath replaces dst; if dst is nullptr, original data        is replaced.
 
-# params
+example: https://fiddle.skia.org/c/_transform
 
-  - matrix =>  SkMatrix to apply to SkPath
-  - dst =>     overwritten, transformed copy of SkPath; may be nullptr
-  - pc =>      whether to apply perspective clipping
+# parameters
 
-example: https://fiddle.skia.org/c/@Path_transform
+  - matrix -   SkMatrix to apply to SkPath
+  - dst -      overwritten, transformed copy of SkPath; may be nullptr
+  - pc -       whether to apply perspective clipping
 */
 func (o Path) Transform1(matrix Matrix, dst Path, pc ApplyPerspectiveClip) {
 	c_obj := o.sk
@@ -7542,14 +6783,12 @@ func (o Path) Transform1(matrix Matrix, dst Path, pc ApplyPerspectiveClip) {
 }
 
 /*
-Transforms verb array, SkPoint array, and weight by matrix.
-transform may change verbs and increase their number.
-SkPath is replaced by transformed data.
+Transforms verb array, SkPoint array, and weight by matrix.        transform may change verbs and increase their number.        SkPath is replaced by transformed data.
 
-# params
+# parameters
 
-  - matrix =>  SkMatrix to apply to SkPath
-  - pc =>      whether to apply perspective clipping
+  - matrix -   SkMatrix to apply to SkPath
+  - pc -       whether to apply perspective clipping
 */
 func (o Path) Transform2(matrix Matrix, pc ApplyPerspectiveClip) Path {
 	c_obj := o.sk
@@ -7576,18 +6815,17 @@ func (o Path) MakeScale(sx float32, sy float32) Path {
 }
 
 /*
-Returns last point on SkPath in lastPt. Returns false if SkPoint array is empty,
-storing (0, 0) if lastPt is not nullptr.
+Returns last point on SkPath in lastPt. Returns false if SkPoint array is empty,        storing (0, 0) if lastPt is not nullptr.
 
-# params
+example: https://fiddle.skia.org/c/_getLastPt
 
-  - lastPt =>  storage for final SkPoint in SkPoint array; may be nullptr
+# parameters
+
+  - lastPt -   storage for final SkPoint in SkPoint array; may be nullptr
 
 # return
 
   - true if SkPoint array contains one or more SkPoint
-
-example: https://fiddle.skia.org/c/@Path_getLastPt
 */
 func (o Path) GetLastPt(lastPt Point) bool {
 	c_obj := o.sk
@@ -7597,15 +6835,14 @@ func (o Path) GetLastPt(lastPt Point) bool {
 }
 
 /*
-Sets last point to (x, y). If SkPoint array is empty, append kMove_Verb to
-verb array and append (x, y) to SkPoint array.
+Sets last point to (x, y). If SkPoint array is empty, append kMove_Verb to        verb array and append (x, y) to SkPoint array.
 
-# params
+example: https://fiddle.skia.org/c/_setLastPt
 
-  - x =>  set x-axis value of last point
-  - y =>  set y-axis value of last point
+# parameters
 
-example: https://fiddle.skia.org/c/@Path_setLastPt
+  - x -   set x-axis value of last point
+  - y -   set y-axis value of last point
 */
 func (o Path) SetLastPt1(x float32, y float32) {
 	c_obj := o.sk
@@ -7615,12 +6852,11 @@ func (o Path) SetLastPt1(x float32, y float32) {
 }
 
 /*
-Sets the last point on the path. If SkPoint array is empty, append kMove_Verb to
-verb array and append p to SkPoint array.
+Sets the last point on the path. If SkPoint array is empty, append kMove_Verb to        verb array and append p to SkPoint array.
 
-# params
+# parameters
 
-  - p =>  set value of last point
+  - p -   set value of last point
 */
 func (o Path) SetLastPt2(p Point) {
 	c_obj := o.sk
@@ -7629,9 +6865,7 @@ func (o Path) SetLastPt2(p Point) {
 }
 
 /*
-Returns a mask, where each set bit corresponds to a SegmentMask constant
-if SkPath contains one or more verbs of that type.
-Returns zero if SkPath contains no lines, or curves: quads, conics, or cubics.
+Returns a mask, where each set bit corresponds to a SegmentMask constant        if SkPath contains one or more verbs of that type.        Returns zero if SkPath contains no lines, or curves: quads, conics, or cubics.
 
 getSegmentMasks() returns a cached result; it is very fast.
 
@@ -7646,19 +6880,18 @@ func (o Path) GetSegmentMasks() uint32 {
 }
 
 /*
-Returns true if the point (x, y) is contained by SkPath, taking into
-account FillType.
+Returns true if the point (x, y) is contained by SkPath, taking into        account FillType.
 
-# params
+example: https://fiddle.skia.org/c/_contains
 
-  - x =>  x-axis value of containment test
-  - y =>  y-axis value of containment test
+# parameters
+
+  - x -   x-axis value of containment test
+  - y -   y-axis value of containment test
 
 # return
 
   - true if SkPoint is in SkPath
-
-example: https://fiddle.skia.org/c/@Path_contains
 */
 func (o Path) Contains(x float32, y float32) bool {
 	c_obj := o.sk
@@ -7671,17 +6904,15 @@ func (o Path) Contains(x float32, y float32) bool {
 /*
 Writes SkPath to buffer, returning the buffer written to, wrapped in SkData.
 
-serialize() writes SkPath::FillType, verb array, SkPoint array, conic weight, and
-additionally writes computed information like SkPath::Convexity and bounds.
+serialize() writes SkPath::FillType, verb array, SkPoint array, conic weight, and        additionally writes computed information like SkPath::Convexity and bounds.
 
-serialize() should only be used in concert with readFromMemory().
-The format used for SkPath in memory is not guaranteed.
+serialize() should only be used in concert with readFromMemory().        The format used for SkPath in memory is not guaranteed.
+
+example: https://fiddle.skia.org/c/_serialize
 
 # return
 
   - SkPath data wrapped in SkData buffer
-
-example: https://fiddle.skia.org/c/@Path_serialize
 */
 func (o Path) Serialize() Data {
 	c_obj := o.sk
@@ -7690,9 +6921,7 @@ func (o Path) Serialize() Data {
 }
 
 /*
-Returns if SkPath data is consistent. Corrupt SkPath data is detected if
-internal values are out of range or internal storage does not match
-array dimensions.
+Returns if SkPath data is consistent. Corrupt SkPath data is detected if        internal values are out of range or internal storage does not match        array dimensions.
 
 # return
 
@@ -7705,8 +6934,7 @@ func (o Path) IsValid() bool {
 }
 
 /*
-AddPathMode chooses how addPath() appends. Adding one SkPath to another can extend
-the last contour or start a new contour.
+AddPathMode chooses how addPath() appends. Adding one SkPath to another can extend        the last contour or start a new contour.
 */
 type PathAddPathMode uint32
 
@@ -7716,31 +6944,29 @@ const (
 	*/
 	PathAddPathModeAppend PathAddPathMode = 0
 	/*
-	   Extends the last contour of the destination path with the first countour
-	   of the source path, connecting them with a line.  If the last contour is
-	   closed, a new empty contour starting at its start point is extended instead.
-	   If the destination path is empty, the result is the source path.
-	   The last path of the result is closed only if the last path of the source is.
+	   Extends the last contour of the destination path with the first countour            of the source path, connecting them with a line.  If the last contour is            closed, a new empty contour starting at its start point is extended instead.            If the destination path is empty, the result is the source path.            The last path of the result is closed only if the last path of the source is.
 	*/
 	PathAddPathModeExtend PathAddPathMode = 1
 )
 
 /*
-Four oval parts with radii (rx, ry) start at last SkPath SkPoint and ends at (x, y).
-ArcSize and Direction select one of the four oval parts.
+Four oval parts with radii (rx, ry) start at last SkPath SkPoint and ends at (x, y).        ArcSize and Direction select one of the four oval parts.
 */
 type PathArcSize uint32
 
 const (
-	// smaller of arc pair
+	/*
+	   smaller of arc pair
+	*/
 	PathArcSizeSmall PathArcSize = 0
-	// larger of arc pair
+	/*
+	   larger of arc pair
+	*/
 	PathArcSizeLarge PathArcSize = 1
 )
 
 /*
-SegmentMask constants correspond to each drawing Verb type in SkPath; for
-instance, if SkPath only contains lines, only the kLine_SegmentMask bit is set.
+SegmentMask constants correspond to each drawing Verb type in SkPath; for        instance, if SkPath only contains lines, only the kLine_SegmentMask bit is set.
 */
 type PathSegmentMask uint32
 
@@ -7752,8 +6978,7 @@ const (
 )
 
 /*
-Verb instructs SkPath how to interpret one or more SkPoint and optional conic weight;
-manage contour, and terminate SkPath.
+Verb instructs SkPath how to interpret one or more SkPoint and optional conic weight;        manage contour, and terminate SkPath.
 */
 type PathVerb uint32
 
@@ -7774,7 +6999,9 @@ type Point struct {
 	sk *C.sk_SkPoint
 }
 
-// x-axis value
+/*
+x-axis value
+*/
 func (o Point) X() float32 {
 	return float32(o.sk.fX)
 }
@@ -7783,7 +7010,9 @@ func (o *Point) SetX(value float32) {
 	o.sk.fX = C.float(value)
 }
 
-// y-axis value
+/*
+y-axis value
+*/
 func (o Point) Y() float32 {
 	return float32(o.sk.fY)
 }
@@ -7799,16 +7028,11 @@ func (o Point) IsNil() bool {
 }
 
 /*
-SkPixmap provides a utility to pair SkImageInfo with pixels and row bytes.
-SkPixmap is a low level class which provides convenience functions to access
-raster destinations. SkCanvas can not draw SkPixmap, nor does SkPixmap provide
-a direct drawing destination.
+SkPixmap provides a utility to pair SkImageInfo with pixels and row bytes.    SkPixmap is a low level class which provides convenience functions to access    raster destinations. SkCanvas can not draw SkPixmap, nor does SkPixmap provide    a direct drawing destination.
 
-Use SkBitmap to draw pixels referenced by SkPixmap; use SkSurface to draw into
-pixels referenced by SkPixmap.
+Use SkBitmap to draw pixels referenced by SkPixmap; use SkSurface to draw into    pixels referenced by SkPixmap.
 
-SkPixmap does not try to manage the lifetime of the pixel memory. Use SkPixelRef
-to manage pixel memory; SkPixelRef is safe across threads.
+SkPixmap does not try to manage the lifetime of the pixel memory. Use SkPixelRef    to manage pixel memory; SkPixelRef is safe across threads.
 */
 type Pixmap struct {
 	sk *C.sk_SkPixmap
@@ -7821,10 +7045,7 @@ func (o Pixmap) IsNil() bool {
 }
 
 /*
-Creates an empty SkPixmap without pixels, with kUnknown_SkColorType, with
-kUnknown_SkAlphaType, and with a width and height of zero. Use
-reset() to associate pixels, SkColorType, SkAlphaType, width, and height
-after SkPixmap has been created.
+Creates an empty SkPixmap without pixels, with kUnknown_SkColorType, with        kUnknown_SkAlphaType, and with a width and height of zero. Use        reset() to associate pixels, SkColorType, SkAlphaType, width, and height        after SkPixmap has been created.
 
 # return
 
@@ -7837,24 +7058,19 @@ func NewPixmap() Pixmap {
 }
 
 /*
-Creates SkPixmap from info width, height, SkAlphaType, and SkColorType.
-addr points to pixels, or nullptr. rowBytes should be info.width() times
-info.bytesPerPixel(), or larger.
+Creates SkPixmap from info width, height, SkAlphaType, and SkColorType.        addr points to pixels, or nullptr. rowBytes should be info.width() times        info.bytesPerPixel(), or larger.
 
-No parameter checking is performed; it is up to the caller to ensure that
-addr and rowBytes agree with info.
+No parameter checking is performed; it is up to the caller to ensure that        addr and rowBytes agree with info.
 
-The memory lifetime of pixels is managed by the caller. When SkPixmap goes
-out of scope, addr is unaffected.
+The memory lifetime of pixels is managed by the caller. When SkPixmap goes        out of scope, addr is unaffected.
 
-SkPixmap may be later modified by reset() to change its size, pixel type, or
-storage.
+SkPixmap may be later modified by reset() to change its size, pixel type, or        storage.
 
-# params
+# parameters
 
-  - info =>      width, height, SkAlphaType, SkColorType of SkImageInfo
-  - addr =>      pointer to pixels allocated by caller; may be nullptr
-  - rowBytes =>  size of one row of addr; width times pixel size, or larger
+  - info -       width, height, SkAlphaType, SkColorType of SkImageInfo
+  - addr -       pointer to pixels allocated by caller; may be nullptr
+  - rowBytes -   size of one row of addr; width times pixel size, or larger
 
 # return
 
@@ -7874,15 +7090,13 @@ func (o *Pixmap) Delete() {
 }
 
 /*
-SkRect holds four float coordinates describing the upper and
-lower bounds of a rectangle. SkRect may be created from outer bounds or
-from position, width, and height. SkRect describes an area; if its right
-is less than or equal to its left, or if its bottom is less than or equal to
-its top, it is considered empty.
+SkRect holds four float coordinates describing the upper and    lower bounds of a rectangle. SkRect may be created from outer bounds or    from position, width, and height. SkRect describes an area; if its right    is less than or equal to its left, or if its bottom is less than or equal to    its top, it is considered empty.
 */
 type Rect C.sk_SkRect
 
-// smaller x-axis bounds
+/*
+smaller x-axis bounds
+*/
 func (o Rect) Left() float32 {
 	return float32(o.fLeft)
 }
@@ -7891,7 +7105,9 @@ func (o *Rect) SetLeft(value float32) {
 	o.fLeft = C.float(value)
 }
 
-// smaller y-axis bounds
+/*
+smaller y-axis bounds
+*/
 func (o Rect) Top() float32 {
 	return float32(o.fTop)
 }
@@ -7900,7 +7116,9 @@ func (o *Rect) SetTop(value float32) {
 	o.fTop = C.float(value)
 }
 
-// larger x-axis bounds
+/*
+larger x-axis bounds
+*/
 func (o Rect) Right() float32 {
 	return float32(o.fRight)
 }
@@ -7909,7 +7127,9 @@ func (o *Rect) SetRight(value float32) {
 	o.fRight = C.float(value)
 }
 
-// larger y-axis bounds
+/*
+larger y-axis bounds
+*/
 func (o Rect) Bottom() float32 {
 	return float32(o.fBottom)
 }
@@ -7919,10 +7139,7 @@ func (o *Rect) SetBottom(value float32) {
 }
 
 /*
-Returns constructed SkRect set to (0, 0, 0, 0).
-Many other rectangles are empty; if left is equal to or greater than right,
-or if top is equal to or greater than bottom. Setting all members to zero
-is a convenience, but does not designate a special empty rectangle.
+Returns constructed SkRect set to (0, 0, 0, 0).        Many other rectangles are empty; if left is equal to or greater than right,        or if top is equal to or greater than bottom. Setting all members to zero        is a convenience, but does not designate a special empty rectangle.
 
 # return
 
@@ -7934,16 +7151,14 @@ func RectMakeEmpty() Rect {
 }
 
 /*
-Returns constructed SkRect set to float values (0, 0, w, h). Does not
-validate input; w or h may be negative.
+Returns constructed SkRect set to float values (0, 0, w, h). Does not        validate input; w or h may be negative.
 
-Passing integer values may generate a compiler warning since SkRect cannot
-represent 32-bit integers exactly. Use SkIRect for an exact integer rectangle.
+Passing integer values may generate a compiler warning since SkRect cannot        represent 32-bit integers exactly. Use SkIRect for an exact integer rectangle.
 
-# params
+# parameters
 
-  - w =>  float width of constructed SkRect
-  - h =>  float height of constructed SkRect
+  - w -   float width of constructed SkRect
+  - h -   float height of constructed SkRect
 
 # return
 
@@ -7957,12 +7172,11 @@ func RectMakeWH(w float32, h float32) Rect {
 }
 
 /*
-Returns constructed SkRect set to (0, 0, size.width(), size.height()). Does not
-validate input; size.width() or size.height() may be negative.
+Returns constructed SkRect set to (0, 0, size.width(), size.height()). Does not        validate input; size.width() or size.height() may be negative.
 
-# params
+# parameters
 
-  - size =>  float values for SkRect width and height
+  - size -   float values for SkRect width and height
 
 # return
 
@@ -7975,15 +7189,14 @@ func RectMakeSize(size Size) Rect {
 }
 
 /*
-Returns constructed SkRect set to (l, t, r, b). Does not sort input; SkRect may
-result in fLeft greater than fRight, or fTop greater than fBottom.
+Returns constructed SkRect set to (l, t, r, b). Does not sort input; SkRect may        result in fLeft greater than fRight, or fTop greater than fBottom.
 
-# params
+# parameters
 
-  - l =>  float stored in fLeft
-  - t =>  float stored in fTop
-  - r =>  float stored in fRight
-  - b =>  float stored in fBottom
+  - l -   float stored in fLeft
+  - t -   float stored in fTop
+  - r -   float stored in fRight
+  - b -   float stored in fBottom
 
 # return
 
@@ -7999,15 +7212,14 @@ func RectMakeLTRB(l float32, t float32, r float32, b float32) Rect {
 }
 
 /*
-Returns constructed SkRect set to (x, y, x + w, y + h).
-Does not validate input; w or h may be negative.
+Returns constructed SkRect set to (x, y, x + w, y + h).        Does not validate input; w or h may be negative.
 
-# params
+# parameters
 
-  - x =>  stored in fLeft
-  - y =>  stored in fTop
-  - w =>  added to x and stored in fRight
-  - h =>  added to y and stored in fBottom
+  - x -   stored in fLeft
+  - y -   stored in fTop
+  - w -   added to x and stored in fRight
+  - h -   added to y and stored in fBottom
 
 # return
 
@@ -8023,12 +7235,11 @@ func RectMakeXYWH(x float32, y float32, w float32, h float32) Rect {
 }
 
 /*
-Returns constructed SkIRect set to (0, 0, size.width(), size.height()).
-Does not validate input; size.width() or size.height() may be negative.
+Returns constructed SkIRect set to (0, 0, size.width(), size.height()).        Does not validate input; size.width() or size.height() may be negative.
 
-# params
+# parameters
 
-  - size =>  integer values for SkRect width and height
+  - size -   integer values for SkRect width and height
 
 # return
 
@@ -8041,13 +7252,11 @@ func RectMakeISize(size ISize) Rect {
 }
 
 /*
-Returns constructed SkIRect set to irect, promoting integers to float.
-Does not validate input; fLeft may be greater than fRight, fTop may be greater
-than fBottom.
+Returns constructed SkIRect set to irect, promoting integers to float.        Does not validate input; fLeft may be greater than fRight, fTop may be greater        than fBottom.
 
-# params
+# parameters
 
-  - irect =>  integer unsorted bounds
+  - irect -   integer unsorted bounds
 
 # return
 
@@ -8060,13 +7269,12 @@ func RectMakeIRect(irect IRect) Rect {
 }
 
 /*
-Returns true if a intersects b.
-Returns false if either a or b is empty, or do not intersect.
+Returns true if a intersects b.        Returns false if either a or b is empty, or do not intersect.
 
-# params
+# parameters
 
-  - a =>  SkRect to intersect
-  - b =>  SkRect to intersect
+  - a -   SkRect to intersect
+  - b -   SkRect to intersect
 
 # return
 
@@ -8080,8 +7288,7 @@ func RectIntersects(a Rect, b Rect) bool {
 }
 
 /*
-Returns left edge of SkRect, if sorted. Call isSorted() to see if SkRect is valid.
-Call sort() to reverse fLeft and fRight if needed.
+Returns left edge of SkRect, if sorted. Call isSorted() to see if SkRect is valid.        Call sort() to reverse fLeft and fRight if needed.
 
 # return
 
@@ -8094,8 +7301,7 @@ func (o *Rect) X() float32 {
 }
 
 /*
-Returns top edge of SkRect, if sorted. Call isEmpty() to see if SkRect may be invalid,
-and sort() to reverse fTop and fBottom if needed.
+Returns top edge of SkRect, if sorted. Call isEmpty() to see if SkRect may be invalid,        and sort() to reverse fTop and fBottom if needed.
 
 # return
 
@@ -8108,8 +7314,7 @@ func (o *Rect) Y() float32 {
 }
 
 /*
-Returns span on the x-axis. This does not check if SkRect is sorted, or if
-result fits in 32-bit float; result may be negative or infinity.
+Returns span on the x-axis. This does not check if SkRect is sorted, or if        result fits in 32-bit float; result may be negative or infinity.
 
 # return
 
@@ -8122,8 +7327,7 @@ func (o *Rect) Width() float32 {
 }
 
 /*
-Returns span on the y-axis. This does not check if SkRect is sorted, or if
-result fits in 32-bit float; result may be negative or infinity.
+Returns span on the y-axis. This does not check if SkRect is sorted, or if        result fits in 32-bit float; result may be negative or infinity.
 
 # return
 
@@ -8136,8 +7340,7 @@ func (o *Rect) Height() float32 {
 }
 
 /*
-Returns average of left edge and right edge. Result does not change if SkRect
-is sorted. Result may overflow to infinity if SkRect is far from the origin.
+Returns average of left edge and right edge. Result does not change if SkRect        is sorted. Result may overflow to infinity if SkRect is far from the origin.
 
 # return
 
@@ -8150,8 +7353,7 @@ func (o *Rect) CenterX() float32 {
 }
 
 /*
-Returns average of top edge and bottom edge. Result does not change if SkRect
-is sorted.
+Returns average of top edge and bottom edge. Result does not change if SkRect        is sorted.
 
 # return
 
@@ -8164,9 +7366,7 @@ func (o *Rect) CenterY() float32 {
 }
 
 /*
-Returns true if fLeft is equal to or greater than fRight, or if fTop is equal
-to or greater than fBottom. Call sort() to reverse rectangles with negative
-width() or height().
+Returns true if fLeft is equal to or greater than fRight, or if fTop is equal        to or greater than fBottom. Call sort() to reverse rectangles with negative        width() or height().
 
 # return
 
@@ -8181,9 +7381,7 @@ func (o *Rect) IsEmpty() bool {
 /*
 Sets SkRect to (0, 0, 0, 0).
 
-Many other rectangles are empty; if left is equal to or greater than right,
-or if top is equal to or greater than bottom. Setting all members to zero
-is a convenience, but does not designate a special empty rectangle.
+Many other rectangles are empty; if left is equal to or greater than right,        or if top is equal to or greater than bottom. Setting all members to zero        is a convenience, but does not designate a special empty rectangle.
 */
 func (o *Rect) SetEmpty() {
 	c_obj := (*C.sk_SkRect)(o)
@@ -8191,16 +7389,14 @@ func (o *Rect) SetEmpty() {
 }
 
 /*
-Sets SkRect to (left, top, right, bottom).
-left and right are not sorted; left is not necessarily less than right.
-top and bottom are not sorted; top is not necessarily less than bottom.
+Sets SkRect to (left, top, right, bottom).        left and right are not sorted; left is not necessarily less than right.        top and bottom are not sorted; top is not necessarily less than bottom.
 
-# params
+# parameters
 
-  - left =>    stored in fLeft
-  - top =>     stored in fTop
-  - right =>   stored in fRight
-  - bottom =>  stored in fBottom
+  - left -     stored in fLeft
+  - top -      stored in fTop
+  - right -    stored in fRight
+  - bottom -   stored in fBottom
 */
 func (o *Rect) SetLTRB(left float32, top float32, right float32, bottom float32) {
 	c_obj := (*C.sk_SkRect)(o)
@@ -8212,15 +7408,14 @@ func (o *Rect) SetLTRB(left float32, top float32, right float32, bottom float32)
 }
 
 /*
-Sets SkRect to (x, y, x + width, y + height).
-Does not validate input; width or height may be negative.
+Sets SkRect to (x, y, x + width, y + height).        Does not validate input; width or height may be negative.
 
-# params
+# parameters
 
-  - x =>       stored in fLeft
-  - y =>       stored in fTop
-  - width =>   added to x and stored in fRight
-  - height =>  added to y and stored in fBottom
+  - x -        stored in fLeft
+  - y -        stored in fTop
+  - width -    added to x and stored in fRight
+  - height -   added to y and stored in fBottom
 */
 func (o *Rect) SetXYWH(x float32, y float32, width float32, height float32) {
 	c_obj := (*C.sk_SkRect)(o)
@@ -8232,13 +7427,12 @@ func (o *Rect) SetXYWH(x float32, y float32, width float32, height float32) {
 }
 
 /*
-Sets SkRect to (0, 0, width, height). Does not validate input;
-width or height may be negative.
+Sets SkRect to (0, 0, width, height). Does not validate input;        width or height may be negative.
 
-# params
+# parameters
 
-  - width =>   stored in fRight
-  - height =>  stored in fBottom
+  - width -    stored in fRight
+  - height -   stored in fBottom
 */
 func (o *Rect) SetWH(width float32, height float32) {
 	c_obj := (*C.sk_SkRect)(o)
@@ -8250,15 +7444,12 @@ func (o *Rect) SetWH(width float32, height float32) {
 /*
 Offsets SkRect by adding dx to fLeft, fRight; and by adding dy to fTop, fBottom.
 
-If dx is negative, moves SkRect to the left.
-If dx is positive, moves SkRect to the right.
-If dy is negative, moves SkRect upward.
-If dy is positive, moves SkRect downward.
+If dx is negative, moves SkRect to the left.        If dx is positive, moves SkRect to the right.        If dy is negative, moves SkRect upward.        If dy is positive, moves SkRect downward.
 
-# params
+# parameters
 
-  - dx =>  offset added to fLeft and fRight
-  - dy =>  offset added to fTop and fBottom
+  - dx -   offset added to fLeft and fRight
+  - dy -   offset added to fTop and fBottom
 */
 func (o *Rect) Offset(dx float32, dy float32) {
 	c_obj := (*C.sk_SkRect)(o)
@@ -8268,13 +7459,12 @@ func (o *Rect) Offset(dx float32, dy float32) {
 }
 
 /*
-Offsets SkRect so that fLeft equals newX, and fTop equals newY. width and height
-are unchanged.
+Offsets SkRect so that fLeft equals newX, and fTop equals newY. width and height        are unchanged.
 
-# params
+# parameters
 
-  - newX =>  stored in fLeft, preserving width()
-  - newY =>  stored in fTop, preserving height()
+  - newX -   stored in fLeft, preserving width()
+  - newY -   stored in fTop, preserving height()
 */
 func (o *Rect) OffsetTo(newX float32, newY float32) {
 	c_obj := (*C.sk_SkRect)(o)
@@ -8286,15 +7476,12 @@ func (o *Rect) OffsetTo(newX float32, newY float32) {
 /*
 Insets SkRect by (dx, dy).
 
-If dx is positive, makes SkRect narrower.
-If dx is negative, makes SkRect wider.
-If dy is positive, makes SkRect shorter.
-If dy is negative, makes SkRect taller.
+If dx is positive, makes SkRect narrower.        If dx is negative, makes SkRect wider.        If dy is positive, makes SkRect shorter.        If dy is negative, makes SkRect taller.
 
-# params
+# parameters
 
-  - dx =>  added to fLeft and subtracted from fRight
-  - dy =>  added to fTop and subtracted from fBottom
+  - dx -   added to fLeft and subtracted from fRight
+  - dy -   added to fTop and subtracted from fBottom
 */
 func (o *Rect) Inset(dx float32, dy float32) {
 	c_obj := (*C.sk_SkRect)(o)
@@ -8306,15 +7493,12 @@ func (o *Rect) Inset(dx float32, dy float32) {
 /*
 Outsets SkRect by (dx, dy).
 
-If dx is positive, makes SkRect wider.
-If dx is negative, makes SkRect narrower.
-If dy is positive, makes SkRect taller.
-If dy is negative, makes SkRect shorter.
+If dx is positive, makes SkRect wider.        If dx is negative, makes SkRect narrower.        If dy is positive, makes SkRect taller.        If dy is negative, makes SkRect shorter.
 
-# params
+# parameters
 
-  - dx =>  subtracted to fLeft and added from fRight
-  - dy =>  subtracted to fTop and added from fBottom
+  - dx -   subtracted to fLeft and added from fRight
+  - dy -   subtracted to fTop and added from fBottom
 */
 func (o *Rect) Outset(dx float32, dy float32) {
 	c_obj := (*C.sk_SkRect)(o)
@@ -8324,13 +7508,12 @@ func (o *Rect) Outset(dx float32, dy float32) {
 }
 
 /*
-Returns true if: fLeft <= x < fRight && fTop <= y < fBottom.
-Returns false if SkRect is empty.
+Returns true if: fLeft <= x < fRight && fTop <= y < fBottom.        Returns false if SkRect is empty.
 
-# params
+# parameters
 
-  - x =>  test SkPoint x-coordinate
-  - y =>  test SkPoint y-coordinate
+  - x -   test SkPoint x-coordinate
+  - y -   test SkPoint y-coordinate
 
 # return
 
@@ -8345,14 +7528,13 @@ func (o *Rect) Contains(x float32, y float32) bool {
 }
 
 /*
-Returns true if SkRect contains r.
-Returns false if SkRect is empty or r is empty.
+Returns true if SkRect contains r.        Returns false if SkRect is empty or r is empty.
 
 SkRect contains r when SkRect area completely includes r area.
 
-# params
+# parameters
 
-  - r =>  SkRect contained
+  - r -   SkRect contained
 
 # return
 
@@ -8366,20 +7548,19 @@ func (o *Rect) ContainsRect(r Rect) bool {
 }
 
 /*
-Returns true if SkRect intersects r, and sets SkRect to intersection.
-Returns false if SkRect does not intersect r, and leaves SkRect unchanged.
+Returns true if SkRect intersects r, and sets SkRect to intersection.        Returns false if SkRect does not intersect r, and leaves SkRect unchanged.
 
 Returns false if either r or SkRect is empty, leaving SkRect unchanged.
 
-# params
+example: https://fiddle.skia.org/c/_intersect
 
-  - r =>  limit of result
+# parameters
+
+  - r -   limit of result
 
 # return
 
   - true if r and SkRect have area in common
-
-example: https://fiddle.skia.org/c/@Rect_intersect
 */
 func (o *Rect) Intersect(r Rect) bool {
 	c_obj := (*C.sk_SkRect)(o)
@@ -8391,14 +7572,13 @@ func (o *Rect) Intersect(r Rect) bool {
 /*
 Sets SkRect to the union of itself and r.
 
-Has no effect if r is empty. Otherwise, if SkRect is empty, sets
-SkRect to r.
+Has no effect if r is empty. Otherwise, if SkRect is empty, sets        SkRect to r.
 
-# params
+example: https://fiddle.skia.org/c/_join_2
 
-  - r =>  expansion SkRect
+# parameters
 
-example: https://fiddle.skia.org/c/@Rect_join_2
+  - r -   expansion SkRect
 */
 func (o *Rect) Join(r Rect) {
 	c_obj := (*C.sk_SkRect)(o)
@@ -8407,9 +7587,7 @@ func (o *Rect) Join(r Rect) {
 }
 
 /*
-Swaps fLeft and fRight if fLeft is greater than fRight; and swaps
-fTop and fBottom if fTop is greater than fBottom. Result may be empty;
-and width() and height() will be zero or positive.
+Swaps fLeft and fRight if fLeft is greater than fRight; and swaps        fTop and fBottom if fTop is greater than fBottom. Result may be empty;        and width() and height() will be zero or positive.
 */
 func (o *Rect) Sort() {
 	c_obj := (*C.sk_SkRect)(o)
@@ -8417,23 +7595,16 @@ func (o *Rect) Sort() {
 }
 
 /*
-SkRRect describes a rounded rectangle with a bounds and a pair of radii for each corner.
-The bounds and radii can be set so that SkRRect describes: a rectangle with sharp corners;
-a circle; an oval; or a rectangle with one or more rounded corners.
+SkRRect describes a rounded rectangle with a bounds and a pair of radii for each corner.    The bounds and radii can be set so that SkRRect describes: a rectangle with sharp corners;    a circle; an oval; or a rectangle with one or more rounded corners.
 
-SkRRect allows implementing CSS properties that describe rounded corners.
-SkRRect may have up to eight different radii, one for each axis on each of its four
-corners.
+SkRRect allows implementing CSS properties that describe rounded corners.    SkRRect may have up to eight different radii, one for each axis on each of its four    corners.
 
-SkRRect may modify the provided parameters when initializing bounds and radii.
-If either axis radii is zero or less: radii are stored as zero; corner is square.
-If corner curves overlap, radii are proportionally reduced to fit within bounds.
+SkRRect may modify the provided parameters when initializing bounds and radii.    If either axis radii is zero or less: radii are stored as zero; corner is square.    If corner curves overlap, radii are proportionally reduced to fit within bounds.
 */
 type RRect C.sk_SkRRect
 
 /*
-Initializes bounds at (0, 0), the origin, with zero width and height.
-Initializes corner radii to (0, 0), and sets type of kEmpty_Type.
+Initializes bounds at (0, 0), the origin, with zero width and height.        Initializes corner radii to (0, 0), and sets type of kEmpty_Type.
 
 # return
 
@@ -8448,9 +7619,9 @@ func NewRRect() RRect {
 /*
 Initializes to copy of rrect bounds and corner radii.
 
-# params
+# parameters
 
-  - rrect =>  bounds and corner to copy
+  - rrect -   bounds and corner to copy
 
 # return
 
@@ -8463,11 +7634,7 @@ func NewRRectCopy(rrect RRect) RRect {
 }
 
 /*
-SkRegion describes the set of pixels used to clip SkCanvas. SkRegion is compact,
-efficiently storing a single integer rectangle, or a run length encoded array
-of rectangles. SkRegion may reduce the current SkCanvas clip, or may be drawn as
-one or more integer rectangles. SkRegion iterator returns the scan lines or
-rectangles contained by it, optionally intersecting a bounding rectangle.
+SkRegion describes the set of pixels used to clip SkCanvas. SkRegion is compact,    efficiently storing a single integer rectangle, or a run length encoded array    of rectangles. SkRegion may reduce the current SkCanvas clip, or may be drawn as    one or more integer rectangles. SkRegion iterator returns the scan lines or    rectangles contained by it, optionally intersecting a bounding rectangle.
 */
 type Region struct {
 	sk *C.sk_SkRegion
@@ -8480,14 +7647,13 @@ func (o Region) IsNil() bool {
 }
 
 /*
-Constructs an empty SkRegion. SkRegion is set to empty bounds
-at (0, 0) with zero width and height.
+Constructs an empty SkRegion. SkRegion is set to empty bounds        at (0, 0) with zero width and height.
+
+example: https://fiddle.skia.org/c/_empty_constructor
 
 # return
 
   - empty SkRegion
-
-example: https://fiddle.skia.org/c/@Region_empty_constructor
 */
 func NewRegion() Region {
 
@@ -8496,24 +7662,19 @@ func NewRegion() Region {
 }
 
 /*
-Constructs a copy of an existing region.
-Copy constructor makes two regions identical by value. Internally, region and
-the returned result share pointer values. The underlying SkRect array is
-copied when modified.
+Constructs a copy of an existing region.        Copy constructor makes two regions identical by value. Internally, region and        the returned result share pointer values. The underlying SkRect array is        copied when modified.
 
-Creating a SkRegion copy is very efficient and never allocates memory.
-SkRegion are always copied by value from the interface; the underlying shared
-pointers are not exposed.
+Creating a SkRegion copy is very efficient and never allocates memory.        SkRegion are always copied by value from the interface; the underlying shared        pointers are not exposed.
 
-# params
+example: https://fiddle.skia.org/c/_copy_const_SkRegion
 
-  - region =>  SkRegion to copy by value
+# parameters
+
+  - region -   SkRegion to copy by value
 
 # return
 
   - copy of SkRegion
-
-example: https://fiddle.skia.org/c/@Region_copy_const_SkRegion
 */
 func NewRegionCopy(region Region) Region {
 	c_region := region.sk
@@ -8524,15 +7685,15 @@ func NewRegionCopy(region Region) Region {
 /*
 Constructs a rectangular SkRegion matching the bounds of rect.
 
-# params
+example: https://fiddle.skia.org/c/_copy_const_SkIRect
 
-  - rect =>  bounds of constructed SkRegion
+# parameters
+
+  - rect -   bounds of constructed SkRegion
 
 # return
 
   - rectangular SkRegion
-
-example: https://fiddle.skia.org/c/@Region_copy_const_SkIRect
 */
 func NewRegionCopyRect(rect IRect) Region {
 	c_rect := *(*C.sk_SkIRect)(unsafe.Pointer(&rect))
@@ -8543,7 +7704,7 @@ func NewRegionCopyRect(rect IRect) Region {
 /*
 Releases ownership of any shared data and deletes data if SkRegion is sole owner.
 
-example: https://fiddle.skia.org/c/@Region_destructor
+example: https://fiddle.skia.org/c/_destructor
 */
 func (o *Region) Delete() {
 	C.misk_delete_SkRegion(o.sk)
@@ -8551,17 +7712,15 @@ func (o *Region) Delete() {
 }
 
 /*
-RGBA color value, holding four floating point components. Color components are always in
-a known order. kAT determines if the SkRGBA4f's R, G, and B components are premultiplied
-by alpha or not.
+RGBA color value, holding four floating point components. Color components are always in    a known order. kAT determines if the SkRGBA4f's R, G, and B components are premultiplied    by alpha or not.
 
-Skia's public API always uses unpremultiplied colors, which can be stored as
-SkRGBA4f<kUnpremul_SkAlphaType>. For convenience, this type can also be referred to
-as SkColor4f.
+Skia's public API always uses unpremultiplied colors, which can be stored as    SkRGBA4f<kUnpremul_SkAlphaType>. For convenience, this type can also be referred to    as SkColor4f.
 */
 type RGBA4f C.sk_SkRGBA4f
 
-// red component
+/*
+red component
+*/
 func (o RGBA4f) R() float32 {
 	return float32(o.fR)
 }
@@ -8570,7 +7729,9 @@ func (o *RGBA4f) SetR(value float32) {
 	o.fR = C.float(value)
 }
 
-// green component
+/*
+green component
+*/
 func (o RGBA4f) G() float32 {
 	return float32(o.fG)
 }
@@ -8579,7 +7740,9 @@ func (o *RGBA4f) SetG(value float32) {
 	o.fG = C.float(value)
 }
 
-// blue component
+/*
+blue component
+*/
 func (o RGBA4f) B() float32 {
 	return float32(o.fB)
 }
@@ -8588,7 +7751,9 @@ func (o *RGBA4f) SetB(value float32) {
 	o.fB = C.float(value)
 }
 
-// alpha component
+/*
+alpha component
+*/
 func (o RGBA4f) A() float32 {
 	return float32(o.fA)
 }
@@ -8640,7 +7805,9 @@ func (o *SamplingOptions) Delete() {
 	o.sk = nil
 }
 
-// /////////////////////////////////////////////////////////////////////////////
+/*
+////////////////////////////////////////////////////////////////////////////
+*/
 type Size C.sk_SkSize
 
 func (o Size) Width() float32 {
@@ -8660,8 +7827,7 @@ func (o *Size) SetHeight(value float32) {
 }
 
 /*
-SkStream -- abstraction for a source of bytes. Subclasses can be backed by
-memory, or a file, or something else.
+SkStream -- abstraction for a source of bytes. Subclasses can be backed by  memory, or a file, or something else.
 */
 type Stream struct {
 	sk *C.sk_SkStream
@@ -8679,9 +7845,7 @@ func (o *Stream) Delete() {
 }
 
 /*
-Light weight class for managing strings. Uses reference
-counting to make string assignments and copies very fast
-with no extra RAM cost. Assumes UTF8 encoding.
+Light weight class for managing strings. Uses reference    counting to make string assignments and copies very fast    with no extra RAM cost. Assumes UTF8 encoding.
 */
 type String struct {
 	sk *C.sk_SkString
@@ -8712,15 +7876,9 @@ func (o String) Data() string {
 }
 
 /*
-SkSurface is responsible for managing the pixels that a canvas draws into. The pixels can be
-allocated either in CPU memory (a raster surface) or on the GPU (a GrRenderTarget surface).
-SkSurface takes care of allocating a SkCanvas that will draw into the surface. Call
-surface->getCanvas() to use that canvas (but don't delete it, it is owned by the surface).
-SkSurface always has non-zero dimensions. If there is a request for a new surface, and either
-of the requested dimensions are zero, then nullptr will be returned.
+SkSurface is responsible for managing the pixels that a canvas draws into. The pixels can be    allocated either in CPU memory (a raster surface) or on the GPU (a GrRenderTarget surface).    SkSurface takes care of allocating a SkCanvas that will draw into the surface. Call    surface->getCanvas() to use that canvas (but don't delete it, it is owned by the surface).    SkSurface always has non-zero dimensions. If there is a request for a new surface, and either    of the requested dimensions are zero, then nullptr will be returned.
 
-Clients should *not* subclass SkSurface as there is a lot of internal machinery that is
-not publicly accessible.
+Clients should *not* subclass SkSurface as there is a lot of internal machinery that is    not publicly accessible.
 */
 type Surface struct {
 	sk *C.sk_SkSurface
@@ -8738,15 +7896,13 @@ func (o *Surface) Unref() {
 }
 
 /*
-Returns SkCanvas that draws into SkSurface. Subsequent calls return the same SkCanvas.
-SkCanvas returned is managed and owned by SkSurface, and is deleted when SkSurface
-is deleted.
+Returns SkCanvas that draws into SkSurface. Subsequent calls return the same SkCanvas.        SkCanvas returned is managed and owned by SkSurface, and is deleted when SkSurface        is deleted.
+
+example: https://fiddle.skia.org/c/_getCanvas
 
 # return
 
   - drawing SkCanvas for SkSurface
-
-example: https://fiddle.skia.org/c/@Surface_getCanvas
 */
 func (o Surface) GetCanvas() Canvas {
 	c_obj := o.sk
@@ -8755,8 +7911,7 @@ func (o Surface) GetCanvas() Canvas {
 }
 
 /*
-Calls makeSurface(ImageInfo) with the same ImageInfo as this surface, but with the
-specified width and height.
+Calls makeSurface(ImageInfo) with the same ImageInfo as this surface, but with the  specified width and height.
 */
 func (o Surface) MakeSurface(width int32, height int32) Surface {
 	c_obj := o.sk
@@ -8767,15 +7922,13 @@ func (o Surface) MakeSurface(width int32, height int32) Surface {
 }
 
 /*
-Returns SkImage capturing SkSurface contents. Subsequent drawing to SkSurface contents
-are not captured. SkImage allocation is accounted for if SkSurface was created with
-skgpu::Budgeted::kYes.
+Returns SkImage capturing SkSurface contents. Subsequent drawing to SkSurface contents        are not captured. SkImage allocation is accounted for if SkSurface was created with        skgpu::Budgeted::kYes.
+
+example: https://fiddle.skia.org/c/_makeImageSnapshot
 
 # return
 
   - SkImage initialized with SkSurface contents
-
-example: https://fiddle.skia.org/c/@Surface_makeImageSnapshot
 */
 func (o Surface) MakeImageSnapshot() Image {
 	c_obj := o.sk
@@ -8784,16 +7937,9 @@ func (o Surface) MakeImageSnapshot() Image {
 }
 
 /*
-Like the no-parameter version, this returns an image of the current surface contents.
-This variant takes a rectangle specifying the subset of the surface that is of interest.
-These bounds will be sanitized before being used.
-  - If bounds extends beyond the surface, it will be trimmed to just the intersection of
+Like the no-parameter version, this returns an image of the current surface contents.  This variant takes a rectangle specifying the subset of the surface that is of interest.  These bounds will be sanitized before being used.  - If bounds extends beyond the surface, it will be trimmed to just the intersection of    it and the surface.  - If bounds does not intersect the surface, then this returns nullptr.  - If bounds == the surface, then this is the same as calling the no-parameter variant.
 
-it and the surface.
-  - If bounds does not intersect the surface, then this returns nullptr.
-  - If bounds == the surface, then this is the same as calling the no-parameter variant.
-
-example: https://fiddle.skia.org/c/@Surface_makeImageSnapshot_2
+example: https://fiddle.skia.org/c/_makeImageSnapshot_2
 */
 func (o Surface) MakeImageSnapshotBounds(bounds IRect) Image {
 	c_obj := o.sk
@@ -8803,9 +7949,7 @@ func (o Surface) MakeImageSnapshotBounds(bounds IRect) Image {
 }
 
 /*
-Describes properties and constraints of a given SkSurface. The rendering engine can parse these
-during drawing, and can sometimes optimize its performance (e.g. disabling an expensive
-feature).
+Describes properties and constraints of a given SkSurface. The rendering engine can parse these  during drawing, and can sometimes optimize its performance (e.g. disabling an expensive  feature).
 */
 type SurfaceProps struct {
 	sk *C.sk_SkSurfaceProps
@@ -8817,14 +7961,18 @@ func (o SurfaceProps) IsNil() bool {
 	return o.sk == nil
 }
 
-// No flags, unknown pixel geometry, platform-default contrast/gamma.
+/*
+No flags, unknown pixel geometry, platform-default contrast/gamma.
+*/
 func NewSurfaceProps() SurfaceProps {
 
 	retC := C.misk_new_SurfaceProps()
 	return SurfaceProps{sk: retC}
 }
 
-// TODO(kschmi): Remove this constructor and replace with the one below. *
+/*
+TODO(kschmi): Remove this constructor and replace with the one below. *
+*/
 func NewSurfacePropsPixelGeometry(flags uint32, p1 PixelGeometry) SurfaceProps {
 	c_flags := C.uint(flags)
 	c_p1 := C.uint(p1)
@@ -8852,6 +8000,9 @@ const (
 	SurfacePropsFlagsAlwaysDither_Flag              SurfacePropsFlags = 4
 )
 
+/*
+SkRefCntBase is the base class for objects that may be shared by multiple    objects. When an existing owner wants to share a reference, it calls ref().    When an owner wants to release its reference, it calls unref(). When the    shared object's reference count goes to zero as the result of an unref()    call, its (virtual) destructor is called. It is an error for the    destructor to be called explicitly (or via the object going out of scope on    the stack or calling delete) if getRefCnt() > 1.
+*/
 type SVGDOM struct {
 	sk *C.sk_SkSVGDOM
 }
@@ -8883,11 +8034,9 @@ func (o SVGDOM) GetRoot() SVGSVG {
 /*
 Specify a "container size" for the SVG dom.
 
-This is used to resolve the initial viewport when the root SVG width/height are specified
-in relative units.
+This is used to resolve the initial viewport when the root SVG width/height are specified in relative units.
 
-If the root dimensions are in absolute units, then the container size has no effect since
-the initial viewport is fixed.
+If the root dimensions are in absolute units, then the container size has no effect since the initial viewport is fixed.
 */
 func (o SVGDOM) SetContainerSize(p0 Size) {
 	c_obj := o.sk
@@ -8900,12 +8049,9 @@ DEPRECATED: use getRoot()->intrinsicSize() to query the root element intrinsic s
 
 Returns the SVG dom container size.
 
-If the client specified a container size via setContainerSize(), then the same size is
-returned.
+If the client specified a container size via setContainerSize(), then the same size is returned.
 
-When unspecified by clients, this returns the intrinsic size of the root element, as defined
-by its width/height attributes.  If either width or height is specified in relative units
-(e.g. "100%"), then the corresponding intrinsic size dimension is zero.
+When unspecified by clients, this returns the intrinsic size of the root element, as defined by its width/height attributes.  If either width or height is specified in relative units (e.g. "100%"), then the corresponding intrinsic size dimension is zero.
 */
 func (o SVGDOM) ContainerSize() Size {
 	c_obj := o.sk
@@ -8925,6 +8071,9 @@ func SVGDOMMakeFromStream(str Stream) SVGDOM {
 	return SVGDOM{sk: retC}
 }
 
+/*
+SkRefCntBase is the base class for objects that may be shared by multiple    objects. When an existing owner wants to share a reference, it calls ref().    When an owner wants to release its reference, it calls unref(). When the    shared object's reference count goes to zero as the result of an unref()    call, its (virtual) destructor is called. It is an error for the    destructor to be called explicitly (or via the object going out of scope on    the stack or calling delete) if getRefCnt() > 1.
+*/
 type SVGSVG struct {
 	sk *C.sk_SkSVGSVG
 }
@@ -8977,9 +8126,7 @@ func (o SVGLengthContext) SetViewPort(viewport Size) {
 }
 
 /*
-SkTextBlob combines multiple text runs into an immutable container. Each text
-run consists of glyphs, SkPaint, and position. Only parts of SkPaint related to
-fonts and text rendering are used by run.
+SkTextBlob combines multiple text runs into an immutable container. Each text    run consists of glyphs, SkPaint, and position. Only parts of SkPaint related to    fonts and text rendering are used by run.
 */
 type TextBlob struct {
 	sk *C.sk_SkTextBlob
@@ -8997,9 +8144,7 @@ func (o *TextBlob) Unref() {
 }
 
 /*
-Returns conservative bounding box. Uses SkPaint associated with each glyph to
-determine glyph bounds, and unions all bounds. Returned bounds may be
-larger than the bounds of all glyphs in runs.
+Returns conservative bounding box. Uses SkPaint associated with each glyph to        determine glyph bounds, and unions all bounds. Returned bounds may be        larger than the bounds of all glyphs in runs.
 
 # return
 
@@ -9025,23 +8170,17 @@ func (o TextBlob) UniqueID() uint32 {
 }
 
 /*
-Creates SkTextBlob with a single run. string meaning depends on SkTextEncoding;
-by default, string is encoded as UTF-8.
+Creates SkTextBlob with a single run. string meaning depends on SkTextEncoding;        by default, string is encoded as UTF-8.
 
 font contains attributes used to define the run text.
 
-When encoding is SkTextEncoding::kUTF8, SkTextEncoding::kUTF16, or
-SkTextEncoding::kUTF32, this function uses the default
-character-to-glyph mapping from the SkTypeface in font.  It does not
-perform typeface fallback for characters not found in the SkTypeface.
-It does not perform kerning or other complex shaping; glyphs are
-positioned based on their default advances.
+When encoding is SkTextEncoding::kUTF8, SkTextEncoding::kUTF16, or        SkTextEncoding::kUTF32, this function uses the default        character-to-glyph mapping from the SkTypeface in font.  It does not        perform typeface fallback for characters not found in the SkTypeface.        It does not perform kerning or other complex shaping; glyphs are        positioned based on their default advances.
 
-# params
+# parameters
 
-  - string =>   character code points or glyphs drawn
-  - font =>     text size, typeface, text scale, and so on, used to draw
-  - encoding => text encoding used in the text array
+  - string -    character code points or glyphs drawn
+  - font -      text size, typeface, text scale, and so on, used to draw
+  - encoding -  text encoding used in the text array
 
 # return
 
@@ -9057,18 +8196,16 @@ func TextBlobMakeFromString(string string, font Font, encoding TextEncoding) Tex
 }
 
 /*
-Returns a textblob built from a single run of text with x-positions and a single y value.
-This is equivalent to using SkTextBlobBuilder and calling allocRunPosH().
-Returns nullptr if byteLength is zero.
+Returns a textblob built from a single run of text with x-positions and a single y value.        This is equivalent to using SkTextBlobBuilder and calling allocRunPosH().        Returns nullptr if byteLength is zero.
 
-# params
+# parameters
 
-  - text =>        character code points or glyphs drawn (based on encoding)
-  - byteLength =>  byte length of text array
-  - xpos =>    array of x-positions, must contain values for all of the character points.
-  - constY =>  shared y-position for each character point, to be paired with each xpos.
-  - font =>    SkFont used for this run
-  - encoding => specifies the encoding of the text array.
+  - text -         character code points or glyphs drawn (based on encoding)
+  - byteLength -   byte length of text array
+  - xpos -     array of x-positions, must contain values for all of the character points.
+  - constY -   shared y-position for each character point, to be paired with each xpos.
+  - font -     SkFont used for this run
+  - encoding -  specifies the encoding of the text array.
 
 # return
 
@@ -9086,17 +8223,15 @@ func TextBlobMakeFromPosTextH(text []byte, byteLength uint32, xpos []float32, co
 }
 
 /*
-Returns a textblob built from a single run of text with positions.
-This is equivalent to using SkTextBlobBuilder and calling allocRunPos().
-Returns nullptr if byteLength is zero.
+Returns a textblob built from a single run of text with positions.        This is equivalent to using SkTextBlobBuilder and calling allocRunPos().        Returns nullptr if byteLength is zero.
 
-# params
+# parameters
 
-  - text =>        character code points or glyphs drawn (based on encoding)
-  - byteLength =>  byte length of text array
-  - pos =>     array of positions, must contain values for all of the character points.
-  - font =>    SkFont used for this run
-  - encoding => specifies the encoding of the text array.
+  - text -         character code points or glyphs drawn (based on encoding)
+  - byteLength -   byte length of text array
+  - pos -      array of positions, must contain values for all of the character points.
+  - font -     SkFont used for this run
+  - encoding -  specifies the encoding of the text array.
 
 # return
 
@@ -9128,11 +8263,11 @@ func (o TextBlobBuilder) IsNil() bool {
 /*
 Constructs empty SkTextBlobBuilder. By default, SkTextBlobBuilder has no runs.
 
+example: https://fiddle.skia.org/c/_empty_constructor
+
 # return
 
   - empty SkTextBlobBuilder
-
-example: https://fiddle.skia.org/c/@TextBlobBuilder_empty_constructor
 */
 func NewTextBlobBuilder() TextBlobBuilder {
 
@@ -9149,18 +8284,15 @@ func (o *TextBlobBuilder) Delete() {
 }
 
 /*
-Returns SkTextBlob built from runs of glyphs added by builder. Returned
-SkTextBlob is immutable; it may be copied, but its contents may not be altered.
-Returns nullptr if no runs of glyphs were added by builder.
+Returns SkTextBlob built from runs of glyphs added by builder. Returned        SkTextBlob is immutable; it may be copied, but its contents may not be altered.        Returns nullptr if no runs of glyphs were added by builder.
 
-Resets SkTextBlobBuilder to its initial empty state, allowing it to be
-reused to build a new set of runs.
+Resets SkTextBlobBuilder to its initial empty state, allowing it to be        reused to build a new set of runs.
+
+example: https://fiddle.skia.org/c/_make
 
 # return
 
   - SkTextBlob or nullptr
-
-example: https://fiddle.skia.org/c/@TextBlobBuilder_make
 */
 func (o TextBlobBuilder) Make() TextBlob {
 	c_obj := o.sk
@@ -9169,27 +8301,23 @@ func (o TextBlobBuilder) Make() TextBlob {
 }
 
 /*
-Returns run with storage for glyphs. Caller must write count glyphs to
-RunBuffer::glyphs before next call to SkTextBlobBuilder.
+Returns run with storage for glyphs. Caller must write count glyphs to        RunBuffer::glyphs before next call to SkTextBlobBuilder.
 
 RunBuffer::pos, RunBuffer::utf8text, and RunBuffer::clusters should be ignored.
 
 Glyphs share metrics in font.
 
-Glyphs are positioned on a baseline at (x, y), using font metrics to
-determine their relative placement.
+Glyphs are positioned on a baseline at (x, y), using font metrics to        determine their relative placement.
 
-bounds defines an optional bounding box, used to suppress drawing when SkTextBlob
-bounds does not intersect SkSurface bounds. If bounds is nullptr, SkTextBlob bounds
-is computed from (x, y) and RunBuffer::glyphs metrics.
+bounds defines an optional bounding box, used to suppress drawing when SkTextBlob        bounds does not intersect SkSurface bounds. If bounds is nullptr, SkTextBlob bounds        is computed from (x, y) and RunBuffer::glyphs metrics.
 
-# params
+# parameters
 
-  - font =>    SkFont used for this run
-  - count =>   number of glyphs
-  - x =>       horizontal offset within the blob
-  - y =>       vertical offset within the blob
-  - bounds =>  optional run bounding box
+  - font -     SkFont used for this run
+  - count -    number of glyphs
+  - x -        horizontal offset within the blob
+  - y -        vertical offset within the blob
+  - bounds -   optional run bounding box
 
 # return
 
@@ -9207,27 +8335,22 @@ func (o TextBlobBuilder) AllocRun(font Font, count int32, x float32, y float32, 
 }
 
 /*
-Returns run with storage for glyphs and positions along baseline. Caller must
-write count glyphs to RunBuffer::glyphs and count scalars to RunBuffer::pos
-before next call to SkTextBlobBuilder.
+Returns run with storage for glyphs and positions along baseline. Caller must        write count glyphs to RunBuffer::glyphs and count scalars to RunBuffer::pos        before next call to SkTextBlobBuilder.
 
 RunBuffer::utf8text and RunBuffer::clusters should be ignored.
 
 Glyphs share metrics in font.
 
-Glyphs are positioned on a baseline at y, using x-axis positions written by
-caller to RunBuffer::pos.
+Glyphs are positioned on a baseline at y, using x-axis positions written by        caller to RunBuffer::pos.
 
-bounds defines an optional bounding box, used to suppress drawing when SkTextBlob
-bounds does not intersect SkSurface bounds. If bounds is nullptr, SkTextBlob bounds
-is computed from y, RunBuffer::pos, and RunBuffer::glyphs metrics.
+bounds defines an optional bounding box, used to suppress drawing when SkTextBlob        bounds does not intersect SkSurface bounds. If bounds is nullptr, SkTextBlob bounds        is computed from y, RunBuffer::pos, and RunBuffer::glyphs metrics.
 
-# params
+# parameters
 
-  - font =>    SkFont used for this run
-  - count =>   number of glyphs
-  - y =>       vertical offset within the blob
-  - bounds =>  optional run bounding box
+  - font -     SkFont used for this run
+  - count -    number of glyphs
+  - y -        vertical offset within the blob
+  - bounds -   optional run bounding box
 
 # return
 
@@ -9244,26 +8367,21 @@ func (o TextBlobBuilder) AllocRunPosH(font Font, count int32, y float32, bounds 
 }
 
 /*
-Returns run with storage for glyphs and SkPoint positions. Caller must
-write count glyphs to RunBuffer::glyphs and count SkPoint to RunBuffer::pos
-before next call to SkTextBlobBuilder.
+Returns run with storage for glyphs and SkPoint positions. Caller must        write count glyphs to RunBuffer::glyphs and count SkPoint to RunBuffer::pos        before next call to SkTextBlobBuilder.
 
 RunBuffer::utf8text and RunBuffer::clusters should be ignored.
 
 Glyphs share metrics in font.
 
-Glyphs are positioned using SkPoint written by caller to RunBuffer::pos, using
-two scalar values for each SkPoint.
+Glyphs are positioned using SkPoint written by caller to RunBuffer::pos, using        two scalar values for each SkPoint.
 
-bounds defines an optional bounding box, used to suppress drawing when SkTextBlob
-bounds does not intersect SkSurface bounds. If bounds is nullptr, SkTextBlob bounds
-is computed from RunBuffer::pos, and RunBuffer::glyphs metrics.
+bounds defines an optional bounding box, used to suppress drawing when SkTextBlob        bounds does not intersect SkSurface bounds. If bounds is nullptr, SkTextBlob bounds        is computed from RunBuffer::pos, and RunBuffer::glyphs metrics.
 
-# params
+# parameters
 
-  - font =>    SkFont used for this run
-  - count =>   number of glyphs
-  - bounds =>  optional run bounding box
+  - font -     SkFont used for this run
+  - count -    number of glyphs
+  - bounds -   optional run bounding box
 
 # return
 
@@ -9279,30 +8397,24 @@ func (o TextBlobBuilder) AllocRunPos(font Font, count int32, bounds *Rect) TextB
 }
 
 /*
-Returns run with storage for glyphs, text, and clusters. Caller must
-write count glyphs to RunBuffer::glyphs, textByteCount UTF-8 code units
-into RunBuffer::utf8text, and count monotonic indexes into utf8text
-into RunBuffer::clusters before next call to SkTextBlobBuilder.
+Returns run with storage for glyphs, text, and clusters. Caller must        write count glyphs to RunBuffer::glyphs, textByteCount UTF-8 code units        into RunBuffer::utf8text, and count monotonic indexes into utf8text        into RunBuffer::clusters before next call to SkTextBlobBuilder.
 
 RunBuffer::pos should be ignored.
 
 Glyphs share metrics in font.
 
-Glyphs are positioned on a baseline at (x, y), using font metrics to
-determine their relative placement.
+Glyphs are positioned on a baseline at (x, y), using font metrics to        determine their relative placement.
 
-bounds defines an optional bounding box, used to suppress drawing when SkTextBlob
-bounds does not intersect SkSurface bounds. If bounds is nullptr, SkTextBlob bounds
-is computed from (x, y) and RunBuffer::glyphs metrics.
+bounds defines an optional bounding box, used to suppress drawing when SkTextBlob        bounds does not intersect SkSurface bounds. If bounds is nullptr, SkTextBlob bounds        is computed from (x, y) and RunBuffer::glyphs metrics.
 
-# params
+# parameters
 
-  - font =>          SkFont used for this run
-  - count =>         number of glyphs
-  - x =>             horizontal offset within the blob
-  - y =>             vertical offset within the blob
-  - textByteCount => number of UTF-8 code units
-  - bounds =>        optional run bounding box
+  - font -           SkFont used for this run
+  - count -          number of glyphs
+  - x -              horizontal offset within the blob
+  - y -              vertical offset within the blob
+  - textByteCount -  number of UTF-8 code units
+  - bounds -         optional run bounding box
 
 # return
 
@@ -9321,28 +8433,21 @@ func (o TextBlobBuilder) AllocRunText(font Font, count int32, x float32, y float
 }
 
 /*
-Returns run with storage for glyphs, positions along baseline, text,
-and clusters. Caller must write count glyphs to RunBuffer::glyphs,
-count scalars to RunBuffer::pos, textByteCount UTF-8 code units into
-RunBuffer::utf8text, and count monotonic indexes into utf8text into
-RunBuffer::clusters before next call to SkTextBlobBuilder.
+Returns run with storage for glyphs, positions along baseline, text,        and clusters. Caller must write count glyphs to RunBuffer::glyphs,        count scalars to RunBuffer::pos, textByteCount UTF-8 code units into        RunBuffer::utf8text, and count monotonic indexes into utf8text into        RunBuffer::clusters before next call to SkTextBlobBuilder.
 
 Glyphs share metrics in font.
 
-Glyphs are positioned on a baseline at y, using x-axis positions written by
-caller to RunBuffer::pos.
+Glyphs are positioned on a baseline at y, using x-axis positions written by        caller to RunBuffer::pos.
 
-bounds defines an optional bounding box, used to suppress drawing when SkTextBlob
-bounds does not intersect SkSurface bounds. If bounds is nullptr, SkTextBlob bounds
-is computed from y, RunBuffer::pos, and RunBuffer::glyphs metrics.
+bounds defines an optional bounding box, used to suppress drawing when SkTextBlob        bounds does not intersect SkSurface bounds. If bounds is nullptr, SkTextBlob bounds        is computed from y, RunBuffer::pos, and RunBuffer::glyphs metrics.
 
-# params
+# parameters
 
-  - font =>          SkFont used for this run
-  - count =>         number of glyphs
-  - y =>             vertical offset within the blob
-  - textByteCount => number of UTF-8 code units
-  - bounds =>        optional run bounding box
+  - font -           SkFont used for this run
+  - count -          number of glyphs
+  - y -              vertical offset within the blob
+  - textByteCount -  number of UTF-8 code units
+  - bounds -         optional run bounding box
 
 # return
 
@@ -9360,27 +8465,20 @@ func (o TextBlobBuilder) AllocRunTextPosH(font Font, count int32, y float32, tex
 }
 
 /*
-Returns run with storage for glyphs, SkPoint positions, text, and
-clusters. Caller must write count glyphs to RunBuffer::glyphs, count
-SkPoint to RunBuffer::pos, textByteCount UTF-8 code units into
-RunBuffer::utf8text, and count monotonic indexes into utf8text into
-RunBuffer::clusters before next call to SkTextBlobBuilder.
+Returns run with storage for glyphs, SkPoint positions, text, and        clusters. Caller must write count glyphs to RunBuffer::glyphs, count        SkPoint to RunBuffer::pos, textByteCount UTF-8 code units into        RunBuffer::utf8text, and count monotonic indexes into utf8text into        RunBuffer::clusters before next call to SkTextBlobBuilder.
 
 Glyphs share metrics in font.
 
-Glyphs are positioned using SkPoint written by caller to RunBuffer::pos, using
-two scalar values for each SkPoint.
+Glyphs are positioned using SkPoint written by caller to RunBuffer::pos, using        two scalar values for each SkPoint.
 
-bounds defines an optional bounding box, used to suppress drawing when SkTextBlob
-bounds does not intersect SkSurface bounds. If bounds is nullptr, SkTextBlob bounds
-is computed from RunBuffer::pos, and RunBuffer::glyphs metrics.
+bounds defines an optional bounding box, used to suppress drawing when SkTextBlob        bounds does not intersect SkSurface bounds. If bounds is nullptr, SkTextBlob bounds        is computed from RunBuffer::pos, and RunBuffer::glyphs metrics.
 
-# params
+# parameters
 
-  - font =>          SkFont used for this run
-  - count =>         number of glyphs
-  - textByteCount => number of UTF-8 code units
-  - bounds =>        optional run bounding box
+  - font -           SkFont used for this run
+  - count -          number of glyphs
+  - textByteCount -  number of UTF-8 code units
+  - bounds -         optional run bounding box
 
 # return
 
@@ -9399,12 +8497,7 @@ func (o TextBlobBuilder) AllocRunTextPos(font Font, count int32, textByteCount i
 /*
 RunBuffer supplies storage for glyphs and positions within a run.
 
-A run is a sequence of glyphs sharing font metrics and positioning.
-Each run may position its glyphs in one of three ways:
-by specifying where the first glyph is drawn, and allowing font metrics to
-determine the advance to subsequent glyphs; by specifying a baseline, and
-the position on that baseline for each glyph in run; or by providing SkPoint
-array, one per glyph.
+A run is a sequence of glyphs sharing font metrics and positioning.        Each run may position its glyphs in one of three ways:        by specifying where the first glyph is drawn, and allowing font metrics to        determine the advance to subsequent glyphs; by specifying a baseline, and        the position on that baseline for each glyph in run; or by providing SkPoint        array, one per glyph.
 */
 type TextBlobBuilderRunBuffer struct {
 	sk *C.sk_SkTextBlobBuilderRunBuffer
@@ -9423,10 +8516,7 @@ func (o TextBlobBuilderRunBuffer) Points() Point {
 }
 
 /*
-The SkTypeface class specifies the typeface and intrinsic style of a font.
-This is used in the paint, along with optionally algorithmic settings like
-textSize, textSkewX, textScaleX, kFakeBoldText_Mask, to specify
-how text appears when drawn (and measured).
+The SkTypeface class specifies the typeface and intrinsic style of a font.    This is used in the paint, along with optionally algorithmic settings like    textSize, textSkewX, textScaleX, kFakeBoldText_Mask, to specify    how text appears when drawn (and measured).
 
 Typeface objects are immutable, and so they can be shared between threads.
 */
@@ -9445,21 +8535,27 @@ func (o *Typeface) Unref() {
 	o.sk = nil
 }
 
-// Returns the typeface's intrinsic style attributes.
+/*
+Returns the typeface's intrinsic style attributes.
+*/
 func (o Typeface) FontStyle() FontStyle {
 	c_obj := o.sk
 	retC := C.misk_Typeface_fontStyle(c_obj)
 	return FontStyle{sk: &retC}
 }
 
-// Returns true if style() has the kBold bit set.
+/*
+Returns true if style() has the kBold bit set.
+*/
 func (o Typeface) IsBold() bool {
 	c_obj := o.sk
 	retC := C.misk_Typeface_isBold(c_obj)
 	return bool(retC)
 }
 
-// Returns true if style() has the kItalic bit set.
+/*
+Returns true if style() has the kItalic bit set.
+*/
 func (o Typeface) IsItalic() bool {
 	c_obj := o.sk
 	retC := C.misk_Typeface_isItalic(c_obj)
@@ -9467,8 +8563,7 @@ func (o Typeface) IsItalic() bool {
 }
 
 /*
-Returns true if the typeface claims to be fixed-pitch.
-This is a style bit, advance widths may vary even if this returns true.
+Returns true if the typeface claims to be fixed-pitch.  This is a style bit, advance widths may vary even if this returns true.
 */
 func (o Typeface) IsFixedPitch() bool {
 	c_obj := o.sk
@@ -9477,8 +8572,7 @@ func (o Typeface) IsFixedPitch() bool {
 }
 
 /*
-Return a 32bit value for this typeface, unique for the underlying font
-data. Will never return 0.
+Return a 32bit value for this typeface, unique for the underlying font        data. Will never return 0.
 */
 func (o Typeface) UniqueID() uint32 {
 	c_obj := o.sk
@@ -9487,11 +8581,7 @@ func (o Typeface) UniqueID() uint32 {
 }
 
 /*
-Return a new typeface based on this typeface but parameterized as specified in the
-SkFontArguments. If the SkFontArguments does not supply an argument for a parameter
-in the font then the value from this typeface will be used as the value for that
-argument. If the cloned typeface would be exaclty the same as this typeface then
-this typeface may be ref'ed and returned. May return nullptr on failure.
+Return a new typeface based on this typeface but parameterized as specified in the        SkFontArguments. If the SkFontArguments does not supply an argument for a parameter        in the font then the value from this typeface will be used as the value for that        argument. If the cloned typeface would be exaclty the same as this typeface then        this typeface may be ref'ed and returned. May return nullptr on failure.
 */
 func (o Typeface) MakeClone(p0 FontArguments) Typeface {
 	c_obj := o.sk
@@ -9503,11 +8593,11 @@ func (o Typeface) MakeClone(p0 FontArguments) Typeface {
 /*
 Given an array of UTF32 character codes, return their corresponding glyph IDs.
 
-# params
+# parameters
 
-  - chars => pointer to the array of UTF32 chars
-  - number => of chars and glyphs
-  - glyphs => returns the corresponding glyph IDs for each character.
+  - glyphs -  returns the corresponding glyph IDs for each character.
+  - chars -  pointer to the array of UTF32 chars
+  - number -  of chars and glyphs
 */
 func (o Typeface) UnicharsToGlyphs(uni []int32, count int32, glyphs []uint16) {
 	c_obj := o.sk
@@ -9529,8 +8619,7 @@ func (o Typeface) TextToGlyphs(text []byte, byteLength uint32, encoding TextEnco
 }
 
 /*
-Return the glyphID that corresponds to the specified unicode code-point
-(in UTF32 encoding). If the unichar is not supported, returns 0.
+Return the glyphID that corresponds to the specified unicode code-point  (in UTF32 encoding). If the unichar is not supported, returns 0.
 
 This is a short-cut for calling unicharsToGlyphs().
 */
@@ -9550,7 +8639,9 @@ func (o Typeface) CountGlyphs() int32 {
 	return int32(retC)
 }
 
-// Return the number of tables in the font.
+/*
+Return the number of tables in the font.
+*/
 func (o Typeface) CountTables() int32 {
 	c_obj := o.sk
 	retC := C.misk_Typeface_countTables(c_obj)
@@ -9558,8 +8649,7 @@ func (o Typeface) CountTables() int32 {
 }
 
 /*
-Return the units-per-em value for this typeface, or zero if there is an
-error.
+Return the units-per-em value for this typeface, or zero if there is an  error.
 */
 func (o Typeface) GetUnitsPerEm() int32 {
 	c_obj := o.sk
@@ -9568,9 +8658,7 @@ func (o Typeface) GetUnitsPerEm() int32 {
 }
 
 /*
-Return the family name for this typeface. It will always be returned
-encoded as UTF8, but the language of the name is whatever the host
-platform chooses.
+Return the family name for this typeface. It will always be returned  encoded as UTF8, but the language of the name is whatever the host  platform chooses.
 */
 func (o Typeface) GetFamilyName(name String) {
 	c_obj := o.sk
@@ -9579,8 +8667,7 @@ func (o Typeface) GetFamilyName(name String) {
 }
 
 /*
-Returns true if the two typefaces reference the same underlying font,
-handling either being null (treating null as not equal to any font).
+Returns true if the two typefaces reference the same underlying font,        handling either being null (treating null as not equal to any font).
 */
 func TypefaceEqual(facea Typeface, faceb Typeface) bool {
 	c_facea := facea.sk
@@ -9589,15 +8676,16 @@ func TypefaceEqual(facea Typeface, faceb Typeface) bool {
 	return bool(retC)
 }
 
-// Returns a non-null typeface which contains no glyphs.
+/*
+Returns a non-null typeface which contains no glyphs.
+*/
 func TypefaceMakeEmpty() Typeface {
 	retC := C.misk_Typeface_MakeEmpty()
 	return Typeface{sk: retC}
 }
 
 /*
-GPU SkImage and SkSurfaces can be stored such that (0, 0) in texture space may correspond to
-either the top-left or bottom-left content pixel.
+GPU SkImage and SkSurfaces can be stored such that (0, 0) in texture space may correspond to either the top-left or bottom-left content pixel.
 */
 type GrSurfaceOrigin int32
 
@@ -9614,8 +8702,7 @@ const (
 )
 
 /*
-Enum used as return value when flush with semaphores so the client knows whether the valid
-semaphores will be submitted on the next GrContext::submit call.
+Enum used as return value when flush with semaphores so the client knows whether the valid semaphores will be submitted on the next GrContext::submit call.
 */
 type GrSemaphoresSubmitted bool
 
@@ -9625,141 +8712,198 @@ const (
 )
 
 /*
-Describes how to interpret the alpha component of a pixel. A pixel may
-be opaque, or alpha, describing multiple levels of transparency.
+Describes how to interpret the alpha component of a pixel. A pixel may    be opaque, or alpha, describing multiple levels of transparency.
 
-In simple blending, alpha weights the draw color and the destination
-color to create a new color. If alpha describes a weight from zero to one:
+In simple blending, alpha weights the draw color and the destination    color to create a new color. If alpha describes a weight from zero to one:
 
 new color = draw color * alpha + destination color * (1 - alpha)
 
 In practice alpha is encoded in two or more bits, where 1.0 equals all bits set.
 
-RGB may have alpha included in each component value; the stored
-value is the original RGB multiplied by alpha. Premultiplied color
-components improve performance.
+RGB may have alpha included in each component value; the stored    value is the original RGB multiplied by alpha. Premultiplied color    components improve performance.
 */
 type AlphaType int32
 
 const (
-	// uninitialized
+	/*
+	   uninitialized
+	*/
 	AlphaTypeUnknown AlphaType = 0
-	// pixel is opaque
+	/*
+	   pixel is opaque
+	*/
 	AlphaTypeOpaque AlphaType = 1
-	// pixel components are premultiplied by alpha
+	/*
+	   pixel components are premultiplied by alpha
+	*/
 	AlphaTypePremul AlphaType = 2
-	// pixel components are independent of alpha
+	/*
+	   pixel components are independent of alpha
+	*/
 	AlphaTypeUnpremul AlphaType = 3
-	// last valid value
+	/*
+	   last valid value
+	*/
 	AlphaTypeLastEnum AlphaType = 3
 )
 
 /*
-When we transform points through a matrix containing perspective (the bottom row is something
-other than 0,0,1), the bruteforce math can produce confusing results (since we might divide
-by 0, or a negative w value). By default, methods that map rects and paths will apply
-perspective clipping, but this can be changed by specifying kYes to those methods.
+When we transform points through a matrix containing perspective (the bottom row is something  other than 0,0,1), the bruteforce math can produce confusing results (since we might divide  by 0, or a negative w value). By default, methods that map rects and paths will apply  perspective clipping, but this can be changed by specifying kYes to those methods.
 */
 type ApplyPerspectiveClip int32
 
 const (
-	// Don't pre-clip the geometry before applying the (perspective) matrix
+	/*
+	   Don't pre-clip the geometry before applying the (perspective) matrix
+	*/
 	ApplyPerspectiveClipNo ApplyPerspectiveClip = 0
-	// Do pre-clip the geometry before applying the (perspective) matrix
+	/*
+	   Do pre-clip the geometry before applying the (perspective) matrix
+	*/
 	ApplyPerspectiveClipYes ApplyPerspectiveClip = 1
 )
 
 /*
-Blends are operators that take in two colors (source, destination) and return a new color.
-Many of these operate the same on all 4 components: red, green, blue, alpha. For these,
-we just document what happens to one component, rather than naming each one separately.
+Blends are operators that take in two colors (source, destination) and return a new color.  Many of these operate the same on all 4 components: red, green, blue, alpha. For these,  we just document what happens to one component, rather than naming each one separately.
 
-Different SkColorTypes have different representations for color components:
-8-bit: 0..255
-6-bit: 0..63
-5-bit: 0..31
-4-bit: 0..15
-floats: 0...1
+Different SkColorTypes have different representations for color components:      8-bit: 0..255      6-bit: 0..63      5-bit: 0..31      4-bit: 0..15     floats: 0...1
 
 The documentation is expressed as if the component values are always 0..1 (floats).
 
-For brevity, the documentation uses the following abbreviations
-s  : source
-d  : destination
-sa : source alpha
-da : destination alpha
+For brevity, the documentation uses the following abbreviations  s  : source  d  : destination  sa : source alpha  da : destination alpha
 
-Results are abbreviated
-r  : if all 4 components are computed in the same manner
-ra : result alpha component
-rc : result "color": red, green, blue components
+Results are abbreviated  r  : if all 4 components are computed in the same manner  ra : result alpha component  rc : result "color": red, green, blue components
 */
 type BlendMode int32
 
 const (
-	// r = 0
+	/*
+	   r = 0
+	*/
 	BlendModeClear BlendMode = 0
-	// r = s
+	/*
+	   r = s
+	*/
 	BlendModeSrc BlendMode = 1
-	// r = d
+	/*
+	   r = d
+	*/
 	BlendModeDst BlendMode = 2
-	// r = s + (1-sa)*d
+	/*
+	   r = s + (1-sa)*d
+	*/
 	BlendModeSrcOver BlendMode = 3
-	// r = d + (1-da)*s
+	/*
+	   r = d + (1-da)*s
+	*/
 	BlendModeDstOver BlendMode = 4
-	// r = s * da
+	/*
+	   r = s * da
+	*/
 	BlendModeSrcIn BlendMode = 5
-	// r = d * sa
+	/*
+	   r = d * sa
+	*/
 	BlendModeDstIn BlendMode = 6
-	// r = s * (1-da)
+	/*
+	   r = s * (1-da)
+	*/
 	BlendModeSrcOut BlendMode = 7
-	// r = d * (1-sa)
+	/*
+	   r = d * (1-sa)
+	*/
 	BlendModeDstOut BlendMode = 8
-	// r = s*da + d*(1-sa)
+	/*
+	   r = s*da + d*(1-sa)
+	*/
 	BlendModeSrcATop BlendMode = 9
-	// r = d*sa + s*(1-da)
+	/*
+	   r = d*sa + s*(1-da)
+	*/
 	BlendModeDstATop BlendMode = 10
-	// r = s*(1-da) + d*(1-sa)
+	/*
+	   r = s*(1-da) + d*(1-sa)
+	*/
 	BlendModeXor BlendMode = 11
-	// r = min(s + d, 1)
+	/*
+	   r = min(s + d, 1)
+	*/
 	BlendModePlus BlendMode = 12
-	// r = s*d
+	/*
+	   r = s*d
+	*/
 	BlendModeModulate BlendMode = 13
-	// r = s + d - s*d
+	/*
+	   r = s + d - s*d
+	*/
 	BlendModeScreen BlendMode = 14
-	// multiply or screen, depending on destination
+	/*
+	   multiply or screen, depending on destination
+	*/
 	BlendModeOverlay BlendMode = 15
-	// rc = s + d - max(s*da, d*sa), ra = kSrcOver
+	/*
+	   rc = s + d - max(s*da, d*sa), ra = kSrcOver
+	*/
 	BlendModeDarken BlendMode = 16
-	// rc = s + d - min(s*da, d*sa), ra = kSrcOver
+	/*
+	   rc = s + d - min(s*da, d*sa), ra = kSrcOver
+	*/
 	BlendModeLighten BlendMode = 17
-	// brighten destination to reflect source
+	/*
+	   brighten destination to reflect source
+	*/
 	BlendModeColorDodge BlendMode = 18
-	// darken destination to reflect source
+	/*
+	   darken destination to reflect source
+	*/
 	BlendModeColorBurn BlendMode = 19
-	// multiply or screen, depending on source
+	/*
+	   multiply or screen, depending on source
+	*/
 	BlendModeHardLight BlendMode = 20
-	// lighten or darken, depending on source
+	/*
+	   lighten or darken, depending on source
+	*/
 	BlendModeSoftLight BlendMode = 21
-	// rc = s + d - 2*(min(s*da, d*sa)), ra = kSrcOver
+	/*
+	   rc = s + d - 2*(min(s*da, d*sa)), ra = kSrcOver
+	*/
 	BlendModeDifference BlendMode = 22
-	// rc = s + d - two(s*d), ra = kSrcOver
+	/*
+	   rc = s + d - two(s*d), ra = kSrcOver
+	*/
 	BlendModeExclusion BlendMode = 23
-	// r = s*(1-da) + d*(1-sa) + s*d
+	/*
+	   r = s*(1-da) + d*(1-sa) + s*d
+	*/
 	BlendModeMultiply BlendMode = 24
-	// hue of source with saturation and luminosity of destination
+	/*
+	   hue of source with saturation and luminosity of destination
+	*/
 	BlendModeHue BlendMode = 25
-	// saturation of source with hue and luminosity of destination
+	/*
+	   saturation of source with hue and luminosity of destination
+	*/
 	BlendModeSaturation BlendMode = 26
-	// hue and saturation of source with luminosity of destination
+	/*
+	   hue and saturation of source with luminosity of destination
+	*/
 	BlendModeColor BlendMode = 27
-	// luminosity of source with hue and saturation of destination
+	/*
+	   luminosity of source with hue and saturation of destination
+	*/
 	BlendModeLuminosity BlendMode = 28
-	// last porter duff blend mode
+	/*
+	   last porter duff blend mode
+	*/
 	BlendModeLastCoeffMode BlendMode = 14
-	// last blend mode operating separately on components
+	/*
+	   last blend mode operating separately on components
+	*/
 	BlendModeLastSeparableMode BlendMode = 24
-	// last valid value
+	/*
+	   last valid value
+	*/
 	BlendModeLastMode BlendMode = 28
 )
 
@@ -9774,78 +8918,137 @@ const (
 /*
 Describes how pixel bits encode color. A pixel may be an alpha mask, a grayscale, RGB, or ARGB.
 
-kN32_SkColorType selects the native 32-bit ARGB format for the current configuration. This can
-lead to inconsistent results across platforms, so use with caution.
+kN32_SkColorType selects the native 32-bit ARGB format for the current configuration. This can    lead to inconsistent results across platforms, so use with caution.
 */
 type ColorType int32
 
 const (
-	// uninitialized
+	/*
+	   uninitialized
+	*/
 	ColorTypeUnknown ColorType = 0
-	// pixel with alpha in 8-bit byte
+	/*
+	   pixel with alpha in 8-bit byte
+	*/
 	ColorTypeAlpha_8 ColorType = 1
-	// pixel with 5 bits red, 6 bits green, 5 bits blue, in 16-bit word
+	/*
+	   pixel with 5 bits red, 6 bits green, 5 bits blue, in 16-bit word
+	*/
 	ColorTypeRGB_565 ColorType = 2
-	// pixel with 4 bits for alpha, red, green, blue; in 16-bit word
+	/*
+	   pixel with 4 bits for alpha, red, green, blue; in 16-bit word
+	*/
 	ColorTypeARGB_4444 ColorType = 3
-	// pixel with 8 bits for red, green, blue, alpha; in 32-bit word
+	/*
+	   pixel with 8 bits for red, green, blue, alpha; in 32-bit word
+	*/
 	ColorTypeRGBA_8888 ColorType = 4
-	// pixel with 8 bits each for red, green, blue; in 32-bit word
+	/*
+	   pixel with 8 bits each for red, green, blue; in 32-bit word
+	*/
 	ColorTypeRGB_888x ColorType = 5
-	// pixel with 8 bits for blue, green, red, alpha; in 32-bit word
+	/*
+	   pixel with 8 bits for blue, green, red, alpha; in 32-bit word
+	*/
 	ColorTypeBGRA_8888 ColorType = 6
-	// 10 bits for red, green, blue; 2 bits for alpha; in 32-bit word
+	/*
+	   10 bits for red, green, blue; 2 bits for alpha; in 32-bit word
+	*/
 	ColorTypeRGBA_1010102 ColorType = 7
-	// 10 bits for blue, green, red; 2 bits for alpha; in 32-bit word
+	/*
+	   10 bits for blue, green, red; 2 bits for alpha; in 32-bit word
+	*/
 	ColorTypeBGRA_1010102 ColorType = 8
-	// pixel with 10 bits each for red, green, blue; in 32-bit word
+	/*
+	   pixel with 10 bits each for red, green, blue; in 32-bit word
+	*/
 	ColorTypeRGB_101010x ColorType = 9
-	// pixel with 10 bits each for blue, green, red; in 32-bit word
+	/*
+	   pixel with 10 bits each for blue, green, red; in 32-bit word
+	*/
 	ColorTypeBGR_101010x ColorType = 10
-	// pixel with 10 bits each for blue, green, red; in 32-bit word, extended range
+	/*
+	   pixel with 10 bits each for blue, green, red; in 32-bit word, extended range
+	*/
 	ColorTypeBGR_101010x_XR ColorType = 11
-	// pixel with 10 bits each for blue, green, red, alpha; in 64-bit word, extended range
+	/*
+	   pixel with 10 bits each for blue, green, red, alpha; in 64-bit word, extended range
+	*/
 	ColorTypeBGRA_10101010_XR ColorType = 12
-	// pixel with 10 used bits (most significant) followed by 6 unused
+	/*
+	   pixel with 10 used bits (most significant) followed by 6 unused
+	*/
 	ColorTypeRGBA_10x6 ColorType = 13
-	// pixel with grayscale level in 8-bit byte
+	/*
+	   pixel with grayscale level in 8-bit byte
+	*/
 	ColorTypeGray_8 ColorType = 14
-	// pixel with half floats in [0,1] for red, green, blue, alpha;
+	/*
+	   pixel with half floats in [0,1] for red, green, blue, alpha;
+	*/
 	ColorTypeRGBA_F16Norm ColorType = 15
-	// pixel with half floats for red, green, blue, alpha;
+	/*
+	   pixel with half floats for red, green, blue, alpha;
+	*/
 	ColorTypeRGBA_F16 ColorType = 16
-	// pixel using C float for red, green, blue, alpha; in 128-bit word
+	/*
+	   pixel using C float for red, green, blue, alpha; in 128-bit word
+	*/
 	ColorTypeRGBA_F32 ColorType = 17
-	// pixel with a uint8_t for red and green
+	/*
+	   pixel with a uint8_t for red and green
+	*/
 	ColorTypeR8G8_unorm ColorType = 18
-	// pixel with a half float for alpha
+	/*
+	   pixel with a half float for alpha
+	*/
 	ColorTypeA16_float ColorType = 19
-	// pixel with a half float for red and green
+	/*
+	   pixel with a half float for red and green
+	*/
 	ColorTypeR16G16_float ColorType = 20
-	// pixel with a little endian uint16_t for alpha
+	/*
+	   pixel with a little endian uint16_t for alpha
+	*/
 	ColorTypeA16_unorm ColorType = 21
-	// pixel with a little endian uint16_t for red and green
+	/*
+	   pixel with a little endian uint16_t for red and green
+	*/
 	ColorTypeR16G16_unorm ColorType = 22
-	// pixel with a little endian uint16_t for red, green, blue
+	/*
+	   pixel with a little endian uint16_t for red, green, blue
+	*/
 	ColorTypeR16G16B16A16_unorm ColorType = 23
 	ColorTypeSRGBA_8888         ColorType = 24
 	ColorTypeR8_unorm           ColorType = 25
-	// last valid value
+	/*
+	   last valid value
+	*/
 	ColorTypeLastEnum ColorType = 25
-	// native 32-bit RGBA encoding
+	/*
+	   native 32-bit RGBA encoding
+	*/
 	ColorTypeN32 ColorType = 4
 )
 
 type FontHinting int32
 
 const (
-	// glyph outlines unchanged
+	/*
+	   glyph outlines unchanged
+	*/
 	FontHintingNone FontHinting = 0
-	// minimal modification to improve constrast
+	/*
+	   minimal modification to improve constrast
+	*/
 	FontHintingSlight FontHinting = 1
-	// glyph outlines modified to improve constrast
+	/*
+	   glyph outlines modified to improve constrast
+	*/
 	FontHintingNormal FontHinting = 2
-	// modifies glyph outlines for maximum constrast
+	/*
+	   modifies glyph outlines for maximum constrast
+	*/
 	FontHintingFull FontHinting = 3
 )
 
@@ -9860,22 +9063,34 @@ const (
 type PathDirection int32
 
 const (
-	// clockwise direction for adding closed contours
+	/*
+	   clockwise direction for adding closed contours
+	*/
 	PathDirectionCW PathDirection = 0
-	// counter-clockwise direction for adding closed contours
+	/*
+	   counter-clockwise direction for adding closed contours
+	*/
 	PathDirectionCCW PathDirection = 1
 )
 
 type PathFillType int32
 
 const (
-	// Specifies that "inside" is computed by a non-zero sum of signed edge crossings
+	/*
+	   Specifies that "inside" is computed by a non-zero sum of signed edge crossings
+	*/
 	PathFillTypeWinding PathFillType = 0
-	// Specifies that "inside" is computed by an odd number of edge crossings
+	/*
+	   Specifies that "inside" is computed by an odd number of edge crossings
+	*/
 	PathFillTypeEvenOdd PathFillType = 1
-	// Same as Winding, but draws outside of the path, rather than inside
+	/*
+	   Same as Winding, but draws outside of the path, rather than inside
+	*/
 	PathFillTypeInverseWinding PathFillType = 2
-	// Same as EvenOdd, but draws outside of the path, rather than inside
+	/*
+	   Same as EvenOdd, but draws outside of the path, rather than inside
+	*/
 	PathFillTypeInverseEvenOdd PathFillType = 3
 )
 
@@ -9885,22 +9100,30 @@ The logical operations that can be performed when combining two paths.
 type PathOp uint32
 
 const (
-	// subtract the op path from the first path
+	/*
+	   subtract the op path from the first path
+	*/
 	PathOpDifference PathOp = 0
-	// intersect the two paths
+	/*
+	   intersect the two paths
+	*/
 	PathOpIntersect PathOp = 1
-	// union (inclusive-or) the two paths
+	/*
+	   union (inclusive-or) the two paths
+	*/
 	PathOpUnion PathOp = 2
-	// exclusive-or the two paths
+	/*
+	   exclusive-or the two paths
+	*/
 	PathOpXOR PathOp = 3
-	// subtract the first path from the op path
+	/*
+	   subtract the first path from the op path
+	*/
 	PathOpReverseDifference PathOp = 4
 )
 
 /*
-Description of how the LCD strips are arranged for each pixel. If this is unknown, or the
-pixels are meant to be "portable" and/or transformed before showing (e.g. rotated, scaled)
-then use kUnknown_SkPixelGeometry.
+Description of how the LCD strips are arranged for each pixel. If this is unknown, or the  pixels are meant to be "portable" and/or transformed before showing (e.g. rotated, scaled)  then use kUnknown_SkPixelGeometry.
 */
 type PixelGeometry uint32
 
@@ -9915,13 +9138,21 @@ const (
 type TextEncoding int32
 
 const (
-	// uses bytes to represent UTF-8 or ASCII
+	/*
+	   uses bytes to represent UTF-8 or ASCII
+	*/
 	TextEncodingUTF8 TextEncoding = 0
-	// uses two byte words to represent most of Unicode
+	/*
+	   uses two byte words to represent most of Unicode
+	*/
 	TextEncodingUTF16 TextEncoding = 1
-	// uses four byte words to represent all of Unicode
+	/*
+	   uses four byte words to represent all of Unicode
+	*/
 	TextEncodingUTF32 TextEncoding = 2
-	// uses two byte words to represent glyph indices
+	/*
+	   uses two byte words to represent glyph indices
+	*/
 	TextEncodingGlyphID TextEncoding = 3
 )
 
@@ -9973,16 +9204,9 @@ func GrDirectContextsMakeGL() GrDirectContext {
 }
 
 /*
-Rather than depend on platform-specific GL headers and libraries, we require
-the client to provide a struct of GL function pointers. This struct can be
-specified per-GrContext as a parameter to GrContext::MakeGL. If no interface is
-passed to MakeGL then a default GL interface is created using GrGLMakeNativeInterface().
-If this returns nullptr then GrContext::MakeGL() will fail.
+Rather than depend on platform-specific GL headers and libraries, we require the client to provide a struct of GL function pointers. This struct can be specified per-GrContext as a parameter to GrContext::MakeGL. If no interface is passed to MakeGL then a default GL interface is created using GrGLMakeNativeInterface(). If this returns nullptr then GrContext::MakeGL() will fail.
 
-The implementation of GrGLMakeNativeInterface is platform-specific. Several
-implementations have been provided (for GLX, WGL, EGL, etc), along with an
-implementation that simply returns nullptr. Clients should select the most
-appropriate one to build.
+The implementation of GrGLMakeNativeInterface is platform-specific. Several implementations have been provided (for GLX, WGL, EGL, etc), along with an implementation that simply returns nullptr. Clients should select the most appropriate one to build.
 */
 func GrGLMakeNativeInterface() GrGLInterface {
 	retC := C.misk_GrGLMakeNativeInterface()
@@ -9990,16 +9214,14 @@ func GrGLMakeNativeInterface() GrGLInterface {
 }
 
 /*
-Returns color value from 8-bit component values. Asserts if SK_DEBUG is defined
-if a, r, g, or b exceed 255. Since color is unpremultiplied, a may be smaller
-than the largest of r, g, and b.
+Returns color value from 8-bit component values. Asserts if SK_DEBUG is defined    if a, r, g, or b exceed 255. Since color is unpremultiplied, a may be smaller    than the largest of r, g, and b.
 
-# params
+# parameters
 
-  - a =>  amount of alpha, from fully transparent (0) to fully opaque (255)
-  - r =>  amount of red, from no red (0) to full red (255)
-  - g =>  amount of green, from no green (0) to full green (255)
-  - b =>  amount of blue, from no blue (0) to full blue (255)
+  - a -   amount of alpha, from fully transparent (0) to fully opaque (255)
+  - r -   amount of red, from no red (0) to full red (255)
+  - g -   amount of green, from no green (0) to full green (255)
+  - b -   amount of blue, from no blue (0) to full blue (255)
 
 # return
 
@@ -10015,13 +9237,12 @@ func ColorSetARGB(a uint32, r uint32, g uint32, b uint32) Color {
 }
 
 /*
-Returns unpremultiplied color with red, blue, and green set from c; and alpha set
-from a. Alpha component of c is ignored and is replaced by a in result.
+Returns unpremultiplied color with red, blue, and green set from c; and alpha set    from a. Alpha component of c is ignored and is replaced by a in result.
 
-# params
+# parameters
 
-  - c =>  packed RGB, eight bits per component
-  - a =>  alpha: transparent at zero, fully opaque at 255
+  - c -   packed RGB, eight bits per component
+  - a -   alpha: transparent at zero, fully opaque at 255
 
 # return
 
@@ -10035,29 +9256,23 @@ func ColorSetA(c Color, a uint32) Color {
 }
 
 /*
-Return a SkImage using the encoded data, but attempts to defer decoding until the
-image is actually used/drawn. This deferral allows the system to cache the result, either on the
-CPU or on the GPU, depending on where the image is drawn. If memory is low, the cache may
-be purged, causing the next draw of the image to have to re-decode.
+Return a SkImage using the encoded data, but attempts to defer decoding until the  image is actually used/drawn. This deferral allows the system to cache the result, either on the  CPU or on the GPU, depending on where the image is drawn. If memory is low, the cache may  be purged, causing the next draw of the image to have to re-decode.
 
-If alphaType is nullopt, the image's alpha type will be chosen automatically based on the
-image format. Transparent images will default to kPremul_SkAlphaType. If alphaType contains
-kPremul_SkAlphaType or kUnpremul_SkAlphaType, that alpha type will be used. Forcing opaque
-(passing kOpaque_SkAlphaType) is not allowed, and will return nullptr.
+If alphaType is nullopt, the image's alpha type will be chosen automatically based on the  image format. Transparent images will default to kPremul_SkAlphaType. If alphaType contains  kPremul_SkAlphaType or kUnpremul_SkAlphaType, that alpha type will be used. Forcing opaque  (passing kOpaque_SkAlphaType) is not allowed, and will return nullptr.
 
 If the encoded format is not supported, nullptr is returned.
 
 If possible, clients should use SkCodecs::DeferredImage instead.
 
-# params
+example: https://fiddle.skia.org/c/
 
-  - encoded =>  the encoded data
+# parameters
+
+  - encoded -   the encoded data
 
 # return
 
   - created SkImage, or nullptr
-
-example: https://fiddle.skia.org/c/@Image_DeferredFromEncodedData
 */
 func ImagesDeferredFromEncodedData(encoded Data, alphaType *AlphaType) Image {
 	c_encoded := encoded.sk
@@ -10067,21 +9282,15 @@ func ImagesDeferredFromEncodedData(encoded Data, alphaType *AlphaType) Image {
 }
 
 /*
-Creates CPU-backed SkImage from pixel data described by info.
-The pixels data will *not* be copied.
+Creates CPU-backed SkImage from pixel data described by info.    The pixels data will *not* be copied.
 
-SkImage is returned if SkImageInfo is valid. Valid SkImageInfo parameters include:
-dimensions are greater than zero;
-each dimension fits in 29 bits;
-SkColorType and SkAlphaType are valid, and SkColorType is not kUnknown_SkColorType;
-rowBytes are large enough to hold one row of pixels;
-pixels is not nullptr, and contains enough data for SkImage.
+SkImage is returned if SkImageInfo is valid. Valid SkImageInfo parameters include:    dimensions are greater than zero;    each dimension fits in 29 bits;    SkColorType and SkAlphaType are valid, and SkColorType is not kUnknown_SkColorType;    rowBytes are large enough to hold one row of pixels;    pixels is not nullptr, and contains enough data for SkImage.
 
-# params
+# parameters
 
-  - info =>      contains width, height, SkAlphaType, SkColorType, SkColorSpace
-  - pixels =>    address or pixel storage
-  - rowBytes =>  size of pixel row or larger
+  - info -       contains width, height, SkAlphaType, SkColorType, SkColorSpace
+  - pixels -     address or pixel storage
+  - rowBytes -   size of pixel row or larger
 
 # return
 
@@ -10098,12 +9307,12 @@ func ImagesRasterFromData(info ImageInfo, pixels Data, rowBytes uint32) Image {
 /*
 Returns a SkPMColor value from unpremultiplied 8-bit component values.
 
-# params
+# parameters
 
-  - a =>  amount of alpha, from fully transparent (0) to fully opaque (255)
-  - r =>  amount of red, from no red (0) to full red (255)
-  - g =>  amount of green, from no green (0) to full green (255)
-  - b =>  amount of blue, from no blue (0) to full blue (255)
+  - a -   amount of alpha, from fully transparent (0) to fully opaque (255)
+  - r -   amount of red, from no red (0) to full red (255)
+  - g -   amount of green, from no green (0) to full green (255)
+  - b -   amount of blue, from no blue (0) to full blue (255)
 
 # return
 
@@ -10119,12 +9328,11 @@ func PreMultiplyARGB(a uint32, r uint32, g uint32, b uint32) PMColor {
 }
 
 /*
-Returns pmcolor closest to color c. Multiplies c RGB components by the c alpha,
-and arranges the bytes to match the format of kN32_SkColorType.
+Returns pmcolor closest to color c. Multiplies c RGB components by the c alpha,    and arranges the bytes to match the format of kN32_SkColorType.
 
-# params
+# parameters
 
-  - c =>  unpremultiplied ARGB color
+  - c -   unpremultiplied ARGB color
 
 # return
 
@@ -10137,29 +9345,20 @@ func PreMultiplyColor(c Color) PMColor {
 }
 
 /*
-Wraps a GPU-backed buffer into SkSurface. Caller must ensure backendRenderTarget
-is valid for the lifetime of returned SkSurface.
+Wraps a GPU-backed buffer into SkSurface. Caller must ensure backendRenderTarget    is valid for the lifetime of returned SkSurface.
 
-SkSurface is returned if all parameters are valid. backendRenderTarget is valid if
-its pixel configuration agrees with colorSpace and context; for instance, if
-backendRenderTarget has an sRGB configuration, then context must support sRGB,
-and colorSpace must be present. Further, backendRenderTarget width and height must
-not exceed context capabilities, and the context must be able to support
-back-end render targets.
+SkSurface is returned if all parameters are valid. backendRenderTarget is valid if    its pixel configuration agrees with colorSpace and context; for instance, if    backendRenderTarget has an sRGB configuration, then context must support sRGB,    and colorSpace must be present. Further, backendRenderTarget width and height must    not exceed context capabilities, and the context must be able to support    back-end render targets.
 
-Upon success releaseProc is called when it is safe to delete the render target in the
-backend API (accounting only for use of the render target by this surface). If SkSurface
-creation fails releaseProc is called before this function returns.
+Upon success releaseProc is called when it is safe to delete the render target in the    backend API (accounting only for use of the render target by this surface). If SkSurface    creation fails releaseProc is called before this function returns.
 
-# params
+# parameters
 
-  - context =>                  GPU context
-  - backendRenderTarget =>      GPU intermediate memory buffer
-  - colorSpace =>               range of colors
-  - surfaceProps =>             LCD striping orientation and setting for device independent
-    fonts; may be nullptr
-  - releaseProc =>              function called when backendRenderTarget can be released
-  - releaseContext =>           state passed to releaseProc
+  - context -                   GPU context
+  - backendRenderTarget -       GPU intermediate memory buffer
+  - colorSpace -                range of colors
+  - surfaceProps -              LCD striping orientation and setting for device independent                                    fonts; may be nullptr
+  - releaseProc -               function called when backendRenderTarget can be released
+  - releaseContext -            state passed to releaseProc
 
 # return
 
@@ -10177,22 +9376,16 @@ func SurfacesWrapBackendRenderTarget(context GrRecordingContext, backendRenderTa
 }
 
 /*
-Set this path to the result of applying the Op to this path and the
-specified path: this = (this op operand).
-The resulting path will be constructed from non-overlapping contours.
-The curve order is reduced where possible so that cubics may be turned
-into quadratics, and quadratics maybe turned into lines.
+Set this path to the result of applying the Op to this path and the    specified path: this = (this op operand).    The resulting path will be constructed from non-overlapping contours.    The curve order is reduced where possible so that cubics may be turned    into quadratics, and quadratics maybe turned into lines.
 
-Returns true if operation was able to produce a result;
-otherwise, result is unmodified.
+Returns true if operation was able to produce a result;    otherwise, result is unmodified.
 
-# params
+# parameters
 
-  - one => The first operand (for difference, the minuend)
-  - two => The second operand (for difference, the subtrahend)
-  - op => The operator to apply.
-  - result => The product of the operands. The result may be one of the
-    inputs.
+  - one -  The first operand (for difference, the minuend)
+  - two -  The second operand (for difference, the subtrahend)
+  - op -  The operator to apply.
+  - result -  The product of the operands. The result may be one of the                  inputs.
 
 # return
 
@@ -10208,18 +9401,14 @@ func Op(one Path, two Path, op PathOp, result Path) bool {
 }
 
 /*
-Set this path to a set of non-overlapping contours that describe the
-same area as the original path.
-The curve order is reduced where possible so that cubics may
-be turned into quadratics, and quadratics maybe turned into lines.
+Set this path to a set of non-overlapping contours that describe the    same area as the original path.    The curve order is reduced where possible so that cubics may    be turned into quadratics, and quadratics maybe turned into lines.
 
-Returns true if operation was able to produce a result;
-otherwise, result is unmodified.
+Returns true if operation was able to produce a result;    otherwise, result is unmodified.
 
-# params
+# parameters
 
-  - path => The path to simplify.
-  - result => The simplified path. The result may be the input.
+  - path -  The path to simplify.
+  - result -  The simplified path. The result may be the input.
 
 # return
 
@@ -10235,10 +9424,10 @@ func Simplify(path Path, result Path) bool {
 /*
 Set the resulting rectangle to the tight bounds of the path.
 
-# params
+# parameters
 
-  - path => The path measured.
-  - result => The tight bounds of the path.
+  - path -  The path measured.
+  - result -  The tight bounds of the path.
 
 # return
 
@@ -10252,18 +9441,14 @@ func TightBounds(path Path, result Rect) bool {
 }
 
 /*
-Set the result with fill type winding to area equivalent to path.
-Returns true if successful. Does not detect if path contains contours which
-contain self-crossings or cross other contours; in these cases, may return
-true even though result does not fill same area as path.
+Set the result with fill type winding to area equivalent to path.    Returns true if successful. Does not detect if path contains contours which    contain self-crossings or cross other contours; in these cases, may return    true even though result does not fill same area as path.
 
-Returns true if operation was able to produce a result;
-otherwise, result is unmodified. The result may be the input.
+Returns true if operation was able to produce a result;    otherwise, result is unmodified. The result may be the input.
 
-# params
+# parameters
 
-  - path => The path typically with fill type set to even odd.
-  - result => The equivalent path with fill type set to winding.
+  - path -  The path typically with fill type set to even odd.
+  - result -  The equivalent path with fill type set to winding.
 
 # return
 
@@ -10282,34 +9467,24 @@ func AsWinding(path Path, result Path) bool {
 type Alpha C.uchar
 
 /*
-32-bit ARGB color value, unpremultiplied. Color components are always in
-a known order. This is different from SkPMColor, which has its bytes in a configuration
-dependent order, to match the format of kBGRA_8888_SkColorType bitmaps. SkColor
-is the type used to specify colors in SkPaint and in gradients.
+32-bit ARGB color value, unpremultiplied. Color components are always in    a known order. This is different from SkPMColor, which has its bytes in a configuration    dependent order, to match the format of kBGRA_8888_SkColorType bitmaps. SkColor    is the type used to specify colors in SkPaint and in gradients.
 
-Color that is premultiplied has the same component values as color
-that is unpremultiplied if alpha is 255, fully opaque, although may have the
-component values in a different order.
+Color that is premultiplied has the same component values as color    that is unpremultiplied if alpha is 255, fully opaque, although may have the    component values in a different order.
 */
 type Color C.uint
 
 /*
-32-bit ARGB color value, premultiplied. The byte order for this value is
-configuration dependent, matching the format of kBGRA_8888_SkColorType bitmaps.
-This is different from SkColor, which is unpremultiplied, and is always in the
-same byte order.
+32-bit ARGB color value, premultiplied. The byte order for this value is    configuration dependent, matching the format of kBGRA_8888_SkColorType bitmaps.    This is different from SkColor, which is unpremultiplied, and is always in the    same byte order.
 */
 type PMColor C.uint
 
 /*
-Represents fully opaque SkAlpha value. SkAlpha ranges from zero,
-fully transparent; to 255, fully opaque.
+Represents fully opaque SkAlpha value. SkAlpha ranges from zero,    fully transparent; to 255, fully opaque.
 */
 var AlphaOPAQUE = (Alpha)(C.sk_SK_AlphaOPAQUE)
 
 /*
-Represents fully transparent SkAlpha value. SkAlpha ranges from zero,
-fully transparent; to 255, fully opaque.
+Represents fully transparent SkAlpha value. SkAlpha ranges from zero,    fully transparent; to 255, fully opaque.
 */
 var AlphaTRANSPARENT = (Alpha)(C.sk_SK_AlphaTRANSPARENT)
 
@@ -10329,26 +9504,22 @@ Represents fully opaque cyan. HTML aqua is equivalent.
 var ColorCYAN = (Color)(C.sk_SK_ColorCYAN)
 
 /*
-Represents fully opaque dark gray.
-Note that SVG dark gray is equivalent to 0xFFA9A9A9.
+Represents fully opaque dark gray.    Note that SVG dark gray is equivalent to 0xFFA9A9A9.
 */
 var ColorDKGRAY = (Color)(C.sk_SK_ColorDKGRAY)
 
 /*
-Represents fully opaque gray.
-Note that HTML gray is equivalent to 0xFF808080.
+Represents fully opaque gray.    Note that HTML gray is equivalent to 0xFF808080.
 */
 var ColorGRAY = (Color)(C.sk_SK_ColorGRAY)
 
 /*
-Represents fully opaque green. HTML lime is equivalent.
-Note that HTML green is equivalent to 0xFF008000.
+Represents fully opaque green. HTML lime is equivalent.    Note that HTML green is equivalent to 0xFF008000.
 */
 var ColorGREEN = (Color)(C.sk_SK_ColorGREEN)
 
 /*
-Represents fully opaque light gray. HTML silver is equivalent to 0xFFC0C0C0.
-Note that SVG light gray is equivalent to 0xFFD3D3D3.
+Represents fully opaque light gray. HTML silver is equivalent to 0xFFC0C0C0.    Note that SVG light gray is equivalent to 0xFFD3D3D3.
 */
 var ColorLTGRAY = (Color)(C.sk_SK_ColorLTGRAY)
 
@@ -10363,8 +9534,7 @@ Represents fully opaque red.
 var ColorRED = (Color)(C.sk_SK_ColorRED)
 
 /*
-Represents fully transparent SkColor. May be used to initialize a destination
-containing a mask or a non-rectangular image.
+Represents fully transparent SkColor. May be used to initialize a destination    containing a mask or a non-rectangular image.
 */
 var ColorTRANSPARENT = (Color)(C.sk_SK_ColorTRANSPARENT)
 
@@ -10406,11 +9576,9 @@ var StrAppendS32_MaxSize = (int32)(C.sk_kSkStrAppendS32_MaxSize)
 var StrAppendS64_MaxSize = (int32)(C.sk_kSkStrAppendS64_MaxSize)
 
 /*
-Floats have at most 8 significant digits, so we limit our %g to that.
-However, the total string could be 15 characters: -1.2345678e-005
+Floats have at most 8 significant digits, so we limit our %g to that.  However, the total string could be 15 characters: -1.2345678e-005
 
-In theory we should only expect up to 2 digits for the exponent, but on
-some platforms we have seen 3 (as in the example above).
+In theory we should only expect up to 2 digits for the exponent, but on  some platforms we have seen 3 (as in the example above).
 */
 var StrAppendScalar_MaxSize = (int32)(C.sk_kSkStrAppendScalar_MaxSize)
 var StrAppendU32_MaxSize = (int32)(C.sk_kSkStrAppendU32_MaxSize)

@@ -1,8 +1,6 @@
 package generate
 
 import (
-	"strings"
-
 	"github.com/go-clang/clang-v15/clang"
 )
 
@@ -19,8 +17,7 @@ type field struct {
 }
 
 func newField(cursor clang.Cursor) field {
-	doc := makeDocComment(cursor.RawCommentText())
-	doc = strings.Replace(doc, "//!< ", "// ", 1)
+	doc := docComment(cursor.ParsedComment())
 
 	f := field{
 		name:      cursor.DisplayName(),

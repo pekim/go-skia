@@ -35,7 +35,7 @@ func (e *enum) enrich1(record *record, cursor clang.Cursor) {
 	}
 	e.goName = goExportedName(e.goName)
 	e.record = record
-	e.doc = makeDocComment(cursor.RawCommentText())
+	e.doc = docComment(cursor.ParsedComment())
 
 	cursor.Visit(func(cursor, parent clang.Cursor) (status clang.ChildVisitResult) {
 		switch cursor.Kind() {
@@ -43,8 +43,7 @@ func (e *enum) enrich1(record *record, cursor clang.Cursor) {
 			name := cursor.Spelling()
 			name = stripKPrefix(name)
 			name = strings.TrimSuffix(name, "_"+e.CppName)
-			doc := makeDocComment(cursor.RawCommentText())
-			doc = strings.Replace(doc, "!<", "", 1)
+			doc := docComment(cursor.ParsedComment())
 
 			constant := enumConstant{
 				goName: e.goName + name,

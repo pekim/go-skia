@@ -23,7 +23,7 @@ func (c *recordCtor) enrich1(record *record, cursor *clang.Cursor) {
 	c.cFuncName = fmt.Sprintf("misk_new_%s%s", c.record.goName, c.Suffix)
 
 	if cursor != nil {
-		c.doc = makeDocComment(cursor.RawCommentText())
+		c.doc = docComment(cursor.ParsedComment())
 
 		paramCount := int(cursor.NumArguments())
 		c.params = make([]param, paramCount)

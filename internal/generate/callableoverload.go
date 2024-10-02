@@ -48,7 +48,7 @@ func (o *callableOverload) enrich1(callable *callable, record *record, cursor cl
 		cName := strings.ReplaceAll(o.cppName, "::", "") // remove any "::" in the name
 		o.cFuncName = fmt.Sprintf("misk_%s%s", cName, o.Suffix)
 	}
-	o.doc = makeDocComment(cursor.RawCommentText())
+	o.doc = docComment(cursor.ParsedComment())
 	o.resultType = cursor.ResultType()
 
 	paramCount := int(cursor.NumArguments())

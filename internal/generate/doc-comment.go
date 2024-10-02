@@ -1,184 +1,93 @@
 package generate
 
 import (
-	"slices"
+	"encoding/xml"
 	"strings"
+
+	"github.com/go-clang/clang-v15/clang"
 )
 
-type docComment struct {
-	lines []string
+// A Relax NG schema for the XML can be found in comment-xml-schema.rng file inside clang source tree.
+type Comment struct {
+	Name     string
+	Abstract struct {
+		Paras CommentParas `xml:"Para"`
+	}
+	Parameters struct {
+		Parameter []struct {
+			Name       string
+			Discussion struct {
+				Paras CommentParas `xml:"Para"`
+			}
+		}
+	}
+	ResultDiscussion struct {
+		Paras CommentParas `xml:"Para"`
+	}
+	Discussion struct {
+		Paras CommentParas `xml:"Para"`
+	}
 }
 
-func makeDocComment(rawComment string) string {
-	dc := docComment{
-		lines: strings.Split(rawComment, "\n"),
-	}
-	dc.removeCommentDelimiters()
-	dc.trimLines()
-	dc.removeDoxygenSpecialCommands()
-	// dc.orderedLists() TODO
-	dc.unorderedLists()
-	dc.params()
-	dc.return_()
+type CommentParas []string
 
-	if len(dc.lines) == 1 && strings.TrimSpace(dc.lines[0]) != "" {
-		return "// " + dc.lines[0] + "\n"
-	}
-
-	doc := strings.TrimSpace(strings.Join(dc.lines, "\n"))
-	if len(doc) == 0 {
+func docComment(comment clang.Comment) string {
+	xmlData := comment.FullComment_getAsXML()
+	if len(xmlData) == 0 {
 		return ""
 	}
-	return "/*\n" + doc + "\n*/\n"
-}
 
-func (dc *docComment) removeCommentDelimiters() {
-	if len(dc.lines) == 0 {
-		return
+	var function Comment
+	err := xml.Unmarshal([]byte(xmlData), &function)
+	fatalOnError(err)
+
+	var text strings.Builder
+
+	// abstract
+	for _, para := range function.Abstract.Paras {
+		text.WriteString(strings.TrimSpace(para))
+		text.WriteString("\n\n")
 	}
 
-	dc.lines[0] = strings.TrimPrefix(dc.lines[0], "/**")
-	dc.lines[0] = strings.TrimPrefix(dc.lines[0], "/*")
-
-	last := len(dc.lines) - 1
-	dc.lines[last] = strings.TrimSuffix(dc.lines[last], "*/")
-}
-
-func (dc *docComment) trimLines() {
-	for i, line := range dc.lines {
-		line = strings.TrimSpace(line)
-		line = strings.TrimPrefix(line, "*")
-		line = strings.TrimPrefix(line, "//")
-		line = strings.TrimSpace(line)
-		line = strings.TrimPrefix(line, "!<") // https://www.doxygen.nl/manual/docblocks.html#memberdoc
-		line = strings.TrimSpace(line)
-		dc.lines[i] = line
-	}
-}
-
-func (dc *docComment) removeDoxygenSpecialCommands() {
-	if len(dc.lines) > 0 && len(dc.lines[0]) > 0 && dc.lines[0][0] == '\\' {
-		dc.lines = dc.lines[1:]
-	}
-}
-
-func (dc *docComment) unorderedLists() {
-	for i, line := range dc.lines {
-		if strings.HasPrefix(line, "- ") {
-			dc.lines[i] = "  " + line
-		}
-	}
-}
-
-func (dc *docComment) params() {
-	// Add params heading.
-	insertedHeading := false
-	for i, line := range dc.lines {
-		if strings.HasPrefix(line, "@param ") {
-			if !insertedHeading {
-				dc.lines = slices.Insert(dc.lines, i, []string{"# params", ""}...)
-				insertedHeading = true
-			}
-		}
+	// discussion
+	for _, para := range function.Discussion.Paras {
+		text.WriteString(strings.TrimSpace(para))
+		text.WriteString("\n\n")
 	}
 
-	// Make params a bullet list.
-	inParam := false
-	for i, line := range dc.lines {
-		if strings.HasPrefix(line, "@param ") {
-			inParam = true
-			line = strings.TrimPrefix(line, "@param ")
-			paramNameEndIndex := strings.Index(line, " ")
-			paramName := line[:paramNameEndIndex]
-			restOfLine := line[paramNameEndIndex:]
-			line = paramName + " =>" + restOfLine
-			dc.lines[i] = "  - " + line
-		} else {
-			if inParam {
-				if len(line) == 0 || strings.HasPrefix(line, "@return ") {
-					inParam = false
+	// parameters
+	if len(function.Parameters.Parameter) > 0 {
+		text.WriteString("# parameters")
+		text.WriteString("\n\n")
+
+		for _, param := range function.Parameters.Parameter {
+			text.WriteString("  - " + param.Name + " - ")
+			for i, para := range param.Discussion.Paras {
+				if i == 0 {
+					text.WriteString(para)
 				} else {
-					// Looks like this line is a continuation of a param.
-					// Indent it so that it'll be treated as continuing the bullet's text
-					dc.lines[i] = "  " + line
+					text.WriteString("  " + para)
 				}
+				text.WriteString("\n")
 			}
 		}
+
+		text.WriteString("\n\n")
 	}
-}
 
-func (dc *docComment) return_() {
-	for i, line := range dc.lines {
-		if strings.HasPrefix(line, "@return ") {
-			line = strings.TrimPrefix(line, "@return ")
-			line = strings.TrimSpace(line)
-			line = "  - " + line
-			dc.lines[i] = line
+	// return
+	if len(function.ResultDiscussion.Paras) > 0 {
+		text.WriteString("# return")
+		text.WriteString("\n\n")
 
-			dc.lines = slices.Insert(dc.lines, i, []string{"# return", ""}...)
-			break
+		for _, para := range function.ResultDiscussion.Paras {
+			text.WriteString("  - " + strings.TrimSpace(para))
+			text.WriteString("\n\n")
 		}
 	}
+
+	if text.Len() == 0 {
+		return ""
+	}
+	return "/*\n" + strings.TrimSpace(text.String()) + "\n*/\n"
 }
-
-// type docComment struct {
-// 	sections []string
-// }
-
-// func makeDocComment(comment clang.Comment) string {
-// 	dc := docComment{}
-
-// 	for i := range comment.NumChildren() {
-// 		child := comment.Child(uint32(i))
-// 		switch child.Kind() {
-// 		case clang.Comment_Paragraph:
-// 			dc.addParagraph(child)
-
-// 		case clang.Comment_ParamCommand:
-// 			// fmt.Println("  ", child.ParamCommandComment_getParamName())
-// 			// for i := range child.NumChildren() {
-// 			// 	paramChild := child.Child(i)
-// 			// 	if paramChild.Kind() == clang.Comment_Paragraph {
-// 			// 		for i := range paramChild.NumChildren() {
-// 			// 			paraChild := paramChild.Child(i)
-// 			// 			fmt.Println("    ", i, paraChild.Kind().Spelling())
-// 			// 			fmt.Println("      ", paraChild.TextComment_getText())
-// 			// 		}
-// 			// 	}
-// 			// }
-
-// 		case clang.Comment_VerbatimLine:
-// 			// fmt.Println(child.VerbatimLineComment_getText())
-
-// 		case clang.Comment_BlockCommand:
-// 			// fmt.Println(child.BlockCommandComment_getParagraph(), child.BlockCommandComment_getCommandName())
-// 			// fmt.Println(i, "  block::", child.BlockCommandComment_getArgText(i))
-
-// 		default:
-// 			fatalf("Unsupported comment child of kind %s", child.Kind().Spelling())
-// 		}
-// 	}
-
-// 	return "/*\n" + strings.Join(dc.sections, "\n\n") + "\n*/"
-// }
-
-// func (dc *docComment) addParagraph(para clang.Comment) {
-// 	var text strings.Builder
-
-// 	for i := range para.NumChildren() {
-// 		child := para.Child(i)
-// 		switch child.Kind() {
-// 		case clang.Comment_Text:
-// 			text.WriteString(child.TextComment_getText())
-
-// 		case clang.Comment_InlineCommand:
-// 			text.WriteString(fmt.Sprintf("@%s", child.InlineCommandComment_getCommandName()))
-
-// 		default:
-// 			fatalf("Unsupported comment paragraph child of kind %s", child.Kind().Spelling())
-// 		}
-// 	}
-
-// 	text.WriteRune('\n')
-// 	dc.sections = append(dc.sections, strings.TrimSpace(text.String()))
-// }

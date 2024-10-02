@@ -45,7 +45,7 @@ func (r *record) enrich1(cursor clang.Cursor, parent *record) {
 	r.cursor = cursor
 	r.goName = stripSkPrefix(parentCppName) + stripSkPrefix(r.CppName)
 	r.cStructName = fmt.Sprintf("sk_%s%s", parentCppName, r.CppName)
-	r.doc = makeDocComment(cursor.RawCommentText())
+	r.doc = docComment(cursor.ParsedComment())
 	r.size = int(cursor.Type().SizeOf())
 	r.parent = parent
 	r.enriched = true

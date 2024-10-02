@@ -22,7 +22,7 @@ func newVariable(cursor clang.Cursor) variable {
 		cppName: cppName,
 		cName:   "sk_" + cppName,
 		goName:  goExportedName(stripSkPrefix(stripKPrefix(cppName))),
-		doc:     makeDocComment(cursor.RawCommentText()),
+		doc:     docComment(cursor.ParsedComment()),
 	}
 	return v
 }
