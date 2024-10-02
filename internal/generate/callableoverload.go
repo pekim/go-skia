@@ -13,6 +13,7 @@ type callableOverload struct {
 	goFuncName        string
 	cFuncName         string
 	record            *record
+	docRaw            string
 	doc               string
 	isStatic          bool
 	isNonStaticMethod bool    // Go function is a method, and C function has a receiver first parameter
@@ -48,7 +49,9 @@ func (o *callableOverload) enrich1(callable *callable, record *record, cursor cl
 		cName := strings.ReplaceAll(o.cppName, "::", "") // remove any "::" in the name
 		o.cFuncName = fmt.Sprintf("misk_%s%s", cName, o.Suffix)
 	}
-	o.doc = cursor.RawCommentText()
+	o.docRaw = cursor.RawCommentText()
+	// o.doc = makeDocComment(cursor.ParsedComment())
+	o.doc = makeDocComment(cursor.RawCommentText())
 	o.resultType = cursor.ResultType()
 
 	paramCount := int(cursor.NumArguments())

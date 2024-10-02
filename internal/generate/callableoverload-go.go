@@ -33,7 +33,8 @@ func (o callableOverload) generateGo(g generator) {
 		}
 	}
 
-	f.writeDocComment(o.doc)
+	// f.writeDocComment(o.docRaw)
+	f.writeln(o.doc)
 	f.writelnf("func %s %s(%s) %s {", receiver, o.goFuncName, strings.Join(params, ", "), returnDecl)
 	o.generateGoBody(g)
 	f.writeln("}")
