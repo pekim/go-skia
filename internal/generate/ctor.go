@@ -66,7 +66,7 @@ func (c recordCtor) generateGo(g generator) {
 		cArgs[i] = param.cName
 	}
 
-	f.writeln(c.doc)
+	f.write(c.doc)
 	f.writelnf("func %s(%s) %s {", c.goFuncName, strings.Join(params, ", "), c.record.goName)
 	f.writeln(strings.Join(cVars, "\n"))
 	f.writelnf("  retC := C.%s(%s)", c.cFuncName, strings.Join(cArgs, ", "))

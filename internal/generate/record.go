@@ -46,7 +46,7 @@ func (r *record) enrich1(cursor clang.Cursor, parent *record) {
 	r.cursor = cursor
 	r.goName = stripSkPrefix(parentCppName) + stripSkPrefix(r.CppName)
 	r.cStructName = fmt.Sprintf("sk_%s%s", parentCppName, r.CppName)
-	r.doc = cursor.RawCommentText()
+	r.doc = makeDocComment(cursor.RawCommentText())
 	r.doc = strings.Replace(r.doc, fmt.Sprintf("\\class %s", r.CppName), "", 1)
 	r.doc = strings.Replace(r.doc, fmt.Sprintf("\\struct %s", r.CppName), "", 1)
 	if parent != nil {
@@ -223,7 +223,7 @@ func (r record) generate(g generator) {
 
 func (r record) generateGoType(g generator) {
 	f := g.goFile
-	f.writeDocComment(r.doc)
+	f.write(r.doc)
 	if r.NoWrapper {
 		f.writelnf("type %s C.%s", r.goName, r.cStructName)
 	} else {
@@ -257,7 +257,7 @@ func (r record) generateFieldGetter(g generator, field field) {
 	}
 
 	f := g.goFile
-	f.writeDocComment(field.doc)
+	f.write(field.doc)
 	f.writelnf(`func (o %s) %s() %s {
 			return %s(%s.%s)
 		}`,

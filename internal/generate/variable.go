@@ -22,7 +22,7 @@ func newVariable(cursor clang.Cursor) variable {
 		cppName: cppName,
 		cName:   "sk_" + cppName,
 		goName:  goExportedName(stripSkPrefix(stripKPrefix(cppName))),
-		doc:     cursor.RawCommentText(),
+		doc:     makeDocComment(cursor.RawCommentText()),
 	}
 	return v
 }
@@ -47,7 +47,7 @@ func (v *variable) generate(g generator) {
 		return
 	}
 
-	g.goFile.writeDocComment(v.doc)
+	g.goFile.write(v.doc)
 	g.goFile.writelnf("var %s = (%s)(C.%s)", v.goName, v.typeGoName, v.cName)
 
 	g.headerFile.writelnf("extern %s %s;", v.typeCName, v.cName)

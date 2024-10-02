@@ -35,7 +35,7 @@ func (e *enum) enrich1(record *record, cursor clang.Cursor) {
 	}
 	e.goName = goExportedName(e.goName)
 	e.record = record
-	e.doc = cursor.RawCommentText()
+	e.doc = makeDocComment(cursor.RawCommentText())
 	if record != nil {
 		e.doc = strings.Replace(e.doc, fmt.Sprintf("\\enum %s::%s", record.CppName, e.CppName), "", 1)
 	}
@@ -46,7 +46,7 @@ func (e *enum) enrich1(record *record, cursor clang.Cursor) {
 			name := cursor.Spelling()
 			name = stripKPrefix(name)
 			name = strings.TrimSuffix(name, "_"+e.CppName)
-			doc := cursor.RawCommentText()
+			doc := makeDocComment(cursor.RawCommentText())
 			doc = strings.Replace(doc, "!<", "", 1)
 
 			constant := enumConstant{
@@ -80,7 +80,7 @@ func (e enum) generate(g generator) {
 
 	f := g.goFile
 
-	f.writeDocComment(e.doc)
+	f.write(e.doc)
 	f.writelnf("type %s %s", e.goName, e.goType)
 	f.writeln()
 
@@ -94,7 +94,7 @@ func (e enum) generate(g generator) {
 			}
 		}
 
-		f.writeDocComment(constant.doc)
+		f.write(constant.doc)
 		f.writelnf("%s %s = %s", constant.goName, e.goName, value)
 	}
 	f.writeln(")")

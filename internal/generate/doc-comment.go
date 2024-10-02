@@ -14,17 +14,21 @@ func makeDocComment(rawComment string) string {
 		lines: strings.Split(rawComment, "\n"),
 	}
 	dc.removeCommentDelimiters()
-	dc.trimLinesWhitespace()
+	dc.trimLines()
 	// dc.orderedLists() TODO
 	dc.unorderedLists()
 	dc.params()
 	dc.return_()
 
+	if len(dc.lines) == 1 && strings.TrimSpace(dc.lines[0]) != "" {
+		return "// " + dc.lines[0] + "\n"
+	}
+
 	doc := strings.TrimSpace(strings.Join(dc.lines, "\n"))
 	if len(doc) == 0 {
 		return ""
 	}
-	return "/*\n" + doc + "\n*/"
+	return "/*\n" + doc + "\n*/\n"
 }
 
 func (dc *docComment) removeCommentDelimiters() {
@@ -39,10 +43,13 @@ func (dc *docComment) removeCommentDelimiters() {
 	dc.lines[last] = strings.TrimSuffix(dc.lines[last], "*/")
 }
 
-func (dc *docComment) trimLinesWhitespace() {
+func (dc *docComment) trimLines() {
 	for i, line := range dc.lines {
 		line = strings.TrimSpace(line)
 		line = strings.TrimPrefix(line, "*")
+		line = strings.TrimPrefix(line, "//")
+		line = strings.TrimSpace(line)
+		line = strings.TrimPrefix(line, "!<")
 		line = strings.TrimSpace(line)
 		dc.lines[i] = line
 	}

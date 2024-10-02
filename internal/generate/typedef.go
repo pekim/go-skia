@@ -17,7 +17,7 @@ type typedef struct {
 func (t *typedef) enrich1(cursor clang.Cursor) {
 	t.goName = goExportedName(stripSkPrefix(cursor.Spelling()))
 	t.clangType = cursor.TypedefDeclUnderlyingType()
-	t.doc = cursor.RawCommentText()
+	t.doc = makeDocComment(cursor.RawCommentText())
 }
 
 func (t *typedef) enrich2(api api) {
@@ -32,7 +32,7 @@ func (t typedef) generate(g generator) {
 	}
 
 	f := g.goFile
-	f.writeDocComment(t.doc)
+	f.write(t.doc)
 	f.writelnf("type %s C.%s", t.goName, t.cName)
 	f.writeln()
 }

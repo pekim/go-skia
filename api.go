@@ -592,13 +592,9 @@ func NewGrContextOptions() GrContextOptions {
 type GrContextOptionsEnable int32
 
 const (
-	/*
-	   Forces an option to be disabled.
-	*/
+	// Forces an option to be disabled.
 	GrContextOptionsEnableNo GrContextOptionsEnable = 0
-	/*
-	   Forces an option to be enabled.
-	*/
+	// Forces an option to be enabled.
 	GrContextOptionsEnableYes GrContextOptionsEnable = 1
 	/*
 	   Uses Skia's default behavior, which may use runtime properties (e.g. driver version).
@@ -730,7 +726,8 @@ func NewBitmapCopy(src Bitmap) Bitmap {
 
 /*
 Decrements SkPixelRef reference count, if SkPixelRef is not nullptr.
-*/func (o *Bitmap) Delete() {
+*/
+func (o *Bitmap) Delete() {
 	C.misk_delete_SkBitmap(o.sk)
 	o.sk = nil
 }
@@ -1031,7 +1028,8 @@ Draws saved layers, if any.
 Frees up resources used by SkCanvas.
 
 example: https://fiddle.skia.org/c/@Canvas_destructor
-*/func (o *Canvas) Delete() {
+*/
+func (o *Canvas) Delete() {
 	C.misk_delete_SkCanvas(o.sk)
 	o.sk = nil
 }
@@ -3351,9 +3349,7 @@ func (o Font) GetWidths(glyphs []uint16, count int32, widths []float32) {
 	C.misk_Font_getWidths(c_obj, c_glyphs, c_count, c_widths)
 }
 
-/*
-Represents a set of actual arguments for a font.
-*/
+// Represents a set of actual arguments for a font.
 type FontArguments struct {
 	sk *C.sk_SkFontArguments
 }
@@ -3427,10 +3423,10 @@ func (o FontArgumentsVariationPosition) IsNil() bool {
 /*
 Specify a palette to use and overrides for palette entries.
 
-	`overrides` is a list of pairs of palette entry index and color.
-	The overriden palette entries will use the associated color.
-	Override pairs with palette entry indices out of range will not be applied.
-	Later override entries override earlier ones.
+`overrides` is a list of pairs of palette entry index and color.
+The overriden palette entries will use the associated color.
+Override pairs with palette entry indices out of range will not be applied.
+Later override entries override earlier ones.
 */
 type FontArgumentsPalette struct {
 	sk *C.sk_SkFontArgumentsPalette
@@ -3792,7 +3788,6 @@ func (o *FontStyleSet) Unref() {
 	C.misk_unref_SkFontStyleSet(o.sk)
 	o.sk = nil
 }
-
 func (o FontStyleSet) Count() int32 {
 	c_obj := o.sk
 	retC := C.misk_FontStyleSet_count(c_obj)
@@ -4568,10 +4563,9 @@ func (o ImageInfo) Reset() {
 4x4 matrix used by SkCanvas and other parts of Skia.
 
 Skia assumes a right-handed coordinate system:
-
-	+X goes to the right
-	+Y goes down
-	+Z goes into the screen (away from the viewer)
++X goes to the right
++Y goes down
++Z goes into the screen (away from the viewer)
 */
 type M44 struct {
 	sk *C.sk_SkM44
@@ -4651,18 +4645,14 @@ func (o *MemoryStream) Delete() {
 	o.sk = nil
 }
 
-/*
-Returns a stream with a shared reference to the input data.
-*/
+// Returns a stream with a shared reference to the input data.
 func MemoryStreamMake(data Data) MemoryStream {
 	c_data := data.sk
 	retC := C.misk_MemoryStream_Make(c_data)
 	return MemoryStream{sk: retC}
 }
 
-/*
-Returns a stream with a bare pointer reference to the input data.
-*/
+// Returns a stream with a bare pointer reference to the input data.
 func MemoryStreamMakeDirect(data []byte, length uint32) MemoryStream {
 	c_data := unsafe.Pointer(&data[0])
 	c_length := C.ulong(length)
@@ -5416,7 +5406,8 @@ func NewPaintCopy(paint Paint) Paint {
 Decreases SkPaint SkRefCnt of owned objects: SkPathEffect, SkShader,
 SkMaskFilter, SkColorFilter, and SkImageFilter. If the
 objects containing SkRefCnt go to zero, they are deleted.
-*/func (o *Paint) Delete() {
+*/
+func (o *Paint) Delete() {
 	C.misk_delete_SkPaint(o.sk)
 	o.sk = nil
 }
@@ -5798,7 +5789,8 @@ func NewPathCopy(path Path) Path {
 Releases ownership of any shared data and deletes data if SkPath is sole owner.
 
 example: https://fiddle.skia.org/c/@Path_destructor
-*/func (o *Path) Delete() {
+*/
+func (o *Path) Delete() {
 	C.misk_delete_SkPath(o.sk)
 	o.sk = nil
 }
@@ -7096,7 +7088,7 @@ This start point also acts as the implied beginning of the subsequent,
 contour, if it does not have an explicit moveTo(). e.g.
 
 path.addRect(...)
-// if we don't say moveTo() here, we will use the rect's start point
+if we don't say moveTo() here, we will use the rect's start point
 path.lineTo(...)
 
 # params
@@ -8552,7 +8544,8 @@ func NewRegionCopyRect(rect IRect) Region {
 Releases ownership of any shared data and deletes data if SkRegion is sole owner.
 
 example: https://fiddle.skia.org/c/@Region_destructor
-*/func (o *Region) Delete() {
+*/
+func (o *Region) Delete() {
 	C.misk_delete_SkRegion(o.sk)
 	o.sk = nil
 }
@@ -8824,18 +8817,14 @@ func (o SurfaceProps) IsNil() bool {
 	return o.sk == nil
 }
 
-/*
-No flags, unknown pixel geometry, platform-default contrast/gamma.
-*/
+// No flags, unknown pixel geometry, platform-default contrast/gamma.
 func NewSurfaceProps() SurfaceProps {
 
 	retC := C.misk_new_SurfaceProps()
 	return SurfaceProps{sk: retC}
 }
 
-/*
-TODO(kschmi): Remove this constructor and replace with the one below. *
-*/
+// TODO(kschmi): Remove this constructor and replace with the one below. *
 func NewSurfacePropsPixelGeometry(flags uint32, p1 PixelGeometry) SurfaceProps {
 	c_flags := C.uint(flags)
 	c_p1 := C.uint(p1)
@@ -9153,7 +9142,8 @@ func NewTextBlobBuilder() TextBlobBuilder {
 
 /*
 Deletes data allocated internally by SkTextBlobBuilder.
-*/func (o *TextBlobBuilder) Delete() {
+*/
+func (o *TextBlobBuilder) Delete() {
 	C.misk_delete_SkTextBlobBuilder(o.sk)
 	o.sk = nil
 }
@@ -9455,27 +9445,21 @@ func (o *Typeface) Unref() {
 	o.sk = nil
 }
 
-/*
-Returns the typeface's intrinsic style attributes.
-*/
+// Returns the typeface's intrinsic style attributes.
 func (o Typeface) FontStyle() FontStyle {
 	c_obj := o.sk
 	retC := C.misk_Typeface_fontStyle(c_obj)
 	return FontStyle{sk: &retC}
 }
 
-/*
-Returns true if style() has the kBold bit set.
-*/
+// Returns true if style() has the kBold bit set.
 func (o Typeface) IsBold() bool {
 	c_obj := o.sk
 	retC := C.misk_Typeface_isBold(c_obj)
 	return bool(retC)
 }
 
-/*
-Returns true if style() has the kItalic bit set.
-*/
+// Returns true if style() has the kItalic bit set.
 func (o Typeface) IsItalic() bool {
 	c_obj := o.sk
 	retC := C.misk_Typeface_isItalic(c_obj)
@@ -9566,9 +9550,7 @@ func (o Typeface) CountGlyphs() int32 {
 	return int32(retC)
 }
 
-/*
-Return the number of tables in the font.
-*/
+// Return the number of tables in the font.
 func (o Typeface) CountTables() int32 {
 	c_obj := o.sk
 	retC := C.misk_Typeface_countTables(c_obj)
@@ -9607,9 +9589,7 @@ func TypefaceEqual(facea Typeface, faceb Typeface) bool {
 	return bool(retC)
 }
 
-/*
-Returns a non-null typeface which contains no glyphs.
-*/
+// Returns a non-null typeface which contains no glyphs.
 func TypefaceMakeEmpty() Typeface {
 	retC := C.misk_Typeface_MakeEmpty()
 	return Typeface{sk: retC}
@@ -9696,12 +9676,11 @@ Many of these operate the same on all 4 components: red, green, blue, alpha. For
 we just document what happens to one component, rather than naming each one separately.
 
 Different SkColorTypes have different representations for color components:
-
-	 8-bit: 0..255
-	 6-bit: 0..63
-	 5-bit: 0..31
-	 4-bit: 0..15
-	floats: 0...1
+8-bit: 0..255
+6-bit: 0..63
+5-bit: 0..31
+4-bit: 0..15
+floats: 0...1
 
 The documentation is expressed as if the component values are always 0..1 (floats).
 
@@ -9883,34 +9862,22 @@ const (
 type PathDirection int32
 
 const (
-	/*
-	   clockwise direction for adding closed contours
-	*/
+	// clockwise direction for adding closed contours
 	PathDirectionCW PathDirection = 0
-	/*
-	   counter-clockwise direction for adding closed contours
-	*/
+	// counter-clockwise direction for adding closed contours
 	PathDirectionCCW PathDirection = 1
 )
 
 type PathFillType int32
 
 const (
-	/*
-	   Specifies that "inside" is computed by a non-zero sum of signed edge crossings
-	*/
+	// Specifies that "inside" is computed by a non-zero sum of signed edge crossings
 	PathFillTypeWinding PathFillType = 0
-	/*
-	   Specifies that "inside" is computed by an odd number of edge crossings
-	*/
+	// Specifies that "inside" is computed by an odd number of edge crossings
 	PathFillTypeEvenOdd PathFillType = 1
-	/*
-	   Same as Winding, but draws outside of the path, rather than inside
-	*/
+	// Same as Winding, but draws outside of the path, rather than inside
 	PathFillTypeInverseWinding PathFillType = 2
-	/*
-	   Same as EvenOdd, but draws outside of the path, rather than inside
-	*/
+	// Same as EvenOdd, but draws outside of the path, rather than inside
 	PathFillTypeInverseEvenOdd PathFillType = 3
 )
 

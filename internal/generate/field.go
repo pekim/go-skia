@@ -19,6 +19,9 @@ type field struct {
 }
 
 func newField(cursor clang.Cursor) field {
+	doc := makeDocComment(cursor.RawCommentText())
+	doc = strings.Replace(doc, "//!< ", "// ", 1)
+
 	f := field{
 		name:      cursor.DisplayName(),
 		size:      int(cursor.Type().SizeOf()),
@@ -26,7 +29,7 @@ func newField(cursor clang.Cursor) field {
 		offset:    int(cursor.OffsetOfField()),
 		public:    cursor.AccessSpecifier() == clang.AccessSpecifier_Public,
 		clangType: cursor.Type(),
-		doc:       strings.Replace(cursor.RawCommentText(), "//!< ", "// ", 1),
+		doc:       doc,
 	}
 	return f
 }
