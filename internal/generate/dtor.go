@@ -15,7 +15,8 @@ type recordDtor struct {
 func newRecordDtor(record *record, cursor *clang.Cursor) recordDtor {
 	d := recordDtor{record: record}
 	if cursor != nil {
-		d.doc = cursor.RawCommentText()
+		d.doc = makeDocComment(cursor.RawCommentText())
+
 	}
 	return d
 }
@@ -35,7 +36,7 @@ func (d *recordDtor) generateGo(g generator) {
 	d.cFuncName = fmt.Sprintf("misk_delete_%s", d.record.CppName)
 
 	f := g.goFile
-	f.writeDocComment(d.doc)
+	f.write(d.doc)
 	f.writelnf("func (o *%s) Delete() {", d.record.goName)
 	f.writelnf("   C.%s(o.sk)", d.cFuncName)
 	f.writeln("  o.sk = nil")

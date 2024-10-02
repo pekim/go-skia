@@ -64,42 +64,36 @@ func (o *GrBackendRenderTarget) Delete() {
 	o.sk = nil
 }
 
-/**/
 func (o GrBackendRenderTarget) Dimensions() ISize {
 	c_obj := o.sk
 	retC := C.misk_GrBackendRenderTarget_dimensions(c_obj)
 	return ISize(retC)
 }
 
-/**/
 func (o GrBackendRenderTarget) Width() int32 {
 	c_obj := o.sk
 	retC := C.misk_GrBackendRenderTarget_width(c_obj)
 	return int32(retC)
 }
 
-/**/
 func (o GrBackendRenderTarget) Height() int32 {
 	c_obj := o.sk
 	retC := C.misk_GrBackendRenderTarget_height(c_obj)
 	return int32(retC)
 }
 
-/**/
 func (o GrBackendRenderTarget) SampleCnt() int32 {
 	c_obj := o.sk
 	retC := C.misk_GrBackendRenderTarget_sampleCnt(c_obj)
 	return int32(retC)
 }
 
-/**/
 func (o GrBackendRenderTarget) StencilBits() int32 {
 	c_obj := o.sk
 	retC := C.misk_GrBackendRenderTarget_stencilBits(c_obj)
 	return int32(retC)
 }
 
-/**/
 func (o GrBackendRenderTarget) IsFramebufferOnly() bool {
 	c_obj := o.sk
 	retC := C.misk_GrBackendRenderTarget_isFramebufferOnly(c_obj)
@@ -127,10 +121,10 @@ func (o *GrDirectContext) Delete() {
 }
 
 /*
-* Call to ensure all drawing to the context has been flushed and submitted to the underlying 3D
-* API. This is equivalent to calling GrContext::flush with a default GrFlushInfo followed by
-* GrContext::submit(sync).
- */
+Call to ensure all drawing to the context has been flushed and submitted to the underlying 3D
+API. This is equivalent to calling GrContext::flush with a default GrFlushInfo followed by
+GrContext::submit(sync).
+*/
 func (o GrDirectContext) FlushAndSubmit(sync GrSyncCpu) {
 	c_obj := o.sk
 	c_sync := C.bool(sync)
@@ -138,29 +132,29 @@ func (o GrDirectContext) FlushAndSubmit(sync GrSyncCpu) {
 }
 
 /*
-* Call to ensure all drawing to the context has been flushed to underlying 3D API specific
-* objects. A call to `submit` is always required to ensure work is actually sent to
-* the gpu. Some specific API details:
-*     GL: Commands are actually sent to the driver, but glFlush is never called. Thus some
-*         sync objects from the flush will not be valid until a submission occurs.
-*
-*     Vulkan/Metal/D3D/Dawn: Commands are recorded to the backend APIs corresponding command
-*         buffer or encoder objects. However, these objects are not sent to the gpu until a
-*         submission occurs.
-*
-* If the return is GrSemaphoresSubmitted::kYes, only initialized GrBackendSemaphores will be
-* submitted to the gpu during the next submit call (it is possible Skia failed to create a
-* subset of the semaphores). The client should not wait on these semaphores until after submit
-* has been called, and must keep them alive until then. If this call returns
-* GrSemaphoresSubmitted::kNo, the GPU backend will not submit any semaphores to be signaled on
-* the GPU. Thus the client should not have the GPU wait on any of the semaphores passed in with
-* the GrFlushInfo. Regardless of whether semaphores were submitted to the GPU or not, the
-* client is still responsible for deleting any initialized semaphores.
-* Regardless of semaphore submission the context will still be flushed. It should be
-* emphasized that a return value of GrSemaphoresSubmitted::kNo does not mean the flush did not
-* happen. It simply means there were no semaphores submitted to the GPU. A caller should only
-* take this as a failure if they passed in semaphores to be submitted.
- */
+Call to ensure all drawing to the context has been flushed to underlying 3D API specific
+objects. A call to `submit` is always required to ensure work is actually sent to
+the gpu. Some specific API details:
+GL: Commands are actually sent to the driver, but glFlush is never called. Thus some
+sync objects from the flush will not be valid until a submission occurs.
+
+Vulkan/Metal/D3D/Dawn: Commands are recorded to the backend APIs corresponding command
+buffer or encoder objects. However, these objects are not sent to the gpu until a
+submission occurs.
+
+If the return is GrSemaphoresSubmitted::kYes, only initialized GrBackendSemaphores will be
+submitted to the gpu during the next submit call (it is possible Skia failed to create a
+subset of the semaphores). The client should not wait on these semaphores until after submit
+has been called, and must keep them alive until then. If this call returns
+GrSemaphoresSubmitted::kNo, the GPU backend will not submit any semaphores to be signaled on
+the GPU. Thus the client should not have the GPU wait on any of the semaphores passed in with
+the GrFlushInfo. Regardless of whether semaphores were submitted to the GPU or not, the
+client is still responsible for deleting any initialized semaphores.
+Regardless of semaphore submission the context will still be flushed. It should be
+emphasized that a return value of GrSemaphoresSubmitted::kNo does not mean the flush did not
+happen. It simply means there were no semaphores submitted to the GPU. A caller should only
+take this as a failure if they passed in semaphores to be submitted.
+*/
 func (o GrDirectContext) Flush(info GrFlushInfo) GrSemaphoresSubmitted {
 	c_obj := o.sk
 	c_info := info.sk
@@ -169,19 +163,19 @@ func (o GrDirectContext) Flush(info GrFlushInfo) GrSemaphoresSubmitted {
 }
 
 /*
-* Submit outstanding work to the gpu from all previously un-submitted flushes. The return
-* value of the submit will indicate whether or not the submission to the GPU was successful.
-*
-* If the call returns true, all previously passed in semaphores in flush calls will have been
-* submitted to the GPU and they can safely be waited on. The caller should wait on those
-* semaphores or perform some other global synchronization before deleting the semaphores.
-*
-* If it returns false, then those same semaphores will not have been submitted and we will not
-* try to submit them again. The caller is free to delete the semaphores at any time.
-*
-* If sync flag is GrSyncCpu::kYes, this function will return once the gpu has finished with all
-* submitted work.
- */
+Submit outstanding work to the gpu from all previously un-submitted flushes. The return
+value of the submit will indicate whether or not the submission to the GPU was successful.
+
+If the call returns true, all previously passed in semaphores in flush calls will have been
+submitted to the GPU and they can safely be waited on. The caller should wait on those
+semaphores or perform some other global synchronization before deleting the semaphores.
+
+If it returns false, then those same semaphores will not have been submitted and we will not
+try to submit them again. The caller is free to delete the semaphores at any time.
+
+If sync flag is GrSyncCpu::kYes, this function will return once the gpu has finished with all
+submitted work.
+*/
 func (o GrDirectContext) Submit(sync GrSyncCpu) bool {
 	c_obj := o.sk
 	c_sync := C.bool(sync)
@@ -702,7 +696,9 @@ set to (0, 0).
 Use setInfo() to associate SkColorType, SkAlphaType, width, and height
 after SkBitmap has been created.
 
-@return  empty SkBitmap
+# return
+
+  - empty SkBitmap
 
 example: https://fiddle.skia.org/c/@Bitmap_empty_constructor
 */
@@ -716,8 +712,13 @@ func NewBitmap() Bitmap {
 Copies settings from src to returned SkBitmap. Shares pixels if src has pixels
 allocated, so both bitmaps reference the same pixels.
 
-@param src  SkBitmap to copy SkImageInfo, and share SkPixelRef
-@return     copy of src
+# params
+
+  - src =>  SkBitmap to copy SkImageInfo, and share SkPixelRef
+
+# return
+
+  - copy of src
 
 example: https://fiddle.skia.org/c/@Bitmap_copy_const_SkBitmap
 */
@@ -729,8 +730,7 @@ func NewBitmapCopy(src Bitmap) Bitmap {
 
 /*
 Decrements SkPixelRef reference count, if SkPixelRef is not nullptr.
-*/
-func (o *Bitmap) Delete() {
+*/func (o *Bitmap) Delete() {
 	C.misk_delete_SkBitmap(o.sk)
 	o.sk = nil
 }
@@ -930,7 +930,9 @@ func (o Canvas) IsNil() bool {
 Creates an empty SkCanvas with no backing device or pixels, with
 a width and height of zero.
 
-@return  empty SkCanvas
+# return
+
+  - empty SkCanvas
 
 example: https://fiddle.skia.org/c/@Canvas_empty_constructor
 */
@@ -950,11 +952,16 @@ direction and order. Since a platform may dynamically change its direction when
 the device is rotated, and since a platform may have multiple monitors with
 different characteristics, it is best not to rely on this legacy behavior.
 
-@param width   zero or greater
-@param height  zero or greater
-@param props   LCD striping orientation and setting for device independent fonts;
-may be nullptr
-@return        SkCanvas placeholder with dimensions
+# params
+
+  - width =>   zero or greater
+  - height =>  zero or greater
+  - props =>   LCD striping orientation and setting for device independent fonts;
+    may be nullptr
+
+# return
+
+  - SkCanvas placeholder with dimensions
 
 example: https://fiddle.skia.org/c/@Canvas_int_int_const_SkSurfaceProps_star
 */
@@ -975,9 +982,14 @@ constructed SkCanvas.
 
 May be deprecated in the future.
 
-@param bitmap  width, height, SkColorType, SkAlphaType, and pixel
-storage of raster surface
-@return        SkCanvas that can be used to draw into bitmap
+# params
+
+  - bitmap =>  width, height, SkColorType, SkAlphaType, and pixel
+    storage of raster surface
+
+# return
+
+  - SkCanvas that can be used to draw into bitmap
 
 example: https://fiddle.skia.org/c/@Canvas_copy_const_SkBitmap
 */
@@ -994,11 +1006,16 @@ Use props to match the device characteristics, like LCD striping.
 bitmap is copied so that subsequently editing bitmap will not affect
 constructed SkCanvas.
 
-@param bitmap  width, height, SkColorType, SkAlphaType,
-and pixel storage of raster surface
-@param props   order and orientation of RGB striping; and whether to use
-device independent fonts
-@return        SkCanvas that can be used to draw into bitmap
+# params
+
+  - bitmap =>  width, height, SkColorType, SkAlphaType,
+    and pixel storage of raster surface
+  - props =>   order and orientation of RGB striping; and whether to use
+    device independent fonts
+
+# return
+
+  - SkCanvas that can be used to draw into bitmap
 
 example: https://fiddle.skia.org/c/@Canvas_const_SkBitmap_const_SkSurfaceProps
 */
@@ -1014,8 +1031,7 @@ Draws saved layers, if any.
 Frees up resources used by SkCanvas.
 
 example: https://fiddle.skia.org/c/@Canvas_destructor
-*/
-func (o *Canvas) Delete() {
+*/func (o *Canvas) Delete() {
 	C.misk_delete_SkCanvas(o.sk)
 	o.sk = nil
 }
@@ -1115,9 +1131,10 @@ func (o Canvas) MakeSurface(info ImageInfo, props SurfaceProps) Surface {
 	return Surface{sk: retC}
 }
 
-/*Sometimes a canvas is owned by a surface. If it is, getSurface() will return a bare
-*  pointer to that surface, else this will return nullptr.
- */
+/*
+Sometimes a canvas is owned by a surface. If it is, getSurface() will return a bare
+pointer to that surface, else this will return nullptr.
+*/
 func (o Canvas) GetSurface() Surface {
 	c_obj := o.sk
 	retC := C.misk_Canvas_getSurface(c_obj)
@@ -1487,7 +1504,6 @@ func (o Canvas) SaveLayer(bounds Rect, paint Paint) int32 {
 	return int32(retC)
 }
 
-/**/
 func (o Canvas) SaveLayerAlpha(bounds Rect, alpha uint32) int32 {
 	c_obj := o.sk
 	c_bounds := *(*C.sk_SkRect)(unsafe.Pointer(&bounds))
@@ -1683,7 +1699,6 @@ func (o Canvas) ConcatMatrix(matrix Matrix) {
 	C.misk_Canvas_concatMatrix(c_obj, c_matrix)
 }
 
-/**/
 func (o Canvas) ConcatM44(p0 M44) {
 	c_obj := o.sk
 	c_p0 := p0.sk
@@ -1706,7 +1721,6 @@ func (o Canvas) SetMatrixM44(matrix M44) {
 	C.misk_Canvas_setMatrixM44(c_obj, c_matrix)
 }
 
-/**/
 func (o Canvas) SetMatrix(matrix Matrix) {
 	c_obj := o.sk
 	c_matrix := matrix.sk
@@ -2410,7 +2424,6 @@ func (o Canvas) DrawPath(path Path, paint Paint) {
 	C.misk_Canvas_drawPath(c_obj, c_path, c_paint)
 }
 
-/**/
 func (o Canvas) DrawImage(image Image, left float32, top float32) {
 	c_obj := o.sk
 	c_image := image.sk
@@ -2419,7 +2432,6 @@ func (o Canvas) DrawImage(image Image, left float32, top float32) {
 	C.misk_Canvas_drawImage(c_obj, c_image, c_left, c_top)
 }
 
-/**/
 func (o Canvas) DrawImageSamplingOptions(p0 Image, x float32, y float32, p3 SamplingOptions, p4 Paint) {
 	c_obj := o.sk
 	c_p0 := p0.sk
@@ -2430,7 +2442,6 @@ func (o Canvas) DrawImageSamplingOptions(p0 Image, x float32, y float32, p3 Samp
 	C.misk_Canvas_drawImageSamplingOptions(c_obj, c_p0, c_x, c_y, c_p3, c_p4)
 }
 
-/**/
 func (o Canvas) DrawImageRect(p0 Image, src Rect, dst Rect, p3 SamplingOptions, p4 Paint, p5 CanvasSrcRectConstraint) {
 	c_obj := o.sk
 	c_p0 := p0.sk
@@ -2442,7 +2453,6 @@ func (o Canvas) DrawImageRect(p0 Image, src Rect, dst Rect, p3 SamplingOptions, 
 	C.misk_Canvas_drawImageRect(c_obj, c_p0, c_src, c_dst, c_p3, c_p4, c_p5)
 }
 
-/**/
 func (o Canvas) DrawImageRectNoSrc(p0 Image, dst Rect, p2 SamplingOptions, p3 Paint) {
 	c_obj := o.sk
 	c_p0 := p0.sk
@@ -2476,8 +2486,7 @@ replicates the image edge color when it samples outside of its bounds.
   - dst =>     destination SkRect of image to draw to
   - filter =>  what technique to use when sampling the image
   - paint =>   SkPaint containing SkBlendMode, SkColorFilter, SkImageFilter,
-
-and so on; or nullptr
+    and so on; or nullptr
 */
 func (o Canvas) DrawImageNine(image Image, center IRect, dst Rect, filter FilterMode, paint Paint) {
 	c_obj := o.sk
@@ -2510,8 +2519,7 @@ default, draws filled black glyphs.
 # params
 
   - str =>     character code points drawn,
-
-ending with a char value of zero
+    ending with a char value of zero
   - x =>       start of string on x-axis
   - y =>       start of string on y-axis
   - font =>    typeface, text size and so, used to describe the text
@@ -2696,7 +2704,9 @@ func (o ColorInfo) IsNil() bool {
 Creates an SkColorInfo with kUnknown_SkColorType, kUnknown_SkAlphaType,
 and no SkColorSpace.
 
-@return  empty SkImageInfo
+# return
+
+  - empty SkImageInfo
 */
 func NewColorInfo() ColorInfo {
 
@@ -2712,7 +2722,9 @@ defaults to sRGB, mapping into SkSurface SkColorSpace.
 
 Parameters are not validated to see if their values are legal, or that the
 combination is supported.
-@return        created SkColorInfo
+# return
+
+  - created SkColorInfo
 */
 func NewColorInfo2(ct ColorType, at AlphaType, cs ColorSpace) ColorInfo {
 	c_ct := C.int(ct)
@@ -2733,42 +2745,36 @@ func (o *ColorInfo) Delete() {
 	o.sk = nil
 }
 
-/**/
 func (o ColorInfo) ColorSpace() ColorSpace {
 	c_obj := o.sk
 	retC := C.misk_ColorInfo_colorSpace(c_obj)
 	return ColorSpace{sk: retC}
 }
 
-/**/
 func (o ColorInfo) RefColorSpace() ColorSpace {
 	c_obj := o.sk
 	retC := C.misk_ColorInfo_refColorSpace(c_obj)
 	return ColorSpace{sk: retC}
 }
 
-/**/
 func (o ColorInfo) ColorType() ColorType {
 	c_obj := o.sk
 	retC := C.misk_ColorInfo_colorType(c_obj)
 	return ColorType(retC)
 }
 
-/**/
 func (o ColorInfo) AlphaType() AlphaType {
 	c_obj := o.sk
 	retC := C.misk_ColorInfo_alphaType(c_obj)
 	return AlphaType(retC)
 }
 
-/**/
 func (o ColorInfo) IsOpaque() bool {
 	c_obj := o.sk
 	retC := C.misk_ColorInfo_isOpaque(c_obj)
 	return bool(retC)
 }
 
-/**/
 func (o ColorInfo) GammaCloseToSRGB() bool {
 	c_obj := o.sk
 	retC := C.misk_ColorInfo_gammaCloseToSRGB(c_obj)
@@ -2859,25 +2865,25 @@ func (o *ColorSpace) Unref() {
 }
 
 /*
-*  Create the sRGB color space.
- */
+Create the sRGB color space.
+*/
 func ColorSpaceMakeSRGB() ColorSpace {
 	retC := C.misk_ColorSpace_MakeSRGB()
 	return ColorSpace{sk: retC}
 }
 
 /*
-*  Colorspace with the sRGB primaries, but a linear (1.0) gamma.
- */
+Colorspace with the sRGB primaries, but a linear (1.0) gamma.
+*/
 func ColorSpaceMakeSRGBLinear() ColorSpace {
 	retC := C.misk_ColorSpace_MakeSRGBLinear()
 	return ColorSpace{sk: retC}
 }
 
 /*
-*  If both are null, we return true. If one is null and the other is not, we return false.
-*  If both are non-null, we do a deeper compare.
- */
+If both are null, we return true. If one is null and the other is not, we return false.
+If both are non-null, we do a deeper compare.
+*/
 func ColorSpaceEquals(p0 ColorSpace, p1 ColorSpace) bool {
 	c_p0 := p0.sk
 	c_p1 := p1.sk
@@ -2906,15 +2912,14 @@ func (o *Data) Unref() {
 }
 
 /*
-*  Returns the number of bytes stored.
- */
+Returns the number of bytes stored.
+*/
 func (o Data) Size() uint32 {
 	c_obj := o.sk
 	retC := C.misk_Data_size(c_obj)
 	return uint32(retC)
 }
 
-/**/
 func (o Data) IsEmpty() bool {
 	c_obj := o.sk
 	retC := C.misk_Data_isEmpty(c_obj)
@@ -2922,8 +2927,8 @@ func (o Data) IsEmpty() bool {
 }
 
 /*
-*  Create a new dataref by copying the specified data
- */
+Create a new dataref by copying the specified data
+*/
 func DataMakeWithCopy(data []byte, length uint32) Data {
 	c_data := unsafe.Pointer(&data[0])
 	c_length := C.ulong(length)
@@ -2932,9 +2937,9 @@ func DataMakeWithCopy(data []byte, length uint32) Data {
 }
 
 /*
-*  Create a new data with zero-initialized contents. The caller should call writable_data()
-*  to write into the buffer, but this must be done before another ref() is made.
- */
+Create a new data with zero-initialized contents. The caller should call writable_data()
+to write into the buffer, but this must be done before another ref() is made.
+*/
 func DataMakeZeroInitialized(length uint32) Data {
 	c_length := C.ulong(length)
 	retC := C.misk_Data_MakeZeroInitialized(c_length)
@@ -2942,11 +2947,11 @@ func DataMakeZeroInitialized(length uint32) Data {
 }
 
 /*
-*  Create a new dataref by copying the specified c-string
-*  (a null-terminated array of bytes). The returned SkData will have size()
-*  equal to strlen(cstr) + 1. If cstr is NULL, it will be treated the same
-*  as "".
- */
+Create a new dataref by copying the specified c-string
+(a null-terminated array of bytes). The returned SkData will have size()
+equal to strlen(cstr) + 1. If cstr is NULL, it will be treated the same
+as "".
+*/
 func DataMakeWithCString(cstr string) Data {
 	c_cstr := C.CString(cstr)
 	defer C.free(unsafe.Pointer(c_cstr))
@@ -2955,9 +2960,9 @@ func DataMakeWithCString(cstr string) Data {
 }
 
 /*
-*  Call this when the data parameter is already const and will outlive the lifetime of the
-*  SkData. Suitable for with const globals.
- */
+Call this when the data parameter is already const and will outlive the lifetime of the
+SkData. Suitable for with const globals.
+*/
 func DataMakeWithoutCopy(data []byte, length uint32) Data {
 	c_data := unsafe.Pointer(&data[0])
 	c_length := C.ulong(length)
@@ -2966,9 +2971,9 @@ func DataMakeWithoutCopy(data []byte, length uint32) Data {
 }
 
 /*
-*  Create a new dataref the file with the specified path.
-*  If the file cannot be opened, this returns NULL.
- */
+Create a new dataref the file with the specified path.
+If the file cannot be opened, this returns NULL.
+*/
 func DataMakeFromFileName(path string) Data {
 	c_path := C.CString(path)
 	defer C.free(unsafe.Pointer(c_path))
@@ -2992,7 +2997,9 @@ func (o Font) IsNil() bool {
 /*
 Constructs SkFont with default values.
 
-@return  default initialized SkFont
+# return
+
+  - default initialized SkFont
 */
 func NewFont() Font {
 
@@ -3003,9 +3010,14 @@ func NewFont() Font {
 /*
 Constructs SkFont with default values with SkTypeface and size in points.
 
-@param typeface  font and style used to draw and measure text
-@param size      typographic height of text
-@return          initialized SkFont
+# params
+
+  - typeface =>  font and style used to draw and measure text
+  - size =>      typographic height of text
+
+# return
+
+  - initialized SkFont
 */
 func NewFontTypefaceSize(typeface Typeface, size float32) Font {
 	c_typeface := typeface.sk
@@ -3017,8 +3029,13 @@ func NewFontTypefaceSize(typeface Typeface, size float32) Font {
 /*
 Constructs SkFont with default values with SkTypeface.
 
-@param typeface  font and style used to draw and measure text
-@return          initialized SkFont
+# params
+
+  - typeface =>  font and style used to draw and measure text
+
+# return
+
+  - initialized SkFont
 */
 func NewFontTypeface(typeface Typeface) Font {
 	c_typeface := typeface.sk
@@ -3031,11 +3048,16 @@ Constructs SkFont with default values with SkTypeface and size in points,
 horizontal scale, and horizontal skew. Horizontal scale emulates condensed
 and expanded fonts. Horizontal skew emulates oblique fonts.
 
-@param typeface  font and style used to draw and measure text
-@param size      typographic height of text
-@param scaleX    text horizontal scale
-@param skewX     additional shear on x-axis relative to y-axis
-@return          initialized SkFont
+# params
+
+  - typeface =>  font and style used to draw and measure text
+  - size =>      typographic height of text
+  - scaleX =>    text horizontal scale
+  - skewX =>     additional shear on x-axis relative to y-axis
+
+# return
+
+  - initialized SkFont
 */
 func NewFontTypefaceSizeScaleSkew(typeface Typeface, size float32, scaleX float32, skewX float32) Font {
 	c_typeface := typeface.sk
@@ -3252,7 +3274,6 @@ func (o Font) UnicharToGlyph(uni int32) uint16 {
 	return uint16(retC)
 }
 
-/**/
 func (o Font) UnicharsToGlyphs(uni []int32, count int32, glyphs []uint16) {
 	c_obj := o.sk
 	c_uni := (*C.int)(unsafe.Pointer(&uni[0]))
@@ -3354,11 +3375,12 @@ func (o *FontArguments) Delete() {
 	o.sk = nil
 }
 
-/*Specify the index of the desired font.
-*
-*  Font formats like ttc, dfont, cff, cid, pfr, t42, t1, and fon may actually be indexed
-*  collections of fonts.
- */
+/*
+Specify the index of the desired font.
+
+Font formats like ttc, dfont, cff, cid, pfr, t42, t1, and fon may actually be indexed
+collections of fonts.
+*/
 func (o FontArguments) SetCollectionIndex(collectionIndex int32) FontArguments {
 	c_obj := o.sk
 	c_collectionIndex := C.int(collectionIndex)
@@ -3366,21 +3388,18 @@ func (o FontArguments) SetCollectionIndex(collectionIndex int32) FontArguments {
 	return FontArguments{sk: &retC}
 }
 
-/**/
 func (o FontArguments) GetCollectionIndex() int32 {
 	c_obj := o.sk
 	retC := C.misk_FontArguments_getCollectionIndex(c_obj)
 	return int32(retC)
 }
 
-/**/
 func (o FontArguments) GetVariationDesignPosition() FontArgumentsVariationPosition {
 	c_obj := o.sk
 	retC := C.misk_FontArguments_getVariationDesignPosition(c_obj)
 	return FontArgumentsVariationPosition{sk: &retC}
 }
 
-/**/
 func (o FontArguments) GetPalette() FontArgumentsPalette {
 	c_obj := o.sk
 	retC := C.misk_FontArguments_getPalette(c_obj)
@@ -3605,16 +3624,16 @@ func (o *FontMgr) Unref() {
 }
 
 /*
-*  The caller must call unref() on the returned object.
-*  Never returns NULL; will return an empty set if the name is not found.
-*
-*  Passing nullptr as the parameter will return the default system family.
-*  Note that most systems don't have a default system family, so passing nullptr will often
-*  result in the empty set.
-*
-*  It is possible that this will return a style set not accessible from
-*  createStyleSet(int) due to hidden or auto-activated fonts.
- */
+The caller must call unref() on the returned object.
+Never returns NULL; will return an empty set if the name is not found.
+
+Passing nullptr as the parameter will return the default system family.
+Note that most systems don't have a default system family, so passing nullptr will often
+result in the empty set.
+
+It is possible that this will return a style set not accessible from
+createStyleSet(int) due to hidden or auto-activated fonts.
+*/
 func (o FontMgr) MatchFamily(familyName string) FontStyleSet {
 	c_obj := o.sk
 	c_familyName := C.CString(familyName)
@@ -3624,17 +3643,17 @@ func (o FontMgr) MatchFamily(familyName string) FontStyleSet {
 }
 
 /*
-*  Find the closest matching typeface to the specified familyName and style
-*  and return a ref to it. The caller must call unref() on the returned
-*  object. Will return nullptr if no 'good' match is found.
-*
-*  Passing |nullptr| as the parameter for |familyName| will return the
-*  default system font.
-*
-*  It is possible that this will return a style set not accessible from
-*  createStyleSet(int) or matchFamily(const char[]) due to hidden or
-*  auto-activated fonts.
- */
+Find the closest matching typeface to the specified familyName and style
+and return a ref to it. The caller must call unref() on the returned
+object. Will return nullptr if no 'good' match is found.
+
+Passing |nullptr| as the parameter for |familyName| will return the
+default system font.
+
+It is possible that this will return a style set not accessible from
+createStyleSet(int) or matchFamily(const char[]) due to hidden or
+auto-activated fonts.
+*/
 func (o FontMgr) MatchFamilyStyle(familyName string, p1 FontStyle) Typeface {
 	c_obj := o.sk
 	c_familyName := C.CString(familyName)
@@ -3645,10 +3664,10 @@ func (o FontMgr) MatchFamilyStyle(familyName string, p1 FontStyle) Typeface {
 }
 
 /*
-*  Create a typeface for the specified data and TTC index (pass 0 for none)
-*  or NULL if the data is not recognized. The caller must call unref() on
-*  the returned object if it is not null.
- */
+Create a typeface for the specified data and TTC index (pass 0 for none)
+or NULL if the data is not recognized. The caller must call unref() on
+the returned object if it is not null.
+*/
 func (o FontMgr) MakeFromData(p0 Data, ttcIndex int32) Typeface {
 	c_obj := o.sk
 	c_p0 := p0.sk
@@ -3658,11 +3677,11 @@ func (o FontMgr) MakeFromData(p0 Data, ttcIndex int32) Typeface {
 }
 
 /*
-*  Create a typeface for the specified fileName and TTC index
-*  (pass 0 for none) or NULL if the file is not found, or its contents are
-*  not recognized. The caller must call unref() on the returned object
-*  if it is not null.
- */
+Create a typeface for the specified fileName and TTC index
+(pass 0 for none) or NULL if the file is not found, or its contents are
+not recognized. The caller must call unref() on the returned object
+if it is not null.
+*/
 func (o FontMgr) MakeFromFile(path string, ttcIndex int32) Typeface {
 	c_obj := o.sk
 	c_path := C.CString(path)
@@ -3701,25 +3720,21 @@ func (o *FontStyle) Delete() {
 	o.sk = nil
 }
 
-/**/
 func FontStyleNormal() FontStyle {
 	retC := C.misk_FontStyle_Normal()
 	return FontStyle{sk: &retC}
 }
 
-/**/
 func FontStyleBold() FontStyle {
 	retC := C.misk_FontStyle_Bold()
 	return FontStyle{sk: &retC}
 }
 
-/**/
 func FontStyleItalic() FontStyle {
 	retC := C.misk_FontStyle_Italic()
 	return FontStyle{sk: &retC}
 }
 
-/**/
 func FontStyleBoldItalic() FontStyle {
 	retC := C.misk_FontStyle_BoldItalic()
 	return FontStyle{sk: &retC}
@@ -3778,14 +3793,12 @@ func (o *FontStyleSet) Unref() {
 	o.sk = nil
 }
 
-/**/
 func (o FontStyleSet) Count() int32 {
 	c_obj := o.sk
 	retC := C.misk_FontStyleSet_count(c_obj)
 	return int32(retC)
 }
 
-/**/
 func (o FontStyleSet) GetStyle(index int32, p1 FontStyle, style String) {
 	c_obj := o.sk
 	c_index := C.int(index)
@@ -3794,7 +3807,6 @@ func (o FontStyleSet) GetStyle(index int32, p1 FontStyle, style String) {
 	C.misk_FontStyleSet_getStyle(c_obj, c_index, c_p1, c_style)
 }
 
-/**/
 func (o FontStyleSet) CreateTypeface(index int32) Typeface {
 	c_obj := o.sk
 	c_index := C.int(index)
@@ -3802,7 +3814,6 @@ func (o FontStyleSet) CreateTypeface(index int32) Typeface {
 	return Typeface{sk: retC}
 }
 
-/**/
 func (o FontStyleSet) MatchStyle(pattern FontStyle) Typeface {
 	c_obj := o.sk
 	c_pattern := pattern.sk
@@ -4079,8 +4090,7 @@ Otherwise, the returned image will be raster-backed.
 # params
 
   - direct =>  the GrDirectContext of the source image (nullptr is ok if the source image
-
-is not texture-backed).
+    is not texture-backed).
   - subset =>  bounds of returned SkImage
 
 # return
@@ -4142,7 +4152,9 @@ func (o ImageInfo) IsNil() bool {
 Creates an empty SkImageInfo with kUnknown_SkColorType, kUnknown_SkAlphaType,
 a width and height of zero, and no SkColorSpace.
 
-@return  empty SkImageInfo
+# return
+
+  - empty SkImageInfo
 */
 func NewImageInfo() ImageInfo {
 
@@ -4181,14 +4193,12 @@ func (o ImageInfo) Height() int32 {
 	return int32(retC)
 }
 
-/**/
 func (o ImageInfo) ColorType() ColorType {
 	c_obj := o.sk
 	retC := C.misk_ImageInfo_colorType(c_obj)
 	return ColorType(retC)
 }
 
-/**/
 func (o ImageInfo) AlphaType() AlphaType {
 	c_obj := o.sk
 	retC := C.misk_ImageInfo_alphaType(c_obj)
@@ -4641,14 +4651,18 @@ func (o *MemoryStream) Delete() {
 	o.sk = nil
 }
 
-/*Returns a stream with a shared reference to the input data.*/
+/*
+Returns a stream with a shared reference to the input data.
+*/
 func MemoryStreamMake(data Data) MemoryStream {
 	c_data := data.sk
 	retC := C.misk_MemoryStream_Make(c_data)
 	return MemoryStream{sk: retC}
 }
 
-/*Returns a stream with a bare pointer reference to the input data.*/
+/*
+Returns a stream with a bare pointer reference to the input data.
+*/
 func MemoryStreamMakeDirect(data []byte, length uint32) MemoryStream {
 	c_data := unsafe.Pointer(&data[0])
 	c_length := C.ulong(length)
@@ -4975,7 +4989,6 @@ func (o *IRect) SetXYWH(x int32, y int32, width int32, height int32) {
 	C.misk_IRect_setXYWH(c_obj, c_x, c_y, c_width, c_height)
 }
 
-/**/
 func (o *IRect) SetWH(width int32, height int32) {
 	c_obj := (*C.sk_SkIRect)(o)
 	c_width := C.int(width)
@@ -5361,7 +5374,9 @@ func (o Paint) IsNil() bool {
 /*
 Constructs SkPaint with default values.
 
-@return  default initialized SkPaint
+# return
+
+  - default initialized SkPaint
 
 example: https://fiddle.skia.org/c/@Paint_empty_constructor
 */
@@ -5381,8 +5396,13 @@ The referenced objects SkPathEffect, SkShader, SkMaskFilter, SkColorFilter,
 and SkImageFilter cannot be modified after they are created.
 This prevents objects with SkRefCnt from being modified once SkPaint refers to them.
 
-@param paint  original to copy
-@return       shallow copy of paint
+# params
+
+  - paint =>  original to copy
+
+# return
+
+  - shallow copy of paint
 
 example: https://fiddle.skia.org/c/@Paint_copy_const_SkPaint
 */
@@ -5396,8 +5416,7 @@ func NewPaintCopy(paint Paint) Paint {
 Decreases SkPaint SkRefCnt of owned objects: SkPathEffect, SkShader,
 SkMaskFilter, SkColorFilter, and SkImageFilter. If the
 objects containing SkRefCnt go to zero, they are deleted.
-*/
-func (o *Paint) Delete() {
+*/func (o *Paint) Delete() {
 	C.misk_delete_SkPaint(o.sk)
 	o.sk = nil
 }
@@ -5413,14 +5432,12 @@ func (o Paint) Reset() {
 	C.misk_Paint_reset(c_obj)
 }
 
-/**/
 func (o Paint) GetAlpha() byte {
 	c_obj := o.sk
 	retC := C.misk_Paint_getAlpha(c_obj)
 	return byte(retC)
 }
 
-/**/
 func (o Paint) SetAlpha(a uint32) {
 	c_obj := o.sk
 	c_a := C.uint(a)
@@ -5462,10 +5479,11 @@ func (o Paint) SetAntiAlias(aa bool) {
 	C.misk_Paint_setAntiAlias(c_obj, c_aa)
 }
 
-/*Helper method for calling setBlender().
-*
-*  This sets a blender that implements the specified blendmode enum.
- */
+/*
+Helper method for calling setBlender().
+
+This sets a blender that implements the specified blendmode enum.
+*/
 func (o Paint) SetBlendMode(mode BlendMode) {
 	c_obj := o.sk
 	c_mode := C.int(mode)
@@ -5515,8 +5533,9 @@ func (o Paint) SetDither(dither bool) {
 	C.misk_Paint_setDither(c_obj, c_dither)
 }
 
-/*Returns the geometry drawn at the beginning and end of strokes.
- */
+/*
+Returns the geometry drawn at the beginning and end of strokes.
+*/
 func (o Paint) GetStrokeCap() PaintCap {
 	c_obj := o.sk
 	retC := C.misk_Paint_getStrokeCap(c_obj)
@@ -5535,8 +5554,9 @@ func (o Paint) SetStrokeCap(cap PaintCap) {
 	C.misk_Paint_setStrokeCap(c_obj, c_cap)
 }
 
-/*Returns the geometry drawn at the corners of strokes.
- */
+/*
+Returns the geometry drawn at the corners of strokes.
+*/
 func (o Paint) GetStrokeJoin() PaintJoin {
 	c_obj := o.sk
 	retC := C.misk_Paint_getStrokeJoin(c_obj)
@@ -5617,8 +5637,9 @@ func (o Paint) SetStrokeWidth(width float32) {
 	C.misk_Paint_setStrokeWidth(c_obj, c_width)
 }
 
-/*Returns whether the geometry is filled, stroked, or filled and stroked.
- */
+/*
+Returns whether the geometry is filled, stroked, or filled and stroked.
+*/
 func (o Paint) GetStyle() PaintStyle {
 	c_obj := o.sk
 	retC := C.misk_Paint_getStyle(c_obj)
@@ -5735,7 +5756,9 @@ func (o Path) IsNil() bool {
 Constructs an empty SkPath. By default, SkPath has no verbs, no SkPoint, and no weights.
 FillType is set to kWinding.
 
-@return  empty SkPath
+# return
+
+  - empty SkPath
 
 example: https://fiddle.skia.org/c/@Path_empty_constructor
 */
@@ -5755,8 +5778,13 @@ Creating a SkPath copy is very efficient and never allocates memory.
 SkPath are always copied by value from the interface; the underlying shared
 pointers are not exposed.
 
-@param path  SkPath to copy by value
-@return      copy of SkPath
+# params
+
+  - path =>  SkPath to copy by value
+
+# return
+
+  - copy of SkPath
 
 example: https://fiddle.skia.org/c/@Path_copy_const_SkPath
 */
@@ -5770,8 +5798,7 @@ func NewPathCopy(path Path) Path {
 Releases ownership of any shared data and deletes data if SkPath is sole owner.
 
 example: https://fiddle.skia.org/c/@Path_destructor
-*/
-func (o *Path) Delete() {
+*/func (o *Path) Delete() {
 	C.misk_delete_SkPath(o.sk)
 	o.sk = nil
 }
@@ -5819,8 +5846,7 @@ compatibility prior to calling interpolate().
 
   - ending =>  SkPoint array averaged with this SkPoint array
   - weight =>  contribution of this SkPoint array, and
-
-one minus contribution of ending SkPoint array
+    one minus contribution of ending SkPoint array
   - out =>     SkPath replaced by interpolated averages
 
 # return
@@ -5884,8 +5910,9 @@ func (o Path) ToggleInverseFillType() {
 	C.misk_Path_toggleInverseFillType(c_obj)
 }
 
-/*Returns true if the path is convex. If necessary, it will first compute the convexity.
- */
+/*
+Returns true if the path is convex. If necessary, it will first compute the convexity.
+*/
 func (o Path) IsConvex() bool {
 	c_obj := o.sk
 	retC := C.misk_Path_isConvex(c_obj)
@@ -7093,7 +7120,6 @@ func (o Path) AddRect1(rect Rect, dir PathDirection, start uint32) Path {
 	return Path{sk: &retC}
 }
 
-/**/
 func (o Path) AddRect2(rect Rect, dir PathDirection) Path {
 	c_obj := o.sk
 	c_rect := *(*C.sk_SkRect)(unsafe.Pointer(&rect))
@@ -7102,7 +7128,6 @@ func (o Path) AddRect2(rect Rect, dir PathDirection) Path {
 	return Path{sk: &retC}
 }
 
-/**/
 func (o Path) AddRect3(left float32, top float32, right float32, bottom float32, dir PathDirection) Path {
 	c_obj := o.sk
 	c_left := C.float(left)
@@ -7542,7 +7567,6 @@ func (o Path) Transform2(matrix Matrix, pc ApplyPerspectiveClip) Path {
 	return Path{sk: &retC}
 }
 
-/**/
 func (o Path) MakeTransform(m Matrix, pc ApplyPerspectiveClip) Path {
 	c_obj := o.sk
 	c_m := m.sk
@@ -7551,7 +7575,6 @@ func (o Path) MakeTransform(m Matrix, pc ApplyPerspectiveClip) Path {
 	return Path{sk: &retC}
 }
 
-/**/
 func (o Path) MakeScale(sx float32, sy float32) Path {
 	c_obj := o.sk
 	c_sx := C.float(sx)
@@ -7811,7 +7834,9 @@ kUnknown_SkAlphaType, and with a width and height of zero. Use
 reset() to associate pixels, SkColorType, SkAlphaType, width, and height
 after SkPixmap has been created.
 
-@return  empty SkPixmap
+# return
+
+  - empty SkPixmap
 */
 func NewPixmap() Pixmap {
 
@@ -7833,10 +7858,15 @@ out of scope, addr is unaffected.
 SkPixmap may be later modified by reset() to change its size, pixel type, or
 storage.
 
-@param info      width, height, SkAlphaType, SkColorType of SkImageInfo
-@param addr      pointer to pixels allocated by caller; may be nullptr
-@param rowBytes  size of one row of addr; width times pixel size, or larger
-@return          initialized SkPixmap
+# params
+
+  - info =>      width, height, SkAlphaType, SkColorType of SkImageInfo
+  - addr =>      pointer to pixels allocated by caller; may be nullptr
+  - rowBytes =>  size of one row of addr; width times pixel size, or larger
+
+# return
+
+  - initialized SkPixmap
 */
 func NewPixmapImageInfo(info ImageInfo, addr []byte, rowBytes uint32) Pixmap {
 	c_info := info.sk
@@ -8413,7 +8443,9 @@ type RRect C.sk_SkRRect
 Initializes bounds at (0, 0), the origin, with zero width and height.
 Initializes corner radii to (0, 0), and sets type of kEmpty_Type.
 
-@return  empty SkRRect
+# return
+
+  - empty SkRRect
 */
 func NewRRect() RRect {
 
@@ -8424,8 +8456,13 @@ func NewRRect() RRect {
 /*
 Initializes to copy of rrect bounds and corner radii.
 
-@param rrect  bounds and corner to copy
-@return       copy of rrect
+# params
+
+  - rrect =>  bounds and corner to copy
+
+# return
+
+  - copy of rrect
 */
 func NewRRectCopy(rrect RRect) RRect {
 	c_rrect := *(*C.sk_SkRRect)(unsafe.Pointer(&rrect))
@@ -8454,7 +8491,9 @@ func (o Region) IsNil() bool {
 Constructs an empty SkRegion. SkRegion is set to empty bounds
 at (0, 0) with zero width and height.
 
-@return  empty SkRegion
+# return
+
+  - empty SkRegion
 
 example: https://fiddle.skia.org/c/@Region_empty_constructor
 */
@@ -8474,8 +8513,13 @@ Creating a SkRegion copy is very efficient and never allocates memory.
 SkRegion are always copied by value from the interface; the underlying shared
 pointers are not exposed.
 
-@param region  SkRegion to copy by value
-@return        copy of SkRegion
+# params
+
+  - region =>  SkRegion to copy by value
+
+# return
+
+  - copy of SkRegion
 
 example: https://fiddle.skia.org/c/@Region_copy_const_SkRegion
 */
@@ -8488,8 +8532,13 @@ func NewRegionCopy(region Region) Region {
 /*
 Constructs a rectangular SkRegion matching the bounds of rect.
 
-@param rect  bounds of constructed SkRegion
-@return      rectangular SkRegion
+# params
+
+  - rect =>  bounds of constructed SkRegion
+
+# return
+
+  - rectangular SkRegion
 
 example: https://fiddle.skia.org/c/@Region_copy_const_SkIRect
 */
@@ -8503,8 +8552,7 @@ func NewRegionCopyRect(rect IRect) Region {
 Releases ownership of any shared data and deletes data if SkRegion is sole owner.
 
 example: https://fiddle.skia.org/c/@Region_destructor
-*/
-func (o *Region) Delete() {
+*/func (o *Region) Delete() {
 	C.misk_delete_SkRegion(o.sk)
 	o.sk = nil
 }
@@ -8664,7 +8712,6 @@ func (o *String) Delete() {
 	o.sk = nil
 }
 
-/**/
 func (o String) Data() string {
 	c_obj := o.sk
 	retC := C.misk_String_data(c_obj)
@@ -8714,9 +8761,10 @@ func (o Surface) GetCanvas() Canvas {
 	return Canvas{sk: retC}
 }
 
-/*Calls makeSurface(ImageInfo) with the same ImageInfo as this surface, but with the
-*  specified width and height.
- */
+/*
+Calls makeSurface(ImageInfo) with the same ImageInfo as this surface, but with the
+specified width and height.
+*/
 func (o Surface) MakeSurface(width int32, height int32) Surface {
 	c_obj := o.sk
 	c_width := C.int(width)
@@ -8743,13 +8791,14 @@ func (o Surface) MakeImageSnapshot() Image {
 }
 
 /*
-*  Like the no-parameter version, this returns an image of the current surface contents.
-*  This variant takes a rectangle specifying the subset of the surface that is of interest.
-*  These bounds will be sanitized before being used.
-*  - If bounds extends beyond the surface, it will be trimmed to just the intersection of
-*    it and the surface.
-*  - If bounds does not intersect the surface, then this returns nullptr.
-*  - If bounds == the surface, then this is the same as calling the no-parameter variant.
+Like the no-parameter version, this returns an image of the current surface contents.
+This variant takes a rectangle specifying the subset of the surface that is of interest.
+These bounds will be sanitized before being used.
+  - If bounds extends beyond the surface, it will be trimmed to just the intersection of
+
+it and the surface.
+  - If bounds does not intersect the surface, then this returns nullptr.
+  - If bounds == the surface, then this is the same as calling the no-parameter variant.
 
 example: https://fiddle.skia.org/c/@Surface_makeImageSnapshot_2
 */
@@ -8834,8 +8883,8 @@ func (o *SVGDOM) Delete() {
 }
 
 /*
-* Returns the root (outermost) SVG element.
- */
+Returns the root (outermost) SVG element.
+*/
 func (o SVGDOM) GetRoot() SVGSVG {
 	c_obj := o.sk
 	retC := C.misk_SVGDOM_getRoot(c_obj)
@@ -8843,14 +8892,14 @@ func (o SVGDOM) GetRoot() SVGSVG {
 }
 
 /*
-* Specify a "container size" for the SVG dom.
-*
-* This is used to resolve the initial viewport when the root SVG width/height are specified
-* in relative units.
-*
-* If the root dimensions are in absolute units, then the container size has no effect since
-* the initial viewport is fixed.
- */
+Specify a "container size" for the SVG dom.
+
+This is used to resolve the initial viewport when the root SVG width/height are specified
+in relative units.
+
+If the root dimensions are in absolute units, then the container size has no effect since
+the initial viewport is fixed.
+*/
 func (o SVGDOM) SetContainerSize(p0 Size) {
 	c_obj := o.sk
 	c_p0 := *(*C.sk_SkSize)(unsafe.Pointer(&p0))
@@ -8858,31 +8907,29 @@ func (o SVGDOM) SetContainerSize(p0 Size) {
 }
 
 /*
-* DEPRECATED: use getRoot()->intrinsicSize() to query the root element intrinsic size.
-*
-* Returns the SVG dom container size.
-*
-* If the client specified a container size via setContainerSize(), then the same size is
-* returned.
-*
-* When unspecified by clients, this returns the intrinsic size of the root element, as defined
-* by its width/height attributes.  If either width or height is specified in relative units
-* (e.g. "100%"), then the corresponding intrinsic size dimension is zero.
- */
+DEPRECATED: use getRoot()->intrinsicSize() to query the root element intrinsic size.
+
+Returns the SVG dom container size.
+
+If the client specified a container size via setContainerSize(), then the same size is
+returned.
+
+When unspecified by clients, this returns the intrinsic size of the root element, as defined
+by its width/height attributes.  If either width or height is specified in relative units
+(e.g. "100%"), then the corresponding intrinsic size dimension is zero.
+*/
 func (o SVGDOM) ContainerSize() Size {
 	c_obj := o.sk
 	retC := C.misk_SVGDOM_containerSize(c_obj)
 	return Size(retC)
 }
 
-/**/
 func (o SVGDOM) Render(p0 Canvas) {
 	c_obj := o.sk
 	c_p0 := p0.sk
 	C.misk_SVGDOM_render(c_obj, c_p0)
 }
 
-/**/
 func SVGDOMMakeFromStream(str Stream) SVGDOM {
 	c_str := str.sk
 	retC := C.misk_SVGDOM_MakeFromStream(c_str)
@@ -8899,7 +8946,6 @@ func (o SVGSVG) IsNil() bool {
 	return o.sk == nil
 }
 
-/**/
 func (o SVGSVG) IntrinsicSize(p0 SVGLengthContext) Size {
 	c_obj := o.sk
 	c_p0 := p0.sk
@@ -8929,14 +8975,12 @@ func (o *SVGLengthContext) Delete() {
 	o.sk = nil
 }
 
-/**/
 func (o SVGLengthContext) ViewPort() Size {
 	c_obj := o.sk
 	retC := C.misk_SVGLengthContext_viewPort(c_obj)
 	return Size(retC)
 }
 
-/**/
 func (o SVGLengthContext) SetViewPort(viewport Size) {
 	c_obj := o.sk
 	c_viewport := *(*C.sk_SkSize)(unsafe.Pointer(&viewport))
@@ -9095,7 +9139,9 @@ func (o TextBlobBuilder) IsNil() bool {
 /*
 Constructs empty SkTextBlobBuilder. By default, SkTextBlobBuilder has no runs.
 
-@return  empty SkTextBlobBuilder
+# return
+
+  - empty SkTextBlobBuilder
 
 example: https://fiddle.skia.org/c/@TextBlobBuilder_empty_constructor
 */
@@ -9107,8 +9153,7 @@ func NewTextBlobBuilder() TextBlobBuilder {
 
 /*
 Deletes data allocated internally by SkTextBlobBuilder.
-*/
-func (o *TextBlobBuilder) Delete() {
+*/func (o *TextBlobBuilder) Delete() {
 	C.misk_delete_SkTextBlobBuilder(o.sk)
 	o.sk = nil
 }
@@ -9381,7 +9426,6 @@ func (o TextBlobBuilderRunBuffer) IsNil() bool {
 	return o.sk == nil
 }
 
-/**/
 func (o TextBlobBuilderRunBuffer) Points() Point {
 	c_obj := o.sk
 	retC := C.misk_TextBlobBuilderRunBuffer_points(c_obj)
@@ -9411,30 +9455,37 @@ func (o *Typeface) Unref() {
 	o.sk = nil
 }
 
-/*Returns the typeface's intrinsic style attributes.*/
+/*
+Returns the typeface's intrinsic style attributes.
+*/
 func (o Typeface) FontStyle() FontStyle {
 	c_obj := o.sk
 	retC := C.misk_Typeface_fontStyle(c_obj)
 	return FontStyle{sk: &retC}
 }
 
-/*Returns true if style() has the kBold bit set.*/
+/*
+Returns true if style() has the kBold bit set.
+*/
 func (o Typeface) IsBold() bool {
 	c_obj := o.sk
 	retC := C.misk_Typeface_isBold(c_obj)
 	return bool(retC)
 }
 
-/*Returns true if style() has the kItalic bit set.*/
+/*
+Returns true if style() has the kItalic bit set.
+*/
 func (o Typeface) IsItalic() bool {
 	c_obj := o.sk
 	retC := C.misk_Typeface_isItalic(c_obj)
 	return bool(retC)
 }
 
-/*Returns true if the typeface claims to be fixed-pitch.
-*  This is a style bit, advance widths may vary even if this returns true.
- */
+/*
+Returns true if the typeface claims to be fixed-pitch.
+This is a style bit, advance widths may vary even if this returns true.
+*/
 func (o Typeface) IsFixedPitch() bool {
 	c_obj := o.sk
 	retC := C.misk_Typeface_isFixedPitch(c_obj)
@@ -9466,12 +9517,14 @@ func (o Typeface) MakeClone(p0 FontArguments) Typeface {
 }
 
 /*
-*  Given an array of UTF32 character codes, return their corresponding glyph IDs.
-*
-*  @param chars pointer to the array of UTF32 chars
-*  @param number of chars and glyphs
-*  @param glyphs returns the corresponding glyph IDs for each character.
- */
+Given an array of UTF32 character codes, return their corresponding glyph IDs.
+
+# params
+
+  - chars => pointer to the array of UTF32 chars
+  - number => of chars and glyphs
+  - glyphs => returns the corresponding glyph IDs for each character.
+*/
 func (o Typeface) UnicharsToGlyphs(uni []int32, count int32, glyphs []uint16) {
 	c_obj := o.sk
 	c_uni := (*C.int)(unsafe.Pointer(&uni[0]))
@@ -9480,7 +9533,6 @@ func (o Typeface) UnicharsToGlyphs(uni []int32, count int32, glyphs []uint16) {
 	C.misk_Typeface_unicharsToGlyphs(c_obj, c_uni, c_count, c_glyphs)
 }
 
-/**/
 func (o Typeface) TextToGlyphs(text []byte, byteLength uint32, encoding TextEncoding, glyphs []uint16, maxGlyphCount int32) int32 {
 	c_obj := o.sk
 	c_text := unsafe.Pointer(&text[0])
@@ -9493,11 +9545,11 @@ func (o Typeface) TextToGlyphs(text []byte, byteLength uint32, encoding TextEnco
 }
 
 /*
-*  Return the glyphID that corresponds to the specified unicode code-point
-*  (in UTF32 encoding). If the unichar is not supported, returns 0.
-*
-*  This is a short-cut for calling unicharsToGlyphs().
- */
+Return the glyphID that corresponds to the specified unicode code-point
+(in UTF32 encoding). If the unichar is not supported, returns 0.
+
+This is a short-cut for calling unicharsToGlyphs().
+*/
 func (o Typeface) UnicharToGlyph(unichar int32) uint16 {
 	c_obj := o.sk
 	c_unichar := C.int(unichar)
@@ -9506,15 +9558,17 @@ func (o Typeface) UnicharToGlyph(unichar int32) uint16 {
 }
 
 /*
-*  Return the number of glyphs in the typeface.
- */
+Return the number of glyphs in the typeface.
+*/
 func (o Typeface) CountGlyphs() int32 {
 	c_obj := o.sk
 	retC := C.misk_Typeface_countGlyphs(c_obj)
 	return int32(retC)
 }
 
-/*Return the number of tables in the font.*/
+/*
+Return the number of tables in the font.
+*/
 func (o Typeface) CountTables() int32 {
 	c_obj := o.sk
 	retC := C.misk_Typeface_countTables(c_obj)
@@ -9522,9 +9576,9 @@ func (o Typeface) CountTables() int32 {
 }
 
 /*
-*  Return the units-per-em value for this typeface, or zero if there is an
-*  error.
- */
+Return the units-per-em value for this typeface, or zero if there is an
+error.
+*/
 func (o Typeface) GetUnitsPerEm() int32 {
 	c_obj := o.sk
 	retC := C.misk_Typeface_getUnitsPerEm(c_obj)
@@ -9532,10 +9586,10 @@ func (o Typeface) GetUnitsPerEm() int32 {
 }
 
 /*
-*  Return the family name for this typeface. It will always be returned
-*  encoded as UTF8, but the language of the name is whatever the host
-*  platform chooses.
- */
+Return the family name for this typeface. It will always be returned
+encoded as UTF8, but the language of the name is whatever the host
+platform chooses.
+*/
 func (o Typeface) GetFamilyName(name String) {
 	c_obj := o.sk
 	c_name := name.sk
@@ -9553,7 +9607,9 @@ func TypefaceEqual(facea Typeface, faceb Typeface) bool {
 	return bool(retC)
 }
 
-/*Returns a non-null typeface which contains no glyphs.*/
+/*
+Returns a non-null typeface which contains no glyphs.
+*/
 func TypefaceMakeEmpty() Typeface {
 	retC := C.misk_Typeface_MakeEmpty()
 	return Typeface{sk: retC}
@@ -9914,7 +9970,6 @@ const (
 	SkgpuProtectedYes SkgpuProtected = true
 )
 
-/**/
 func GrBackendRenderTargetsMakeGL(width int32, height int32, sampleCnt int32, stencilBits int32, glInfo GrGLFramebufferInfo) GrBackendRenderTarget {
 	c_width := C.int(width)
 	c_height := C.int(height)
@@ -9926,8 +9981,8 @@ func GrBackendRenderTargetsMakeGL(width int32, height int32, sampleCnt int32, st
 }
 
 /*
-* Creates a GrDirectContext for a backend context. GrGLInterface must be non-null.
- */
+Creates a GrDirectContext for a backend context. GrGLInterface must be non-null.
+*/
 func GrDirectContextsMakeGLInterfaceOptions(p0 GrGLInterface, p1 GrContextOptions) GrDirectContext {
 	c_p0 := p0.sk
 	c_p1 := *(*C.sk_GrContextOptions)(unsafe.Pointer(&p1))
@@ -9935,38 +9990,35 @@ func GrDirectContextsMakeGLInterfaceOptions(p0 GrGLInterface, p1 GrContextOption
 	return GrDirectContext{sk: retC}
 }
 
-/**/
 func GrDirectContextsMakeGLInterface(p0 GrGLInterface) GrDirectContext {
 	c_p0 := p0.sk
 	retC := C.misk_GrDirectContextsMakeGLInterface(c_p0)
 	return GrDirectContext{sk: retC}
 }
 
-/**/
 func GrDirectContextsMakeGLOptions(p0 GrContextOptions) GrDirectContext {
 	c_p0 := *(*C.sk_GrContextOptions)(unsafe.Pointer(&p0))
 	retC := C.misk_GrDirectContextsMakeGLOptions(c_p0)
 	return GrDirectContext{sk: retC}
 }
 
-/**/
 func GrDirectContextsMakeGL() GrDirectContext {
 	retC := C.misk_GrDirectContextsMakeGL()
 	return GrDirectContext{sk: retC}
 }
 
 /*
-* Rather than depend on platform-specific GL headers and libraries, we require
-* the client to provide a struct of GL function pointers. This struct can be
-* specified per-GrContext as a parameter to GrContext::MakeGL. If no interface is
-* passed to MakeGL then a default GL interface is created using GrGLMakeNativeInterface().
-* If this returns nullptr then GrContext::MakeGL() will fail.
-*
-* The implementation of GrGLMakeNativeInterface is platform-specific. Several
-* implementations have been provided (for GLX, WGL, EGL, etc), along with an
-* implementation that simply returns nullptr. Clients should select the most
-* appropriate one to build.
- */
+Rather than depend on platform-specific GL headers and libraries, we require
+the client to provide a struct of GL function pointers. This struct can be
+specified per-GrContext as a parameter to GrContext::MakeGL. If no interface is
+passed to MakeGL then a default GL interface is created using GrGLMakeNativeInterface().
+If this returns nullptr then GrContext::MakeGL() will fail.
+
+The implementation of GrGLMakeNativeInterface is platform-specific. Several
+implementations have been provided (for GLX, WGL, EGL, etc), along with an
+implementation that simply returns nullptr. Clients should select the most
+appropriate one to build.
+*/
 func GrGLMakeNativeInterface() GrGLInterface {
 	retC := C.misk_GrGLMakeNativeInterface()
 	return GrGLInterface{sk: retC}
@@ -10018,22 +10070,27 @@ func ColorSetA(c Color, a uint32) Color {
 }
 
 /*
-*  Return a SkImage using the encoded data, but attempts to defer decoding until the
-*  image is actually used/drawn. This deferral allows the system to cache the result, either on the
-*  CPU or on the GPU, depending on where the image is drawn. If memory is low, the cache may
-*  be purged, causing the next draw of the image to have to re-decode.
-*
-*  If alphaType is nullopt, the image's alpha type will be chosen automatically based on the
-*  image format. Transparent images will default to kPremul_SkAlphaType. If alphaType contains
-*  kPremul_SkAlphaType or kUnpremul_SkAlphaType, that alpha type will be used. Forcing opaque
-*  (passing kOpaque_SkAlphaType) is not allowed, and will return nullptr.
-*
-*  If the encoded format is not supported, nullptr is returned.
-*
-*  If possible, clients should use SkCodecs::DeferredImage instead.
-*
-*  @param encoded  the encoded data
-*  @return         created SkImage, or nullptr
+Return a SkImage using the encoded data, but attempts to defer decoding until the
+image is actually used/drawn. This deferral allows the system to cache the result, either on the
+CPU or on the GPU, depending on where the image is drawn. If memory is low, the cache may
+be purged, causing the next draw of the image to have to re-decode.
+
+If alphaType is nullopt, the image's alpha type will be chosen automatically based on the
+image format. Transparent images will default to kPremul_SkAlphaType. If alphaType contains
+kPremul_SkAlphaType or kUnpremul_SkAlphaType, that alpha type will be used. Forcing opaque
+(passing kOpaque_SkAlphaType) is not allowed, and will return nullptr.
+
+If the encoded format is not supported, nullptr is returned.
+
+If possible, clients should use SkCodecs::DeferredImage instead.
+
+# params
+
+  - encoded =>  the encoded data
+
+# return
+
+  - created SkImage, or nullptr
 
 example: https://fiddle.skia.org/c/@Image_DeferredFromEncodedData
 */
@@ -10135,8 +10192,7 @@ creation fails releaseProc is called before this function returns.
   - backendRenderTarget =>      GPU intermediate memory buffer
   - colorSpace =>               range of colors
   - surfaceProps =>             LCD striping orientation and setting for device independent
-
-fonts; may be nullptr
+    fonts; may be nullptr
   - releaseProc =>              function called when backendRenderTarget can be released
   - releaseContext =>           state passed to releaseProc
 
@@ -10171,8 +10227,8 @@ otherwise, result is unmodified.
   - two => The second operand (for difference, the subtrahend)
   - op => The operator to apply.
   - result => The product of the operands. The result may be one of the
+    inputs.
 
-inputs.
 # return
 
   - True if the operation succeeded.

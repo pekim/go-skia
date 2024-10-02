@@ -10,7 +10,6 @@ type docComment struct {
 }
 
 func makeDocComment(rawComment string) string {
-	// fmt.Println(rawComment)
 	dc := docComment{
 		lines: strings.Split(rawComment, "\n"),
 	}
@@ -21,9 +20,11 @@ func makeDocComment(rawComment string) string {
 	dc.params()
 	dc.return_()
 
-	return "/*" +
-		strings.Join(dc.lines, "\n") +
-		"*/"
+	doc := strings.TrimSpace(strings.Join(dc.lines, "\n"))
+	if len(doc) == 0 {
+		return ""
+	}
+	return "/*\n" + doc + "\n*/"
 }
 
 func (dc *docComment) removeCommentDelimiters() {
@@ -40,7 +41,10 @@ func (dc *docComment) removeCommentDelimiters() {
 
 func (dc *docComment) trimLinesWhitespace() {
 	for i, line := range dc.lines {
-		dc.lines[i] = strings.TrimSpace(line)
+		line = strings.TrimSpace(line)
+		line = strings.TrimPrefix(line, "*")
+		line = strings.TrimSpace(line)
+		dc.lines[i] = line
 	}
 }
 
@@ -65,14 +69,26 @@ func (dc *docComment) params() {
 	}
 
 	// Make params a bullet list.
+	inParam := false
 	for i, line := range dc.lines {
 		if strings.HasPrefix(line, "@param ") {
+			inParam = true
 			line = strings.TrimPrefix(line, "@param ")
 			paramNameEndIndex := strings.Index(line, " ")
 			paramName := line[:paramNameEndIndex]
 			restOfLine := line[paramNameEndIndex:]
 			line = paramName + " =>" + restOfLine
 			dc.lines[i] = "  - " + line
+		} else {
+			if inParam {
+				if len(line) == 0 || strings.HasPrefix(line, "@return ") {
+					inParam = false
+				} else {
+					// Looks like this line is a continuation of a param.
+					// Indent it so that it'll be treated as continuing the bullet's text
+					dc.lines[i] = "  " + line
+				}
+			}
 		}
 	}
 }

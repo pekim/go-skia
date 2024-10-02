@@ -23,7 +23,7 @@ func (c *recordCtor) enrich1(record *record, cursor *clang.Cursor) {
 	c.cFuncName = fmt.Sprintf("misk_new_%s%s", c.record.goName, c.Suffix)
 
 	if cursor != nil {
-		c.doc = cursor.RawCommentText()
+		c.doc = makeDocComment(cursor.RawCommentText())
 
 		paramCount := int(cursor.NumArguments())
 		c.params = make([]param, paramCount)
@@ -66,7 +66,7 @@ func (c recordCtor) generateGo(g generator) {
 		cArgs[i] = param.cName
 	}
 
-	f.writeDocComment(c.doc)
+	f.writeln(c.doc)
 	f.writelnf("func %s(%s) %s {", c.goFuncName, strings.Join(params, ", "), c.record.goName)
 	f.writeln(strings.Join(cVars, "\n"))
 	f.writelnf("  retC := C.%s(%s)", c.cFuncName, strings.Join(cArgs, ", "))
