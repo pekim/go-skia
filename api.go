@@ -9625,7 +9625,6 @@ const (
 )
 
 /*
-\enum SkAlphaType
 Describes how to interpret the alpha component of a pixel. A pixel may
 be opaque, or alpha, describing multiple levels of transparency.
 
@@ -9773,7 +9772,6 @@ const (
 )
 
 /*
-\enum SkColorType
 Describes how pixel bits encode color. A pixel may be an alpha mask, a grayscale, RGB, or ARGB.
 
 kN32_SkColorType selects the native 32-bit ARGB format for the current configuration. This can

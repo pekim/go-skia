@@ -36,9 +36,6 @@ func (e *enum) enrich1(record *record, cursor clang.Cursor) {
 	e.goName = goExportedName(e.goName)
 	e.record = record
 	e.doc = makeDocComment(cursor.RawCommentText())
-	if record != nil {
-		e.doc = strings.Replace(e.doc, fmt.Sprintf("\\enum %s::%s", record.CppName, e.CppName), "", 1)
-	}
 
 	cursor.Visit(func(cursor, parent clang.Cursor) (status clang.ChildVisitResult) {
 		switch cursor.Kind() {

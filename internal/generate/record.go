@@ -3,7 +3,6 @@ package generate
 import (
 	"fmt"
 	"regexp"
-	"strings"
 
 	"github.com/go-clang/clang-v15/clang"
 )
@@ -47,11 +46,6 @@ func (r *record) enrich1(cursor clang.Cursor, parent *record) {
 	r.goName = stripSkPrefix(parentCppName) + stripSkPrefix(r.CppName)
 	r.cStructName = fmt.Sprintf("sk_%s%s", parentCppName, r.CppName)
 	r.doc = makeDocComment(cursor.RawCommentText())
-	r.doc = strings.Replace(r.doc, fmt.Sprintf("\\class %s", r.CppName), "", 1)
-	r.doc = strings.Replace(r.doc, fmt.Sprintf("\\struct %s", r.CppName), "", 1)
-	if parent != nil {
-		r.doc = strings.Replace(r.doc, fmt.Sprintf("\\struct %s::%s", parent.CppName, r.CppName), "", 1)
-	}
 	r.size = int(cursor.Type().SizeOf())
 	r.parent = parent
 	r.enriched = true

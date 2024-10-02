@@ -15,6 +15,7 @@ func makeDocComment(rawComment string) string {
 	}
 	dc.removeCommentDelimiters()
 	dc.trimLines()
+	dc.removeDoxygenSpecialCommands()
 	// dc.orderedLists() TODO
 	dc.unorderedLists()
 	dc.params()
@@ -49,9 +50,15 @@ func (dc *docComment) trimLines() {
 		line = strings.TrimPrefix(line, "*")
 		line = strings.TrimPrefix(line, "//")
 		line = strings.TrimSpace(line)
-		line = strings.TrimPrefix(line, "!<")
+		line = strings.TrimPrefix(line, "!<") // https://www.doxygen.nl/manual/docblocks.html#memberdoc
 		line = strings.TrimSpace(line)
 		dc.lines[i] = line
+	}
+}
+
+func (dc *docComment) removeDoxygenSpecialCommands() {
+	if len(dc.lines) > 0 && len(dc.lines[0]) > 0 && dc.lines[0][0] == '\\' {
+		dc.lines = dc.lines[1:]
 	}
 }
 
