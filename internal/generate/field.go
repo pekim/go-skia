@@ -37,4 +37,5 @@ func (f *field) enrich2(api api) {
 		f.cType = typ.cName
 		f.goType = typ.goName
 	}
+	f.doc = addDocCommentLinks(f.doc, api)
 }

@@ -64,6 +64,7 @@ func (e *enum) enrich2(api api) {
 	e.cType = mustTypFromClangType(e.clangType, api, "")
 	e.goType = e.cType.goName
 	e.enriched = true
+	e.doc = addDocCommentLinks(e.doc, api)
 }
 
 func (e enum) generate(g generator) {

@@ -40,6 +40,7 @@ func (v *variable) enrich2(api api) {
 			fatalf("unsupported type for variable, %#v", typ)
 		}
 	}
+	v.doc = addDocCommentLinks(v.doc, api)
 }
 
 func (v *variable) generate(g generator) {

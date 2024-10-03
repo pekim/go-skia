@@ -118,6 +118,8 @@ func (r *record) enrich1(cursor clang.Cursor, parent *record) {
 }
 
 func (r *record) enrich2(api api) {
+	r.doc = addDocCommentLinks(r.doc, api)
+
 	for i := range r.Enums {
 		enum := &r.Enums[i]
 		enum.enrich2(api)

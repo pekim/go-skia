@@ -74,6 +74,7 @@ func (o *callableOverload) enrich2(api api) {
 	}
 	o.setCParamsDecl()
 	o.retrn = mustTypFromClangType(o.resultType, api, o.templateRef)
+	o.doc = addDocCommentLinks(o.doc, api)
 }
 
 func (o *callableOverload) setCParamsDecl() {

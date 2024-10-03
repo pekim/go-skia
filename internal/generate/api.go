@@ -188,3 +188,17 @@ func (api api) printStats() {
 		structCount, structEnumCount, structMethodCount, structRecordCount)
 	fmt.Printf("%4d typedefs\n", len(api.Typedefs))
 }
+
+func (api api) goNameForCppName(cppName string) (string, bool) {
+	if enum, ok := api.findEnum(cppName); ok {
+		return enum.goName, true
+	}
+	if record, ok := api.findRecord(cppName); ok {
+		return record.goName, true
+	}
+	if typedef, ok := api.findTypedef(cppName); ok {
+		return typedef.goName, true
+	}
+
+	return "", false
+}

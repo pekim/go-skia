@@ -24,6 +24,7 @@ func (t *typedef) enrich2(api api) {
 	t.cType = mustTypFromClangType(t.clangType, api, "")
 	t.cName = t.cType.cName
 	t.enriched = true
+	t.doc = addDocCommentLinks(t.doc, api)
 }
 
 func (t typedef) generate(g generator) {

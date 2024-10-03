@@ -2,7 +2,9 @@ package generate
 
 import (
 	"encoding/xml"
+	"fmt"
 	"strings"
+	"unicode"
 
 	"github.com/go-clang/clang-v15/clang"
 )
@@ -90,4 +92,39 @@ func docComment(comment clang.Comment) string {
 		return ""
 	}
 	return "/*\n" + strings.TrimSpace(text.String()) + "\n*/\n"
+}
+
+/*
+addDocCommentLinks turn references to types in a doc comment in to links.
+*/
+func addDocCommentLinks(comment string, api api) string {
+	if len(comment) == 0 {
+		return comment
+	}
+
+	comment = strings.TrimPrefix(comment, "/*")
+	comment = strings.TrimSuffix(comment, "*/\n")
+
+	var newComment strings.Builder
+	var word strings.Builder
+	for _, r := range comment {
+		if unicode.IsLetter(r) {
+			word.WriteRune(r)
+		} else {
+			if word.Len() > 0 {
+				possibleName := word.String()
+				goName, ok := api.goNameForCppName(possibleName)
+				if ok {
+					newComment.WriteString(fmt.Sprintf("[%s]", goName))
+				} else {
+					newComment.WriteString(possibleName)
+				}
+				word.Reset()
+			}
+
+			newComment.WriteRune(r)
+		}
+	}
+
+	return "/*" + newComment.String() + "*/\n"
 }

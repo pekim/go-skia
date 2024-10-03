@@ -37,11 +37,12 @@ func (c *recordCtor) enrich1(record *record, cursor *clang.Cursor) {
 	c.enriched = true
 }
 
-func (c recordCtor) enrich2(api api) {
+func (c *recordCtor) enrich2(api api) {
 	for i := range c.params {
 		param := &c.params[i]
 		param.enrich2(api)
 	}
+	c.doc = addDocCommentLinks(c.doc, api)
 }
 
 func (c recordCtor) generate(g generator) {
