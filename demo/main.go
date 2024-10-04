@@ -11,11 +11,11 @@ import (
 	"github.com/pekim/go-skia"
 )
 
-//go:embed tiger.svg
-var tigerSVG []byte
+// //go:embed tiger.svg
+// var tigerSVG []byte
 
-//go:embed test.png
-var testPng []byte
+// //go:embed test.png
+// var testPng []byte
 
 const windowWidth = 800
 const windowHeight = 600
@@ -108,21 +108,21 @@ func main() {
 	var metrics skia.FontMetrics
 	lineSpacing := font.GetMetrics(&metrics)
 
-	tigerData := skia.DataMakeWithCopy(tigerSVG, uint32(len(tigerSVG)))
-	tigerStream := skia.MemoryStreamMake(tigerData).AsStream()
-	svgTiger := skia.SVGDOMMakeFromStream(tigerStream)
-	if svgTiger.IsNil() {
-		panic("failed to create tiger svg")
-	}
-	tigerStream.Delete()
-	tigerData.Unref()
-	var size skia.Size
-	size.SetWidth(300)
-	size.SetHeight(300)
-	svgTiger.SetContainerSize(size)
+	// tigerData := skia.DataMakeWithCopy(tigerSVG, uint32(len(tigerSVG)))
+	// tigerStream := skia.MemoryStreamMake(tigerData).AsStream()
+	// svgTiger := skia.SVGDOMMakeFromStream(tigerStream)
+	// if svgTiger.IsNil() {
+	// 	panic("failed to create tiger svg")
+	// }
+	// tigerStream.Delete()
+	// tigerData.Unref()
+	// var size skia.Size
+	// size.SetWidth(300)
+	// size.SetHeight(300)
+	// svgTiger.SetContainerSize(size)
 
-	imageData := skia.DataMakeWithCopy(testPng, uint32(len(testPng)))
-	image := skia.ImagesDeferredFromEncodedData(imageData, nil)
+	// imageData := skia.DataMakeWithCopy(testPng, uint32(len(testPng)))
+	// image := skia.ImagesDeferredFromEncodedData(imageData, nil)
 
 	for !window.ShouldClose() {
 		canvas := surface.GetCanvas()
@@ -147,14 +147,14 @@ func main() {
 		rect2 := skia.RectMakeXYWH(400, 100, 100, 100)
 		canvas.DrawRect(rect2, paint)
 
-		canvas.Save()
-		canvas.Translate(180, 150)
-		scale := float32(2.5)
-		canvas.Scale(scale, scale)
-		svgTiger.Render(canvas)
-		canvas.Restore()
+		// canvas.Save()
+		// canvas.Translate(180, 150)
+		// scale := float32(2.5)
+		// canvas.Scale(scale, scale)
+		// svgTiger.Render(canvas)
+		// canvas.Restore()
 
-		canvas.DrawImage(image, 1000, 200)
+		// canvas.DrawImage(image, 1000, 200)
 
 		context.FlushAndSubmit(skia.GrSyncCpuYes)
 

@@ -6,6 +6,8 @@ package skia
 // #cgo LDFLAGS: -L ${SRCDIR}/lib
 // #cgo LDFLAGS: -l skia
 // #cgo LDFLAGS: -l skshaper
+// #cgo LDFLAGS: -l skunicode_core
+// #cgo LDFLAGS: -l skunicode_icu
 // #cgo LDFLAGS: -l svg
 // #cgo pkg-config: freetype2
 // #cgo pkg-config: gl
