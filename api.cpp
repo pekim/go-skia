@@ -890,15 +890,27 @@ extern "C"
   }
 
   void
-  misk_Canvas_drawGlyphs (sk_SkCanvas *c_obj, int c_count, ushort *c_glyphs,
-                          sk_SkPoint *c_positions, uint *c_clusters,
-                          int c_textByteCount, char *c_utf8text,
-                          sk_SkPoint c_origin, sk_SkFont *c_font,
-                          sk_SkPaint *c_paint)
+  misk_Canvas_drawGlyphsClusters (sk_SkCanvas *c_obj, int c_count,
+                                  ushort *c_glyphs, sk_SkPoint *c_positions,
+                                  uint *c_clusters, int c_textByteCount,
+                                  char *c_utf8text, sk_SkPoint c_origin,
+                                  sk_SkFont *c_font, sk_SkPaint *c_paint)
   {
     reinterpret_cast<SkCanvas *> (c_obj)->drawGlyphs (
         c_count, (unsigned short *)c_glyphs, (SkPoint *)c_positions,
         (unsigned int *)c_clusters, c_textByteCount, (char *)c_utf8text,
+        *reinterpret_cast<SkPoint *> (&c_origin),
+        *reinterpret_cast<SkFont *> (c_font),
+        *reinterpret_cast<SkPaint *> (c_paint));
+  }
+
+  void
+  misk_Canvas_drawGlyphs (sk_SkCanvas *c_obj, int c_count, ushort *c_glyphs,
+                          sk_SkPoint *c_positions, sk_SkPoint c_origin,
+                          sk_SkFont *c_font, sk_SkPaint *c_paint)
+  {
+    reinterpret_cast<SkCanvas *> (c_obj)->drawGlyphs (
+        c_count, (unsigned short *)c_glyphs, (SkPoint *)c_positions,
         *reinterpret_cast<SkPoint *> (&c_origin),
         *reinterpret_cast<SkFont *> (c_font),
         *reinterpret_cast<SkPaint *> (c_paint));
@@ -2853,6 +2865,13 @@ extern "C"
   {
     auto ret = reinterpret_cast<SkPath *> (c_obj)->isValid ();
     return ret;
+  }
+
+  sk_SkPoint
+  misk_Point_Make (float c_x, float c_y)
+  {
+    auto ret = SkPoint::Make (c_x, c_y);
+    return *(reinterpret_cast<sk_SkPoint *> (&ret));
   }
 
   sk_SkPixmap *

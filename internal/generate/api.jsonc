@@ -205,7 +205,10 @@
         },
         { "name": "drawImageNine" },
         { "name": "drawString", "overloads": [{}, null] },
-        { "name": "drawGlyphs", "overloads": [{}, null, null] },
+        {
+          "name": "drawGlyphs",
+          "overloads": [{ "suffix": "Clusters" }, {}, null]
+        },
         { "name": "drawTextBlob", "overloads": [{}, null] }
       ]
     },
@@ -616,7 +619,8 @@
     },
 
     {
-      "name": "SkPoint"
+      "name": "SkPoint",
+      "methods": [{ "name": "Make" }]
     },
 
     {

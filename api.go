@@ -2201,7 +2201,7 @@ All elements of paint: SkPathEffect, SkMaskFilter, SkShader,       SkColorFilter
   - font -             typeface, text size and so, used to describe the text
   - paint -            blend, color, and so on, used to draw
 */
-func (o Canvas) DrawGlyphs(count int32, glyphs []uint16, positions []Point, clusters []uint32, textByteCount int32, utf8text string, origin Point, font Font, paint Paint) {
+func (o Canvas) DrawGlyphsClusters(count int32, glyphs []uint16, positions []Point, clusters []uint32, textByteCount int32, utf8text string, origin Point, font Font, paint Paint) {
 	c_obj := o.sk
 	c_count := C.int(count)
 	c_glyphs := (*C.ushort)(unsafe.Pointer(&glyphs[0]))
@@ -2213,7 +2213,36 @@ func (o Canvas) DrawGlyphs(count int32, glyphs []uint16, positions []Point, clus
 	c_origin := *(*C.sk_SkPoint)(unsafe.Pointer(&origin))
 	c_font := font.sk
 	c_paint := paint.sk
-	C.misk_Canvas_drawGlyphs(c_obj, c_count, c_glyphs, c_positions, c_clusters, c_textByteCount, c_utf8text, c_origin, c_font, c_paint)
+	C.misk_Canvas_drawGlyphsClusters(c_obj, c_count, c_glyphs, c_positions, c_clusters, c_textByteCount, c_utf8text, c_origin, c_font, c_paint)
+}
+
+/*
+Draws count glyphs, at positions relative to origin styled with font and paint.
+
+This function draw glyphs at the given positions relative to the given origin.        It does not perform typeface fallback for glyphs not found in the [Typeface] in font.
+
+The drawing obeys the current transform matrix and clipping.
+
+All elements of paint: SkPathEffect, SkMaskFilter, SkShader,        SkColorFilter, and SkImageFilter; apply to text. By        default, draws filled black glyphs.
+
+# parameters
+
+  - count -        number of glyphs to draw
+  - glyphs -       the array of glyphIDs to draw
+  - positions -    where to draw each glyph relative to origin
+  - origin -       the origin of all the positions
+  - font -         typeface, text size and so, used to describe the text
+  - paint -        blend, color, and so on, used to draw
+*/
+func (o Canvas) DrawGlyphs(count int32, glyphs []uint16, positions []Point, origin Point, font Font, paint Paint) {
+	c_obj := o.sk
+	c_count := C.int(count)
+	c_glyphs := (*C.ushort)(unsafe.Pointer(&glyphs[0]))
+	c_positions := (*C.sk_SkPoint)(unsafe.Pointer(&positions[0]))
+	c_origin := *(*C.sk_SkPoint)(unsafe.Pointer(&origin))
+	c_font := font.sk
+	c_paint := paint.sk
+	C.misk_Canvas_drawGlyphs(c_obj, c_count, c_glyphs, c_positions, c_origin, c_font, c_paint)
 }
 
 /*
@@ -7025,6 +7054,25 @@ func (o *Point) SetY(value float32) {
 // If it is nil is may indicate that the Point has not been created, or has been deleted with [Point.Delete].
 func (o Point) IsNil() bool {
 	return o.sk == nil
+}
+
+/*
+Sets fX to x, fY to y. Used both to set [Point] and vector.
+
+# parameters
+
+  - x -   float x-axis value of constructed [Point] or vector
+  - y -   float y-axis value of constructed [Point] or vector
+
+# return
+
+  - [Point] (x, y)
+*/
+func PointMake(x float32, y float32) Point {
+	c_x := C.float(x)
+	c_y := C.float(y)
+	retC := C.misk_Point_Make(c_x, c_y)
+	return Point{sk: &retC}
 }
 
 /*

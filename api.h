@@ -685,11 +685,16 @@ extern "C"
   void misk_Canvas_drawString (sk_SkCanvas *c_obj, char *c_str, float c_x,
                                float c_y, sk_SkFont *c_font,
                                sk_SkPaint *c_paint);
+  void misk_Canvas_drawGlyphsClusters (sk_SkCanvas *c_obj, int c_count,
+                                       ushort *c_glyphs,
+                                       sk_SkPoint *c_positions,
+                                       uint *c_clusters, int c_textByteCount,
+                                       char *c_utf8text, sk_SkPoint c_origin,
+                                       sk_SkFont *c_font, sk_SkPaint *c_paint);
   void misk_Canvas_drawGlyphs (sk_SkCanvas *c_obj, int c_count,
                                ushort *c_glyphs, sk_SkPoint *c_positions,
-                               uint *c_clusters, int c_textByteCount,
-                               char *c_utf8text, sk_SkPoint c_origin,
-                               sk_SkFont *c_font, sk_SkPaint *c_paint);
+                               sk_SkPoint c_origin, sk_SkFont *c_font,
+                               sk_SkPaint *c_paint);
   void misk_Canvas_drawTextBlob (sk_SkCanvas *c_obj, sk_SkTextBlob *c_blob,
                                  float c_x, float c_y, sk_SkPaint *c_paint);
 
@@ -1062,6 +1067,8 @@ extern "C"
   bool misk_Path_contains (sk_SkPath *c_obj, float c_x, float c_y);
   sk_SkData *misk_Path_serialize (sk_SkPath *c_obj);
   bool misk_Path_isValid (sk_SkPath *c_obj);
+
+  sk_SkPoint misk_Point_Make (float c_x, float c_y);
 
   sk_SkPixmap *misk_new_Pixmap ();
   sk_SkPixmap *misk_new_PixmapImageInfo (sk_SkImageInfo *c_info, void *c_addr,
