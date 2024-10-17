@@ -5591,7 +5591,7 @@ func (o Path) GetPoint(index int32) Point {
 	c_obj := o.sk
 	c_index := C.int(index)
 	retC := C.misk_Path_getPoint(c_obj, c_index)
-	return Point{sk: &retC}
+	return Point(retC)
 }
 
 /*
@@ -5806,7 +5806,7 @@ Adds beginning of contour at [Point] p.
 */
 func (o Path) MoveTo(p Point) Path {
 	c_obj := o.sk
-	c_p := p.sk
+	c_p := *(*C.sk_SkPoint)(unsafe.Pointer(&p))
 	retC := C.misk_Path_moveTo(c_obj, c_p)
 	return Path{sk: &retC}
 }
@@ -5872,7 +5872,7 @@ lineTo() first appends kMove_Verb to verb array and (0, 0) to [Point] array, if 
 */
 func (o Path) LineToPoint(p Point) Path {
 	c_obj := o.sk
-	c_p := p.sk
+	c_p := *(*C.sk_SkPoint)(unsafe.Pointer(&p))
 	retC := C.misk_Path_lineToPoint(c_obj, c_p)
 	return Path{sk: &retC}
 }
@@ -5945,8 +5945,8 @@ Appends kMove_Verb to verb array and (0, 0) to [Point] array, if needed;        
 */
 func (o Path) QuadToPoint(p1 Point, p2 Point) Path {
 	c_obj := o.sk
-	c_p1 := p1.sk
-	c_p2 := p2.sk
+	c_p1 := *(*C.sk_SkPoint)(unsafe.Pointer(&p1))
+	c_p2 := *(*C.sk_SkPoint)(unsafe.Pointer(&p2))
 	retC := C.misk_Path_quadToPoint(c_obj, c_p1, c_p2)
 	return Path{sk: &retC}
 }
@@ -6036,8 +6036,8 @@ If w is not finite, appends kLine_Verb twice to verb array, and        [Point] p
 */
 func (o Path) ConicToPoints(p1 Point, p2 Point, w float32) Path {
 	c_obj := o.sk
-	c_p1 := p1.sk
-	c_p2 := p2.sk
+	c_p1 := *(*C.sk_SkPoint)(unsafe.Pointer(&p1))
+	c_p2 := *(*C.sk_SkPoint)(unsafe.Pointer(&p2))
 	c_w := C.float(w)
 	retC := C.misk_Path_conicToPoints(c_obj, c_p1, c_p2, c_w)
 	return Path{sk: &retC}
@@ -6124,9 +6124,9 @@ Appends kMove_Verb to verb array and (0, 0) to [Point] array, if needed;        
 */
 func (o Path) CubicToPoints(p1 Point, p2 Point, p3 Point) Path {
 	c_obj := o.sk
-	c_p1 := p1.sk
-	c_p2 := p2.sk
-	c_p3 := p3.sk
+	c_p1 := *(*C.sk_SkPoint)(unsafe.Pointer(&p1))
+	c_p2 := *(*C.sk_SkPoint)(unsafe.Pointer(&p2))
+	c_p3 := *(*C.sk_SkPoint)(unsafe.Pointer(&p3))
 	retC := C.misk_Path_cubicToPoints(c_obj, c_p1, c_p2, c_p3)
 	return Path{sk: &retC}
 }
@@ -6858,7 +6858,7 @@ example: https://fiddle.skia.org/c/_getLastPt
 */
 func (o Path) GetLastPt(lastPt Point) bool {
 	c_obj := o.sk
-	c_lastPt := lastPt.sk
+	c_lastPt := *(*C.sk_SkPoint)(unsafe.Pointer(&lastPt))
 	retC := C.misk_Path_getLastPt(c_obj, c_lastPt)
 	return bool(retC)
 }
@@ -6889,7 +6889,7 @@ Sets the last point on the path. If [Point] array is empty, append kMove_Verb to
 */
 func (o Path) SetLastPt2(p Point) {
 	c_obj := o.sk
-	c_p := p.sk
+	c_p := *(*C.sk_SkPoint)(unsafe.Pointer(&p))
 	C.misk_Path_setLastPt2(c_obj, c_p)
 }
 
@@ -7024,36 +7024,28 @@ const (
 /*
 [Point] holds two 32-bit floating point coordinates.
 */
-type Point struct {
-	sk *C.sk_SkPoint
-}
+type Point C.sk_SkPoint
 
 /*
 x-axis value
 */
 func (o Point) X() float32 {
-	return float32(o.sk.fX)
+	return float32(o.fX)
 }
 
 func (o *Point) SetX(value float32) {
-	o.sk.fX = C.float(value)
+	o.fX = C.float(value)
 }
 
 /*
 y-axis value
 */
 func (o Point) Y() float32 {
-	return float32(o.sk.fY)
+	return float32(o.fY)
 }
 
 func (o *Point) SetY(value float32) {
-	o.sk.fY = C.float(value)
-}
-
-// IsNil returns true if the raw skia object pointer is nil.
-// If it is nil is may indicate that the Point has not been created, or has been deleted with [Point.Delete].
-func (o Point) IsNil() bool {
-	return o.sk == nil
+	o.fY = C.float(value)
 }
 
 /*
@@ -7072,7 +7064,7 @@ func PointMake(x float32, y float32) Point {
 	c_x := C.float(x)
 	c_y := C.float(y)
 	retC := C.misk_Point_Make(c_x, c_y)
-	return Point{sk: &retC}
+	return Point(retC)
 }
 
 /*
@@ -8555,12 +8547,6 @@ type TextBlobBuilderRunBuffer struct {
 // If it is nil is may indicate that the TextBlobBuilderRunBuffer has not been created, or has been deleted with [TextBlobBuilderRunBuffer.Delete].
 func (o TextBlobBuilderRunBuffer) IsNil() bool {
 	return o.sk == nil
-}
-
-func (o TextBlobBuilderRunBuffer) Points() Point {
-	c_obj := o.sk
-	retC := C.misk_TextBlobBuilderRunBuffer_points(c_obj)
-	return Point{sk: retC}
 }
 
 /*

@@ -2424,10 +2424,10 @@ extern "C"
   }
 
   sk_SkPath
-  misk_Path_moveTo (sk_SkPath *c_obj, sk_SkPoint *c_p)
+  misk_Path_moveTo (sk_SkPath *c_obj, sk_SkPoint c_p)
   {
     auto ret = reinterpret_cast<SkPath *> (c_obj)->moveTo (
-        *reinterpret_cast<SkPoint *> (c_p));
+        *reinterpret_cast<SkPoint *> (&c_p));
     return *(reinterpret_cast<sk_SkPath *> (&ret));
   }
 
@@ -2446,10 +2446,10 @@ extern "C"
   }
 
   sk_SkPath
-  misk_Path_lineToPoint (sk_SkPath *c_obj, sk_SkPoint *c_p)
+  misk_Path_lineToPoint (sk_SkPath *c_obj, sk_SkPoint c_p)
   {
     auto ret = reinterpret_cast<SkPath *> (c_obj)->lineTo (
-        *reinterpret_cast<SkPoint *> (c_p));
+        *reinterpret_cast<SkPoint *> (&c_p));
     return *(reinterpret_cast<sk_SkPath *> (&ret));
   }
 
@@ -2470,11 +2470,11 @@ extern "C"
   }
 
   sk_SkPath
-  misk_Path_quadToPoint (sk_SkPath *c_obj, sk_SkPoint *c_p1, sk_SkPoint *c_p2)
+  misk_Path_quadToPoint (sk_SkPath *c_obj, sk_SkPoint c_p1, sk_SkPoint c_p2)
   {
     auto ret = reinterpret_cast<SkPath *> (c_obj)->quadTo (
-        *reinterpret_cast<SkPoint *> (c_p1),
-        *reinterpret_cast<SkPoint *> (c_p2));
+        *reinterpret_cast<SkPoint *> (&c_p1),
+        *reinterpret_cast<SkPoint *> (&c_p2));
     return *(reinterpret_cast<sk_SkPath *> (&ret));
   }
 
@@ -2497,12 +2497,12 @@ extern "C"
   }
 
   sk_SkPath
-  misk_Path_conicToPoints (sk_SkPath *c_obj, sk_SkPoint *c_p1,
-                           sk_SkPoint *c_p2, float c_w)
+  misk_Path_conicToPoints (sk_SkPath *c_obj, sk_SkPoint c_p1, sk_SkPoint c_p2,
+                           float c_w)
   {
     auto ret = reinterpret_cast<SkPath *> (c_obj)->conicTo (
-        *reinterpret_cast<SkPoint *> (c_p1),
-        *reinterpret_cast<SkPoint *> (c_p2), c_w);
+        *reinterpret_cast<SkPoint *> (&c_p1),
+        *reinterpret_cast<SkPoint *> (&c_p2), c_w);
     return *(reinterpret_cast<sk_SkPath *> (&ret));
   }
 
@@ -2525,13 +2525,13 @@ extern "C"
   }
 
   sk_SkPath
-  misk_Path_cubicToPoints (sk_SkPath *c_obj, sk_SkPoint *c_p1,
-                           sk_SkPoint *c_p2, sk_SkPoint *c_p3)
+  misk_Path_cubicToPoints (sk_SkPath *c_obj, sk_SkPoint c_p1, sk_SkPoint c_p2,
+                           sk_SkPoint c_p3)
   {
     auto ret = reinterpret_cast<SkPath *> (c_obj)->cubicTo (
-        *reinterpret_cast<SkPoint *> (c_p1),
-        *reinterpret_cast<SkPoint *> (c_p2),
-        *reinterpret_cast<SkPoint *> (c_p3));
+        *reinterpret_cast<SkPoint *> (&c_p1),
+        *reinterpret_cast<SkPoint *> (&c_p2),
+        *reinterpret_cast<SkPoint *> (&c_p3));
     return *(reinterpret_cast<sk_SkPath *> (&ret));
   }
 
@@ -2819,10 +2819,10 @@ extern "C"
   }
 
   bool
-  misk_Path_getLastPt (sk_SkPath *c_obj, sk_SkPoint *c_lastPt)
+  misk_Path_getLastPt (sk_SkPath *c_obj, sk_SkPoint c_lastPt)
   {
     auto ret = reinterpret_cast<SkPath *> (c_obj)->getLastPt (
-        reinterpret_cast<SkPoint *> (c_lastPt));
+        reinterpret_cast<SkPoint *> (&c_lastPt));
     return ret;
   }
 
@@ -2833,10 +2833,10 @@ extern "C"
   }
 
   void
-  misk_Path_setLastPt2 (sk_SkPath *c_obj, sk_SkPoint *c_p)
+  misk_Path_setLastPt2 (sk_SkPath *c_obj, sk_SkPoint c_p)
   {
     reinterpret_cast<SkPath *> (c_obj)->setLastPt (
-        *reinterpret_cast<SkPoint *> (c_p));
+        *reinterpret_cast<SkPoint *> (&c_p));
   }
 
   unsigned int
@@ -3469,14 +3469,6 @@ extern "C"
         *reinterpret_cast<SkFont *> (c_font), c_count, c_textByteCount,
         reinterpret_cast<SkRect *> (c_bounds));
     return *(reinterpret_cast<sk_SkTextBlobBuilderRunBuffer *> (&ret));
-  }
-
-  sk_SkPoint *
-  misk_TextBlobBuilderRunBuffer_points (sk_SkTextBlobBuilderRunBuffer *c_obj)
-  {
-    auto ret
-        = reinterpret_cast<SkTextBlobBuilder::RunBuffer *> (c_obj)->points ();
-    return reinterpret_cast<sk_SkPoint *> (ret);
   }
 
   sk_SkFontStyle

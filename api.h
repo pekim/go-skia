@@ -978,27 +978,27 @@ extern "C"
   void misk_Path_incReserve (sk_SkPath *c_obj, int c_extraPtCount,
                              int c_extraVerbCount, int c_extraConicCount);
   sk_SkPath misk_Path_moveToPoint (sk_SkPath *c_obj, float c_x, float c_y);
-  sk_SkPath misk_Path_moveTo (sk_SkPath *c_obj, sk_SkPoint *c_p);
+  sk_SkPath misk_Path_moveTo (sk_SkPath *c_obj, sk_SkPoint c_p);
   sk_SkPath misk_Path_rMoveTo (sk_SkPath *c_obj, float c_dx, float c_dy);
   sk_SkPath misk_Path_lineTo (sk_SkPath *c_obj, float c_x, float c_y);
-  sk_SkPath misk_Path_lineToPoint (sk_SkPath *c_obj, sk_SkPoint *c_p);
+  sk_SkPath misk_Path_lineToPoint (sk_SkPath *c_obj, sk_SkPoint c_p);
   sk_SkPath misk_Path_rLineTo (sk_SkPath *c_obj, float c_dx, float c_dy);
   sk_SkPath misk_Path_quadTo (sk_SkPath *c_obj, float c_x1, float c_y1,
                               float c_x2, float c_y2);
-  sk_SkPath misk_Path_quadToPoint (sk_SkPath *c_obj, sk_SkPoint *c_p1,
-                                   sk_SkPoint *c_p2);
+  sk_SkPath misk_Path_quadToPoint (sk_SkPath *c_obj, sk_SkPoint c_p1,
+                                   sk_SkPoint c_p2);
   sk_SkPath misk_Path_rQuadTo (sk_SkPath *c_obj, float c_dx1, float c_dy1,
                                float c_dx2, float c_dy2);
   sk_SkPath misk_Path_conicTo (sk_SkPath *c_obj, float c_x1, float c_y1,
                                float c_x2, float c_y2, float c_w);
-  sk_SkPath misk_Path_conicToPoints (sk_SkPath *c_obj, sk_SkPoint *c_p1,
-                                     sk_SkPoint *c_p2, float c_w);
+  sk_SkPath misk_Path_conicToPoints (sk_SkPath *c_obj, sk_SkPoint c_p1,
+                                     sk_SkPoint c_p2, float c_w);
   sk_SkPath misk_Path_rConicTo (sk_SkPath *c_obj, float c_dx1, float c_dy1,
                                 float c_dx2, float c_dy2, float c_w);
   sk_SkPath misk_Path_cubicTo (sk_SkPath *c_obj, float c_x1, float c_y1,
                                float c_x2, float c_y2, float c_x3, float c_y3);
-  sk_SkPath misk_Path_cubicToPoints (sk_SkPath *c_obj, sk_SkPoint *c_p1,
-                                     sk_SkPoint *c_p2, sk_SkPoint *c_p3);
+  sk_SkPath misk_Path_cubicToPoints (sk_SkPath *c_obj, sk_SkPoint c_p1,
+                                     sk_SkPoint c_p2, sk_SkPoint c_p3);
   sk_SkPath misk_Path_rCubicTo (sk_SkPath *c_obj, float c_dx1, float c_dy1,
                                 float c_dx2, float c_dy2, float c_dx3,
                                 float c_dy3);
@@ -1060,9 +1060,9 @@ extern "C"
   sk_SkPath misk_Path_makeTransform (sk_SkPath *c_obj, sk_SkMatrix *c_m,
                                      int c_pc);
   sk_SkPath misk_Path_makeScale (sk_SkPath *c_obj, float c_sx, float c_sy);
-  bool misk_Path_getLastPt (sk_SkPath *c_obj, sk_SkPoint *c_lastPt);
+  bool misk_Path_getLastPt (sk_SkPath *c_obj, sk_SkPoint c_lastPt);
   void misk_Path_setLastPt1 (sk_SkPath *c_obj, float c_x, float c_y);
-  void misk_Path_setLastPt2 (sk_SkPath *c_obj, sk_SkPoint *c_p);
+  void misk_Path_setLastPt2 (sk_SkPath *c_obj, sk_SkPoint c_p);
   unsigned int misk_Path_getSegmentMasks (sk_SkPath *c_obj);
   bool misk_Path_contains (sk_SkPath *c_obj, float c_x, float c_y);
   sk_SkData *misk_Path_serialize (sk_SkPath *c_obj);
@@ -1198,8 +1198,6 @@ extern "C"
   sk_SkTextBlobBuilderRunBuffer misk_TextBlobBuilder_allocRunTextPos (
       sk_SkTextBlobBuilder *c_obj, sk_SkFont *c_font, int c_count,
       int c_textByteCount, sk_SkRect *c_bounds);
-  sk_SkPoint *
-  misk_TextBlobBuilderRunBuffer_points (sk_SkTextBlobBuilderRunBuffer *c_obj);
 
   sk_SkFontStyle misk_Typeface_fontStyle (sk_SkTypeface *c_obj);
   bool misk_Typeface_isBold (sk_SkTypeface *c_obj);
