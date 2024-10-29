@@ -133,24 +133,22 @@ impl<T> ::core::cmp::PartialEq for __BindgenUnionField<T> {
     }
 }
 impl<T> ::core::cmp::Eq for __BindgenUnionField<T> {}
-pub type std_string = [u64; 4usize];
-pub type std_u16string = [u64; 4usize];
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct std_basic_string {
     pub _address: u8,
 }
-pub type std_basic_string__Char_alloc_type = __gnu_cxx___alloc_traits;
+pub type std_basic_string__Char_alloc_type = [u8; 0usize];
 pub type std_basic_string__Alloc_traits = __gnu_cxx___alloc_traits;
 pub type std_basic_string_traits_type<_Traits> = _Traits;
 pub type std_basic_string_value_type = u8;
 pub type std_basic_string_allocator_type = std_basic_string__Char_alloc_type;
-pub type std_basic_string_size_type = std_basic_string__Alloc_traits;
-pub type std_basic_string_difference_type = std_basic_string__Alloc_traits;
-pub type std_basic_string_reference = std_basic_string__Alloc_traits;
-pub type std_basic_string_const_reference = std_basic_string__Alloc_traits;
-pub type std_basic_string_pointer = std_basic_string__Alloc_traits;
-pub type std_basic_string_const_pointer = std_basic_string__Alloc_traits;
+pub type std_basic_string_size_type = [u8; 0usize];
+pub type std_basic_string_difference_type = [u8; 0usize];
+pub type std_basic_string_reference = [u8; 0usize];
+pub type std_basic_string_const_reference = [u8; 0usize];
+pub type std_basic_string_pointer = [u8; 0usize];
+pub type std_basic_string_const_pointer = [u8; 0usize];
 pub type std_basic_string_iterator = __gnu_cxx___normal_iterator<std_basic_string_pointer>;
 pub type std_basic_string_const_iterator =
     __gnu_cxx___normal_iterator<std_basic_string_const_pointer>;
@@ -167,7 +165,6 @@ pub struct std_basic_string___sv_wrapper<_CharT> {
     pub _phantom_0: ::core::marker::PhantomData<::core::cell::UnsafeCell<_CharT>>,
 }
 #[repr(C)]
-#[derive(Debug, Copy, Clone)]
 pub struct std_basic_string__Alloc_hider {
     pub _M_p: std_basic_string_pointer,
 }
@@ -179,15 +176,17 @@ pub enum std_basic_string__bindgen_ty_1 {
     _S_local_capacity = 0,
 }
 #[repr(C)]
-pub union std_basic_string__bindgen_ty_2<_CharT> {
-    pub _M_local_buf: *mut _CharT,
-    pub _M_allocated_capacity: std_basic_string_size_type,
+pub struct std_basic_string__bindgen_ty_2<_CharT> {
+    pub _M_local_buf: __BindgenUnionField<*mut _CharT>,
+    pub _M_allocated_capacity: __BindgenUnionField<std_basic_string_size_type>,
+    pub bindgen_union_field: u64,
     pub _phantom_0: ::core::marker::PhantomData<::core::cell::UnsafeCell<_CharT>>,
 }
 pub type std_integral_constant_value_type<_Tp> = _Tp;
 pub type std_integral_constant_type = u8;
 pub type std_true_type = u8;
 pub type std_false_type = u8;
+pub type std___bool_constant = u8;
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct std___or_ {
@@ -200,8 +199,23 @@ pub struct std___and_ {
 }
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
+pub struct std___not_ {
+    pub _address: u8,
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct std_is_floating_point {
+    pub _address: u8,
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
 pub struct std_is_empty {
     pub _address: u8,
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct std_is_same {
+    pub _base: std_false_type,
 }
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
@@ -209,7 +223,12 @@ pub struct std_remove_const {
     pub _address: u8,
 }
 pub type std_remove_const_type<_Tp> = _Tp;
-pub type std_remove_const_t = std_remove_const;
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct std_remove_cv {
+    pub _address: u8,
+}
+pub type std_remove_cv_type = std_remove_const;
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct std_remove_reference {
@@ -255,6 +274,7 @@ fn bindgen_test_layout_std_aligned_storage_type() {
     );
 }
 pub type std_conditional_type<_Iftrue> = _Iftrue;
+pub type std___remove_cvref_t = std_remove_cv;
 pub type std_enable_if_t = u8;
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
@@ -292,6 +312,26 @@ pub type std_pair_first_type<_T1> = _T1;
 pub type std_pair_second_type<_T2> = _T2;
 pub type std_pair__PCCP = u8;
 pub type std_pair__PCCFP = u8;
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct std_in_place_t {
+    pub _address: u8,
+}
+#[test]
+fn bindgen_test_layout_std_in_place_t() {
+    assert_eq!(
+        ::core::mem::size_of::<std_in_place_t>(),
+        1usize,
+        concat!("Size of: ", stringify!(std_in_place_t))
+    );
+    assert_eq!(
+        ::core::mem::align_of::<std_in_place_t>(),
+        1usize,
+        concat!("Alignment of ", stringify!(std_in_place_t))
+    );
+}
+pub type std_string = [u64; 4usize];
+pub type std_u16string = [u64; 4usize];
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct std_input_iterator_tag {
@@ -413,7 +453,7 @@ pub type std_reverse_iterator_pointer = std_reverse_iterator___traits_type;
 pub type std_reverse_iterator_reference = std_reverse_iterator___traits_type;
 pub type std_streamoff = ::core::ffi::c_long;
 #[repr(C)]
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug)]
 pub struct std_fpos<_StateT> {
     pub _M_off: std_streamoff,
     pub _M_state: _StateT,
@@ -565,11 +605,14 @@ pub struct std_basic_string_view<_CharT> {
 }
 pub type std_basic_string_view_traits_type<_Traits> = _Traits;
 pub type std_basic_string_view_value_type<_CharT> = _CharT;
-pub type std_basic_string_view_pointer<_CharT> = *const _CharT;
-pub type std_basic_string_view_const_pointer<_CharT> = *const _CharT;
-pub type std_basic_string_view_reference<_CharT> = *const _CharT;
-pub type std_basic_string_view_const_reference<_CharT> = *const _CharT;
-pub type std_basic_string_view_const_iterator<_CharT> = *const _CharT;
+pub type std_basic_string_view_pointer<_CharT> = *mut std_basic_string_view_value_type<_CharT>;
+pub type std_basic_string_view_const_pointer<_CharT> =
+    *const std_basic_string_view_value_type<_CharT>;
+pub type std_basic_string_view_reference<_CharT> = *mut std_basic_string_view_value_type<_CharT>;
+pub type std_basic_string_view_const_reference<_CharT> =
+    *const std_basic_string_view_value_type<_CharT>;
+pub type std_basic_string_view_const_iterator<_CharT> =
+    *const std_basic_string_view_value_type<_CharT>;
 pub type std_basic_string_view_iterator<_CharT> = std_basic_string_view_const_iterator<_CharT>;
 pub type std_basic_string_view_const_reverse_iterator<_CharT> =
     std_reverse_iterator<std_basic_string_view_const_iterator<_CharT>>;
@@ -578,6 +621,27 @@ pub type std_basic_string_view_reverse_iterator<_CharT> =
 pub type std_basic_string_view_size_type = usize;
 pub type std_basic_string_view_difference_type = isize;
 #[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct std___detail___variant__Traits {
+    pub _address: u8,
+}
+pub type std___detail___variant__Variant_storage_alias = u8;
+pub type std___detail___variant__Copy_ctor_base__Base =
+    std___detail___variant__Variant_storage_alias;
+pub type std___detail___variant__Copy_ctor_alias = u8;
+pub type std___detail___variant__Move_ctor_base__Base = std___detail___variant__Copy_ctor_alias;
+pub type std___detail___variant__Move_ctor_alias = u8;
+pub type std___detail___variant__Copy_assign_base__Base = std___detail___variant__Move_ctor_alias;
+pub type std___detail___variant__Copy_assign_alias = u8;
+pub type std___detail___variant__Move_assign_base__Base = std___detail___variant__Copy_assign_alias;
+pub type std___detail___variant__Move_assign_alias = u8;
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct std___detail___variant__Variant_base {
+    pub _address: u8,
+}
+pub type std___detail___variant__Variant_base__Base = std___detail___variant__Move_assign_alias;
+#[repr(C)]
 #[derive(Debug)]
 pub struct std___detail__ReuseOrAllocNode {
     pub _M_nodes: *mut std___detail__ReuseOrAllocNode___node_type,
@@ -585,10 +649,6 @@ pub struct std___detail__ReuseOrAllocNode {
 }
 pub type std___detail__ReuseOrAllocNode___node_alloc_type<_NodeAlloc> = _NodeAlloc;
 pub type std___detail__ReuseOrAllocNode___hashtable_alloc = std___detail__Hashtable_alloc;
-pub type std___detail__ReuseOrAllocNode___value_alloc_type =
-    std___detail__ReuseOrAllocNode___hashtable_alloc;
-pub type std___detail__ReuseOrAllocNode___value_alloc_traits =
-    std___detail__ReuseOrAllocNode___hashtable_alloc;
 pub type std___detail__ReuseOrAllocNode___node_alloc_traits =
     std___detail__ReuseOrAllocNode___hashtable_alloc;
 pub type std___detail__ReuseOrAllocNode___node_type =
@@ -693,20 +753,12 @@ pub type std___detail__Hashtable_alloc___ebo_node_alloc = u8;
 pub type std___detail__Hashtable_alloc___node_type = [u8; 0usize];
 pub type std___detail__Hashtable_alloc___node_alloc_type<_NodeAlloc> = _NodeAlloc;
 pub type std___detail__Hashtable_alloc___node_alloc_traits = __gnu_cxx___alloc_traits;
-pub type std___detail__Hashtable_alloc___value_type = [u8; 0usize];
-pub type std___detail__Hashtable_alloc___value_alloc_type = std___alloc_rebind;
-pub type std___detail__Hashtable_alloc___value_alloc_traits = std_allocator_traits;
+pub type std___detail__Hashtable_alloc___value_alloc_traits = [u8; 0usize];
 pub type std___detail__Hashtable_alloc___node_base = std___detail__Hash_node_base;
 pub type std___detail__Hashtable_alloc___bucket_type =
     *mut std___detail__Hashtable_alloc___node_base;
 pub type std___detail__Hashtable_alloc___bucket_alloc_type = std___alloc_rebind;
 pub type std___detail__Hashtable_alloc___bucket_alloc_traits = std_allocator_traits;
-#[repr(C)]
-#[derive(Debug, Copy, Clone)]
-pub struct std___detail___variant__Variant_base {
-    pub _address: u8,
-}
-pub type std___detail___variant__Variant_base__Storage = u8;
 pub type std_string_view = std_basic_string_view<::core::ffi::c_char>;
 pub type std___array_traits__Type<_Tp> = *mut _Tp;
 pub type std___array_traits__Is_swappable = std___is_swappable;
@@ -727,18 +779,20 @@ pub type std_tuple__TMC = u8;
 pub type std_tuple__TMCT = u8;
 pub type std_tuple__TNTC = u8;
 #[repr(C)]
-#[derive(Debug)]
 pub struct std__Vector_base {
     pub _M_impl: std__Vector_base__Vector_impl,
 }
-pub type std__Vector_base__Tp_alloc_type = __gnu_cxx___alloc_traits;
-pub type std__Vector_base_pointer = __gnu_cxx___alloc_traits;
+pub type std__Vector_base__Tp_alloc_type = [u8; 0usize];
+pub type std__Vector_base_pointer = [u8; 0usize];
 #[repr(C)]
-#[derive(Debug, Copy, Clone)]
-pub struct std__Vector_base__Vector_impl {
+pub struct std__Vector_base__Vector_impl_data {
     pub _M_start: std__Vector_base_pointer,
     pub _M_finish: std__Vector_base_pointer,
     pub _M_end_of_storage: std__Vector_base_pointer,
+}
+#[repr(C)]
+pub struct std__Vector_base__Vector_impl {
+    pub _base_1: std__Vector_base__Vector_impl_data,
 }
 pub type std__Vector_base_allocator_type<_Alloc> = _Alloc;
 #[repr(C)]
@@ -771,34 +825,13 @@ pub type std_unique_ptr_deleter_type<_Dp> = _Dp;
 pub type std_unique_ptr___safe_conversion_up = std___and_;
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
-pub struct std__Optional_payload___ctor_tag {
-    pub _address: u8,
-}
-pub type std__Optional_payload__Stored_type = std_remove_const_t;
-#[repr(C)]
-#[derive(Debug, Copy, Clone)]
-pub struct std__Optional_payload__Empty_byte {
-    pub _address: u8,
-}
-#[repr(C)]
-#[repr(align(1))]
-pub struct std__Optional_payload__bindgen_ty_1 {
-    pub _M_empty: __BindgenUnionField<std__Optional_payload__Empty_byte>,
-    pub _M_payload: __BindgenUnionField<std__Optional_payload__Stored_type>,
-    pub bindgen_union_field: [u8; 0usize],
-}
-#[repr(C)]
-#[derive(Debug, Copy, Clone)]
-pub struct std__Optional_base {
-    pub _M_payload: u8,
-}
-pub type std__Optional_base__Stored_type = std_remove_const_t;
-#[repr(C)]
-#[derive(Debug, Copy, Clone)]
 pub struct std_optional {
     pub _address: u8,
 }
-pub type std_optional__Base = std__Optional_base;
+pub type std_optional__Base = u8;
+pub type std_optional___not_self = std___not_;
+pub type std_optional___not_tag = std___not_;
+pub type std_optional__Requires = std_enable_if_t;
 pub type std_optional_value_type<_Tp> = _Tp;
 #[repr(u8)]
 #[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
@@ -809,6 +842,35 @@ pub enum std_byte {
 #[derive(Debug, Copy, Clone)]
 pub struct std_atomic {
     pub _address: u8,
+}
+pub type std_atomic_value_type<_Tp> = _Tp;
+#[repr(C)]
+#[derive(Debug)]
+pub struct std__Node_handle_common {
+    pub _M_ptr: std__Node_handle_common__AllocTraits,
+    pub _M_alloc: u8,
+}
+pub type std__Node_handle_common__AllocTraits = std_allocator_traits;
+pub type std__Node_handle_common_allocator_type = std___alloc_rebind;
+#[repr(C)]
+#[derive(Debug)]
+pub struct std__Node_handle {
+    pub _base: std__Node_handle_common,
+    pub _M_pkey: std__Node_handle___pointer,
+    pub _M_pmapped: std__Node_handle___pointer,
+}
+pub type std__Node_handle_key_type<_Key> = _Key;
+pub type std__Node_handle_mapped_type = [u8; 0usize];
+pub type std__Node_handle__AllocTraits = std_allocator_traits;
+pub type std__Node_handle___pointer = std___ptr_rebind;
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct std__Node_insert_return<_Iterator, _NodeHandle> {
+    pub position: _Iterator,
+    pub inserted: bool,
+    pub node: _NodeHandle,
+    pub _phantom_0: ::core::marker::PhantomData<::core::cell::UnsafeCell<_Iterator>>,
+    pub _phantom_1: ::core::marker::PhantomData<::core::cell::UnsafeCell<_NodeHandle>>,
 }
 pub type std__Base_bitset__WordT = ::core::ffi::c_ulong;
 extern "C" {
@@ -843,34 +905,6 @@ pub struct std_bitset_reference {
     pub _M_wp: *mut std_bitset__WordT,
     pub _M_bpos: usize,
 }
-#[repr(C)]
-#[derive(Debug)]
-pub struct std__Node_handle_common {
-    pub _M_ptr: std__Node_handle_common__AllocTraits,
-    pub _M_alloc: u8,
-}
-pub type std__Node_handle_common__AllocTraits = std_allocator_traits;
-pub type std__Node_handle_common_allocator_type = std___alloc_rebind;
-#[repr(C)]
-#[derive(Debug)]
-pub struct std__Node_handle {
-    pub _base: std__Node_handle_common,
-    pub _M_pkey: std__Node_handle___pointer,
-    pub _M_pmapped: std__Node_handle___pointer,
-}
-pub type std__Node_handle_key_type<_Key> = _Key;
-pub type std__Node_handle_mapped_type = [u8; 0usize];
-pub type std__Node_handle__AllocTraits = std_allocator_traits;
-pub type std__Node_handle___pointer = std___ptr_rebind;
-#[repr(C)]
-#[derive(Debug, Copy, Clone)]
-pub struct std__Node_insert_return<_Iterator, _NodeHandle> {
-    pub position: _Iterator,
-    pub inserted: bool,
-    pub node: _NodeHandle,
-    pub _phantom_0: ::core::marker::PhantomData<::core::cell::UnsafeCell<_Iterator>>,
-    pub _phantom_1: ::core::marker::PhantomData<::core::cell::UnsafeCell<_NodeHandle>>,
-}
 extern "C" {
     #[link_name = "\u{1}num"]
     pub static std_ratio_num: ::core::ffi::c_long;
@@ -881,14 +915,22 @@ extern "C" {
 }
 pub type std_milli = u8;
 #[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct std_chrono_treat_as_floating_point {
+    pub _address: u8,
+}
+#[repr(C)]
 #[derive(Debug)]
 pub struct std_chrono_duration<_Rep> {
     pub __r: std_chrono_duration_rep<_Rep>,
     pub _phantom_0: ::core::marker::PhantomData<::core::cell::UnsafeCell<_Rep>>,
 }
+pub type std_chrono_duration___is_float = std_chrono_treat_as_floating_point;
+pub type std_chrono_duration___is_harmonic = std___bool_constant;
 pub type std_chrono_duration_rep<_Rep> = _Rep;
 pub type std_chrono_duration_period<_Period> = _Period;
 pub type std_chrono_milliseconds = std_chrono_duration<::core::ffi::c_long>;
+pub type std_variant_alternative_t = u8;
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct std_variant {
@@ -896,8 +938,14 @@ pub struct std_variant {
 }
 pub type std_variant__Base = std___detail___variant__Variant_base;
 pub type std_variant__Default_ctor_enabler = u8;
-pub type std_variant___to_type = u8;
+pub type std_variant___to_type = std_variant_alternative_t;
 pub type std_variant___accepted_type = std_variant___to_type;
+pub type std_variant__Traits = std___detail___variant__Traits;
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct std_variant___is_in_place_tag {
+    pub _base: std_false_type,
+}
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct __gnu_cxx___normal_iterator<_Iterator> {
@@ -2870,15 +2918,16 @@ pub enum SkColorType {
     kGray_8_SkColorType = 14,
     kRGBA_F16Norm_SkColorType = 15,
     kRGBA_F16_SkColorType = 16,
-    kRGBA_F32_SkColorType = 17,
-    kR8G8_unorm_SkColorType = 18,
-    kA16_float_SkColorType = 19,
-    kR16G16_float_SkColorType = 20,
-    kA16_unorm_SkColorType = 21,
-    kR16G16_unorm_SkColorType = 22,
-    kR16G16B16A16_unorm_SkColorType = 23,
-    kSRGBA_8888_SkColorType = 24,
-    kR8_unorm_SkColorType = 25,
+    kRGB_F16F16F16x_SkColorType = 17,
+    kRGBA_F32_SkColorType = 18,
+    kR8G8_unorm_SkColorType = 19,
+    kA16_float_SkColorType = 20,
+    kR16G16_float_SkColorType = 21,
+    kA16_unorm_SkColorType = 22,
+    kR16G16_unorm_SkColorType = 23,
+    kR16G16B16A16_unorm_SkColorType = 24,
+    kSRGBA_8888_SkColorType = 25,
+    kR8_unorm_SkColorType = 26,
 }
 extern "C" {
     #[link_name = "\u{1}_Z24SkColorTypeBytesPerPixel11SkColorType"]
@@ -2924,21 +2973,29 @@ pub enum SkYUVColorSpace {
     BT2020_10bit_Limited = 7,
     BT2020_12bit_Full = 8,
     BT2020_12bit_Limited = 9,
-    FCC_Full = 10,
-    FCC_Limited = 11,
-    SMPTE240_Full = 12,
-    SMPTE240_Limited = 13,
-    YDZDX_Full = 14,
-    YDZDX_Limited = 15,
-    GBR_Full = 16,
-    GBR_Limited = 17,
-    YCgCo_8bit_Full = 18,
-    YCgCo_8bit_Limited = 19,
-    YCgCo_10bit_Full = 20,
-    YCgCo_10bit_Limited = 21,
-    YCgCo_12bit_Full = 22,
-    YCgCo_12bit_Limited = 23,
-    Identity = 24,
+    BT2020_16bit_Full = 10,
+    BT2020_16bit_Limited = 11,
+    FCC_Full = 12,
+    FCC_Limited = 13,
+    SMPTE240_Full = 14,
+    SMPTE240_Limited = 15,
+    YDZDX_Full = 16,
+    YDZDX_Limited = 17,
+    GBR_Full = 18,
+    GBR_Limited = 19,
+    YCgCo_8bit_Full = 20,
+    YCgCo_8bit_Limited = 21,
+    YCgCo_10bit_Full = 22,
+    YCgCo_10bit_Limited = 23,
+    YCgCo_12bit_Full = 24,
+    YCgCo_12bit_Limited = 25,
+    YCgCo_16bit_Full = 26,
+    YCgCo_16bit_Limited = 27,
+    Identity = 28,
+}
+extern "C" {
+    #[link_name = "\u{1}_Z29SkYUVColorSpaceIsLimitedRange15SkYUVColorSpace"]
+    pub fn SkYUVColorSpaceIsLimitedRange(cs: SkYUVColorSpace) -> bool;
 }
 #[repr(C)]
 #[derive(Debug)]
@@ -5536,40 +5593,44 @@ pub enum skcms_PixelFormat {
     skcms_PixelFormat_A_8_ = 1,
     skcms_PixelFormat_G_8 = 2,
     skcms_PixelFormat_G_8_ = 3,
-    skcms_PixelFormat_RGB_565 = 4,
-    skcms_PixelFormat_BGR_565 = 5,
-    skcms_PixelFormat_ABGR_4444 = 6,
-    skcms_PixelFormat_ARGB_4444 = 7,
-    skcms_PixelFormat_RGB_888 = 8,
-    skcms_PixelFormat_BGR_888 = 9,
-    skcms_PixelFormat_RGBA_8888 = 10,
-    skcms_PixelFormat_BGRA_8888 = 11,
-    skcms_PixelFormat_RGBA_8888_sRGB = 12,
-    skcms_PixelFormat_BGRA_8888_sRGB = 13,
-    skcms_PixelFormat_RGBA_1010102 = 14,
-    skcms_PixelFormat_BGRA_1010102 = 15,
-    skcms_PixelFormat_RGB_161616LE = 16,
-    skcms_PixelFormat_BGR_161616LE = 17,
-    skcms_PixelFormat_RGBA_16161616LE = 18,
-    skcms_PixelFormat_BGRA_16161616LE = 19,
-    skcms_PixelFormat_RGB_161616BE = 20,
-    skcms_PixelFormat_BGR_161616BE = 21,
-    skcms_PixelFormat_RGBA_16161616BE = 22,
-    skcms_PixelFormat_BGRA_16161616BE = 23,
-    skcms_PixelFormat_RGB_hhh_Norm = 24,
-    skcms_PixelFormat_BGR_hhh_Norm = 25,
-    skcms_PixelFormat_RGBA_hhhh_Norm = 26,
-    skcms_PixelFormat_BGRA_hhhh_Norm = 27,
-    skcms_PixelFormat_RGB_hhh = 28,
-    skcms_PixelFormat_BGR_hhh = 29,
-    skcms_PixelFormat_RGBA_hhhh = 30,
-    skcms_PixelFormat_BGRA_hhhh = 31,
-    skcms_PixelFormat_RGB_fff = 32,
-    skcms_PixelFormat_BGR_fff = 33,
-    skcms_PixelFormat_RGBA_ffff = 34,
-    skcms_PixelFormat_BGRA_ffff = 35,
-    skcms_PixelFormat_RGB_101010x_XR = 36,
-    skcms_PixelFormat_BGR_101010x_XR = 37,
+    skcms_PixelFormat_GA_88 = 4,
+    skcms_PixelFormat_GA_88_ = 5,
+    skcms_PixelFormat_RGB_565 = 6,
+    skcms_PixelFormat_BGR_565 = 7,
+    skcms_PixelFormat_ABGR_4444 = 8,
+    skcms_PixelFormat_ARGB_4444 = 9,
+    skcms_PixelFormat_RGB_888 = 10,
+    skcms_PixelFormat_BGR_888 = 11,
+    skcms_PixelFormat_RGBA_8888 = 12,
+    skcms_PixelFormat_BGRA_8888 = 13,
+    skcms_PixelFormat_RGBA_8888_sRGB = 14,
+    skcms_PixelFormat_BGRA_8888_sRGB = 15,
+    skcms_PixelFormat_RGBA_1010102 = 16,
+    skcms_PixelFormat_BGRA_1010102 = 17,
+    skcms_PixelFormat_RGB_161616LE = 18,
+    skcms_PixelFormat_BGR_161616LE = 19,
+    skcms_PixelFormat_RGBA_16161616LE = 20,
+    skcms_PixelFormat_BGRA_16161616LE = 21,
+    skcms_PixelFormat_RGB_161616BE = 22,
+    skcms_PixelFormat_BGR_161616BE = 23,
+    skcms_PixelFormat_RGBA_16161616BE = 24,
+    skcms_PixelFormat_BGRA_16161616BE = 25,
+    skcms_PixelFormat_RGB_hhh_Norm = 26,
+    skcms_PixelFormat_BGR_hhh_Norm = 27,
+    skcms_PixelFormat_RGBA_hhhh_Norm = 28,
+    skcms_PixelFormat_BGRA_hhhh_Norm = 29,
+    skcms_PixelFormat_RGB_hhh = 30,
+    skcms_PixelFormat_BGR_hhh = 31,
+    skcms_PixelFormat_RGBA_hhhh = 32,
+    skcms_PixelFormat_BGRA_hhhh = 33,
+    skcms_PixelFormat_RGB_fff = 34,
+    skcms_PixelFormat_BGR_fff = 35,
+    skcms_PixelFormat_RGBA_ffff = 36,
+    skcms_PixelFormat_BGRA_ffff = 37,
+    skcms_PixelFormat_RGB_101010x_XR = 38,
+    skcms_PixelFormat_BGR_101010x_XR = 39,
+    skcms_PixelFormat_RGBA_10101010_XR = 40,
+    skcms_PixelFormat_BGRA_10101010_XR = 41,
 }
 #[repr(u32)]
 #[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
@@ -6991,6 +7052,75 @@ extern "C" {
     #[link_name = "\u{1}_Z27SkAnnotateLinkToDestinationP8SkCanvasRK6SkRectP6SkData"]
     pub fn SkAnnotateLinkToDestination(arg1: *mut SkCanvas, arg2: *const SkRect, arg3: *mut SkData);
 }
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct SkArc {
+    pub fOval: SkRect,
+    pub fStartAngle: SkScalar,
+    pub fSweepAngle: SkScalar,
+    pub fType: SkArc_Type,
+}
+#[repr(u8)]
+#[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
+pub enum SkArc_Type {
+    Arc = 0,
+    Wedge = 1,
+}
+#[test]
+fn bindgen_test_layout_SkArc() {
+    const UNINIT: ::core::mem::MaybeUninit<SkArc> = ::core::mem::MaybeUninit::uninit();
+    let ptr = UNINIT.as_ptr();
+    assert_eq!(
+        ::core::mem::size_of::<SkArc>(),
+        28usize,
+        concat!("Size of: ", stringify!(SkArc))
+    );
+    assert_eq!(
+        ::core::mem::align_of::<SkArc>(),
+        4usize,
+        concat!("Alignment of ", stringify!(SkArc))
+    );
+    assert_eq!(
+        unsafe { ::core::ptr::addr_of!((*ptr).fOval) as usize - ptr as usize },
+        0usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(SkArc),
+            "::",
+            stringify!(fOval)
+        )
+    );
+    assert_eq!(
+        unsafe { ::core::ptr::addr_of!((*ptr).fStartAngle) as usize - ptr as usize },
+        16usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(SkArc),
+            "::",
+            stringify!(fStartAngle)
+        )
+    );
+    assert_eq!(
+        unsafe { ::core::ptr::addr_of!((*ptr).fSweepAngle) as usize - ptr as usize },
+        20usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(SkArc),
+            "::",
+            stringify!(fSweepAngle)
+        )
+    );
+    assert_eq!(
+        unsafe { ::core::ptr::addr_of!((*ptr).fType) as usize - ptr as usize },
+        24usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(SkArc),
+            "::",
+            stringify!(fType)
+        )
+    );
+}
 impl SkBlendMode {
     pub const LastCoeffMode: SkBlendMode = SkBlendMode::Screen;
 }
@@ -7741,75 +7871,6 @@ pub enum SkBlurStyle {
     Solid = 1,
     Outer = 2,
     Inner = 3,
-}
-#[repr(C)]
-#[derive(Debug, Copy, Clone)]
-pub struct SkArc {
-    pub fOval: SkRect,
-    pub fStartAngle: SkScalar,
-    pub fSweepAngle: SkScalar,
-    pub fType: SkArc_Type,
-}
-#[repr(u8)]
-#[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
-pub enum SkArc_Type {
-    Arc = 0,
-    Wedge = 1,
-}
-#[test]
-fn bindgen_test_layout_SkArc() {
-    const UNINIT: ::core::mem::MaybeUninit<SkArc> = ::core::mem::MaybeUninit::uninit();
-    let ptr = UNINIT.as_ptr();
-    assert_eq!(
-        ::core::mem::size_of::<SkArc>(),
-        28usize,
-        concat!("Size of: ", stringify!(SkArc))
-    );
-    assert_eq!(
-        ::core::mem::align_of::<SkArc>(),
-        4usize,
-        concat!("Alignment of ", stringify!(SkArc))
-    );
-    assert_eq!(
-        unsafe { ::core::ptr::addr_of!((*ptr).fOval) as usize - ptr as usize },
-        0usize,
-        concat!(
-            "Offset of field: ",
-            stringify!(SkArc),
-            "::",
-            stringify!(fOval)
-        )
-    );
-    assert_eq!(
-        unsafe { ::core::ptr::addr_of!((*ptr).fStartAngle) as usize - ptr as usize },
-        16usize,
-        concat!(
-            "Offset of field: ",
-            stringify!(SkArc),
-            "::",
-            stringify!(fStartAngle)
-        )
-    );
-    assert_eq!(
-        unsafe { ::core::ptr::addr_of!((*ptr).fSweepAngle) as usize - ptr as usize },
-        20usize,
-        concat!(
-            "Offset of field: ",
-            stringify!(SkArc),
-            "::",
-            stringify!(fSweepAngle)
-        )
-    );
-    assert_eq!(
-        unsafe { ::core::ptr::addr_of!((*ptr).fType) as usize - ptr as usize },
-        24usize,
-        concat!(
-            "Offset of field: ",
-            stringify!(SkArc),
-            "::",
-            stringify!(fType)
-        )
-    );
 }
 impl SkClipOp {
     pub const Max_EnumValue: SkClipOp = SkClipOp::Intersect;
@@ -10213,6 +10274,7 @@ pub struct SkCanvas_Layer {
     pub fPaint: SkPaint,
     pub fIsCoverage: bool,
     pub fDiscard: bool,
+    pub fIncludesPadding: bool,
 }
 #[test]
 fn bindgen_test_layout_SkCanvas_Layer() {
@@ -10278,15 +10340,26 @@ fn bindgen_test_layout_SkCanvas_Layer() {
             stringify!(fDiscard)
         )
     );
+    assert_eq!(
+        unsafe { ::core::ptr::addr_of!((*ptr).fIncludesPadding) as usize - ptr as usize },
+        114usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(SkCanvas_Layer),
+            "::",
+            stringify!(fIncludesPadding)
+        )
+    );
 }
 extern "C" {
-    #[link_name = "\u{1}_ZN8SkCanvas5LayerC1E5sk_spI8SkDeviceE6SkSpanIS1_I13SkImageFilterEERK7SkPaintb"]
+    #[link_name = "\u{1}_ZN8SkCanvas5LayerC1E5sk_spI8SkDeviceE6SkSpanIS1_I13SkImageFilterEERK7SkPaintbb"]
     pub fn SkCanvas_Layer_Layer(
         this: *mut SkCanvas_Layer,
         device: sk_sp<SkDevice>,
         imageFilters: SkCanvas_FilterSpan,
         paint: *const SkPaint,
         isCoverage: bool,
+        includesPadding: bool,
     );
 }
 impl SkCanvas_Layer {
@@ -10296,6 +10369,7 @@ impl SkCanvas_Layer {
         imageFilters: SkCanvas_FilterSpan,
         paint: *const SkPaint,
         isCoverage: bool,
+        includesPadding: bool,
     ) -> Self {
         let mut __bindgen_tmp = ::core::mem::MaybeUninit::uninit();
         SkCanvas_Layer_Layer(
@@ -10304,6 +10378,7 @@ impl SkCanvas_Layer {
             imageFilters,
             paint,
             isCoverage,
+            includesPadding,
         );
         __bindgen_tmp.assume_init()
     }
@@ -10474,13 +10549,14 @@ fn bindgen_test_layout_SkCanvas_MCRec() {
     );
 }
 extern "C" {
-    #[link_name = "\u{1}_ZN8SkCanvas5MCRec8newLayerE5sk_spI8SkDeviceE6SkSpanIS1_I13SkImageFilterEERK7SkPaintb"]
+    #[link_name = "\u{1}_ZN8SkCanvas5MCRec8newLayerE5sk_spI8SkDeviceE6SkSpanIS1_I13SkImageFilterEERK7SkPaintbb"]
     pub fn SkCanvas_MCRec_newLayer(
         this: *mut SkCanvas_MCRec,
         layerDevice: sk_sp<SkDevice>,
         filters: SkCanvas_FilterSpan,
         restorePaint: *const SkPaint,
         layerIsCoverage: bool,
+        includesPadding: bool,
     );
 }
 extern "C" {
@@ -10507,8 +10583,16 @@ impl SkCanvas_MCRec {
         filters: SkCanvas_FilterSpan,
         restorePaint: *const SkPaint,
         layerIsCoverage: bool,
+        includesPadding: bool,
     ) {
-        SkCanvas_MCRec_newLayer(self, layerDevice, filters, restorePaint, layerIsCoverage)
+        SkCanvas_MCRec_newLayer(
+            self,
+            layerDevice,
+            filters,
+            restorePaint,
+            layerIsCoverage,
+            includesPadding,
+        )
     }
     #[inline]
     pub unsafe fn reset(&mut self, device: *mut SkDevice) {
@@ -10531,11 +10615,12 @@ impl SkCanvas_MCRec {
         SkCanvas_MCRec_MCRec_destructor(self)
     }
 }
-#[repr(u8)]
+#[repr(i32)]
 #[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
 pub enum SkCanvas_DeviceCompatibleWithFilter {
     kUnknown = 0,
     kYes = 1,
+    kYesWithPadding = 2,
 }
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
@@ -12426,6 +12511,12 @@ impl SkColorFilter {
     ) -> sk_sp<SkColorFilter> {
         SkColorFilter_Deserialize(data, size, procs)
     }
+}
+#[repr(u8)]
+#[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
+pub enum SkColorFilters_Clamp {
+    No = 0,
+    Yes = 1,
 }
 #[repr(C)]
 #[derive(Debug)]
@@ -15911,6 +16002,15 @@ extern "C" {
     ) -> bool;
 }
 extern "C" {
+    #[link_name = "\u{1}_ZNK7SkImage10makeScaledEPN5skgpu8graphite8RecorderERK11SkImageInfoRK17SkSamplingOptions"]
+    pub fn SkImage_makeScaled(
+        this: *const SkImage,
+        arg1: *mut skgpu_graphite_Recorder,
+        arg2: *const SkImageInfo,
+        arg3: *const SkSamplingOptions,
+    ) -> sk_sp<SkImage>;
+}
+extern "C" {
     #[link_name = "\u{1}_ZNK7SkImage14refEncodedDataEv"]
     pub fn SkImage_refEncodedData(this: *const SkImage) -> sk_sp<SkData>;
 }
@@ -16192,6 +16292,15 @@ impl SkImage {
         cachingHint: SkImage_CachingHint,
     ) -> bool {
         SkImage_scalePixels(self, dst, arg1, cachingHint)
+    }
+    #[inline]
+    pub unsafe fn makeScaled(
+        &self,
+        arg1: *mut skgpu_graphite_Recorder,
+        arg2: *const SkImageInfo,
+        arg3: *const SkSamplingOptions,
+    ) -> sk_sp<SkImage> {
+        SkImage_makeScaled(self, arg1, arg2, arg3)
     }
     #[inline]
     pub unsafe fn refEncodedData(&self) -> sk_sp<SkData> {
@@ -16934,10 +17043,6 @@ extern "C" {
     pub fn SkPath_isRRect(this: *const SkPath, rrect: *mut SkRRect) -> bool;
 }
 extern "C" {
-    #[link_name = "\u{1}_ZNK6SkPath5isArcEP5SkArc"]
-    pub fn SkPath_isArc(this: *const SkPath, arc: *mut SkArc) -> bool;
-}
-extern "C" {
     #[link_name = "\u{1}_ZN6SkPath5resetEv"]
     pub fn SkPath_reset(this: *mut SkPath) -> *mut SkPath;
 }
@@ -17214,15 +17319,6 @@ extern "C" {
 extern "C" {
     #[link_name = "\u{1}_ZN6SkPath7addOvalERK6SkRect15SkPathDirectionj"]
     pub fn SkPath_addOval1(
-        this: *mut SkPath,
-        oval: *const SkRect,
-        dir: SkPathDirection,
-        start: ::core::ffi::c_uint,
-    ) -> *mut SkPath;
-}
-extern "C" {
-    #[link_name = "\u{1}_ZN6SkPath11addOpenOvalERK6SkRect15SkPathDirectionj"]
-    pub fn SkPath_addOpenOval(
         this: *mut SkPath,
         oval: *const SkRect,
         dir: SkPathDirection,
@@ -17533,10 +17629,6 @@ impl SkPath {
         SkPath_isRRect(self, rrect)
     }
     #[inline]
-    pub unsafe fn isArc(&self, arc: *mut SkArc) -> bool {
-        SkPath_isArc(self, arc)
-    }
-    #[inline]
     pub unsafe fn reset(&mut self) -> *mut SkPath {
         SkPath_reset(self)
     }
@@ -17810,15 +17902,6 @@ impl SkPath {
         start: ::core::ffi::c_uint,
     ) -> *mut SkPath {
         SkPath_addOval1(self, oval, dir, start)
-    }
-    #[inline]
-    pub unsafe fn addOpenOval(
-        &mut self,
-        oval: *const SkRect,
-        dir: SkPathDirection,
-        start: ::core::ffi::c_uint,
-    ) -> *mut SkPath {
-        SkPath_addOpenOval(self, oval, dir, start)
     }
     #[inline]
     pub unsafe fn addCircle(
@@ -18138,7 +18221,7 @@ extern "C" {
 #[repr(align(8))]
 #[derive(Debug, Copy, Clone)]
 pub struct SkPathRef {
-    pub _bindgen_opaque_blob: [u64; 24usize],
+    pub _bindgen_opaque_blob: [u64; 21usize],
 }
 pub type SkPathRef_PointsArray = [u64; 6usize];
 pub type SkPathRef_VerbsArray = [u64; 3usize];
@@ -18148,9 +18231,7 @@ pub type SkPathRef_ConicWeightsArray = [u64; 3usize];
 pub enum SkPathRef_PathType {
     kGeneral = 0,
     kOval = 1,
-    kOpenOval = 2,
-    kRRect = 3,
-    kArc = 4,
+    kRRect = 2,
 }
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
@@ -18281,7 +18362,7 @@ pub enum SkPathRef__bindgen_ty_1 {
 fn bindgen_test_layout_SkPathRef() {
     assert_eq!(
         ::core::mem::size_of::<SkPathRef>(),
-        192usize,
+        168usize,
         concat!("Size of: ", stringify!(SkPathRef))
     );
     assert_eq!(
@@ -26492,10 +26573,11 @@ extern "C" {
 }
 extern "C" {
     pub fn C_Core_Types(
-        arg1: *mut SkGraphics,
-        arg2: *mut SkCoverageMode,
-        arg3: *mut SkColorChannelFlag,
-        arg4: SkSurfaces_BackendSurfaceAccess,
+        arg1: *mut SkArc,
+        arg2: *mut SkGraphics,
+        arg3: *mut SkCoverageMode,
+        arg4: *mut SkColorChannelFlag,
+        arg5: SkSurfaces_BackendSurfaceAccess,
     );
 }
 extern "C" {
@@ -26642,6 +26724,13 @@ extern "C" {
 }
 extern "C" {
     pub fn C_SkImage_isValid(self_: *const SkImage, context: *mut GrRecordingContext) -> bool;
+}
+extern "C" {
+    pub fn C_SkImage_makeScaled(
+        self_: *const SkImage,
+        info: *const SkImageInfo,
+        sampling: *const SkSamplingOptions,
+    ) -> *mut SkImage;
 }
 extern "C" {
     pub fn C_SkImage_refEncodedData(self_: *const SkImage) -> *mut SkData;
@@ -27809,10 +27898,16 @@ extern "C" {
     pub fn C_SkColorFilters_Blend(c: SkColor, blendMode: SkBlendMode) -> *mut SkColorFilter;
 }
 extern "C" {
-    pub fn C_SkColorFilters_Matrix(colorMatrix: *const SkColorMatrix) -> *mut SkColorFilter;
+    pub fn C_SkColorFilters_Matrix(
+        colorMatrix: *const SkColorMatrix,
+        clamp: SkColorFilters_Clamp,
+    ) -> *mut SkColorFilter;
 }
 extern "C" {
-    pub fn C_SkColorFilters_MatrixRowMajor(array: *const SkScalar) -> *mut SkColorFilter;
+    pub fn C_SkColorFilters_MatrixRowMajor(
+        array: *const SkScalar,
+        clamp: SkColorFilters_Clamp,
+    ) -> *mut SkColorFilter;
 }
 extern "C" {
     pub fn C_SkColorFilters_HSLAMatrixOfColorMatrix(
@@ -28721,7 +28816,8 @@ extern "C" {
         dy: SkScalar,
         sigmaX: SkScalar,
         sigmaY: SkScalar,
-        color: SkColor,
+        color: *const SkColor4f,
+        colorSpace: *mut SkColorSpace,
         input: *mut SkImageFilter,
         cropRect: *const SkRect,
     ) -> *mut SkImageFilter;
@@ -28732,7 +28828,8 @@ extern "C" {
         dy: SkScalar,
         sigmaX: SkScalar,
         sigmaY: SkScalar,
-        color: SkColor,
+        color: *const SkColor4f,
+        colorSpace: *mut SkColorSpace,
         input: *mut SkImageFilter,
         cropRect: *const SkRect,
     ) -> *mut SkImageFilter;
@@ -31106,6 +31203,7 @@ pub struct GrContextOptions {
     pub fShaderErrorHandler: *mut GrContextOptions_ShaderErrorHandler,
     pub fInternalMultisampleCount: ::core::ffi::c_int,
     pub fMaxCachedVulkanSecondaryCommandBuffers: ::core::ffi::c_int,
+    pub fVulkanVMALargeHeapBlockSize: [u64; 2usize],
     pub fSuppressMipmapSupport: bool,
     pub fDisableTessellationPathRenderer: bool,
     pub fEnableExperimentalHardwareTessellation: bool,
@@ -31160,7 +31258,7 @@ fn bindgen_test_layout_GrContextOptions() {
     let ptr = UNINIT.as_ptr();
     assert_eq!(
         ::core::mem::size_of::<GrContextOptions>(),
-        160usize,
+        176usize,
         concat!("Size of: ", stringify!(GrContextOptions))
     );
     assert_eq!(
@@ -31443,8 +31541,20 @@ fn bindgen_test_layout_GrContextOptions() {
         )
     );
     assert_eq!(
-        unsafe { ::core::ptr::addr_of!((*ptr).fSuppressMipmapSupport) as usize - ptr as usize },
+        unsafe {
+            ::core::ptr::addr_of!((*ptr).fVulkanVMALargeHeapBlockSize) as usize - ptr as usize
+        },
         112usize,
+        concat!(
+            "Offset of field: ",
+            stringify!(GrContextOptions),
+            "::",
+            stringify!(fVulkanVMALargeHeapBlockSize)
+        )
+    );
+    assert_eq!(
+        unsafe { ::core::ptr::addr_of!((*ptr).fSuppressMipmapSupport) as usize - ptr as usize },
+        128usize,
         concat!(
             "Offset of field: ",
             stringify!(GrContextOptions),
@@ -31456,7 +31566,7 @@ fn bindgen_test_layout_GrContextOptions() {
         unsafe {
             ::core::ptr::addr_of!((*ptr).fDisableTessellationPathRenderer) as usize - ptr as usize
         },
-        113usize,
+        129usize,
         concat!(
             "Offset of field: ",
             stringify!(GrContextOptions),
@@ -31469,7 +31579,7 @@ fn bindgen_test_layout_GrContextOptions() {
             ::core::ptr::addr_of!((*ptr).fEnableExperimentalHardwareTessellation) as usize
                 - ptr as usize
         },
-        114usize,
+        130usize,
         concat!(
             "Offset of field: ",
             stringify!(GrContextOptions),
@@ -31481,7 +31591,7 @@ fn bindgen_test_layout_GrContextOptions() {
         unsafe {
             ::core::ptr::addr_of!((*ptr).fSupportBilerpFromGlyphAtlas) as usize - ptr as usize
         },
-        115usize,
+        131usize,
         concat!(
             "Offset of field: ",
             stringify!(GrContextOptions),
@@ -31491,7 +31601,7 @@ fn bindgen_test_layout_GrContextOptions() {
     );
     assert_eq!(
         unsafe { ::core::ptr::addr_of!((*ptr).fReducedShaderVariations) as usize - ptr as usize },
-        116usize,
+        132usize,
         concat!(
             "Offset of field: ",
             stringify!(GrContextOptions),
@@ -31501,7 +31611,7 @@ fn bindgen_test_layout_GrContextOptions() {
     );
     assert_eq!(
         unsafe { ::core::ptr::addr_of!((*ptr).fAllowMSAAOnNewIntel) as usize - ptr as usize },
-        117usize,
+        133usize,
         concat!(
             "Offset of field: ",
             stringify!(GrContextOptions),
@@ -31513,7 +31623,7 @@ fn bindgen_test_layout_GrContextOptions() {
         unsafe {
             ::core::ptr::addr_of!((*ptr).fAlwaysUseTexStorageWhenAvailable) as usize - ptr as usize
         },
-        118usize,
+        134usize,
         concat!(
             "Offset of field: ",
             stringify!(GrContextOptions),
@@ -31523,7 +31633,7 @@ fn bindgen_test_layout_GrContextOptions() {
     );
     assert_eq!(
         unsafe { ::core::ptr::addr_of!((*ptr).fContextDeleteContext) as usize - ptr as usize },
-        120usize,
+        136usize,
         concat!(
             "Offset of field: ",
             stringify!(GrContextOptions),
@@ -31533,7 +31643,7 @@ fn bindgen_test_layout_GrContextOptions() {
     );
     assert_eq!(
         unsafe { ::core::ptr::addr_of!((*ptr).fContextDeleteProc) as usize - ptr as usize },
-        128usize,
+        144usize,
         concat!(
             "Offset of field: ",
             stringify!(GrContextOptions),
@@ -31543,7 +31653,7 @@ fn bindgen_test_layout_GrContextOptions() {
     );
     assert_eq!(
         unsafe { ::core::ptr::addr_of!((*ptr).fDriverBugWorkarounds) as usize - ptr as usize },
-        136usize,
+        152usize,
         concat!(
             "Offset of field: ",
             stringify!(GrContextOptions),
@@ -41080,12 +41190,17 @@ extern "C" {
 }
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
-pub struct _bindgen_ty_30 {
+pub struct _bindgen_ty_3 {
     pub _address: u8,
 }
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
-pub struct _bindgen_ty_31 {
+pub struct _bindgen_ty_27 {
+    pub _address: u8,
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct _bindgen_ty_28 {
     pub _address: u8,
 }
 #[test]
@@ -45007,25 +45122,6 @@ fn __bindgen_test_layout_sk_sp_open0_SkColorSpace_close0_instantiation_26() {
     );
 }
 #[test]
-fn __bindgen_test_layout_sk_sp_open0_SkData_close0_instantiation_26() {
-    assert_eq!(
-        ::core::mem::size_of::<sk_sp<SkData>>(),
-        8usize,
-        concat!(
-            "Size of template specialization: ",
-            stringify!(sk_sp<SkData>)
-        )
-    );
-    assert_eq!(
-        ::core::mem::align_of::<sk_sp<SkData>>(),
-        8usize,
-        concat!(
-            "Alignment of template specialization: ",
-            stringify!(sk_sp<SkData>)
-        )
-    );
-}
-#[test]
 fn __bindgen_test_layout_sk_sp_open0_SkImage_close0_instantiation_6() {
     assert_eq!(
         ::core::mem::size_of::<sk_sp<SkImage>>(),
@@ -45041,6 +45137,25 @@ fn __bindgen_test_layout_sk_sp_open0_SkImage_close0_instantiation_6() {
         concat!(
             "Alignment of template specialization: ",
             stringify!(sk_sp<SkImage>)
+        )
+    );
+}
+#[test]
+fn __bindgen_test_layout_sk_sp_open0_SkData_close0_instantiation_26() {
+    assert_eq!(
+        ::core::mem::size_of::<sk_sp<SkData>>(),
+        8usize,
+        concat!(
+            "Size of template specialization: ",
+            stringify!(sk_sp<SkData>)
+        )
+    );
+    assert_eq!(
+        ::core::mem::align_of::<sk_sp<SkData>>(),
+        8usize,
+        concat!(
+            "Alignment of template specialization: ",
+            stringify!(sk_sp<SkData>)
         )
     );
 }
@@ -45121,25 +45236,6 @@ fn __bindgen_test_layout_sk_sp_open0_SkImage_close0_instantiation_10() {
     );
 }
 #[test]
-fn __bindgen_test_layout_sk_sp_open0_SkColorSpace_close0_instantiation_27() {
-    assert_eq!(
-        ::core::mem::size_of::<sk_sp<SkColorSpace>>(),
-        8usize,
-        concat!(
-            "Size of template specialization: ",
-            stringify!(sk_sp<SkColorSpace>)
-        )
-    );
-    assert_eq!(
-        ::core::mem::align_of::<sk_sp<SkColorSpace>>(),
-        8usize,
-        concat!(
-            "Alignment of template specialization: ",
-            stringify!(sk_sp<SkColorSpace>)
-        )
-    );
-}
-#[test]
 fn __bindgen_test_layout_sk_sp_open0_SkImage_close0_instantiation_11() {
     assert_eq!(
         ::core::mem::size_of::<sk_sp<SkImage>>(),
@@ -45159,7 +45255,7 @@ fn __bindgen_test_layout_sk_sp_open0_SkImage_close0_instantiation_11() {
     );
 }
 #[test]
-fn __bindgen_test_layout_sk_sp_open0_SkColorSpace_close0_instantiation_28() {
+fn __bindgen_test_layout_sk_sp_open0_SkColorSpace_close0_instantiation_27() {
     assert_eq!(
         ::core::mem::size_of::<sk_sp<SkColorSpace>>(),
         8usize,
@@ -45197,7 +45293,7 @@ fn __bindgen_test_layout_sk_sp_open0_SkImage_close0_instantiation_12() {
     );
 }
 #[test]
-fn __bindgen_test_layout_sk_sp_open0_SkColorSpace_close0_instantiation_29() {
+fn __bindgen_test_layout_sk_sp_open0_SkColorSpace_close0_instantiation_28() {
     assert_eq!(
         ::core::mem::size_of::<sk_sp<SkColorSpace>>(),
         8usize,
@@ -45235,7 +45331,7 @@ fn __bindgen_test_layout_sk_sp_open0_SkImage_close0_instantiation_13() {
     );
 }
 #[test]
-fn __bindgen_test_layout_sk_sp_open0_SkColorSpace_close0_instantiation_30() {
+fn __bindgen_test_layout_sk_sp_open0_SkColorSpace_close0_instantiation_29() {
     assert_eq!(
         ::core::mem::size_of::<sk_sp<SkColorSpace>>(),
         8usize,
@@ -45273,7 +45369,7 @@ fn __bindgen_test_layout_sk_sp_open0_SkImage_close0_instantiation_14() {
     );
 }
 #[test]
-fn __bindgen_test_layout_sk_sp_open0_SkColorSpace_close0_instantiation_31() {
+fn __bindgen_test_layout_sk_sp_open0_SkColorSpace_close0_instantiation_30() {
     assert_eq!(
         ::core::mem::size_of::<sk_sp<SkColorSpace>>(),
         8usize,
@@ -45293,6 +45389,44 @@ fn __bindgen_test_layout_sk_sp_open0_SkColorSpace_close0_instantiation_31() {
 }
 #[test]
 fn __bindgen_test_layout_sk_sp_open0_SkImage_close0_instantiation_15() {
+    assert_eq!(
+        ::core::mem::size_of::<sk_sp<SkImage>>(),
+        8usize,
+        concat!(
+            "Size of template specialization: ",
+            stringify!(sk_sp<SkImage>)
+        )
+    );
+    assert_eq!(
+        ::core::mem::align_of::<sk_sp<SkImage>>(),
+        8usize,
+        concat!(
+            "Alignment of template specialization: ",
+            stringify!(sk_sp<SkImage>)
+        )
+    );
+}
+#[test]
+fn __bindgen_test_layout_sk_sp_open0_SkColorSpace_close0_instantiation_31() {
+    assert_eq!(
+        ::core::mem::size_of::<sk_sp<SkColorSpace>>(),
+        8usize,
+        concat!(
+            "Size of template specialization: ",
+            stringify!(sk_sp<SkColorSpace>)
+        )
+    );
+    assert_eq!(
+        ::core::mem::align_of::<sk_sp<SkColorSpace>>(),
+        8usize,
+        concat!(
+            "Alignment of template specialization: ",
+            stringify!(sk_sp<SkColorSpace>)
+        )
+    );
+}
+#[test]
+fn __bindgen_test_layout_sk_sp_open0_SkImage_close0_instantiation_16() {
     assert_eq!(
         ::core::mem::size_of::<sk_sp<SkImage>>(),
         8usize,
@@ -46109,7 +46243,7 @@ fn __bindgen_test_layout_sk_sp_open0_SkSurface_close0_instantiation_3() {
     );
 }
 #[test]
-fn __bindgen_test_layout_sk_sp_open0_SkImage_close0_instantiation_16() {
+fn __bindgen_test_layout_sk_sp_open0_SkImage_close0_instantiation_17() {
     assert_eq!(
         ::core::mem::size_of::<sk_sp<SkImage>>(),
         8usize,
@@ -46128,7 +46262,7 @@ fn __bindgen_test_layout_sk_sp_open0_SkImage_close0_instantiation_16() {
     );
 }
 #[test]
-fn __bindgen_test_layout_sk_sp_open0_SkImage_close0_instantiation_17() {
+fn __bindgen_test_layout_sk_sp_open0_SkImage_close0_instantiation_18() {
     assert_eq!(
         ::core::mem::size_of::<sk_sp<SkImage>>(),
         8usize,
@@ -48059,25 +48193,6 @@ fn __bindgen_test_layout_sk_sp_open0_GrContextThreadSafeProxy_close0_instantiati
     );
 }
 #[test]
-fn __bindgen_test_layout_sk_sp_open0_SkImage_close0_instantiation_18() {
-    assert_eq!(
-        ::core::mem::size_of::<sk_sp<SkImage>>(),
-        8usize,
-        concat!(
-            "Size of template specialization: ",
-            stringify!(sk_sp<SkImage>)
-        )
-    );
-    assert_eq!(
-        ::core::mem::align_of::<sk_sp<SkImage>>(),
-        8usize,
-        concat!(
-            "Alignment of template specialization: ",
-            stringify!(sk_sp<SkImage>)
-        )
-    );
-}
-#[test]
 fn __bindgen_test_layout_sk_sp_open0_SkImage_close0_instantiation_19() {
     assert_eq!(
         ::core::mem::size_of::<sk_sp<SkImage>>(),
@@ -48098,6 +48213,25 @@ fn __bindgen_test_layout_sk_sp_open0_SkImage_close0_instantiation_19() {
 }
 #[test]
 fn __bindgen_test_layout_sk_sp_open0_SkImage_close0_instantiation_20() {
+    assert_eq!(
+        ::core::mem::size_of::<sk_sp<SkImage>>(),
+        8usize,
+        concat!(
+            "Size of template specialization: ",
+            stringify!(sk_sp<SkImage>)
+        )
+    );
+    assert_eq!(
+        ::core::mem::align_of::<sk_sp<SkImage>>(),
+        8usize,
+        concat!(
+            "Alignment of template specialization: ",
+            stringify!(sk_sp<SkImage>)
+        )
+    );
+}
+#[test]
+fn __bindgen_test_layout_sk_sp_open0_SkImage_close0_instantiation_21() {
     assert_eq!(
         ::core::mem::size_of::<sk_sp<SkImage>>(),
         8usize,
@@ -49202,6 +49336,26 @@ fn __bindgen_test_layout_std_less_open0_unsigned_long_close0_instantiation() {
         concat!(
             "Alignment of template specialization: ",
             stringify!(std_less)
+        )
+    );
+}
+#[test]
+fn __bindgen_test_layout_std_allocator_open0_std_pair_open1_const_unsigned_long_skia_textlayout_StyleMetrics_close1_close0_instantiation(
+) {
+    assert_eq!(
+        ::core::mem::size_of::<std_allocator>(),
+        1usize,
+        concat!(
+            "Size of template specialization: ",
+            stringify!(std_allocator)
+        )
+    );
+    assert_eq!(
+        ::core::mem::align_of::<std_allocator>(),
+        1usize,
+        concat!(
+            "Alignment of template specialization: ",
+            stringify!(std_allocator)
         )
     );
 }
