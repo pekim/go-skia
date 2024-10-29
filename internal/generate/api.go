@@ -38,7 +38,7 @@ func (api *api) parseTranslationUnits() {
 	group.SetLimit(runtime.NumCPU())
 	for i, headerFile := range headerFiles {
 		group.Go(func() error {
-			api.tus[i] = newTranslationUnit("_skia/skia/" + headerFile)
+			api.tus[i] = newTranslationUnit("_skia/" + headerFile)
 			fmt.Print(".")
 			return nil
 		})

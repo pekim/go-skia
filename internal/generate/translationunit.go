@@ -37,7 +37,7 @@ func newTranslationUnit(headerFile string) translationUnit {
 	resourcesDir := clangResourceDir()
 	parseArgs := []string{
 		"-I", path.Join(resourcesDir, "include"),
-		"-I", "./_skia/skia/",
+		"-I", "./_skia/",
 		"-x", "c++-header",
 	}
 

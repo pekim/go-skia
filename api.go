@@ -3645,6 +3645,8 @@ func (o Image) IsOpaque() bool {
 /*
 Copies [Rect] of pixels from [Image] to dstPixels. Copy starts at offset (srcX, srcY),        and does not exceed [Image] (width(), height()).
 
+Graphite has deprecated this API in favor of the equivalent asynchronous API on        skgpu::graphite::Context (with an optional explicit synchonization).
+
 dstInfo specifies width, height, [ColorType], [AlphaType], and [ColorSpace] of        destination. dstRowBytes specifies the gap from one destination row to the next.        Returns true if pixels are copied. Returns false if:        - dstInfo.addr() equals nullptr        - dstRowBytes is less than dstInfo.minRowBytes()        - SkPixelRef is nullptr
 
 Pixels are copied only if pixel conversion is possible. If [Image] [ColorType] is        kGray_8_[ColorType], or kAlpha_8_[ColorType]; dstInfo.colorType() must match.        If [Image] [ColorType] is kGray_8_[ColorType], dstInfo.colorSpace() must match.        If [Image] [AlphaType] is kOpaque_[AlphaType], dstInfo.alphaType() must        match. If [Image] [ColorSpace] is nullptr, dstInfo.colorSpace() must match. Returns        false if pixel conversion is not possible.
@@ -5030,7 +5032,7 @@ Requests, but does not require, to distribute color error.
 
 # parameters
 
-  - dither -   setting for ditering
+  - dither -   setting for dithering
 */
 func (o Paint) SetDither(dither bool) {
 	c_obj := o.sk
@@ -9028,39 +9030,43 @@ const (
 	*/
 	ColorTypeRGBA_F16 ColorType = 16
 	/*
+	   pixel with half floats for red, green, blue; in 64-bit word
+	*/
+	ColorTypeRGB_F16F16F16x ColorType = 17
+	/*
 	   pixel using C float for red, green, blue, alpha; in 128-bit word
 	*/
-	ColorTypeRGBA_F32 ColorType = 17
+	ColorTypeRGBA_F32 ColorType = 18
 	/*
 	   pixel with a uint8_t for red and green
 	*/
-	ColorTypeR8G8_unorm ColorType = 18
+	ColorTypeR8G8_unorm ColorType = 19
 	/*
 	   pixel with a half float for alpha
 	*/
-	ColorTypeA16_float ColorType = 19
+	ColorTypeA16_float ColorType = 20
 	/*
 	   pixel with a half float for red and green
 	*/
-	ColorTypeR16G16_float ColorType = 20
+	ColorTypeR16G16_float ColorType = 21
 	/*
 	   pixel with a little endian uint16_t for alpha
 	*/
-	ColorTypeA16_unorm ColorType = 21
+	ColorTypeA16_unorm ColorType = 22
 	/*
 	   pixel with a little endian uint16_t for red and green
 	*/
-	ColorTypeR16G16_unorm ColorType = 22
+	ColorTypeR16G16_unorm ColorType = 23
 	/*
 	   pixel with a little endian uint16_t for red, green, blue
 	*/
-	ColorTypeR16G16B16A16_unorm ColorType = 23
-	ColorTypeSRGBA_8888         ColorType = 24
-	ColorTypeR8_unorm           ColorType = 25
+	ColorTypeR16G16B16A16_unorm ColorType = 24
+	ColorTypeSRGBA_8888         ColorType = 25
+	ColorTypeR8_unorm           ColorType = 26
 	/*
 	   last valid value
 	*/
-	ColorTypeLastEnum ColorType = 25
+	ColorTypeLastEnum ColorType = 26
 	/*
 	   native 32-bit RGBA encoding
 	*/
@@ -9593,11 +9599,6 @@ var InvalidGenID = (uint32)(C.sk_SK_InvalidGenID)
 The unique IDs in Skia reserve 0 has an invalid marker.
 */
 var InvalidUniqueID = (uint32)(C.sk_SK_InvalidUniqueID)
-
-/*
-Maximum representable milliseconds; 24d 20h 31m 23.647s.
-*/
-var MSecMax = (uint32)(C.sk_SK_MSecMax)
 
 /*
 This value translates to reseting all the context state for any backend.

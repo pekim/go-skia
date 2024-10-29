@@ -118,6 +118,7 @@ extern "C"
     uchar fShaderErrorHandler[8];
     int fInternalMultisampleCount;
     int fMaxCachedVulkanSecondaryCommandBuffers;
+    uchar fVulkanVMALargeHeapBlockSize[16];
     bool fSuppressMipmapSupport;
     bool fDisableTessellationPathRenderer;
     bool fEnableExperimentalHardwareTessellation;
@@ -125,11 +126,11 @@ extern "C"
     bool fReducedShaderVariations;
     bool fAllowMSAAOnNewIntel;
     bool fAlwaysUseTexStorageWhenAvailable;
-    uchar pad_33[1];
+    uchar pad_34[1];
     uchar fContextDeleteContext[8];
     uchar fContextDeleteProc[8];
     uchar fDriverBugWorkarounds[17];
-    uchar pad_36[7];
+    uchar pad_37[7];
   } sk_GrContextOptions;
 
   typedef struct
@@ -1270,7 +1271,6 @@ extern "C"
   extern uint sk_SK_ColorYELLOW;
   extern uint sk_SK_InvalidGenID;
   extern uint sk_SK_InvalidUniqueID;
-  extern uint sk_SK_MSecMax;
   extern uint sk_kAll_GrBackendState;
   extern int sk_kGrGLStandardCnt;
   extern int sk_kSkBlendModeCount;

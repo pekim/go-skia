@@ -25,6 +25,7 @@ if (skia_enable_skshaper) {
   }
 
   component("skshaper") {
+    complete_static_lib = false
     check_includes = false
     public_configs = [ ":public_config" ]
     public = skia_shaper_public

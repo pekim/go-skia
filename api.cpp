@@ -37,16 +37,16 @@
 #include <include/core/SkTypeface.h>
 #include <include/core/SkTypes.h>
 #include <include/gpu/GpuTypes.h>
-#include <include/gpu/GrBackendSurface.h>
-#include <include/gpu/GrContextOptions.h>
-#include <include/gpu/GrDirectContext.h>
-#include <include/gpu/GrRecordingContext.h>
-#include <include/gpu/GrTypes.h>
+#include <include/gpu/ganesh/GrBackendSurface.h>
+#include <include/gpu/ganesh/GrContextOptions.h>
+#include <include/gpu/ganesh/GrDirectContext.h>
+#include <include/gpu/ganesh/GrRecordingContext.h>
+#include <include/gpu/ganesh/GrTypes.h>
 #include <include/gpu/ganesh/SkSurfaceGanesh.h>
 #include <include/gpu/ganesh/gl/GrGLBackendSurface.h>
 #include <include/gpu/ganesh/gl/GrGLDirectContext.h>
-#include <include/gpu/gl/GrGLInterface.h>
-#include <include/gpu/gl/GrGLTypes.h>
+#include <include/gpu/ganesh/gl/GrGLInterface.h>
+#include <include/gpu/ganesh/gl/GrGLTypes.h>
 #include <include/pathops/SkPathOps.h>
 #include <include/private/base/SkPoint_impl.h>
 #include <modules/svg/include/SkSVGDOM.h>
@@ -3766,7 +3766,6 @@ extern "C"
   uint sk_SK_ColorYELLOW = SK_ColorYELLOW;
   uint sk_SK_InvalidGenID = SK_InvalidGenID;
   uint sk_SK_InvalidUniqueID = SK_InvalidUniqueID;
-  uint sk_SK_MSecMax = SK_MSecMax;
   uint sk_kAll_GrBackendState = kAll_GrBackendState;
   int sk_kGrGLStandardCnt = kGrGLStandardCnt;
   int sk_kSkBlendModeCount = kSkBlendModeCount;

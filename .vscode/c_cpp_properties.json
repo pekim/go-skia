@@ -3,7 +3,7 @@
     {
       "name": "Linux",
       "defines": ["SKIA_UNIX"],
-      "includePath": ["./_skia/skia"],
+      "includePath": ["./_skia"],
       "intelliSenseMode": "linux-clang-x64",
       "compilerPath": "/usr/lib64/ccache/clang",
       "cStandard": "c17",
