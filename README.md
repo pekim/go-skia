@@ -11,16 +11,23 @@ To add it to a Go module, `go get github.com/pekim/go-skia`.
 
 ### pre-requisites
 
-Version 15 or later of `clang` is required.
+- version 1.23.0 or later of `Go`
+- version 15 or later of `clang`
 
 ### build
 
-The build script
+The build script does the following
 
-- downloads skia source (if not already downloaded)
-- builds skia
-- generates Go bindings
-- verifies that the generated bindings result in a package that builds
+- [`rust-skia`](https://github.com/rust-skia/skia) repo
+  - clone repo (if not present) to `_skia` dir
+  - check out desired tag (if not currently checked out)
+  - copy required headers to `header` dir
+- [`skia-binaries`](https://github.com/rust-skia/skia-binaries) repo
+  - if desired release not present in `lib` dir
+    - download release
+    - extract in to `lib` dir
+- generate Go bindings
+- run tests to verify that the generated bindings result in a package that builds
 
 ```sh
 ./build.sh
@@ -40,8 +47,3 @@ that performs some linting.
   - https://pre-commit.com/index.html#install
 - install pre-commit hook in this repo's workspace
   - `pre-commit install`
-
-## acknowledgement
-
-Much of `build.sh` was copied from
-https://github.com/richardwilkes/cskia/blob/main/build.sh.
