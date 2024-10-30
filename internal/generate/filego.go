@@ -14,7 +14,6 @@ func newFileGo() *fileGo {
 	package skia
 
 	// #cgo CXXFLAGS: -I ${SRCDIR}/header
-	// #cgo LDFLAGS: -L ${SRCDIR}/lib
 	// #cgo LDFLAGS: -l skia
 	// #cgo LDFLAGS: -l skshaper
 	// #cgo LDFLAGS: -l svg
