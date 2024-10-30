@@ -1,4 +1,5 @@
 #! /usr/bin/env bash
+
 set -eo pipefail
 
 # vars for rust-skia repo
@@ -51,8 +52,7 @@ EOF
 if [ ! -e $SKIA_DIR ]; then
   git clone https://github.com/rust-skia/skia.git $SKIA_DIR
 fi
-
-# checkout required tag
+# checkout required rust-skia repo tag
 pushd $SKIA_DIR > /dev/null
 if [[ $(git describe --always --tags) != "$SKIA_MILESTONE-$SKIA_TAG" ]];then
   git fetch --tags
