@@ -2,6 +2,8 @@ module github.com/pekim/go-skia
 
 go 1.23.0
 
+// Address deprecation of clang_getDiagnosticCategoryName.
+// Avoids a noisy message when generating api.
 replace github.com/go-clang/clang-v15 => github.com/pekim/clang-v15 v0.0.0-20240830114552-c0d27ccce9ec
 
 require (
