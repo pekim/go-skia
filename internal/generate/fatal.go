@@ -13,5 +13,6 @@ func fatalOnError(err error) {
 }
 
 func fatalf(format string, args ...any) {
+	fmt.Println()
 	fatal(fmt.Sprintf(format, args...))
 }

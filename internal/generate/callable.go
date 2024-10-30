@@ -41,7 +41,16 @@ func (c *callable) enrich1(record *record, cursor clang.Cursor) {
 	c.enrichedCount++
 }
 
-func (c *callable) enrich2(api api) {
+func (c *callable) enrich2(record *record, api api) {
+	c.record = record
+	if len(c.Overloads) == 0 {
+		if c.record != nil {
+			fatalf("record %s, method %s, has 0 overloads configured, and none enriched", c.record.CppName, c.CppName)
+		} else {
+			fatalf("function %s has 0 overloads configured, and none enriched", c.CppName)
+		}
+	}
+
 	for i := range c.Overloads {
 		overload := c.Overloads[i]
 		if overload != nil {

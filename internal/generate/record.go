@@ -34,7 +34,8 @@ type record struct {
 	derivedFromRefCnt bool
 	doc               string
 	parent            *record
-	enriched          bool
+	enriched1         bool
+	enriched2         bool
 }
 
 func (r *record) enrich1(cursor clang.Cursor, parent *record) {
@@ -48,7 +49,7 @@ func (r *record) enrich1(cursor clang.Cursor, parent *record) {
 	r.doc = docComment(cursor.ParsedComment())
 	r.size = int(cursor.Type().SizeOf())
 	r.parent = parent
-	r.enriched = true
+	r.enriched2 = true
 	r.isClass = cursor.Kind() == clang.Cursor_ClassDecl
 
 	var ctorsEnriched int
@@ -58,6 +59,9 @@ func (r *record) enrich1(cursor clang.Cursor, parent *record) {
 		switch cursor.Kind() {
 		case clang.Cursor_Constructor:
 			if cursor.AccessSpecifier() == clang.AccessSpecifier_Public {
+				if len(r.Ctors) <= ctorsEnriched {
+					fatalf("record %s only has %d ctors configured but at least %d encountered", r.CppName, len(r.Ctors), ctorsEnriched+1)
+				}
 				ctor := r.Ctors[ctorsEnriched]
 				if ctor != nil {
 					r.Ctors[ctorsEnriched].enrich1(r, &cursor)
@@ -115,9 +119,15 @@ func (r *record) enrich1(cursor clang.Cursor, parent *record) {
 	if r.DtorCreate || (!dtorCreated && !dtorNotPublic) && len(r.Ctors) > 0 && !r.NoWrapper {
 		r.dtor = newRecordDtor(r, nil)
 	}
+
+	r.enriched1 = true
 }
 
 func (r *record) enrich2(api api) {
+	if !r.enriched1 {
+		fatalf("record %s has not been phase 1 enriched", r.CppName)
+	}
+
 	r.doc = addDocCommentLinks(r.doc, api)
 
 	for i := range r.Enums {
@@ -144,7 +154,7 @@ func (r *record) enrich2(api api) {
 
 	for i := range r.Methods {
 		method := &r.Methods[i]
-		method.enrich2(api)
+		method.enrich2(r, api)
 	}
 
 	for _, as := range r.As {
@@ -184,7 +194,7 @@ func (r record) findRecord(name string) (*record, bool) {
 }
 
 func (r record) generate(g generator) {
-	if !r.enriched {
+	if !r.enriched2 {
 		fatalf("record %s has not been enriched", r.CppName)
 	}
 
@@ -202,6 +212,7 @@ func (r record) generate(g generator) {
 	r.dtor.generate(g)
 
 	for _, method := range r.Methods {
+		method.record = &r
 		method.generate(g)
 	}
 

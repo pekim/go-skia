@@ -11,24 +11,30 @@ type typedef struct {
 	cType     typ
 	clangType clang.Type
 	doc       string
-	enriched  bool
+	enriched1 bool
+	enriched2 bool
 }
 
 func (t *typedef) enrich1(cursor clang.Cursor) {
 	t.goName = goExportedName(stripSkPrefix(cursor.Spelling()))
 	t.clangType = cursor.TypedefDeclUnderlyingType()
 	t.doc = docComment(cursor.ParsedComment())
+	t.enriched1 = true
 }
 
 func (t *typedef) enrich2(api api) {
+	if !t.enriched1 {
+		fatalf("typedef %s has not been phase 1 enriched", t.CppName)
+	}
+
 	t.cType = mustTypFromClangType(t.clangType, api, "")
 	t.cName = t.cType.cName
-	t.enriched = true
+	t.enriched2 = true
 	t.doc = addDocCommentLinks(t.doc, api)
 }
 
 func (t typedef) generate(g generator) {
-	if !t.enriched {
+	if !t.enriched2 {
 		fatalf("typedef %s has not been enriched", t.CppName)
 	}
 

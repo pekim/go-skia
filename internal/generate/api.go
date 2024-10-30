@@ -70,7 +70,7 @@ func (api api) enrich2() {
 	}
 	for i := range api.Functions {
 		function := &api.Functions[i]
-		function.enrich2(api)
+		function.enrich2(nil, api)
 	}
 	for i := range api.Records {
 		record := &api.Records[i]

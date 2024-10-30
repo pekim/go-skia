@@ -16,7 +16,8 @@ type enum struct {
 	record    *record
 	doc       string
 	constants []enumConstant
-	enriched  bool
+	enriched1 bool
+	enriched2 bool
 	goType    string
 }
 
@@ -58,12 +59,18 @@ func (e *enum) enrich1(record *record, cursor clang.Cursor) {
 
 		return clang.ChildVisit_Continue
 	})
+
+	e.enriched1 = true
 }
 
 func (e *enum) enrich2(api api) {
+	if !e.enriched1 {
+		fatalf("enum %s has not been phase 1 enriched", e.CppName)
+	}
+
 	e.cType = mustTypFromClangType(e.clangType, api, "")
 	e.goType = e.cType.goName
-	e.enriched = true
+	e.enriched2 = true
 	e.doc = addDocCommentLinks(e.doc, api)
 }
 
@@ -71,7 +78,7 @@ func (e enum) generate(g generator) {
 	if len(e.constants) == 0 {
 		fmt.Printf("warning: enum %s has no constants\n", e.CppName)
 	}
-	if !e.enriched {
+	if !e.enriched2 {
 		fatalf("enum %s has not been enriched", e.CppName)
 	}
 
