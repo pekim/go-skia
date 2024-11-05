@@ -261,6 +261,7 @@
         { "suffix": "Typeface" },
         { "suffix": "TypefaceSizeScaleSkew" }
       ],
+      "enums": [{ "name": "Edging" }],
       "methods": [
         {
           "name": "getMetrics",
@@ -278,6 +279,8 @@
           ]
         },
         { "name": "setForceAutoHinting" },
+        { "name": "getEdging" },
+        { "name": "setEdging" },
         { "name": "setHinting" },
         { "name": "setSubpixel" },
         { "name": "textToGlyphs" },

@@ -752,6 +752,8 @@ extern "C"
                                     sk_SkRect *c_bounds, sk_SkPaint *c_paint);
   void misk_Font_setForceAutoHinting (sk_SkFont *c_obj,
                                       bool c_forceAutoHinting);
+  int misk_Font_getEdging (sk_SkFont *c_obj);
+  void misk_Font_setEdging (sk_SkFont *c_obj, int c_edging);
   void misk_Font_setHinting (sk_SkFont *c_obj, int c_hintingLevel);
   void misk_Font_setSubpixel (sk_SkFont *c_obj, bool c_subpixel);
   int misk_Font_textToGlyphs (sk_SkFont *c_obj, void *c_text,

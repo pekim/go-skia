@@ -2824,6 +2824,24 @@ func (o Font) SetForceAutoHinting(forceAutoHinting bool) {
 }
 
 /*
+Whether edge pixels draw opaque or with partial transparency.
+*/
+func (o Font) GetEdging() FontEdging {
+	c_obj := o.sk
+	retC := C.misk_Font_getEdging(c_obj)
+	return FontEdging(retC)
+}
+
+/*
+Requests, but does not require, that edge pixels draw opaque or with        partial transparency.
+*/
+func (o Font) SetEdging(edging FontEdging) {
+	c_obj := o.sk
+	c_edging := C.int(edging)
+	C.misk_Font_setEdging(c_obj, c_edging)
+}
+
+/*
 Sets level of glyph outline adjustment.        Does not check for valid values of hintingLevel.
 */
 func (o Font) SetHinting(hintingLevel FontHinting) {
@@ -2969,6 +2987,26 @@ func (o Font) GetWidths(glyphs []uint16, count int32, widths []float32) {
 	c_widths := (*C.float)(unsafe.Pointer(&widths[0]))
 	C.misk_Font_getWidths(c_obj, c_glyphs, c_count, c_widths)
 }
+
+/*
+Whether edge pixels draw opaque or with partial transparency.
+*/
+type FontEdging int32
+
+const (
+	/*
+	   no transparent pixels on glyph edges
+	*/
+	FontEdgingAlias FontEdging = 0
+	/*
+	   may have transparent pixels on glyph edges
+	*/
+	FontEdgingAntiAlias FontEdging = 1
+	/*
+	   glyph positioned in pixel using transparency
+	*/
+	FontEdgingSubpixelAntiAlias FontEdging = 2
+)
 
 /*
 Represents a set of actual arguments for a font.

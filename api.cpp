@@ -1200,6 +1200,19 @@ extern "C"
         c_forceAutoHinting);
   }
 
+  int
+  misk_Font_getEdging (sk_SkFont *c_obj)
+  {
+    auto ret = reinterpret_cast<SkFont *> (c_obj)->getEdging ();
+    return (int)ret;
+  }
+
+  void
+  misk_Font_setEdging (sk_SkFont *c_obj, int c_edging)
+  {
+    reinterpret_cast<SkFont *> (c_obj)->setEdging (SkFont::Edging (c_edging));
+  }
+
   void
   misk_Font_setHinting (sk_SkFont *c_obj, int c_hintingLevel)
   {
