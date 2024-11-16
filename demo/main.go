@@ -36,7 +36,6 @@ func main() {
 	glfw.WindowHint(glfw.ContextVersionMinor, 3)
 	glfw.WindowHint(glfw.OpenGLProfile, glfw.OpenGLCoreProfile)
 	glfw.WindowHint(glfw.OpenGLForwardCompatible, glfw.True)
-	// glfw.WindowHint(glfw.SRGBCapable, glfw.True)
 	window, err := glfw.CreateWindow(windowWidth, windowHeight, "skia demo", nil, nil)
 	if err != nil {
 		panic(err)
@@ -55,7 +54,7 @@ func main() {
 	})
 
 	gl.Enable(gl.BLEND)
-	// gl.Enable(gl.FRAMEBUFFER_SRGB)
+	gl.Enable(gl.FRAMEBUFFER_SRGB)
 	gl.BlendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA)
 
 	iface := skia.GrGLMakeNativeInterface()
@@ -91,10 +90,6 @@ func main() {
 			panic("failed to create target")
 		}
 		var colorspace skia.ColorSpace
-		// colorspace = skia.ColorSpaceMakeSRGB()
-		colorspace = skia.ColorSpaceMakeSRGB().MakeSRGBGamma()
-		// colorspace = skia.ColorSpaceMakeSRGBLinear()
-		colorspace = skia.ColorSpaceMakeSRGBLinear().MakeSRGBGamma()
 
 		surface = skia.SurfacesWrapBackendRenderTarget(context.AsGrRecordingContext(), backend, skia.GrSurfaceOriginBottomLeft,
 			skia.ColorTypeBGRA_8888, colorspace, skia.NewSurfacePropsPixelGeometry(0, skia.PixelGeometryRGB_H))
@@ -109,7 +104,7 @@ func main() {
 	framebufferSize(window.GetFramebufferSize())
 
 	typeface := skia.FontMgrDefault().MatchFamilyStyle("sans-serif", skia.FontStyleNormal())
-	font := skia.NewFontTypefaceSize(typeface, 20)
+	font := skia.NewFontTypefaceSize(typeface, 22)
 	var metrics skia.FontMetrics
 	lineSpacing := font.GetMetrics(&metrics)
 
@@ -151,13 +146,6 @@ func main() {
 		paint.SetColor(skia.ColorGREEN)
 		rect2 := skia.RectMakeXYWH(400, 100, 100, 100)
 		canvas.DrawRect(rect2, paint)
-
-		paint.SetColor(skia.ColorBLACK)
-		rect3 := skia.RectMakeXYWH(80, 300, 250, 100)
-		canvas.DrawRect(rect3, paint)
-		paint.SetColor(skia.ColorWHITE)
-		canvas.DrawString("Some text", 100, 330, font, paint)
-		canvas.DrawString(fmt.Sprintf("Font ascent = %.1f", metrics.Ascent()), 100, 330+lineSpacing, font, paint)
 
 		canvas.Save()
 		canvas.Translate(180, 150)

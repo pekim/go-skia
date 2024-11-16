@@ -235,7 +235,6 @@
       "name": "SkColorSpace",
       "methods": [
         { "name": "MakeSRGB" },
-        { "name": "makeSRGBGamma" },
         { "name": "MakeSRGBLinear" },
         { "name": "Equals" }
       ]
