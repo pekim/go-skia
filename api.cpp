@@ -1041,6 +1041,15 @@ extern "C"
   }
 
   sk_SkColorSpace *
+  misk_ColorSpace_makeSRGBGamma (sk_SkColorSpace *c_obj)
+  {
+    auto ret = reinterpret_cast<SkColorSpace *> (c_obj)
+                   ->makeSRGBGamma ()
+                   .release ();
+    return reinterpret_cast<sk_SkColorSpace *> (ret);
+  }
+
+  sk_SkColorSpace *
   misk_ColorSpace_MakeSRGBLinear ()
   {
     auto ret = SkColorSpace::MakeSRGBLinear ().release ();

@@ -2534,6 +2534,15 @@ func ColorSpaceMakeSRGB() ColorSpace {
 }
 
 /*
+Returns a color space with the same gamut as this one, but with the sRGB transfer  function.
+*/
+func (o ColorSpace) MakeSRGBGamma() ColorSpace {
+	c_obj := o.sk
+	retC := C.misk_ColorSpace_makeSRGBGamma(c_obj)
+	return ColorSpace{sk: retC}
+}
+
+/*
 Colorspace with the sRGB primaries, but a linear (1.0) gamma.
 */
 func ColorSpaceMakeSRGBLinear() ColorSpace {

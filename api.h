@@ -720,6 +720,7 @@ extern "C"
   int misk_ColorInfo_shiftPerPixel (sk_SkColorInfo *c_obj);
 
   sk_SkColorSpace *misk_ColorSpace_MakeSRGB ();
+  sk_SkColorSpace *misk_ColorSpace_makeSRGBGamma (sk_SkColorSpace *c_obj);
   sk_SkColorSpace *misk_ColorSpace_MakeSRGBLinear ();
   bool misk_ColorSpace_Equals (sk_SkColorSpace *c_p0, sk_SkColorSpace *c_p1);
   void misk_unref_SkColorSpace (sk_SkColorSpace *c_obj);
