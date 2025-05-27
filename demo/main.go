@@ -104,7 +104,7 @@ func main() {
 	framebufferSize(window.GetFramebufferSize())
 
 	typeface := skia.FontMgrDefault().MatchFamilyStyle("sans-serif", skia.FontStyleNormal())
-	font := skia.NewFontTypefaceSize(typeface, 22)
+	font := skia.NewFontTypefaceSize(typeface, 19)
 	var metrics skia.FontMetrics
 	lineSpacing := font.GetMetrics(&metrics)
 
