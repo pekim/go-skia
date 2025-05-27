@@ -40,10 +40,14 @@ in the "Subdirectories" section.
 
 ### pre-commit hook
 
-There is configuration for a git pre-commit hook
-that performs some linting.
+There are configuration files for linting and other checks.
+To use a git pre-commit hook for the checks
 
+- install `goimports` if not already installed
+  - https://pkg.go.dev/golang.org/x/tools/cmd/goimports
+- install `golangci-lint` if not already installed
+  - https://golangci-lint.run/usage/install/#local-installation
 - install the `pre-commit` application if not already installed
   - https://pre-commit.com/index.html#install
-- install pre-commit hook in this repo's workspace
+- install a git pre-commit hook in this repo's workspace
   - `pre-commit install`
