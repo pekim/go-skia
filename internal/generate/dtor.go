@@ -51,7 +51,7 @@ func (d *recordDtor) generateHeader(g generator) {
 func (d *recordDtor) generateCpp(g generator) {
 	f := g.cppFile
 	f.writelnf("void  %s(%s *obj) {", d.cFuncName, d.record.cStructName)
-	f.writelnf("  delete reinterpret_cast<%s*>(obj);", d.record.CppName)
+	f.writelnf("  delete reinterpret_cast<%s*>(obj);", d.record.qualifiedCppName())
 	f.writeln("}")
 	f.writeln()
 }

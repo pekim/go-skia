@@ -102,7 +102,8 @@ func (c recordCtor) generateCpp(g generator) {
 	}
 
 	f.writelnf("%s * %s(%s) {", c.record.cStructName, c.cFuncName, strings.Join(params, ", "))
-	f.writelnf("  return reinterpret_cast<%s*>(new %s(%s));", c.record.cStructName, c.record.CppName, strings.Join(args, ", "))
+	f.writelnf("  return reinterpret_cast<%s*>(new %s(%s));",
+		c.record.cStructName, c.record.qualifiedCppName(), strings.Join(args, ", "))
 	f.writeln("}")
 	f.writeln()
 }

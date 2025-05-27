@@ -110,7 +110,7 @@ func main() {
 
 	tigerData := skia.DataMakeWithCopy(tigerSVG, uint32(len(tigerSVG)))
 	tigerStream := skia.MemoryStreamMake(tigerData).AsStream()
-	svgTiger := skia.SVGDOMMakeFromStream(tigerStream)
+	svgTiger := skia.NewSVGDOMBuilder().Make(tigerStream)
 	if svgTiger.IsNil() {
 		panic("failed to create tiger svg")
 	}

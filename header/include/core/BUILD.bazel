@@ -23,7 +23,6 @@ skia_filegroup(
         "SkClipOp.h",
         "SkColor.h",
         "SkColorFilter.h",
-        "SkColorPriv.h",
         "SkColorSpace.h",
         "SkColorTable.h",
         "SkColorType.h",
@@ -41,6 +40,7 @@ skia_filegroup(
         "SkFontMetrics.h",
         "SkFontMgr.h",
         "SkFontParameters.h",
+        "SkFontScanner.h",
         "SkFontStyle.h",
         "SkFontTypes.h",
         "SkFourByteTag.h",
@@ -108,7 +108,6 @@ skia_filegroup(
     srcs = [
         "SkAlphaType.h",
         "SkColor.h",
-        "SkColorPriv.h",
         "SkScalar.h",
         "SkTypes.h",
     ],

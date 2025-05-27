@@ -16,6 +16,7 @@
 #include "include/private/base/SkTArray.h"
 
 #include <chrono>
+#include <optional>
 
 struct AHardwareBuffer;
 class SkCanvas;
@@ -58,7 +59,6 @@ class UploadBufferManager;
 class UploadList;
 
 template<typename T> class PipelineDataCache;
-using UniformDataCache = PipelineDataCache<UniformDataBlock>;
 using TextureDataCache = PipelineDataCache<TextureDataBlock>;
 
 struct SK_API RecorderOptions final {
@@ -71,6 +71,10 @@ struct SK_API RecorderOptions final {
     static constexpr size_t kDefaultRecorderBudget = 256 * (1 << 20);
     // What is the budget for GPU resources allocated and held by this Recorder.
     size_t fGpuBudgetInBytes = kDefaultRecorderBudget;
+    // If Recordings are known to be played back in the order they are recorded, then Graphite
+    // may be able to make certain assuptions that improve performance. This is often the case
+    // if the content being drawn triggers the use of internal atlasing in Graphite (e.g. text).
+    std::optional<bool> fRequireOrderedRecordings;
 };
 
 class SK_API Recorder final {
@@ -211,6 +215,12 @@ public:
     size_t maxBudgetedBytes() const;
 
     /**
+     * Sets the size of Recorders's gpu memory cache budget in bytes. If the new budget is lower
+     * than the current budget, the cache will try to free resources to get under the new budget.
+     */
+    void setMaxBudgetedBytes(size_t bytes);
+
+    /**
      * Enumerates all cached GPU resources owned by the Recorder and dumps their memory to
      * traceMemoryDump.
      */
@@ -262,7 +272,6 @@ private:
     // Aggregated one-time uploads that preceed all tasks in the root task list.
     std::unique_ptr<UploadList> fRootUploads;
 
-    std::unique_ptr<UniformDataCache> fUniformDataCache;
     std::unique_ptr<TextureDataCache> fTextureDataCache;
     std::unique_ptr<DrawBufferManager> fDrawBufferManager;
     std::unique_ptr<UploadBufferManager> fUploadBufferManager;
@@ -277,6 +286,8 @@ private:
 
     uint32_t fUniqueID;  // Needed for MessageBox handling for text
     uint32_t fNextRecordingID = 1;
+    const bool fRequireOrderedRecordings;
+
     std::unique_ptr<AtlasProvider> fAtlasProvider;
     std::unique_ptr<TokenTracker> fTokenTracker;
     std::unique_ptr<sktext::gpu::StrikeCache> fStrikeCache;

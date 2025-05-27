@@ -59,11 +59,7 @@ func (o callableOverload) generateCppApiCallStatement(g generator) {
 		f.writef("%s::%s(%s)", o.record.CppName, o.cppName, o.cppArgs)
 	} else if o.record != nil {
 		// Call a class member function.
-		recordCppName := o.record.CppName
-		if o.record.parent != nil {
-			recordCppName = fmt.Sprintf("%s::%s", o.record.parent.CppName, o.record.CppName)
-		}
-		f.writef("reinterpret_cast<%s*>(c_obj)->%s(%s)", recordCppName, o.cppName, o.cppArgs)
+		f.writef("reinterpret_cast<%s*>(c_obj)->%s(%s)", o.record.qualifiedCppName(), o.cppName, o.cppArgs)
 	} else {
 		// Call a plain (non-class) function.
 		f.writef("%s(%s)", o.cppName, o.cppArgs)

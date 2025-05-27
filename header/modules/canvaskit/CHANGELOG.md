@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.40.0] - 2025-03-31
+
 ### Changed
  - `Typeface.MakeFreeTypeFaceFromData` is now `Typeface.MakeTypefaceFromData` to be consistent
    with the rest of the Skia library in the capitalization of the f in Typeface.
@@ -18,6 +20,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
  - `CanvasKit.Typeface.GetDefault()` as a way to explicitly get the compiled-in typeface (if any).
+ - `Canvas.quickReject` to quickly check if a Rect is within the current clip region.
+ - `Canvas.saveLayer` now accepts a `TileMode` argument which affects the backdrop filter
+   in the save layer.
 
 ## [0.39.1] - 2023-10-12
 

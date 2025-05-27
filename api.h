@@ -56,8 +56,11 @@ extern "C"
   typedef struct
   {
     ulong fNumSemaphores;
+    uchar fGpuStatsFlags[4];
+    uchar pad_2[4];
     uchar fSignalSemaphores[8];
     uchar fFinishedProc[8];
+    uchar fFinishedWithStatsProc[8];
     uchar fFinishedContext[8];
     uchar fSubmittedProc[8];
     uchar fSubmittedContext[8];
@@ -82,43 +85,41 @@ extern "C"
     uchar fStandard[4];
     uchar pad_3[4];
     uchar fExtensions[24];
-    uchar fFunctions[8240];
+    uchar fFunctions[8200];
   } sk_GrGLInterface;
 
   typedef struct
   {
-    bool fSuppressPrints;
-    uchar pad_1[3];
+    uchar fVulkanVMALargeHeapBlockSize[16];
+    uchar fContextDeleteContext[8];
+    uchar fContextDeleteProc[8];
+    uchar fExecutor[8];
+    uchar fPersistentCache[8];
+    uchar fShaderErrorHandler[8];
+    ulong fMinimumStagingBufferSize;
+    ulong fGlyphCacheTextureMaximumBytes;
     uchar fSkipGLErrorChecks[4];
+    uchar fAllowMultipleGlyphCacheTextures[4];
+    uchar fUseDrawInsteadOfClear[4];
+    uchar fReduceOpsTaskSplitting[4];
+    uchar fShaderCacheStrategy[4];
     int fMaxTextureSizeOverride;
     int fBufferMapThreshold;
-    ulong fMinimumStagingBufferSize;
-    uchar fExecutor[8];
+    int fRuntimeProgramCacheSize;
+    int fInternalMultisampleCount;
+    int fMaxCachedVulkanSecondaryCommandBuffers;
+    float fMinDistanceFieldFontSize;
+    float fGlyphsAsPathsFontSize;
+    uchar fDriverBugWorkarounds[17];
     bool fDoManualMipmapping;
     bool fDisableCoverageCountingPaths;
     bool fDisableDistanceFieldPaths;
     bool fAllowPathMaskCaching;
     bool fDisableGpuYUVConversion;
-    uchar pad_11[3];
-    ulong fGlyphCacheTextureMaximumBytes;
-    float fMinDistanceFieldFontSize;
-    float fGlyphsAsPathsFontSize;
-    uchar fAllowMultipleGlyphCacheTextures[4];
     bool fAvoidStencilBuffers;
-    uchar pad_16[3];
-    uchar fUseDrawInsteadOfClear[4];
-    uchar fReduceOpsTaskSplitting[4];
+    bool fSharpenMipmappedTextures;
     bool fPreferExternalImagesOverES3;
     bool fDisableDriverCorrectnessWorkarounds;
-    uchar pad_20[2];
-    int fRuntimeProgramCacheSize;
-    uchar fPersistentCache[8];
-    uchar fShaderCacheStrategy[4];
-    uchar pad_23[4];
-    uchar fShaderErrorHandler[8];
-    int fInternalMultisampleCount;
-    int fMaxCachedVulkanSecondaryCommandBuffers;
-    uchar fVulkanVMALargeHeapBlockSize[16];
     bool fSuppressMipmapSupport;
     bool fDisableTessellationPathRenderer;
     bool fEnableExperimentalHardwareTessellation;
@@ -126,11 +127,8 @@ extern "C"
     bool fReducedShaderVariations;
     bool fAllowMSAAOnNewIntel;
     bool fAlwaysUseTexStorageWhenAvailable;
-    uchar pad_34[1];
-    uchar fContextDeleteContext[8];
-    uchar fContextDeleteProc[8];
-    uchar fDriverBugWorkarounds[17];
-    uchar pad_37[7];
+    bool fSuppressPrints;
+    uchar pad_38[6];
   } sk_GrContextOptions;
 
   typedef struct
@@ -449,6 +447,13 @@ extern "C"
     uchar fIDMapper[16];
     uchar fContainerSize[8];
   } sk_SkSVGDOM;
+
+  typedef struct
+  {
+    uchar fFontMgr[8];
+    uchar fResourceProvider[8];
+    uchar fTextShapingFactory[8];
+  } sk_SkSVGDOMBuilder;
 
   typedef struct
   {
@@ -793,7 +798,7 @@ extern "C"
   void misk_unref_SkFontMgr (sk_SkFontMgr *c_obj);
 
   sk_SkFontStyle *misk_new_FontStyle2 (int c_weight, int c_width,
-                                       uint c_slant);
+                                       uchar c_slant);
   sk_SkFontStyle *misk_new_FontStyle ();
   void misk_delete_SkFontStyle (sk_SkFontStyle *obj);
   sk_SkFontStyle misk_FontStyle_Normal ();
@@ -940,7 +945,7 @@ extern "C"
   uchar misk_Paint_getStrokeJoin (sk_SkPaint *c_obj);
   void misk_Paint_setStrokeJoin (sk_SkPaint *c_obj, uchar c_join);
   float misk_Paint_getStrokeMiter (sk_SkPaint *c_obj);
-  void misk_Paint_setStrokeMiter (sk_SkPaint *c_obj, float c_miter);
+  void misk_Paint_setStrokeMiter (sk_SkPaint *c_obj, float c_miterLimit);
   float misk_Paint_getStrokeWidth (sk_SkPaint *c_obj);
   void misk_Paint_setStrokeWidth (sk_SkPaint *c_obj, float c_width);
   uchar misk_Paint_getStyle (sk_SkPaint *c_obj);
@@ -1147,7 +1152,14 @@ extern "C"
   void misk_SVGDOM_setContainerSize (sk_SkSVGDOM *c_obj, sk_SkSize c_p0);
   sk_SkSize misk_SVGDOM_containerSize (sk_SkSVGDOM *c_obj);
   void misk_SVGDOM_render (sk_SkSVGDOM *c_obj, sk_SkCanvas *c_p0);
-  sk_SkSVGDOM *misk_SVGDOM_MakeFromStream (sk_SkStream *c_str);
+  sk_SkSVGDOMBuilder *misk_new_SVGDOMBuilder ();
+  void misk_delete_Builder (sk_SkSVGDOMBuilder *obj);
+  sk_SkSVGDOMBuilder
+  misk_SVGDOMBuilder_setFontManager (sk_SkSVGDOMBuilder *c_obj,
+                                     sk_SkFontMgr *c_p0);
+  sk_SkSVGDOM *misk_SVGDOMBuilder_make (sk_SkSVGDOMBuilder *c_obj,
+                                        sk_SkStream *c_p0);
+
   void misk_unref_SkSVGDOM (sk_SkSVGDOM *c_obj);
 
   sk_SkSize misk_SVGSVG_intrinsicSize (sk_SkSVGSVG *c_obj,
@@ -1254,7 +1266,6 @@ extern "C"
   bool misk_Op (sk_SkPath *c_one, sk_SkPath *c_two, uint c_op,
                 sk_SkPath *c_result);
   bool misk_Simplify (sk_SkPath *c_path, sk_SkPath *c_result);
-  bool misk_TightBounds (sk_SkPath *c_path, sk_SkRect c_result);
   bool misk_AsWinding (sk_SkPath *c_path, sk_SkPath *c_result);
 
   extern uchar sk_SK_AlphaOPAQUE;

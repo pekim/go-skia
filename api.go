@@ -150,15 +150,6 @@ func (o GrDirectContext) Flush(info GrFlushInfo) GrSemaphoresSubmitted {
 	return GrSemaphoresSubmitted(retC)
 }
 
-/*
-Submit outstanding work to the gpu from all previously un-submitted flushes. The return value of the submit will indicate whether or not the submission to the GPU was successful.
-
-If the call returns true, all previously passed in semaphores in flush calls will have been submitted to the GPU and they can safely be waited on. The caller should wait on those semaphores or perform some other global synchronization before deleting the semaphores.
-
-If it returns false, then those same semaphores will not have been submitted and we will not try to submit them again. The caller is free to delete the semaphores at any time.
-
-If sync flag is [GrSyncCpu]::kYes, this function will return once the gpu has finished with all submitted work.
-*/
 func (o GrDirectContext) Submit(sync GrSyncCpu) bool {
 	c_obj := o.sk
 	c_sync := C.bool(sync)
@@ -173,7 +164,9 @@ After issuing all commands, fNumSemaphore semaphores will be signaled by the gpu
 
 The client will own and be responsible for deleting the underlying semaphores that are stored and returned in initialized GrBackendSemaphore objects. The GrBackendSemaphore objects themselves can be deleted as soon as this function returns.
 
-If a finishedProc is provided, the finishedProc will be called when all work submitted to the gpu from this flush call and all previous flush calls has finished on the GPU. If the flush call fails due to an error and nothing ends up getting sent to the GPU, the finished proc is called immediately.
+If a finishedProc or finishedWithStatsProc is provided, the proc will be called when all work submitted to the gpu from this flush call and all previous flush calls has finished on the GPU. If the flush call fails due to an error and nothing ends up getting sent to the GPU, the finished proc is called immediately. If both types of proc are provided then finishedWithStatsProc is preferred.
+
+When finishedWithStatsProc is called the GpuStats passed will contain valid values for stats by requested by gpuStatsFlags, assuming the stats are supported by the underlying backend GPU context and the GPU work completed successfully.
 
 If a submittedProc is provided, the submittedProc will be called when all work from this flush call is submitted to the GPU. If the flush call fails due to an error and nothing will get sent to the GPU, the submitted proc is called immediately. It is possibly that when work is finally submitted, that the submission actual fails. In this case we will not reattempt to do the submission. Skia notifies the client of these via the success bool passed into the submittedProc. The submittedProc is useful to the client to know when semaphores that were sent with the flush have actually been submitted to the GPU so that they can be waited on (or deleted if the submit fails). GrBackendSemaphores are not supported for the GL backend and will be ignored if set.
 */
@@ -240,12 +233,26 @@ func (o *GrGLInterface) Delete() {
 
 type GrContextOptions C.sk_GrContextOptions
 
-func (o GrContextOptions) SuppressPrints() bool {
-	return bool(o.fSuppressPrints)
+/*
+Default minimum size to use when allocating buffers for uploading data to textures. The        larger the value the more uploads can be packed into one buffer, but at the cost of        more gpu memory allocated that may not be used. Uploads larger than the minimum will still        work by allocating a dedicated buffer.
+*/
+func (o GrContextOptions) MinimumStagingBufferSize() uint32 {
+	return uint32(o.fMinimumStagingBufferSize)
 }
 
-func (o *GrContextOptions) SetSuppressPrints(value bool) {
-	o.fSuppressPrints = C.bool(value)
+func (o *GrContextOptions) SetMinimumStagingBufferSize(value uint32) {
+	o.fMinimumStagingBufferSize = C.ulong(value)
+}
+
+/*
+The maximum size of cache textures used for Skia's Glyph cache.
+*/
+func (o GrContextOptions) GlyphCacheTextureMaximumBytes() uint32 {
+	return uint32(o.fGlyphCacheTextureMaximumBytes)
+}
+
+func (o *GrContextOptions) SetGlyphCacheTextureMaximumBytes(value uint32) {
+	o.fGlyphCacheTextureMaximumBytes = C.ulong(value)
 }
 
 /*
@@ -271,14 +278,59 @@ func (o *GrContextOptions) SetBufferMapThreshold(value int32) {
 }
 
 /*
-Default minimum size to use when allocating buffers for uploading data to textures. The        larger the value the more uploads can be packed into one buffer, but at the cost of        more gpu memory allocated that may not be used. Uploads larger than the minimum will still        work by allocating a dedicated buffer.
+Maximum number of GPU programs or pipelines to keep active in the runtime cache.
 */
-func (o GrContextOptions) MinimumStagingBufferSize() uint32 {
-	return uint32(o.fMinimumStagingBufferSize)
+func (o GrContextOptions) RuntimeProgramCacheSize() int32 {
+	return int32(o.fRuntimeProgramCacheSize)
 }
 
-func (o *GrContextOptions) SetMinimumStagingBufferSize(value uint32) {
-	o.fMinimumStagingBufferSize = C.ulong(value)
+func (o *GrContextOptions) SetRuntimeProgramCacheSize(value int32) {
+	o.fRuntimeProgramCacheSize = C.int(value)
+}
+
+/*
+Specifies the number of samples Ganesh should use when performing internal draws with MSAA (hardware capabilities permitting).
+
+If 0, Ganesh will disable internal code paths that use multisampling.
+*/
+func (o GrContextOptions) InternalMultisampleCount() int32 {
+	return int32(o.fInternalMultisampleCount)
+}
+
+func (o *GrContextOptions) SetInternalMultisampleCount(value int32) {
+	o.fInternalMultisampleCount = C.int(value)
+}
+
+/*
+In Skia's vulkan backend a single GrContext submit equates to the submission of a single primary command buffer to the VkQueue. This value specifies how many vulkan secondary command buffers we will cache for reuse on a given primary command buffer. A single submit may use more than this many secondary command buffers, but after the primary command buffer is finished on the GPU it will only hold on to this many secondary command buffers for reuse.
+
+A value of -1 means we will pick a limit value internally.
+*/
+func (o GrContextOptions) MaxCachedVulkanSecondaryCommandBuffers() int32 {
+	return int32(o.fMaxCachedVulkanSecondaryCommandBuffers)
+}
+
+func (o *GrContextOptions) SetMaxCachedVulkanSecondaryCommandBuffers(value int32) {
+	o.fMaxCachedVulkanSecondaryCommandBuffers = C.int(value)
+}
+
+/*
+Below this threshold size in device space distance field fonts won't be used. Distance field fonts don't support hinting which is more important at smaller sizes.
+*/
+func (o GrContextOptions) MinDistanceFieldFontSize() float32 {
+	return float32(o.fMinDistanceFieldFontSize)
+}
+
+func (o *GrContextOptions) SetMinDistanceFieldFontSize(value float32) {
+	o.fMinDistanceFieldFontSize = C.float(value)
+}
+
+func (o GrContextOptions) GlyphsAsPathsFontSize() float32 {
+	return float32(o.fGlyphsAsPathsFontSize)
+}
+
+func (o *GrContextOptions) SetGlyphsAsPathsFontSize(value float32) {
+	o.fGlyphsAsPathsFontSize = C.float(value)
 }
 
 /*
@@ -337,36 +389,6 @@ func (o *GrContextOptions) SetDisableGpuYUVConversion(value bool) {
 }
 
 /*
-The maximum size of cache textures used for Skia's Glyph cache.
-*/
-func (o GrContextOptions) GlyphCacheTextureMaximumBytes() uint32 {
-	return uint32(o.fGlyphCacheTextureMaximumBytes)
-}
-
-func (o *GrContextOptions) SetGlyphCacheTextureMaximumBytes(value uint32) {
-	o.fGlyphCacheTextureMaximumBytes = C.ulong(value)
-}
-
-/*
-Below this threshold size in device space distance field fonts won't be used. Distance field fonts don't support hinting which is more important at smaller sizes.
-*/
-func (o GrContextOptions) MinDistanceFieldFontSize() float32 {
-	return float32(o.fMinDistanceFieldFontSize)
-}
-
-func (o *GrContextOptions) SetMinDistanceFieldFontSize(value float32) {
-	o.fMinDistanceFieldFontSize = C.float(value)
-}
-
-func (o GrContextOptions) GlyphsAsPathsFontSize() float32 {
-	return float32(o.fGlyphsAsPathsFontSize)
-}
-
-func (o *GrContextOptions) SetGlyphsAsPathsFontSize(value float32) {
-	o.fGlyphsAsPathsFontSize = C.float(value)
-}
-
-/*
 Bugs on certain drivers cause stencil buffers to leak. This flag causes Skia to avoid allocating stencil buffers and use alternate rasterization paths, avoiding the leak.
 */
 func (o GrContextOptions) AvoidStencilBuffers() bool {
@@ -375,6 +397,17 @@ func (o GrContextOptions) AvoidStencilBuffers() bool {
 
 func (o *GrContextOptions) SetAvoidStencilBuffers(value bool) {
 	o.fAvoidStencilBuffers = C.bool(value)
+}
+
+/*
+If true, texture fetches from mip-mapped textures will be biased to read larger MIP levels. This has the effect of sharpening those textures, at the cost of some aliasing, and possible performance impact.
+*/
+func (o GrContextOptions) SharpenMipmappedTextures() bool {
+	return bool(o.fSharpenMipmappedTextures)
+}
+
+func (o *GrContextOptions) SetSharpenMipmappedTextures(value bool) {
+	o.fSharpenMipmappedTextures = C.bool(value)
 }
 
 /*
@@ -397,43 +430,6 @@ func (o GrContextOptions) DisableDriverCorrectnessWorkarounds() bool {
 
 func (o *GrContextOptions) SetDisableDriverCorrectnessWorkarounds(value bool) {
 	o.fDisableDriverCorrectnessWorkarounds = C.bool(value)
-}
-
-/*
-Maximum number of GPU programs or pipelines to keep active in the runtime cache.
-*/
-func (o GrContextOptions) RuntimeProgramCacheSize() int32 {
-	return int32(o.fRuntimeProgramCacheSize)
-}
-
-func (o *GrContextOptions) SetRuntimeProgramCacheSize(value int32) {
-	o.fRuntimeProgramCacheSize = C.int(value)
-}
-
-/*
-Specifies the number of samples Ganesh should use when performing internal draws with MSAA (hardware capabilities permitting).
-
-If 0, Ganesh will disable internal code paths that use multisampling.
-*/
-func (o GrContextOptions) InternalMultisampleCount() int32 {
-	return int32(o.fInternalMultisampleCount)
-}
-
-func (o *GrContextOptions) SetInternalMultisampleCount(value int32) {
-	o.fInternalMultisampleCount = C.int(value)
-}
-
-/*
-In Skia's vulkan backend a single GrContext submit equates to the submission of a single primary command buffer to the VkQueue. This value specifies how many vulkan secondary command buffers we will cache for reuse on a given primary command buffer. A single submit may use more than this many secondary command buffers, but after the primary command buffer is finished on the GPU it will only hold on to this many secondary command buffers for reuse.
-
-A value of -1 means we will pick a limit value internally.
-*/
-func (o GrContextOptions) MaxCachedVulkanSecondaryCommandBuffers() int32 {
-	return int32(o.fMaxCachedVulkanSecondaryCommandBuffers)
-}
-
-func (o *GrContextOptions) SetMaxCachedVulkanSecondaryCommandBuffers(value int32) {
-	o.fMaxCachedVulkanSecondaryCommandBuffers = C.int(value)
 }
 
 /*
@@ -513,6 +509,14 @@ func (o GrContextOptions) AlwaysUseTexStorageWhenAvailable() bool {
 
 func (o *GrContextOptions) SetAlwaysUseTexStorageWhenAvailable(value bool) {
 	o.fAlwaysUseTexStorageWhenAvailable = C.bool(value)
+}
+
+func (o GrContextOptions) SuppressPrints() bool {
+	return bool(o.fSuppressPrints)
+}
+
+func (o *GrContextOptions) SetSuppressPrints(value bool) {
+	o.fSuppressPrints = C.bool(value)
 }
 
 func NewGrContextOptions() GrContextOptions {
@@ -3377,7 +3381,7 @@ func (o FontStyle) IsNil() bool {
 func NewFontStyle2(weight int32, width int32, slant FontStyleSlant) FontStyle {
 	c_weight := C.int(weight)
 	c_width := C.int(width)
-	c_slant := C.uint(slant)
+	c_slant := C.uchar(slant)
 	retC := C.misk_new_FontStyle2(c_weight, c_width, c_slant)
 	return FontStyle{sk: retC}
 }
@@ -3413,7 +3417,7 @@ func FontStyleBoldItalic() FontStyle {
 	return FontStyle{sk: &retC}
 }
 
-type FontStyleSlant uint32
+type FontStyleSlant byte
 
 const (
 	FontStyleSlantUpright FontStyleSlant = 0
@@ -5131,18 +5135,20 @@ func (o Paint) GetStrokeMiter() float32 {
 }
 
 /*
-Sets the limit at which a sharp corner is drawn beveled.        Valid values are zero and greater.        Has no effect if miter is less than zero.
+When stroking a small joinAngle with miter, the miterLength may be very long.        When miterLength > maxMiterLength (or joinAngle < minJoinAngle) the join will become bevel.        miterLimit = maxMiterLength / strokeWidth or miterLimit = 1 / sin(minJoinAngle / 2).
+
+This call has no effect if the miterLimit passed is less than zero.        Values less than one will be treated as bevel.
 
 example: https://fiddle.skia.org/c/_setStrokeMiter
 
 # parameters
 
-  - miter -   zero and greater miter limit
+  - miterLimit -   zero and greater miter limit
 */
-func (o Paint) SetStrokeMiter(miter float32) {
+func (o Paint) SetStrokeMiter(miterLimit float32) {
 	c_obj := o.sk
-	c_miter := C.float(miter)
-	C.misk_Paint_setStrokeMiter(c_obj, c_miter)
+	c_miterLimit := C.float(miterLimit)
+	C.misk_Paint_setStrokeMiter(c_obj, c_miterLimit)
 }
 
 /*
@@ -8146,9 +8152,41 @@ func (o SVGDOM) Render(p0 Canvas) {
 	C.misk_SVGDOM_render(c_obj, c_p0)
 }
 
-func SVGDOMMakeFromStream(str Stream) SVGDOM {
-	c_str := str.sk
-	retC := C.misk_SVGDOM_MakeFromStream(c_str)
+type SVGDOMBuilder struct {
+	sk *C.sk_SkSVGDOMBuilder
+}
+
+// IsNil returns true if the raw skia object pointer is nil.
+// If it is nil is may indicate that the SVGDOMBuilder has not been created, or has been deleted with [SVGDOMBuilder.Delete].
+func (o SVGDOMBuilder) IsNil() bool {
+	return o.sk == nil
+}
+
+func NewSVGDOMBuilder() SVGDOMBuilder {
+
+	retC := C.misk_new_SVGDOMBuilder()
+	return SVGDOMBuilder{sk: retC}
+}
+
+func (o *SVGDOMBuilder) Delete() {
+	C.misk_delete_Builder(o.sk)
+	o.sk = nil
+}
+
+/*
+Specify a font manager for loading fonts (e.g. from the system) to render <text> SVG nodes. If this is not set, but a font is required as part of rendering, the text will not be displayed.
+*/
+func (o SVGDOMBuilder) SetFontManager(p0 FontMgr) SVGDOMBuilder {
+	c_obj := o.sk
+	c_p0 := p0.sk
+	retC := C.misk_SVGDOMBuilder_setFontManager(c_obj, c_p0)
+	return SVGDOMBuilder{sk: &retC}
+}
+
+func (o SVGDOMBuilder) Make(p0 Stream) SVGDOM {
+	c_obj := o.sk
+	c_p0 := p0.sk
+	retC := C.misk_SVGDOMBuilder_make(c_obj, c_p0)
 	return SVGDOM{sk: retC}
 }
 
@@ -8994,109 +9032,38 @@ const (
 Describes how pixel bits encode color. A pixel may be an alpha mask, a grayscale, RGB, or ARGB.
 
 kN32_[ColorType] selects the native 32-bit ARGB format for the current configuration. This can    lead to inconsistent results across platforms, so use with caution.
+
+By default, Skia operates with the assumption of a little-Endian system. The names of each    [ColorType] implicitly define the channel ordering and size in memory. Due to historical reasons    the names do not follow 100% identical convention, but are typically labeled from least    significant to most significant. To help clarify when the actual data layout differs from the    default convention, every [ColorType]'s comment includes a bit-labeled description of a pixel    in that color type on a LE system.
+
+Unless specified otherwise, a channel's value is treated as an unsigned integer with a range of    of [0, 2^N-1] and this is mapped uniformly to a floating point value of [0.0, 1.0]. Some color    types instead store data directly in 32-bit floating point (assumed to be IEEE), or in 16-bit    "half" floating point values. A half float, or F16/float16, is interpreted as FP 1-5-10 or       Bits: [sign:15 exp:14..10 man:9..0]
 */
 type ColorType int32
 
 const (
-	/*
-	   uninitialized
-	*/
-	ColorTypeUnknown ColorType = 0
-	/*
-	   pixel with alpha in 8-bit byte
-	*/
-	ColorTypeAlpha_8 ColorType = 1
-	/*
-	   pixel with 5 bits red, 6 bits green, 5 bits blue, in 16-bit word
-	*/
-	ColorTypeRGB_565 ColorType = 2
-	/*
-	   pixel with 4 bits for alpha, red, green, blue; in 16-bit word
-	*/
-	ColorTypeARGB_4444 ColorType = 3
-	/*
-	   pixel with 8 bits for red, green, blue, alpha; in 32-bit word
-	*/
-	ColorTypeRGBA_8888 ColorType = 4
-	/*
-	   pixel with 8 bits each for red, green, blue; in 32-bit word
-	*/
-	ColorTypeRGB_888x ColorType = 5
-	/*
-	   pixel with 8 bits for blue, green, red, alpha; in 32-bit word
-	*/
-	ColorTypeBGRA_8888 ColorType = 6
-	/*
-	   10 bits for red, green, blue; 2 bits for alpha; in 32-bit word
-	*/
-	ColorTypeRGBA_1010102 ColorType = 7
-	/*
-	   10 bits for blue, green, red; 2 bits for alpha; in 32-bit word
-	*/
-	ColorTypeBGRA_1010102 ColorType = 8
-	/*
-	   pixel with 10 bits each for red, green, blue; in 32-bit word
-	*/
-	ColorTypeRGB_101010x ColorType = 9
-	/*
-	   pixel with 10 bits each for blue, green, red; in 32-bit word
-	*/
-	ColorTypeBGR_101010x ColorType = 10
-	/*
-	   pixel with 10 bits each for blue, green, red; in 32-bit word, extended range
-	*/
-	ColorTypeBGR_101010x_XR ColorType = 11
-	/*
-	   pixel with 10 bits each for blue, green, red, alpha; in 64-bit word, extended range
-	*/
-	ColorTypeBGRA_10101010_XR ColorType = 12
-	/*
-	   pixel with 10 used bits (most significant) followed by 6 unused
-	*/
-	ColorTypeRGBA_10x6 ColorType = 13
-	/*
-	   pixel with grayscale level in 8-bit byte
-	*/
-	ColorTypeGray_8 ColorType = 14
-	/*
-	   pixel with half floats in [0,1] for red, green, blue, alpha;
-	*/
-	ColorTypeRGBA_F16Norm ColorType = 15
-	/*
-	   pixel with half floats for red, green, blue, alpha;
-	*/
-	ColorTypeRGBA_F16 ColorType = 16
-	/*
-	   pixel with half floats for red, green, blue; in 64-bit word
-	*/
-	ColorTypeRGB_F16F16F16x ColorType = 17
-	/*
-	   pixel using C float for red, green, blue, alpha; in 128-bit word
-	*/
-	ColorTypeRGBA_F32 ColorType = 18
-	/*
-	   pixel with a uint8_t for red and green
-	*/
-	ColorTypeR8G8_unorm ColorType = 19
-	/*
-	   pixel with a half float for alpha
-	*/
-	ColorTypeA16_float ColorType = 20
-	/*
-	   pixel with a half float for red and green
-	*/
-	ColorTypeR16G16_float ColorType = 21
-	/*
-	   pixel with a little endian uint16_t for alpha
-	*/
-	ColorTypeA16_unorm ColorType = 22
-	/*
-	   pixel with a little endian uint16_t for red and green
-	*/
-	ColorTypeR16G16_unorm ColorType = 23
-	/*
-	   pixel with a little endian uint16_t for red, green, blue
-	*/
+	ColorTypeUnknown            ColorType = 0
+	ColorTypeAlpha_8            ColorType = 1
+	ColorTypeRGB_565            ColorType = 2
+	ColorTypeARGB_4444          ColorType = 3
+	ColorTypeRGBA_8888          ColorType = 4
+	ColorTypeRGB_888x           ColorType = 5
+	ColorTypeBGRA_8888          ColorType = 6
+	ColorTypeRGBA_1010102       ColorType = 7
+	ColorTypeBGRA_1010102       ColorType = 8
+	ColorTypeRGB_101010x        ColorType = 9
+	ColorTypeBGR_101010x        ColorType = 10
+	ColorTypeBGR_101010x_XR     ColorType = 11
+	ColorTypeBGRA_10101010_XR   ColorType = 12
+	ColorTypeRGBA_10x6          ColorType = 13
+	ColorTypeGray_8             ColorType = 14
+	ColorTypeRGBA_F16Norm       ColorType = 15
+	ColorTypeRGBA_F16           ColorType = 16
+	ColorTypeRGB_F16F16F16x     ColorType = 17
+	ColorTypeRGBA_F32           ColorType = 18
+	ColorTypeR8G8_unorm         ColorType = 19
+	ColorTypeA16_float          ColorType = 20
+	ColorTypeR16G16_float       ColorType = 21
+	ColorTypeA16_unorm          ColorType = 22
+	ColorTypeR16G16_unorm       ColorType = 23
 	ColorTypeR16G16B16A16_unorm ColorType = 24
 	ColorTypeSRGBA_8888         ColorType = 25
 	ColorTypeR8_unorm           ColorType = 26
@@ -9497,25 +9464,6 @@ func Simplify(path Path, result Path) bool {
 	c_path := path.sk
 	c_result := result.sk
 	retC := C.misk_Simplify(c_path, c_result)
-	return bool(retC)
-}
-
-/*
-Set the resulting rectangle to the tight bounds of the path.
-
-# parameters
-
-  - path -  The path measured.
-  - result -  The tight bounds of the path.
-
-# return
-
-  - True if the bounds could be computed.
-*/
-func TightBounds(path Path, result Rect) bool {
-	c_path := path.sk
-	c_result := *(*C.sk_SkRect)(unsafe.Pointer(&result))
-	retC := C.misk_TightBounds(c_path, c_result)
 	return bool(retC)
 }
 

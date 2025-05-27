@@ -1377,7 +1377,7 @@ extern "C"
   }
 
   sk_SkFontStyle *
-  misk_new_FontStyle2 (int c_weight, int c_width, uint c_slant)
+  misk_new_FontStyle2 (int c_weight, int c_width, uchar c_slant)
   {
     return reinterpret_cast<sk_SkFontStyle *> (
         new SkFontStyle (c_weight, c_width, SkFontStyle::Slant (c_slant)));
@@ -2175,9 +2175,9 @@ extern "C"
   }
 
   void
-  misk_Paint_setStrokeMiter (sk_SkPaint *c_obj, float c_miter)
+  misk_Paint_setStrokeMiter (sk_SkPaint *c_obj, float c_miterLimit)
   {
-    reinterpret_cast<SkPaint *> (c_obj)->setStrokeMiter (c_miter);
+    reinterpret_cast<SkPaint *> (c_obj)->setStrokeMiter (c_miterLimit);
   }
 
   float
@@ -3286,10 +3286,32 @@ extern "C"
         reinterpret_cast<SkCanvas *> (c_p0));
   }
 
-  sk_SkSVGDOM *
-  misk_SVGDOM_MakeFromStream (sk_SkStream *c_str)
+  sk_SkSVGDOMBuilder *
+  misk_new_SVGDOMBuilder ()
   {
-    auto ret = SkSVGDOM::MakeFromStream (*reinterpret_cast<SkStream *> (c_str))
+    return reinterpret_cast<sk_SkSVGDOMBuilder *> (new SkSVGDOM::Builder ());
+  }
+
+  void
+  misk_delete_Builder (sk_SkSVGDOMBuilder *obj)
+  {
+    delete reinterpret_cast<SkSVGDOM::Builder *> (obj);
+  }
+
+  sk_SkSVGDOMBuilder
+  misk_SVGDOMBuilder_setFontManager (sk_SkSVGDOMBuilder *c_obj,
+                                     sk_SkFontMgr *c_p0)
+  {
+    auto ret = reinterpret_cast<SkSVGDOM::Builder *> (c_obj)->setFontManager (
+        sk_ref_sp (reinterpret_cast<SkFontMgr *> (c_p0)));
+    return *(reinterpret_cast<sk_SkSVGDOMBuilder *> (&ret));
+  }
+
+  sk_SkSVGDOM *
+  misk_SVGDOMBuilder_make (sk_SkSVGDOMBuilder *c_obj, sk_SkStream *c_p0)
+  {
+    auto ret = reinterpret_cast<SkSVGDOM::Builder *> (c_obj)
+                   ->make (*reinterpret_cast<SkStream *> (c_p0))
                    .release ();
     return reinterpret_cast<sk_SkSVGDOM *> (ret);
   }
@@ -3744,14 +3766,6 @@ extern "C"
   {
     auto ret = Simplify (*reinterpret_cast<SkPath *> (c_path),
                          reinterpret_cast<SkPath *> (c_result));
-    return ret;
-  }
-
-  bool
-  misk_TightBounds (sk_SkPath *c_path, sk_SkRect c_result)
-  {
-    auto ret = TightBounds (*reinterpret_cast<SkPath *> (c_path),
-                            reinterpret_cast<SkRect *> (&c_result));
     return ret;
   }
 

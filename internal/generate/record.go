@@ -97,7 +97,10 @@ func (r *record) enrich1(cursor clang.Cursor, parent *record) {
 		case clang.Cursor_FieldDecl:
 			r.fields = append(r.fields, newField(cursor))
 
-		case clang.Cursor_StructDecl:
+		case
+			clang.Cursor_StructDecl,
+			clang.Cursor_ClassDecl:
+
 			if record, ok := r.findRecord(cursor.Spelling()); ok {
 				record.enrich1(cursor, r)
 			}
@@ -191,6 +194,13 @@ func (r record) findRecord(name string) (*record, bool) {
 		}
 	}
 	return nil, false
+}
+
+func (r record) qualifiedCppName() string {
+	if r.parent == nil {
+		return r.CppName
+	}
+	return r.parent.CppName + "::" + r.CppName
 }
 
 func (r record) generate(g generator) {

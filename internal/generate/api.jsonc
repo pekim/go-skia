@@ -48,7 +48,8 @@
           "overloads": [{}, null, null, null, null, null, null]
         },
         {
-          "name": "submit"
+          "name": "submit",
+          "overloads": [null, {}]
         }
       ]
     },
@@ -742,8 +743,18 @@
         { "name": "getRoot" },
         { "name": "setContainerSize" },
         { "name": "containerSize" },
-        { "name": "render" },
-        { "name": "MakeFromStream" }
+        { "name": "render" }
+      ],
+      "records": [
+        {
+          "name": "Builder",
+          "constructors": [{}],
+          "methods": [
+            { "name": "setFontManager" },
+            // { "name": "setResourceProvider" },
+            { "name": "make" }
+          ]
+        }
       ]
     },
 
@@ -870,7 +881,6 @@
 
     { "name": "Op" },
     { "name": "Simplify" },
-    { "name": "TightBounds" },
     { "name": "AsWinding" }
   ],
 

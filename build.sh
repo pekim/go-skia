@@ -3,12 +3,12 @@
 set -eo pipefail
 
 # vars for rust-skia repo
-SKIA_MILESTONE=m130
-SKIA_TAG=0.78.1
+SKIA_MILESTONE=m136
+SKIA_TAG=0.84.2
 SKIA_DIR=_skia
 # vars for skia-binaries repo
-SKIA_BINARIES_COMMITHASH=ec00cf219c4901d785ed
-SKIA_BINARIES_TAG=0.78.2
+SKIA_BINARIES_COMMITHASH=8df1749a67a2800c2904
+SKIA_BINARIES_TAG=0.84.0
 
 function get_binaries() {
   GOOS=$1
