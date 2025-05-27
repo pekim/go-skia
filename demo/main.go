@@ -124,7 +124,12 @@ func main() {
 	imageData := skia.DataMakeWithCopy(testPng, uint32(len(testPng)))
 	image := skia.ImagesDeferredFromEncodedData(imageData, nil)
 
-	for !window.ShouldClose() {
+	draw := func() {
+		// start := time.Now()
+		// defer func() {
+		// 	fmt.Printf("%0.2fms\n", time.Since(start).Seconds()*1000)
+		// }()
+
 		canvas := surface.GetCanvas()
 		paint := skia.NewPaint()
 		defer paint.Delete()
@@ -155,9 +160,11 @@ func main() {
 		canvas.Restore()
 
 		canvas.DrawImage(image, 1000, 200)
-
 		context.FlushAndSubmit(skia.GrSyncCpuYes)
+	}
 
+	for !window.ShouldClose() {
+		draw()
 		window.SwapBuffers()
 		glfw.WaitEvents()
 	}
