@@ -154,3 +154,7 @@ linters-settings:
     extra-words:
     #  - typo: "whattever"
     #    correction: "whatever"
+
+issues:
+  exclude-dirs:
+    - header
