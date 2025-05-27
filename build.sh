@@ -3,11 +3,10 @@
 set -eo pipefail
 
 # vars for rust-skia repo
-SKIA_MILESTONE=m136
-SKIA_TAG=0.84.2
+SKIA_TAG=m136-0.84.2
 SKIA_DIR=_skia
 # vars for skia-binaries repo
-SKIA_BINARIES_COMMITHASH=8df1749a67a2800c2904
+SKIA_BINARIES_HASH=8df1749a67a2800c2904
 SKIA_BINARIES_TAG=0.84.0
 
 function get_binaries() {
@@ -28,7 +27,7 @@ function get_binaries() {
   # get the OS/arch specific libraries
   wget \
     -qO- \
-    "https://github.com/rust-skia/skia-binaries/releases/download/$SKIA_BINARIES_TAG/skia-binaries-$SKIA_BINARIES_COMMITHASH-$FILE_VARIATION.tar.gz" | \
+    "https://github.com/rust-skia/skia-binaries/releases/download/$SKIA_BINARIES_TAG/skia-binaries-$SKIA_BINARIES_HASH-$FILE_VARIATION.tar.gz" | \
     tar xz
   rm -fr $LIB_DIR
   mkdir -p $LIB_DIR
@@ -54,9 +53,9 @@ if [ ! -e $SKIA_DIR ]; then
 fi
 # checkout required rust-skia repo tag
 pushd $SKIA_DIR > /dev/null
-if [[ $(git describe --always --tags) != "$SKIA_MILESTONE-$SKIA_TAG" ]];then
+if [[ $(git describe --always --tags) != "$SKIA_TAG" ]];then
   git fetch --tags
-  git checkout "$SKIA_MILESTONE-$SKIA_TAG"
+  git checkout "$SKIA_TAG"
 fi
 popd > /dev/null
 

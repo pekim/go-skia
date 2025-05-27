@@ -33,6 +33,19 @@ The build script does the following
 ./build.sh
 ```
 
+### upgrade skia
+
+To upgrade skia, update some variables in `build.sh`.
+
+- https://github.com/rust-skia/skia/tags
+  - `SKIA_TAG` - set to a tag, such as `m136-0.84.2`
+- https://github.com/rust-skia/skia-binaries/releases
+  - Expand the assets for the latest available minor release that `SKIA_TAG` references.
+    For example if `SKIA_TAG` is `m136-0.84.2`, the release to use will be `0.84.0`.
+    Do not try to mix minor releases, as it's unlikely to work.
+  - `SKIA_BINARIES_COMMITHASH` - set to the hash used in all of the release's downloadable assets
+  - `SKIA_BINARIES_TAG` - the release's tag, such as `0.84.0`
+
 ### \_skia dir
 
 The leading underscore in the dir name is to prevent the directory appearing in godoc output
