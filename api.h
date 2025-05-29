@@ -17,7 +17,7 @@ extern "C"
     uchar fProtected[1];
     uchar pad_3[3];
   } sk_GrGLFramebufferInfo;
-  extern int sk_sizeof_GrGLFramebufferInfo;
+  extern int sk_sizeof_sk_GrGLFramebufferInfo;
 
   typedef struct
   {
@@ -32,7 +32,7 @@ extern "C"
     uchar fRTData[184];
     uchar pad_8[16];
   } sk_GrBackendRenderTarget;
-  extern int sk_sizeof_GrBackendRenderTarget;
+  extern int sk_sizeof_sk_GrBackendRenderTarget;
 
   typedef struct
   {
@@ -54,7 +54,7 @@ extern "C"
     uchar fAtlasManager[8];
     uchar fSmallPathAtlasMgr[8];
   } sk_GrDirectContext;
-  extern int sk_sizeof_GrDirectContext;
+  extern int sk_sizeof_sk_GrDirectContext;
 
   typedef struct
   {
@@ -68,7 +68,7 @@ extern "C"
     uchar fSubmittedProc[8];
     uchar fSubmittedContext[8];
   } sk_GrFlushInfo;
-  extern int sk_sizeof_GrFlushInfo;
+  extern int sk_sizeof_sk_GrFlushInfo;
 
   typedef struct
   {
@@ -81,7 +81,7 @@ extern "C"
     uchar fCPUContext[8];
     uchar fRecorder[8];
   } sk_GrRecordingContext;
-  extern int sk_sizeof_GrRecordingContext;
+  extern int sk_sizeof_sk_GrRecordingContext;
 
   typedef struct
   {
@@ -94,7 +94,7 @@ extern "C"
     uchar fExtensions[24];
     uchar fFunctions[8200];
   } sk_GrGLInterface;
-  extern int sk_sizeof_GrGLInterface;
+  extern int sk_sizeof_sk_GrGLInterface;
 
   typedef struct
   {
@@ -138,7 +138,7 @@ extern "C"
     bool fSuppressPrints;
     uchar pad_38[6];
   } sk_GrContextOptions;
-  extern int sk_sizeof_GrContextOptions;
+  extern int sk_sizeof_sk_GrContextOptions;
 
   typedef struct
   {
@@ -148,7 +148,7 @@ extern "C"
     uchar fType[1];
     uchar pad_4[3];
   } sk_SkArc;
-  extern int sk_sizeof_SkArc;
+  extern int sk_sizeof_sk_SkArc;
 
   typedef struct
   {
@@ -156,7 +156,7 @@ extern "C"
     uchar fPixmap[40];
     uchar fMips[8];
   } sk_SkBitmap;
-  extern int sk_sizeof_SkBitmap;
+  extern int sk_sizeof_sk_SkBitmap;
 
   typedef struct
   {
@@ -176,7 +176,7 @@ extern "C"
     uchar pad_11[4];
     uchar fScratchGlyphRunBuilder[8];
   } sk_SkCanvas;
-  extern int sk_sizeof_SkCanvas;
+  extern int sk_sizeof_sk_SkCanvas;
 
   typedef struct
   {
@@ -184,7 +184,7 @@ extern "C"
     uchar fColorType[4];
     uchar fAlphaType[4];
   } sk_SkColorInfo;
-  extern int sk_sizeof_SkColorInfo;
+  extern int sk_sizeof_sk_SkColorInfo;
 
   typedef struct
   {
@@ -198,7 +198,7 @@ extern "C"
     uchar fLazyDstFieldsOnce[1];
     uchar pad_7[3];
   } sk_SkColorSpace;
-  extern int sk_sizeof_SkColorSpace;
+  extern int sk_sizeof_sk_SkColorSpace;
 
   typedef struct
   {
@@ -208,7 +208,7 @@ extern "C"
     uchar fPtr[8];
     ulong fSize;
   } sk_SkData;
-  extern int sk_sizeof_SkData;
+  extern int sk_sizeof_sk_SkData;
 
   typedef struct
   {
@@ -221,7 +221,7 @@ extern "C"
     uchar fHinting;
     uchar pad_7[1];
   } sk_SkFont;
-  extern int sk_sizeof_SkFont;
+  extern int sk_sizeof_sk_SkFont;
 
   typedef struct
   {
@@ -230,7 +230,7 @@ extern "C"
     uchar fVariationDesignPosition[16];
     uchar fPalette[24];
   } sk_SkFontArguments;
-  extern int sk_sizeof_SkFontArguments;
+  extern int sk_sizeof_sk_SkFontArguments;
 
   typedef struct
   {
@@ -238,7 +238,7 @@ extern "C"
     int coordinateCount;
     uchar pad_2[4];
   } sk_SkFontArgumentsVariationPosition;
-  extern int sk_sizeof_SkFontArgumentsVariationPosition;
+  extern int sk_sizeof_sk_SkFontArgumentsVariationPosition;
 
   typedef struct
   {
@@ -248,7 +248,7 @@ extern "C"
     int overrideCount;
     uchar pad_3[4];
   } sk_SkFontArgumentsPalette;
-  extern int sk_sizeof_SkFontArgumentsPalette;
+  extern int sk_sizeof_sk_SkFontArgumentsPalette;
 
   typedef struct
   {
@@ -269,25 +269,25 @@ extern "C"
     float fStrikeoutThickness;
     float fStrikeoutPosition;
   } sk_SkFontMetrics;
-  extern int sk_sizeof_SkFontMetrics;
+  extern int sk_sizeof_sk_SkFontMetrics;
 
   typedef struct
   {
     uchar pad_0[16];
   } sk_SkFontMgr;
-  extern int sk_sizeof_SkFontMgr;
+  extern int sk_sizeof_sk_SkFontMgr;
 
   typedef struct
   {
     int fValue;
   } sk_SkFontStyle;
-  extern int sk_sizeof_SkFontStyle;
+  extern int sk_sizeof_sk_SkFontStyle;
 
   typedef struct
   {
     uchar pad_0[16];
   } sk_SkFontStyleSet;
-  extern int sk_sizeof_SkFontStyleSet;
+  extern int sk_sizeof_sk_SkFontStyleSet;
 
   typedef struct
   {
@@ -296,20 +296,20 @@ extern "C"
     uint fUniqueID;
     uchar pad_2[4];
   } sk_SkImage;
-  extern int sk_sizeof_SkImage;
+  extern int sk_sizeof_sk_SkImage;
 
   typedef struct
   {
     uchar fColorInfo[16];
     uchar fDimensions[8];
   } sk_SkImageInfo;
-  extern int sk_sizeof_SkImageInfo;
+  extern int sk_sizeof_sk_SkImageInfo;
 
   typedef struct
   {
     uchar fMat[64];
   } sk_SkM44;
-  extern int sk_sizeof_SkM44;
+  extern int sk_sizeof_sk_SkM44;
 
   typedef struct
   {
@@ -317,14 +317,14 @@ extern "C"
     uchar fData[8];
     ulong fOffset;
   } sk_SkMemoryStream;
-  extern int sk_sizeof_SkMemoryStream;
+  extern int sk_sizeof_sk_SkMemoryStream;
 
   typedef struct
   {
     int fX;
     int fY;
   } sk_SkIPoint;
-  extern int sk_sizeof_SkIPoint;
+  extern int sk_sizeof_sk_SkIPoint;
 
   typedef struct
   {
@@ -333,28 +333,28 @@ extern "C"
     int fRight;
     int fBottom;
   } sk_SkIRect;
-  extern int sk_sizeof_SkIRect;
+  extern int sk_sizeof_sk_SkIRect;
 
   typedef struct
   {
     int fWidth;
     int fHeight;
   } sk_SkISize;
-  extern int sk_sizeof_SkISize;
+  extern int sk_sizeof_sk_SkISize;
 
   typedef struct
   {
     uchar fMat[36];
     int fTypeMask;
   } sk_SkMatrix;
-  extern int sk_sizeof_SkMatrix;
+  extern int sk_sizeof_sk_SkMatrix;
 
   typedef struct
   {
     uchar fPathRefs[16];
     uchar fOps[24];
   } sk_SkOpBuilder;
-  extern int sk_sizeof_SkOpBuilder;
+  extern int sk_sizeof_sk_SkOpBuilder;
 
   typedef struct
   {
@@ -369,7 +369,7 @@ extern "C"
     float fMiterLimit;
     uchar pad_9[8];
   } sk_SkPaint;
-  extern int sk_sizeof_SkPaint;
+  extern int sk_sizeof_sk_SkPaint;
 
   typedef struct
   {
@@ -381,14 +381,14 @@ extern "C"
     // TODO misalignment (perhaps there are bitfields around here?)
     uchar fIsVolatile;
   } sk_SkPath;
-  extern int sk_sizeof_SkPath;
+  extern int sk_sizeof_sk_SkPath;
 
   typedef struct
   {
     float fX;
     float fY;
   } sk_SkPoint;
-  extern int sk_sizeof_SkPoint;
+  extern int sk_sizeof_sk_SkPoint;
 
   typedef struct
   {
@@ -396,7 +396,7 @@ extern "C"
     ulong fRowBytes;
     uchar fInfo[24];
   } sk_SkPixmap;
-  extern int sk_sizeof_SkPixmap;
+  extern int sk_sizeof_sk_SkPixmap;
 
   typedef struct
   {
@@ -405,7 +405,7 @@ extern "C"
     float fRight;
     float fBottom;
   } sk_SkRect;
-  extern int sk_sizeof_SkRect;
+  extern int sk_sizeof_sk_SkRect;
 
   typedef struct
   {
@@ -413,14 +413,14 @@ extern "C"
     uchar fRadii[32];
     int fType;
   } sk_SkRRect;
-  extern int sk_sizeof_SkRRect;
+  extern int sk_sizeof_sk_SkRRect;
 
   typedef struct
   {
     uchar fBounds[16];
     uchar fRunHead[8];
   } sk_SkRegion;
-  extern int sk_sizeof_SkRegion;
+  extern int sk_sizeof_sk_SkRegion;
 
   typedef struct
   {
@@ -432,7 +432,7 @@ extern "C"
     // TODO misalignment (perhaps there are bitfields around here?)
     float fA;
   } sk_SkRGBA4f;
-  extern int sk_sizeof_SkRGBA4f;
+  extern int sk_sizeof_sk_SkRGBA4f;
 
   typedef struct
   {
@@ -443,26 +443,26 @@ extern "C"
     uchar filter[4];
     uchar mipmap[4];
   } sk_SkSamplingOptions;
-  extern int sk_sizeof_SkSamplingOptions;
+  extern int sk_sizeof_sk_SkSamplingOptions;
 
   typedef struct
   {
     float fWidth;
     float fHeight;
   } sk_SkSize;
-  extern int sk_sizeof_SkSize;
+  extern int sk_sizeof_sk_SkSize;
 
   typedef struct
   {
     uchar pad_0[8];
   } sk_SkStream;
-  extern int sk_sizeof_SkStream;
+  extern int sk_sizeof_sk_SkStream;
 
   typedef struct
   {
     uchar fRec[8];
   } sk_SkString;
-  extern int sk_sizeof_SkString;
+  extern int sk_sizeof_sk_SkString;
 
   typedef struct
   {
@@ -472,7 +472,7 @@ extern "C"
     int fHeight;
     uint fGenerationID;
   } sk_SkSurface;
-  extern int sk_sizeof_SkSurface;
+  extern int sk_sizeof_sk_SkSurface;
 
   typedef struct
   {
@@ -481,7 +481,7 @@ extern "C"
     float fTextContrast;
     float fTextGamma;
   } sk_SkSurfaceProps;
-  extern int sk_sizeof_SkSurfaceProps;
+  extern int sk_sizeof_sk_SkSurfaceProps;
 
   typedef struct
   {
@@ -493,7 +493,7 @@ extern "C"
     uchar fIDMapper[16];
     uchar fContainerSize[8];
   } sk_SkSVGDOM;
-  extern int sk_sizeof_SkSVGDOM;
+  extern int sk_sizeof_sk_SkSVGDOM;
 
   typedef struct
   {
@@ -501,7 +501,7 @@ extern "C"
     uchar fResourceProvider[8];
     uchar fTextShapingFactory[8];
   } sk_SkSVGDOMBuilder;
-  extern int sk_sizeof_SkSVGDOMBuilder;
+  extern int sk_sizeof_sk_SkSVGDOMBuilder;
 
   typedef struct
   {
@@ -514,14 +514,14 @@ extern "C"
     uchar fViewBox[20];
     uchar fType[4];
   } sk_SkSVGSVG;
-  extern int sk_sizeof_SkSVGSVG;
+  extern int sk_sizeof_sk_SkSVGSVG;
 
   typedef struct
   {
     uchar fViewport[8];
     float fDPI;
   } sk_SkSVGLengthContext;
-  extern int sk_sizeof_SkSVGLengthContext;
+  extern int sk_sizeof_sk_SkSVGLengthContext;
 
   typedef struct
   {
@@ -533,7 +533,7 @@ extern "C"
     uchar fPurgeDelegate[8];
     ulong fStorageSize;
   } sk_SkTextBlob;
-  extern int sk_sizeof_SkTextBlob;
+  extern int sk_sizeof_sk_SkTextBlob;
 
   typedef struct
   {
@@ -547,7 +547,7 @@ extern "C"
     ulong fLastRun;
     uchar fCurrentRunBuffer[32];
   } sk_SkTextBlobBuilder;
-  extern int sk_sizeof_SkTextBlobBuilder;
+  extern int sk_sizeof_sk_SkTextBlobBuilder;
 
   typedef struct
   {
@@ -556,7 +556,7 @@ extern "C"
     uchar utf8text[8];
     uchar clusters[8];
   } sk_SkTextBlobBuilderRunBuffer;
-  extern int sk_sizeof_SkTextBlobBuilderRunBuffer;
+  extern int sk_sizeof_sk_SkTextBlobBuilderRunBuffer;
 
   typedef struct
   {
@@ -568,7 +568,7 @@ extern "C"
     bool fIsFixedPitch;
     uchar pad_5[6];
   } sk_SkTypeface;
-  extern int sk_sizeof_SkTypeface;
+  extern int sk_sizeof_sk_SkTypeface;
 
   sk_GrBackendRenderTarget *misk_new_GrBackendRenderTarget ();
   sk_GrBackendRenderTarget *

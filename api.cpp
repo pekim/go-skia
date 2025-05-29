@@ -69,60 +69,60 @@ extern "C"
 {
 #include "api.h"
 
-  int sk_sizeof_GrGLFramebufferInfo = sizeof (sk_GrGLFramebufferInfo);
-  int sk_sizeof_GrBackendRenderTarget = sizeof (sk_GrBackendRenderTarget);
-  int sk_sizeof_GrDirectContext = sizeof (sk_GrDirectContext);
-  int sk_sizeof_GrFlushInfo = sizeof (sk_GrFlushInfo);
-  int sk_sizeof_GrRecordingContext = sizeof (sk_GrRecordingContext);
-  int sk_sizeof_GrGLInterface = sizeof (sk_GrGLInterface);
-  int sk_sizeof_GrContextOptions = sizeof (sk_GrContextOptions);
-  int sk_sizeof_SkArc = sizeof (sk_SkArc);
-  int sk_sizeof_SkBitmap = sizeof (sk_SkBitmap);
-  int sk_sizeof_SkCanvas = sizeof (sk_SkCanvas);
-  int sk_sizeof_SkColorInfo = sizeof (sk_SkColorInfo);
-  int sk_sizeof_SkColorSpace = sizeof (sk_SkColorSpace);
-  int sk_sizeof_SkData = sizeof (sk_SkData);
-  int sk_sizeof_SkFont = sizeof (sk_SkFont);
-  int sk_sizeof_SkFontArguments = sizeof (sk_SkFontArguments);
-  int sk_sizeof_SkFontArgumentsVariationPosition
+  int sk_sizeof_sk_GrGLFramebufferInfo = sizeof (sk_GrGLFramebufferInfo);
+  int sk_sizeof_sk_GrBackendRenderTarget = sizeof (sk_GrBackendRenderTarget);
+  int sk_sizeof_sk_GrDirectContext = sizeof (sk_GrDirectContext);
+  int sk_sizeof_sk_GrFlushInfo = sizeof (sk_GrFlushInfo);
+  int sk_sizeof_sk_GrRecordingContext = sizeof (sk_GrRecordingContext);
+  int sk_sizeof_sk_GrGLInterface = sizeof (sk_GrGLInterface);
+  int sk_sizeof_sk_GrContextOptions = sizeof (sk_GrContextOptions);
+  int sk_sizeof_sk_SkArc = sizeof (sk_SkArc);
+  int sk_sizeof_sk_SkBitmap = sizeof (sk_SkBitmap);
+  int sk_sizeof_sk_SkCanvas = sizeof (sk_SkCanvas);
+  int sk_sizeof_sk_SkColorInfo = sizeof (sk_SkColorInfo);
+  int sk_sizeof_sk_SkColorSpace = sizeof (sk_SkColorSpace);
+  int sk_sizeof_sk_SkData = sizeof (sk_SkData);
+  int sk_sizeof_sk_SkFont = sizeof (sk_SkFont);
+  int sk_sizeof_sk_SkFontArguments = sizeof (sk_SkFontArguments);
+  int sk_sizeof_sk_SkFontArgumentsVariationPosition
       = sizeof (sk_SkFontArgumentsVariationPosition);
-  int sk_sizeof_SkFontArgumentsPalette = sizeof (sk_SkFontArgumentsPalette);
-  int sk_sizeof_SkFontMetrics = sizeof (sk_SkFontMetrics);
-  int sk_sizeof_SkFontMgr = sizeof (sk_SkFontMgr);
-  int sk_sizeof_SkFontStyle = sizeof (sk_SkFontStyle);
-  int sk_sizeof_SkFontStyleSet = sizeof (sk_SkFontStyleSet);
-  int sk_sizeof_SkImage = sizeof (sk_SkImage);
-  int sk_sizeof_SkImageInfo = sizeof (sk_SkImageInfo);
-  int sk_sizeof_SkM44 = sizeof (sk_SkM44);
-  int sk_sizeof_SkMemoryStream = sizeof (sk_SkMemoryStream);
-  int sk_sizeof_SkIPoint = sizeof (sk_SkIPoint);
-  int sk_sizeof_SkIRect = sizeof (sk_SkIRect);
-  int sk_sizeof_SkISize = sizeof (sk_SkISize);
-  int sk_sizeof_SkMatrix = sizeof (sk_SkMatrix);
-  int sk_sizeof_SkOpBuilder = sizeof (sk_SkOpBuilder);
-  int sk_sizeof_SkPaint = sizeof (sk_SkPaint);
-  int sk_sizeof_SkPath = sizeof (sk_SkPath);
-  int sk_sizeof_SkPoint = sizeof (sk_SkPoint);
-  int sk_sizeof_SkPixmap = sizeof (sk_SkPixmap);
-  int sk_sizeof_SkRect = sizeof (sk_SkRect);
-  int sk_sizeof_SkRRect = sizeof (sk_SkRRect);
-  int sk_sizeof_SkRegion = sizeof (sk_SkRegion);
-  int sk_sizeof_SkRGBA4f = sizeof (sk_SkRGBA4f);
-  int sk_sizeof_SkSamplingOptions = sizeof (sk_SkSamplingOptions);
-  int sk_sizeof_SkSize = sizeof (sk_SkSize);
-  int sk_sizeof_SkStream = sizeof (sk_SkStream);
-  int sk_sizeof_SkString = sizeof (sk_SkString);
-  int sk_sizeof_SkSurface = sizeof (sk_SkSurface);
-  int sk_sizeof_SkSurfaceProps = sizeof (sk_SkSurfaceProps);
-  int sk_sizeof_SkSVGDOM = sizeof (sk_SkSVGDOM);
-  int sk_sizeof_SkSVGDOMBuilder = sizeof (sk_SkSVGDOMBuilder);
-  int sk_sizeof_SkSVGSVG = sizeof (sk_SkSVGSVG);
-  int sk_sizeof_SkSVGLengthContext = sizeof (sk_SkSVGLengthContext);
-  int sk_sizeof_SkTextBlob = sizeof (sk_SkTextBlob);
-  int sk_sizeof_SkTextBlobBuilder = sizeof (sk_SkTextBlobBuilder);
-  int sk_sizeof_SkTextBlobBuilderRunBuffer
+  int sk_sizeof_sk_SkFontArgumentsPalette = sizeof (sk_SkFontArgumentsPalette);
+  int sk_sizeof_sk_SkFontMetrics = sizeof (sk_SkFontMetrics);
+  int sk_sizeof_sk_SkFontMgr = sizeof (sk_SkFontMgr);
+  int sk_sizeof_sk_SkFontStyle = sizeof (sk_SkFontStyle);
+  int sk_sizeof_sk_SkFontStyleSet = sizeof (sk_SkFontStyleSet);
+  int sk_sizeof_sk_SkImage = sizeof (sk_SkImage);
+  int sk_sizeof_sk_SkImageInfo = sizeof (sk_SkImageInfo);
+  int sk_sizeof_sk_SkM44 = sizeof (sk_SkM44);
+  int sk_sizeof_sk_SkMemoryStream = sizeof (sk_SkMemoryStream);
+  int sk_sizeof_sk_SkIPoint = sizeof (sk_SkIPoint);
+  int sk_sizeof_sk_SkIRect = sizeof (sk_SkIRect);
+  int sk_sizeof_sk_SkISize = sizeof (sk_SkISize);
+  int sk_sizeof_sk_SkMatrix = sizeof (sk_SkMatrix);
+  int sk_sizeof_sk_SkOpBuilder = sizeof (sk_SkOpBuilder);
+  int sk_sizeof_sk_SkPaint = sizeof (sk_SkPaint);
+  int sk_sizeof_sk_SkPath = sizeof (sk_SkPath);
+  int sk_sizeof_sk_SkPoint = sizeof (sk_SkPoint);
+  int sk_sizeof_sk_SkPixmap = sizeof (sk_SkPixmap);
+  int sk_sizeof_sk_SkRect = sizeof (sk_SkRect);
+  int sk_sizeof_sk_SkRRect = sizeof (sk_SkRRect);
+  int sk_sizeof_sk_SkRegion = sizeof (sk_SkRegion);
+  int sk_sizeof_sk_SkRGBA4f = sizeof (sk_SkRGBA4f);
+  int sk_sizeof_sk_SkSamplingOptions = sizeof (sk_SkSamplingOptions);
+  int sk_sizeof_sk_SkSize = sizeof (sk_SkSize);
+  int sk_sizeof_sk_SkStream = sizeof (sk_SkStream);
+  int sk_sizeof_sk_SkString = sizeof (sk_SkString);
+  int sk_sizeof_sk_SkSurface = sizeof (sk_SkSurface);
+  int sk_sizeof_sk_SkSurfaceProps = sizeof (sk_SkSurfaceProps);
+  int sk_sizeof_sk_SkSVGDOM = sizeof (sk_SkSVGDOM);
+  int sk_sizeof_sk_SkSVGDOMBuilder = sizeof (sk_SkSVGDOMBuilder);
+  int sk_sizeof_sk_SkSVGSVG = sizeof (sk_SkSVGSVG);
+  int sk_sizeof_sk_SkSVGLengthContext = sizeof (sk_SkSVGLengthContext);
+  int sk_sizeof_sk_SkTextBlob = sizeof (sk_SkTextBlob);
+  int sk_sizeof_sk_SkTextBlobBuilder = sizeof (sk_SkTextBlobBuilder);
+  int sk_sizeof_sk_SkTextBlobBuilderRunBuffer
       = sizeof (sk_SkTextBlobBuilderRunBuffer);
-  int sk_sizeof_SkTypeface = sizeof (sk_SkTypeface);
+  int sk_sizeof_sk_SkTypeface = sizeof (sk_SkTypeface);
 
   sk_GrBackendRenderTarget *
   misk_new_GrBackendRenderTarget ()
