@@ -30,7 +30,7 @@ func assertSizesMatch(name string, cSize int, cppSize int) {
 	}
 }
 
-func init() {
+func assertAllStructsSizesMatch() {
 	assertSizesMatch("GrGLFramebufferInfo", C.sizeof_sk_GrGLFramebufferInfo, int(C.sk_sizeof_sk_GrGLFramebufferInfo))
 	assertSizesMatch("GrBackendRenderTarget", C.sizeof_sk_GrBackendRenderTarget, int(C.sk_sizeof_sk_GrBackendRenderTarget))
 	assertSizesMatch("GrDirectContext", C.sizeof_sk_GrDirectContext, int(C.sk_sizeof_sk_GrDirectContext))

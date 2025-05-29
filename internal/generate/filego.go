@@ -64,7 +64,7 @@ func (f fileGo) finish() {
 }
 
 func (f fileGo) generateStructSizeAssertions(g generator, records []record) {
-	f.writeln("func init() {")
+	f.writeln("func assertAllStructsSizesMatch() {")
 
 	for _, record := range records {
 		record.generateStructSizeAssertion(g)
