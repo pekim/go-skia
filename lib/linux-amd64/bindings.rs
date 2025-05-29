@@ -15836,32 +15836,32 @@ pub struct SkRecord {
 }
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
-pub struct SkRecorder {
+pub struct SkRecordCanvas {
     _unused: [u8; 0],
 }
 #[repr(C)]
 #[derive(Debug)]
 pub struct SkPictureRecorder {
-    pub fActivelyRecording: bool,
-    pub fCullRect: SkRect,
     pub fBBH: sk_sp<SkBBoxHierarchy>,
     pub fRecorder: u64,
     pub fRecord: sk_sp<SkRecord>,
+    pub fCullRect: SkRect,
+    pub fActivelyRecording: bool,
 }
 #[allow(clippy::unnecessary_operation, clippy::identity_op)]
 const _: () = {
     ["Size of SkPictureRecorder"][::core::mem::size_of::<SkPictureRecorder>() - 48usize];
     ["Alignment of SkPictureRecorder"][::core::mem::align_of::<SkPictureRecorder>() - 8usize];
-    ["Offset of field: SkPictureRecorder::fActivelyRecording"]
-        [::core::mem::offset_of!(SkPictureRecorder, fActivelyRecording) - 0usize];
-    ["Offset of field: SkPictureRecorder::fCullRect"]
-        [::core::mem::offset_of!(SkPictureRecorder, fCullRect) - 4usize];
     ["Offset of field: SkPictureRecorder::fBBH"]
-        [::core::mem::offset_of!(SkPictureRecorder, fBBH) - 24usize];
+        [::core::mem::offset_of!(SkPictureRecorder, fBBH) - 0usize];
     ["Offset of field: SkPictureRecorder::fRecorder"]
-        [::core::mem::offset_of!(SkPictureRecorder, fRecorder) - 32usize];
+        [::core::mem::offset_of!(SkPictureRecorder, fRecorder) - 8usize];
     ["Offset of field: SkPictureRecorder::fRecord"]
-        [::core::mem::offset_of!(SkPictureRecorder, fRecord) - 40usize];
+        [::core::mem::offset_of!(SkPictureRecorder, fRecord) - 16usize];
+    ["Offset of field: SkPictureRecorder::fCullRect"]
+        [::core::mem::offset_of!(SkPictureRecorder, fCullRect) - 24usize];
+    ["Offset of field: SkPictureRecorder::fActivelyRecording"]
+        [::core::mem::offset_of!(SkPictureRecorder, fActivelyRecording) - 40usize];
 };
 unsafe extern "C" {
     #[link_name = "\u{1}_ZN17SkPictureRecorder14beginRecordingERK6SkRect5sk_spI15SkBBoxHierarchyE"]
@@ -18088,7 +18088,7 @@ pub struct SkTextBlob_Iter {
 pub struct SkTextBlob_Iter_Run {
     pub fTypeface: *mut SkTypeface,
     pub fGlyphCount: ::core::ffi::c_int,
-    pub fGlyphIndices: *const u16,
+    pub fGlyphIndices: *const SkGlyphID,
 }
 #[allow(clippy::unnecessary_operation, clippy::identity_op)]
 const _: () = {
@@ -18106,7 +18106,7 @@ const _: () = {
 pub struct SkTextBlob_Iter_ExperimentalRun {
     pub font: SkFont,
     pub count: ::core::ffi::c_int,
-    pub glyphs: *const u16,
+    pub glyphs: *const SkGlyphID,
     pub positions: *const SkPoint,
 }
 #[allow(clippy::unnecessary_operation, clippy::identity_op)]
@@ -19015,6 +19015,7 @@ pub struct SkPDF_Metadata {
 pub enum SkPDF_Metadata_Outline {
     None = 0,
     StructureElementHeaders = 1,
+    StructureElements = 2,
 }
 #[repr(i32)]
 #[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
@@ -21888,6 +21889,12 @@ unsafe extern "C" {
 }
 unsafe extern "C" {
     pub fn C_SkColorSpace_unique(self_: *const SkColorSpace) -> bool;
+}
+unsafe extern "C" {
+    pub fn C_SkColorSpace_MakeICC(
+        buffer: *const ::core::ffi::c_void,
+        size: usize,
+    ) -> *mut SkColorSpace;
 }
 unsafe extern "C" {
     pub fn C_SkColorSpace_MakeSRGB() -> *mut SkColorSpace;
@@ -28706,7 +28713,7 @@ pub struct skia_textlayout_ParagraphImpl {
 #[repr(align(8))]
 #[derive(Debug, Copy, Clone)]
 pub struct skia_textlayout_ParagraphCache {
-    pub _bindgen_opaque_blob: [u64; 15usize],
+    pub _bindgen_opaque_blob: [u64; 16usize],
 }
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
@@ -28728,7 +28735,7 @@ const _: () = {
 #[allow(clippy::unnecessary_operation, clippy::identity_op)]
 const _: () = {
     ["Size of skia_textlayout_ParagraphCache"]
-        [::core::mem::size_of::<skia_textlayout_ParagraphCache>() - 120usize];
+        [::core::mem::size_of::<skia_textlayout_ParagraphCache>() - 128usize];
     ["Alignment of skia_textlayout_ParagraphCache"]
         [::core::mem::align_of::<skia_textlayout_ParagraphCache>() - 8usize];
 };
@@ -29336,7 +29343,7 @@ const _: () = {
 #[repr(align(8))]
 #[derive(Debug, Copy, Clone)]
 pub struct skia_textlayout_FontCollection {
-    pub _bindgen_opaque_blob: [u64; 26usize],
+    pub _bindgen_opaque_blob: [u64; 27usize],
 }
 #[repr(C)]
 pub struct skia_textlayout_FontCollection_FamilyKey {
@@ -29374,7 +29381,7 @@ const _: () = {
 #[allow(clippy::unnecessary_operation, clippy::identity_op)]
 const _: () = {
     ["Size of skia_textlayout_FontCollection"]
-        [::core::mem::size_of::<skia_textlayout_FontCollection>() - 208usize];
+        [::core::mem::size_of::<skia_textlayout_FontCollection>() - 216usize];
     ["Alignment of skia_textlayout_FontCollection"]
         [::core::mem::align_of::<skia_textlayout_FontCollection>() - 8usize];
 };
@@ -29796,7 +29803,7 @@ pub struct skia_textlayout_Paragraph_VisitorInfo {
     pub origin: SkPoint,
     pub advanceX: SkScalar,
     pub count: ::core::ffi::c_int,
-    pub glyphs: *const u16,
+    pub glyphs: *const SkGlyphID,
     pub positions: *const SkPoint,
     pub utf8Starts: *const u32,
     pub flags: ::core::ffi::c_uint,
@@ -29832,7 +29839,7 @@ pub struct skia_textlayout_Paragraph_ExtendedVisitorInfo {
     pub origin: SkPoint,
     pub advance: SkSize,
     pub count: ::core::ffi::c_int,
-    pub glyphs: *const u16,
+    pub glyphs: *const SkGlyphID,
     pub positions: *mut SkPoint,
     pub bounds: *const SkRect,
     pub utf8Starts: *const u32,
@@ -32280,6 +32287,10 @@ const _: () = {
         [::core::mem::offset_of!(SkSVGDOM, fContainerSize) - 64usize];
 };
 unsafe extern "C" {
+    #[link_name = "\u{1}_ZN8SkSVGDOM14MakeFromStreamER8SkStream"]
+    pub fn SkSVGDOM_MakeFromStream(str_: *mut SkStream) -> sk_sp<SkSVGDOM>;
+}
+unsafe extern "C" {
     #[link_name = "\u{1}_ZN8SkSVGDOM16setContainerSizeERK6SkSize"]
     pub fn SkSVGDOM_setContainerSize(this: *mut SkSVGDOM, arg1: *const SkSize);
 }
@@ -32308,6 +32319,10 @@ unsafe extern "C" {
     );
 }
 impl SkSVGDOM {
+    #[inline]
+    pub unsafe fn MakeFromStream(str_: *mut SkStream) -> sk_sp<SkSVGDOM> {
+        SkSVGDOM_MakeFromStream(str_)
+    }
     #[inline]
     pub unsafe fn setContainerSize(&mut self, arg1: *const SkSize) {
         SkSVGDOM_setContainerSize(self, arg1)
@@ -37728,9 +37743,9 @@ const _: () = {
 };
 #[allow(clippy::unnecessary_operation, clippy::identity_op)]
 const _: () = {
-    ["Size of template specialization: std_default_delete_open0_SkRecorder_close0"]
+    ["Size of template specialization: std_default_delete_open0_SkRecordCanvas_close0"]
         [::core::mem::size_of::<std_default_delete>() - 1usize];
-    ["Align of template specialization: std_default_delete_open0_SkRecorder_close0"]
+    ["Align of template specialization: std_default_delete_open0_SkRecordCanvas_close0"]
         [::core::mem::align_of::<std_default_delete>() - 1usize];
 };
 #[allow(clippy::unnecessary_operation, clippy::identity_op)]
@@ -39461,6 +39476,13 @@ const _: () = {
         [::core::mem::size_of::<sk_sp<SkShapers_Factory>>() - 8usize];
     ["Align of template specialization: sk_sp_open0_SkShapers_Factory_close0"]
         [::core::mem::align_of::<sk_sp<SkShapers_Factory>>() - 8usize];
+};
+#[allow(clippy::unnecessary_operation, clippy::identity_op)]
+const _: () = {
+    ["Size of template specialization: sk_sp_open0_SkSVGDOM_close0"]
+        [::core::mem::size_of::<sk_sp<SkSVGDOM>>() - 8usize];
+    ["Align of template specialization: sk_sp_open0_SkSVGDOM_close0"]
+        [::core::mem::align_of::<sk_sp<SkSVGDOM>>() - 8usize];
 };
 #[allow(clippy::unnecessary_operation, clippy::identity_op)]
 const _: () = {

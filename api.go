@@ -5410,7 +5410,7 @@ func (o Path) GetFillType() PathFillType {
 }
 
 /*
-Sets FillType, the rule used to fill [Path]. While there is no check        that ft is legal, values outside of FillType are not supported.
+Sets [PathFillType], the rule used to fill [Path]. While there is no        check that ft is legal, values outside of [PathFillType] are not supported.
 */
 func (o Path) SetFillType(ft PathFillType) {
 	c_obj := o.sk
@@ -5419,7 +5419,7 @@ func (o Path) SetFillType(ft PathFillType) {
 }
 
 /*
-Returns if FillType describes area outside [Path] geometry. The inverse fill area        extends indefinitely.
+Returns if [PathFillType] describes area outside [Path] geometry. The inverse fill area        extends indefinitely.
 
 # return
 
@@ -5432,7 +5432,7 @@ func (o Path) IsInverseFillType() bool {
 }
 
 /*
-Replaces FillType with its inverse. The inverse of FillType describes the area        unmodified by the original FillType.
+Replaces [PathFillType] with its inverse. The inverse of [PathFillType] describes the area        unmodified by the original [PathFillType].
 */
 func (o Path) ToggleInverseFillType() {
 	c_obj := o.sk

@@ -3,11 +3,11 @@
 set -eo pipefail
 
 # vars for rust-skia repo
-SKIA_TAG=m136-0.84.2
+SKIA_TAG=m138-0.86.0
 SKIA_DIR=_skia
 # vars for skia-binaries repo
-SKIA_BINARIES_HASH=8df1749a67a2800c2904
-SKIA_BINARIES_TAG=0.84.0
+SKIA_BINARIES_HASH=cab569e6478958ca0783
+SKIA_BINARIES_TAG=0.86.0
 
 function get_binaries() {
   GOOS=$1
@@ -66,9 +66,9 @@ mkdir -p header/src/base && cp -r _skia/src/base/SkTLazy.h _skia/src/base/SkMath
 mkdir -p header/src/core && cp -r _skia/src/core/SkTHash.h _skia/src/core/SkChecksum.h header/src/core
 
 # get pre-built binaries for multiple OSes and architectures
-get_binaries "darwin" "arm64" "aarch64-apple-darwin-gl-svg-textlayout"
-get_binaries "darwin" "amd64" "x86_64-apple-darwin-gl-svg-textlayout"
-get_binaries "linux" "amd64" "x86_64-unknown-linux-gnu-gl-svg-textlayout-x11"
+get_binaries "darwin" "arm64" "aarch64-apple-darwin-gl-pdf-svg-textlayout"
+get_binaries "darwin" "amd64" "x86_64-apple-darwin-gl-pdf-svg-textlayout"
+get_binaries "linux" "amd64" "x86_64-unknown-linux-gnu-gl-pdf-svg-textlayout-x11"
 
 # Generate & verify
 go run internal/generate/cmd/main.go

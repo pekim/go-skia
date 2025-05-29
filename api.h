@@ -34,7 +34,7 @@ extern "C"
 
   typedef struct
   {
-    uchar pad_0[120];
+    uchar pad_0[136];
     uchar fDeleteCallbackHelper[8];
     uchar fDirectContextID[4];
     uchar pad_2[4];
@@ -74,6 +74,8 @@ extern "C"
     uchar fArenas[24];
     uchar fDrawingManager[8];
     uchar fProxyProvider[8];
+    uchar fCPUContext[8];
+    uchar fRecorder[8];
   } sk_GrRecordingContext;
 
   typedef struct
