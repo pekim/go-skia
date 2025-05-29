@@ -123,12 +123,17 @@ func (api api) generate(g generator) {
 	fmt.Print("generate")
 	start := time.Now()
 
+	g.goFile.generateStructSizeAssertions(g, api.Records)
+
 	for _, record := range api.Records {
 		record.generateCStruct(g)
+		record.generateCPPStructSize(g)
 		for _, record := range record.Records {
 			record.generateCStruct(g)
+			record.generateCPPStructSize(g)
 		}
 	}
+	g.cppFile.writeln()
 
 	for _, record := range api.Records {
 		record.generate(g)

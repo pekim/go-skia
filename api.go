@@ -16,9 +16,74 @@ package skia
 import "C"
 
 import (
+	"fmt"
 	"sync"
 	"unsafe"
 )
+
+func assertSizesMatch(name string, cSize int, cppSize int) {
+	if cSize != cppSize {
+		panic(fmt.Sprintf("struct size differs : sk_%s %d != %s %d",
+			name, cSize,
+			name, cppSize,
+		))
+	}
+}
+
+func init() {
+	assertSizesMatch("GrGLFramebufferInfo", C.sizeof_sk_GrGLFramebufferInfo, int(C.sk_sizeof_GrGLFramebufferInfo))
+	assertSizesMatch("GrBackendRenderTarget", C.sizeof_sk_GrBackendRenderTarget, int(C.sk_sizeof_GrBackendRenderTarget))
+	assertSizesMatch("GrDirectContext", C.sizeof_sk_GrDirectContext, int(C.sk_sizeof_GrDirectContext))
+	assertSizesMatch("GrFlushInfo", C.sizeof_sk_GrFlushInfo, int(C.sk_sizeof_GrFlushInfo))
+	assertSizesMatch("GrRecordingContext", C.sizeof_sk_GrRecordingContext, int(C.sk_sizeof_GrRecordingContext))
+	assertSizesMatch("GrGLInterface", C.sizeof_sk_GrGLInterface, int(C.sk_sizeof_GrGLInterface))
+	assertSizesMatch("GrContextOptions", C.sizeof_sk_GrContextOptions, int(C.sk_sizeof_GrContextOptions))
+	assertSizesMatch("Arc", C.sizeof_sk_SkArc, int(C.sk_sizeof_SkArc))
+	assertSizesMatch("Bitmap", C.sizeof_sk_SkBitmap, int(C.sk_sizeof_SkBitmap))
+	assertSizesMatch("Canvas", C.sizeof_sk_SkCanvas, int(C.sk_sizeof_SkCanvas))
+	assertSizesMatch("ColorInfo", C.sizeof_sk_SkColorInfo, int(C.sk_sizeof_SkColorInfo))
+	assertSizesMatch("ColorSpace", C.sizeof_sk_SkColorSpace, int(C.sk_sizeof_SkColorSpace))
+	assertSizesMatch("Data", C.sizeof_sk_SkData, int(C.sk_sizeof_SkData))
+	assertSizesMatch("Font", C.sizeof_sk_SkFont, int(C.sk_sizeof_SkFont))
+	assertSizesMatch("FontArguments", C.sizeof_sk_SkFontArguments, int(C.sk_sizeof_SkFontArguments))
+	assertSizesMatch("FontArgumentsVariationPosition", C.sizeof_sk_SkFontArgumentsVariationPosition, int(C.sk_sizeof_SkFontArgumentsVariationPosition))
+	assertSizesMatch("FontArgumentsPalette", C.sizeof_sk_SkFontArgumentsPalette, int(C.sk_sizeof_SkFontArgumentsPalette))
+	assertSizesMatch("FontMetrics", C.sizeof_sk_SkFontMetrics, int(C.sk_sizeof_SkFontMetrics))
+	assertSizesMatch("FontMgr", C.sizeof_sk_SkFontMgr, int(C.sk_sizeof_SkFontMgr))
+	assertSizesMatch("FontStyle", C.sizeof_sk_SkFontStyle, int(C.sk_sizeof_SkFontStyle))
+	assertSizesMatch("FontStyleSet", C.sizeof_sk_SkFontStyleSet, int(C.sk_sizeof_SkFontStyleSet))
+	assertSizesMatch("Image", C.sizeof_sk_SkImage, int(C.sk_sizeof_SkImage))
+	assertSizesMatch("ImageInfo", C.sizeof_sk_SkImageInfo, int(C.sk_sizeof_SkImageInfo))
+	assertSizesMatch("M44", C.sizeof_sk_SkM44, int(C.sk_sizeof_SkM44))
+	assertSizesMatch("MemoryStream", C.sizeof_sk_SkMemoryStream, int(C.sk_sizeof_SkMemoryStream))
+	assertSizesMatch("IPoint", C.sizeof_sk_SkIPoint, int(C.sk_sizeof_SkIPoint))
+	assertSizesMatch("IRect", C.sizeof_sk_SkIRect, int(C.sk_sizeof_SkIRect))
+	assertSizesMatch("ISize", C.sizeof_sk_SkISize, int(C.sk_sizeof_SkISize))
+	assertSizesMatch("Matrix", C.sizeof_sk_SkMatrix, int(C.sk_sizeof_SkMatrix))
+	assertSizesMatch("OpBuilder", C.sizeof_sk_SkOpBuilder, int(C.sk_sizeof_SkOpBuilder))
+	assertSizesMatch("Paint", C.sizeof_sk_SkPaint, int(C.sk_sizeof_SkPaint))
+	assertSizesMatch("Path", C.sizeof_sk_SkPath, int(C.sk_sizeof_SkPath))
+	assertSizesMatch("Point", C.sizeof_sk_SkPoint, int(C.sk_sizeof_SkPoint))
+	assertSizesMatch("Pixmap", C.sizeof_sk_SkPixmap, int(C.sk_sizeof_SkPixmap))
+	assertSizesMatch("Rect", C.sizeof_sk_SkRect, int(C.sk_sizeof_SkRect))
+	assertSizesMatch("RRect", C.sizeof_sk_SkRRect, int(C.sk_sizeof_SkRRect))
+	assertSizesMatch("Region", C.sizeof_sk_SkRegion, int(C.sk_sizeof_SkRegion))
+	assertSizesMatch("RGBA4f", C.sizeof_sk_SkRGBA4f, int(C.sk_sizeof_SkRGBA4f))
+	assertSizesMatch("SamplingOptions", C.sizeof_sk_SkSamplingOptions, int(C.sk_sizeof_SkSamplingOptions))
+	assertSizesMatch("Size", C.sizeof_sk_SkSize, int(C.sk_sizeof_SkSize))
+	assertSizesMatch("Stream", C.sizeof_sk_SkStream, int(C.sk_sizeof_SkStream))
+	assertSizesMatch("String", C.sizeof_sk_SkString, int(C.sk_sizeof_SkString))
+	assertSizesMatch("Surface", C.sizeof_sk_SkSurface, int(C.sk_sizeof_SkSurface))
+	assertSizesMatch("SurfaceProps", C.sizeof_sk_SkSurfaceProps, int(C.sk_sizeof_SkSurfaceProps))
+	assertSizesMatch("SVGDOM", C.sizeof_sk_SkSVGDOM, int(C.sk_sizeof_SkSVGDOM))
+	assertSizesMatch("SVGDOMBuilder", C.sizeof_sk_SkSVGDOMBuilder, int(C.sk_sizeof_SkSVGDOMBuilder))
+	assertSizesMatch("SVGSVG", C.sizeof_sk_SkSVGSVG, int(C.sk_sizeof_SkSVGSVG))
+	assertSizesMatch("SVGLengthContext", C.sizeof_sk_SkSVGLengthContext, int(C.sk_sizeof_SkSVGLengthContext))
+	assertSizesMatch("TextBlob", C.sizeof_sk_SkTextBlob, int(C.sk_sizeof_SkTextBlob))
+	assertSizesMatch("TextBlobBuilder", C.sizeof_sk_SkTextBlobBuilder, int(C.sk_sizeof_SkTextBlobBuilder))
+	assertSizesMatch("TextBlobBuilderRunBuffer", C.sizeof_sk_SkTextBlobBuilderRunBuffer, int(C.sk_sizeof_SkTextBlobBuilderRunBuffer))
+	assertSizesMatch("Typeface", C.sizeof_sk_SkTypeface, int(C.sk_sizeof_SkTypeface))
+}
 
 type GrGLFramebufferInfo C.sk_GrGLFramebufferInfo
 

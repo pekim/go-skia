@@ -27,9 +27,20 @@ func newFileGo() *fileGo {
 	import "C"
 
 	import (
+		"fmt"
 	  "sync"
 		"unsafe"
 	)
+
+  func assertSizesMatch(name string, cSize int, cppSize int) {
+    if cSize != cppSize {
+      panic(fmt.Sprintf("struct size differs : sk_%%s %%d != %%s %%d",
+        name, cSize,
+        name, cppSize,
+    ))
+    }
+  }
+
 	`)
 
 	return f
@@ -50,4 +61,17 @@ func (f fileGo) finish() {
 	`)
 
 	f.close()
+}
+
+func (f fileGo) generateStructSizeAssertions(g generator, records []record) {
+	f.writeln("func init() {")
+
+	for _, record := range records {
+		record.generateStructSizeAssertion(g)
+		for _, record := range record.Records {
+			record.generateStructSizeAssertion(g)
+		}
+	}
+
+	f.writeln("}")
 }

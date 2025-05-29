@@ -31,6 +31,7 @@ type record struct {
 	isClass           bool // false for struct, true for class
 	goName            string
 	cStructName       string
+	qualifiedName     string
 	derivedFromRefCnt bool
 	doc               string
 	parent            *record
@@ -42,6 +43,10 @@ func (r *record) enrich1(cursor clang.Cursor, parent *record) {
 	parentCppName := ""
 	if parent != nil {
 		parentCppName = parent.CppName
+	}
+	r.qualifiedName = r.CppName
+	if parent != nil {
+		r.qualifiedName = parent.CppName + r.CppName
 	}
 	r.cursor = cursor
 	r.goName = stripSkPrefix(parentCppName) + stripSkPrefix(r.CppName)
@@ -355,11 +360,12 @@ func (r record) generateHeaderFile(g generator) {
 }
 
 func (r record) generateCppFile(g generator) {
+	f := g.cppFile
+
 	if !r.derivedFromRefCnt {
 		return
 	}
 
-	f := g.cppFile
 	f.writelnf("void misk_unref_%s(%s *c_obj) {", r.CppName, r.cStructName)
 	f.writelnf("reinterpret_cast<%s *> (c_obj)->unref();", r.CppName)
 	f.writeln("}")
@@ -397,5 +403,15 @@ func (r record) generateCStruct(g generator) {
 	}
 
 	f.writelnf("} %s;", r.cStructName)
+	f.writelnf("extern int sk_sizeof_%s;", r.qualifiedName)
 	f.writeln()
+}
+
+func (r record) generateCPPStructSize(g generator) {
+	g.cppFile.writelnf("int sk_sizeof_%s = sizeof(sk_%s);", r.qualifiedName, r.qualifiedName)
+}
+
+func (r record) generateStructSizeAssertion(g generator) {
+	g.goFile.writelnf(`assertSizesMatch("%s", C.sizeof_sk_%s, int(C.sk_sizeof_%s))`,
+		r.goName, r.qualifiedName, r.qualifiedName)
 }
