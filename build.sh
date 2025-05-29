@@ -61,14 +61,18 @@ popd > /dev/null
 
 # copy headers
 rm -fr header
-mkdir header && cp -r _skia/include _skia/modules header
-mkdir -p header/src/base && cp -r _skia/src/base/SkTLazy.h _skia/src/base/SkMathPriv.h header/src/base
-mkdir -p header/src/core && cp -r _skia/src/core/SkTHash.h _skia/src/core/SkChecksum.h header/src/core
+mkdir header
+cp -r _skia/include _skia/modules _skia/src header
+find header/ -type f | \
+  grep -v ".*\.h$" | \
+  grep -v LICENSE | \
+  xargs rm # remove all files except header files and licences
 
 # get pre-built binaries for multiple OSes and architectures
 get_binaries "darwin" "arm64" "aarch64-apple-darwin-gl-pdf-svg-textlayout"
 get_binaries "darwin" "amd64" "x86_64-apple-darwin-gl-pdf-svg-textlayout"
 get_binaries "linux" "amd64" "x86_64-unknown-linux-gnu-gl-pdf-svg-textlayout-x11"
+find lib -name "bindings.rs" | xargs rm -f
 
 # Generate & verify
 go run internal/generate/cmd/main.go
