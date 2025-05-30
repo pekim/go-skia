@@ -60,10 +60,10 @@ fi
 popd > /dev/null
 
 # copy headers
-rm -fr header
-mkdir header
-cp -r _skia/include _skia/modules _skia/src header
-find header/ -type f | \
+rm -fr skia
+mkdir skia
+cp -r _skia/include _skia/modules _skia/src skia
+find skia/ -type f | \
   grep -v ".*\.h$" | \
   grep -v LICENSE | \
   xargs rm # remove all files except header files and licences

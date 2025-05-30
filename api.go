@@ -2,7 +2,7 @@
 
 package skia
 
-// #cgo CXXFLAGS: -I ${SRCDIR}/header
+// #cgo CXXFLAGS: -I ${SRCDIR}/skia
 // #cgo LDFLAGS: -l skia
 // #cgo LDFLAGS: -l skshaper
 // #cgo LDFLAGS: -l svg
