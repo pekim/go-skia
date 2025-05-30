@@ -55,7 +55,7 @@ func (r *record) enrich1(cursor clang.Cursor, parent *record) {
 	var ctorsEnriched int
 	dtorCreated := false
 	dtorNotPublic := false
-	r.cursor.Visit(func(cursor, parent clang.Cursor) (status clang.ChildVisitResult) {
+	r.cursor.Visit(func(cursor, _parent clang.Cursor) (status clang.ChildVisitResult) {
 		switch cursor.Kind() {
 		case clang.Cursor_Constructor:
 			if cursor.AccessSpecifier() == clang.AccessSpecifier_Public {

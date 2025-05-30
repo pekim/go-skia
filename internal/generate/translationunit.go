@@ -54,7 +54,7 @@ func newTranslationUnit(headerFile string) translationUnit {
 }
 
 func (tu translationUnit) enrichApi(api *api) {
-	tu.TranslationUnitCursor().Visit(func(cursor, parent clang.Cursor) (status clang.ChildVisitResult) {
+	tu.TranslationUnitCursor().Visit(func(cursor, _parent clang.Cursor) (status clang.ChildVisitResult) {
 		file, _, _, _ := cursor.Location().FileLocation()
 		if file.Name() != tu.headerFile {
 			// Skip declarations from other files.
@@ -64,7 +64,7 @@ func (tu translationUnit) enrichApi(api *api) {
 		switch cursor.Kind() {
 		case clang.Cursor_Namespace:
 			namespace := cursor.Spelling()
-			cursor.Visit(func(cursor, parent clang.Cursor) (status clang.ChildVisitResult) {
+			cursor.Visit(func(cursor, _parent clang.Cursor) (status clang.ChildVisitResult) {
 				qualifiedName := fmt.Sprintf("%s::%s", namespace, cursor.Spelling())
 
 				switch cursor.Kind() {

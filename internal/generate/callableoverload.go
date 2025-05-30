@@ -25,7 +25,7 @@ type callableOverload struct {
 }
 
 func (o *callableOverload) enrich1(callable *callable, record *record, cursor clang.Cursor) {
-	cursor.Visit(func(cursor, parent clang.Cursor) (status clang.ChildVisitResult) {
+	cursor.Visit(func(cursor, _parent clang.Cursor) (status clang.ChildVisitResult) {
 		if cursor.Kind() == clang.Cursor_TemplateRef {
 			o.templateRef = cursor.Spelling()
 		}

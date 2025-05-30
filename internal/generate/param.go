@@ -37,7 +37,7 @@ func newParam(paramIndex int, cursor clang.Cursor, valueNil bool, out bool) para
 		Out:       out,
 	}
 
-	cursor.Visit(func(cursor, parent clang.Cursor) (status clang.ChildVisitResult) {
+	cursor.Visit(func(cursor, _parent clang.Cursor) (status clang.ChildVisitResult) {
 		if cursor.Kind() == clang.Cursor_TemplateRef {
 			p.templateRef = cursor.Spelling()
 		}

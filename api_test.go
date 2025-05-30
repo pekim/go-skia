@@ -83,6 +83,6 @@ func TestOutParams(t *testing.T) {
 	assert.NotZero(t, bounds.Height())
 }
 
-func TestAllStructsSizesMatch(t *testing.T) {
+func TestAllStructsSizesMatch(_ *testing.T) {
 	assertAllStructsSizesMatch()
 }

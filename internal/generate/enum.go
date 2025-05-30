@@ -38,7 +38,7 @@ func (e *enum) enrich1(record *record, cursor clang.Cursor) {
 	e.record = record
 	e.doc = docComment(cursor.ParsedComment())
 
-	cursor.Visit(func(cursor, parent clang.Cursor) (status clang.ChildVisitResult) {
+	cursor.Visit(func(cursor, _parent clang.Cursor) (status clang.ChildVisitResult) {
 		switch cursor.Kind() {
 		case clang.Cursor_EnumConstantDecl:
 			name := cursor.Spelling()

@@ -47,7 +47,7 @@ func main() {
 	}
 	glfw.SwapInterval(0)
 
-	window.SetKeyCallback(func(w *glfw.Window, key glfw.Key, scancode int, action glfw.Action, mods glfw.ModifierKey) {
+	window.SetKeyCallback(func(_ *glfw.Window, key glfw.Key, _scancode int, action glfw.Action, mods glfw.ModifierKey) {
 		if action == glfw.Press && mods == glfw.ModControl && key == glfw.KeyQ {
 			window.SetShouldClose(true)
 		}
