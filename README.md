@@ -30,11 +30,11 @@ The build script does the following
 - [`rust-skia`](https://github.com/rust-skia/skia) repo
   - clone repo (if not present) to `_skia` dir
   - check out desired tag (if not currently checked out)
-  - copy required headers to `header` dir
+  - copy required header files to `skia` dir
 - [`skia-binaries`](https://github.com/rust-skia/skia-binaries) repo
   - if desired release not present in `lib` dir
-    - download release
-    - extract in to `lib` dir
+    - download releases for platforms
+    - extract the platform releases in to `lib` dir
 - generate Go bindings
 - run tests to verify that the generated bindings result in a package that builds
 
