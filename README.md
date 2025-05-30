@@ -1,4 +1,4 @@
-# github.com/pekim/go-skia
+# go-skia
 
 [![PkgGoDev](https://pkg.go.dev/badge/github.com/pekim/go-skia)](https://pkg.go.dev/github.com/pekim/go-skia)
 
@@ -6,6 +6,15 @@
 for some of [skia](https://skia.org/)'s C++ api.
 
 To add it to a Go module, `go get github.com/pekim/go-skia`.
+
+## License
+
+go-skia is licensed under the terms of the MIT license.
+
+## platforms
+
+go-skia has been developed on linux amd64.
+Libraries for darwin amd64 and arm64 are included and it may work on macOS, but it's untested.
 
 ## development
 
