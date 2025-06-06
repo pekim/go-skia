@@ -571,23 +571,18 @@ extern "C"
   extern int sk_sizeof_sk_SkTypeface;
 
   sk_GrBackendRenderTarget *misk_new_GrBackendRenderTarget ();
-  sk_GrBackendRenderTarget *
-  misk_new_GrBackendRenderTargetCopy (sk_GrBackendRenderTarget *c_that);
+  sk_GrBackendRenderTarget *misk_new_GrBackendRenderTargetCopy (sk_GrBackendRenderTarget *c_that);
   void misk_delete_GrBackendRenderTarget (sk_GrBackendRenderTarget *obj);
-  sk_SkISize
-  misk_GrBackendRenderTarget_dimensions (sk_GrBackendRenderTarget *c_obj);
+  sk_SkISize misk_GrBackendRenderTarget_dimensions (sk_GrBackendRenderTarget *c_obj);
   int misk_GrBackendRenderTarget_width (sk_GrBackendRenderTarget *c_obj);
   int misk_GrBackendRenderTarget_height (sk_GrBackendRenderTarget *c_obj);
   int misk_GrBackendRenderTarget_sampleCnt (sk_GrBackendRenderTarget *c_obj);
   int misk_GrBackendRenderTarget_stencilBits (sk_GrBackendRenderTarget *c_obj);
-  bool misk_GrBackendRenderTarget_isFramebufferOnly (
-      sk_GrBackendRenderTarget *c_obj);
+  bool misk_GrBackendRenderTarget_isFramebufferOnly (sk_GrBackendRenderTarget *c_obj);
 
   void misk_delete_GrDirectContext (sk_GrDirectContext *obj);
-  void misk_GrDirectContext_flushAndSubmit (sk_GrDirectContext *c_obj,
-                                            bool c_sync);
-  bool misk_GrDirectContext_flush (sk_GrDirectContext *c_obj,
-                                   sk_GrFlushInfo *c_info);
+  void misk_GrDirectContext_flushAndSubmit (sk_GrDirectContext *c_obj, bool c_sync);
+  bool misk_GrDirectContext_flush (sk_GrDirectContext *c_obj, sk_GrFlushInfo *c_info);
   bool misk_GrDirectContext_submit (sk_GrDirectContext *c_obj, bool c_sync);
 
   void misk_delete_GrRecordingContext (sk_GrRecordingContext *obj);
@@ -616,151 +611,102 @@ extern "C"
   sk_SkISize misk_Bitmap_dimensions (sk_SkBitmap *c_obj);
 
   sk_SkCanvas *misk_new_Canvas ();
-  sk_SkCanvas *misk_new_CanvasWithDimensions (int c_width, int c_height,
-                                              sk_SkSurfaceProps *c_props);
+  sk_SkCanvas *misk_new_CanvasWithDimensions (int c_width, int c_height, sk_SkSurfaceProps *c_props);
   sk_SkCanvas *misk_new_CanvasFromBitmap (sk_SkBitmap *c_bitmap);
-  sk_SkCanvas *
-  misk_new_CanvasFromBitmapSurfaceProps (sk_SkBitmap *c_bitmap,
-                                         sk_SkSurfaceProps *c_props);
+  sk_SkCanvas *misk_new_CanvasFromBitmapSurfaceProps (sk_SkBitmap *c_bitmap, sk_SkSurfaceProps *c_props);
   void misk_delete_SkCanvas (sk_SkCanvas *obj);
   bool misk_Canvas_getProps (sk_SkCanvas *c_obj, sk_SkSurfaceProps *c_props);
   sk_SkSurfaceProps misk_Canvas_getBaseProps (sk_SkCanvas *c_obj);
   sk_SkSurfaceProps misk_Canvas_getTopProps (sk_SkCanvas *c_obj);
   sk_SkISize misk_Canvas_getBaseLayerSize (sk_SkCanvas *c_obj);
-  sk_SkSurface *misk_Canvas_makeSurface (sk_SkCanvas *c_obj,
-                                         sk_SkImageInfo *c_info,
+  sk_SkSurface *misk_Canvas_makeSurface (sk_SkCanvas *c_obj, sk_SkImageInfo *c_info,
                                          sk_SkSurfaceProps *c_props);
   sk_SkSurface *misk_Canvas_getSurface (sk_SkCanvas *c_obj);
   sk_GrRecordingContext *misk_Canvas_recordingContext (sk_SkCanvas *c_obj);
   bool misk_Canvas_peekPixels (sk_SkCanvas *c_obj, sk_SkPixmap *c_pixmap);
-  bool misk_Canvas_readPixelsImageInfo (sk_SkCanvas *c_obj,
-                                        sk_SkImageInfo *c_dstInfo,
-                                        void *c_dstPixels, ulong c_dstRowBytes,
-                                        int c_srcX, int c_srcY);
-  bool misk_Canvas_readPixelsPixmap (sk_SkCanvas *c_obj, sk_SkPixmap *c_pixmap,
-                                     int c_srcX, int c_srcY);
-  bool misk_Canvas_readPixelsBitmap (sk_SkCanvas *c_obj, sk_SkBitmap *c_bitmap,
-                                     int c_srcX, int c_srcY);
-  bool misk_Canvas_writePixelsImageInfo (sk_SkCanvas *c_obj,
-                                         sk_SkImageInfo *c_info,
-                                         void *c_pixels, ulong c_rowBytes,
-                                         int c_x, int c_y);
-  bool misk_Canvas_writePixelsBitmap (sk_SkCanvas *c_obj,
-                                      sk_SkBitmap *c_bitmap, int c_x, int c_y);
+  bool misk_Canvas_readPixelsImageInfo (sk_SkCanvas *c_obj, sk_SkImageInfo *c_dstInfo, void *c_dstPixels,
+                                        ulong c_dstRowBytes, int c_srcX, int c_srcY);
+  bool misk_Canvas_readPixelsPixmap (sk_SkCanvas *c_obj, sk_SkPixmap *c_pixmap, int c_srcX, int c_srcY);
+  bool misk_Canvas_readPixelsBitmap (sk_SkCanvas *c_obj, sk_SkBitmap *c_bitmap, int c_srcX, int c_srcY);
+  bool misk_Canvas_writePixelsImageInfo (sk_SkCanvas *c_obj, sk_SkImageInfo *c_info, void *c_pixels,
+                                         ulong c_rowBytes, int c_x, int c_y);
+  bool misk_Canvas_writePixelsBitmap (sk_SkCanvas *c_obj, sk_SkBitmap *c_bitmap, int c_x, int c_y);
   int misk_Canvas_save (sk_SkCanvas *c_obj);
-  int misk_Canvas_saveLayer (sk_SkCanvas *c_obj, sk_SkRect c_bounds,
-                             sk_SkPaint *c_paint);
-  int misk_Canvas_saveLayerAlpha (sk_SkCanvas *c_obj, sk_SkRect c_bounds,
-                                  uint c_alpha);
+  int misk_Canvas_saveLayer (sk_SkCanvas *c_obj, sk_SkRect c_bounds, sk_SkPaint *c_paint);
+  int misk_Canvas_saveLayerAlpha (sk_SkCanvas *c_obj, sk_SkRect c_bounds, uint c_alpha);
   void misk_Canvas_restore (sk_SkCanvas *c_obj);
   int misk_Canvas_getSaveCount (sk_SkCanvas *c_obj);
   void misk_Canvas_restoreToCount (sk_SkCanvas *c_obj, int c_saveCount);
   void misk_Canvas_translate (sk_SkCanvas *c_obj, float c_dx, float c_dy);
   void misk_Canvas_scale (sk_SkCanvas *c_obj, float c_sx, float c_sy);
   void misk_Canvas_rotate (sk_SkCanvas *c_obj, float c_degrees);
-  void misk_Canvas_rotateAboutPoint (sk_SkCanvas *c_obj, float c_degrees,
-                                     float c_px, float c_py);
+  void misk_Canvas_rotateAboutPoint (sk_SkCanvas *c_obj, float c_degrees, float c_px, float c_py);
   void misk_Canvas_skew (sk_SkCanvas *c_obj, float c_sx, float c_sy);
   void misk_Canvas_concatMatrix (sk_SkCanvas *c_obj, sk_SkMatrix *c_matrix);
   void misk_Canvas_concatM44 (sk_SkCanvas *c_obj, sk_SkM44 *c_p0);
   void misk_Canvas_setMatrixM44 (sk_SkCanvas *c_obj, sk_SkM44 *c_matrix);
   void misk_Canvas_setMatrix (sk_SkCanvas *c_obj, sk_SkMatrix *c_matrix);
   void misk_Canvas_resetMatrix (sk_SkCanvas *c_obj);
-  void misk_Canvas_clipRect (sk_SkCanvas *c_obj, sk_SkRect c_rect, int c_op,
-                             bool c_doAntiAlias);
-  void misk_Canvas_clipRRect (sk_SkCanvas *c_obj, sk_SkRRect c_rrect, int c_op,
-                              bool c_doAntiAlias);
-  void misk_Canvas_clipPath (sk_SkCanvas *c_obj, sk_SkPath *c_path, int c_op,
-                             bool c_doAntiAlias);
-  void misk_Canvas_clipRegion (sk_SkCanvas *c_obj, sk_SkRegion *c_deviceRgn,
-                               int c_op);
+  void misk_Canvas_clipRect (sk_SkCanvas *c_obj, sk_SkRect c_rect, int c_op, bool c_doAntiAlias);
+  void misk_Canvas_clipRRect (sk_SkCanvas *c_obj, sk_SkRRect c_rrect, int c_op, bool c_doAntiAlias);
+  void misk_Canvas_clipPath (sk_SkCanvas *c_obj, sk_SkPath *c_path, int c_op, bool c_doAntiAlias);
+  void misk_Canvas_clipRegion (sk_SkCanvas *c_obj, sk_SkRegion *c_deviceRgn, int c_op);
   bool misk_Canvas_quickRejectRect (sk_SkCanvas *c_obj, sk_SkRect c_rect);
   bool misk_Canvas_quickRejectPath (sk_SkCanvas *c_obj, sk_SkPath *c_path);
   sk_SkRect misk_Canvas_getLocalClipBoundsRect (sk_SkCanvas *c_obj);
-  bool misk_Canvas_getLocalClipBoundsPath (sk_SkCanvas *c_obj,
-                                           sk_SkRect *c_bounds);
+  bool misk_Canvas_getLocalClipBoundsPath (sk_SkCanvas *c_obj, sk_SkRect *c_bounds);
   sk_SkIRect misk_Canvas_getDeviceClipBounds (sk_SkCanvas *c_obj);
-  bool misk_Canvas_getDeviceClipBoundsRect (sk_SkCanvas *c_obj,
-                                            sk_SkIRect *c_bounds);
+  bool misk_Canvas_getDeviceClipBoundsRect (sk_SkCanvas *c_obj, sk_SkIRect *c_bounds);
   void misk_Canvas_drawColor (sk_SkCanvas *c_obj, uint c_color, int c_mode);
-  void misk_Canvas_drawColor4f (sk_SkCanvas *c_obj, sk_SkRGBA4f c_color,
-                                int c_mode);
+  void misk_Canvas_drawColor4f (sk_SkCanvas *c_obj, sk_SkRGBA4f c_color, int c_mode);
   void misk_Canvas_clear (sk_SkCanvas *c_obj, uint c_color);
   void misk_Canvas_clear4f (sk_SkCanvas *c_obj, sk_SkRGBA4f c_color);
   void misk_Canvas_discard (sk_SkCanvas *c_obj);
   void misk_Canvas_drawPaint (sk_SkCanvas *c_obj, sk_SkPaint *c_paint);
-  void misk_Canvas_drawPointScalars (sk_SkCanvas *c_obj, float c_x, float c_y,
-                                     sk_SkPaint *c_paint);
-  void misk_Canvas_drawPoint (sk_SkCanvas *c_obj, sk_SkPoint c_p,
-                              sk_SkPaint *c_paint);
-  void misk_Canvas_drawLineScalars (sk_SkCanvas *c_obj, float c_x0, float c_y0,
-                                    float c_x1, float c_y1,
+  void misk_Canvas_drawPointScalars (sk_SkCanvas *c_obj, float c_x, float c_y, sk_SkPaint *c_paint);
+  void misk_Canvas_drawPoint (sk_SkCanvas *c_obj, sk_SkPoint c_p, sk_SkPaint *c_paint);
+  void misk_Canvas_drawLineScalars (sk_SkCanvas *c_obj, float c_x0, float c_y0, float c_x1, float c_y1,
                                     sk_SkPaint *c_paint);
-  void misk_Canvas_drawLinePoints (sk_SkCanvas *c_obj, sk_SkPoint c_p0,
-                                   sk_SkPoint c_p1, sk_SkPaint *c_paint);
-  void misk_Canvas_drawRect (sk_SkCanvas *c_obj, sk_SkRect c_rect,
-                             sk_SkPaint *c_paint);
-  void misk_Canvas_drawIRect (sk_SkCanvas *c_obj, sk_SkIRect c_rect,
-                              sk_SkPaint *c_paint);
-  void misk_Canvas_drawRegion (sk_SkCanvas *c_obj, sk_SkRegion *c_region,
+  void misk_Canvas_drawLinePoints (sk_SkCanvas *c_obj, sk_SkPoint c_p0, sk_SkPoint c_p1, sk_SkPaint *c_paint);
+  void misk_Canvas_drawRect (sk_SkCanvas *c_obj, sk_SkRect c_rect, sk_SkPaint *c_paint);
+  void misk_Canvas_drawIRect (sk_SkCanvas *c_obj, sk_SkIRect c_rect, sk_SkPaint *c_paint);
+  void misk_Canvas_drawRegion (sk_SkCanvas *c_obj, sk_SkRegion *c_region, sk_SkPaint *c_paint);
+  void misk_Canvas_drawOval (sk_SkCanvas *c_obj, sk_SkRect c_oval, sk_SkPaint *c_paint);
+  void misk_Canvas_drawRRect (sk_SkCanvas *c_obj, sk_SkRRect c_rrect, sk_SkPaint *c_paint);
+  void misk_Canvas_drawDRRect (sk_SkCanvas *c_obj, sk_SkRRect c_outer, sk_SkRRect c_inner,
                                sk_SkPaint *c_paint);
-  void misk_Canvas_drawOval (sk_SkCanvas *c_obj, sk_SkRect c_oval,
-                             sk_SkPaint *c_paint);
-  void misk_Canvas_drawRRect (sk_SkCanvas *c_obj, sk_SkRRect c_rrect,
-                              sk_SkPaint *c_paint);
-  void misk_Canvas_drawDRRect (sk_SkCanvas *c_obj, sk_SkRRect c_outer,
-                               sk_SkRRect c_inner, sk_SkPaint *c_paint);
-  void misk_Canvas_drawCircleScalars (sk_SkCanvas *c_obj, float c_cx,
-                                      float c_cy, float c_radius,
+  void misk_Canvas_drawCircleScalars (sk_SkCanvas *c_obj, float c_cx, float c_cy, float c_radius,
                                       sk_SkPaint *c_paint);
-  void misk_Canvas_drawCirclePoint (sk_SkCanvas *c_obj, sk_SkPoint c_center,
-                                    float c_radius, sk_SkPaint *c_paint);
-  void misk_Canvas_drawArc (sk_SkCanvas *c_obj, sk_SkRect c_oval,
-                            float c_startAngle, float c_sweepAngle,
+  void misk_Canvas_drawCirclePoint (sk_SkCanvas *c_obj, sk_SkPoint c_center, float c_radius,
+                                    sk_SkPaint *c_paint);
+  void misk_Canvas_drawArc (sk_SkCanvas *c_obj, sk_SkRect c_oval, float c_startAngle, float c_sweepAngle,
                             bool c_useCenter, sk_SkPaint *c_paint);
-  void misk_Canvas_drawArcArc (sk_SkCanvas *c_obj, sk_SkArc *c_arc,
+  void misk_Canvas_drawArcArc (sk_SkCanvas *c_obj, sk_SkArc *c_arc, sk_SkPaint *c_paint);
+  void misk_Canvas_drawRoundRect (sk_SkCanvas *c_obj, sk_SkRect c_rect, float c_rx, float c_ry,
+                                  sk_SkPaint *c_paint);
+  void misk_Canvas_drawPath (sk_SkCanvas *c_obj, sk_SkPath *c_path, sk_SkPaint *c_paint);
+  void misk_Canvas_drawImage (sk_SkCanvas *c_obj, sk_SkImage *c_image, float c_left, float c_top);
+  void misk_Canvas_drawImageSamplingOptions (sk_SkCanvas *c_obj, sk_SkImage *c_p0, float c_x, float c_y,
+                                             sk_SkSamplingOptions *c_p3, sk_SkPaint *c_p4);
+  void misk_Canvas_drawImageRect (sk_SkCanvas *c_obj, sk_SkImage *c_p0, sk_SkRect c_src, sk_SkRect c_dst,
+                                  sk_SkSamplingOptions *c_p3, sk_SkPaint *c_p4, uint c_p5);
+  void misk_Canvas_drawImageRectNoSrc (sk_SkCanvas *c_obj, sk_SkImage *c_p0, sk_SkRect c_dst,
+                                       sk_SkSamplingOptions *c_p2, sk_SkPaint *c_p3);
+  void misk_Canvas_drawImageNine (sk_SkCanvas *c_obj, sk_SkImage *c_image, sk_SkIRect c_center,
+                                  sk_SkRect c_dst, int c_filter, sk_SkPaint *c_paint);
+  void misk_Canvas_drawString (sk_SkCanvas *c_obj, char *c_str, float c_x, float c_y, sk_SkFont *c_font,
                                sk_SkPaint *c_paint);
-  void misk_Canvas_drawRoundRect (sk_SkCanvas *c_obj, sk_SkRect c_rect,
-                                  float c_rx, float c_ry, sk_SkPaint *c_paint);
-  void misk_Canvas_drawPath (sk_SkCanvas *c_obj, sk_SkPath *c_path,
-                             sk_SkPaint *c_paint);
-  void misk_Canvas_drawImage (sk_SkCanvas *c_obj, sk_SkImage *c_image,
-                              float c_left, float c_top);
-  void misk_Canvas_drawImageSamplingOptions (sk_SkCanvas *c_obj,
-                                             sk_SkImage *c_p0, float c_x,
-                                             float c_y,
-                                             sk_SkSamplingOptions *c_p3,
-                                             sk_SkPaint *c_p4);
-  void misk_Canvas_drawImageRect (sk_SkCanvas *c_obj, sk_SkImage *c_p0,
-                                  sk_SkRect c_src, sk_SkRect c_dst,
-                                  sk_SkSamplingOptions *c_p3, sk_SkPaint *c_p4,
-                                  uint c_p5);
-  void misk_Canvas_drawImageRectNoSrc (sk_SkCanvas *c_obj, sk_SkImage *c_p0,
-                                       sk_SkRect c_dst,
-                                       sk_SkSamplingOptions *c_p2,
-                                       sk_SkPaint *c_p3);
-  void misk_Canvas_drawImageNine (sk_SkCanvas *c_obj, sk_SkImage *c_image,
-                                  sk_SkIRect c_center, sk_SkRect c_dst,
-                                  int c_filter, sk_SkPaint *c_paint);
-  void misk_Canvas_drawString (sk_SkCanvas *c_obj, char *c_str, float c_x,
-                               float c_y, sk_SkFont *c_font,
-                               sk_SkPaint *c_paint);
-  void misk_Canvas_drawGlyphsClusters (sk_SkCanvas *c_obj, int c_count,
-                                       ushort *c_glyphs,
-                                       sk_SkPoint *c_positions,
-                                       uint *c_clusters, int c_textByteCount,
-                                       char *c_utf8text, sk_SkPoint c_origin,
-                                       sk_SkFont *c_font, sk_SkPaint *c_paint);
-  void misk_Canvas_drawGlyphs (sk_SkCanvas *c_obj, int c_count,
-                               ushort *c_glyphs, sk_SkPoint *c_positions,
-                               sk_SkPoint c_origin, sk_SkFont *c_font,
-                               sk_SkPaint *c_paint);
-  void misk_Canvas_drawTextBlob (sk_SkCanvas *c_obj, sk_SkTextBlob *c_blob,
-                                 float c_x, float c_y, sk_SkPaint *c_paint);
+  void misk_Canvas_drawGlyphsClusters (sk_SkCanvas *c_obj, int c_count, ushort *c_glyphs,
+                                       sk_SkPoint *c_positions, uint *c_clusters, int c_textByteCount,
+                                       char *c_utf8text, sk_SkPoint c_origin, sk_SkFont *c_font,
+                                       sk_SkPaint *c_paint);
+  void misk_Canvas_drawGlyphs (sk_SkCanvas *c_obj, int c_count, ushort *c_glyphs, sk_SkPoint *c_positions,
+                               sk_SkPoint c_origin, sk_SkFont *c_font, sk_SkPaint *c_paint);
+  void misk_Canvas_drawTextBlob (sk_SkCanvas *c_obj, sk_SkTextBlob *c_blob, float c_x, float c_y,
+                                 sk_SkPaint *c_paint);
 
   sk_SkColorInfo *misk_new_ColorInfo ();
-  sk_SkColorInfo *misk_new_ColorInfo2 (int c_ct, int c_at,
-                                       sk_SkColorSpace *c_cs);
+  sk_SkColorInfo *misk_new_ColorInfo2 (int c_ct, int c_at, sk_SkColorSpace *c_cs);
   sk_SkColorInfo *misk_new_ColorInfoCopy (sk_SkColorInfo *c_p0);
   void misk_delete_SkColorInfo (sk_SkColorInfo *obj);
   sk_SkColorSpace *misk_ColorInfo_colorSpace (sk_SkColorInfo *c_obj);
@@ -769,12 +715,9 @@ extern "C"
   int misk_ColorInfo_alphaType (sk_SkColorInfo *c_obj);
   bool misk_ColorInfo_isOpaque (sk_SkColorInfo *c_obj);
   bool misk_ColorInfo_gammaCloseToSRGB (sk_SkColorInfo *c_obj);
-  sk_SkColorInfo misk_ColorInfo_makeAlphaType (sk_SkColorInfo *c_obj,
-                                               int c_newAlphaType);
-  sk_SkColorInfo misk_ColorInfo_makeColorType (sk_SkColorInfo *c_obj,
-                                               int c_newColorType);
-  sk_SkColorInfo misk_ColorInfo_makeColorSpace (sk_SkColorInfo *c_obj,
-                                                sk_SkColorSpace *c_cs);
+  sk_SkColorInfo misk_ColorInfo_makeAlphaType (sk_SkColorInfo *c_obj, int c_newAlphaType);
+  sk_SkColorInfo misk_ColorInfo_makeColorType (sk_SkColorInfo *c_obj, int c_newColorType);
+  sk_SkColorInfo misk_ColorInfo_makeColorSpace (sk_SkColorInfo *c_obj, sk_SkColorSpace *c_cs);
   int misk_ColorInfo_bytesPerPixel (sk_SkColorInfo *c_obj);
   int misk_ColorInfo_shiftPerPixel (sk_SkColorInfo *c_obj);
 
@@ -793,66 +736,48 @@ extern "C"
   void misk_unref_SkData (sk_SkData *c_obj);
 
   sk_SkFont *misk_new_Font ();
-  sk_SkFont *misk_new_FontTypefaceSize (sk_SkTypeface *c_typeface,
-                                        float c_size);
+  sk_SkFont *misk_new_FontTypefaceSize (sk_SkTypeface *c_typeface, float c_size);
   sk_SkFont *misk_new_FontTypeface (sk_SkTypeface *c_typeface);
-  sk_SkFont *misk_new_FontTypefaceSizeScaleSkew (sk_SkTypeface *c_typeface,
-                                                 float c_size, float c_scaleX,
+  sk_SkFont *misk_new_FontTypefaceSizeScaleSkew (sk_SkTypeface *c_typeface, float c_size, float c_scaleX,
                                                  float c_skewX);
   void misk_delete_SkFont (sk_SkFont *obj);
   float misk_Font_getMetrics (sk_SkFont *c_obj, sk_SkFontMetrics *c_metrics);
-  void misk_Font_getXPos (sk_SkFont *c_obj, ushort *c_glyphs, int c_count,
-                          float *c_xpos, float c_origin);
-  float misk_Font_measureText (sk_SkFont *c_obj, void *c_text,
-                               ulong c_byteLength, int c_encoding,
+  void misk_Font_getXPos (sk_SkFont *c_obj, ushort *c_glyphs, int c_count, float *c_xpos, float c_origin);
+  float misk_Font_measureText (sk_SkFont *c_obj, void *c_text, ulong c_byteLength, int c_encoding,
                                sk_SkRect *c_bounds);
-  float misk_Font_measureTextPaint (sk_SkFont *c_obj, void *c_text,
-                                    ulong c_byteLength, int c_encoding,
+  float misk_Font_measureTextPaint (sk_SkFont *c_obj, void *c_text, ulong c_byteLength, int c_encoding,
                                     sk_SkRect *c_bounds, sk_SkPaint *c_paint);
-  void misk_Font_setForceAutoHinting (sk_SkFont *c_obj,
-                                      bool c_forceAutoHinting);
+  void misk_Font_setForceAutoHinting (sk_SkFont *c_obj, bool c_forceAutoHinting);
   int misk_Font_getEdging (sk_SkFont *c_obj);
   void misk_Font_setEdging (sk_SkFont *c_obj, int c_edging);
   void misk_Font_setHinting (sk_SkFont *c_obj, int c_hintingLevel);
   void misk_Font_setSubpixel (sk_SkFont *c_obj, bool c_subpixel);
-  int misk_Font_textToGlyphs (sk_SkFont *c_obj, void *c_text,
-                              ulong c_byteLength, int c_encoding,
+  int misk_Font_textToGlyphs (sk_SkFont *c_obj, void *c_text, ulong c_byteLength, int c_encoding,
                               ushort *c_glyphs, int c_maxGlyphCount);
   unsigned short misk_Font_unicharToGlyph (sk_SkFont *c_obj, int c_uni);
-  void misk_Font_unicharsToGlyphs (sk_SkFont *c_obj, int *c_uni, int c_count,
-                                   ushort *c_glyphs);
+  void misk_Font_unicharsToGlyphs (sk_SkFont *c_obj, int *c_uni, int c_count, ushort *c_glyphs);
   float misk_Font_getSize (sk_SkFont *c_obj);
   sk_SkTypeface *misk_Font_getTypeface (sk_SkFont *c_obj);
-  void misk_Font_getWidthsBounds (sk_SkFont *c_obj, ushort *c_glyphs,
-                                  int c_count, float *c_widths,
+  void misk_Font_getWidthsBounds (sk_SkFont *c_obj, ushort *c_glyphs, int c_count, float *c_widths,
                                   sk_SkRect *c_bounds);
-  void misk_Font_getWidths (sk_SkFont *c_obj, ushort *c_glyphs, int c_count,
-                            float *c_widths);
+  void misk_Font_getWidths (sk_SkFont *c_obj, ushort *c_glyphs, int c_count, float *c_widths);
 
   sk_SkFontArguments *misk_new_FontArguments ();
   void misk_delete_SkFontArguments (sk_SkFontArguments *obj);
-  sk_SkFontArguments
-  misk_FontArguments_setCollectionIndex (sk_SkFontArguments *c_obj,
-                                         int c_collectionIndex);
+  sk_SkFontArguments misk_FontArguments_setCollectionIndex (sk_SkFontArguments *c_obj, int c_collectionIndex);
   int misk_FontArguments_getCollectionIndex (sk_SkFontArguments *c_obj);
   sk_SkFontArgumentsVariationPosition
   misk_FontArguments_getVariationDesignPosition (sk_SkFontArguments *c_obj);
-  sk_SkFontArgumentsPalette
-  misk_FontArguments_getPalette (sk_SkFontArguments *c_obj);
+  sk_SkFontArgumentsPalette misk_FontArguments_getPalette (sk_SkFontArguments *c_obj);
 
-  sk_SkFontStyleSet *misk_FontMgr_matchFamily (sk_SkFontMgr *c_obj,
-                                               char *c_familyName);
-  sk_SkTypeface *misk_FontMgr_matchFamilyStyle (sk_SkFontMgr *c_obj,
-                                                char *c_familyName,
+  sk_SkFontStyleSet *misk_FontMgr_matchFamily (sk_SkFontMgr *c_obj, char *c_familyName);
+  sk_SkTypeface *misk_FontMgr_matchFamilyStyle (sk_SkFontMgr *c_obj, char *c_familyName,
                                                 sk_SkFontStyle *c_p1);
-  sk_SkTypeface *misk_FontMgr_makeFromData (sk_SkFontMgr *c_obj,
-                                            sk_SkData *c_p0, int c_ttcIndex);
-  sk_SkTypeface *misk_FontMgr_makeFromFile (sk_SkFontMgr *c_obj, char *c_path,
-                                            int c_ttcIndex);
+  sk_SkTypeface *misk_FontMgr_makeFromData (sk_SkFontMgr *c_obj, sk_SkData *c_p0, int c_ttcIndex);
+  sk_SkTypeface *misk_FontMgr_makeFromFile (sk_SkFontMgr *c_obj, char *c_path, int c_ttcIndex);
   void misk_unref_SkFontMgr (sk_SkFontMgr *c_obj);
 
-  sk_SkFontStyle *misk_new_FontStyle2 (int c_weight, int c_width,
-                                       uchar c_slant);
+  sk_SkFontStyle *misk_new_FontStyle2 (int c_weight, int c_width, uchar c_slant);
   sk_SkFontStyle *misk_new_FontStyle ();
   void misk_delete_SkFontStyle (sk_SkFontStyle *obj);
   sk_SkFontStyle misk_FontStyle_Normal ();
@@ -861,12 +786,10 @@ extern "C"
   sk_SkFontStyle misk_FontStyle_BoldItalic ();
 
   int misk_FontStyleSet_count (sk_SkFontStyleSet *c_obj);
-  void misk_FontStyleSet_getStyle (sk_SkFontStyleSet *c_obj, int c_index,
-                                   sk_SkFontStyle *c_p1, sk_SkString *c_style);
-  sk_SkTypeface *misk_FontStyleSet_createTypeface (sk_SkFontStyleSet *c_obj,
-                                                   int c_index);
-  sk_SkTypeface *misk_FontStyleSet_matchStyle (sk_SkFontStyleSet *c_obj,
-                                               sk_SkFontStyle *c_pattern);
+  void misk_FontStyleSet_getStyle (sk_SkFontStyleSet *c_obj, int c_index, sk_SkFontStyle *c_p1,
+                                   sk_SkString *c_style);
+  sk_SkTypeface *misk_FontStyleSet_createTypeface (sk_SkFontStyleSet *c_obj, int c_index);
+  sk_SkTypeface *misk_FontStyleSet_matchStyle (sk_SkFontStyleSet *c_obj, sk_SkFontStyle *c_pattern);
   void misk_unref_SkFontStyleSet (sk_SkFontStyleSet *c_obj);
 
   sk_SkImageInfo misk_Image_imageInfo (sk_SkImage *c_obj);
@@ -880,13 +803,10 @@ extern "C"
   sk_SkColorSpace *misk_Image_colorSpace (sk_SkImage *c_obj);
   bool misk_Image_isAlphaOnly (sk_SkImage *c_obj);
   bool misk_Image_isOpaque (sk_SkImage *c_obj);
-  bool misk_Image_readPixels (sk_SkImage *c_obj, sk_GrDirectContext *c_context,
-                              sk_SkImageInfo *c_dstInfo, void *c_dstPixels,
-                              ulong c_dstRowBytes, int c_srcX, int c_srcY,
+  bool misk_Image_readPixels (sk_SkImage *c_obj, sk_GrDirectContext *c_context, sk_SkImageInfo *c_dstInfo,
+                              void *c_dstPixels, ulong c_dstRowBytes, int c_srcX, int c_srcY,
                               uint c_cachingHint);
-  sk_SkImage *misk_Image_makeSubset (sk_SkImage *c_obj,
-                                     sk_GrDirectContext *c_direct,
-                                     sk_SkIRect c_subset);
+  sk_SkImage *misk_Image_makeSubset (sk_SkImage *c_obj, sk_GrDirectContext *c_direct, sk_SkIRect c_subset);
   void misk_unref_SkImage (sk_SkImage *c_obj);
 
   sk_SkImageInfo *misk_new_ImageInfo ();
@@ -903,24 +823,17 @@ extern "C"
   sk_SkISize misk_ImageInfo_dimensions (sk_SkImageInfo *c_obj);
   sk_SkIRect misk_ImageInfo_bounds (sk_SkImageInfo *c_obj);
   bool misk_ImageInfo_gammaCloseToSRGB (sk_SkImageInfo *c_obj);
-  sk_SkImageInfo misk_ImageInfo_makeWH (sk_SkImageInfo *c_obj, int c_newWidth,
-                                        int c_newHeight);
-  sk_SkImageInfo misk_ImageInfo_makeDimensions (sk_SkImageInfo *c_obj,
-                                                sk_SkISize c_newSize);
-  sk_SkImageInfo misk_ImageInfo_makeAlphaType (sk_SkImageInfo *c_obj,
-                                               int c_newAlphaType);
-  sk_SkImageInfo misk_ImageInfo_makeColorType (sk_SkImageInfo *c_obj,
-                                               int c_newColorType);
-  sk_SkImageInfo misk_ImageInfo_makeColorSpace (sk_SkImageInfo *c_obj,
-                                                sk_SkColorSpace *c_cs);
+  sk_SkImageInfo misk_ImageInfo_makeWH (sk_SkImageInfo *c_obj, int c_newWidth, int c_newHeight);
+  sk_SkImageInfo misk_ImageInfo_makeDimensions (sk_SkImageInfo *c_obj, sk_SkISize c_newSize);
+  sk_SkImageInfo misk_ImageInfo_makeAlphaType (sk_SkImageInfo *c_obj, int c_newAlphaType);
+  sk_SkImageInfo misk_ImageInfo_makeColorType (sk_SkImageInfo *c_obj, int c_newColorType);
+  sk_SkImageInfo misk_ImageInfo_makeColorSpace (sk_SkImageInfo *c_obj, sk_SkColorSpace *c_cs);
   int misk_ImageInfo_bytesPerPixel (sk_SkImageInfo *c_obj);
   int misk_ImageInfo_shiftPerPixel (sk_SkImageInfo *c_obj);
   unsigned long misk_ImageInfo_minRowBytes64 (sk_SkImageInfo *c_obj);
   unsigned long misk_ImageInfo_minRowBytes (sk_SkImageInfo *c_obj);
-  unsigned long misk_ImageInfo_computeOffset (sk_SkImageInfo *c_obj, int c_x,
-                                              int c_y, ulong c_rowBytes);
-  unsigned long misk_ImageInfo_computeByteSize (sk_SkImageInfo *c_obj,
-                                                ulong c_rowBytes);
+  unsigned long misk_ImageInfo_computeOffset (sk_SkImageInfo *c_obj, int c_x, int c_y, ulong c_rowBytes);
+  unsigned long misk_ImageInfo_computeByteSize (sk_SkImageInfo *c_obj, ulong c_rowBytes);
   unsigned long misk_ImageInfo_computeMinByteSize (sk_SkImageInfo *c_obj);
   bool misk_ImageInfo_validRowBytes (sk_SkImageInfo *c_obj, ulong c_rowBytes);
   void misk_ImageInfo_reset (sk_SkImageInfo *c_obj);
@@ -928,18 +841,14 @@ extern "C"
   sk_SkM44 *misk_new_M44Copy (sk_SkM44 *c_src);
   sk_SkM44 *misk_new_M44 ();
   sk_SkM44 *misk_new_M44AB (sk_SkM44 *c_a, sk_SkM44 *c_b);
-  sk_SkM44 *misk_new_M44Scalars (float c_m0, float c_m4, float c_m8,
-                                 float c_m12, float c_m1, float c_m5,
-                                 float c_m9, float c_m13, float c_m2,
-                                 float c_m6, float c_m10, float c_m14,
-                                 float c_m3, float c_m7, float c_m11,
-                                 float c_m15);
+  sk_SkM44 *misk_new_M44Scalars (float c_m0, float c_m4, float c_m8, float c_m12, float c_m1, float c_m5,
+                                 float c_m9, float c_m13, float c_m2, float c_m6, float c_m10, float c_m14,
+                                 float c_m3, float c_m7, float c_m11, float c_m15);
   void misk_delete_SkM44 (sk_SkM44 *obj);
 
   void misk_delete_SkMemoryStream (sk_SkMemoryStream *obj);
   sk_SkMemoryStream *misk_MemoryStream_Make (sk_SkData *c_data);
-  sk_SkMemoryStream *misk_MemoryStream_MakeDirect (void *c_data,
-                                                   ulong c_length);
+  sk_SkMemoryStream *misk_MemoryStream_MakeDirect (void *c_data, ulong c_length);
 
   sk_SkIRect misk_IRect_MakeEmpty ();
   sk_SkIRect misk_IRect_MakeWH (int c_w, int c_h);
@@ -953,18 +862,15 @@ extern "C"
   int misk_IRect_height (sk_SkIRect *c_obj);
   bool misk_IRect_isEmpty (sk_SkIRect *c_obj);
   void misk_IRect_setEmpty (sk_SkIRect *c_obj);
-  void misk_IRect_setLTRB (sk_SkIRect *c_obj, int c_left, int c_top,
-                           int c_right, int c_bottom);
-  void misk_IRect_setXYWH (sk_SkIRect *c_obj, int c_x, int c_y, int c_width,
-                           int c_height);
+  void misk_IRect_setLTRB (sk_SkIRect *c_obj, int c_left, int c_top, int c_right, int c_bottom);
+  void misk_IRect_setXYWH (sk_SkIRect *c_obj, int c_x, int c_y, int c_width, int c_height);
   void misk_IRect_setWH (sk_SkIRect *c_obj, int c_width, int c_height);
   void misk_IRect_offset (sk_SkIRect *c_obj, int c_dx, int c_dy);
   void misk_IRect_offsetPoint (sk_SkIRect *c_obj, sk_SkIPoint *c_delta);
   void misk_IRect_offsetTo (sk_SkIRect *c_obj, int c_newX, int c_newY);
   void misk_IRect_inset (sk_SkIRect *c_obj, int c_dx, int c_dy);
   void misk_IRect_outset (sk_SkIRect *c_obj, int c_dx, int c_dy);
-  void misk_IRect_adjust (sk_SkIRect *c_obj, int c_dL, int c_dT, int c_dR,
-                          int c_dB);
+  void misk_IRect_adjust (sk_SkIRect *c_obj, int c_dL, int c_dT, int c_dR, int c_dB);
   bool misk_IRect_contains (sk_SkIRect *c_obj, int c_x, int c_y);
   bool misk_IRect_containsRect (sk_SkIRect *c_obj, sk_SkIRect c_r);
   bool misk_IRect_containsNoEmptyCheck (sk_SkIRect *c_obj, sk_SkIRect c_r);
@@ -977,8 +883,7 @@ extern "C"
 
   sk_SkOpBuilder *misk_new_OpBuilder ();
   void misk_delete_SkOpBuilder (sk_SkOpBuilder *obj);
-  void misk_OpBuilder_add (sk_SkOpBuilder *c_obj, sk_SkPath *c_path,
-                           uint c__operator);
+  void misk_OpBuilder_add (sk_SkOpBuilder *c_obj, sk_SkPath *c_path, uint c__operator);
   bool misk_OpBuilder_resolve (sk_SkOpBuilder *c_obj, sk_SkPath *c_result);
 
   sk_SkPaint *misk_new_Paint ();
@@ -987,8 +892,7 @@ extern "C"
   void misk_Paint_reset (sk_SkPaint *c_obj);
   unsigned char misk_Paint_getAlpha (sk_SkPaint *c_obj);
   void misk_Paint_setAlpha (sk_SkPaint *c_obj, uint c_a);
-  void misk_Paint_setARGB (sk_SkPaint *c_obj, uint c_a, uint c_r, uint c_g,
-                           uint c_b);
+  void misk_Paint_setARGB (sk_SkPaint *c_obj, uint c_a, uint c_r, uint c_g, uint c_b);
   void misk_Paint_setAntiAlias (sk_SkPaint *c_obj, bool c_aa);
   void misk_Paint_setBlendMode (sk_SkPaint *c_obj, int c_mode);
   uint misk_Paint_getColor (sk_SkPaint *c_obj);
@@ -1009,8 +913,7 @@ extern "C"
   sk_SkPath *misk_new_PathCopy (sk_SkPath *c_path);
   void misk_delete_SkPath (sk_SkPath *obj);
   bool misk_Path_isInterpolatable (sk_SkPath *c_obj, sk_SkPath *c_compare);
-  bool misk_Path_interpolate (sk_SkPath *c_obj, sk_SkPath *c_ending,
-                              float c_weight, sk_SkPath *c_out);
+  bool misk_Path_interpolate (sk_SkPath *c_obj, sk_SkPath *c_ending, float c_weight, sk_SkPath *c_out);
   int misk_Path_getFillType (sk_SkPath *c_obj);
   void misk_Path_setFillType (sk_SkPath *c_obj, int c_ft);
   bool misk_Path_isInverseFillType (sk_SkPath *c_obj);
@@ -1035,92 +938,62 @@ extern "C"
   sk_SkRect misk_Path_getBounds (sk_SkPath *c_obj);
   void misk_Path_updateBoundsCache (sk_SkPath *c_obj);
   sk_SkRect misk_Path_computeTightBounds (sk_SkPath *c_obj);
-  bool misk_Path_conservativelyContainsRect (sk_SkPath *c_obj,
-                                             sk_SkRect c_rect);
-  void misk_Path_incReserve (sk_SkPath *c_obj, int c_extraPtCount,
-                             int c_extraVerbCount, int c_extraConicCount);
+  bool misk_Path_conservativelyContainsRect (sk_SkPath *c_obj, sk_SkRect c_rect);
+  void misk_Path_incReserve (sk_SkPath *c_obj, int c_extraPtCount, int c_extraVerbCount,
+                             int c_extraConicCount);
   sk_SkPath misk_Path_moveToPoint (sk_SkPath *c_obj, float c_x, float c_y);
   sk_SkPath misk_Path_moveTo (sk_SkPath *c_obj, sk_SkPoint c_p);
   sk_SkPath misk_Path_rMoveTo (sk_SkPath *c_obj, float c_dx, float c_dy);
   sk_SkPath misk_Path_lineTo (sk_SkPath *c_obj, float c_x, float c_y);
   sk_SkPath misk_Path_lineToPoint (sk_SkPath *c_obj, sk_SkPoint c_p);
   sk_SkPath misk_Path_rLineTo (sk_SkPath *c_obj, float c_dx, float c_dy);
-  sk_SkPath misk_Path_quadTo (sk_SkPath *c_obj, float c_x1, float c_y1,
-                              float c_x2, float c_y2);
-  sk_SkPath misk_Path_quadToPoint (sk_SkPath *c_obj, sk_SkPoint c_p1,
-                                   sk_SkPoint c_p2);
-  sk_SkPath misk_Path_rQuadTo (sk_SkPath *c_obj, float c_dx1, float c_dy1,
-                               float c_dx2, float c_dy2);
-  sk_SkPath misk_Path_conicTo (sk_SkPath *c_obj, float c_x1, float c_y1,
-                               float c_x2, float c_y2, float c_w);
-  sk_SkPath misk_Path_conicToPoints (sk_SkPath *c_obj, sk_SkPoint c_p1,
-                                     sk_SkPoint c_p2, float c_w);
-  sk_SkPath misk_Path_rConicTo (sk_SkPath *c_obj, float c_dx1, float c_dy1,
-                                float c_dx2, float c_dy2, float c_w);
-  sk_SkPath misk_Path_cubicTo (sk_SkPath *c_obj, float c_x1, float c_y1,
-                               float c_x2, float c_y2, float c_x3, float c_y3);
-  sk_SkPath misk_Path_cubicToPoints (sk_SkPath *c_obj, sk_SkPoint c_p1,
-                                     sk_SkPoint c_p2, sk_SkPoint c_p3);
-  sk_SkPath misk_Path_rCubicTo (sk_SkPath *c_obj, float c_dx1, float c_dy1,
-                                float c_dx2, float c_dy2, float c_dx3,
-                                float c_dy3);
-  sk_SkPath misk_Path_arcTo1 (sk_SkPath *c_obj, sk_SkRect c_oval,
-                              float c_startAngle, float c_sweepAngle,
+  sk_SkPath misk_Path_quadTo (sk_SkPath *c_obj, float c_x1, float c_y1, float c_x2, float c_y2);
+  sk_SkPath misk_Path_quadToPoint (sk_SkPath *c_obj, sk_SkPoint c_p1, sk_SkPoint c_p2);
+  sk_SkPath misk_Path_rQuadTo (sk_SkPath *c_obj, float c_dx1, float c_dy1, float c_dx2, float c_dy2);
+  sk_SkPath misk_Path_conicTo (sk_SkPath *c_obj, float c_x1, float c_y1, float c_x2, float c_y2, float c_w);
+  sk_SkPath misk_Path_conicToPoints (sk_SkPath *c_obj, sk_SkPoint c_p1, sk_SkPoint c_p2, float c_w);
+  sk_SkPath misk_Path_rConicTo (sk_SkPath *c_obj, float c_dx1, float c_dy1, float c_dx2, float c_dy2,
+                                float c_w);
+  sk_SkPath misk_Path_cubicTo (sk_SkPath *c_obj, float c_x1, float c_y1, float c_x2, float c_y2, float c_x3,
+                               float c_y3);
+  sk_SkPath misk_Path_cubicToPoints (sk_SkPath *c_obj, sk_SkPoint c_p1, sk_SkPoint c_p2, sk_SkPoint c_p3);
+  sk_SkPath misk_Path_rCubicTo (sk_SkPath *c_obj, float c_dx1, float c_dy1, float c_dx2, float c_dy2,
+                                float c_dx3, float c_dy3);
+  sk_SkPath misk_Path_arcTo1 (sk_SkPath *c_obj, sk_SkRect c_oval, float c_startAngle, float c_sweepAngle,
                               bool c_forceMoveTo);
-  sk_SkPath misk_Path_arcTo2 (sk_SkPath *c_obj, float c_x1, float c_y1,
-                              float c_x2, float c_y2, float c_radius);
-  sk_SkPath misk_Path_arcTo3 (sk_SkPath *c_obj, sk_SkPoint c_p1,
-                              sk_SkPoint c_p2, float c_radius);
-  sk_SkPath misk_Path_arcTo4 (sk_SkPath *c_obj, float c_rx, float c_ry,
-                              float c_xAxisRotate, uint c_largeArc,
+  sk_SkPath misk_Path_arcTo2 (sk_SkPath *c_obj, float c_x1, float c_y1, float c_x2, float c_y2,
+                              float c_radius);
+  sk_SkPath misk_Path_arcTo3 (sk_SkPath *c_obj, sk_SkPoint c_p1, sk_SkPoint c_p2, float c_radius);
+  sk_SkPath misk_Path_arcTo4 (sk_SkPath *c_obj, float c_rx, float c_ry, float c_xAxisRotate, uint c_largeArc,
                               int c_sweep, float c_x, float c_y);
-  sk_SkPath misk_Path_arcTo5 (sk_SkPath *c_obj, sk_SkPoint c_r,
-                              float c_xAxisRotate, uint c_largeArc,
+  sk_SkPath misk_Path_arcTo5 (sk_SkPath *c_obj, sk_SkPoint c_r, float c_xAxisRotate, uint c_largeArc,
                               int c_sweep, sk_SkPoint c_xy);
-  sk_SkPath misk_Path_rArcTo (sk_SkPath *c_obj, float c_rx, float c_ry,
-                              float c_xAxisRotate, uint c_largeArc,
+  sk_SkPath misk_Path_rArcTo (sk_SkPath *c_obj, float c_rx, float c_ry, float c_xAxisRotate, uint c_largeArc,
                               int c_sweep, float c_dx, float c_dy);
   sk_SkPath misk_Path_close (sk_SkPath *c_obj);
-  bool misk_Path_isRect (sk_SkPath *c_obj, sk_SkRect *c_rect, bool *c_isClosed,
-                         int *c_direction);
-  sk_SkPath misk_Path_addRect1 (sk_SkPath *c_obj, sk_SkRect c_rect, int c_dir,
-                                uint c_start);
+  bool misk_Path_isRect (sk_SkPath *c_obj, sk_SkRect *c_rect, bool *c_isClosed, int *c_direction);
+  sk_SkPath misk_Path_addRect1 (sk_SkPath *c_obj, sk_SkRect c_rect, int c_dir, uint c_start);
   sk_SkPath misk_Path_addRect2 (sk_SkPath *c_obj, sk_SkRect c_rect, int c_dir);
-  sk_SkPath misk_Path_addRect3 (sk_SkPath *c_obj, float c_left, float c_top,
-                                float c_right, float c_bottom, int c_dir);
+  sk_SkPath misk_Path_addRect3 (sk_SkPath *c_obj, float c_left, float c_top, float c_right, float c_bottom,
+                                int c_dir);
   sk_SkPath misk_Path_addOval1 (sk_SkPath *c_obj, sk_SkRect c_oval, int c_dir);
-  sk_SkPath misk_Path_addOval2 (sk_SkPath *c_obj, sk_SkRect c_oval, int c_dir,
-                                uint c_start);
-  sk_SkPath misk_Path_addCircle (sk_SkPath *c_obj, float c_x, float c_y,
-                                 float c_radius, int c_dir);
-  sk_SkPath misk_Path_addArc (sk_SkPath *c_obj, sk_SkRect c_oval,
-                              float c_startAngle, float c_sweepAngle);
-  sk_SkPath misk_Path_addRoundRect1 (sk_SkPath *c_obj, sk_SkRect c_rect,
-                                     float c_rx, float c_ry, int c_dir);
-  sk_SkPath misk_Path_addRoundRect2 (sk_SkPath *c_obj, sk_SkRect c_rect,
-                                     float *c_radii, int c_dir);
-  sk_SkPath misk_Path_addRRect1 (sk_SkPath *c_obj, sk_SkRRect c_rrect,
-                                 int c_dir);
-  sk_SkPath misk_Path_addRRect2 (sk_SkPath *c_obj, sk_SkRRect c_rrect,
-                                 int c_dir, uint c_start);
-  sk_SkPath misk_Path_addPoly (sk_SkPath *c_obj, sk_SkPoint *c_pts,
-                               int c_count, bool c_close);
-  sk_SkPath misk_Path_addPath1 (sk_SkPath *c_obj, sk_SkPath *c_src, float c_dx,
-                                float c_dy, uint c_mode);
-  sk_SkPath misk_Path_addPath2 (sk_SkPath *c_obj, sk_SkPath *c_src,
-                                uint c_mode);
-  sk_SkPath misk_Path_addPath3 (sk_SkPath *c_obj, sk_SkPath *c_src,
-                                sk_SkMatrix *c_matrix, uint c_mode);
+  sk_SkPath misk_Path_addOval2 (sk_SkPath *c_obj, sk_SkRect c_oval, int c_dir, uint c_start);
+  sk_SkPath misk_Path_addCircle (sk_SkPath *c_obj, float c_x, float c_y, float c_radius, int c_dir);
+  sk_SkPath misk_Path_addArc (sk_SkPath *c_obj, sk_SkRect c_oval, float c_startAngle, float c_sweepAngle);
+  sk_SkPath misk_Path_addRoundRect1 (sk_SkPath *c_obj, sk_SkRect c_rect, float c_rx, float c_ry, int c_dir);
+  sk_SkPath misk_Path_addRoundRect2 (sk_SkPath *c_obj, sk_SkRect c_rect, float *c_radii, int c_dir);
+  sk_SkPath misk_Path_addRRect1 (sk_SkPath *c_obj, sk_SkRRect c_rrect, int c_dir);
+  sk_SkPath misk_Path_addRRect2 (sk_SkPath *c_obj, sk_SkRRect c_rrect, int c_dir, uint c_start);
+  sk_SkPath misk_Path_addPoly (sk_SkPath *c_obj, sk_SkPoint *c_pts, int c_count, bool c_close);
+  sk_SkPath misk_Path_addPath1 (sk_SkPath *c_obj, sk_SkPath *c_src, float c_dx, float c_dy, uint c_mode);
+  sk_SkPath misk_Path_addPath2 (sk_SkPath *c_obj, sk_SkPath *c_src, uint c_mode);
+  sk_SkPath misk_Path_addPath3 (sk_SkPath *c_obj, sk_SkPath *c_src, sk_SkMatrix *c_matrix, uint c_mode);
   sk_SkPath misk_Path_reverseAddPath (sk_SkPath *c_obj, sk_SkPath *c_src);
-  void misk_Path_offset1 (sk_SkPath *c_obj, float c_dx, float c_dy,
-                          sk_SkPath *c_dst);
+  void misk_Path_offset1 (sk_SkPath *c_obj, float c_dx, float c_dy, sk_SkPath *c_dst);
   sk_SkPath misk_Path_offset2 (sk_SkPath *c_obj, float c_dx, float c_dy);
-  void misk_Path_transform1 (sk_SkPath *c_obj, sk_SkMatrix *c_matrix,
-                             sk_SkPath *c_dst, int c_pc);
-  sk_SkPath misk_Path_transform2 (sk_SkPath *c_obj, sk_SkMatrix *c_matrix,
-                                  int c_pc);
-  sk_SkPath misk_Path_makeTransform (sk_SkPath *c_obj, sk_SkMatrix *c_m,
-                                     int c_pc);
+  void misk_Path_transform1 (sk_SkPath *c_obj, sk_SkMatrix *c_matrix, sk_SkPath *c_dst, int c_pc);
+  sk_SkPath misk_Path_transform2 (sk_SkPath *c_obj, sk_SkMatrix *c_matrix, int c_pc);
+  sk_SkPath misk_Path_makeTransform (sk_SkPath *c_obj, sk_SkMatrix *c_m, int c_pc);
   sk_SkPath misk_Path_makeScale (sk_SkPath *c_obj, float c_sx, float c_sy);
   bool misk_Path_getLastPt (sk_SkPath *c_obj, sk_SkPoint c_lastPt);
   void misk_Path_setLastPt1 (sk_SkPath *c_obj, float c_x, float c_y);
@@ -1133,8 +1006,7 @@ extern "C"
   sk_SkPoint misk_Point_Make (float c_x, float c_y);
 
   sk_SkPixmap *misk_new_Pixmap ();
-  sk_SkPixmap *misk_new_PixmapImageInfo (sk_SkImageInfo *c_info, void *c_addr,
-                                         ulong c_rowBytes);
+  sk_SkPixmap *misk_new_PixmapImageInfo (sk_SkImageInfo *c_info, void *c_addr, ulong c_rowBytes);
   void misk_delete_SkPixmap (sk_SkPixmap *obj);
 
   sk_SkRect misk_Rect_MakeEmpty ();
@@ -1153,10 +1025,8 @@ extern "C"
   float misk_Rect_centerY (sk_SkRect *c_obj);
   bool misk_Rect_isEmpty (sk_SkRect *c_obj);
   void misk_Rect_setEmpty (sk_SkRect *c_obj);
-  void misk_Rect_setLTRB (sk_SkRect *c_obj, float c_left, float c_top,
-                          float c_right, float c_bottom);
-  void misk_Rect_setXYWH (sk_SkRect *c_obj, float c_x, float c_y,
-                          float c_width, float c_height);
+  void misk_Rect_setLTRB (sk_SkRect *c_obj, float c_left, float c_top, float c_right, float c_bottom);
+  void misk_Rect_setXYWH (sk_SkRect *c_obj, float c_x, float c_y, float c_width, float c_height);
   void misk_Rect_setWH (sk_SkRect *c_obj, float c_width, float c_height);
   void misk_Rect_offset (sk_SkRect *c_obj, float c_dx, float c_dy);
   void misk_Rect_offsetTo (sk_SkRect *c_obj, float c_newX, float c_newY);
@@ -1177,8 +1047,7 @@ extern "C"
   void misk_delete_SkRegion (sk_SkRegion *obj);
 
   sk_SkSamplingOptions *misk_new_SamplingOptions ();
-  sk_SkSamplingOptions *
-  misk_new_SamplingOptionsCopy (sk_SkSamplingOptions *c_p0);
+  sk_SkSamplingOptions *misk_new_SamplingOptionsCopy (sk_SkSamplingOptions *c_p0);
   void misk_delete_SkSamplingOptions (sk_SkSamplingOptions *obj);
 
   void misk_delete_SkStream (sk_SkStream *obj);
@@ -1188,16 +1057,13 @@ extern "C"
   char *misk_String_data (sk_SkString *c_obj);
 
   sk_SkCanvas *misk_Surface_getCanvas (sk_SkSurface *c_obj);
-  sk_SkSurface *misk_Surface_makeSurface (sk_SkSurface *c_obj, int c_width,
-                                          int c_height);
+  sk_SkSurface *misk_Surface_makeSurface (sk_SkSurface *c_obj, int c_width, int c_height);
   sk_SkImage *misk_Surface_makeImageSnapshot (sk_SkSurface *c_obj);
-  sk_SkImage *misk_Surface_makeImageSnapshotBounds (sk_SkSurface *c_obj,
-                                                    sk_SkIRect c_bounds);
+  sk_SkImage *misk_Surface_makeImageSnapshotBounds (sk_SkSurface *c_obj, sk_SkIRect c_bounds);
   void misk_unref_SkSurface (sk_SkSurface *c_obj);
 
   sk_SkSurfaceProps *misk_new_SurfaceProps ();
-  sk_SkSurfaceProps *misk_new_SurfacePropsPixelGeometry (uint c_flags,
-                                                         uint c_p1);
+  sk_SkSurfaceProps *misk_new_SurfacePropsPixelGeometry (uint c_flags, uint c_p1);
   sk_SkSurfaceProps *misk_new_SurfacePropsCopy (sk_SkSurfaceProps *c_p0);
   void misk_delete_SkSurfaceProps (sk_SkSurfaceProps *obj);
 
@@ -1208,80 +1074,62 @@ extern "C"
   void misk_SVGDOM_render (sk_SkSVGDOM *c_obj, sk_SkCanvas *c_p0);
   sk_SkSVGDOMBuilder *misk_new_SVGDOMBuilder ();
   void misk_delete_Builder (sk_SkSVGDOMBuilder *obj);
-  sk_SkSVGDOMBuilder
-  misk_SVGDOMBuilder_setFontManager (sk_SkSVGDOMBuilder *c_obj,
-                                     sk_SkFontMgr *c_p0);
-  sk_SkSVGDOM *misk_SVGDOMBuilder_make (sk_SkSVGDOMBuilder *c_obj,
-                                        sk_SkStream *c_p0);
+  sk_SkSVGDOMBuilder misk_SVGDOMBuilder_setFontManager (sk_SkSVGDOMBuilder *c_obj, sk_SkFontMgr *c_p0);
+  sk_SkSVGDOM *misk_SVGDOMBuilder_make (sk_SkSVGDOMBuilder *c_obj, sk_SkStream *c_p0);
 
   void misk_unref_SkSVGDOM (sk_SkSVGDOM *c_obj);
 
-  sk_SkSize misk_SVGSVG_intrinsicSize (sk_SkSVGSVG *c_obj,
-                                       sk_SkSVGLengthContext *c_p0);
+  sk_SkSize misk_SVGSVG_intrinsicSize (sk_SkSVGSVG *c_obj, sk_SkSVGLengthContext *c_p0);
 
-  sk_SkSVGLengthContext *misk_new_SVGLengthContext (sk_SkSize c_viewport,
-                                                    float c_dpi);
+  sk_SkSVGLengthContext *misk_new_SVGLengthContext (sk_SkSize c_viewport, float c_dpi);
   void misk_delete_SkSVGLengthContext (sk_SkSVGLengthContext *obj);
   sk_SkSize misk_SVGLengthContext_viewPort (sk_SkSVGLengthContext *c_obj);
-  void misk_SVGLengthContext_setViewPort (sk_SkSVGLengthContext *c_obj,
-                                          sk_SkSize c_viewport);
+  void misk_SVGLengthContext_setViewPort (sk_SkSVGLengthContext *c_obj, sk_SkSize c_viewport);
 
   sk_SkRect misk_TextBlob_bounds (sk_SkTextBlob *c_obj);
   unsigned int misk_TextBlob_uniqueID (sk_SkTextBlob *c_obj);
-  sk_SkTextBlob *misk_TextBlob_MakeFromString (char *c_string,
-                                               sk_SkFont *c_font,
-                                               int c_encoding);
-  sk_SkTextBlob *misk_TextBlob_MakeFromPosTextH (void *c_text,
-                                                 ulong c_byteLength,
-                                                 float *c_xpos, float c_constY,
-                                                 sk_SkFont *c_font,
-                                                 int c_encoding);
-  sk_SkTextBlob *misk_TextBlob_MakeFromPosText (void *c_text,
-                                                ulong c_byteLength,
-                                                sk_SkPoint *c_pos,
-                                                sk_SkFont *c_font,
-                                                int c_encoding);
+  sk_SkTextBlob *misk_TextBlob_MakeFromString (char *c_string, sk_SkFont *c_font, int c_encoding);
+  sk_SkTextBlob *misk_TextBlob_MakeFromPosTextH (void *c_text, ulong c_byteLength, float *c_xpos,
+                                                 float c_constY, sk_SkFont *c_font, int c_encoding);
+  sk_SkTextBlob *misk_TextBlob_MakeFromPosText (void *c_text, ulong c_byteLength, sk_SkPoint *c_pos,
+                                                sk_SkFont *c_font, int c_encoding);
   void misk_unref_SkTextBlob (sk_SkTextBlob *c_obj);
 
   sk_SkTextBlobBuilder *misk_new_TextBlobBuilder ();
   void misk_delete_SkTextBlobBuilder (sk_SkTextBlobBuilder *obj);
   sk_SkTextBlob *misk_TextBlobBuilder_make (sk_SkTextBlobBuilder *c_obj);
-  sk_SkTextBlobBuilderRunBuffer
-  misk_TextBlobBuilder_allocRun (sk_SkTextBlobBuilder *c_obj,
-                                 sk_SkFont *c_font, int c_count, float c_x,
-                                 float c_y, sk_SkRect *c_bounds);
-  sk_SkTextBlobBuilderRunBuffer
-  misk_TextBlobBuilder_allocRunPosH (sk_SkTextBlobBuilder *c_obj,
-                                     sk_SkFont *c_font, int c_count, float c_y,
-                                     sk_SkRect *c_bounds);
-  sk_SkTextBlobBuilderRunBuffer
-  misk_TextBlobBuilder_allocRunPos (sk_SkTextBlobBuilder *c_obj,
-                                    sk_SkFont *c_font, int c_count,
-                                    sk_SkRect *c_bounds);
-  sk_SkTextBlobBuilderRunBuffer misk_TextBlobBuilder_allocRunText (
-      sk_SkTextBlobBuilder *c_obj, sk_SkFont *c_font, int c_count, float c_x,
-      float c_y, int c_textByteCount, sk_SkRect *c_bounds);
-  sk_SkTextBlobBuilderRunBuffer misk_TextBlobBuilder_allocRunTextPosH (
-      sk_SkTextBlobBuilder *c_obj, sk_SkFont *c_font, int c_count, float c_y,
-      int c_textByteCount, sk_SkRect *c_bounds);
-  sk_SkTextBlobBuilderRunBuffer misk_TextBlobBuilder_allocRunTextPos (
-      sk_SkTextBlobBuilder *c_obj, sk_SkFont *c_font, int c_count,
-      int c_textByteCount, sk_SkRect *c_bounds);
+  sk_SkTextBlobBuilderRunBuffer misk_TextBlobBuilder_allocRun (sk_SkTextBlobBuilder *c_obj, sk_SkFont *c_font,
+                                                               int c_count, float c_x, float c_y,
+                                                               sk_SkRect *c_bounds);
+  sk_SkTextBlobBuilderRunBuffer misk_TextBlobBuilder_allocRunPosH (sk_SkTextBlobBuilder *c_obj,
+                                                                   sk_SkFont *c_font, int c_count, float c_y,
+                                                                   sk_SkRect *c_bounds);
+  sk_SkTextBlobBuilderRunBuffer misk_TextBlobBuilder_allocRunPos (sk_SkTextBlobBuilder *c_obj,
+                                                                  sk_SkFont *c_font, int c_count,
+                                                                  sk_SkRect *c_bounds);
+  sk_SkTextBlobBuilderRunBuffer misk_TextBlobBuilder_allocRunText (sk_SkTextBlobBuilder *c_obj,
+                                                                   sk_SkFont *c_font, int c_count, float c_x,
+                                                                   float c_y, int c_textByteCount,
+                                                                   sk_SkRect *c_bounds);
+  sk_SkTextBlobBuilderRunBuffer misk_TextBlobBuilder_allocRunTextPosH (sk_SkTextBlobBuilder *c_obj,
+                                                                       sk_SkFont *c_font, int c_count,
+                                                                       float c_y, int c_textByteCount,
+                                                                       sk_SkRect *c_bounds);
+  sk_SkTextBlobBuilderRunBuffer misk_TextBlobBuilder_allocRunTextPos (sk_SkTextBlobBuilder *c_obj,
+                                                                      sk_SkFont *c_font, int c_count,
+                                                                      int c_textByteCount,
+                                                                      sk_SkRect *c_bounds);
 
   sk_SkFontStyle misk_Typeface_fontStyle (sk_SkTypeface *c_obj);
   bool misk_Typeface_isBold (sk_SkTypeface *c_obj);
   bool misk_Typeface_isItalic (sk_SkTypeface *c_obj);
   bool misk_Typeface_isFixedPitch (sk_SkTypeface *c_obj);
   unsigned int misk_Typeface_uniqueID (sk_SkTypeface *c_obj);
-  sk_SkTypeface *misk_Typeface_makeClone (sk_SkTypeface *c_obj,
-                                          sk_SkFontArguments *c_p0);
-  void misk_Typeface_unicharsToGlyphs (sk_SkTypeface *c_obj, int *c_uni,
-                                       int c_count, ushort *c_glyphs);
-  int misk_Typeface_textToGlyphs (sk_SkTypeface *c_obj, void *c_text,
-                                  ulong c_byteLength, int c_encoding,
+  sk_SkTypeface *misk_Typeface_makeClone (sk_SkTypeface *c_obj, sk_SkFontArguments *c_p0);
+  void misk_Typeface_unicharsToGlyphs (sk_SkTypeface *c_obj, int *c_uni, int c_count, ushort *c_glyphs);
+  int misk_Typeface_textToGlyphs (sk_SkTypeface *c_obj, void *c_text, ulong c_byteLength, int c_encoding,
                                   ushort *c_glyphs, int c_maxGlyphCount);
-  unsigned short misk_Typeface_unicharToGlyph (sk_SkTypeface *c_obj,
-                                               int c_unichar);
+  unsigned short misk_Typeface_unicharToGlyph (sk_SkTypeface *c_obj, int c_unichar);
   int misk_Typeface_countGlyphs (sk_SkTypeface *c_obj);
   int misk_Typeface_countTables (sk_SkTypeface *c_obj);
   int misk_Typeface_getUnitsPerEm (sk_SkTypeface *c_obj);
@@ -1290,35 +1138,27 @@ extern "C"
   sk_SkTypeface *misk_Typeface_MakeEmpty ();
   void misk_unref_SkTypeface (sk_SkTypeface *c_obj);
 
-  sk_GrBackendRenderTarget
-  misk_GrBackendRenderTargetsMakeGL (int c_width, int c_height,
-                                     int c_sampleCnt, int c_stencilBits,
-                                     sk_GrGLFramebufferInfo c_glInfo);
-  sk_GrDirectContext *
-  misk_GrDirectContextsMakeGLInterfaceOptions (sk_GrGLInterface *c_p0,
-                                               sk_GrContextOptions c_p1);
-  sk_GrDirectContext *
-  misk_GrDirectContextsMakeGLInterface (sk_GrGLInterface *c_p0);
-  sk_GrDirectContext *
-  misk_GrDirectContextsMakeGLOptions (sk_GrContextOptions c_p0);
+  sk_GrBackendRenderTarget misk_GrBackendRenderTargetsMakeGL (int c_width, int c_height, int c_sampleCnt,
+                                                              int c_stencilBits,
+                                                              sk_GrGLFramebufferInfo c_glInfo);
+  sk_GrDirectContext *misk_GrDirectContextsMakeGLInterfaceOptions (sk_GrGLInterface *c_p0,
+                                                                   sk_GrContextOptions c_p1);
+  sk_GrDirectContext *misk_GrDirectContextsMakeGLInterface (sk_GrGLInterface *c_p0);
+  sk_GrDirectContext *misk_GrDirectContextsMakeGLOptions (sk_GrContextOptions c_p0);
   sk_GrDirectContext *misk_GrDirectContextsMakeGL ();
   const sk_GrGLInterface *misk_GrGLMakeNativeInterface ();
   uint misk_SkColorSetARGB (uint c_a, uint c_r, uint c_g, uint c_b);
   uint misk_SkColorSetA (uint c_c, uint c_a);
-  sk_SkImage *misk_SkImagesDeferredFromEncodedData (sk_SkData *c_encoded,
-                                                    int *c_alphaType);
-  sk_SkImage *misk_SkImagesRasterFromData (sk_SkImageInfo *c_info,
-                                           sk_SkData *c_pixels,
-                                           ulong c_rowBytes);
+  sk_SkImage *misk_SkImagesDeferredFromEncodedData (sk_SkData *c_encoded, int *c_alphaType);
+  sk_SkImage *misk_SkImagesRasterFromData (sk_SkImageInfo *c_info, sk_SkData *c_pixels, ulong c_rowBytes);
   uint misk_SkPreMultiplyARGB (uint c_a, uint c_r, uint c_g, uint c_b);
   uint misk_SkPreMultiplyColor (uint c_c);
-  sk_SkSurface *misk_SkSurfacesWrapBackendRenderTarget (
-      sk_GrRecordingContext *c_context,
-      sk_GrBackendRenderTarget *c_backendRenderTarget, int c_origin,
-      int c_colorType, sk_SkColorSpace *c_colorSpace,
-      sk_SkSurfaceProps *c_surfaceProps);
-  bool misk_Op (sk_SkPath *c_one, sk_SkPath *c_two, uint c_op,
-                sk_SkPath *c_result);
+  sk_SkSurface *misk_SkSurfacesWrapBackendRenderTarget (sk_GrRecordingContext *c_context,
+                                                        sk_GrBackendRenderTarget *c_backendRenderTarget,
+                                                        int c_origin, int c_colorType,
+                                                        sk_SkColorSpace *c_colorSpace,
+                                                        sk_SkSurfaceProps *c_surfaceProps);
+  bool misk_Op (sk_SkPath *c_one, sk_SkPath *c_two, uint c_op, sk_SkPath *c_result);
   bool misk_Simplify (sk_SkPath *c_path, sk_SkPath *c_result);
   bool misk_AsWinding (sk_SkPath *c_path, sk_SkPath *c_result);
 

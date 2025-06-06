@@ -84,8 +84,7 @@ extern "C"
   int sk_sizeof_sk_SkData = sizeof (sk_SkData);
   int sk_sizeof_sk_SkFont = sizeof (sk_SkFont);
   int sk_sizeof_sk_SkFontArguments = sizeof (sk_SkFontArguments);
-  int sk_sizeof_sk_SkFontArgumentsVariationPosition
-      = sizeof (sk_SkFontArgumentsVariationPosition);
+  int sk_sizeof_sk_SkFontArgumentsVariationPosition = sizeof (sk_SkFontArgumentsVariationPosition);
   int sk_sizeof_sk_SkFontArgumentsPalette = sizeof (sk_SkFontArgumentsPalette);
   int sk_sizeof_sk_SkFontMetrics = sizeof (sk_SkFontMetrics);
   int sk_sizeof_sk_SkFontMgr = sizeof (sk_SkFontMgr);
@@ -120,23 +119,20 @@ extern "C"
   int sk_sizeof_sk_SkSVGLengthContext = sizeof (sk_SkSVGLengthContext);
   int sk_sizeof_sk_SkTextBlob = sizeof (sk_SkTextBlob);
   int sk_sizeof_sk_SkTextBlobBuilder = sizeof (sk_SkTextBlobBuilder);
-  int sk_sizeof_sk_SkTextBlobBuilderRunBuffer
-      = sizeof (sk_SkTextBlobBuilderRunBuffer);
+  int sk_sizeof_sk_SkTextBlobBuilderRunBuffer = sizeof (sk_SkTextBlobBuilderRunBuffer);
   int sk_sizeof_sk_SkTypeface = sizeof (sk_SkTypeface);
 
   sk_GrBackendRenderTarget *
   misk_new_GrBackendRenderTarget ()
   {
-    return reinterpret_cast<sk_GrBackendRenderTarget *> (
-        new GrBackendRenderTarget ());
+    return reinterpret_cast<sk_GrBackendRenderTarget *> (new GrBackendRenderTarget ());
   }
 
   sk_GrBackendRenderTarget *
   misk_new_GrBackendRenderTargetCopy (sk_GrBackendRenderTarget *c_that)
   {
     return reinterpret_cast<sk_GrBackendRenderTarget *> (
-        new GrBackendRenderTarget (
-            *reinterpret_cast<GrBackendRenderTarget *> (c_that)));
+        new GrBackendRenderTarget (*reinterpret_cast<GrBackendRenderTarget *> (c_that)));
   }
 
   void
@@ -148,8 +144,7 @@ extern "C"
   sk_SkISize
   misk_GrBackendRenderTarget_dimensions (sk_GrBackendRenderTarget *c_obj)
   {
-    auto ret
-        = reinterpret_cast<GrBackendRenderTarget *> (c_obj)->dimensions ();
+    auto ret = reinterpret_cast<GrBackendRenderTarget *> (c_obj)->dimensions ();
     return *(reinterpret_cast<sk_SkISize *> (&ret));
   }
 
@@ -177,17 +172,14 @@ extern "C"
   int
   misk_GrBackendRenderTarget_stencilBits (sk_GrBackendRenderTarget *c_obj)
   {
-    auto ret
-        = reinterpret_cast<GrBackendRenderTarget *> (c_obj)->stencilBits ();
+    auto ret = reinterpret_cast<GrBackendRenderTarget *> (c_obj)->stencilBits ();
     return ret;
   }
 
   bool
-  misk_GrBackendRenderTarget_isFramebufferOnly (
-      sk_GrBackendRenderTarget *c_obj)
+  misk_GrBackendRenderTarget_isFramebufferOnly (sk_GrBackendRenderTarget *c_obj)
   {
-    auto ret = reinterpret_cast<GrBackendRenderTarget *> (c_obj)
-                   ->isFramebufferOnly ();
+    auto ret = reinterpret_cast<GrBackendRenderTarget *> (c_obj)->isFramebufferOnly ();
     return ret;
   }
 
@@ -200,24 +192,20 @@ extern "C"
   void
   misk_GrDirectContext_flushAndSubmit (sk_GrDirectContext *c_obj, bool c_sync)
   {
-    reinterpret_cast<GrDirectContext *> (c_obj)->flushAndSubmit (
-        GrSyncCpu (c_sync));
+    reinterpret_cast<GrDirectContext *> (c_obj)->flushAndSubmit (GrSyncCpu (c_sync));
   }
 
   bool
-  misk_GrDirectContext_flush (sk_GrDirectContext *c_obj,
-                              sk_GrFlushInfo *c_info)
+  misk_GrDirectContext_flush (sk_GrDirectContext *c_obj, sk_GrFlushInfo *c_info)
   {
-    auto ret = reinterpret_cast<GrDirectContext *> (c_obj)->flush (
-        *reinterpret_cast<GrFlushInfo *> (c_info));
+    auto ret = reinterpret_cast<GrDirectContext *> (c_obj)->flush (*reinterpret_cast<GrFlushInfo *> (c_info));
     return (bool)ret;
   }
 
   bool
   misk_GrDirectContext_submit (sk_GrDirectContext *c_obj, bool c_sync)
   {
-    auto ret = reinterpret_cast<GrDirectContext *> (c_obj)->submit (
-        GrSyncCpu (c_sync));
+    auto ret = reinterpret_cast<GrDirectContext *> (c_obj)->submit (GrSyncCpu (c_sync));
     return ret;
   }
 
@@ -254,8 +242,7 @@ extern "C"
   sk_SkArc *
   misk_new_ArcCopy (sk_SkArc *c_arc)
   {
-    return reinterpret_cast<sk_SkArc *> (
-        new SkArc (*reinterpret_cast<SkArc *> (c_arc)));
+    return reinterpret_cast<sk_SkArc *> (new SkArc (*reinterpret_cast<SkArc *> (c_arc)));
   }
 
   void
@@ -273,8 +260,7 @@ extern "C"
   sk_SkBitmap *
   misk_new_BitmapCopy (sk_SkBitmap *c_src)
   {
-    return reinterpret_cast<sk_SkBitmap *> (
-        new SkBitmap (*reinterpret_cast<SkBitmap *> (c_src)));
+    return reinterpret_cast<sk_SkBitmap *> (new SkBitmap (*reinterpret_cast<SkBitmap *> (c_src)));
   }
 
   void
@@ -286,8 +272,7 @@ extern "C"
   bool
   misk_Bitmap_ComputeIsOpaque (sk_SkBitmap *c_bm)
   {
-    auto ret
-        = SkBitmap::ComputeIsOpaque (*reinterpret_cast<SkBitmap *> (c_bm));
+    auto ret = SkBitmap::ComputeIsOpaque (*reinterpret_cast<SkBitmap *> (c_bm));
     return ret;
   }
 
@@ -360,27 +345,23 @@ extern "C"
   }
 
   sk_SkCanvas *
-  misk_new_CanvasWithDimensions (int c_width, int c_height,
-                                 sk_SkSurfaceProps *c_props)
+  misk_new_CanvasWithDimensions (int c_width, int c_height, sk_SkSurfaceProps *c_props)
   {
-    return reinterpret_cast<sk_SkCanvas *> (new SkCanvas (
-        c_width, c_height, reinterpret_cast<SkSurfaceProps *> (c_props)));
+    return reinterpret_cast<sk_SkCanvas *> (
+        new SkCanvas (c_width, c_height, reinterpret_cast<SkSurfaceProps *> (c_props)));
   }
 
   sk_SkCanvas *
   misk_new_CanvasFromBitmap (sk_SkBitmap *c_bitmap)
   {
-    return reinterpret_cast<sk_SkCanvas *> (
-        new SkCanvas (*reinterpret_cast<SkBitmap *> (c_bitmap)));
+    return reinterpret_cast<sk_SkCanvas *> (new SkCanvas (*reinterpret_cast<SkBitmap *> (c_bitmap)));
   }
 
   sk_SkCanvas *
-  misk_new_CanvasFromBitmapSurfaceProps (sk_SkBitmap *c_bitmap,
-                                         sk_SkSurfaceProps *c_props)
+  misk_new_CanvasFromBitmapSurfaceProps (sk_SkBitmap *c_bitmap, sk_SkSurfaceProps *c_props)
   {
-    return reinterpret_cast<sk_SkCanvas *> (
-        new SkCanvas (*reinterpret_cast<SkBitmap *> (c_bitmap),
-                      *reinterpret_cast<SkSurfaceProps *> (c_props)));
+    return reinterpret_cast<sk_SkCanvas *> (new SkCanvas (*reinterpret_cast<SkBitmap *> (c_bitmap),
+                                                          *reinterpret_cast<SkSurfaceProps *> (c_props)));
   }
 
   void
@@ -392,8 +373,7 @@ extern "C"
   bool
   misk_Canvas_getProps (sk_SkCanvas *c_obj, sk_SkSurfaceProps *c_props)
   {
-    auto ret = reinterpret_cast<SkCanvas *> (c_obj)->getProps (
-        reinterpret_cast<SkSurfaceProps *> (c_props));
+    auto ret = reinterpret_cast<SkCanvas *> (c_obj)->getProps (reinterpret_cast<SkSurfaceProps *> (c_props));
     return ret;
   }
 
@@ -419,8 +399,7 @@ extern "C"
   }
 
   sk_SkSurface *
-  misk_Canvas_makeSurface (sk_SkCanvas *c_obj, sk_SkImageInfo *c_info,
-                           sk_SkSurfaceProps *c_props)
+  misk_Canvas_makeSurface (sk_SkCanvas *c_obj, sk_SkImageInfo *c_info, sk_SkSurfaceProps *c_props)
   {
     auto ret = reinterpret_cast<SkCanvas *> (c_obj)
                    ->makeSurface (*reinterpret_cast<SkImageInfo *> (c_info),
@@ -446,58 +425,50 @@ extern "C"
   bool
   misk_Canvas_peekPixels (sk_SkCanvas *c_obj, sk_SkPixmap *c_pixmap)
   {
-    auto ret = reinterpret_cast<SkCanvas *> (c_obj)->peekPixels (
-        reinterpret_cast<SkPixmap *> (c_pixmap));
+    auto ret = reinterpret_cast<SkCanvas *> (c_obj)->peekPixels (reinterpret_cast<SkPixmap *> (c_pixmap));
     return ret;
   }
 
   bool
-  misk_Canvas_readPixelsImageInfo (sk_SkCanvas *c_obj,
-                                   sk_SkImageInfo *c_dstInfo,
-                                   void *c_dstPixels, ulong c_dstRowBytes,
-                                   int c_srcX, int c_srcY)
+  misk_Canvas_readPixelsImageInfo (sk_SkCanvas *c_obj, sk_SkImageInfo *c_dstInfo, void *c_dstPixels,
+                                   ulong c_dstRowBytes, int c_srcX, int c_srcY)
   {
-    auto ret = reinterpret_cast<SkCanvas *> (c_obj)->readPixels (
-        *reinterpret_cast<SkImageInfo *> (c_dstInfo),
-        reinterpret_cast<void *> (c_dstPixels), c_dstRowBytes, c_srcX, c_srcY);
+    auto ret = reinterpret_cast<SkCanvas *> (c_obj)->readPixels (*reinterpret_cast<SkImageInfo *> (c_dstInfo),
+                                                                 reinterpret_cast<void *> (c_dstPixels),
+                                                                 c_dstRowBytes, c_srcX, c_srcY);
     return ret;
   }
 
   bool
-  misk_Canvas_readPixelsPixmap (sk_SkCanvas *c_obj, sk_SkPixmap *c_pixmap,
-                                int c_srcX, int c_srcY)
+  misk_Canvas_readPixelsPixmap (sk_SkCanvas *c_obj, sk_SkPixmap *c_pixmap, int c_srcX, int c_srcY)
   {
-    auto ret = reinterpret_cast<SkCanvas *> (c_obj)->readPixels (
-        *reinterpret_cast<SkPixmap *> (c_pixmap), c_srcX, c_srcY);
+    auto ret = reinterpret_cast<SkCanvas *> (c_obj)->readPixels (*reinterpret_cast<SkPixmap *> (c_pixmap),
+                                                                 c_srcX, c_srcY);
     return ret;
   }
 
   bool
-  misk_Canvas_readPixelsBitmap (sk_SkCanvas *c_obj, sk_SkBitmap *c_bitmap,
-                                int c_srcX, int c_srcY)
+  misk_Canvas_readPixelsBitmap (sk_SkCanvas *c_obj, sk_SkBitmap *c_bitmap, int c_srcX, int c_srcY)
   {
-    auto ret = reinterpret_cast<SkCanvas *> (c_obj)->readPixels (
-        *reinterpret_cast<SkBitmap *> (c_bitmap), c_srcX, c_srcY);
+    auto ret = reinterpret_cast<SkCanvas *> (c_obj)->readPixels (*reinterpret_cast<SkBitmap *> (c_bitmap),
+                                                                 c_srcX, c_srcY);
     return ret;
   }
 
   bool
-  misk_Canvas_writePixelsImageInfo (sk_SkCanvas *c_obj, sk_SkImageInfo *c_info,
-                                    void *c_pixels, ulong c_rowBytes, int c_x,
-                                    int c_y)
+  misk_Canvas_writePixelsImageInfo (sk_SkCanvas *c_obj, sk_SkImageInfo *c_info, void *c_pixels,
+                                    ulong c_rowBytes, int c_x, int c_y)
   {
     auto ret = reinterpret_cast<SkCanvas *> (c_obj)->writePixels (
-        *reinterpret_cast<SkImageInfo *> (c_info),
-        reinterpret_cast<void *> (c_pixels), c_rowBytes, c_x, c_y);
+        *reinterpret_cast<SkImageInfo *> (c_info), reinterpret_cast<void *> (c_pixels), c_rowBytes, c_x, c_y);
     return ret;
   }
 
   bool
-  misk_Canvas_writePixelsBitmap (sk_SkCanvas *c_obj, sk_SkBitmap *c_bitmap,
-                                 int c_x, int c_y)
+  misk_Canvas_writePixelsBitmap (sk_SkCanvas *c_obj, sk_SkBitmap *c_bitmap, int c_x, int c_y)
   {
-    auto ret = reinterpret_cast<SkCanvas *> (c_obj)->writePixels (
-        *reinterpret_cast<SkBitmap *> (c_bitmap), c_x, c_y);
+    auto ret = reinterpret_cast<SkCanvas *> (c_obj)->writePixels (*reinterpret_cast<SkBitmap *> (c_bitmap),
+                                                                  c_x, c_y);
     return ret;
   }
 
@@ -509,21 +480,18 @@ extern "C"
   }
 
   int
-  misk_Canvas_saveLayer (sk_SkCanvas *c_obj, sk_SkRect c_bounds,
-                         sk_SkPaint *c_paint)
+  misk_Canvas_saveLayer (sk_SkCanvas *c_obj, sk_SkRect c_bounds, sk_SkPaint *c_paint)
   {
-    auto ret = reinterpret_cast<SkCanvas *> (c_obj)->saveLayer (
-        reinterpret_cast<SkRect *> (&c_bounds),
-        reinterpret_cast<SkPaint *> (c_paint));
+    auto ret = reinterpret_cast<SkCanvas *> (c_obj)->saveLayer (reinterpret_cast<SkRect *> (&c_bounds),
+                                                                reinterpret_cast<SkPaint *> (c_paint));
     return ret;
   }
 
   int
-  misk_Canvas_saveLayerAlpha (sk_SkCanvas *c_obj, sk_SkRect c_bounds,
-                              uint c_alpha)
+  misk_Canvas_saveLayerAlpha (sk_SkCanvas *c_obj, sk_SkRect c_bounds, uint c_alpha)
   {
-    auto ret = reinterpret_cast<SkCanvas *> (c_obj)->saveLayerAlpha (
-        reinterpret_cast<SkRect *> (&c_bounds), c_alpha);
+    auto ret = reinterpret_cast<SkCanvas *> (c_obj)->saveLayerAlpha (reinterpret_cast<SkRect *> (&c_bounds),
+                                                                     c_alpha);
     return ret;
   }
 
@@ -565,8 +533,7 @@ extern "C"
   }
 
   void
-  misk_Canvas_rotateAboutPoint (sk_SkCanvas *c_obj, float c_degrees,
-                                float c_px, float c_py)
+  misk_Canvas_rotateAboutPoint (sk_SkCanvas *c_obj, float c_degrees, float c_px, float c_py)
   {
     reinterpret_cast<SkCanvas *> (c_obj)->rotate (c_degrees, c_px, c_py);
   }
@@ -580,29 +547,25 @@ extern "C"
   void
   misk_Canvas_concatMatrix (sk_SkCanvas *c_obj, sk_SkMatrix *c_matrix)
   {
-    reinterpret_cast<SkCanvas *> (c_obj)->concat (
-        *reinterpret_cast<SkMatrix *> (c_matrix));
+    reinterpret_cast<SkCanvas *> (c_obj)->concat (*reinterpret_cast<SkMatrix *> (c_matrix));
   }
 
   void
   misk_Canvas_concatM44 (sk_SkCanvas *c_obj, sk_SkM44 *c_p0)
   {
-    reinterpret_cast<SkCanvas *> (c_obj)->concat (
-        *reinterpret_cast<SkM44 *> (c_p0));
+    reinterpret_cast<SkCanvas *> (c_obj)->concat (*reinterpret_cast<SkM44 *> (c_p0));
   }
 
   void
   misk_Canvas_setMatrixM44 (sk_SkCanvas *c_obj, sk_SkM44 *c_matrix)
   {
-    reinterpret_cast<SkCanvas *> (c_obj)->setMatrix (
-        *reinterpret_cast<SkM44 *> (c_matrix));
+    reinterpret_cast<SkCanvas *> (c_obj)->setMatrix (*reinterpret_cast<SkM44 *> (c_matrix));
   }
 
   void
   misk_Canvas_setMatrix (sk_SkCanvas *c_obj, sk_SkMatrix *c_matrix)
   {
-    reinterpret_cast<SkCanvas *> (c_obj)->setMatrix (
-        *reinterpret_cast<SkMatrix *> (c_matrix));
+    reinterpret_cast<SkCanvas *> (c_obj)->setMatrix (*reinterpret_cast<SkMatrix *> (c_matrix));
   }
 
   void
@@ -612,51 +575,44 @@ extern "C"
   }
 
   void
-  misk_Canvas_clipRect (sk_SkCanvas *c_obj, sk_SkRect c_rect, int c_op,
-                        bool c_doAntiAlias)
+  misk_Canvas_clipRect (sk_SkCanvas *c_obj, sk_SkRect c_rect, int c_op, bool c_doAntiAlias)
   {
-    reinterpret_cast<SkCanvas *> (c_obj)->clipRect (
-        *reinterpret_cast<SkRect *> (&c_rect), SkClipOp (c_op), c_doAntiAlias);
+    reinterpret_cast<SkCanvas *> (c_obj)->clipRect (*reinterpret_cast<SkRect *> (&c_rect), SkClipOp (c_op),
+                                                    c_doAntiAlias);
   }
 
   void
-  misk_Canvas_clipRRect (sk_SkCanvas *c_obj, sk_SkRRect c_rrect, int c_op,
-                         bool c_doAntiAlias)
+  misk_Canvas_clipRRect (sk_SkCanvas *c_obj, sk_SkRRect c_rrect, int c_op, bool c_doAntiAlias)
   {
-    reinterpret_cast<SkCanvas *> (c_obj)->clipRRect (
-        *reinterpret_cast<SkRRect *> (&c_rrect), SkClipOp (c_op),
-        c_doAntiAlias);
+    reinterpret_cast<SkCanvas *> (c_obj)->clipRRect (*reinterpret_cast<SkRRect *> (&c_rrect), SkClipOp (c_op),
+                                                     c_doAntiAlias);
   }
 
   void
-  misk_Canvas_clipPath (sk_SkCanvas *c_obj, sk_SkPath *c_path, int c_op,
-                        bool c_doAntiAlias)
+  misk_Canvas_clipPath (sk_SkCanvas *c_obj, sk_SkPath *c_path, int c_op, bool c_doAntiAlias)
   {
-    reinterpret_cast<SkCanvas *> (c_obj)->clipPath (
-        *reinterpret_cast<SkPath *> (c_path), SkClipOp (c_op), c_doAntiAlias);
+    reinterpret_cast<SkCanvas *> (c_obj)->clipPath (*reinterpret_cast<SkPath *> (c_path), SkClipOp (c_op),
+                                                    c_doAntiAlias);
   }
 
   void
-  misk_Canvas_clipRegion (sk_SkCanvas *c_obj, sk_SkRegion *c_deviceRgn,
-                          int c_op)
+  misk_Canvas_clipRegion (sk_SkCanvas *c_obj, sk_SkRegion *c_deviceRgn, int c_op)
   {
-    reinterpret_cast<SkCanvas *> (c_obj)->clipRegion (
-        *reinterpret_cast<SkRegion *> (c_deviceRgn), SkClipOp (c_op));
+    reinterpret_cast<SkCanvas *> (c_obj)->clipRegion (*reinterpret_cast<SkRegion *> (c_deviceRgn),
+                                                      SkClipOp (c_op));
   }
 
   bool
   misk_Canvas_quickRejectRect (sk_SkCanvas *c_obj, sk_SkRect c_rect)
   {
-    auto ret = reinterpret_cast<SkCanvas *> (c_obj)->quickReject (
-        *reinterpret_cast<SkRect *> (&c_rect));
+    auto ret = reinterpret_cast<SkCanvas *> (c_obj)->quickReject (*reinterpret_cast<SkRect *> (&c_rect));
     return ret;
   }
 
   bool
   misk_Canvas_quickRejectPath (sk_SkCanvas *c_obj, sk_SkPath *c_path)
   {
-    auto ret = reinterpret_cast<SkCanvas *> (c_obj)->quickReject (
-        *reinterpret_cast<SkPath *> (c_path));
+    auto ret = reinterpret_cast<SkCanvas *> (c_obj)->quickReject (*reinterpret_cast<SkPath *> (c_path));
     return ret;
   }
 
@@ -670,8 +626,8 @@ extern "C"
   bool
   misk_Canvas_getLocalClipBoundsPath (sk_SkCanvas *c_obj, sk_SkRect *c_bounds)
   {
-    auto ret = reinterpret_cast<SkCanvas *> (c_obj)->getLocalClipBounds (
-        reinterpret_cast<SkRect *> (c_bounds));
+    auto ret
+        = reinterpret_cast<SkCanvas *> (c_obj)->getLocalClipBounds (reinterpret_cast<SkRect *> (c_bounds));
     return ret;
   }
 
@@ -683,27 +639,24 @@ extern "C"
   }
 
   bool
-  misk_Canvas_getDeviceClipBoundsRect (sk_SkCanvas *c_obj,
-                                       sk_SkIRect *c_bounds)
+  misk_Canvas_getDeviceClipBoundsRect (sk_SkCanvas *c_obj, sk_SkIRect *c_bounds)
   {
-    auto ret = reinterpret_cast<SkCanvas *> (c_obj)->getDeviceClipBounds (
-        reinterpret_cast<SkIRect *> (c_bounds));
+    auto ret
+        = reinterpret_cast<SkCanvas *> (c_obj)->getDeviceClipBounds (reinterpret_cast<SkIRect *> (c_bounds));
     return ret;
   }
 
   void
   misk_Canvas_drawColor (sk_SkCanvas *c_obj, uint c_color, int c_mode)
   {
-    reinterpret_cast<SkCanvas *> (c_obj)->drawColor (SkColor (c_color),
-                                                     SkBlendMode (c_mode));
+    reinterpret_cast<SkCanvas *> (c_obj)->drawColor (SkColor (c_color), SkBlendMode (c_mode));
   }
 
   void
   misk_Canvas_drawColor4f (sk_SkCanvas *c_obj, sk_SkRGBA4f c_color, int c_mode)
   {
     reinterpret_cast<SkCanvas *> (c_obj)->drawColor (
-        *reinterpret_cast<SkRGBA4f<kUnpremul_SkAlphaType> *> (&c_color),
-        SkBlendMode (c_mode));
+        *reinterpret_cast<SkRGBA4f<kUnpremul_SkAlphaType> *> (&c_color), SkBlendMode (c_mode));
   }
 
   void
@@ -728,256 +681,205 @@ extern "C"
   void
   misk_Canvas_drawPaint (sk_SkCanvas *c_obj, sk_SkPaint *c_paint)
   {
-    reinterpret_cast<SkCanvas *> (c_obj)->drawPaint (
-        *reinterpret_cast<SkPaint *> (c_paint));
+    reinterpret_cast<SkCanvas *> (c_obj)->drawPaint (*reinterpret_cast<SkPaint *> (c_paint));
   }
 
   void
-  misk_Canvas_drawPointScalars (sk_SkCanvas *c_obj, float c_x, float c_y,
-                                sk_SkPaint *c_paint)
+  misk_Canvas_drawPointScalars (sk_SkCanvas *c_obj, float c_x, float c_y, sk_SkPaint *c_paint)
   {
-    reinterpret_cast<SkCanvas *> (c_obj)->drawPoint (
-        c_x, c_y, *reinterpret_cast<SkPaint *> (c_paint));
+    reinterpret_cast<SkCanvas *> (c_obj)->drawPoint (c_x, c_y, *reinterpret_cast<SkPaint *> (c_paint));
   }
 
   void
-  misk_Canvas_drawPoint (sk_SkCanvas *c_obj, sk_SkPoint c_p,
-                         sk_SkPaint *c_paint)
+  misk_Canvas_drawPoint (sk_SkCanvas *c_obj, sk_SkPoint c_p, sk_SkPaint *c_paint)
   {
-    reinterpret_cast<SkCanvas *> (c_obj)->drawPoint (
-        *reinterpret_cast<SkPoint *> (&c_p),
-        *reinterpret_cast<SkPaint *> (c_paint));
+    reinterpret_cast<SkCanvas *> (c_obj)->drawPoint (*reinterpret_cast<SkPoint *> (&c_p),
+                                                     *reinterpret_cast<SkPaint *> (c_paint));
   }
 
   void
-  misk_Canvas_drawLineScalars (sk_SkCanvas *c_obj, float c_x0, float c_y0,
-                               float c_x1, float c_y1, sk_SkPaint *c_paint)
+  misk_Canvas_drawLineScalars (sk_SkCanvas *c_obj, float c_x0, float c_y0, float c_x1, float c_y1,
+                               sk_SkPaint *c_paint)
   {
-    reinterpret_cast<SkCanvas *> (c_obj)->drawLine (
-        c_x0, c_y0, c_x1, c_y1, *reinterpret_cast<SkPaint *> (c_paint));
+    reinterpret_cast<SkCanvas *> (c_obj)->drawLine (c_x0, c_y0, c_x1, c_y1,
+                                                    *reinterpret_cast<SkPaint *> (c_paint));
   }
 
   void
-  misk_Canvas_drawLinePoints (sk_SkCanvas *c_obj, sk_SkPoint c_p0,
-                              sk_SkPoint c_p1, sk_SkPaint *c_paint)
+  misk_Canvas_drawLinePoints (sk_SkCanvas *c_obj, sk_SkPoint c_p0, sk_SkPoint c_p1, sk_SkPaint *c_paint)
   {
-    reinterpret_cast<SkCanvas *> (c_obj)->drawLine (
-        *reinterpret_cast<SkPoint *> (&c_p0),
-        *reinterpret_cast<SkPoint *> (&c_p1),
-        *reinterpret_cast<SkPaint *> (c_paint));
+    reinterpret_cast<SkCanvas *> (c_obj)->drawLine (*reinterpret_cast<SkPoint *> (&c_p0),
+                                                    *reinterpret_cast<SkPoint *> (&c_p1),
+                                                    *reinterpret_cast<SkPaint *> (c_paint));
   }
 
   void
-  misk_Canvas_drawRect (sk_SkCanvas *c_obj, sk_SkRect c_rect,
-                        sk_SkPaint *c_paint)
+  misk_Canvas_drawRect (sk_SkCanvas *c_obj, sk_SkRect c_rect, sk_SkPaint *c_paint)
   {
-    reinterpret_cast<SkCanvas *> (c_obj)->drawRect (
-        *reinterpret_cast<SkRect *> (&c_rect),
-        *reinterpret_cast<SkPaint *> (c_paint));
+    reinterpret_cast<SkCanvas *> (c_obj)->drawRect (*reinterpret_cast<SkRect *> (&c_rect),
+                                                    *reinterpret_cast<SkPaint *> (c_paint));
   }
 
   void
-  misk_Canvas_drawIRect (sk_SkCanvas *c_obj, sk_SkIRect c_rect,
-                         sk_SkPaint *c_paint)
+  misk_Canvas_drawIRect (sk_SkCanvas *c_obj, sk_SkIRect c_rect, sk_SkPaint *c_paint)
   {
-    reinterpret_cast<SkCanvas *> (c_obj)->drawIRect (
-        *reinterpret_cast<SkIRect *> (&c_rect),
-        *reinterpret_cast<SkPaint *> (c_paint));
+    reinterpret_cast<SkCanvas *> (c_obj)->drawIRect (*reinterpret_cast<SkIRect *> (&c_rect),
+                                                     *reinterpret_cast<SkPaint *> (c_paint));
   }
 
   void
-  misk_Canvas_drawRegion (sk_SkCanvas *c_obj, sk_SkRegion *c_region,
-                          sk_SkPaint *c_paint)
+  misk_Canvas_drawRegion (sk_SkCanvas *c_obj, sk_SkRegion *c_region, sk_SkPaint *c_paint)
   {
-    reinterpret_cast<SkCanvas *> (c_obj)->drawRegion (
-        *reinterpret_cast<SkRegion *> (c_region),
-        *reinterpret_cast<SkPaint *> (c_paint));
+    reinterpret_cast<SkCanvas *> (c_obj)->drawRegion (*reinterpret_cast<SkRegion *> (c_region),
+                                                      *reinterpret_cast<SkPaint *> (c_paint));
   }
 
   void
-  misk_Canvas_drawOval (sk_SkCanvas *c_obj, sk_SkRect c_oval,
-                        sk_SkPaint *c_paint)
+  misk_Canvas_drawOval (sk_SkCanvas *c_obj, sk_SkRect c_oval, sk_SkPaint *c_paint)
   {
-    reinterpret_cast<SkCanvas *> (c_obj)->drawOval (
-        *reinterpret_cast<SkRect *> (&c_oval),
-        *reinterpret_cast<SkPaint *> (c_paint));
+    reinterpret_cast<SkCanvas *> (c_obj)->drawOval (*reinterpret_cast<SkRect *> (&c_oval),
+                                                    *reinterpret_cast<SkPaint *> (c_paint));
   }
 
   void
-  misk_Canvas_drawRRect (sk_SkCanvas *c_obj, sk_SkRRect c_rrect,
-                         sk_SkPaint *c_paint)
+  misk_Canvas_drawRRect (sk_SkCanvas *c_obj, sk_SkRRect c_rrect, sk_SkPaint *c_paint)
   {
-    reinterpret_cast<SkCanvas *> (c_obj)->drawRRect (
-        *reinterpret_cast<SkRRect *> (&c_rrect),
-        *reinterpret_cast<SkPaint *> (c_paint));
+    reinterpret_cast<SkCanvas *> (c_obj)->drawRRect (*reinterpret_cast<SkRRect *> (&c_rrect),
+                                                     *reinterpret_cast<SkPaint *> (c_paint));
   }
 
   void
-  misk_Canvas_drawDRRect (sk_SkCanvas *c_obj, sk_SkRRect c_outer,
-                          sk_SkRRect c_inner, sk_SkPaint *c_paint)
+  misk_Canvas_drawDRRect (sk_SkCanvas *c_obj, sk_SkRRect c_outer, sk_SkRRect c_inner, sk_SkPaint *c_paint)
   {
-    reinterpret_cast<SkCanvas *> (c_obj)->drawDRRect (
-        *reinterpret_cast<SkRRect *> (&c_outer),
-        *reinterpret_cast<SkRRect *> (&c_inner),
-        *reinterpret_cast<SkPaint *> (c_paint));
+    reinterpret_cast<SkCanvas *> (c_obj)->drawDRRect (*reinterpret_cast<SkRRect *> (&c_outer),
+                                                      *reinterpret_cast<SkRRect *> (&c_inner),
+                                                      *reinterpret_cast<SkPaint *> (c_paint));
   }
 
   void
-  misk_Canvas_drawCircleScalars (sk_SkCanvas *c_obj, float c_cx, float c_cy,
-                                 float c_radius, sk_SkPaint *c_paint)
+  misk_Canvas_drawCircleScalars (sk_SkCanvas *c_obj, float c_cx, float c_cy, float c_radius,
+                                 sk_SkPaint *c_paint)
   {
-    reinterpret_cast<SkCanvas *> (c_obj)->drawCircle (
-        c_cx, c_cy, c_radius, *reinterpret_cast<SkPaint *> (c_paint));
+    reinterpret_cast<SkCanvas *> (c_obj)->drawCircle (c_cx, c_cy, c_radius,
+                                                      *reinterpret_cast<SkPaint *> (c_paint));
   }
 
   void
-  misk_Canvas_drawCirclePoint (sk_SkCanvas *c_obj, sk_SkPoint c_center,
-                               float c_radius, sk_SkPaint *c_paint)
+  misk_Canvas_drawCirclePoint (sk_SkCanvas *c_obj, sk_SkPoint c_center, float c_radius, sk_SkPaint *c_paint)
   {
-    reinterpret_cast<SkCanvas *> (c_obj)->drawCircle (
-        *reinterpret_cast<SkPoint *> (&c_center), c_radius,
-        *reinterpret_cast<SkPaint *> (c_paint));
+    reinterpret_cast<SkCanvas *> (c_obj)->drawCircle (*reinterpret_cast<SkPoint *> (&c_center), c_radius,
+                                                      *reinterpret_cast<SkPaint *> (c_paint));
   }
 
   void
-  misk_Canvas_drawArc (sk_SkCanvas *c_obj, sk_SkRect c_oval,
-                       float c_startAngle, float c_sweepAngle,
+  misk_Canvas_drawArc (sk_SkCanvas *c_obj, sk_SkRect c_oval, float c_startAngle, float c_sweepAngle,
                        bool c_useCenter, sk_SkPaint *c_paint)
   {
-    reinterpret_cast<SkCanvas *> (c_obj)->drawArc (
-        *reinterpret_cast<SkRect *> (&c_oval), c_startAngle, c_sweepAngle,
-        c_useCenter, *reinterpret_cast<SkPaint *> (c_paint));
+    reinterpret_cast<SkCanvas *> (c_obj)->drawArc (*reinterpret_cast<SkRect *> (&c_oval), c_startAngle,
+                                                   c_sweepAngle, c_useCenter,
+                                                   *reinterpret_cast<SkPaint *> (c_paint));
   }
 
   void
-  misk_Canvas_drawArcArc (sk_SkCanvas *c_obj, sk_SkArc *c_arc,
-                          sk_SkPaint *c_paint)
+  misk_Canvas_drawArcArc (sk_SkCanvas *c_obj, sk_SkArc *c_arc, sk_SkPaint *c_paint)
   {
-    reinterpret_cast<SkCanvas *> (c_obj)->drawArc (
-        *reinterpret_cast<SkArc *> (c_arc),
-        *reinterpret_cast<SkPaint *> (c_paint));
+    reinterpret_cast<SkCanvas *> (c_obj)->drawArc (*reinterpret_cast<SkArc *> (c_arc),
+                                                   *reinterpret_cast<SkPaint *> (c_paint));
   }
 
   void
-  misk_Canvas_drawRoundRect (sk_SkCanvas *c_obj, sk_SkRect c_rect, float c_rx,
-                             float c_ry, sk_SkPaint *c_paint)
+  misk_Canvas_drawRoundRect (sk_SkCanvas *c_obj, sk_SkRect c_rect, float c_rx, float c_ry,
+                             sk_SkPaint *c_paint)
   {
-    reinterpret_cast<SkCanvas *> (c_obj)->drawRoundRect (
-        *reinterpret_cast<SkRect *> (&c_rect), c_rx, c_ry,
-        *reinterpret_cast<SkPaint *> (c_paint));
+    reinterpret_cast<SkCanvas *> (c_obj)->drawRoundRect (*reinterpret_cast<SkRect *> (&c_rect), c_rx, c_ry,
+                                                         *reinterpret_cast<SkPaint *> (c_paint));
   }
 
   void
-  misk_Canvas_drawPath (sk_SkCanvas *c_obj, sk_SkPath *c_path,
-                        sk_SkPaint *c_paint)
+  misk_Canvas_drawPath (sk_SkCanvas *c_obj, sk_SkPath *c_path, sk_SkPaint *c_paint)
   {
-    reinterpret_cast<SkCanvas *> (c_obj)->drawPath (
-        *reinterpret_cast<SkPath *> (c_path),
-        *reinterpret_cast<SkPaint *> (c_paint));
+    reinterpret_cast<SkCanvas *> (c_obj)->drawPath (*reinterpret_cast<SkPath *> (c_path),
+                                                    *reinterpret_cast<SkPaint *> (c_paint));
   }
 
   void
-  misk_Canvas_drawImage (sk_SkCanvas *c_obj, sk_SkImage *c_image, float c_left,
-                         float c_top)
+  misk_Canvas_drawImage (sk_SkCanvas *c_obj, sk_SkImage *c_image, float c_left, float c_top)
   {
-    reinterpret_cast<SkCanvas *> (c_obj)->drawImage (
-        reinterpret_cast<SkImage *> (c_image), c_left, c_top);
+    reinterpret_cast<SkCanvas *> (c_obj)->drawImage (reinterpret_cast<SkImage *> (c_image), c_left, c_top);
   }
 
   void
-  misk_Canvas_drawImageSamplingOptions (sk_SkCanvas *c_obj, sk_SkImage *c_p0,
-                                        float c_x, float c_y,
-                                        sk_SkSamplingOptions *c_p3,
-                                        sk_SkPaint *c_p4)
+  misk_Canvas_drawImageSamplingOptions (sk_SkCanvas *c_obj, sk_SkImage *c_p0, float c_x, float c_y,
+                                        sk_SkSamplingOptions *c_p3, sk_SkPaint *c_p4)
   {
-    reinterpret_cast<SkCanvas *> (c_obj)->drawImage (
-        reinterpret_cast<SkImage *> (c_p0), c_x, c_y,
-        *reinterpret_cast<SkSamplingOptions *> (c_p3),
-        reinterpret_cast<SkPaint *> (c_p4));
+    reinterpret_cast<SkCanvas *> (c_obj)->drawImage (reinterpret_cast<SkImage *> (c_p0), c_x, c_y,
+                                                     *reinterpret_cast<SkSamplingOptions *> (c_p3),
+                                                     reinterpret_cast<SkPaint *> (c_p4));
   }
 
   void
-  misk_Canvas_drawImageRect (sk_SkCanvas *c_obj, sk_SkImage *c_p0,
-                             sk_SkRect c_src, sk_SkRect c_dst,
-                             sk_SkSamplingOptions *c_p3, sk_SkPaint *c_p4,
-                             uint c_p5)
+  misk_Canvas_drawImageRect (sk_SkCanvas *c_obj, sk_SkImage *c_p0, sk_SkRect c_src, sk_SkRect c_dst,
+                             sk_SkSamplingOptions *c_p3, sk_SkPaint *c_p4, uint c_p5)
   {
     reinterpret_cast<SkCanvas *> (c_obj)->drawImageRect (
-        reinterpret_cast<SkImage *> (c_p0),
-        *reinterpret_cast<SkRect *> (&c_src),
-        *reinterpret_cast<SkRect *> (&c_dst),
-        *reinterpret_cast<SkSamplingOptions *> (c_p3),
-        reinterpret_cast<SkPaint *> (c_p4),
-        SkCanvas::SrcRectConstraint (c_p5));
+        reinterpret_cast<SkImage *> (c_p0), *reinterpret_cast<SkRect *> (&c_src),
+        *reinterpret_cast<SkRect *> (&c_dst), *reinterpret_cast<SkSamplingOptions *> (c_p3),
+        reinterpret_cast<SkPaint *> (c_p4), SkCanvas::SrcRectConstraint (c_p5));
   }
 
   void
-  misk_Canvas_drawImageRectNoSrc (sk_SkCanvas *c_obj, sk_SkImage *c_p0,
-                                  sk_SkRect c_dst, sk_SkSamplingOptions *c_p2,
-                                  sk_SkPaint *c_p3)
+  misk_Canvas_drawImageRectNoSrc (sk_SkCanvas *c_obj, sk_SkImage *c_p0, sk_SkRect c_dst,
+                                  sk_SkSamplingOptions *c_p2, sk_SkPaint *c_p3)
   {
     reinterpret_cast<SkCanvas *> (c_obj)->drawImageRect (
-        reinterpret_cast<SkImage *> (c_p0),
-        *reinterpret_cast<SkRect *> (&c_dst),
-        *reinterpret_cast<SkSamplingOptions *> (c_p2),
-        reinterpret_cast<SkPaint *> (c_p3));
+        reinterpret_cast<SkImage *> (c_p0), *reinterpret_cast<SkRect *> (&c_dst),
+        *reinterpret_cast<SkSamplingOptions *> (c_p2), reinterpret_cast<SkPaint *> (c_p3));
   }
 
   void
-  misk_Canvas_drawImageNine (sk_SkCanvas *c_obj, sk_SkImage *c_image,
-                             sk_SkIRect c_center, sk_SkRect c_dst,
+  misk_Canvas_drawImageNine (sk_SkCanvas *c_obj, sk_SkImage *c_image, sk_SkIRect c_center, sk_SkRect c_dst,
                              int c_filter, sk_SkPaint *c_paint)
   {
     reinterpret_cast<SkCanvas *> (c_obj)->drawImageNine (
-        reinterpret_cast<SkImage *> (c_image),
-        *reinterpret_cast<SkIRect *> (&c_center),
-        *reinterpret_cast<SkRect *> (&c_dst), SkFilterMode (c_filter),
-        reinterpret_cast<SkPaint *> (c_paint));
+        reinterpret_cast<SkImage *> (c_image), *reinterpret_cast<SkIRect *> (&c_center),
+        *reinterpret_cast<SkRect *> (&c_dst), SkFilterMode (c_filter), reinterpret_cast<SkPaint *> (c_paint));
   }
 
   void
-  misk_Canvas_drawString (sk_SkCanvas *c_obj, char *c_str, float c_x,
-                          float c_y, sk_SkFont *c_font, sk_SkPaint *c_paint)
+  misk_Canvas_drawString (sk_SkCanvas *c_obj, char *c_str, float c_x, float c_y, sk_SkFont *c_font,
+                          sk_SkPaint *c_paint)
   {
-    reinterpret_cast<SkCanvas *> (c_obj)->drawString (
-        (char *)c_str, c_x, c_y, *reinterpret_cast<SkFont *> (c_font),
-        *reinterpret_cast<SkPaint *> (c_paint));
+    reinterpret_cast<SkCanvas *> (c_obj)->drawString ((char *)c_str, c_x, c_y,
+                                                      *reinterpret_cast<SkFont *> (c_font),
+                                                      *reinterpret_cast<SkPaint *> (c_paint));
   }
 
   void
-  misk_Canvas_drawGlyphsClusters (sk_SkCanvas *c_obj, int c_count,
-                                  ushort *c_glyphs, sk_SkPoint *c_positions,
-                                  uint *c_clusters, int c_textByteCount,
-                                  char *c_utf8text, sk_SkPoint c_origin,
-                                  sk_SkFont *c_font, sk_SkPaint *c_paint)
+  misk_Canvas_drawGlyphsClusters (sk_SkCanvas *c_obj, int c_count, ushort *c_glyphs, sk_SkPoint *c_positions,
+                                  uint *c_clusters, int c_textByteCount, char *c_utf8text,
+                                  sk_SkPoint c_origin, sk_SkFont *c_font, sk_SkPaint *c_paint)
   {
     reinterpret_cast<SkCanvas *> (c_obj)->drawGlyphs (
-        c_count, (unsigned short *)c_glyphs, (SkPoint *)c_positions,
-        (unsigned int *)c_clusters, c_textByteCount, (char *)c_utf8text,
-        *reinterpret_cast<SkPoint *> (&c_origin),
-        *reinterpret_cast<SkFont *> (c_font),
-        *reinterpret_cast<SkPaint *> (c_paint));
+        c_count, (unsigned short *)c_glyphs, (SkPoint *)c_positions, (unsigned int *)c_clusters,
+        c_textByteCount, (char *)c_utf8text, *reinterpret_cast<SkPoint *> (&c_origin),
+        *reinterpret_cast<SkFont *> (c_font), *reinterpret_cast<SkPaint *> (c_paint));
   }
 
   void
-  misk_Canvas_drawGlyphs (sk_SkCanvas *c_obj, int c_count, ushort *c_glyphs,
-                          sk_SkPoint *c_positions, sk_SkPoint c_origin,
-                          sk_SkFont *c_font, sk_SkPaint *c_paint)
+  misk_Canvas_drawGlyphs (sk_SkCanvas *c_obj, int c_count, ushort *c_glyphs, sk_SkPoint *c_positions,
+                          sk_SkPoint c_origin, sk_SkFont *c_font, sk_SkPaint *c_paint)
   {
     reinterpret_cast<SkCanvas *> (c_obj)->drawGlyphs (
-        c_count, (unsigned short *)c_glyphs, (SkPoint *)c_positions,
-        *reinterpret_cast<SkPoint *> (&c_origin),
-        *reinterpret_cast<SkFont *> (c_font),
-        *reinterpret_cast<SkPaint *> (c_paint));
+        c_count, (unsigned short *)c_glyphs, (SkPoint *)c_positions, *reinterpret_cast<SkPoint *> (&c_origin),
+        *reinterpret_cast<SkFont *> (c_font), *reinterpret_cast<SkPaint *> (c_paint));
   }
 
   void
-  misk_Canvas_drawTextBlob (sk_SkCanvas *c_obj, sk_SkTextBlob *c_blob,
-                            float c_x, float c_y, sk_SkPaint *c_paint)
+  misk_Canvas_drawTextBlob (sk_SkCanvas *c_obj, sk_SkTextBlob *c_blob, float c_x, float c_y,
+                            sk_SkPaint *c_paint)
   {
-    reinterpret_cast<SkCanvas *> (c_obj)->drawTextBlob (
-        reinterpret_cast<SkTextBlob *> (c_blob), c_x, c_y,
-        *reinterpret_cast<SkPaint *> (c_paint));
+    reinterpret_cast<SkCanvas *> (c_obj)->drawTextBlob (reinterpret_cast<SkTextBlob *> (c_blob), c_x, c_y,
+                                                        *reinterpret_cast<SkPaint *> (c_paint));
   }
 
   sk_SkColorInfo *
@@ -989,16 +891,14 @@ extern "C"
   sk_SkColorInfo *
   misk_new_ColorInfo2 (int c_ct, int c_at, sk_SkColorSpace *c_cs)
   {
-    return reinterpret_cast<sk_SkColorInfo *> (
-        new SkColorInfo (SkColorType (c_ct), SkAlphaType (c_at),
-                         sk_ref_sp (reinterpret_cast<SkColorSpace *> (c_cs))));
+    return reinterpret_cast<sk_SkColorInfo *> (new SkColorInfo (
+        SkColorType (c_ct), SkAlphaType (c_at), sk_ref_sp (reinterpret_cast<SkColorSpace *> (c_cs))));
   }
 
   sk_SkColorInfo *
   misk_new_ColorInfoCopy (sk_SkColorInfo *c_p0)
   {
-    return reinterpret_cast<sk_SkColorInfo *> (
-        new SkColorInfo (*reinterpret_cast<SkColorInfo *> (c_p0)));
+    return reinterpret_cast<sk_SkColorInfo *> (new SkColorInfo (*reinterpret_cast<SkColorInfo *> (c_p0)));
   }
 
   void
@@ -1017,8 +917,7 @@ extern "C"
   sk_SkColorSpace *
   misk_ColorInfo_refColorSpace (sk_SkColorInfo *c_obj)
   {
-    auto ret
-        = reinterpret_cast<SkColorInfo *> (c_obj)->refColorSpace ().release ();
+    auto ret = reinterpret_cast<SkColorInfo *> (c_obj)->refColorSpace ().release ();
     return reinterpret_cast<sk_SkColorSpace *> (ret);
   }
 
@@ -1053,16 +952,14 @@ extern "C"
   sk_SkColorInfo
   misk_ColorInfo_makeAlphaType (sk_SkColorInfo *c_obj, int c_newAlphaType)
   {
-    auto ret = reinterpret_cast<SkColorInfo *> (c_obj)->makeAlphaType (
-        SkAlphaType (c_newAlphaType));
+    auto ret = reinterpret_cast<SkColorInfo *> (c_obj)->makeAlphaType (SkAlphaType (c_newAlphaType));
     return *(reinterpret_cast<sk_SkColorInfo *> (&ret));
   }
 
   sk_SkColorInfo
   misk_ColorInfo_makeColorType (sk_SkColorInfo *c_obj, int c_newColorType)
   {
-    auto ret = reinterpret_cast<SkColorInfo *> (c_obj)->makeColorType (
-        SkColorType (c_newColorType));
+    auto ret = reinterpret_cast<SkColorInfo *> (c_obj)->makeColorType (SkColorType (c_newColorType));
     return *(reinterpret_cast<sk_SkColorInfo *> (&ret));
   }
 
@@ -1133,9 +1030,7 @@ extern "C"
   sk_SkData *
   misk_Data_MakeWithCopy (void *c_data, ulong c_length)
   {
-    auto ret
-        = SkData::MakeWithCopy (reinterpret_cast<void *> (c_data), c_length)
-              .release ();
+    auto ret = SkData::MakeWithCopy (reinterpret_cast<void *> (c_data), c_length).release ();
     return reinterpret_cast<sk_SkData *> (ret);
   }
 
@@ -1156,9 +1051,7 @@ extern "C"
   sk_SkData *
   misk_Data_MakeWithoutCopy (void *c_data, ulong c_length)
   {
-    auto ret
-        = SkData::MakeWithoutCopy (reinterpret_cast<void *> (c_data), c_length)
-              .release ();
+    auto ret = SkData::MakeWithoutCopy (reinterpret_cast<void *> (c_data), c_length).release ();
     return reinterpret_cast<sk_SkData *> (ret);
   }
 
@@ -1184,8 +1077,8 @@ extern "C"
   sk_SkFont *
   misk_new_FontTypefaceSize (sk_SkTypeface *c_typeface, float c_size)
   {
-    return reinterpret_cast<sk_SkFont *> (new SkFont (
-        sk_ref_sp (reinterpret_cast<SkTypeface *> (c_typeface)), c_size));
+    return reinterpret_cast<sk_SkFont *> (
+        new SkFont (sk_ref_sp (reinterpret_cast<SkTypeface *> (c_typeface)), c_size));
   }
 
   sk_SkFont *
@@ -1196,12 +1089,10 @@ extern "C"
   }
 
   sk_SkFont *
-  misk_new_FontTypefaceSizeScaleSkew (sk_SkTypeface *c_typeface, float c_size,
-                                      float c_scaleX, float c_skewX)
+  misk_new_FontTypefaceSizeScaleSkew (sk_SkTypeface *c_typeface, float c_size, float c_scaleX, float c_skewX)
   {
     return reinterpret_cast<sk_SkFont *> (
-        new SkFont (sk_ref_sp (reinterpret_cast<SkTypeface *> (c_typeface)),
-                    c_size, c_scaleX, c_skewX));
+        new SkFont (sk_ref_sp (reinterpret_cast<SkTypeface *> (c_typeface)), c_size, c_scaleX, c_skewX));
   }
 
   void
@@ -1213,46 +1104,41 @@ extern "C"
   float
   misk_Font_getMetrics (sk_SkFont *c_obj, sk_SkFontMetrics *c_metrics)
   {
-    auto ret = reinterpret_cast<SkFont *> (c_obj)->getMetrics (
-        reinterpret_cast<SkFontMetrics *> (c_metrics));
+    auto ret = reinterpret_cast<SkFont *> (c_obj)->getMetrics (reinterpret_cast<SkFontMetrics *> (c_metrics));
     return ret;
   }
 
   void
-  misk_Font_getXPos (sk_SkFont *c_obj, ushort *c_glyphs, int c_count,
-                     float *c_xpos, float c_origin)
+  misk_Font_getXPos (sk_SkFont *c_obj, ushort *c_glyphs, int c_count, float *c_xpos, float c_origin)
   {
-    reinterpret_cast<SkFont *> (c_obj)->getXPos (
-        (unsigned short *)c_glyphs, c_count, (float *)c_xpos, c_origin);
+    reinterpret_cast<SkFont *> (c_obj)->getXPos ((unsigned short *)c_glyphs, c_count, (float *)c_xpos,
+                                                 c_origin);
   }
 
   float
-  misk_Font_measureText (sk_SkFont *c_obj, void *c_text, ulong c_byteLength,
-                         int c_encoding, sk_SkRect *c_bounds)
+  misk_Font_measureText (sk_SkFont *c_obj, void *c_text, ulong c_byteLength, int c_encoding,
+                         sk_SkRect *c_bounds)
   {
-    auto ret = reinterpret_cast<SkFont *> (c_obj)->measureText (
-        reinterpret_cast<void *> (c_text), c_byteLength,
-        SkTextEncoding (c_encoding), reinterpret_cast<SkRect *> (c_bounds));
+    auto ret = reinterpret_cast<SkFont *> (c_obj)->measureText (reinterpret_cast<void *> (c_text),
+                                                                c_byteLength, SkTextEncoding (c_encoding),
+                                                                reinterpret_cast<SkRect *> (c_bounds));
     return ret;
   }
 
   float
-  misk_Font_measureTextPaint (sk_SkFont *c_obj, void *c_text,
-                              ulong c_byteLength, int c_encoding,
+  misk_Font_measureTextPaint (sk_SkFont *c_obj, void *c_text, ulong c_byteLength, int c_encoding,
                               sk_SkRect *c_bounds, sk_SkPaint *c_paint)
   {
     auto ret = reinterpret_cast<SkFont *> (c_obj)->measureText (
-        reinterpret_cast<void *> (c_text), c_byteLength,
-        SkTextEncoding (c_encoding), reinterpret_cast<SkRect *> (c_bounds),
-        reinterpret_cast<SkPaint *> (c_paint));
+        reinterpret_cast<void *> (c_text), c_byteLength, SkTextEncoding (c_encoding),
+        reinterpret_cast<SkRect *> (c_bounds), reinterpret_cast<SkPaint *> (c_paint));
     return ret;
   }
 
   void
   misk_Font_setForceAutoHinting (sk_SkFont *c_obj, bool c_forceAutoHinting)
   {
-    reinterpret_cast<SkFont *> (c_obj)->setForceAutoHinting (
-        c_forceAutoHinting);
+    reinterpret_cast<SkFont *> (c_obj)->setForceAutoHinting (c_forceAutoHinting);
   }
 
   int
@@ -1271,8 +1157,7 @@ extern "C"
   void
   misk_Font_setHinting (sk_SkFont *c_obj, int c_hintingLevel)
   {
-    reinterpret_cast<SkFont *> (c_obj)->setHinting (
-        SkFontHinting (c_hintingLevel));
+    reinterpret_cast<SkFont *> (c_obj)->setHinting (SkFontHinting (c_hintingLevel));
   }
 
   void
@@ -1282,14 +1167,12 @@ extern "C"
   }
 
   int
-  misk_Font_textToGlyphs (sk_SkFont *c_obj, void *c_text, ulong c_byteLength,
-                          int c_encoding, ushort *c_glyphs,
-                          int c_maxGlyphCount)
+  misk_Font_textToGlyphs (sk_SkFont *c_obj, void *c_text, ulong c_byteLength, int c_encoding,
+                          ushort *c_glyphs, int c_maxGlyphCount)
   {
-    auto ret = reinterpret_cast<SkFont *> (c_obj)->textToGlyphs (
-        reinterpret_cast<void *> (c_text), c_byteLength,
-        SkTextEncoding (c_encoding), (unsigned short *)c_glyphs,
-        c_maxGlyphCount);
+    auto ret = reinterpret_cast<SkFont *> (c_obj)->textToGlyphs (reinterpret_cast<void *> (c_text),
+                                                                 c_byteLength, SkTextEncoding (c_encoding),
+                                                                 (unsigned short *)c_glyphs, c_maxGlyphCount);
     return ret;
   }
 
@@ -1301,11 +1184,9 @@ extern "C"
   }
 
   void
-  misk_Font_unicharsToGlyphs (sk_SkFont *c_obj, int *c_uni, int c_count,
-                              ushort *c_glyphs)
+  misk_Font_unicharsToGlyphs (sk_SkFont *c_obj, int *c_uni, int c_count, ushort *c_glyphs)
   {
-    reinterpret_cast<SkFont *> (c_obj)->unicharsToGlyphs (
-        (int *)c_uni, c_count, (unsigned short *)c_glyphs);
+    reinterpret_cast<SkFont *> (c_obj)->unicharsToGlyphs ((int *)c_uni, c_count, (unsigned short *)c_glyphs);
   }
 
   float
@@ -1323,20 +1204,17 @@ extern "C"
   }
 
   void
-  misk_Font_getWidthsBounds (sk_SkFont *c_obj, ushort *c_glyphs, int c_count,
-                             float *c_widths, sk_SkRect *c_bounds)
+  misk_Font_getWidthsBounds (sk_SkFont *c_obj, ushort *c_glyphs, int c_count, float *c_widths,
+                             sk_SkRect *c_bounds)
   {
-    reinterpret_cast<SkFont *> (c_obj)->getWidths ((unsigned short *)c_glyphs,
-                                                   c_count, (float *)c_widths,
+    reinterpret_cast<SkFont *> (c_obj)->getWidths ((unsigned short *)c_glyphs, c_count, (float *)c_widths,
                                                    (SkRect *)c_bounds);
   }
 
   void
-  misk_Font_getWidths (sk_SkFont *c_obj, ushort *c_glyphs, int c_count,
-                       float *c_widths)
+  misk_Font_getWidths (sk_SkFont *c_obj, ushort *c_glyphs, int c_count, float *c_widths)
   {
-    reinterpret_cast<SkFont *> (c_obj)->getWidths ((unsigned short *)c_glyphs,
-                                                   c_count, (float *)c_widths);
+    reinterpret_cast<SkFont *> (c_obj)->getWidths ((unsigned short *)c_glyphs, c_count, (float *)c_widths);
   }
 
   sk_SkFontArguments *
@@ -1352,28 +1230,23 @@ extern "C"
   }
 
   sk_SkFontArguments
-  misk_FontArguments_setCollectionIndex (sk_SkFontArguments *c_obj,
-                                         int c_collectionIndex)
+  misk_FontArguments_setCollectionIndex (sk_SkFontArguments *c_obj, int c_collectionIndex)
   {
-    auto ret
-        = reinterpret_cast<SkFontArguments *> (c_obj)->setCollectionIndex (
-            c_collectionIndex);
+    auto ret = reinterpret_cast<SkFontArguments *> (c_obj)->setCollectionIndex (c_collectionIndex);
     return *(reinterpret_cast<sk_SkFontArguments *> (&ret));
   }
 
   int
   misk_FontArguments_getCollectionIndex (sk_SkFontArguments *c_obj)
   {
-    auto ret
-        = reinterpret_cast<SkFontArguments *> (c_obj)->getCollectionIndex ();
+    auto ret = reinterpret_cast<SkFontArguments *> (c_obj)->getCollectionIndex ();
     return ret;
   }
 
   sk_SkFontArgumentsVariationPosition
   misk_FontArguments_getVariationDesignPosition (sk_SkFontArguments *c_obj)
   {
-    auto ret = reinterpret_cast<SkFontArguments *> (c_obj)
-                   ->getVariationDesignPosition ();
+    auto ret = reinterpret_cast<SkFontArguments *> (c_obj)->getVariationDesignPosition ();
     return *(reinterpret_cast<sk_SkFontArgumentsVariationPosition *> (&ret));
   }
 
@@ -1387,41 +1260,32 @@ extern "C"
   sk_SkFontStyleSet *
   misk_FontMgr_matchFamily (sk_SkFontMgr *c_obj, char *c_familyName)
   {
-    auto ret = reinterpret_cast<SkFontMgr *> (c_obj)
-                   ->matchFamily ((char *)c_familyName)
-                   .release ();
+    auto ret = reinterpret_cast<SkFontMgr *> (c_obj)->matchFamily ((char *)c_familyName).release ();
     return reinterpret_cast<sk_SkFontStyleSet *> (ret);
   }
 
   sk_SkTypeface *
-  misk_FontMgr_matchFamilyStyle (sk_SkFontMgr *c_obj, char *c_familyName,
-                                 sk_SkFontStyle *c_p1)
+  misk_FontMgr_matchFamilyStyle (sk_SkFontMgr *c_obj, char *c_familyName, sk_SkFontStyle *c_p1)
   {
     auto ret = reinterpret_cast<SkFontMgr *> (c_obj)
-                   ->matchFamilyStyle ((char *)c_familyName,
-                                       *reinterpret_cast<SkFontStyle *> (c_p1))
+                   ->matchFamilyStyle ((char *)c_familyName, *reinterpret_cast<SkFontStyle *> (c_p1))
                    .release ();
     return reinterpret_cast<sk_SkTypeface *> (ret);
   }
 
   sk_SkTypeface *
-  misk_FontMgr_makeFromData (sk_SkFontMgr *c_obj, sk_SkData *c_p0,
-                             int c_ttcIndex)
+  misk_FontMgr_makeFromData (sk_SkFontMgr *c_obj, sk_SkData *c_p0, int c_ttcIndex)
   {
-    auto ret
-        = reinterpret_cast<SkFontMgr *> (c_obj)
-              ->makeFromData (sk_ref_sp (reinterpret_cast<SkData *> (c_p0)),
-                              c_ttcIndex)
-              .release ();
+    auto ret = reinterpret_cast<SkFontMgr *> (c_obj)
+                   ->makeFromData (sk_ref_sp (reinterpret_cast<SkData *> (c_p0)), c_ttcIndex)
+                   .release ();
     return reinterpret_cast<sk_SkTypeface *> (ret);
   }
 
   sk_SkTypeface *
   misk_FontMgr_makeFromFile (sk_SkFontMgr *c_obj, char *c_path, int c_ttcIndex)
   {
-    auto ret = reinterpret_cast<SkFontMgr *> (c_obj)
-                   ->makeFromFile ((char *)c_path, c_ttcIndex)
-                   .release ();
+    auto ret = reinterpret_cast<SkFontMgr *> (c_obj)->makeFromFile ((char *)c_path, c_ttcIndex).release ();
     return reinterpret_cast<sk_SkTypeface *> (ret);
   }
 
@@ -1486,26 +1350,22 @@ extern "C"
   }
 
   void
-  misk_FontStyleSet_getStyle (sk_SkFontStyleSet *c_obj, int c_index,
-                              sk_SkFontStyle *c_p1, sk_SkString *c_style)
+  misk_FontStyleSet_getStyle (sk_SkFontStyleSet *c_obj, int c_index, sk_SkFontStyle *c_p1,
+                              sk_SkString *c_style)
   {
-    reinterpret_cast<SkFontStyleSet *> (c_obj)->getStyle (
-        c_index, reinterpret_cast<SkFontStyle *> (c_p1),
-        reinterpret_cast<SkString *> (c_style));
+    reinterpret_cast<SkFontStyleSet *> (c_obj)->getStyle (c_index, reinterpret_cast<SkFontStyle *> (c_p1),
+                                                          reinterpret_cast<SkString *> (c_style));
   }
 
   sk_SkTypeface *
   misk_FontStyleSet_createTypeface (sk_SkFontStyleSet *c_obj, int c_index)
   {
-    auto ret = reinterpret_cast<SkFontStyleSet *> (c_obj)
-                   ->createTypeface (c_index)
-                   .release ();
+    auto ret = reinterpret_cast<SkFontStyleSet *> (c_obj)->createTypeface (c_index).release ();
     return reinterpret_cast<sk_SkTypeface *> (ret);
   }
 
   sk_SkTypeface *
-  misk_FontStyleSet_matchStyle (sk_SkFontStyleSet *c_obj,
-                                sk_SkFontStyle *c_pattern)
+  misk_FontStyleSet_matchStyle (sk_SkFontStyleSet *c_obj, sk_SkFontStyle *c_pattern)
   {
     auto ret = reinterpret_cast<SkFontStyleSet *> (c_obj)
                    ->matchStyle (*reinterpret_cast<SkFontStyle *> (c_pattern))
@@ -1597,28 +1457,23 @@ extern "C"
   }
 
   bool
-  misk_Image_readPixels (sk_SkImage *c_obj, sk_GrDirectContext *c_context,
-                         sk_SkImageInfo *c_dstInfo, void *c_dstPixels,
-                         ulong c_dstRowBytes, int c_srcX, int c_srcY,
-                         uint c_cachingHint)
+  misk_Image_readPixels (sk_SkImage *c_obj, sk_GrDirectContext *c_context, sk_SkImageInfo *c_dstInfo,
+                         void *c_dstPixels, ulong c_dstRowBytes, int c_srcX, int c_srcY, uint c_cachingHint)
   {
     auto ret = reinterpret_cast<SkImage *> (c_obj)->readPixels (
-        reinterpret_cast<GrDirectContext *> (c_context),
-        *reinterpret_cast<SkImageInfo *> (c_dstInfo),
+        reinterpret_cast<GrDirectContext *> (c_context), *reinterpret_cast<SkImageInfo *> (c_dstInfo),
         reinterpret_cast<void *> (c_dstPixels), c_dstRowBytes, c_srcX, c_srcY,
         SkImage::CachingHint (c_cachingHint));
     return ret;
   }
 
   sk_SkImage *
-  misk_Image_makeSubset (sk_SkImage *c_obj, sk_GrDirectContext *c_direct,
-                         sk_SkIRect c_subset)
+  misk_Image_makeSubset (sk_SkImage *c_obj, sk_GrDirectContext *c_direct, sk_SkIRect c_subset)
   {
-    auto ret
-        = reinterpret_cast<SkImage *> (c_obj)
-              ->makeSubset (reinterpret_cast<GrDirectContext *> (c_direct),
-                            *reinterpret_cast<SkIRect *> (&c_subset))
-              .release ();
+    auto ret = reinterpret_cast<SkImage *> (c_obj)
+                   ->makeSubset (reinterpret_cast<GrDirectContext *> (c_direct),
+                                 *reinterpret_cast<SkIRect *> (&c_subset))
+                   .release ();
     return reinterpret_cast<sk_SkImage *> (ret);
   }
 
@@ -1678,8 +1533,7 @@ extern "C"
   sk_SkColorSpace *
   misk_ImageInfo_refColorSpace (sk_SkImageInfo *c_obj)
   {
-    auto ret
-        = reinterpret_cast<SkImageInfo *> (c_obj)->refColorSpace ().release ();
+    auto ret = reinterpret_cast<SkImageInfo *> (c_obj)->refColorSpace ().release ();
     return reinterpret_cast<sk_SkColorSpace *> (ret);
   }
 
@@ -1726,35 +1580,31 @@ extern "C"
   }
 
   sk_SkImageInfo
-  misk_ImageInfo_makeWH (sk_SkImageInfo *c_obj, int c_newWidth,
-                         int c_newHeight)
+  misk_ImageInfo_makeWH (sk_SkImageInfo *c_obj, int c_newWidth, int c_newHeight)
   {
-    auto ret = reinterpret_cast<SkImageInfo *> (c_obj)->makeWH (c_newWidth,
-                                                                c_newHeight);
+    auto ret = reinterpret_cast<SkImageInfo *> (c_obj)->makeWH (c_newWidth, c_newHeight);
     return *(reinterpret_cast<sk_SkImageInfo *> (&ret));
   }
 
   sk_SkImageInfo
   misk_ImageInfo_makeDimensions (sk_SkImageInfo *c_obj, sk_SkISize c_newSize)
   {
-    auto ret = reinterpret_cast<SkImageInfo *> (c_obj)->makeDimensions (
-        *reinterpret_cast<SkISize *> (&c_newSize));
+    auto ret
+        = reinterpret_cast<SkImageInfo *> (c_obj)->makeDimensions (*reinterpret_cast<SkISize *> (&c_newSize));
     return *(reinterpret_cast<sk_SkImageInfo *> (&ret));
   }
 
   sk_SkImageInfo
   misk_ImageInfo_makeAlphaType (sk_SkImageInfo *c_obj, int c_newAlphaType)
   {
-    auto ret = reinterpret_cast<SkImageInfo *> (c_obj)->makeAlphaType (
-        SkAlphaType (c_newAlphaType));
+    auto ret = reinterpret_cast<SkImageInfo *> (c_obj)->makeAlphaType (SkAlphaType (c_newAlphaType));
     return *(reinterpret_cast<sk_SkImageInfo *> (&ret));
   }
 
   sk_SkImageInfo
   misk_ImageInfo_makeColorType (sk_SkImageInfo *c_obj, int c_newColorType)
   {
-    auto ret = reinterpret_cast<SkImageInfo *> (c_obj)->makeColorType (
-        SkColorType (c_newColorType));
+    auto ret = reinterpret_cast<SkImageInfo *> (c_obj)->makeColorType (SkColorType (c_newColorType));
     return *(reinterpret_cast<sk_SkImageInfo *> (&ret));
   }
 
@@ -1795,19 +1645,16 @@ extern "C"
   }
 
   unsigned long
-  misk_ImageInfo_computeOffset (sk_SkImageInfo *c_obj, int c_x, int c_y,
-                                ulong c_rowBytes)
+  misk_ImageInfo_computeOffset (sk_SkImageInfo *c_obj, int c_x, int c_y, ulong c_rowBytes)
   {
-    auto ret = reinterpret_cast<SkImageInfo *> (c_obj)->computeOffset (
-        c_x, c_y, c_rowBytes);
+    auto ret = reinterpret_cast<SkImageInfo *> (c_obj)->computeOffset (c_x, c_y, c_rowBytes);
     return ret;
   }
 
   unsigned long
   misk_ImageInfo_computeByteSize (sk_SkImageInfo *c_obj, ulong c_rowBytes)
   {
-    auto ret = reinterpret_cast<SkImageInfo *> (c_obj)->computeByteSize (
-        c_rowBytes);
+    auto ret = reinterpret_cast<SkImageInfo *> (c_obj)->computeByteSize (c_rowBytes);
     return ret;
   }
 
@@ -1821,8 +1668,7 @@ extern "C"
   bool
   misk_ImageInfo_validRowBytes (sk_SkImageInfo *c_obj, ulong c_rowBytes)
   {
-    auto ret
-        = reinterpret_cast<SkImageInfo *> (c_obj)->validRowBytes (c_rowBytes);
+    auto ret = reinterpret_cast<SkImageInfo *> (c_obj)->validRowBytes (c_rowBytes);
     return ret;
   }
 
@@ -1835,8 +1681,7 @@ extern "C"
   sk_SkM44 *
   misk_new_M44Copy (sk_SkM44 *c_src)
   {
-    return reinterpret_cast<sk_SkM44 *> (
-        new SkM44 (*reinterpret_cast<SkM44 *> (c_src)));
+    return reinterpret_cast<sk_SkM44 *> (new SkM44 (*reinterpret_cast<SkM44 *> (c_src)));
   }
 
   sk_SkM44 *
@@ -1848,19 +1693,17 @@ extern "C"
   sk_SkM44 *
   misk_new_M44AB (sk_SkM44 *c_a, sk_SkM44 *c_b)
   {
-    return reinterpret_cast<sk_SkM44 *> (new SkM44 (
-        *reinterpret_cast<SkM44 *> (c_a), *reinterpret_cast<SkM44 *> (c_b)));
+    return reinterpret_cast<sk_SkM44 *> (
+        new SkM44 (*reinterpret_cast<SkM44 *> (c_a), *reinterpret_cast<SkM44 *> (c_b)));
   }
 
   sk_SkM44 *
-  misk_new_M44Scalars (float c_m0, float c_m4, float c_m8, float c_m12,
-                       float c_m1, float c_m5, float c_m9, float c_m13,
-                       float c_m2, float c_m6, float c_m10, float c_m14,
-                       float c_m3, float c_m7, float c_m11, float c_m15)
+  misk_new_M44Scalars (float c_m0, float c_m4, float c_m8, float c_m12, float c_m1, float c_m5, float c_m9,
+                       float c_m13, float c_m2, float c_m6, float c_m10, float c_m14, float c_m3, float c_m7,
+                       float c_m11, float c_m15)
   {
-    return reinterpret_cast<sk_SkM44 *> (
-        new SkM44 (c_m0, c_m4, c_m8, c_m12, c_m1, c_m5, c_m9, c_m13, c_m2,
-                   c_m6, c_m10, c_m14, c_m3, c_m7, c_m11, c_m15));
+    return reinterpret_cast<sk_SkM44 *> (new SkM44 (c_m0, c_m4, c_m8, c_m12, c_m1, c_m5, c_m9, c_m13, c_m2,
+                                                    c_m6, c_m10, c_m14, c_m3, c_m7, c_m11, c_m15));
   }
 
   void
@@ -1878,18 +1721,14 @@ extern "C"
   sk_SkMemoryStream *
   misk_MemoryStream_Make (sk_SkData *c_data)
   {
-    auto ret = SkMemoryStream::Make (
-                   sk_ref_sp (reinterpret_cast<SkData *> (c_data)))
-                   .release ();
+    auto ret = SkMemoryStream::Make (sk_ref_sp (reinterpret_cast<SkData *> (c_data))).release ();
     return reinterpret_cast<sk_SkMemoryStream *> (ret);
   }
 
   sk_SkMemoryStream *
   misk_MemoryStream_MakeDirect (void *c_data, ulong c_length)
   {
-    auto ret = SkMemoryStream::MakeDirect (reinterpret_cast<void *> (c_data),
-                                           c_length)
-                   .release ();
+    auto ret = SkMemoryStream::MakeDirect (reinterpret_cast<void *> (c_data), c_length).release ();
     return reinterpret_cast<sk_SkMemoryStream *> (ret);
   }
 
@@ -1931,8 +1770,7 @@ extern "C"
   bool
   misk_IRect_Intersects (sk_SkIRect c_a, sk_SkIRect c_b)
   {
-    auto ret = SkIRect::Intersects (*reinterpret_cast<SkIRect *> (&c_a),
-                                    *reinterpret_cast<SkIRect *> (&c_b));
+    auto ret = SkIRect::Intersects (*reinterpret_cast<SkIRect *> (&c_a), *reinterpret_cast<SkIRect *> (&c_b));
     return ret;
   }
 
@@ -1978,16 +1816,13 @@ extern "C"
   }
 
   void
-  misk_IRect_setLTRB (sk_SkIRect *c_obj, int c_left, int c_top, int c_right,
-                      int c_bottom)
+  misk_IRect_setLTRB (sk_SkIRect *c_obj, int c_left, int c_top, int c_right, int c_bottom)
   {
-    reinterpret_cast<SkIRect *> (c_obj)->setLTRB (c_left, c_top, c_right,
-                                                  c_bottom);
+    reinterpret_cast<SkIRect *> (c_obj)->setLTRB (c_left, c_top, c_right, c_bottom);
   }
 
   void
-  misk_IRect_setXYWH (sk_SkIRect *c_obj, int c_x, int c_y, int c_width,
-                      int c_height)
+  misk_IRect_setXYWH (sk_SkIRect *c_obj, int c_x, int c_y, int c_width, int c_height)
   {
     reinterpret_cast<SkIRect *> (c_obj)->setXYWH (c_x, c_y, c_width, c_height);
   }
@@ -2007,8 +1842,7 @@ extern "C"
   void
   misk_IRect_offsetPoint (sk_SkIRect *c_obj, sk_SkIPoint *c_delta)
   {
-    reinterpret_cast<SkIRect *> (c_obj)->offset (
-        *reinterpret_cast<SkIPoint *> (c_delta));
+    reinterpret_cast<SkIRect *> (c_obj)->offset (*reinterpret_cast<SkIPoint *> (c_delta));
   }
 
   void
@@ -2045,32 +1879,29 @@ extern "C"
   bool
   misk_IRect_containsRect (sk_SkIRect *c_obj, sk_SkIRect c_r)
   {
-    auto ret = reinterpret_cast<SkIRect *> (c_obj)->contains (
-        *reinterpret_cast<SkIRect *> (&c_r));
+    auto ret = reinterpret_cast<SkIRect *> (c_obj)->contains (*reinterpret_cast<SkIRect *> (&c_r));
     return ret;
   }
 
   bool
   misk_IRect_containsNoEmptyCheck (sk_SkIRect *c_obj, sk_SkIRect c_r)
   {
-    auto ret = reinterpret_cast<SkIRect *> (c_obj)->containsNoEmptyCheck (
-        *reinterpret_cast<SkIRect *> (&c_r));
+    auto ret
+        = reinterpret_cast<SkIRect *> (c_obj)->containsNoEmptyCheck (*reinterpret_cast<SkIRect *> (&c_r));
     return ret;
   }
 
   bool
   misk_IRect_intersect (sk_SkIRect *c_obj, sk_SkIRect c_r)
   {
-    auto ret = reinterpret_cast<SkIRect *> (c_obj)->intersect (
-        *reinterpret_cast<SkIRect *> (&c_r));
+    auto ret = reinterpret_cast<SkIRect *> (c_obj)->intersect (*reinterpret_cast<SkIRect *> (&c_r));
     return ret;
   }
 
   void
   misk_IRect_join (sk_SkIRect *c_obj, sk_SkIRect c_r)
   {
-    reinterpret_cast<SkIRect *> (c_obj)->join (
-        *reinterpret_cast<SkIRect *> (&c_r));
+    reinterpret_cast<SkIRect *> (c_obj)->join (*reinterpret_cast<SkIRect *> (&c_r));
   }
 
   void
@@ -2104,18 +1935,16 @@ extern "C"
   }
 
   void
-  misk_OpBuilder_add (sk_SkOpBuilder *c_obj, sk_SkPath *c_path,
-                      uint c__operator)
+  misk_OpBuilder_add (sk_SkOpBuilder *c_obj, sk_SkPath *c_path, uint c__operator)
   {
-    reinterpret_cast<SkOpBuilder *> (c_obj)->add (
-        *reinterpret_cast<SkPath *> (c_path), SkPathOp (c__operator));
+    reinterpret_cast<SkOpBuilder *> (c_obj)->add (*reinterpret_cast<SkPath *> (c_path),
+                                                  SkPathOp (c__operator));
   }
 
   bool
   misk_OpBuilder_resolve (sk_SkOpBuilder *c_obj, sk_SkPath *c_result)
   {
-    auto ret = reinterpret_cast<SkOpBuilder *> (c_obj)->resolve (
-        reinterpret_cast<SkPath *> (c_result));
+    auto ret = reinterpret_cast<SkOpBuilder *> (c_obj)->resolve (reinterpret_cast<SkPath *> (c_result));
     return ret;
   }
 
@@ -2128,8 +1957,7 @@ extern "C"
   sk_SkPaint *
   misk_new_PaintCopy (sk_SkPaint *c_paint)
   {
-    return reinterpret_cast<sk_SkPaint *> (
-        new SkPaint (*reinterpret_cast<SkPaint *> (c_paint)));
+    return reinterpret_cast<sk_SkPaint *> (new SkPaint (*reinterpret_cast<SkPaint *> (c_paint)));
   }
 
   void
@@ -2158,8 +1986,7 @@ extern "C"
   }
 
   void
-  misk_Paint_setARGB (sk_SkPaint *c_obj, uint c_a, uint c_r, uint c_g,
-                      uint c_b)
+  misk_Paint_setARGB (sk_SkPaint *c_obj, uint c_a, uint c_r, uint c_g, uint c_b)
   {
     reinterpret_cast<SkPaint *> (c_obj)->setARGB (c_a, c_r, c_g, c_b);
   }
@@ -2218,8 +2045,7 @@ extern "C"
   void
   misk_Paint_setStrokeJoin (sk_SkPaint *c_obj, uchar c_join)
   {
-    reinterpret_cast<SkPaint *> (c_obj)->setStrokeJoin (
-        SkPaint::Join (c_join));
+    reinterpret_cast<SkPaint *> (c_obj)->setStrokeJoin (SkPaint::Join (c_join));
   }
 
   float
@@ -2270,8 +2096,7 @@ extern "C"
   sk_SkPath *
   misk_new_PathCopy (sk_SkPath *c_path)
   {
-    return reinterpret_cast<sk_SkPath *> (
-        new SkPath (*reinterpret_cast<SkPath *> (c_path)));
+    return reinterpret_cast<sk_SkPath *> (new SkPath (*reinterpret_cast<SkPath *> (c_path)));
   }
 
   void
@@ -2283,18 +2108,15 @@ extern "C"
   bool
   misk_Path_isInterpolatable (sk_SkPath *c_obj, sk_SkPath *c_compare)
   {
-    auto ret = reinterpret_cast<SkPath *> (c_obj)->isInterpolatable (
-        *reinterpret_cast<SkPath *> (c_compare));
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->isInterpolatable (*reinterpret_cast<SkPath *> (c_compare));
     return ret;
   }
 
   bool
-  misk_Path_interpolate (sk_SkPath *c_obj, sk_SkPath *c_ending, float c_weight,
-                         sk_SkPath *c_out)
+  misk_Path_interpolate (sk_SkPath *c_obj, sk_SkPath *c_ending, float c_weight, sk_SkPath *c_out)
   {
-    auto ret = reinterpret_cast<SkPath *> (c_obj)->interpolate (
-        *reinterpret_cast<SkPath *> (c_ending), c_weight,
-        reinterpret_cast<SkPath *> (c_out));
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->interpolate (*reinterpret_cast<SkPath *> (c_ending),
+                                                                c_weight, reinterpret_cast<SkPath *> (c_out));
     return ret;
   }
 
@@ -2334,16 +2156,14 @@ extern "C"
   bool
   misk_Path_isOval (sk_SkPath *c_obj, sk_SkRect c_bounds)
   {
-    auto ret = reinterpret_cast<SkPath *> (c_obj)->isOval (
-        reinterpret_cast<SkRect *> (&c_bounds));
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->isOval (reinterpret_cast<SkRect *> (&c_bounds));
     return ret;
   }
 
   bool
   misk_Path_isRRect (sk_SkPath *c_obj, sk_SkRRect c_rrect)
   {
-    auto ret = reinterpret_cast<SkPath *> (c_obj)->isRRect (
-        reinterpret_cast<SkRRect *> (&c_rrect));
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->isRRect (reinterpret_cast<SkRRect *> (&c_rrect));
     return ret;
   }
 
@@ -2392,8 +2212,7 @@ extern "C"
   sk_SkPath
   misk_Path_setIsVolatile (sk_SkPath *c_obj, bool c_isVolatile)
   {
-    auto ret
-        = reinterpret_cast<SkPath *> (c_obj)->setIsVolatile (c_isVolatile);
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->setIsVolatile (c_isVolatile);
     return *(reinterpret_cast<sk_SkPath *> (&ret));
   }
 
@@ -2414,8 +2233,7 @@ extern "C"
   int
   misk_Path_getPoints (sk_SkPath *c_obj, sk_SkPoint *c_points, int c_max)
   {
-    auto ret = reinterpret_cast<SkPath *> (c_obj)->getPoints (
-        (SkPoint *)c_points, c_max);
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->getPoints ((SkPoint *)c_points, c_max);
     return ret;
   }
 
@@ -2429,8 +2247,7 @@ extern "C"
   int
   misk_Path_getVerbs (sk_SkPath *c_obj, uchar *c_verbs, int c_max)
   {
-    auto ret = reinterpret_cast<SkPath *> (c_obj)->getVerbs (
-        (unsigned char *)c_verbs, c_max);
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->getVerbs ((unsigned char *)c_verbs, c_max);
     return ret;
   }
 
@@ -2444,8 +2261,7 @@ extern "C"
   void
   misk_Path_swap (sk_SkPath *c_obj, sk_SkPath *c_other)
   {
-    reinterpret_cast<SkPath *> (c_obj)->swap (
-        *reinterpret_cast<SkPath *> (c_other));
+    reinterpret_cast<SkPath *> (c_obj)->swap (*reinterpret_cast<SkPath *> (c_other));
   }
 
   sk_SkRect
@@ -2477,11 +2293,9 @@ extern "C"
   }
 
   void
-  misk_Path_incReserve (sk_SkPath *c_obj, int c_extraPtCount,
-                        int c_extraVerbCount, int c_extraConicCount)
+  misk_Path_incReserve (sk_SkPath *c_obj, int c_extraPtCount, int c_extraVerbCount, int c_extraConicCount)
   {
-    reinterpret_cast<SkPath *> (c_obj)->incReserve (
-        c_extraPtCount, c_extraVerbCount, c_extraConicCount);
+    reinterpret_cast<SkPath *> (c_obj)->incReserve (c_extraPtCount, c_extraVerbCount, c_extraConicCount);
   }
 
   sk_SkPath
@@ -2494,8 +2308,7 @@ extern "C"
   sk_SkPath
   misk_Path_moveTo (sk_SkPath *c_obj, sk_SkPoint c_p)
   {
-    auto ret = reinterpret_cast<SkPath *> (c_obj)->moveTo (
-        *reinterpret_cast<SkPoint *> (&c_p));
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->moveTo (*reinterpret_cast<SkPoint *> (&c_p));
     return *(reinterpret_cast<sk_SkPath *> (&ret));
   }
 
@@ -2516,8 +2329,7 @@ extern "C"
   sk_SkPath
   misk_Path_lineToPoint (sk_SkPath *c_obj, sk_SkPoint c_p)
   {
-    auto ret = reinterpret_cast<SkPath *> (c_obj)->lineTo (
-        *reinterpret_cast<SkPoint *> (&c_p));
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->lineTo (*reinterpret_cast<SkPoint *> (&c_p));
     return *(reinterpret_cast<sk_SkPath *> (&ret));
   }
 
@@ -2529,148 +2341,122 @@ extern "C"
   }
 
   sk_SkPath
-  misk_Path_quadTo (sk_SkPath *c_obj, float c_x1, float c_y1, float c_x2,
-                    float c_y2)
+  misk_Path_quadTo (sk_SkPath *c_obj, float c_x1, float c_y1, float c_x2, float c_y2)
   {
-    auto ret
-        = reinterpret_cast<SkPath *> (c_obj)->quadTo (c_x1, c_y1, c_x2, c_y2);
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->quadTo (c_x1, c_y1, c_x2, c_y2);
     return *(reinterpret_cast<sk_SkPath *> (&ret));
   }
 
   sk_SkPath
   misk_Path_quadToPoint (sk_SkPath *c_obj, sk_SkPoint c_p1, sk_SkPoint c_p2)
   {
-    auto ret = reinterpret_cast<SkPath *> (c_obj)->quadTo (
-        *reinterpret_cast<SkPoint *> (&c_p1),
-        *reinterpret_cast<SkPoint *> (&c_p2));
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->quadTo (*reinterpret_cast<SkPoint *> (&c_p1),
+                                                           *reinterpret_cast<SkPoint *> (&c_p2));
     return *(reinterpret_cast<sk_SkPath *> (&ret));
   }
 
   sk_SkPath
-  misk_Path_rQuadTo (sk_SkPath *c_obj, float c_dx1, float c_dy1, float c_dx2,
-                     float c_dy2)
+  misk_Path_rQuadTo (sk_SkPath *c_obj, float c_dx1, float c_dy1, float c_dx2, float c_dy2)
   {
-    auto ret = reinterpret_cast<SkPath *> (c_obj)->rQuadTo (c_dx1, c_dy1,
-                                                            c_dx2, c_dy2);
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->rQuadTo (c_dx1, c_dy1, c_dx2, c_dy2);
     return *(reinterpret_cast<sk_SkPath *> (&ret));
   }
 
   sk_SkPath
-  misk_Path_conicTo (sk_SkPath *c_obj, float c_x1, float c_y1, float c_x2,
-                     float c_y2, float c_w)
+  misk_Path_conicTo (sk_SkPath *c_obj, float c_x1, float c_y1, float c_x2, float c_y2, float c_w)
   {
-    auto ret = reinterpret_cast<SkPath *> (c_obj)->conicTo (c_x1, c_y1, c_x2,
-                                                            c_y2, c_w);
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->conicTo (c_x1, c_y1, c_x2, c_y2, c_w);
     return *(reinterpret_cast<sk_SkPath *> (&ret));
   }
 
   sk_SkPath
-  misk_Path_conicToPoints (sk_SkPath *c_obj, sk_SkPoint c_p1, sk_SkPoint c_p2,
-                           float c_w)
+  misk_Path_conicToPoints (sk_SkPath *c_obj, sk_SkPoint c_p1, sk_SkPoint c_p2, float c_w)
   {
-    auto ret = reinterpret_cast<SkPath *> (c_obj)->conicTo (
-        *reinterpret_cast<SkPoint *> (&c_p1),
-        *reinterpret_cast<SkPoint *> (&c_p2), c_w);
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->conicTo (*reinterpret_cast<SkPoint *> (&c_p1),
+                                                            *reinterpret_cast<SkPoint *> (&c_p2), c_w);
     return *(reinterpret_cast<sk_SkPath *> (&ret));
   }
 
   sk_SkPath
-  misk_Path_rConicTo (sk_SkPath *c_obj, float c_dx1, float c_dy1, float c_dx2,
-                      float c_dy2, float c_w)
+  misk_Path_rConicTo (sk_SkPath *c_obj, float c_dx1, float c_dy1, float c_dx2, float c_dy2, float c_w)
   {
-    auto ret = reinterpret_cast<SkPath *> (c_obj)->rConicTo (
-        c_dx1, c_dy1, c_dx2, c_dy2, c_w);
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->rConicTo (c_dx1, c_dy1, c_dx2, c_dy2, c_w);
     return *(reinterpret_cast<sk_SkPath *> (&ret));
   }
 
   sk_SkPath
-  misk_Path_cubicTo (sk_SkPath *c_obj, float c_x1, float c_y1, float c_x2,
-                     float c_y2, float c_x3, float c_y3)
+  misk_Path_cubicTo (sk_SkPath *c_obj, float c_x1, float c_y1, float c_x2, float c_y2, float c_x3, float c_y3)
   {
-    auto ret = reinterpret_cast<SkPath *> (c_obj)->cubicTo (c_x1, c_y1, c_x2,
-                                                            c_y2, c_x3, c_y3);
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->cubicTo (c_x1, c_y1, c_x2, c_y2, c_x3, c_y3);
     return *(reinterpret_cast<sk_SkPath *> (&ret));
   }
 
   sk_SkPath
-  misk_Path_cubicToPoints (sk_SkPath *c_obj, sk_SkPoint c_p1, sk_SkPoint c_p2,
-                           sk_SkPoint c_p3)
+  misk_Path_cubicToPoints (sk_SkPath *c_obj, sk_SkPoint c_p1, sk_SkPoint c_p2, sk_SkPoint c_p3)
   {
-    auto ret = reinterpret_cast<SkPath *> (c_obj)->cubicTo (
-        *reinterpret_cast<SkPoint *> (&c_p1),
-        *reinterpret_cast<SkPoint *> (&c_p2),
-        *reinterpret_cast<SkPoint *> (&c_p3));
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->cubicTo (*reinterpret_cast<SkPoint *> (&c_p1),
+                                                            *reinterpret_cast<SkPoint *> (&c_p2),
+                                                            *reinterpret_cast<SkPoint *> (&c_p3));
     return *(reinterpret_cast<sk_SkPath *> (&ret));
   }
 
   sk_SkPath
-  misk_Path_rCubicTo (sk_SkPath *c_obj, float c_dx1, float c_dy1, float c_dx2,
-                      float c_dy2, float c_dx3, float c_dy3)
+  misk_Path_rCubicTo (sk_SkPath *c_obj, float c_dx1, float c_dy1, float c_dx2, float c_dy2, float c_dx3,
+                      float c_dy3)
   {
-    auto ret = reinterpret_cast<SkPath *> (c_obj)->rCubicTo (
-        c_dx1, c_dy1, c_dx2, c_dy2, c_dx3, c_dy3);
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->rCubicTo (c_dx1, c_dy1, c_dx2, c_dy2, c_dx3, c_dy3);
     return *(reinterpret_cast<sk_SkPath *> (&ret));
   }
 
   sk_SkPath
-  misk_Path_arcTo1 (sk_SkPath *c_obj, sk_SkRect c_oval, float c_startAngle,
-                    float c_sweepAngle, bool c_forceMoveTo)
+  misk_Path_arcTo1 (sk_SkPath *c_obj, sk_SkRect c_oval, float c_startAngle, float c_sweepAngle,
+                    bool c_forceMoveTo)
   {
-    auto ret = reinterpret_cast<SkPath *> (c_obj)->arcTo (
-        *reinterpret_cast<SkRect *> (&c_oval), c_startAngle, c_sweepAngle,
-        c_forceMoveTo);
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->arcTo (*reinterpret_cast<SkRect *> (&c_oval), c_startAngle,
+                                                          c_sweepAngle, c_forceMoveTo);
     return *(reinterpret_cast<sk_SkPath *> (&ret));
   }
 
   sk_SkPath
-  misk_Path_arcTo2 (sk_SkPath *c_obj, float c_x1, float c_y1, float c_x2,
-                    float c_y2, float c_radius)
+  misk_Path_arcTo2 (sk_SkPath *c_obj, float c_x1, float c_y1, float c_x2, float c_y2, float c_radius)
   {
-    auto ret = reinterpret_cast<SkPath *> (c_obj)->arcTo (c_x1, c_y1, c_x2,
-                                                          c_y2, c_radius);
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->arcTo (c_x1, c_y1, c_x2, c_y2, c_radius);
     return *(reinterpret_cast<sk_SkPath *> (&ret));
   }
 
   sk_SkPath
-  misk_Path_arcTo3 (sk_SkPath *c_obj, sk_SkPoint c_p1, sk_SkPoint c_p2,
-                    float c_radius)
+  misk_Path_arcTo3 (sk_SkPath *c_obj, sk_SkPoint c_p1, sk_SkPoint c_p2, float c_radius)
+  {
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->arcTo (*reinterpret_cast<SkPoint *> (&c_p1),
+                                                          *reinterpret_cast<SkPoint *> (&c_p2), c_radius);
+    return *(reinterpret_cast<sk_SkPath *> (&ret));
+  }
+
+  sk_SkPath
+  misk_Path_arcTo4 (sk_SkPath *c_obj, float c_rx, float c_ry, float c_xAxisRotate, uint c_largeArc,
+                    int c_sweep, float c_x, float c_y)
   {
     auto ret = reinterpret_cast<SkPath *> (c_obj)->arcTo (
-        *reinterpret_cast<SkPoint *> (&c_p1),
-        *reinterpret_cast<SkPoint *> (&c_p2), c_radius);
+        c_rx, c_ry, c_xAxisRotate, SkPath::ArcSize (c_largeArc), SkPathDirection (c_sweep), c_x, c_y);
     return *(reinterpret_cast<sk_SkPath *> (&ret));
   }
 
   sk_SkPath
-  misk_Path_arcTo4 (sk_SkPath *c_obj, float c_rx, float c_ry,
-                    float c_xAxisRotate, uint c_largeArc, int c_sweep,
-                    float c_x, float c_y)
+  misk_Path_arcTo5 (sk_SkPath *c_obj, sk_SkPoint c_r, float c_xAxisRotate, uint c_largeArc, int c_sweep,
+                    sk_SkPoint c_xy)
   {
     auto ret = reinterpret_cast<SkPath *> (c_obj)->arcTo (
-        c_rx, c_ry, c_xAxisRotate, SkPath::ArcSize (c_largeArc),
-        SkPathDirection (c_sweep), c_x, c_y);
+        *reinterpret_cast<SkPoint *> (&c_r), c_xAxisRotate, SkPath::ArcSize (c_largeArc),
+        SkPathDirection (c_sweep), *reinterpret_cast<SkPoint *> (&c_xy));
     return *(reinterpret_cast<sk_SkPath *> (&ret));
   }
 
   sk_SkPath
-  misk_Path_arcTo5 (sk_SkPath *c_obj, sk_SkPoint c_r, float c_xAxisRotate,
-                    uint c_largeArc, int c_sweep, sk_SkPoint c_xy)
-  {
-    auto ret = reinterpret_cast<SkPath *> (c_obj)->arcTo (
-        *reinterpret_cast<SkPoint *> (&c_r), c_xAxisRotate,
-        SkPath::ArcSize (c_largeArc), SkPathDirection (c_sweep),
-        *reinterpret_cast<SkPoint *> (&c_xy));
-    return *(reinterpret_cast<sk_SkPath *> (&ret));
-  }
-
-  sk_SkPath
-  misk_Path_rArcTo (sk_SkPath *c_obj, float c_rx, float c_ry,
-                    float c_xAxisRotate, uint c_largeArc, int c_sweep,
-                    float c_dx, float c_dy)
+  misk_Path_rArcTo (sk_SkPath *c_obj, float c_rx, float c_ry, float c_xAxisRotate, uint c_largeArc,
+                    int c_sweep, float c_dx, float c_dy)
   {
     auto ret = reinterpret_cast<SkPath *> (c_obj)->rArcTo (
-        c_rx, c_ry, c_xAxisRotate, SkPath::ArcSize (c_largeArc),
-        SkPathDirection (c_sweep), c_dx, c_dy);
+        c_rx, c_ry, c_xAxisRotate, SkPath::ArcSize (c_largeArc), SkPathDirection (c_sweep), c_dx, c_dy);
     return *(reinterpret_cast<sk_SkPath *> (&ret));
   }
 
@@ -2682,168 +2468,143 @@ extern "C"
   }
 
   bool
-  misk_Path_isRect (sk_SkPath *c_obj, sk_SkRect *c_rect, bool *c_isClosed,
-                    int *c_direction)
+  misk_Path_isRect (sk_SkPath *c_obj, sk_SkRect *c_rect, bool *c_isClosed, int *c_direction)
   {
-    auto ret = reinterpret_cast<SkPath *> (c_obj)->isRect (
-        reinterpret_cast<SkRect *> (c_rect), c_isClosed,
-        (SkPathDirection *)c_direction);
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->isRect (reinterpret_cast<SkRect *> (c_rect), c_isClosed,
+                                                           (SkPathDirection *)c_direction);
     return ret;
   }
 
   sk_SkPath
-  misk_Path_addRect1 (sk_SkPath *c_obj, sk_SkRect c_rect, int c_dir,
-                      uint c_start)
+  misk_Path_addRect1 (sk_SkPath *c_obj, sk_SkRect c_rect, int c_dir, uint c_start)
   {
-    auto ret = reinterpret_cast<SkPath *> (c_obj)->addRect (
-        *reinterpret_cast<SkRect *> (&c_rect), SkPathDirection (c_dir),
-        c_start);
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->addRect (*reinterpret_cast<SkRect *> (&c_rect),
+                                                            SkPathDirection (c_dir), c_start);
     return *(reinterpret_cast<sk_SkPath *> (&ret));
   }
 
   sk_SkPath
   misk_Path_addRect2 (sk_SkPath *c_obj, sk_SkRect c_rect, int c_dir)
   {
-    auto ret = reinterpret_cast<SkPath *> (c_obj)->addRect (
-        *reinterpret_cast<SkRect *> (&c_rect), SkPathDirection (c_dir));
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->addRect (*reinterpret_cast<SkRect *> (&c_rect),
+                                                            SkPathDirection (c_dir));
     return *(reinterpret_cast<sk_SkPath *> (&ret));
   }
 
   sk_SkPath
-  misk_Path_addRect3 (sk_SkPath *c_obj, float c_left, float c_top,
-                      float c_right, float c_bottom, int c_dir)
+  misk_Path_addRect3 (sk_SkPath *c_obj, float c_left, float c_top, float c_right, float c_bottom, int c_dir)
   {
-    auto ret = reinterpret_cast<SkPath *> (c_obj)->addRect (
-        c_left, c_top, c_right, c_bottom, SkPathDirection (c_dir));
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->addRect (c_left, c_top, c_right, c_bottom,
+                                                            SkPathDirection (c_dir));
     return *(reinterpret_cast<sk_SkPath *> (&ret));
   }
 
   sk_SkPath
   misk_Path_addOval1 (sk_SkPath *c_obj, sk_SkRect c_oval, int c_dir)
   {
-    auto ret = reinterpret_cast<SkPath *> (c_obj)->addOval (
-        *reinterpret_cast<SkRect *> (&c_oval), SkPathDirection (c_dir));
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->addOval (*reinterpret_cast<SkRect *> (&c_oval),
+                                                            SkPathDirection (c_dir));
     return *(reinterpret_cast<sk_SkPath *> (&ret));
   }
 
   sk_SkPath
-  misk_Path_addOval2 (sk_SkPath *c_obj, sk_SkRect c_oval, int c_dir,
-                      uint c_start)
+  misk_Path_addOval2 (sk_SkPath *c_obj, sk_SkRect c_oval, int c_dir, uint c_start)
   {
-    auto ret = reinterpret_cast<SkPath *> (c_obj)->addOval (
-        *reinterpret_cast<SkRect *> (&c_oval), SkPathDirection (c_dir),
-        c_start);
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->addOval (*reinterpret_cast<SkRect *> (&c_oval),
+                                                            SkPathDirection (c_dir), c_start);
     return *(reinterpret_cast<sk_SkPath *> (&ret));
   }
 
   sk_SkPath
-  misk_Path_addCircle (sk_SkPath *c_obj, float c_x, float c_y, float c_radius,
-                       int c_dir)
+  misk_Path_addCircle (sk_SkPath *c_obj, float c_x, float c_y, float c_radius, int c_dir)
   {
-    auto ret = reinterpret_cast<SkPath *> (c_obj)->addCircle (
-        c_x, c_y, c_radius, SkPathDirection (c_dir));
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->addCircle (c_x, c_y, c_radius, SkPathDirection (c_dir));
     return *(reinterpret_cast<sk_SkPath *> (&ret));
   }
 
   sk_SkPath
-  misk_Path_addArc (sk_SkPath *c_obj, sk_SkRect c_oval, float c_startAngle,
-                    float c_sweepAngle)
+  misk_Path_addArc (sk_SkPath *c_obj, sk_SkRect c_oval, float c_startAngle, float c_sweepAngle)
   {
-    auto ret = reinterpret_cast<SkPath *> (c_obj)->addArc (
-        *reinterpret_cast<SkRect *> (&c_oval), c_startAngle, c_sweepAngle);
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->addArc (*reinterpret_cast<SkRect *> (&c_oval),
+                                                           c_startAngle, c_sweepAngle);
     return *(reinterpret_cast<sk_SkPath *> (&ret));
   }
 
   sk_SkPath
-  misk_Path_addRoundRect1 (sk_SkPath *c_obj, sk_SkRect c_rect, float c_rx,
-                           float c_ry, int c_dir)
+  misk_Path_addRoundRect1 (sk_SkPath *c_obj, sk_SkRect c_rect, float c_rx, float c_ry, int c_dir)
   {
-    auto ret = reinterpret_cast<SkPath *> (c_obj)->addRoundRect (
-        *reinterpret_cast<SkRect *> (&c_rect), c_rx, c_ry,
-        SkPathDirection (c_dir));
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->addRoundRect (*reinterpret_cast<SkRect *> (&c_rect), c_rx,
+                                                                 c_ry, SkPathDirection (c_dir));
     return *(reinterpret_cast<sk_SkPath *> (&ret));
   }
 
   sk_SkPath
-  misk_Path_addRoundRect2 (sk_SkPath *c_obj, sk_SkRect c_rect, float *c_radii,
-                           int c_dir)
+  misk_Path_addRoundRect2 (sk_SkPath *c_obj, sk_SkRect c_rect, float *c_radii, int c_dir)
   {
-    auto ret = reinterpret_cast<SkPath *> (c_obj)->addRoundRect (
-        *reinterpret_cast<SkRect *> (&c_rect), (float *)c_radii,
-        SkPathDirection (c_dir));
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->addRoundRect (*reinterpret_cast<SkRect *> (&c_rect),
+                                                                 (float *)c_radii, SkPathDirection (c_dir));
     return *(reinterpret_cast<sk_SkPath *> (&ret));
   }
 
   sk_SkPath
   misk_Path_addRRect1 (sk_SkPath *c_obj, sk_SkRRect c_rrect, int c_dir)
   {
-    auto ret = reinterpret_cast<SkPath *> (c_obj)->addRRect (
-        *reinterpret_cast<SkRRect *> (&c_rrect), SkPathDirection (c_dir));
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->addRRect (*reinterpret_cast<SkRRect *> (&c_rrect),
+                                                             SkPathDirection (c_dir));
     return *(reinterpret_cast<sk_SkPath *> (&ret));
   }
 
   sk_SkPath
-  misk_Path_addRRect2 (sk_SkPath *c_obj, sk_SkRRect c_rrect, int c_dir,
-                       uint c_start)
+  misk_Path_addRRect2 (sk_SkPath *c_obj, sk_SkRRect c_rrect, int c_dir, uint c_start)
   {
-    auto ret = reinterpret_cast<SkPath *> (c_obj)->addRRect (
-        *reinterpret_cast<SkRRect *> (&c_rrect), SkPathDirection (c_dir),
-        c_start);
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->addRRect (*reinterpret_cast<SkRRect *> (&c_rrect),
+                                                             SkPathDirection (c_dir), c_start);
     return *(reinterpret_cast<sk_SkPath *> (&ret));
   }
 
   sk_SkPath
-  misk_Path_addPoly (sk_SkPath *c_obj, sk_SkPoint *c_pts, int c_count,
-                     bool c_close)
+  misk_Path_addPoly (sk_SkPath *c_obj, sk_SkPoint *c_pts, int c_count, bool c_close)
   {
-    auto ret = reinterpret_cast<SkPath *> (c_obj)->addPoly ((SkPoint *)c_pts,
-                                                            c_count, c_close);
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->addPoly ((SkPoint *)c_pts, c_count, c_close);
     return *(reinterpret_cast<sk_SkPath *> (&ret));
   }
 
   sk_SkPath
-  misk_Path_addPath1 (sk_SkPath *c_obj, sk_SkPath *c_src, float c_dx,
-                      float c_dy, uint c_mode)
+  misk_Path_addPath1 (sk_SkPath *c_obj, sk_SkPath *c_src, float c_dx, float c_dy, uint c_mode)
   {
-    auto ret = reinterpret_cast<SkPath *> (c_obj)->addPath (
-        *reinterpret_cast<SkPath *> (c_src), c_dx, c_dy,
-        SkPath::AddPathMode (c_mode));
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->addPath (*reinterpret_cast<SkPath *> (c_src), c_dx, c_dy,
+                                                            SkPath::AddPathMode (c_mode));
     return *(reinterpret_cast<sk_SkPath *> (&ret));
   }
 
   sk_SkPath
   misk_Path_addPath2 (sk_SkPath *c_obj, sk_SkPath *c_src, uint c_mode)
   {
-    auto ret = reinterpret_cast<SkPath *> (c_obj)->addPath (
-        *reinterpret_cast<SkPath *> (c_src), SkPath::AddPathMode (c_mode));
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->addPath (*reinterpret_cast<SkPath *> (c_src),
+                                                            SkPath::AddPathMode (c_mode));
     return *(reinterpret_cast<sk_SkPath *> (&ret));
   }
 
   sk_SkPath
-  misk_Path_addPath3 (sk_SkPath *c_obj, sk_SkPath *c_src,
-                      sk_SkMatrix *c_matrix, uint c_mode)
+  misk_Path_addPath3 (sk_SkPath *c_obj, sk_SkPath *c_src, sk_SkMatrix *c_matrix, uint c_mode)
   {
-    auto ret = reinterpret_cast<SkPath *> (c_obj)->addPath (
-        *reinterpret_cast<SkPath *> (c_src),
-        *reinterpret_cast<SkMatrix *> (c_matrix),
-        SkPath::AddPathMode (c_mode));
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->addPath (*reinterpret_cast<SkPath *> (c_src),
+                                                            *reinterpret_cast<SkMatrix *> (c_matrix),
+                                                            SkPath::AddPathMode (c_mode));
     return *(reinterpret_cast<sk_SkPath *> (&ret));
   }
 
   sk_SkPath
   misk_Path_reverseAddPath (sk_SkPath *c_obj, sk_SkPath *c_src)
   {
-    auto ret = reinterpret_cast<SkPath *> (c_obj)->reverseAddPath (
-        *reinterpret_cast<SkPath *> (c_src));
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->reverseAddPath (*reinterpret_cast<SkPath *> (c_src));
     return *(reinterpret_cast<sk_SkPath *> (&ret));
   }
 
   void
-  misk_Path_offset1 (sk_SkPath *c_obj, float c_dx, float c_dy,
-                     sk_SkPath *c_dst)
+  misk_Path_offset1 (sk_SkPath *c_obj, float c_dx, float c_dy, sk_SkPath *c_dst)
   {
-    reinterpret_cast<SkPath *> (c_obj)->offset (
-        c_dx, c_dy, reinterpret_cast<SkPath *> (c_dst));
+    reinterpret_cast<SkPath *> (c_obj)->offset (c_dx, c_dy, reinterpret_cast<SkPath *> (c_dst));
   }
 
   sk_SkPath
@@ -2854,28 +2615,26 @@ extern "C"
   }
 
   void
-  misk_Path_transform1 (sk_SkPath *c_obj, sk_SkMatrix *c_matrix,
-                        sk_SkPath *c_dst, int c_pc)
+  misk_Path_transform1 (sk_SkPath *c_obj, sk_SkMatrix *c_matrix, sk_SkPath *c_dst, int c_pc)
   {
-    reinterpret_cast<SkPath *> (c_obj)->transform (
-        *reinterpret_cast<SkMatrix *> (c_matrix),
-        reinterpret_cast<SkPath *> (c_dst), SkApplyPerspectiveClip (c_pc));
+    reinterpret_cast<SkPath *> (c_obj)->transform (*reinterpret_cast<SkMatrix *> (c_matrix),
+                                                   reinterpret_cast<SkPath *> (c_dst),
+                                                   SkApplyPerspectiveClip (c_pc));
   }
 
   sk_SkPath
   misk_Path_transform2 (sk_SkPath *c_obj, sk_SkMatrix *c_matrix, int c_pc)
   {
-    auto ret = reinterpret_cast<SkPath *> (c_obj)->transform (
-        *reinterpret_cast<SkMatrix *> (c_matrix),
-        SkApplyPerspectiveClip (c_pc));
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->transform (*reinterpret_cast<SkMatrix *> (c_matrix),
+                                                              SkApplyPerspectiveClip (c_pc));
     return *(reinterpret_cast<sk_SkPath *> (&ret));
   }
 
   sk_SkPath
   misk_Path_makeTransform (sk_SkPath *c_obj, sk_SkMatrix *c_m, int c_pc)
   {
-    auto ret = reinterpret_cast<SkPath *> (c_obj)->makeTransform (
-        *reinterpret_cast<SkMatrix *> (c_m), SkApplyPerspectiveClip (c_pc));
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->makeTransform (*reinterpret_cast<SkMatrix *> (c_m),
+                                                                  SkApplyPerspectiveClip (c_pc));
     return *(reinterpret_cast<sk_SkPath *> (&ret));
   }
 
@@ -2889,8 +2648,7 @@ extern "C"
   bool
   misk_Path_getLastPt (sk_SkPath *c_obj, sk_SkPoint c_lastPt)
   {
-    auto ret = reinterpret_cast<SkPath *> (c_obj)->getLastPt (
-        reinterpret_cast<SkPoint *> (&c_lastPt));
+    auto ret = reinterpret_cast<SkPath *> (c_obj)->getLastPt (reinterpret_cast<SkPoint *> (&c_lastPt));
     return ret;
   }
 
@@ -2903,8 +2661,7 @@ extern "C"
   void
   misk_Path_setLastPt2 (sk_SkPath *c_obj, sk_SkPoint c_p)
   {
-    reinterpret_cast<SkPath *> (c_obj)->setLastPt (
-        *reinterpret_cast<SkPoint *> (&c_p));
+    reinterpret_cast<SkPath *> (c_obj)->setLastPt (*reinterpret_cast<SkPoint *> (&c_p));
   }
 
   unsigned int
@@ -2949,12 +2706,10 @@ extern "C"
   }
 
   sk_SkPixmap *
-  misk_new_PixmapImageInfo (sk_SkImageInfo *c_info, void *c_addr,
-                            ulong c_rowBytes)
+  misk_new_PixmapImageInfo (sk_SkImageInfo *c_info, void *c_addr, ulong c_rowBytes)
   {
-    return reinterpret_cast<sk_SkPixmap *> (
-        new SkPixmap (*reinterpret_cast<SkImageInfo *> (c_info),
-                      reinterpret_cast<void *> (c_addr), c_rowBytes));
+    return reinterpret_cast<sk_SkPixmap *> (new SkPixmap (*reinterpret_cast<SkImageInfo *> (c_info),
+                                                          reinterpret_cast<void *> (c_addr), c_rowBytes));
   }
 
   void
@@ -3015,8 +2770,7 @@ extern "C"
   bool
   misk_Rect_Intersects (sk_SkRect c_a, sk_SkRect c_b)
   {
-    auto ret = SkRect::Intersects (*reinterpret_cast<SkRect *> (&c_a),
-                                   *reinterpret_cast<SkRect *> (&c_b));
+    auto ret = SkRect::Intersects (*reinterpret_cast<SkRect *> (&c_a), *reinterpret_cast<SkRect *> (&c_b));
     return ret;
   }
 
@@ -3076,16 +2830,13 @@ extern "C"
   }
 
   void
-  misk_Rect_setLTRB (sk_SkRect *c_obj, float c_left, float c_top,
-                     float c_right, float c_bottom)
+  misk_Rect_setLTRB (sk_SkRect *c_obj, float c_left, float c_top, float c_right, float c_bottom)
   {
-    reinterpret_cast<SkRect *> (c_obj)->setLTRB (c_left, c_top, c_right,
-                                                 c_bottom);
+    reinterpret_cast<SkRect *> (c_obj)->setLTRB (c_left, c_top, c_right, c_bottom);
   }
 
   void
-  misk_Rect_setXYWH (sk_SkRect *c_obj, float c_x, float c_y, float c_width,
-                     float c_height)
+  misk_Rect_setXYWH (sk_SkRect *c_obj, float c_x, float c_y, float c_width, float c_height)
   {
     reinterpret_cast<SkRect *> (c_obj)->setXYWH (c_x, c_y, c_width, c_height);
   }
@@ -3130,24 +2881,21 @@ extern "C"
   bool
   misk_Rect_containsRect (sk_SkRect *c_obj, sk_SkRect c_r)
   {
-    auto ret = reinterpret_cast<SkRect *> (c_obj)->contains (
-        *reinterpret_cast<SkRect *> (&c_r));
+    auto ret = reinterpret_cast<SkRect *> (c_obj)->contains (*reinterpret_cast<SkRect *> (&c_r));
     return ret;
   }
 
   bool
   misk_Rect_intersect (sk_SkRect *c_obj, sk_SkRect c_r)
   {
-    auto ret = reinterpret_cast<SkRect *> (c_obj)->intersect (
-        *reinterpret_cast<SkRect *> (&c_r));
+    auto ret = reinterpret_cast<SkRect *> (c_obj)->intersect (*reinterpret_cast<SkRect *> (&c_r));
     return ret;
   }
 
   void
   misk_Rect_join (sk_SkRect *c_obj, sk_SkRect c_r)
   {
-    reinterpret_cast<SkRect *> (c_obj)->join (
-        *reinterpret_cast<SkRect *> (&c_r));
+    reinterpret_cast<SkRect *> (c_obj)->join (*reinterpret_cast<SkRect *> (&c_r));
   }
 
   void
@@ -3165,8 +2913,7 @@ extern "C"
   sk_SkRRect *
   misk_new_RRectCopy (sk_SkRRect c_rrect)
   {
-    return reinterpret_cast<sk_SkRRect *> (
-        new SkRRect (*reinterpret_cast<SkRRect *> (&c_rrect)));
+    return reinterpret_cast<sk_SkRRect *> (new SkRRect (*reinterpret_cast<SkRRect *> (&c_rrect)));
   }
 
   sk_SkRegion *
@@ -3178,15 +2925,13 @@ extern "C"
   sk_SkRegion *
   misk_new_RegionCopy (sk_SkRegion *c_region)
   {
-    return reinterpret_cast<sk_SkRegion *> (
-        new SkRegion (*reinterpret_cast<SkRegion *> (c_region)));
+    return reinterpret_cast<sk_SkRegion *> (new SkRegion (*reinterpret_cast<SkRegion *> (c_region)));
   }
 
   sk_SkRegion *
   misk_new_RegionCopyRect (sk_SkIRect c_rect)
   {
-    return reinterpret_cast<sk_SkRegion *> (
-        new SkRegion (*reinterpret_cast<SkIRect *> (&c_rect)));
+    return reinterpret_cast<sk_SkRegion *> (new SkRegion (*reinterpret_cast<SkIRect *> (&c_rect)));
   }
 
   void
@@ -3249,29 +2994,23 @@ extern "C"
   sk_SkSurface *
   misk_Surface_makeSurface (sk_SkSurface *c_obj, int c_width, int c_height)
   {
-    auto ret = reinterpret_cast<SkSurface *> (c_obj)
-                   ->makeSurface (c_width, c_height)
-                   .release ();
+    auto ret = reinterpret_cast<SkSurface *> (c_obj)->makeSurface (c_width, c_height).release ();
     return reinterpret_cast<sk_SkSurface *> (ret);
   }
 
   sk_SkImage *
   misk_Surface_makeImageSnapshot (sk_SkSurface *c_obj)
   {
-    auto ret = reinterpret_cast<SkSurface *> (c_obj)
-                   ->makeImageSnapshot ()
-                   .release ();
+    auto ret = reinterpret_cast<SkSurface *> (c_obj)->makeImageSnapshot ().release ();
     return reinterpret_cast<sk_SkImage *> (ret);
   }
 
   sk_SkImage *
-  misk_Surface_makeImageSnapshotBounds (sk_SkSurface *c_obj,
-                                        sk_SkIRect c_bounds)
+  misk_Surface_makeImageSnapshotBounds (sk_SkSurface *c_obj, sk_SkIRect c_bounds)
   {
-    auto ret
-        = reinterpret_cast<SkSurface *> (c_obj)
-              ->makeImageSnapshot (*reinterpret_cast<SkIRect *> (&c_bounds))
-              .release ();
+    auto ret = reinterpret_cast<SkSurface *> (c_obj)
+                   ->makeImageSnapshot (*reinterpret_cast<SkIRect *> (&c_bounds))
+                   .release ();
     return reinterpret_cast<sk_SkImage *> (ret);
   }
 
@@ -3290,8 +3029,7 @@ extern "C"
   sk_SkSurfaceProps *
   misk_new_SurfacePropsPixelGeometry (uint c_flags, uint c_p1)
   {
-    return reinterpret_cast<sk_SkSurfaceProps *> (
-        new SkSurfaceProps (c_flags, SkPixelGeometry (c_p1)));
+    return reinterpret_cast<sk_SkSurfaceProps *> (new SkSurfaceProps (c_flags, SkPixelGeometry (c_p1)));
   }
 
   sk_SkSurfaceProps *
@@ -3323,8 +3061,7 @@ extern "C"
   void
   misk_SVGDOM_setContainerSize (sk_SkSVGDOM *c_obj, sk_SkSize c_p0)
   {
-    reinterpret_cast<SkSVGDOM *> (c_obj)->setContainerSize (
-        *reinterpret_cast<SkSize *> (&c_p0));
+    reinterpret_cast<SkSVGDOM *> (c_obj)->setContainerSize (*reinterpret_cast<SkSize *> (&c_p0));
   }
 
   sk_SkSize
@@ -3337,8 +3074,7 @@ extern "C"
   void
   misk_SVGDOM_render (sk_SkSVGDOM *c_obj, sk_SkCanvas *c_p0)
   {
-    reinterpret_cast<SkSVGDOM *> (c_obj)->render (
-        reinterpret_cast<SkCanvas *> (c_p0));
+    reinterpret_cast<SkSVGDOM *> (c_obj)->render (reinterpret_cast<SkCanvas *> (c_p0));
   }
 
   sk_SkSVGDOMBuilder *
@@ -3354,8 +3090,7 @@ extern "C"
   }
 
   sk_SkSVGDOMBuilder
-  misk_SVGDOMBuilder_setFontManager (sk_SkSVGDOMBuilder *c_obj,
-                                     sk_SkFontMgr *c_p0)
+  misk_SVGDOMBuilder_setFontManager (sk_SkSVGDOMBuilder *c_obj, sk_SkFontMgr *c_p0)
   {
     auto ret = reinterpret_cast<SkSVGDOM::Builder *> (c_obj)->setFontManager (
         sk_ref_sp (reinterpret_cast<SkFontMgr *> (c_p0)));
@@ -3388,8 +3123,8 @@ extern "C"
   sk_SkSVGLengthContext *
   misk_new_SVGLengthContext (sk_SkSize c_viewport, float c_dpi)
   {
-    return reinterpret_cast<sk_SkSVGLengthContext *> (new SkSVGLengthContext (
-        *reinterpret_cast<SkSize *> (&c_viewport), c_dpi));
+    return reinterpret_cast<sk_SkSVGLengthContext *> (
+        new SkSVGLengthContext (*reinterpret_cast<SkSize *> (&c_viewport), c_dpi));
   }
 
   void
@@ -3406,11 +3141,9 @@ extern "C"
   }
 
   void
-  misk_SVGLengthContext_setViewPort (sk_SkSVGLengthContext *c_obj,
-                                     sk_SkSize c_viewport)
+  misk_SVGLengthContext_setViewPort (sk_SkSVGLengthContext *c_obj, sk_SkSize c_viewport)
   {
-    reinterpret_cast<SkSVGLengthContext *> (c_obj)->setViewPort (
-        *reinterpret_cast<SkSize *> (&c_viewport));
+    reinterpret_cast<SkSVGLengthContext *> (c_obj)->setViewPort (*reinterpret_cast<SkSize *> (&c_viewport));
   }
 
   sk_SkRect
@@ -3428,39 +3161,31 @@ extern "C"
   }
 
   sk_SkTextBlob *
-  misk_TextBlob_MakeFromString (char *c_string, sk_SkFont *c_font,
-                                int c_encoding)
+  misk_TextBlob_MakeFromString (char *c_string, sk_SkFont *c_font, int c_encoding)
   {
-    auto ret = SkTextBlob::MakeFromString (
-                   (char *)c_string, *reinterpret_cast<SkFont *> (c_font),
-                   SkTextEncoding (c_encoding))
+    auto ret = SkTextBlob::MakeFromString ((char *)c_string, *reinterpret_cast<SkFont *> (c_font),
+                                           SkTextEncoding (c_encoding))
                    .release ();
     return reinterpret_cast<sk_SkTextBlob *> (ret);
   }
 
   sk_SkTextBlob *
-  misk_TextBlob_MakeFromPosTextH (void *c_text, ulong c_byteLength,
-                                  float *c_xpos, float c_constY,
+  misk_TextBlob_MakeFromPosTextH (void *c_text, ulong c_byteLength, float *c_xpos, float c_constY,
                                   sk_SkFont *c_font, int c_encoding)
   {
-    auto ret
-        = SkTextBlob::MakeFromPosTextH (
-              reinterpret_cast<void *> (c_text), c_byteLength, (float *)c_xpos,
-              c_constY, *reinterpret_cast<SkFont *> (c_font),
-              SkTextEncoding (c_encoding))
-              .release ();
+    auto ret = SkTextBlob::MakeFromPosTextH (reinterpret_cast<void *> (c_text), c_byteLength, (float *)c_xpos,
+                                             c_constY, *reinterpret_cast<SkFont *> (c_font),
+                                             SkTextEncoding (c_encoding))
+                   .release ();
     return reinterpret_cast<sk_SkTextBlob *> (ret);
   }
 
   sk_SkTextBlob *
-  misk_TextBlob_MakeFromPosText (void *c_text, ulong c_byteLength,
-                                 sk_SkPoint *c_pos, sk_SkFont *c_font,
+  misk_TextBlob_MakeFromPosText (void *c_text, ulong c_byteLength, sk_SkPoint *c_pos, sk_SkFont *c_font,
                                  int c_encoding)
   {
-    auto ret = SkTextBlob::MakeFromPosText (
-                   reinterpret_cast<void *> (c_text), c_byteLength,
-                   (SkPoint *)c_pos, *reinterpret_cast<SkFont *> (c_font),
-                   SkTextEncoding (c_encoding))
+    auto ret = SkTextBlob::MakeFromPosText (reinterpret_cast<void *> (c_text), c_byteLength, (SkPoint *)c_pos,
+                                            *reinterpret_cast<SkFont *> (c_font), SkTextEncoding (c_encoding))
                    .release ();
     return reinterpret_cast<sk_SkTextBlob *> (ret);
   }
@@ -3486,74 +3211,60 @@ extern "C"
   sk_SkTextBlob *
   misk_TextBlobBuilder_make (sk_SkTextBlobBuilder *c_obj)
   {
-    auto ret
-        = reinterpret_cast<SkTextBlobBuilder *> (c_obj)->make ().release ();
+    auto ret = reinterpret_cast<SkTextBlobBuilder *> (c_obj)->make ().release ();
     return reinterpret_cast<sk_SkTextBlob *> (ret);
   }
 
   sk_SkTextBlobBuilderRunBuffer
-  misk_TextBlobBuilder_allocRun (sk_SkTextBlobBuilder *c_obj,
-                                 sk_SkFont *c_font, int c_count, float c_x,
+  misk_TextBlobBuilder_allocRun (sk_SkTextBlobBuilder *c_obj, sk_SkFont *c_font, int c_count, float c_x,
                                  float c_y, sk_SkRect *c_bounds)
   {
     auto ret = reinterpret_cast<SkTextBlobBuilder *> (c_obj)->allocRun (
-        *reinterpret_cast<SkFont *> (c_font), c_count, c_x, c_y,
-        reinterpret_cast<SkRect *> (c_bounds));
+        *reinterpret_cast<SkFont *> (c_font), c_count, c_x, c_y, reinterpret_cast<SkRect *> (c_bounds));
     return *(reinterpret_cast<sk_SkTextBlobBuilderRunBuffer *> (&ret));
   }
 
   sk_SkTextBlobBuilderRunBuffer
-  misk_TextBlobBuilder_allocRunPosH (sk_SkTextBlobBuilder *c_obj,
-                                     sk_SkFont *c_font, int c_count, float c_y,
+  misk_TextBlobBuilder_allocRunPosH (sk_SkTextBlobBuilder *c_obj, sk_SkFont *c_font, int c_count, float c_y,
                                      sk_SkRect *c_bounds)
   {
     auto ret = reinterpret_cast<SkTextBlobBuilder *> (c_obj)->allocRunPosH (
-        *reinterpret_cast<SkFont *> (c_font), c_count, c_y,
-        reinterpret_cast<SkRect *> (c_bounds));
+        *reinterpret_cast<SkFont *> (c_font), c_count, c_y, reinterpret_cast<SkRect *> (c_bounds));
     return *(reinterpret_cast<sk_SkTextBlobBuilderRunBuffer *> (&ret));
   }
 
   sk_SkTextBlobBuilderRunBuffer
-  misk_TextBlobBuilder_allocRunPos (sk_SkTextBlobBuilder *c_obj,
-                                    sk_SkFont *c_font, int c_count,
+  misk_TextBlobBuilder_allocRunPos (sk_SkTextBlobBuilder *c_obj, sk_SkFont *c_font, int c_count,
                                     sk_SkRect *c_bounds)
   {
     auto ret = reinterpret_cast<SkTextBlobBuilder *> (c_obj)->allocRunPos (
-        *reinterpret_cast<SkFont *> (c_font), c_count,
+        *reinterpret_cast<SkFont *> (c_font), c_count, reinterpret_cast<SkRect *> (c_bounds));
+    return *(reinterpret_cast<sk_SkTextBlobBuilderRunBuffer *> (&ret));
+  }
+
+  sk_SkTextBlobBuilderRunBuffer
+  misk_TextBlobBuilder_allocRunText (sk_SkTextBlobBuilder *c_obj, sk_SkFont *c_font, int c_count, float c_x,
+                                     float c_y, int c_textByteCount, sk_SkRect *c_bounds)
+  {
+    auto ret = reinterpret_cast<SkTextBlobBuilder *> (c_obj)->allocRunText (
+        *reinterpret_cast<SkFont *> (c_font), c_count, c_x, c_y, c_textByteCount,
         reinterpret_cast<SkRect *> (c_bounds));
     return *(reinterpret_cast<sk_SkTextBlobBuilderRunBuffer *> (&ret));
   }
 
   sk_SkTextBlobBuilderRunBuffer
-  misk_TextBlobBuilder_allocRunText (sk_SkTextBlobBuilder *c_obj,
-                                     sk_SkFont *c_font, int c_count, float c_x,
-                                     float c_y, int c_textByteCount,
-                                     sk_SkRect *c_bounds)
+  misk_TextBlobBuilder_allocRunTextPosH (sk_SkTextBlobBuilder *c_obj, sk_SkFont *c_font, int c_count,
+                                         float c_y, int c_textByteCount, sk_SkRect *c_bounds)
   {
-    auto ret = reinterpret_cast<SkTextBlobBuilder *> (c_obj)->allocRunText (
-        *reinterpret_cast<SkFont *> (c_font), c_count, c_x, c_y,
-        c_textByteCount, reinterpret_cast<SkRect *> (c_bounds));
+    auto ret = reinterpret_cast<SkTextBlobBuilder *> (c_obj)->allocRunTextPosH (
+        *reinterpret_cast<SkFont *> (c_font), c_count, c_y, c_textByteCount,
+        reinterpret_cast<SkRect *> (c_bounds));
     return *(reinterpret_cast<sk_SkTextBlobBuilderRunBuffer *> (&ret));
   }
 
   sk_SkTextBlobBuilderRunBuffer
-  misk_TextBlobBuilder_allocRunTextPosH (sk_SkTextBlobBuilder *c_obj,
-                                         sk_SkFont *c_font, int c_count,
-                                         float c_y, int c_textByteCount,
-                                         sk_SkRect *c_bounds)
-  {
-    auto ret
-        = reinterpret_cast<SkTextBlobBuilder *> (c_obj)->allocRunTextPosH (
-            *reinterpret_cast<SkFont *> (c_font), c_count, c_y,
-            c_textByteCount, reinterpret_cast<SkRect *> (c_bounds));
-    return *(reinterpret_cast<sk_SkTextBlobBuilderRunBuffer *> (&ret));
-  }
-
-  sk_SkTextBlobBuilderRunBuffer
-  misk_TextBlobBuilder_allocRunTextPos (sk_SkTextBlobBuilder *c_obj,
-                                        sk_SkFont *c_font, int c_count,
-                                        int c_textByteCount,
-                                        sk_SkRect *c_bounds)
+  misk_TextBlobBuilder_allocRunTextPos (sk_SkTextBlobBuilder *c_obj, sk_SkFont *c_font, int c_count,
+                                        int c_textByteCount, sk_SkRect *c_bounds)
   {
     auto ret = reinterpret_cast<SkTextBlobBuilder *> (c_obj)->allocRunTextPos (
         *reinterpret_cast<SkFont *> (c_font), c_count, c_textByteCount,
@@ -3606,30 +3317,26 @@ extern "C"
   }
 
   void
-  misk_Typeface_unicharsToGlyphs (sk_SkTypeface *c_obj, int *c_uni,
-                                  int c_count, ushort *c_glyphs)
+  misk_Typeface_unicharsToGlyphs (sk_SkTypeface *c_obj, int *c_uni, int c_count, ushort *c_glyphs)
   {
-    reinterpret_cast<SkTypeface *> (c_obj)->unicharsToGlyphs (
-        (int *)c_uni, c_count, (unsigned short *)c_glyphs);
+    reinterpret_cast<SkTypeface *> (c_obj)->unicharsToGlyphs ((int *)c_uni, c_count,
+                                                              (unsigned short *)c_glyphs);
   }
 
   int
-  misk_Typeface_textToGlyphs (sk_SkTypeface *c_obj, void *c_text,
-                              ulong c_byteLength, int c_encoding,
+  misk_Typeface_textToGlyphs (sk_SkTypeface *c_obj, void *c_text, ulong c_byteLength, int c_encoding,
                               ushort *c_glyphs, int c_maxGlyphCount)
   {
     auto ret = reinterpret_cast<SkTypeface *> (c_obj)->textToGlyphs (
-        reinterpret_cast<void *> (c_text), c_byteLength,
-        SkTextEncoding (c_encoding), (unsigned short *)c_glyphs,
-        c_maxGlyphCount);
+        reinterpret_cast<void *> (c_text), c_byteLength, SkTextEncoding (c_encoding),
+        (unsigned short *)c_glyphs, c_maxGlyphCount);
     return ret;
   }
 
   unsigned short
   misk_Typeface_unicharToGlyph (sk_SkTypeface *c_obj, int c_unichar)
   {
-    auto ret
-        = reinterpret_cast<SkTypeface *> (c_obj)->unicharToGlyph (c_unichar);
+    auto ret = reinterpret_cast<SkTypeface *> (c_obj)->unicharToGlyph (c_unichar);
     return ret;
   }
 
@@ -3657,8 +3364,7 @@ extern "C"
   void
   misk_Typeface_getFamilyName (sk_SkTypeface *c_obj, sk_SkString *c_name)
   {
-    reinterpret_cast<SkTypeface *> (c_obj)->getFamilyName (
-        reinterpret_cast<SkString *> (c_name));
+    reinterpret_cast<SkTypeface *> (c_obj)->getFamilyName (reinterpret_cast<SkString *> (c_name));
   }
 
   bool
@@ -3683,23 +3389,19 @@ extern "C"
   }
 
   sk_GrBackendRenderTarget
-  misk_GrBackendRenderTargetsMakeGL (int c_width, int c_height,
-                                     int c_sampleCnt, int c_stencilBits,
+  misk_GrBackendRenderTargetsMakeGL (int c_width, int c_height, int c_sampleCnt, int c_stencilBits,
                                      sk_GrGLFramebufferInfo c_glInfo)
   {
-    auto ret = GrBackendRenderTargets::MakeGL (
-        c_width, c_height, c_sampleCnt, c_stencilBits,
-        *reinterpret_cast<GrGLFramebufferInfo *> (&c_glInfo));
+    auto ret = GrBackendRenderTargets::MakeGL (c_width, c_height, c_sampleCnt, c_stencilBits,
+                                               *reinterpret_cast<GrGLFramebufferInfo *> (&c_glInfo));
     return *(reinterpret_cast<sk_GrBackendRenderTarget *> (&ret));
   }
 
   sk_GrDirectContext *
-  misk_GrDirectContextsMakeGLInterfaceOptions (sk_GrGLInterface *c_p0,
-                                               sk_GrContextOptions c_p1)
+  misk_GrDirectContextsMakeGLInterfaceOptions (sk_GrGLInterface *c_p0, sk_GrContextOptions c_p1)
   {
-    auto ret = GrDirectContexts::MakeGL (
-                   sk_ref_sp (reinterpret_cast<GrGLInterface *> (c_p0)),
-                   *reinterpret_cast<GrContextOptions *> (&c_p1))
+    auto ret = GrDirectContexts::MakeGL (sk_ref_sp (reinterpret_cast<GrGLInterface *> (c_p0)),
+                                         *reinterpret_cast<GrContextOptions *> (&c_p1))
                    .release ();
     return reinterpret_cast<sk_GrDirectContext *> (ret);
   }
@@ -3707,18 +3409,14 @@ extern "C"
   sk_GrDirectContext *
   misk_GrDirectContextsMakeGLInterface (sk_GrGLInterface *c_p0)
   {
-    auto ret = GrDirectContexts::MakeGL (
-                   sk_ref_sp (reinterpret_cast<GrGLInterface *> (c_p0)))
-                   .release ();
+    auto ret = GrDirectContexts::MakeGL (sk_ref_sp (reinterpret_cast<GrGLInterface *> (c_p0))).release ();
     return reinterpret_cast<sk_GrDirectContext *> (ret);
   }
 
   sk_GrDirectContext *
   misk_GrDirectContextsMakeGLOptions (sk_GrContextOptions c_p0)
   {
-    auto ret = GrDirectContexts::MakeGL (
-                   *reinterpret_cast<GrContextOptions *> (&c_p0))
-                   .release ();
+    auto ret = GrDirectContexts::MakeGL (*reinterpret_cast<GrContextOptions *> (&c_p0)).release ();
     return reinterpret_cast<sk_GrDirectContext *> (ret);
   }
 
@@ -3756,22 +3454,17 @@ extern "C"
     auto ret
         = SkImages::DeferredFromEncodedData (
               sk_ref_sp (reinterpret_cast<SkData *> (c_encoded)),
-              c_alphaType == nullptr
-                  ? std::nullopt
-                  : std::optional<SkAlphaType> ((SkAlphaType)*c_alphaType))
+              c_alphaType == nullptr ? std::nullopt : std::optional<SkAlphaType> ((SkAlphaType)*c_alphaType))
               .release ();
     return reinterpret_cast<sk_SkImage *> (ret);
   }
 
   sk_SkImage *
-  misk_SkImagesRasterFromData (sk_SkImageInfo *c_info, sk_SkData *c_pixels,
-                               ulong c_rowBytes)
+  misk_SkImagesRasterFromData (sk_SkImageInfo *c_info, sk_SkData *c_pixels, ulong c_rowBytes)
   {
-    auto ret
-        = SkImages::RasterFromData (
-              *reinterpret_cast<SkImageInfo *> (c_info),
-              sk_ref_sp (reinterpret_cast<SkData *> (c_pixels)), c_rowBytes)
-              .release ();
+    auto ret = SkImages::RasterFromData (*reinterpret_cast<SkImageInfo *> (c_info),
+                                         sk_ref_sp (reinterpret_cast<SkData *> (c_pixels)), c_rowBytes)
+                   .release ();
     return reinterpret_cast<sk_SkImage *> (ret);
   }
 
@@ -3790,28 +3483,25 @@ extern "C"
   }
 
   sk_SkSurface *
-  misk_SkSurfacesWrapBackendRenderTarget (
-      sk_GrRecordingContext *c_context,
-      sk_GrBackendRenderTarget *c_backendRenderTarget, int c_origin,
-      int c_colorType, sk_SkColorSpace *c_colorSpace,
-      sk_SkSurfaceProps *c_surfaceProps)
+  misk_SkSurfacesWrapBackendRenderTarget (sk_GrRecordingContext *c_context,
+                                          sk_GrBackendRenderTarget *c_backendRenderTarget, int c_origin,
+                                          int c_colorType, sk_SkColorSpace *c_colorSpace,
+                                          sk_SkSurfaceProps *c_surfaceProps)
   {
-    auto ret = SkSurfaces::WrapBackendRenderTarget (
-                   reinterpret_cast<GrRecordingContext *> (c_context),
-                   *reinterpret_cast<GrBackendRenderTarget *> (
-                       c_backendRenderTarget),
-                   GrSurfaceOrigin (c_origin), SkColorType (c_colorType),
-                   sk_ref_sp (reinterpret_cast<SkColorSpace *> (c_colorSpace)),
-                   reinterpret_cast<SkSurfaceProps *> (c_surfaceProps))
-                   .release ();
+    auto ret
+        = SkSurfaces::WrapBackendRenderTarget (
+              reinterpret_cast<GrRecordingContext *> (c_context),
+              *reinterpret_cast<GrBackendRenderTarget *> (c_backendRenderTarget), GrSurfaceOrigin (c_origin),
+              SkColorType (c_colorType), sk_ref_sp (reinterpret_cast<SkColorSpace *> (c_colorSpace)),
+              reinterpret_cast<SkSurfaceProps *> (c_surfaceProps))
+              .release ();
     return reinterpret_cast<sk_SkSurface *> (ret);
   }
 
   bool
   misk_Op (sk_SkPath *c_one, sk_SkPath *c_two, uint c_op, sk_SkPath *c_result)
   {
-    auto ret = Op (*reinterpret_cast<SkPath *> (c_one),
-                   *reinterpret_cast<SkPath *> (c_two), SkPathOp (c_op),
+    auto ret = Op (*reinterpret_cast<SkPath *> (c_one), *reinterpret_cast<SkPath *> (c_two), SkPathOp (c_op),
                    reinterpret_cast<SkPath *> (c_result));
     return ret;
   }
@@ -3819,16 +3509,14 @@ extern "C"
   bool
   misk_Simplify (sk_SkPath *c_path, sk_SkPath *c_result)
   {
-    auto ret = Simplify (*reinterpret_cast<SkPath *> (c_path),
-                         reinterpret_cast<SkPath *> (c_result));
+    auto ret = Simplify (*reinterpret_cast<SkPath *> (c_path), reinterpret_cast<SkPath *> (c_result));
     return ret;
   }
 
   bool
   misk_AsWinding (sk_SkPath *c_path, sk_SkPath *c_result)
   {
-    auto ret = AsWinding (*reinterpret_cast<SkPath *> (c_path),
-                          reinterpret_cast<SkPath *> (c_result));
+    auto ret = AsWinding (*reinterpret_cast<SkPath *> (c_path), reinterpret_cast<SkPath *> (c_result));
     return ret;
   }
 
@@ -3864,14 +3552,11 @@ extern "C"
   sk_fontmgr_ref_default (void)
   {
 #if defined(SKIA_MAC)
-    return reinterpret_cast<sk_SkFontMgr *> (
-        SkFontMgr_New_CoreText (nullptr).release ());
+    return reinterpret_cast<sk_SkFontMgr *> (SkFontMgr_New_CoreText (nullptr).release ());
 #elif defined(SKIA_UNIX)
-    return reinterpret_cast<sk_SkFontMgr *> (
-        SkFontMgr_New_FontConfig (nullptr).release ());
+    return reinterpret_cast<sk_SkFontMgr *> (SkFontMgr_New_FontConfig (nullptr).release ());
 #elif defined(SKIA_WINDOWS)
-    return reinterpret_cast<sk_SkFontMgr *> (
-        SkFontMgr_New_DirectWrite ().release ());
+    return reinterpret_cast<sk_SkFontMgr *> (SkFontMgr_New_DirectWrite ().release ());
 #else
 #error "No font manager available for this platform"
 #endif

@@ -48,7 +48,7 @@ func (f *file) close() {
 }
 
 func (f *file) clangFormat() {
-	cmd := exec.Command("clang-format", "-style=gnu", "-i", f.filename)
+	cmd := exec.Command("clang-format", "-style={BasedOnStyle: gnu, ColumnLimit: 110}", "-i", f.filename)
 	output, err := cmd.CombinedOutput()
 	if len(output) > 0 {
 		fmt.Printf("Output of clang-format for %s\n", f.filename)
