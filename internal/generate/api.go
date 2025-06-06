@@ -12,11 +12,13 @@ import (
 )
 
 type api struct {
-	records       []record
-	enums         []enum
-	functions     []callable
-	typedefs      []typedef
-	variables     []variable
+	// details of the api entities to be generated
+	records   []record
+	enums     []enum
+	functions []callable
+	typedefs  []typedef
+	variables []variable
+
 	tus           []translationUnit
 	variablesLock *sync.Mutex
 }
