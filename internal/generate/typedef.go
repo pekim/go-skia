@@ -5,7 +5,7 @@ import (
 )
 
 type typedef struct {
-	CppName   string `json:"name"`
+	cppName   string
 	cName     string
 	goName    string
 	cType     typ
@@ -24,7 +24,7 @@ func (t *typedef) enrich1(cursor clang.Cursor) {
 
 func (t *typedef) enrich2(api api) {
 	if !t.enriched1 {
-		fatalf("typedef %s has not been phase 1 enriched", t.CppName)
+		fatalf("typedef %s has not been phase 1 enriched", t.cppName)
 	}
 
 	t.cType = mustTypFromClangType(t.clangType, api, "")
@@ -35,7 +35,7 @@ func (t *typedef) enrich2(api api) {
 
 func (t typedef) generate(g generator) {
 	if !t.enriched2 {
-		fatalf("typedef %s has not been enriched", t.CppName)
+		fatalf("typedef %s has not been enriched", t.cppName)
 	}
 
 	f := g.goFile

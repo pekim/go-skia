@@ -82,11 +82,19 @@ func Generate() {
 		variablesLock: new(sync.Mutex),
 	}
 	fmt.Println()
+
+	api.configEnums()
+	api.configFunctions()
+	api.configRecords()
+	api.configTypedefs()
+
 	api.parseTranslationUnits()
 	api.enrich1()
 	api.enrich2()
+
 	api.generate(g)
 	fmt.Println()
+
 	api.printStats()
 	fmt.Println()
 }

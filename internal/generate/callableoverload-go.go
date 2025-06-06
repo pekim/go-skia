@@ -26,7 +26,7 @@ func (o callableOverload) generateGo(g generator) {
 	// make receiver if a non-static class method
 	var receiver string
 	if o.isNonStaticMethod {
-		if o.record.NoWrapper {
+		if o.record.noWrapper {
 			receiver = fmt.Sprintf("(o *%s)", o.record.goName)
 		} else {
 			receiver = fmt.Sprintf("(o %s)", o.record.goName)
@@ -76,7 +76,7 @@ func (o callableOverload) generateGoBody(g generator) {
 		} else if o.retrn.enum != nil {
 			f.writelnf("  return %s(retC)", o.retrn.enum.goName)
 		} else if o.retrn.record != nil {
-			if o.retrn.record.NoWrapper {
+			if o.retrn.record.noWrapper {
 				f.writelnf("  return %s(retC)", o.retrn.record.goName)
 			} else if o.retrn.isPointer || o.retrn.isSmartPointer {
 				f.writelnf("  return %s{sk: retC}", o.retrn.record.goName)
@@ -86,7 +86,7 @@ func (o callableOverload) generateGoBody(g generator) {
 		} else if (o.retrn.isPointer || o.retrn.isSmartPointer) && o.retrn.subTyp.record != nil {
 			f.writelnf("  return %s{sk: retC}", o.retrn.subTyp.record.goName)
 		} else if o.retrn.isLValueReference {
-			if o.retrn.subTyp.record.NoWrapper {
+			if o.retrn.subTyp.record.noWrapper {
 				f.writelnf("  return %s(retC)", o.retrn.subTyp.record.goName)
 			} else {
 				f.writelnf("  return %s{sk: &retC}", o.retrn.subTyp.record.goName)
@@ -109,7 +109,7 @@ func (o callableOverload) firstGoCArg() (string, string, bool) {
 	}
 
 	cVar := "c_obj := o.sk"
-	if o.record.NoWrapper {
+	if o.record.noWrapper {
 		cVar = fmt.Sprintf("c_obj := (*C.%s)(o)", o.record.cStructName)
 	}
 	cArg := "c_obj"

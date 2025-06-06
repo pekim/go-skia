@@ -118,14 +118,13 @@ func (p *param) enrich2(api api) {
 		p.cppArg = fmt.Sprintf("reinterpret_cast<%s*>(%s)", p.typ.subTyp.cppName, p.cName)
 
 	} else if p.typ.goName == "string" {
-		p.cgoVar = fmt.Sprintf(`%s := C.CString(%s)
-	defer C.free(unsafe.Pointer(%s))`,
+		p.cgoVar = fmt.Sprintf("%s := C.CString(%s)\ndefer C.free(unsafe.Pointer(%s))",
 			p.cName, p.goName, p.cName)
 		p.cParam = fmt.Sprintf("%s *%s", p.typ.subTyp.cName, p.cName)
 		p.cppArg = fmt.Sprintf("(%s*)%s", p.typ.subTyp.cppName, p.cName)
 
 	} else if p.typ.isLValueReference && p.typ.subTyp.record != nil {
-		if p.typ.subTyp.record.NoWrapper {
+		if p.typ.subTyp.record.noWrapper {
 			p.cgoVar = fmt.Sprintf("%s := *(*C.%s)(unsafe.Pointer(&%s))", p.cName, p.typ.subTyp.record.cStructName, p.goName)
 			p.cParam = fmt.Sprintf("%s %s", p.typ.subTyp.cName, p.cName)
 			p.cppArg = fmt.Sprintf("*reinterpret_cast<%s*>(&%s)", p.typ.subTyp.cppName, p.cName)
@@ -136,7 +135,7 @@ func (p *param) enrich2(api api) {
 		}
 
 	} else if p.typ.isPointer && p.typ.subTyp.record != nil {
-		if p.typ.subTyp.record.NoWrapper {
+		if p.typ.subTyp.record.noWrapper {
 			if p.Out {
 				p.cgoVar = fmt.Sprintf("%s := (*C.%s)(unsafe.Pointer(%s))", p.cName, p.typ.subTyp.record.cStructName, p.goName)
 				p.cParam = fmt.Sprintf("%s *%s", p.typ.subTyp.cName, p.cName)

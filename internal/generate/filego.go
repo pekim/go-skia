@@ -68,7 +68,7 @@ func (f fileGo) generateStructSizeAssertions(g generator, records []record) {
 
 	for _, record := range records {
 		record.generateStructSizeAssertion(g)
-		for _, record := range record.Records {
+		for _, record := range record.records {
 			record.generateStructSizeAssertion(g)
 		}
 	}

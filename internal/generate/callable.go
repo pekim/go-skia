@@ -5,8 +5,8 @@ import (
 )
 
 type callable struct {
-	CppName       string              `json:"name"`
-	Overloads     []*callableOverload `json:"overloads"`
+	cppName       string
+	overloads     []*callableOverload
 	record        *record
 	enrichedCount int
 }
@@ -16,16 +16,16 @@ func (c *callable) enrich1(record *record, cursor clang.Cursor) {
 	c.record = record
 
 	var overload *callableOverload
-	if len(c.Overloads) == 0 {
+	if len(c.overloads) == 0 {
 		// If no overloads were configured in JSON it implies that there is just one.
-		c.Overloads = []*callableOverload{{}}
+		c.overloads = []*callableOverload{{}}
 	}
-	if c.enrichedCount >= len(c.Overloads) {
+	if c.enrichedCount >= len(c.overloads) {
 		if record != nil {
 			fatalf("record %s, method %s, %d overloads configured, but more encountered",
-				c.record.CppName, c.CppName, len(c.Overloads))
+				c.record.cppName, c.cppName, len(c.overloads))
 		} else {
-			fatalf("function %s, %d overloads configured, but more encountered", c.CppName, len(c.Overloads))
+			fatalf("function %s, %d overloads configured, but more encountered", c.cppName, len(c.overloads))
 		}
 	}
 
@@ -34,7 +34,7 @@ func (c *callable) enrich1(record *record, cursor clang.Cursor) {
 	//
 	// If an overload is configured as 'null' in JSON that indicates that is it not to be
 	// generated. So it won't be enriched.
-	overload = c.Overloads[c.enrichedCount]
+	overload = c.overloads[c.enrichedCount]
 	if overload != nil {
 		overload.enrich1(c, record, cursor)
 	}
@@ -43,16 +43,16 @@ func (c *callable) enrich1(record *record, cursor clang.Cursor) {
 
 func (c *callable) enrich2(record *record, api api) {
 	c.record = record
-	if len(c.Overloads) == 0 {
+	if len(c.overloads) == 0 {
 		if c.record != nil {
-			fatalf("record %s, method %s, has 0 overloads configured, and none enriched", c.record.CppName, c.CppName)
+			fatalf("record %s, method %s, has 0 overloads configured, and none enriched", c.record.cppName, c.cppName)
 		} else {
-			fatalf("function %s has 0 overloads configured, and none enriched", c.CppName)
+			fatalf("function %s has 0 overloads configured, and none enriched", c.cppName)
 		}
 	}
 
-	for i := range c.Overloads {
-		overload := c.Overloads[i]
+	for i := range c.overloads {
+		overload := c.overloads[i]
 		if overload != nil {
 			overload.enrich2(api)
 		}
@@ -60,24 +60,24 @@ func (c *callable) enrich2(record *record, api api) {
 }
 
 func (c callable) generate(g generator) {
-	if len(c.Overloads) == 0 {
+	if len(c.overloads) == 0 {
 		if c.record != nil {
-			fatalf("record %s, method %s, has 0 overloads configured, and none enriched", c.record.CppName, c.CppName)
+			fatalf("record %s, method %s, has 0 overloads configured, and none enriched", c.record.cppName, c.cppName)
 		} else {
-			fatalf("function %s has 0 overloads configured, and none enriched", c.CppName)
+			fatalf("function %s has 0 overloads configured, and none enriched", c.cppName)
 		}
 	}
-	if c.enrichedCount < len(c.Overloads) {
+	if c.enrichedCount < len(c.overloads) {
 		if c.record != nil {
 			fatalf("record %s, method %s, only %d of %d overloads enriched",
-				c.Overloads[0].record.CppName, c.CppName, c.enrichedCount, len(c.Overloads))
+				c.overloads[0].record.cppName, c.cppName, c.enrichedCount, len(c.overloads))
 		} else {
 			fatalf("function %s, only %d of %d overloads enriched",
-				c.CppName, c.enrichedCount, len(c.Overloads))
+				c.cppName, c.enrichedCount, len(c.overloads))
 		}
 	}
 
-	for _, overload := range c.Overloads {
+	for _, overload := range c.overloads {
 		if overload != nil {
 			overload.generate(g)
 		}

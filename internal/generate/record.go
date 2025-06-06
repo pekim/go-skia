@@ -16,14 +16,14 @@ func init() {
 // record represents a class or struct.
 type record struct {
 	cursor            clang.Cursor
-	CppName           string        `json:"name"`
-	Ctors             []*recordCtor `json:"constructors"`
-	DtorCreate        bool          `json:"dtorCreate"` // create a destructor, even if there isn't one in the AST
-	Enums             []enum        `json:"enums"`
-	Methods           []callable    `json:"methods"`
-	Records           []record      `json:"records"`
-	NoWrapper         bool          `json:"noWrapper"`
-	As                []string      `json:"as"`
+	cppName           string
+	ctors             []*recordCtor
+	dtorCreate        bool // create a destructor, even if there isn't one in the AST
+	enums             []enum
+	methods           []callable
+	records           []record
+	noWrapper         bool
+	as                []string
 	asRecords         []*record
 	dtor              recordDtor
 	fields            []field
@@ -41,11 +41,11 @@ type record struct {
 func (r *record) enrich1(cursor clang.Cursor, parent *record) {
 	parentCppName := ""
 	if parent != nil {
-		parentCppName = parent.CppName
+		parentCppName = parent.cppName
 	}
 	r.cursor = cursor
-	r.goName = stripSkPrefix(parentCppName) + stripSkPrefix(r.CppName)
-	r.cStructName = fmt.Sprintf("sk_%s%s", parentCppName, r.CppName)
+	r.goName = stripSkPrefix(parentCppName) + stripSkPrefix(r.cppName)
+	r.cStructName = fmt.Sprintf("sk_%s%s", parentCppName, r.cppName)
 	r.doc = docComment(cursor.ParsedComment())
 	r.size = int(cursor.Type().SizeOf())
 	r.parent = parent
@@ -59,12 +59,12 @@ func (r *record) enrich1(cursor clang.Cursor, parent *record) {
 		switch cursor.Kind() {
 		case clang.Cursor_Constructor:
 			if cursor.AccessSpecifier() == clang.AccessSpecifier_Public {
-				if len(r.Ctors) <= ctorsEnriched {
-					fatalf("record %s only has %d ctors configured but at least %d encountered", r.CppName, len(r.Ctors), ctorsEnriched+1)
+				if len(r.ctors) <= ctorsEnriched {
+					fatalf("record %s only has %d ctors configured but at least %d encountered", r.cppName, len(r.ctors), ctorsEnriched+1)
 				}
-				ctor := r.Ctors[ctorsEnriched]
+				ctor := r.ctors[ctorsEnriched]
 				if ctor != nil {
-					r.Ctors[ctorsEnriched].enrich1(r, &cursor)
+					r.ctors[ctorsEnriched].enrich1(r, &cursor)
 				}
 				ctorsEnriched++
 			}
@@ -109,17 +109,17 @@ func (r *record) enrich1(cursor clang.Cursor, parent *record) {
 		return clang.ChildVisit_Continue
 	})
 
-	if len(r.Ctors) != ctorsEnriched {
-		if len(r.Ctors) == 1 && ctorsEnriched == 0 {
+	if len(r.ctors) != ctorsEnriched {
+		if len(r.ctors) == 1 && ctorsEnriched == 0 {
 			// Enrich a default constructor.
-			r.Ctors[0].enrich1(r, nil)
+			r.ctors[0].enrich1(r, nil)
 		} else {
-			fatalf("record %s has %d ctors, but expected %d", r.CppName, ctorsEnriched, len(r.Ctors))
+			fatalf("record %s has %d ctors, but expected %d", r.cppName, ctorsEnriched, len(r.ctors))
 		}
 	}
 
 	// Create dtors that were not explicitly present in the AST.
-	if r.DtorCreate || (!dtorCreated && !dtorNotPublic) && len(r.Ctors) > 0 && !r.NoWrapper {
+	if r.dtorCreate || (!dtorCreated && !dtorNotPublic) && len(r.ctors) > 0 && !r.noWrapper {
 		r.dtor = newRecordDtor(r, nil)
 	}
 
@@ -128,18 +128,18 @@ func (r *record) enrich1(cursor clang.Cursor, parent *record) {
 
 func (r *record) enrich2(api api) {
 	if !r.enriched1 {
-		fatalf("record %s has not been phase 1 enriched", r.CppName)
+		fatalf("record %s has not been phase 1 enriched", r.cppName)
 	}
 
 	r.doc = addDocCommentLinks(r.doc, api)
 
-	for i := range r.Enums {
-		enum := &r.Enums[i]
+	for i := range r.enums {
+		enum := &r.enums[i]
 		enum.enrich2(api)
 	}
 
-	for i := range r.Records {
-		record := &r.Records[i]
+	for i := range r.records {
+		record := &r.records[i]
 		record.enrich2(api)
 	}
 
@@ -148,49 +148,49 @@ func (r *record) enrich2(api api) {
 		field.enrich2(api)
 	}
 
-	for i := range r.Ctors {
-		ctor := r.Ctors[i]
+	for i := range r.ctors {
+		ctor := r.ctors[i]
 		if ctor != nil {
 			ctor.enrich2(api)
 		}
 	}
 
-	for i := range r.Methods {
-		method := &r.Methods[i]
+	for i := range r.methods {
+		method := &r.methods[i]
 		method.enrich2(r, api)
 	}
 
-	for _, as := range r.As {
+	for _, as := range r.as {
 		asRecord, ok := api.findRecord(as)
 		if !ok {
-			fatalf("failed to find record %s for As method for %s record", as, r.CppName)
+			fatalf("failed to find record %s for As method for %s record", as, r.cppName)
 		}
 		r.asRecords = append(r.asRecords, asRecord)
 	}
 }
 
 func (r *record) findEnum(name string) (*enum, bool) {
-	for i, enum := range r.Enums {
-		if enum.CppName == name {
-			return &r.Enums[i], true
+	for i, enum := range r.enums {
+		if enum.cppName == name {
+			return &r.enums[i], true
 		}
 	}
 	return nil, false
 }
 
 func (r *record) findMethod(name string) (*callable, bool) {
-	for i, method := range r.Methods {
-		if method.CppName == name {
-			return &r.Methods[i], true
+	for i, method := range r.methods {
+		if method.cppName == name {
+			return &r.methods[i], true
 		}
 	}
 	return nil, false
 }
 
 func (r record) findRecord(name string) (*record, bool) {
-	for i, record := range r.Records {
-		if record.CppName == name {
-			return &r.Records[i], true
+	for i, record := range r.records {
+		if record.cppName == name {
+			return &r.records[i], true
 		}
 	}
 	return nil, false
@@ -198,14 +198,14 @@ func (r record) findRecord(name string) (*record, bool) {
 
 func (r record) qualifiedCppName() string {
 	if r.parent == nil {
-		return r.CppName
+		return r.cppName
 	}
-	return r.parent.CppName + "::" + r.CppName
+	return r.parent.cppName + "::" + r.cppName
 }
 
 func (r record) generate(g generator) {
 	if !r.enriched2 {
-		fatalf("record %s has not been enriched", r.CppName)
+		fatalf("record %s has not been enriched", r.cppName)
 	}
 
 	r.generateGoType(g)
@@ -214,23 +214,23 @@ func (r record) generate(g generator) {
 	r.generateAsMethods(g)
 	r.generateUnref(g)
 
-	for _, ctor := range r.Ctors {
+	for _, ctor := range r.ctors {
 		if ctor != nil {
 			ctor.generate(g)
 		}
 	}
 	r.dtor.generate(g)
 
-	for _, method := range r.Methods {
+	for _, method := range r.methods {
 		method.record = &r
 		method.generate(g)
 	}
 
-	for _, enum := range r.Enums {
+	for _, enum := range r.enums {
 		enum.generate(g)
 	}
 
-	for _, record := range r.Records {
+	for _, record := range r.records {
 		record.generate(g)
 	}
 
@@ -241,7 +241,7 @@ func (r record) generate(g generator) {
 func (r record) generateGoType(g generator) {
 	f := g.goFile
 	f.write(r.doc)
-	if r.NoWrapper {
+	if r.noWrapper {
 		f.writelnf("type %s C.%s", r.goName, r.cStructName)
 	} else {
 		f.writelnf("type %s struct {", r.goName)
@@ -269,7 +269,7 @@ func (r record) generateFieldGetter(g generator, field field) {
 	}
 
 	cStruct := "o"
-	if !r.NoWrapper {
+	if !r.noWrapper {
 		cStruct = "o.sk"
 	}
 
@@ -292,7 +292,7 @@ func (r record) generateFieldSetter(g generator, field field) {
 	methodName := goExportedName("Set" + fieldName)
 
 	cStruct := "o"
-	if !r.NoWrapper {
+	if !r.noWrapper {
 		cStruct = "o.sk"
 	}
 
@@ -307,7 +307,7 @@ func (r record) generateFieldSetter(g generator, field field) {
 }
 
 func (r record) generateNilMethod(g generator) {
-	if r.NoWrapper {
+	if r.noWrapper {
 		return
 	}
 
@@ -341,7 +341,7 @@ func (r record) generateUnref(g generator) {
 
 	f := g.goFile
 	f.writelnf("func (o *%s) Unref() {", r.goName)
-	f.writelnf("  C.misk_unref_%s(o.sk)", r.CppName)
+	f.writelnf("  C.misk_unref_%s(o.sk)", r.cppName)
 	f.writeln("  o.sk = nil")
 	f.writeln("}")
 }
@@ -349,7 +349,7 @@ func (r record) generateUnref(g generator) {
 func (r record) generateHeaderFile(g generator) {
 	f := g.headerFile
 	if r.derivedFromRefCnt {
-		f.writelnf("void misk_unref_%s(%s *c_obj);", r.CppName, r.cStructName)
+		f.writelnf("void misk_unref_%s(%s *c_obj);", r.cppName, r.cStructName)
 	}
 	f.writeln()
 }
@@ -361,8 +361,8 @@ func (r record) generateCppFile(g generator) {
 		return
 	}
 
-	f.writelnf("void misk_unref_%s(%s *c_obj) {", r.CppName, r.cStructName)
-	f.writelnf("reinterpret_cast<%s *> (c_obj)->unref();", r.CppName)
+	f.writelnf("void misk_unref_%s(%s *c_obj) {", r.cppName, r.cStructName)
+	f.writelnf("reinterpret_cast<%s *> (c_obj)->unref();", r.cppName)
 	f.writeln("}")
 	f.writeln()
 }

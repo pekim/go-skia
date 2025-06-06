@@ -32,7 +32,7 @@ func (o *callableOverload) enrich1(callable *callable, record *record, cursor cl
 		return clang.ChildVisit_Continue
 	})
 
-	o.cppName = callable.CppName
+	o.cppName = callable.cppName
 	o.record = record
 	o.isStatic = cursor.CXXMethod_IsStatic()
 	o.isNonStaticMethod = o.record != nil && !o.isStatic

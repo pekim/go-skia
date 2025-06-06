@@ -56,7 +56,7 @@ func (o callableOverload) generateCppApiCallStatement(g generator) {
 	// Generate the function call.
 	if o.isStatic {
 		// Call a class static member function.
-		f.writef("%s::%s(%s)", o.record.CppName, o.cppName, o.cppArgs)
+		f.writef("%s::%s(%s)", o.record.cppName, o.cppName, o.cppArgs)
 	} else if o.record != nil {
 		// Call a class member function.
 		f.writef("reinterpret_cast<%s*>(c_obj)->%s(%s)", o.record.qualifiedCppName(), o.cppName, o.cppArgs)

@@ -9,7 +9,7 @@ import (
 )
 
 type enum struct {
-	CppName   string `json:"name"`
+	cppName   string
 	cType     typ
 	clangType clang.Type
 	goName    string
@@ -30,9 +30,9 @@ type enumConstant struct {
 func (e *enum) enrich1(record *record, cursor clang.Cursor) {
 	e.clangType = cursor.EnumDeclIntegerType()
 	if record != nil {
-		e.goName = record.goName + e.CppName
+		e.goName = record.goName + e.cppName
 	} else {
-		e.goName = stripSkPrefix(e.CppName)
+		e.goName = stripSkPrefix(e.cppName)
 	}
 	e.goName = goExportedName(e.goName)
 	e.record = record
@@ -43,7 +43,7 @@ func (e *enum) enrich1(record *record, cursor clang.Cursor) {
 		case clang.Cursor_EnumConstantDecl:
 			name := cursor.Spelling()
 			name = stripKPrefix(name)
-			name = strings.TrimSuffix(name, "_"+e.CppName)
+			name = strings.TrimSuffix(name, "_"+e.cppName)
 			doc := docComment(cursor.ParsedComment())
 
 			constant := enumConstant{
@@ -65,7 +65,7 @@ func (e *enum) enrich1(record *record, cursor clang.Cursor) {
 
 func (e *enum) enrich2(api api) {
 	if !e.enriched1 {
-		fatalf("enum %s has not been phase 1 enriched", e.CppName)
+		fatalf("enum %s has not been phase 1 enriched", e.cppName)
 	}
 
 	e.cType = mustTypFromClangType(e.clangType, api, "")
@@ -76,10 +76,10 @@ func (e *enum) enrich2(api api) {
 
 func (e enum) generate(g generator) {
 	if len(e.constants) == 0 {
-		fmt.Printf("warning: enum %s has no constants\n", e.CppName)
+		fmt.Printf("warning: enum %s has no constants\n", e.cppName)
 	}
 	if !e.enriched2 {
-		fatalf("enum %s has not been enriched", e.CppName)
+		fatalf("enum %s has not been enriched", e.cppName)
 	}
 
 	f := g.goFile

@@ -33,7 +33,7 @@ func (d *recordDtor) generate(g generator) {
 }
 
 func (d *recordDtor) generateGo(g generator) {
-	d.cFuncName = fmt.Sprintf("misk_delete_%s", d.record.CppName)
+	d.cFuncName = fmt.Sprintf("misk_delete_%s", d.record.cppName)
 
 	f := g.goFile
 	f.write(d.doc)

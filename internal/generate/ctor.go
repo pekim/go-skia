@@ -47,7 +47,7 @@ func (c *recordCtor) enrich2(api api) {
 
 func (c recordCtor) generate(g generator) {
 	if !c.enriched {
-		fatalf("record %s ctor has not been enriched", c.record.CppName)
+		fatalf("record %s ctor has not been enriched", c.record.cppName)
 	}
 
 	c.generateGo(g)
@@ -71,7 +71,7 @@ func (c recordCtor) generateGo(g generator) {
 	f.writelnf("func %s(%s) %s {", c.goFuncName, strings.Join(params, ", "), c.record.goName)
 	f.writeln(strings.Join(cVars, "\n"))
 	f.writelnf("  retC := C.%s(%s)", c.cFuncName, strings.Join(cArgs, ", "))
-	if c.record.NoWrapper {
+	if c.record.noWrapper {
 		f.writelnf("  return *(*%s)(unsafe.Pointer(&retC))", c.record.goName)
 
 	} else {

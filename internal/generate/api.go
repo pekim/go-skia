@@ -1,8 +1,6 @@
 package generate
 
 import (
-	_ "embed"
-	"encoding/json"
 	"fmt"
 	"runtime"
 	"slices"
@@ -11,26 +9,19 @@ import (
 	"time"
 
 	"golang.org/x/sync/errgroup"
-	"muzzammil.xyz/jsonc"
 )
 
-//go:embed api.jsonc
-var apiJson []byte
-
 type api struct {
-	Records       []record   `json:"records"`
-	Enums         []enum     `json:"enums"`
-	Functions     []callable `json:"functions"`
-	Typedefs      []typedef  `json:"typedefs"`
-	Variables     []variable
+	records       []record
+	enums         []enum
+	functions     []callable
+	typedefs      []typedef
+	variables     []variable
 	tus           []translationUnit
 	variablesLock *sync.Mutex
 }
 
 func (api *api) parseTranslationUnits() {
-	err := json.Unmarshal(jsonc.ToJSON(apiJson), &api)
-	fatalOnError(err)
-
 	fmt.Print("parse header files ")
 	start := time.Now()
 	api.tus = make([]translationUnit, len(headerFiles))
@@ -43,7 +34,7 @@ func (api *api) parseTranslationUnits() {
 			return nil
 		})
 	}
-	err = group.Wait()
+	err := group.Wait()
 	fatalOnError(err)
 	fmt.Printf(" %dms\n", time.Since(start).Milliseconds())
 }
@@ -60,60 +51,60 @@ func (api *api) enrich1() {
 func (api api) enrich2() {
 	fmt.Print("enrich 2")
 	start := time.Now()
-	for i := range api.Enums {
-		enum := &api.Enums[i]
+	for i := range api.enums {
+		enum := &api.enums[i]
 		enum.enrich2(api)
 	}
-	for i := range api.Typedefs {
-		record := &api.Typedefs[i]
+	for i := range api.typedefs {
+		record := &api.typedefs[i]
 		record.enrich2(api)
 	}
-	for i := range api.Functions {
-		function := &api.Functions[i]
+	for i := range api.functions {
+		function := &api.functions[i]
 		function.enrich2(nil, api)
 	}
-	for i := range api.Records {
-		record := &api.Records[i]
+	for i := range api.records {
+		record := &api.records[i]
 		record.enrich2(api)
 	}
-	for i := range api.Variables {
-		variable := &api.Variables[i]
+	for i := range api.variables {
+		variable := &api.variables[i]
 		variable.enrich2(api)
 	}
 	fmt.Printf(" %dms\n", time.Since(start).Milliseconds())
 }
 
 func (api api) findRecord(name string) (*record, bool) {
-	for i, record := range api.Records {
-		if record.CppName == name {
-			return &api.Records[i], true
+	for i, record := range api.records {
+		if record.cppName == name {
+			return &api.records[i], true
 		}
 	}
 	return nil, false
 }
 
 func (api api) findEnum(name string) (*enum, bool) {
-	for i, enum := range api.Enums {
-		if enum.CppName == name {
-			return &api.Enums[i], true
+	for i, enum := range api.enums {
+		if enum.cppName == name {
+			return &api.enums[i], true
 		}
 	}
 	return nil, false
 }
 
 func (api api) findFunction(name string) (*callable, bool) {
-	for i, function := range api.Functions {
-		if function.CppName == name {
-			return &api.Functions[i], true
+	for i, function := range api.functions {
+		if function.cppName == name {
+			return &api.functions[i], true
 		}
 	}
 	return nil, false
 }
 
 func (api api) findTypedef(name string) (*typedef, bool) {
-	for i, typedef := range api.Typedefs {
-		if typedef.CppName == name {
-			return &api.Typedefs[i], true
+	for i, typedef := range api.typedefs {
+		if typedef.cppName == name {
+			return &api.typedefs[i], true
 		}
 	}
 	return nil, false
@@ -123,39 +114,39 @@ func (api api) generate(g generator) {
 	fmt.Print("generate")
 	start := time.Now()
 
-	g.goFile.generateStructSizeAssertions(g, api.Records)
+	g.goFile.generateStructSizeAssertions(g, api.records)
 
-	for _, record := range api.Records {
+	for _, record := range api.records {
 		record.generateCStruct(g)
 		record.generateCPPStructSize(g)
-		for _, record := range record.Records {
+		for _, record := range record.records {
 			record.generateCStruct(g)
 			record.generateCPPStructSize(g)
 		}
 	}
 	g.cppFile.writeln()
 
-	for _, record := range api.Records {
+	for _, record := range api.records {
 		record.generate(g)
 	}
 
-	for _, enum := range api.Enums {
+	for _, enum := range api.enums {
 		enum.generate(g)
 	}
 
-	for _, function := range api.Functions {
+	for _, function := range api.functions {
 		function.generate(g)
 	}
 
-	for _, typedef := range api.Typedefs {
+	for _, typedef := range api.typedefs {
 		typedef.generate(g)
 	}
 
 	g.headerFile.writeln()
-	slices.SortFunc(api.Variables, func(a, b variable) int {
+	slices.SortFunc(api.variables, func(a, b variable) int {
 		return strings.Compare(a.cppName, b.cppName)
 	})
-	for _, variable := range api.Variables {
+	for _, variable := range api.variables {
 		variable.generate(g)
 	}
 
@@ -171,27 +162,27 @@ func (api api) printStats() {
 	structEnumCount := 0
 	structMethodCount := 0
 	structRecordCount := 0
-	for _, record := range api.Records {
+	for _, record := range api.records {
 		if record.isClass {
 			classCount++
-			classEnumCount += len(record.Enums)
-			classMethodCount += len(record.Methods)
-			classRecordCount += len(record.Records)
+			classEnumCount += len(record.enums)
+			classMethodCount += len(record.methods)
+			classRecordCount += len(record.records)
 		} else {
 			structCount++
-			structEnumCount += len(record.Enums)
-			structMethodCount += len(record.Methods)
-			structRecordCount += len(record.Records)
+			structEnumCount += len(record.enums)
+			structMethodCount += len(record.methods)
+			structRecordCount += len(record.records)
 		}
 	}
 
 	fmt.Printf("%4d classes (with %d enums, %d methods, %d records)\n",
 		classCount, classEnumCount, classMethodCount, classRecordCount)
-	fmt.Printf("%4d enums\n", len(api.Enums))
-	fmt.Printf("%4d functions\n", len(api.Functions))
+	fmt.Printf("%4d enums\n", len(api.enums))
+	fmt.Printf("%4d functions\n", len(api.functions))
 	fmt.Printf("%4d structs (with %d enums, %d methods, %d records)\n",
 		structCount, structEnumCount, structMethodCount, structRecordCount)
-	fmt.Printf("%4d typedefs\n", len(api.Typedefs))
+	fmt.Printf("%4d typedefs\n", len(api.typedefs))
 }
 
 func (api api) goNameForCppName(cppName string) (string, bool) {
