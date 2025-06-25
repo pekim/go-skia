@@ -17,6 +17,9 @@ var tigerSVG []byte
 //go:embed test.png
 var testPng []byte
 
+//go:embed transparency.png
+var transparencyPng []byte
+
 const windowWidth = 800
 const windowHeight = 600
 
@@ -124,6 +127,9 @@ func main() {
 	imageData := skia.DataMakeWithCopy(testPng, uint32(len(testPng)))
 	image := skia.ImagesDeferredFromEncodedData(imageData, nil)
 
+	image2Data := skia.DataMakeWithCopy(transparencyPng, uint32(len(transparencyPng)))
+	image2 := skia.ImagesDeferredFromEncodedData(image2Data, nil)
+
 	draw := func() {
 		// start := time.Now()
 		// defer func() {
@@ -160,6 +166,13 @@ func main() {
 		canvas.Restore()
 
 		canvas.DrawImage(image, 1000, 200)
+
+		paint.SetColor(skia.ColorRED)
+		paint.SetAlpha(0x20)
+		rect3 := skia.RectMakeXYWH(180, 800, float32(image2.Width()), float32(image2.Height()))
+		canvas.DrawRect(rect3, paint)
+		canvas.DrawImage(image2, 180, 800) // position so that a bit of the tiger is under the translucent image
+
 		context.FlushAndSubmit(skia.GrSyncCpuYes)
 	}
 
