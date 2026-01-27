@@ -9,7 +9,7 @@ func newFileGo() *fileGo {
 		file: newFile("./api.go"),
 	}
 
-	f.file.goFmt = true
+	f.goFmt = true
 	f.writelnf(`
 	package skia
 
